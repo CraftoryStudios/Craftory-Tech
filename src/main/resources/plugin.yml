@@ -1,0 +1,13 @@
+name: Extended
+version: ${project.version}
+main: tech.brettsaunders.extended.Extended
+api-version: 1.13
+prefix: Extended
+depend: [ItemsAdder]
+authors: [BrettSaunders]
+description: Adds more functionality to minecraft with only server side modification
+website: brettsaunders.tech
+commands:
+  matty:
+    description: TEST
+    usage: /<command>
