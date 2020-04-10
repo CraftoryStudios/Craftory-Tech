@@ -1,5 +1,9 @@
 package tech.brettsaunders.extended;
 
+import com.google.common.collect.HashBiMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -12,6 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Extended extends JavaPlugin {
 
   public static Extended plugin;
+  public static HashSet<Long> chunkKeys = new HashSet<>();
+  public static BiMutliHashMap beltManagers = new BiMutliHashMap();
 
   @Override
   public void onEnable() {
@@ -19,7 +25,7 @@ public final class Extended extends JavaPlugin {
     // Plugin startup logic
     getLogger().info("Now loaded!");
     getServer().getPluginManager().registerEvents(new BeltEvents(), this);
-    getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 20L);
+    getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
   }
 
   @Override
