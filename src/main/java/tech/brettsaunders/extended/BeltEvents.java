@@ -1,18 +1,13 @@
 package tech.brettsaunders.extended;
 
 import dev.lone.itemsadder.api.ItemsAdder;
-import java.util.Set;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class BeltEvents implements Listener {
   BlockUtils blockUtils = new BlockUtils();
@@ -55,7 +50,7 @@ public class BeltEvents implements Listener {
                 } else {
                   ItemsAdder.placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltsouth"));
                 }
-
+                blockUtils.onSouthBeltPlace(event.getBlockPlaced());
               } else if (yaw < 135) {
                 //WEST
                 if (blockEast && blockWest) {
