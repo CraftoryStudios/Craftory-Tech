@@ -12,7 +12,7 @@ import tech.brettsaunders.extended.BeltManagerContext.Side;
 
 public class BlockUtils {
 
-  final List<String> BELT_SOUTH = Arrays.asList("extended:beltsouthsn", "extended:beltsouths", "extended:beltsouthn", "extended:beltsouth");
+  final List<String> BELT_SOUTH = Arrays.asList("extended:beltsouthns", "extended:beltsouths", "extended:beltsouthn", "extended:beltsouth");
   final List<String> BELT_NORTH = Arrays.asList("extended:beltns", "extended:belts", "extended:beltn", "extended:belt");
   final List<String> BELT_EAST = Arrays.asList("extended:belteastew", "extended:belteastee", "extended:belteastw", "extended:belteast");
   final List<String> BELT_WEST = Arrays.asList("extended:beltwestew", "extended:beltweste", "extended:beltwestw", "extended:beltwest");

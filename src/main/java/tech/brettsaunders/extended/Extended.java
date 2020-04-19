@@ -27,6 +27,9 @@ public final class Extended extends JavaPlugin {
     getServer().getPluginManager().registerEvents(new BeltEvents(), this);
     getServer().getPluginManager().registerEvents(new DebugEvents(), this);
     getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
+    CursedEarth cursedEarth = new CursedEarth();
+    getServer().getPluginManager().registerEvents(cursedEarth, this);
+    getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 80L, 80L);
   }
 
   @Override
