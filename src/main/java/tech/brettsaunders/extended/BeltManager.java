@@ -3,6 +3,8 @@ package tech.brettsaunders.extended;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.management.remote.rmi._RMIConnection_Stub;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import tech.brettsaunders.extended.BeltManagerContext.Side;
@@ -14,8 +16,11 @@ public class BeltManager{
   private BeltTree tree;
 
   public BeltManager (Block block) {
-    lenght = 0;
+    lenght = 1;
     tree = new BeltTree(block.getLocation());
+    Extended.beltManagers.getMap().put(block.getLocation(), this);
+    Bukkit.getLogger().info(this.toString());
+    belts.add(block.getLocation());
   }
 
   public int getLenght() {
@@ -27,8 +32,9 @@ public class BeltManager{
   }
 
   public void addBelt(Block block, Side side, Block leadBlock, ArrayList<BeltManagerContext> currentBeltManagers) {
+    Bukkit.getLogger().info(this.toString());
     lenght = lenght + 1;
-    Extended.beltManagers.put(block.getLocation(), this);
+    Extended.beltManagers.getMap().put(block.getLocation(), this);
     belts.add(block.getLocation());
     BeltNode node = new BeltNode(block.getLocation());
 
@@ -52,9 +58,11 @@ public class BeltManager{
         node.setParentRight(tree.getRoot());
         break;
     }
+    Bukkit.getLogger().info("HERE");
 
     for (BeltManagerContext managerContext : currentBeltManagers) {
       BeltNode rootNode = managerContext.getBeltManager().getTree().getRoot();
+      Bukkit.getLogger().info("Manager: " + managerContext.getBeltManager().toString() + " side: " + managerContext.getSide());
       switch(managerContext.getSide()) {
         case Front:
           BeltNode parent = managerContext.getBeltManager().getTree().getParent(managerContext.getBlock().getLocation());
@@ -78,6 +86,7 @@ public class BeltManager{
 
       for (Location belt : managerContext.getBeltManager().getBelts()) {
         Extended.beltManagers.getMap().replace(belt, this);
+        Bukkit.getLogger().info(belt + "this one");
       }
 
       belts = (ArrayList<Location>) Stream.of(belts, managerContext.getBeltManager().getBelts()).flatMap(x -> x.stream()).collect(

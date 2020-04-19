@@ -35,7 +35,7 @@ public class BeltManagerContext implements Comparable<BeltManagerContext>{
   public int compareTo(BeltManagerContext o) {
     if (beltManager == o.getBeltManager()) return 0;
 
-    if (beltManager.getLenght() > o.getBeltManager().getLenght()) {
+    if (beltManager.getLenght() < o.getBeltManager().getLenght()) {
       return 1;
     } else {
       return -1;

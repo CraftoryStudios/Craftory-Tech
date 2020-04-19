@@ -25,6 +25,7 @@ public final class Extended extends JavaPlugin {
     // Plugin startup logic
     getLogger().info("Now loaded!");
     getServer().getPluginManager().registerEvents(new BeltEvents(), this);
+    getServer().getPluginManager().registerEvents(new DebugEvents(), this);
     getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
   }
 

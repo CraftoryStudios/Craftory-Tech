@@ -1,5 +1,6 @@
 package tech.brettsaunders.extended;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class BeltNode {
@@ -11,6 +12,7 @@ public class BeltNode {
 
   public BeltNode(Location location) {
     this.location = location;
+    Bukkit.getLogger().info(toString());
   }
 
   public void setChild(BeltNode child) {
@@ -32,4 +34,12 @@ public class BeltNode {
   public Location getLocation() {
     return location;
   }
+
+  @Override
+  public String toString() {
+    return "BeltNode{" +
+        "location=" + location +
+        '}';
+  }
+
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.extended.BeltManagerContext.Side;
@@ -75,29 +76,42 @@ public class BlockUtils {
     Block blockFront = block.getRelative(front);
 
     if (isBelt(blockBehind, front) && hasBeltManager(blockBehind)) {
+      Bukkit.getLogger().info("Behind");
       currentBeltManagers.add(new BeltManagerContext(getBeltManager(blockBehind), Side.Back, blockBehind));
     }
     if (isBelt(blockFront, front) && hasBeltManager(blockFront)) {
       currentBeltManagers.add(new BeltManagerContext(getBeltManager(blockFront), Side.Front, blockFront));
+      Bukkit.getLogger().info("Front");
     }
     if (isBelt(blockLeft, right) && hasBeltManager(blockLeft)) {
       currentBeltManagers.add(new BeltManagerContext(getBeltManager(blockLeft), Side.Left, blockLeft));
+      Bukkit.getLogger().info("Left");
     }
     if (isBelt(blockRight, left) && hasBeltManager(blockRight)) {
       currentBeltManagers.add(new BeltManagerContext(getBeltManager(blockRight), Side.Right, blockRight));
+      Bukkit.getLogger().info("Right");
     }
 
-    if (currentBeltManagers.size() > 1) {
+    Bukkit.getLogger().info("LIST OF " + currentBeltManagers.toString());
+    Bukkit.getLogger().info("SIZE" + currentBeltManagers.size() );
+    BeltManagerContext leadManager = null;
+    if (currentBeltManagers.size() >= 1) {
+      for (BeltManagerContext context : currentBeltManagers) {
+        Bukkit.getLogger().info(context.getBeltManager().getLenght() + " length");
+      }
       Collections.sort(currentBeltManagers);
-    }
 
-    BeltManagerContext leadManager = currentBeltManagers.remove(0);
+      leadManager = currentBeltManagers.remove(0);
+    }
 
     if (leadManager == null) {
       leadManager = new BeltManagerContext(new BeltManager(block), Side.None);
+      Bukkit.getLogger().info("NEW MANAGER");
     } else {
       leadManager.getBeltManager().addBelt(block, leadManager.getSide(), leadManager.getBlock(), currentBeltManagers);
+      Bukkit.getLogger().info("OLD MANAGER");
     }
+    Bukkit.getLogger().warning("----------------------------------------");
   }
 
   public void onNorthBeltPlace(Block block) {
