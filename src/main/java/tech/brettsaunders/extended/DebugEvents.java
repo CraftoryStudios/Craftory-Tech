@@ -13,8 +13,8 @@ public class DebugEvents implements Listener {
   public void onPlayerRightClickDebug(PlayerInteractEvent e) {
     if (!(e.getAction() == Action.LEFT_CLICK_BLOCK)) return;
     if (!(e.hasItem())) return;
-    if (!(ItemsAdder.matchCustomItemName(e.getItem(), "itemsadder:ketchup_bottle")));
-
+    if (!(ItemsAdder.matchCustomItemName(e.getItem(), "itemsadder:ketchup_bottle"))) return;
+    
     e.getPlayer().sendMessage("Manager: " + Extended.beltManagers.getMap().get(e.getClickedBlock().getLocation()));
   }
 
