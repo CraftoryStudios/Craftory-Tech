@@ -1,6 +1,5 @@
 package tech.brettsaunders.extended;
 
-import java.util.Arrays;
 import java.util.List;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
