@@ -31,6 +31,18 @@ public class BeltNode {
     this.parentRight = parentRight;
   }
 
+  public BeltNode getParentBehind() {
+    return parentBehind;
+  }
+
+  public BeltNode getParentLeft() {
+    return parentLeft;
+  }
+
+  public BeltNode getParentRight() {
+    return parentRight;
+  }
+
   public Location getLocation() {
     return location;
   }

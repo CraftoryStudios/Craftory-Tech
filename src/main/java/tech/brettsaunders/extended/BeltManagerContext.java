@@ -28,6 +28,8 @@ public class BeltManagerContext implements Comparable<BeltManagerContext>{
     Back,
     Left,
     Right,
+    SidewaysLeft,
+    SidewaysRight,
     None
   }
 

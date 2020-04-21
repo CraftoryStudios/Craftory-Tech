@@ -75,18 +75,32 @@ public class BlockUtils {
     Block blockRight = block.getRelative(right);
     Block blockFront = block.getRelative(front);
 
+    //Front Sideways Right
+    if (isBelt(blockFront, right) && hasBeltManager(blockFront)) {
+      currentBeltManagers.add(new BeltManagerContext(getBeltManager(blockFront), Side.SidewaysRight, blockFront));
+      Bukkit.getLogger().info("Front Sideways Right");
+    }
+    //Front Sideways Left
+    if (isBelt(blockFront, left) && hasBeltManager(blockFront)) {
+      currentBeltManagers.add(new BeltManagerContext(getBeltManager(blockFront), Side.SidewaysLeft, blockFront));
+      Bukkit.getLogger().info("Front Sideways Left");
+    }
+    //Back
     if (isBelt(blockBehind, front) && hasBeltManager(blockBehind)) {
       Bukkit.getLogger().info("Behind");
       currentBeltManagers.add(new BeltManagerContext(getBeltManager(blockBehind), Side.Back, blockBehind));
     }
+    //Front
     if (isBelt(blockFront, front) && hasBeltManager(blockFront)) {
       currentBeltManagers.add(new BeltManagerContext(getBeltManager(blockFront), Side.Front, blockFront));
       Bukkit.getLogger().info("Front");
     }
+    //Left
     if (isBelt(blockLeft, right) && hasBeltManager(blockLeft)) {
       currentBeltManagers.add(new BeltManagerContext(getBeltManager(blockLeft), Side.Left, blockLeft));
       Bukkit.getLogger().info("Left");
     }
+    //Right
     if (isBelt(blockRight, left) && hasBeltManager(blockRight)) {
       currentBeltManagers.add(new BeltManagerContext(getBeltManager(blockRight), Side.Right, blockRight));
       Bukkit.getLogger().info("Right");
@@ -131,11 +145,11 @@ public class BlockUtils {
   }
 
   public Boolean hasBeltManager(Block block) {
-    return Extended.beltManagers.getMap().containsKey(block.getLocation());
+    return Extended.beltManagers.containsKey(block.getLocation());
   }
 
   public BeltManager getBeltManager(Block block) {
-    return Extended.beltManagers.getMap().get(block.getLocation());
+    return Extended.beltManagers.get(block.getLocation());
   }
 
 }
