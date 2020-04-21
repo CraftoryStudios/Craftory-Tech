@@ -34,6 +34,7 @@ public final class Craftory extends JavaPlugin {
     CursedEarth cursedEarth = new CursedEarth();
     getServer().getPluginManager().registerEvents(cursedEarth, this);
     getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 80L, 80L);
+    getServer().getPluginManager().registerEvents(new Magic(), this);
   }
 
   @Override
