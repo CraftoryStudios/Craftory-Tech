@@ -22,14 +22,7 @@ public final class Craftory extends JavaPlugin {
     plugin = this;
     // Plugin startup logic
     getLogger().info("Now Loading!");
-    //Load Data
-    DataContainer data = DataContainer.loadData();
-    if (data.chunkKeys != null) {
-      chunkKeys = data.chunkKeys;
-    }
-    if (data.beltManagers != null) {
-      beltManagers = data.beltManagers;
-    }
+    resourceSetup();
     //Register
     getServer().getPluginManager().registerEvents(new BeltEvents(), this);
     getServer().getPluginManager().registerEvents(new DebugEvents(), this);
@@ -57,6 +50,14 @@ public final class Craftory extends JavaPlugin {
     }
     return false;
   }
+
+  public void resourceSetup() {
+    //Load Data
+    DataContainer data = DataContainer.loadData();
+    if (data.chunkKeys != null) chunkKeys = data.chunkKeys;
+    if (data.beltManagers != null) beltManagers = data.beltManagers;
+  }
+
 
 
 }
