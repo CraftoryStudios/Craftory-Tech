@@ -4,6 +4,7 @@ main: tech.brettsaunders.craftory.Craftory
 api-version: 1.13
 prefix: Craftory
 depend: [ItemsAdder]
+loadbefore: [ItemsAdder]
 authors: [BrettSaunders]
 description: Adds more functionality to minecraft with only server side modification
 website: brettsaunders.tech
