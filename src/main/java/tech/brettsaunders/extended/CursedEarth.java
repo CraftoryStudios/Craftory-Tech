@@ -19,6 +19,7 @@ public class CursedEarth implements Listener, Runnable {
     private HashSet<Block> earths = new HashSet<>();
     private HashSet<Block> closedList = new HashSet<>();
     BlockUtils bs = new BlockUtils();
+    static private float SPREAD_RATE = 1.0f;
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
@@ -27,7 +28,7 @@ public class CursedEarth implements Listener, Runnable {
                     @Override
                     public void run() {
                         if (bs.isCustomBlockType(event.getBlockPlaced(), "extended:cursed_earth")) {
-                            earths.add(event.getBlockPlaced());
+                            earths.add(event.getBlockPlaced()); //Add the block to the HashSet when it is placed
                         }
                     }
                 }, 1L);
@@ -41,19 +42,18 @@ public class CursedEarth implements Listener, Runnable {
         HashSet<Block> toRemove = new HashSet<>();
         int empty = 0;
         for (Block block : earths) {
-            if(random.nextInt(4)>= 1) {continue;}
-            for (int i = -1; i < 2; i++) {
+            if(random.nextInt(4)>= 1) {continue;} //Stops every block from spreading at the same time, could change this to select random elements rather than iterating and skipping
+            for (int i = -1; i < 2; i++) { //Loop through y-1, y and y+1 of block
                 Block search = block.getRelative(0, i, 0);
-                ArrayList<BlockFace> valid = generateValidFaces(search);
-                if (valid.size() > 0){
-                    BlockFace face = valid.get(random.nextInt(valid.size()));
-                    if(random.nextInt(5000) <= (30 * valid.size())){
-                        ItemsAdder.placeCustomBlock(search.getRelative(face).getLocation(), ItemsAdder.getCustomItem("extended:cursed_earth"));
-                        toAdd.add(search.getRelative(face));
-                    }
+                ArrayList<BlockFace> valid = generateValidFaces(search); //Get blocks that it can spread to
+                if (valid.size() > 0 && random.nextInt(10000) / SPREAD_RATE <= (30 * valid.size())){
+                    BlockFace face = valid.get(random.nextInt(valid.size())); //Picks a random face
+                    ItemsAdder.placeCustomBlock(search.getRelative(face).getLocation(), ItemsAdder.getCustomItem("extended:cursed_earth"));
+                    toAdd.add(search.getRelative(face));
+                    break;
                 } else { empty +=1;}
             }
-            if(empty==3){
+            if(empty==3){ //If there are no valid spaces for it to spread to move it to the closed list
                 closedList.add(block);
                 toRemove.add(block);
             }
