@@ -37,35 +37,44 @@ public class CursedEarth implements Listener, Runnable {
         Random random = new Random();
         HashSet<Block> toAdd = new HashSet<>();
         HashSet<Block> toRemove = new HashSet<>();
-        int empty = 0;
         for (Block block : earths) {
             if(random.nextInt(4)>= 1) {continue;} //Stops every block from spreading at the same time, could change this to select random elements rather than iterating and skipping
-            for (int i = -1; i < 2; i++) { //Loop through y-1, y and y+1 of block
-                Block search = block.getRelative(0, i, 0);
-                ArrayList<BlockFace> valid = generateValidFaces(search); //Get blocks that it can spread to
-                if (valid.size() > 0 && random.nextInt(10000) / SPREAD_RATE <= (30 * valid.size())){
-                    BlockFace face = valid.get(random.nextInt(valid.size())); //Picks a random face
-                    ItemsAdder.placeCustomBlock(search.getRelative(face).getLocation(), ItemsAdder.getCustomItem("extended:cursed_earth"));
-                    toAdd.add(search.getRelative(face));
+            ArrayList<Block> valid = generateValidFaces(block); //Get blocks that it can spread to
+            if (valid.size() > 0) {
+                if(random.nextInt(10000) / SPREAD_RATE <= (30 * valid.size())) {
+                    Block neighbour = valid.get(random.nextInt(valid.size())); //Picks a random face
+                    ItemsAdder.placeCustomBlock(neighbour.getLocation(), ItemsAdder.getCustomItem("extended:cursed_earth"));
+                    toAdd.add(neighbour);
+                    System.out.println("Cursed Spread");
                     break;
-                } else { empty +=1;}
-            }
-            if(empty==3){ //If there are no valid spaces for it to spread to move it to the closed list
+                }
+            } else {
+                System.out.println("No valid");
                 closedList.add(block);
                 toRemove.add(block);
             }
-            empty = 0;
         }
         earths.addAll(toAdd);
         earths.removeAll(toRemove);
     }
 
-    private ArrayList<BlockFace> generateValidFaces(Block block){
-        ArrayList<BlockFace> valid = new ArrayList<>();
+    private ArrayList<Block> generateValidFaces(Block block){
+        ArrayList<Block> valid = new ArrayList<>();
+        Block blockup = block.getRelative(0, 1, 0);
+        Block blockdown = block.getRelative(0, -1, 0);
+        Block neighbour;
         for (BlockFace face : faces) {
-            Block neighbour = block.getRelative(face);
+            neighbour = block.getRelative(face);
             if (!neighbour.isEmpty() && neighbour.getType().isBlock() && !ItemsAdder.isCustomBlock(neighbour)) {
-                valid.add(face);
+                valid.add(neighbour);
+            }
+            neighbour = blockup.getRelative(face);
+            if (!neighbour.isEmpty() && neighbour.getType().isBlock() && !ItemsAdder.isCustomBlock(neighbour)) {
+                valid.add(neighbour);
+            }
+            neighbour = blockdown.getRelative(face);
+            if (!neighbour.isEmpty() && neighbour.getType().isBlock() && !ItemsAdder.isCustomBlock(neighbour)) {
+                valid.add(neighbour);
             }
         }
         return valid;
