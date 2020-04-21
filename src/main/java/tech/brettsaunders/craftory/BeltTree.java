@@ -23,6 +23,10 @@ public class BeltTree implements Serializable {
     return root;
   }
 
+  public void setRoot(BeltNode root) {
+    this.root = root;
+  }
+
   public BeltNode getParent(Location location) {
     return parents.get(location);
   }
@@ -105,9 +109,5 @@ public class BeltTree implements Serializable {
         node.getParentBehind(), (node.getParentBehind() == node) ? false : true);
     printResuriveFancy(player, stringBuilder, paddingForBoth, pointerForRight,
         node.getParentRight(), (node.getParentRight() == node) ? false : true);
-  }
-
-  public void setRoot(BeltNode root) {
-    this.root = root;
   }
 }

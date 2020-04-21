@@ -12,10 +12,13 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 public class CursedEarth implements Listener, Runnable {
 
+  static private float SPREAD_RATE = 1.0f;
+  BlockUtils bs = new BlockUtils();
+  BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
+      BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST,
+      BlockFace.NORTH_WEST};
   private HashSet<Block> earths = new HashSet<>();
   private HashSet<Block> closedList = new HashSet<>();
-  BlockUtils bs = new BlockUtils();
-  static private float SPREAD_RATE = 1.0f;
 
   @EventHandler
   public void onBlockPlace(BlockPlaceEvent event) {
@@ -29,10 +32,6 @@ public class CursedEarth implements Listener, Runnable {
           }
         }, 1L);
   }
-
-  BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
-      BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST,
-      BlockFace.NORTH_WEST};
 
   @Override
   public void run() {

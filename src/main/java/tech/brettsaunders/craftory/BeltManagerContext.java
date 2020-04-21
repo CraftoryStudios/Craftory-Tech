@@ -23,17 +23,6 @@ public class BeltManagerContext implements Comparable<BeltManagerContext> {
     this.block = block;
   }
 
-
-  public enum Side {
-    Front,
-    Back,
-    Left,
-    Right,
-    SidewaysLeft,
-    SidewaysRight,
-    None
-  }
-
   @Override
   public int compareTo(BeltManagerContext o) {
     if (beltManager == o.getBeltManager()) {
@@ -57,5 +46,15 @@ public class BeltManagerContext implements Comparable<BeltManagerContext> {
 
   public Block getBlock() {
     return block;
+  }
+
+  public enum Side {
+    Front,
+    Back,
+    Left,
+    Right,
+    SidewaysLeft,
+    SidewaysRight,
+    None
   }
 }

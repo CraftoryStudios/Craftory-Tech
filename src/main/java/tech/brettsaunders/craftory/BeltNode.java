@@ -21,28 +21,28 @@ public class BeltNode implements Serializable {
     this.child = child;
   }
 
-  public void setParentBehind(BeltNode parentBehind) {
-    this.parentBehind = parentBehind;
-  }
-
-  public void setParentLeft(BeltNode parentLeft) {
-    this.parentLeft = parentLeft;
-  }
-
-  public void setParentRight(BeltNode parentRight) {
-    this.parentRight = parentRight;
-  }
-
   public BeltNode getParentBehind() {
     return parentBehind;
+  }
+
+  public void setParentBehind(BeltNode parentBehind) {
+    this.parentBehind = parentBehind;
   }
 
   public BeltNode getParentLeft() {
     return parentLeft;
   }
 
+  public void setParentLeft(BeltNode parentLeft) {
+    this.parentLeft = parentLeft;
+  }
+
   public BeltNode getParentRight() {
     return parentRight;
+  }
+
+  public void setParentRight(BeltNode parentRight) {
+    this.parentRight = parentRight;
   }
 
   public Location getLocation() {
