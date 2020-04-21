@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class EntitySerach implements Runnable {
+
   final double VELOCITY = 0.1;
   BlockUtils blockUtils = new BlockUtils();
 
@@ -32,7 +33,8 @@ public class EntitySerach implements Runnable {
 
         Chunk chunk = world.getChunkAt(entityLocation);
 
-        if (!Craftory.chunkKeys.contains((((long) chunk.getX()) << 32) | (chunk.getZ() & 0xFFFFFFFFL))) {
+        if (!Craftory.chunkKeys
+            .contains((((long) chunk.getX()) << 32) | (chunk.getZ() & 0xFFFFFFFFL))) {
           continue;
         }
 
@@ -47,20 +49,18 @@ public class EntitySerach implements Runnable {
 
         Block blockUnder = entityLocation.getBlock().getRelative(BlockFace.DOWN);
 
-
         if (blockUtils.isBelt(blockUnder, BlockFace.NORTH)) {
-          entity.setVelocity(entity.getVelocity().add(new Vector(0,0,-VELOCITY)));
+          entity.setVelocity(entity.getVelocity().add(new Vector(0, 0, -VELOCITY)));
         }
         if (blockUtils.isBelt(blockUnder, BlockFace.EAST)) {
-          entity.setVelocity(entity.getVelocity().add(new Vector(VELOCITY,0,0)));
+          entity.setVelocity(entity.getVelocity().add(new Vector(VELOCITY, 0, 0)));
         }
         if (blockUtils.isBelt(blockUnder, BlockFace.SOUTH)) {
-          entity.setVelocity(entity.getVelocity().add(new Vector(0,0,VELOCITY)));
+          entity.setVelocity(entity.getVelocity().add(new Vector(0, 0, VELOCITY)));
         }
         if (blockUtils.isBelt(blockUnder, BlockFace.WEST)) {
-          entity.setVelocity(entity.getVelocity().add(new Vector(-VELOCITY,0,0)));
+          entity.setVelocity(entity.getVelocity().add(new Vector(-VELOCITY, 0, 0)));
         }
-
 
         //entity.setVelocity(new Vector(0,0,-VELOCITY));
       }

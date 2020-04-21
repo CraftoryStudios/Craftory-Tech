@@ -13,7 +13,7 @@ public class BeltManager implements Serializable {
   private ArrayList<Location> belts = new ArrayList<>();
   private BeltTree tree;
 
-  public BeltManager (Block block) {
+  public BeltManager(Block block) {
     lenght = 1;
     tree = new BeltTree(block.getLocation());
     Craftory.beltManagers.put(block.getLocation(), this);
@@ -29,7 +29,8 @@ public class BeltManager implements Serializable {
     lenght = lenght - 1;
   }
 
-  public void addBelt(Block block, Side side, Block leadBlock, ArrayList<BeltManagerContext> currentBeltManagers) {
+  public void addBelt(Block block, Side side, Block leadBlock,
+      ArrayList<BeltManagerContext> currentBeltManagers) {
     Bukkit.getLogger().info(this.toString());
     lenght = lenght + 1;
     Craftory.beltManagers.put(block.getLocation(), this);
@@ -75,16 +76,22 @@ public class BeltManager implements Serializable {
     Bukkit.getLogger().info("HERE");
 
     for (BeltManagerContext managerContext : currentBeltManagers) {
-      if (managerContext.getBeltManager() == this) continue;
+      if (managerContext.getBeltManager() == this) {
+        continue;
+      }
       BeltNode rootNode = managerContext.getBeltManager().getTree().getRoot();
-      Bukkit.getLogger().info("Manager: " + managerContext.getBeltManager().toString() + " side: " + managerContext.getSide());
-      switch(managerContext.getSide()) {
+      Bukkit.getLogger().info(
+          "Manager: " + managerContext.getBeltManager().toString() + " side: " + managerContext
+              .getSide());
+      switch (managerContext.getSide()) {
         case Front:
-          BeltNode parent = managerContext.getBeltManager().getTree().getParent(managerContext.getBlock().getLocation());
+          BeltNode parent = managerContext.getBeltManager().getTree()
+              .getParent(managerContext.getBlock().getLocation());
           parent.setParentBehind(node);
           node.setChild(parent);
           getTree().setRoot(managerContext.getBeltManager().getTree().getRoot());
-          managerContext.getBeltManager().getTree().replaceParent(managerContext.getBlock().getLocation(), block.getLocation(), node);
+          managerContext.getBeltManager().getTree()
+              .replaceParent(managerContext.getBlock().getLocation(), block.getLocation(), node);
           break;
         case Right:
           rootNode.setChild(node);
@@ -99,7 +106,8 @@ public class BeltManager implements Serializable {
         case Back:
           rootNode.setChild(node);
           node.setParentBehind(rootNode);
-          getTree().replaceParent(block.getLocation(), managerContext.getBlock().getLocation(), rootNode);
+          getTree().replaceParent(block.getLocation(), managerContext.getBlock().getLocation(),
+              rootNode);
           //getTree().getParents().putAll(managerContext.getBeltManager().getTree().getParents());
           break;
         case SidewaysLeft:

@@ -8,6 +8,7 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
 public class BeltTree implements Serializable {
+
   private BeltNode root;
   private HashMap<Location, BeltNode> parents = new HashMap<>();
   private HashMap<Location, BeltNode> mapper = new HashMap<>();
@@ -26,7 +27,9 @@ public class BeltTree implements Serializable {
     return parents.get(location);
   }
 
-  public HashMap<Location, BeltNode> getParents() { return parents; }
+  public HashMap<Location, BeltNode> getParents() {
+    return parents;
+  }
 
   public void replaceParent(Location toRemove, Location toAdd, BeltNode node) {
     parents.remove(toRemove);
@@ -72,7 +75,8 @@ public class BeltTree implements Serializable {
     printResurive(node.getParentRight());
   }
 
-  private void printResuriveFancy(Player player, StringBuilder stringBuilder,  String padding, String pointer, BeltNode node, Boolean recus) {
+  private void printResuriveFancy(Player player, StringBuilder stringBuilder, String padding,
+      String pointer, BeltNode node, Boolean recus) {
     if (node == null) {
       return;
     }
@@ -81,21 +85,26 @@ public class BeltTree implements Serializable {
     stringBuilder.append(node.toString());
     stringBuilder.append("\n");
     Location location = node.getLocation().clone();
-    location.add(0.5,1.5,0.5);
-    player.spawnParticle(Particle.FLAME, location, 5, 0, 0,0, 0);
+    location.add(0.5, 1.5, 0.5);
+    player.spawnParticle(Particle.FLAME, location, 5, 0, 0, 0, 0);
 
     StringBuilder paddingBuilder = new StringBuilder(padding);
     paddingBuilder.append("│  ");
 
     String paddingForBoth = paddingBuilder.toString();
     String pointerForRight = "└──";
-    String pointerForLeft =  "├──";
+    String pointerForLeft = "├──";
 
-    if (!recus) return;
+    if (!recus) {
+      return;
+    }
 
-    printResuriveFancy(player, stringBuilder, paddingForBoth, pointerForLeft, node.getParentLeft(), (node.getParentLeft() == node) ? false : true);
-    printResuriveFancy(player, stringBuilder, paddingForBoth, pointerForLeft, node.getParentBehind(), (node.getParentBehind() == node) ? false : true);
-    printResuriveFancy(player, stringBuilder, paddingForBoth, pointerForRight, node.getParentRight(), (node.getParentRight() == node) ? false : true);
+    printResuriveFancy(player, stringBuilder, paddingForBoth, pointerForLeft, node.getParentLeft(),
+        (node.getParentLeft() == node) ? false : true);
+    printResuriveFancy(player, stringBuilder, paddingForBoth, pointerForLeft,
+        node.getParentBehind(), (node.getParentBehind() == node) ? false : true);
+    printResuriveFancy(player, stringBuilder, paddingForBoth, pointerForRight,
+        node.getParentRight(), (node.getParentRight() == node) ? false : true);
   }
 
   public void setRoot(BeltNode root) {

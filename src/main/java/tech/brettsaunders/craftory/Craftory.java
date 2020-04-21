@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
-
 public final class Craftory extends JavaPlugin {
 
   public static Craftory plugin;
@@ -25,8 +24,12 @@ public final class Craftory extends JavaPlugin {
     getLogger().info("Now Loading!");
     //Load Data
     DataContainer data = DataContainer.loadData();
-    if (data.chunkKeys != null) chunkKeys = data.chunkKeys;
-    if (data.beltManagers != null) beltManagers = data.beltManagers;
+    if (data.chunkKeys != null) {
+      chunkKeys = data.chunkKeys;
+    }
+    if (data.beltManagers != null) {
+      beltManagers = data.beltManagers;
+    }
     //Register
     getServer().getPluginManager().registerEvents(new BeltEvents(), this);
     getServer().getPluginManager().registerEvents(new DebugEvents(), this);
@@ -46,15 +49,14 @@ public final class Craftory extends JavaPlugin {
   }
 
   @Override
-  public boolean onCommand(CommandSender sender,  Command command,  String label, String[] args) {
-    if(command.getName().equals("matty")) {
+  public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    if (command.getName().equals("matty")) {
       Player player = (Player) sender;
-      Block block = player.getLocation().add(0,0,-2).getBlock();
+      Block block = player.getLocation().add(0, 0, -2).getBlock();
       block.setType(Material.STONE);
     }
     return false;
   }
-
 
 
 }

@@ -21,13 +21,13 @@ public class DataContainer implements Serializable {
   public final HashMap<Location, BeltManager> beltManagers;
 
   //Used for saving data
-  public DataContainer (HashSet<Long> chunkKeys, HashMap<Location, BeltManager> beltManagers) {
+  public DataContainer(HashSet<Long> chunkKeys, HashMap<Location, BeltManager> beltManagers) {
     this.chunkKeys = chunkKeys;
     this.beltManagers = beltManagers;
   }
 
   //Used for loading data
-  public DataContainer (DataContainer loadedData) {
+  public DataContainer(DataContainer loadedData) {
     if (loadedData == null) {
       this.chunkKeys = null;
       this.beltManagers = null;
@@ -39,7 +39,8 @@ public class DataContainer implements Serializable {
 
   private boolean saveData(String filePath) {
     try {
-      BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)));
+      BukkitObjectOutputStream out = new BukkitObjectOutputStream(
+          new GZIPOutputStream(new FileOutputStream(filePath)));
       out.writeObject(this);
       out.close();
       return true;
@@ -52,7 +53,8 @@ public class DataContainer implements Serializable {
 
   public static DataContainer loadData(String filePath) {
     try {
-      BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(filePath)));
+      BukkitObjectInputStream in = new BukkitObjectInputStream(
+          new GZIPInputStream(new FileInputStream(filePath)));
       DataContainer data = (DataContainer) in.readObject();
       in.close();
       return data;
@@ -63,7 +65,8 @@ public class DataContainer implements Serializable {
     }
   }
 
-  public static void saveData(HashSet<Long> chunkKeys, HashMap<Location, BeltManager> beltManagers) {
+  public static void saveData(HashSet<Long> chunkKeys,
+      HashMap<Location, BeltManager> beltManagers) {
     new DataContainer(chunkKeys, beltManagers).saveData("Carftory.data");
   }
 

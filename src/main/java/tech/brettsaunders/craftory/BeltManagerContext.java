@@ -3,7 +3,8 @@ package tech.brettsaunders.craftory;
 
 import org.bukkit.block.Block;
 
-public class BeltManagerContext implements Comparable<BeltManagerContext>{
+public class BeltManagerContext implements Comparable<BeltManagerContext> {
+
   private BeltManager beltManager;
   private Side side;
   private boolean leadManager;
@@ -35,7 +36,9 @@ public class BeltManagerContext implements Comparable<BeltManagerContext>{
 
   @Override
   public int compareTo(BeltManagerContext o) {
-    if (beltManager == o.getBeltManager()) return 0;
+    if (beltManager == o.getBeltManager()) {
+      return 0;
+    }
 
     if (beltManager.getLenght() < o.getBeltManager().getLenght()) {
       return 1;
