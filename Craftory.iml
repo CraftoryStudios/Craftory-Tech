@@ -28,7 +28,7 @@
     <orderEntry type="module-library">
       <library name="Maven: tech.brettsaunders.itemsadder:itemsadder:2.0.12">
         <CLASSES>
-          <root url="jar://$USER_HOME$/lib/ItemsAdder.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/ItemsAdder.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
