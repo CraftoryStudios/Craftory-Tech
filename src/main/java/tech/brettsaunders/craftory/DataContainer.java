@@ -37,20 +37,6 @@ public class DataContainer implements Serializable {
     }
   }
 
-  private boolean saveData(String filePath) {
-    try {
-      BukkitObjectOutputStream out = new BukkitObjectOutputStream(
-          new GZIPOutputStream(new FileOutputStream(filePath)));
-      out.writeObject(this);
-      out.close();
-      return true;
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-      return false;
-    }
-  }
-
   public static DataContainer loadData(String filePath) {
     try {
       BukkitObjectInputStream in = new BukkitObjectInputStream(
@@ -72,5 +58,19 @@ public class DataContainer implements Serializable {
 
   public static DataContainer loadData() {
     return new DataContainer(DataContainer.loadData("Carftory.data"));
+  }
+
+  private boolean saveData(String filePath) {
+    try {
+      BukkitObjectOutputStream out = new BukkitObjectOutputStream(
+          new GZIPOutputStream(new FileOutputStream(filePath)));
+      out.writeObject(this);
+      out.close();
+      return true;
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+      return false;
+    }
   }
 }

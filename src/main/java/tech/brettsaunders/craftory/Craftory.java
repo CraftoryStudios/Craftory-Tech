@@ -54,10 +54,13 @@ public final class Craftory extends JavaPlugin {
   public void resourceSetup() {
     //Load Data
     DataContainer data = DataContainer.loadData();
-    if (data.chunkKeys != null) chunkKeys = data.chunkKeys;
-    if (data.beltManagers != null) beltManagers = data.beltManagers;
+    if (data.chunkKeys != null) {
+      chunkKeys = data.chunkKeys;
+    }
+    if (data.beltManagers != null) {
+      beltManagers = data.beltManagers;
+    }
   }
-
 
 
 }

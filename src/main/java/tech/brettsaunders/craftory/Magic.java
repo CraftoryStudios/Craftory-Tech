@@ -16,15 +16,15 @@ public class Magic implements Listener {
 
   @EventHandler
   public void onPlayerRightClick(PlayerInteractEvent e) {
-      if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-          return;
-      }
-      if (!(e.hasItem())) {
-          return;
-      }
-      if (!(ItemsAdder.matchCustomItemName(e.getItem(), "extended:wand"))) {
-          return;
-      }
+    if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+      return;
+    }
+    if (!(e.hasItem())) {
+      return;
+    }
+    if (!(ItemsAdder.matchCustomItemName(e.getItem(), "extended:wand"))) {
+      return;
+    }
     Block clicked = e.getClickedBlock();
     if (clicked.getType().equals(Material.CAULDRON)) {
       wandUsedCauldron(clicked);
@@ -69,9 +69,9 @@ public class Magic implements Listener {
     System.out.println("Glow: " + glowstoneAmount);
     System.out.println("Red: " + redstoneCount);
     System.out.println("Gold: " + goldCount);
-      if (glowstoneAmount < 1) {
-          return;
-      }
+    if (glowstoneAmount < 1) {
+      return;
+    }
 
     int to_removeG = glowstoneAmount;
     int to_removeR = glowstoneAmount;
