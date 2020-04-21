@@ -1,4 +1,4 @@
-package tech.brettsaunders.extended;
+package tech.brettsaunders.craftory;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,8 +28,13 @@ public class DataContainer implements Serializable {
 
   //Used for loading data
   public DataContainer (DataContainer loadedData) {
-    this.chunkKeys = loadedData.chunkKeys;
-    this.beltManagers = loadedData.beltManagers;
+    if (loadedData == null) {
+      this.chunkKeys = null;
+      this.beltManagers = null;
+    } else {
+      this.chunkKeys = loadedData.chunkKeys;
+      this.beltManagers = loadedData.beltManagers;
+    }
   }
 
   private boolean saveData(String filePath) {

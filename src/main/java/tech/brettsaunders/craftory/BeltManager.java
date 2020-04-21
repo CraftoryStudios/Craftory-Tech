@@ -1,12 +1,13 @@
-package tech.brettsaunders.extended;
+package tech.brettsaunders.craftory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import tech.brettsaunders.extended.BeltManagerContext.Side;
+import tech.brettsaunders.craftory.BeltManagerContext.Side;
 
-public class BeltManager{
+public class BeltManager implements Serializable {
 
   private int lenght;
   private ArrayList<Location> belts = new ArrayList<>();
@@ -15,7 +16,7 @@ public class BeltManager{
   public BeltManager (Block block) {
     lenght = 1;
     tree = new BeltTree(block.getLocation());
-    Extended.beltManagers.put(block.getLocation(), this);
+    Craftory.beltManagers.put(block.getLocation(), this);
     Bukkit.getLogger().info(this.toString());
     belts.add(block.getLocation());
   }
@@ -31,7 +32,7 @@ public class BeltManager{
   public void addBelt(Block block, Side side, Block leadBlock, ArrayList<BeltManagerContext> currentBeltManagers) {
     Bukkit.getLogger().info(this.toString());
     lenght = lenght + 1;
-    Extended.beltManagers.put(block.getLocation(), this);
+    Craftory.beltManagers.put(block.getLocation(), this);
     belts.add(block.getLocation());
     BeltNode node = new BeltNode(block.getLocation());
     tree.addToMapper(block.getLocation(), node);
@@ -116,7 +117,7 @@ public class BeltManager{
       }
 
       for (Location belt : managerContext.getBeltManager().getBelts()) {
-        Extended.beltManagers.replace(belt, this);
+        Craftory.beltManagers.replace(belt, this);
         belts.add(belt);
         Bukkit.getLogger().info(belt + "this one");
       }

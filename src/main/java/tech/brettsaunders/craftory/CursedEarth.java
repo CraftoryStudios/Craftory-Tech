@@ -1,8 +1,6 @@
-package tech.brettsaunders.extended;
+package tech.brettsaunders.craftory;
 
-import com.google.common.collect.ConcurrentHashMultiset;
 import dev.lone.itemsadder.api.ItemsAdder;
-import org.bukkit.Location;
 import java.util.Random;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -11,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class CursedEarth implements Listener, Runnable {
@@ -23,7 +20,7 @@ public class CursedEarth implements Listener, Runnable {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        Extended.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Extended.plugin,
+        Craftory.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Craftory.plugin,
                 new Runnable() {
                     @Override
                     public void run() {

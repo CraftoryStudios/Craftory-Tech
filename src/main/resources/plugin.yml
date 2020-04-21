@@ -1,8 +1,8 @@
-name: Extended
+name: Craftory
 version: ${project.version}
-main: tech.brettsaunders.extended.Extended
+main: tech.brettsaunders.craftory.Craftory
 api-version: 1.13
-prefix: Extended
+prefix: Craftory
 depend: [ItemsAdder]
 authors: [BrettSaunders]
 description: Adds more functionality to minecraft with only server side modification

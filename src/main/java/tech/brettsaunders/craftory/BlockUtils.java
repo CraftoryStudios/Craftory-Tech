@@ -1,4 +1,4 @@
-package tech.brettsaunders.extended;
+package tech.brettsaunders.craftory;
 
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import tech.brettsaunders.extended.BeltManagerContext.Side;
+import tech.brettsaunders.craftory.BeltManagerContext.Side;
 
 public class BlockUtils {
 
@@ -45,7 +45,7 @@ public class BlockUtils {
         return true;
       }
     } else {
-      Extended.plugin.getLogger().warning("Belt direction doesn't exist");
+      Craftory.plugin.getLogger().warning("Belt direction doesn't exist");
     }
     return false;
   }
@@ -145,11 +145,11 @@ public class BlockUtils {
   }
 
   public Boolean hasBeltManager(Block block) {
-    return Extended.beltManagers.containsKey(block.getLocation());
+    return Craftory.beltManagers.containsKey(block.getLocation());
   }
 
   public BeltManager getBeltManager(Block block) {
-    return Extended.beltManagers.get(block.getLocation());
+    return Craftory.beltManagers.get(block.getLocation());
   }
 
 }

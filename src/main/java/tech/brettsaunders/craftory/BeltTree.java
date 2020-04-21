@@ -1,12 +1,13 @@
-package tech.brettsaunders.extended;
+package tech.brettsaunders.craftory;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
-public class BeltTree {
+public class BeltTree implements Serializable {
   private BeltNode root;
   private HashMap<Location, BeltNode> parents = new HashMap<>();
   private HashMap<Location, BeltNode> mapper = new HashMap<>();

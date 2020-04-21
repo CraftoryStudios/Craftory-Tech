@@ -1,4 +1,4 @@
-package tech.brettsaunders.extended;
+package tech.brettsaunders.craftory;
 
 import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.Chunk;
@@ -14,14 +14,14 @@ public class BeltEvents implements Listener {
 
   @EventHandler
   public void onBlockPlace(BlockPlaceEvent event) {
-    Extended.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Extended.plugin,
+    Craftory.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Craftory.plugin,
         new Runnable() {
           @Override
           public void run() {
 
             if (blockUtils.isCustomBlockType(event.getBlockPlaced(), "extended:belt")) {
               Chunk chunk = event.getBlockPlaced().getWorld().getChunkAt(event.getBlockPlaced());
-              Extended.chunkKeys.add((((long) chunk.getChunkSnapshot().getX()) << 32) | (chunk.getChunkSnapshot().getZ() & 0xFFFFFFFFL));
+              Craftory.chunkKeys.add((((long) chunk.getChunkSnapshot().getX()) << 32) | (chunk.getChunkSnapshot().getZ() & 0xFFFFFFFFL));
 
               event.getBlockPlaced().getLocation().add(0,1,0).getBlock().breakNaturally();
               float yaw = event.getPlayer().getLocation().getYaw();

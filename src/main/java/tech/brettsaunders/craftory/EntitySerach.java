@@ -1,4 +1,4 @@
-package tech.brettsaunders.extended;
+package tech.brettsaunders.craftory;
 
 import java.util.List;
 import org.bukkit.Chunk;
@@ -16,7 +16,7 @@ public class EntitySerach implements Runnable {
 
   @Override
   public void run() {
-    for (World world : Extended.plugin.getServer().getWorlds()) {
+    for (World world : Craftory.plugin.getServer().getWorlds()) {
       List<Player> players = world.getPlayers();
       // No players in this world
       if (players.isEmpty()) {
@@ -32,7 +32,7 @@ public class EntitySerach implements Runnable {
 
         Chunk chunk = world.getChunkAt(entityLocation);
 
-        if (!Extended.chunkKeys.contains((((long) chunk.getX()) << 32) | (chunk.getZ() & 0xFFFFFFFFL))) {
+        if (!Craftory.chunkKeys.contains((((long) chunk.getX()) << 32) | (chunk.getZ() & 0xFFFFFFFFL))) {
           continue;
         }
 

@@ -1,9 +1,7 @@
-package tech.brettsaunders.extended;
+package tech.brettsaunders.craftory;
 
-import com.google.common.collect.HashBiMap;
 import java.util.HashMap;
 import java.util.HashSet;
-import javax.xml.crypto.Data;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,9 +12,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 
-public final class Extended extends JavaPlugin {
+public final class Craftory extends JavaPlugin {
 
-  public static Extended plugin;
+  public static Craftory plugin;
   public static HashSet<Long> chunkKeys = new HashSet<>();
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
 
@@ -27,8 +25,8 @@ public final class Extended extends JavaPlugin {
     getLogger().info("Now Loading!");
     //Load Data
     DataContainer data = DataContainer.loadData();
-    chunkKeys = data.chunkKeys;
-    beltManagers = data.beltManagers;
+    if (data.chunkKeys != null) chunkKeys = data.chunkKeys;
+    if (data.beltManagers != null) beltManagers = data.beltManagers;
     //Register
     getServer().getPluginManager().registerEvents(new BeltEvents(), this);
     getServer().getPluginManager().registerEvents(new DebugEvents(), this);

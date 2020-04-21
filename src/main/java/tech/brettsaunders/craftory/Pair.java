@@ -1,4 +1,4 @@
-package tech.brettsaunders.extended;
+package tech.brettsaunders.craftory;
 
 public class Pair<T, U> {
   public final T t;

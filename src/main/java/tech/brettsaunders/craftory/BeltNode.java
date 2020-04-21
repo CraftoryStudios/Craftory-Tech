@@ -1,9 +1,10 @@
-package tech.brettsaunders.extended;
+package tech.brettsaunders.craftory;
 
+import java.io.Serializable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-public class BeltNode {
+public class BeltNode implements Serializable {
   private BeltNode child;
   private BeltNode parentBehind;
   private BeltNode parentLeft;
