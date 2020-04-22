@@ -18,7 +18,7 @@ public final class Craftory extends JavaPlugin {
   public static Craftory plugin;
   public static HashSet<Long> chunkKeys = new HashSet<>();
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
-
+  public CursedEarth cursedEarth = new CursedEarth();
   FileConfiguration config = getConfig();
 
   @Override
@@ -32,7 +32,6 @@ public final class Craftory extends JavaPlugin {
 
     //Magic Classes
     if (config.getBoolean("enableMagic")) {
-      CursedEarth cursedEarth = new CursedEarth();
       getServer().getPluginManager().registerEvents(cursedEarth, this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 80L, 80L);
       getServer().getPluginManager().registerEvents(new Magic(), this);
@@ -49,7 +48,7 @@ public final class Craftory extends JavaPlugin {
   @Override
   public void onDisable() {
     //Save Data
-    DataContainer.saveData(chunkKeys, beltManagers);
+    DataContainer.saveData(chunkKeys, beltManagers, cursedEarth.getEarths(), cursedEarth.getClosedList());
     // Plugin shutdown logic
     plugin = null;
   }
@@ -72,6 +71,12 @@ public final class Craftory extends JavaPlugin {
     }
     if (data.beltManagers != null) {
       beltManagers = data.beltManagers;
+    }
+    if (data.earths != null){
+      cursedEarth.setEarths(data.earths);
+    }
+    if (data.closedList != null){
+      cursedEarth.setClosedList(data.closedList);
     }
     config.addDefault("enableMagic", true);
     config.addDefault("enableTech", true);
