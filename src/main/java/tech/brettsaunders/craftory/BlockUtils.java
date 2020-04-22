@@ -13,16 +13,16 @@ import tech.brettsaunders.craftory.BeltManagerContext.Side;
 public class BlockUtils {
 
   final List<String> BELT_SOUTH = Arrays
-      .asList("extended:beltsouthns", "extended:beltsouths", "extended:beltsouthn",
-          "extended:beltsouth");
+      .asList("craftory:beltsouthns", "craftory:beltsouths", "craftory:beltsouthn",
+          "craftory:beltsouth");
   final List<String> BELT_NORTH = Arrays
-      .asList("extended:beltns", "extended:belts", "extended:beltn", "extended:belt");
+      .asList("craftory:beltns", "craftory:belts", "craftory:beltn", "craftory:belt");
   final List<String> BELT_EAST = Arrays
-      .asList("extended:belteastew", "extended:belteastee", "extended:belteastw",
-          "extended:belteast");
+      .asList("craftory:belteastew", "craftory:belteastee", "craftory:belteastw",
+          "craftory:belteast");
   final List<String> BELT_WEST = Arrays
-      .asList("extended:beltwestew", "extended:beltweste", "extended:beltwestw",
-          "extended:beltwest");
+      .asList("craftory:beltwestew", "craftory:beltweste", "craftory:beltwestw",
+          "craftory:beltwest");
   final List<List> BELTS = Arrays.asList(BELT_SOUTH, BELT_NORTH, BELT_EAST, BELT_WEST);
 
   public boolean isCustomBlockType(Block block, String type) {

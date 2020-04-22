@@ -20,7 +20,7 @@ public class BeltEvents implements Listener {
           @Override
           public void run() {
 
-            if (blockUtils.isCustomBlockType(event.getBlockPlaced(), "extended:belt")) {
+            if (blockUtils.isCustomBlockType(event.getBlockPlaced(), "craftory:belt")) {
               Chunk chunk = event.getBlockPlaced().getWorld().getChunkAt(event.getBlockPlaced());
               Craftory.chunkKeys.add((((long) chunk.getChunkSnapshot().getX()) << 32) | (
                   chunk.getChunkSnapshot().getZ() & 0xFFFFFFFFL));
@@ -45,61 +45,61 @@ public class BeltEvents implements Listener {
                 //SOUTH
                 if (blockSouth && blockNorth) {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltsouthsn"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:beltsouthsn"));
                 } else if (blockSouth) {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltsouths"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:beltsouths"));
                 } else if (blockNorth) {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltsouthn"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:beltsouthn"));
                 } else {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltsouth"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:beltsouth"));
                 }
                 blockUtils.onSouthBeltPlace(event.getBlockPlaced());
               } else if (yaw < 135) {
                 //WEST
                 if (blockEast && blockWest) {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltwestew"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:beltwestew"));
                 } else if (blockEast) {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltweste"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:beltweste"));
                 } else if (blockWest) {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltwestw"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:beltwestw"));
                 } else {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltwest"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:beltwest"));
                 }
                 blockUtils.onWestBeltPlace(event.getBlockPlaced());
               } else if (yaw < 225) {
                 //NORTH
                 if (blockSouth && blockNorth) {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltns"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:beltns"));
                 } else if (blockSouth) {
-                  ItemsAdder.placeCustomBlock(location, ItemsAdder.getCustomItem("extended:belts"));
+                  ItemsAdder.placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:belts"));
                 } else if (blockNorth) {
-                  ItemsAdder.placeCustomBlock(location, ItemsAdder.getCustomItem("extended:beltn"));
+                  ItemsAdder.placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:beltn"));
                 } else {
-                  ItemsAdder.placeCustomBlock(location, ItemsAdder.getCustomItem("extended:belt"));
+                  ItemsAdder.placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:belt"));
                 }
                 blockUtils.onNorthBeltPlace(event.getBlockPlaced());
               } else if (yaw < 315) {
                 //EAST
                 if (blockEast && blockWest) {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:belteastew"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:belteastew"));
                 } else if (blockEast) {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:belteastee"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:belteastee"));
                 } else if (blockWest) {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:belteastw"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:belteastw"));
                 } else {
                   ItemsAdder
-                      .placeCustomBlock(location, ItemsAdder.getCustomItem("extended:belteast"));
+                      .placeCustomBlock(location, ItemsAdder.getCustomItem("craftory:belteast"));
                 }
                 blockUtils.onEastBeltPlace(event.getBlockPlaced());
               }
@@ -109,7 +109,7 @@ public class BeltEvents implements Listener {
             Block checkBlock = event.getBlockPlaced().getLocation().add(0, -1, 0).getBlock();
             if (ItemsAdder.isCustomBlock(checkBlock)) {
 
-              //if (ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(checkBlock)).equals("extended:belt"))
+              //if (ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(checkBlock)).equals("craftory:belt"))
               event.getBlockPlaced().breakNaturally();
             }
           }

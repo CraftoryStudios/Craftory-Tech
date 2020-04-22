@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.bukkit.Location;
@@ -76,7 +77,10 @@ public final class Craftory extends JavaPlugin {
     config.addDefault("enableTech", true);
     config.options().copyDefaults(true);
     saveConfig();
-  }
 
+    File items = new File(getDataFolder().getParentFile(), "ItemsAdder/data/");
+    items.mkdirs();
+    FileUtils.copyResourcesRecursively(getClass().getResource("/data"), items);
+  }
 
 }

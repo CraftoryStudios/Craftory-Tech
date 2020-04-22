@@ -22,7 +22,7 @@ public class Magic implements Listener {
     if (!(e.hasItem())) {
       return;
     }
-    if (!(ItemsAdder.matchCustomItemName(e.getItem(), "extended:wand"))) {
+    if (!(ItemsAdder.matchCustomItemName(e.getItem(), "craftory:wand"))) {
       return;
     }
     Block clicked = e.getClickedBlock();
