@@ -1,0 +1,55 @@
+{
+	"__comment": "Designed by Benthomas7777 with Cubik Studio - https://cubik.studio",
+	"textures": {
+		"particle": "#conveyor",
+		"conveyor": "craftory:block/conveyor",
+		"wall": "craftory:block/conveyor_casing_side"
+	},
+	"elements": [ 	 
+		{
+			"__comment": "Element",
+			"from": [ 1, 0, 0 ],
+			"to": [ 15, 14.5, 16 ],
+			"faces": {
+				"down": { "uv": [ 1, 16, 15, 0 ], "texture": "#conveyor" },
+				"up": { "uv": [ 1, 16, 15, 0 ], "texture": "#conveyor" },
+				"north": { "uv": [ 1, 0, 15, 16 ], "texture": "#conveyor" },
+				"south": { "uv": [ 1, 16, 15, 0 ], "texture": "#conveyor" }
+			}
+		},
+		{
+			"__comment": "Element",
+			"from": [ 0, 0, 0 ],
+			"to": [ 1, 16, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 15, 1, 1 ], "texture": "#wall" },
+				"up": { "uv": [ 0, 15, 1, 1 ], "texture": "#wall" },
+				"north": { "uv": [ 0, 0, 1, 2 ], "texture": "#wall" },
+				"south": { "uv": [ 0, 2, 1, 0 ], "texture": "#wall" },
+				"west": { "uv": [ 1, 2, 15, 0 ], "texture": "#wall" },
+				"east": { "uv": [ 1, 2, 15, 0 ], "texture": "#wall" }
+			}
+		},
+		{
+			"__comment": "Element",
+			"from": [ 15, 0, 0 ],
+			"to": [ 16, 16, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 15, 1, 1 ], "texture": "#wall" },
+				"up": { "uv": [ 0, 15, 1, 1 ], "texture": "#wall" },
+				"north": { "uv": [ 0, 0, 1, 2 ], "texture": "#wall" },
+				"south": { "uv": [ 0, 2, 1, 0 ], "texture": "#wall" },
+				"west": { "uv": [ 1, 2, 15, 0 ], "texture": "#wall" },
+				"east": { "uv": [ 1, 2, 15, 0 ], "texture": "#wall" }
+			}
+		},
+		{
+			"__comment": "South",
+			"from": [ 1, 14.5, 16 ],
+			"to": [ 15, 16, 16.001 ],
+			"faces": {
+				"north": { "uv": [ 1, 0, 15, 1.5 ], "texture": "#wall" }
+			}
+		}
+	]
+}

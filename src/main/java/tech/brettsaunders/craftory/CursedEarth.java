@@ -26,7 +26,7 @@ public class CursedEarth implements Listener, Runnable {
         new Runnable() {
           @Override
           public void run() {
-            if (bs.isCustomBlockType(event.getBlockPlaced(), "extended:cursed_earth")) {
+            if (bs.isCustomBlockType(event.getBlockPlaced(), "craftory:cursed_earth")) {
               earths.add(event.getBlockPlaced()); //Add the block to the HashSet when it is placed
             }
           }
@@ -47,7 +47,7 @@ public class CursedEarth implements Listener, Runnable {
         if (random.nextInt(10000) / SPREAD_RATE <= (30 * valid.size())) {
           Block neighbour = valid.get(random.nextInt(valid.size())); //Picks a random face
           ItemsAdder.placeCustomBlock(neighbour.getLocation(),
-              ItemsAdder.getCustomItem("extended:cursed_earth"));
+              ItemsAdder.getCustomItem("craftory:cursed_earth"));
           toAdd.add(neighbour);
           System.out.println("Cursed Spread");
           break;

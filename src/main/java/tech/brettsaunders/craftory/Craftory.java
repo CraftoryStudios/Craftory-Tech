@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.bukkit.Location;
@@ -7,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,20 +19,31 @@ public final class Craftory extends JavaPlugin {
   public static HashSet<Long> chunkKeys = new HashSet<>();
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
 
+  FileConfiguration config = getConfig();
+
   @Override
   public void onEnable() {
     plugin = this;
     // Plugin startup logic
     getLogger().info("Now Loading!");
     resourceSetup();
+
     //Register
-    getServer().getPluginManager().registerEvents(new BeltEvents(), this);
-    getServer().getPluginManager().registerEvents(new DebugEvents(), this);
-    getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
-    CursedEarth cursedEarth = new CursedEarth();
-    getServer().getPluginManager().registerEvents(cursedEarth, this);
-    getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 80L, 80L);
-    getServer().getPluginManager().registerEvents(new Magic(), this);
+
+    //Magic Classes
+    if (config.getBoolean("enableMagic")) {
+      CursedEarth cursedEarth = new CursedEarth();
+      getServer().getPluginManager().registerEvents(cursedEarth, this);
+      getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 80L, 80L);
+      getServer().getPluginManager().registerEvents(new Magic(), this);
+    }
+
+    //Tech Classes
+    if (config.getBoolean("enableTech")) {
+      getServer().getPluginManager().registerEvents(new BeltEvents(), this);
+      getServer().getPluginManager().registerEvents(new DebugEvents(), this);
+      getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
+    }
   }
 
   @Override
@@ -60,7 +73,14 @@ public final class Craftory extends JavaPlugin {
     if (data.beltManagers != null) {
       beltManagers = data.beltManagers;
     }
-  }
+    config.addDefault("enableMagic", true);
+    config.addDefault("enableTech", true);
+    config.options().copyDefaults(true);
+    saveConfig();
 
+    File items = new File(getDataFolder().getParentFile(), "ItemsAdder/data/");
+    items.mkdirs();
+    FileUtils.copyResourcesRecursively(getClass().getResource("/data"), items);
+  }
 
 }
