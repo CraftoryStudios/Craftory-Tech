@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -46,8 +48,8 @@ public class Magic implements Listener {
 
   private void wandUsed(Block block) {
     float spell_range = 1.5f;
-    System.out.println("Wand stuff");
-    ArrayList<ItemStack> items = getItemsInRadius(block.getLocation().add(0, 1, 0), spell_range);
+    Bukkit.getLogger().info("Wand stuff");
+    ArrayList<ItemStack> items = getItemsInRadius(block.getLocation().clone().add(0, 1, 0), spell_range);
     int amount;
     for (ItemStack i : items) {
       amount = i.getAmount();
@@ -88,9 +90,9 @@ public class Magic implements Listener {
       min = 0;
     }
     final int productAmounts = min;
-    System.out.println("Fusion");
-    System.out.println(counts);
-    System.out.println(productAmounts);
+    Bukkit.getLogger().info("Fusion");
+    Bukkit.getLogger().info(counts.toString());
+    Bukkit.getLogger().info(Integer.toString(productAmounts));
     //Ensure the right amount of each item is removed
     for (Entry<Material, Integer> e : counts.entrySet()) {
       Material key = e.getKey();
@@ -153,6 +155,8 @@ public class Magic implements Listener {
       ArrayList<ItemStack> toDrop = fuseItems(items, inputs, products, counts);
       for (ItemStack i : toDrop) {
         cauldron.getWorld().dropItemNaturally(loc, i);
+        Location particleLoc = loc.clone().add(0.5,0.75,0.5);
+        cauldron.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, particleLoc, 10, 0, 0, 0, 0);
       }
     }
   }

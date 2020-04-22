@@ -4,6 +4,7 @@ import dev.lone.itemsadder.api.ItemsAdder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
@@ -14,9 +15,27 @@ public class CursedEarth implements Listener, Runnable {
 
   static private float SPREAD_RATE = 1.0f;
   BlockUtils bs = new BlockUtils();
+
+  public void setEarths(HashSet<Block> earths) {
+    this.earths = earths;
+  }
+
+  public void setClosedList(HashSet<Block> closedList) {
+    this.closedList = closedList;
+  }
+
   BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
       BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST,
       BlockFace.NORTH_WEST};
+
+  public HashSet<Block> getEarths() {
+    return earths;
+  }
+
+  public HashSet<Block> getClosedList() {
+    return closedList;
+  }
+
   private HashSet<Block> earths = new HashSet<>();
   private HashSet<Block> closedList = new HashSet<>();
 
@@ -35,6 +54,7 @@ public class CursedEarth implements Listener, Runnable {
 
   @Override
   public void run() {
+    Bukkit.getLogger().info("Earths size: " + earths.size());
     Random random = new Random();
     HashSet<Block> toAdd = new HashSet<>();
     HashSet<Block> toRemove = new HashSet<>();
@@ -44,16 +64,16 @@ public class CursedEarth implements Listener, Runnable {
       } //Stops every block from spreading at the same time, could change this to select random elements rather than iterating and skipping
       ArrayList<Block> valid = generateValidFaces(block); //Get blocks that it can spread to
       if (valid.size() > 0) {
-        if (random.nextInt(10000) / SPREAD_RATE <= (30 * valid.size())) {
+        if (random.nextInt(1000) / SPREAD_RATE <= (3 * valid.size())) {
           Block neighbour = valid.get(random.nextInt(valid.size())); //Picks a random face
           ItemsAdder.placeCustomBlock(neighbour.getLocation(),
               ItemsAdder.getCustomItem("craftory:cursed_earth"));
           toAdd.add(neighbour);
-          System.out.println("Cursed Spread");
+          Bukkit.getLogger().info("Cursed Spread");
           break;
         }
       } else {
-        System.out.println("No valid");
+        Bukkit.getLogger().info("No valid");
         closedList.add(block);
         toRemove.add(block);
       }
