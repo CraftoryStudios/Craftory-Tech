@@ -1,0 +1,54 @@
+info:
+  namespace: craftory
+recipes:
+  crafting_table:
+    wand:
+      permission: craftory.belt
+      enabled: true
+      pattern:
+      - XXL
+      - XSX
+      - SXX
+      ingredients:
+        S: STICK
+        L: LAPIS_LAZULI
+      result:
+        item: craftory:wand
+        amount: 1
+    cursed_earth:
+      permission: craftory.belt
+      enabled: true
+      pattern:
+      - OOO
+      - OOO
+      - OOO
+      ingredients:
+        O: DIRT
+      result:
+        item: craftory:cursed_earth
+        amount: 7
+items:
+  wand:
+    display_name: Wand
+    permission: craftory.belt
+    resource:
+      material: STICK
+      generate: true
+      textures:
+      - item/wand.png
+  cursed_earth:
+    display_name: Cursed Earth
+    permission: belt
+    resource:
+      material: STONE
+      generate: true
+      textures:
+      - block/cursed_earth.png
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+        - PICKAXE
+        - pickaxe
