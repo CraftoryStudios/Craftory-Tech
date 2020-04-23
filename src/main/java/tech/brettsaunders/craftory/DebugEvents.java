@@ -13,7 +13,7 @@ public class DebugEvents implements Listener {
 
   @EventHandler
   public void onPlayerRightClickDebug(PlayerInteractEvent e) {
-    if (!(e.getAction() == Action.LEFT_CLICK_BLOCK)) {
+    if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
       return;
     }
     if (!(e.hasItem())) {
