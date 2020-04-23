@@ -48,7 +48,6 @@ public class Magic implements Listener {
 
   private void wandUsed(Block block) {
     float spell_range = 1.5f;
-    Bukkit.getLogger().info("Wand stuff");
     ArrayList<ItemStack> items = getItemsInRadius(block.getLocation().clone().add(0, 1, 0), spell_range);
     int amount;
     for (ItemStack i : items) {
@@ -59,11 +58,16 @@ public class Magic implements Listener {
     }
   }
 
-  private HashMap<Material, Integer> getItemCounts(ArrayList<ItemStack> items) {
-    HashMap<Material, Integer> counts = new HashMap<>();
+  private HashMap<String, Integer> getItemCounts(ArrayList<ItemStack> items) {
+    HashMap<String, Integer> counts = new HashMap<>();
     for (ItemStack i : items) { //Count the amount of each item
-      Material type = i.getType();
-      if (counts.containsKey(i.getType())) {
+      String type;
+      if(ItemsAdder.isCustomItem(i)){
+        type = ItemsAdder.getCustomItemName(i);
+      } else {
+        type = i.getType().toString();
+      }
+      if (counts.containsKey(type)) {
         counts.put(type, counts.get(type) + i.getAmount());
       } else {
         counts.put(type, i.getAmount());
@@ -72,17 +76,19 @@ public class Magic implements Listener {
     return counts;
   }
 
-  private ArrayList<ItemStack> fuseItems(ArrayList<ItemStack> items, HashMap<Material, Integer>[] recipe,
-      HashMap<Material, Integer> counts) {
-    HashMap<Material, Integer> inputs = recipe[0];
-    HashMap<Material, Integer> products = recipe[1];
+  private ArrayList<ItemStack> fuseItems(ArrayList<ItemStack> items, HashMap<String, Integer>[] recipe,
+      HashMap<String, Integer> counts) {
+    HashMap<String, Integer> inputs = recipe[0];
+    HashMap<String, Integer> products = recipe[1];
     if (counts == null) {
       counts = getItemCounts(items);
     }
+    Bukkit.getLogger().info("Fusion");
+    Bukkit.getLogger().info(counts.toString());
     int min = Integer.MAX_VALUE;
-    for (Entry<Material, Integer> entry : counts
+    for (Entry<String, Integer> entry : counts
         .entrySet()) { //Work out how many of the product can be made
-      Material key = entry.getKey();
+      String key = entry.getKey();
       if(!inputs.containsKey(key)) continue;
       Integer value = entry.getValue();
       int temp = value / inputs.get(key); //Divide by number of item required for recipe
@@ -92,18 +98,18 @@ public class Magic implements Listener {
       min = 0;
     }
     final int productAmounts = min;
-    Bukkit.getLogger().info("Fusion");
-    Bukkit.getLogger().info(counts.toString());
     Bukkit.getLogger().info(Integer.toString(productAmounts));
     //Ensure the right amount of each item is removed
-    for (Entry<Material, Integer> e : counts.entrySet()) {
-      Material key = e.getKey();
-      counts.put(key, productAmounts * inputs.get(key));
+    for (Entry<String, Integer> e : counts.entrySet()) {
+      String key = e.getKey();
+      if(inputs.containsKey(key)){
+        counts.put(key, productAmounts * inputs.get(key));
+      }
     }
     for (ItemStack i : items) { //Remove items used
-      for (Material m : inputs.keySet()) {
-        int toRemove = counts.get(m);
-        if (toRemove > 0 && i.getType().equals(m)) {
+      for (String s : inputs.keySet()) {
+        int toRemove = counts.get(s);
+        if (toRemove > 0 && ((ItemsAdder.isCustomItem(i)&& ItemsAdder.matchCustomItemName(i,s) )||!ItemsAdder.isCustomItem(i)&&i.getType().toString().equals(s))) {
           if (i.getAmount() > toRemove) {
             i.setAmount(i.getAmount() - toRemove);
             toRemove = 0;
@@ -111,25 +117,37 @@ public class Magic implements Listener {
             toRemove -= i.getAmount();
             i.setAmount(0);
           }
-          counts.put(m, toRemove);
+          counts.put(s, toRemove);
         }
       }
     }
     ArrayList<ItemStack> toDrop = new ArrayList<>();
     ItemStack item;
-    for (Entry<Material, Integer> entry : products.entrySet()) {
-      Material m = entry.getKey();
+    for (Entry<String, Integer> entry : products.entrySet()) {
+      String s = entry.getKey();
       Integer i = entry.getValue();
-      item = new ItemStack(m);
+      if(ItemsAdder.isCustomItem(s)){
+        item = ItemsAdder.getCustomItem(s);
+      } else {
+        item = new ItemStack(Material.valueOf(s));
+      }
       int max = item.getMaxStackSize();
       int tomake = productAmounts * i;
       while (tomake > 0) {
         if (tomake > max) {
-          item = new ItemStack(m);
+          if(ItemsAdder.isCustomItem(s)){
+            item = ItemsAdder.getCustomItem(s);
+          } else {
+            item = new ItemStack(Material.valueOf(s));
+          }
           item.setAmount(max);
           tomake -= max;
         } else {
-          item = new ItemStack(m);
+          if(ItemsAdder.isCustomItem(s)){
+            item = ItemsAdder.getCustomItem(s);
+          } else {
+            item = new ItemStack(Material.valueOf(s));
+          }
           item.setAmount(tomake);
           tomake = 0;
         }
@@ -142,10 +160,10 @@ public class Magic implements Listener {
   private void wandUsedCauldron(Block cauldron) {
     Location loc = cauldron.getLocation();
     ArrayList<ItemStack> items = getItemsInRadius(loc, 1.2f);
-    HashMap<Material, Integer> counts = getItemCounts(items);
+    HashMap<String, Integer> counts = getItemCounts(items);
 
     //Set the recipe
-    HashMap<Material, Integer>[] recipe = MagicFusionRecipes.getRecipe(counts);
+    HashMap<String, Integer>[] recipe = MagicFusionRecipes.getRecipe(counts);
     if(recipe==null) return;
     ArrayList<ItemStack> toDrop = fuseItems(items, recipe, counts);
     for (ItemStack i : toDrop) {
