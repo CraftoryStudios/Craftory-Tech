@@ -34,6 +34,9 @@ public class Magic implements Listener {
     if (clicked.getType().equals(Material.CAULDRON)) {
       wandUsedCauldron(clicked);
       return;
+    } else if (clicked.getType().equals(Material.CHEST)){
+      wandUsedChest(clicked);
+      return;
     }
     wandUsed(clicked);
   }
@@ -46,9 +49,49 @@ public class Magic implements Listener {
             .toArray(ItemStack[]::new)));
   }
 
+  private void wandUsedChest(Block chest) {
+    Location loc = chest.getLocation();
+    ArrayList<ItemStack> items = getItemsInRadius(loc, 3f);
+    HashMap<String, Integer> counts = getItemCounts(items);
+    if(!counts.containsKey("craftory:life_gem") || !counts.containsKey(Material.STICK.toString()) || counts.get(Material.STICK.toString()) < 10) return;
+    HashMap<String, Integer> remove = new HashMap<>();
+    remove.put("craftory:life_gem", 1);
+    remove.put(Material.STICK.toString(), 10);
+    removeItems(items, remove);
+    Location particleLoc = loc.clone();
+    chest.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, particleLoc, 10, 0, 0, 0, 0);
+    particleLoc = loc.clone().add(0.5, 1, 0.5);
+    chest.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, particleLoc, 10, 0, 0, 0, 0);
+    particleLoc = loc.clone().add(-0.5, 1, -0.5);
+    chest.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, particleLoc, 10, 0, 0, 0, 0);
+    particleLoc = loc.clone().add(-0.5, 1, 0.5);
+    chest.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, particleLoc, 10, 0, 0, 0, 0);
+    particleLoc = loc.clone().add(-0.5, 1, -0.5);
+    chest.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, particleLoc, 10, 0, 0, 0, 0);
+    //TODO spawn the chest thing in.
+  }
+
+  private void wandUsedCauldron(Block cauldron) {
+    Location loc = cauldron.getLocation();
+    ArrayList<ItemStack> items = getItemsInRadius(loc, 1.2f);
+    HashMap<String, Integer> counts = getItemCounts(items);
+
+    //Set the recipe
+    HashMap<String, Integer>[] recipe = MagicFusionRecipes.getRecipe(counts);
+    if (recipe == null) {
+      return;
+    }
+    ArrayList<ItemStack> toDrop = fuseItems(items, recipe, counts);
+    for (ItemStack i : toDrop) {
+      cauldron.getWorld().dropItemNaturally(loc, i);
+      Location particleLoc = loc.clone().add(0.5, 0.75, 0.5);
+      cauldron.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, particleLoc, 10, 0, 0, 0, 0);
+    }
+  }
   private void wandUsed(Block block) {
     float spell_range = 1.5f;
-    ArrayList<ItemStack> items = getItemsInRadius(block.getLocation().clone().add(0, 1, 0), spell_range);
+    ArrayList<ItemStack> items = getItemsInRadius(block.getLocation().clone().add(0, 1, 0),
+        spell_range);
     int amount;
     for (ItemStack i : items) {
       amount = i.getAmount();
@@ -62,7 +105,7 @@ public class Magic implements Listener {
     HashMap<String, Integer> counts = new HashMap<>();
     for (ItemStack i : items) { //Count the amount of each item
       String type;
-      if(ItemsAdder.isCustomItem(i)){
+      if (ItemsAdder.isCustomItem(i)) {
         type = ItemsAdder.getCustomItemName(i);
       } else {
         type = i.getType().toString();
@@ -76,7 +119,31 @@ public class Magic implements Listener {
     return counts;
   }
 
-  private ArrayList<ItemStack> fuseItems(ArrayList<ItemStack> items, HashMap<String, Integer>[] recipe,
+  private void removeItems(ArrayList<ItemStack> items, HashMap<String, Integer> amounts){
+    for (ItemStack i : items) {
+      String s;
+      if (ItemsAdder.isCustomItem(i)) {
+        s = ItemsAdder.getCustomItemName(i);
+      } else {
+        s = i.getType().toString();
+      }
+      if (!amounts.containsKey(s)) continue;
+      int toRemove = amounts.get(s);
+      if (toRemove > 0 && ((ItemsAdder.isCustomItem(i) && ItemsAdder.matchCustomItemName(i, s))
+          || !ItemsAdder.isCustomItem(i) && i.getType().toString().equals(s))) {
+        if (i.getAmount() > toRemove) {
+          i.setAmount(i.getAmount() - toRemove);
+          toRemove = 0;
+        } else {
+          toRemove -= i.getAmount();
+          i.setAmount(0);
+        }
+        amounts.put(s, toRemove);
+      }
+    }
+  }
+  private ArrayList<ItemStack> fuseItems(ArrayList<ItemStack> items,
+      HashMap<String, Integer>[] recipe,
       HashMap<String, Integer> counts) {
     HashMap<String, Integer> inputs = recipe[0];
     HashMap<String, Integer> products = recipe[1];
@@ -86,10 +153,12 @@ public class Magic implements Listener {
     Bukkit.getLogger().info("Fusion");
     Bukkit.getLogger().info(counts.toString());
     int min = Integer.MAX_VALUE;
-    for (Entry<String, Integer> entry : counts
-        .entrySet()) { //Work out how many of the product can be made
+    //Work out how many of the product can be made
+    for (Entry<String, Integer> entry : counts.entrySet()) {
       String key = entry.getKey();
-      if(!inputs.containsKey(key)) continue;
+      if (!inputs.containsKey(key)) {
+        continue;
+      }
       Integer value = entry.getValue();
       int temp = value / inputs.get(key); //Divide by number of item required for recipe
       min = min < temp ? min : temp;
@@ -102,54 +171,42 @@ public class Magic implements Listener {
     //Ensure the right amount of each item is removed
     for (Entry<String, Integer> e : counts.entrySet()) {
       String key = e.getKey();
-      if(inputs.containsKey(key)){
+      if (inputs.containsKey(key)) {
         counts.put(key, productAmounts * inputs.get(key));
       }
     }
-    for (ItemStack i : items) { //Remove items used
-      for (String s : inputs.keySet()) {
-        int toRemove = counts.get(s);
-        if (toRemove > 0 && ((ItemsAdder.isCustomItem(i)&& ItemsAdder.matchCustomItemName(i,s) )||!ItemsAdder.isCustomItem(i)&&i.getType().toString().equals(s))) {
-          if (i.getAmount() > toRemove) {
-            i.setAmount(i.getAmount() - toRemove);
-            toRemove = 0;
-          } else {
-            toRemove -= i.getAmount();
-            i.setAmount(0);
-          }
-          counts.put(s, toRemove);
-        }
-      }
-    }
+    //Remove items used
+    removeItems(items, counts);
+
     ArrayList<ItemStack> toDrop = new ArrayList<>();
     ItemStack item;
     for (Entry<String, Integer> entry : products.entrySet()) {
       String s = entry.getKey();
       Integer i = entry.getValue();
-      if(ItemsAdder.isCustomItem(s)){
+      if (ItemsAdder.isCustomItem(s)) {
         item = ItemsAdder.getCustomItem(s);
       } else {
         item = new ItemStack(Material.valueOf(s));
       }
       int max = item.getMaxStackSize();
-      int tomake = productAmounts * i;
-      while (tomake > 0) {
-        if (tomake > max) {
-          if(ItemsAdder.isCustomItem(s)){
+      int toMake = productAmounts * i;
+      while (toMake > 0) {
+        if (toMake > max) {
+          if (ItemsAdder.isCustomItem(s)) {
             item = ItemsAdder.getCustomItem(s);
           } else {
             item = new ItemStack(Material.valueOf(s));
           }
           item.setAmount(max);
-          tomake -= max;
+          toMake -= max;
         } else {
-          if(ItemsAdder.isCustomItem(s)){
+          if (ItemsAdder.isCustomItem(s)) {
             item = ItemsAdder.getCustomItem(s);
           } else {
             item = new ItemStack(Material.valueOf(s));
           }
-          item.setAmount(tomake);
-          tomake = 0;
+          item.setAmount(toMake);
+          toMake = 0;
         }
         toDrop.add(item);
       }
@@ -157,19 +214,4 @@ public class Magic implements Listener {
     return toDrop;
   }
 
-  private void wandUsedCauldron(Block cauldron) {
-    Location loc = cauldron.getLocation();
-    ArrayList<ItemStack> items = getItemsInRadius(loc, 1.2f);
-    HashMap<String, Integer> counts = getItemCounts(items);
-
-    //Set the recipe
-    HashMap<String, Integer>[] recipe = MagicFusionRecipes.getRecipe(counts);
-    if(recipe==null) return;
-    ArrayList<ItemStack> toDrop = fuseItems(items, recipe, counts);
-    for (ItemStack i : toDrop) {
-      cauldron.getWorld().dropItemNaturally(loc, i);
-      Location particleLoc = loc.clone().add(0.5,0.75,0.5);
-      cauldron.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, particleLoc, 10, 0, 0, 0, 0);
-    }
-  }
 }
