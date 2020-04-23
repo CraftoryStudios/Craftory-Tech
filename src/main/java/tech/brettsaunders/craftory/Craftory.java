@@ -19,7 +19,7 @@ public final class Craftory extends JavaPlugin {
   public static Craftory plugin;
   public static HashSet<Long> chunkKeys = new HashSet<>();
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
-  public CursedEarth cursedEarth;
+  public CursedEarth cursedEarth = null;
   FileConfiguration config = getConfig();
 
   @Override
@@ -27,13 +27,13 @@ public final class Craftory extends JavaPlugin {
     plugin = this;
     // Plugin startup logic
     getLogger().info("Now Loading!");
-    cursedEarth = new CursedEarth();
     resourceSetup();
 
     //Register
 
     //Magic Classes
     if (config.getBoolean("enableMagic")) {
+      cursedEarth = new CursedEarth();
       getServer().getPluginManager().registerEvents(cursedEarth, this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 80L, 80L);
       getServer().getPluginManager().registerEvents(new Magic(), this);
@@ -51,6 +51,7 @@ public final class Craftory extends JavaPlugin {
   public void onDisable() {
     //Save Data
     DataContainer.saveData(chunkKeys, beltManagers);
+    if(cursedEarth!=null) cursedEarth.save();
     // Plugin shutdown logic
     plugin = null;
   }
@@ -61,6 +62,13 @@ public final class Craftory extends JavaPlugin {
       Player player = (Player) sender;
       Block block = player.getLocation().add(0, 0, -2).getBlock();
       block.setType(Material.STONE);
+    }
+    if (command.getName().equals("setCursedSpreadRate")) {
+      try {
+        cursedEarth.setSpreadRate(Float.parseFloat(args[0]));
+      }catch (Exception e){
+
+      }
     }
     return false;
   }
