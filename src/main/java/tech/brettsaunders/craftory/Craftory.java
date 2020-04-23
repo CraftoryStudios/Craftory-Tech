@@ -33,7 +33,7 @@ public final class Craftory extends JavaPlugin {
 
     //Magic Classes
     if (config.getBoolean("enableMagic")) {
-      cursedEarth = new CursedEarth();
+      cursedEarth = new CursedEarth(getDataFolder().getPath());
       getServer().getPluginManager().registerEvents(cursedEarth, this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 80L, 80L);
       getServer().getPluginManager().registerEvents(new Magic(), this);
