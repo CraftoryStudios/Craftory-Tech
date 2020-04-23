@@ -96,8 +96,9 @@ public class CursedEarth implements Listener, Runnable {
     Random random = new Random();
     HashSet<Location> toAdd = new HashSet<>();
     HashSet<Location> toRemove = new HashSet<>();
+    Bukkit.getLogger().info("EARTHS: " + earths.size());
     for (Location loc : earths) {
-      if (random.nextInt(2) >= 1) {
+      if (random.nextInt(4) >= 1) {
         continue;
       } //Stops every block from spreading at the same time, could change this to select random elements rather than iterating and skipping
       ArrayList<Location> valid = generateValidFaces(
@@ -107,7 +108,6 @@ public class CursedEarth implements Listener, Runnable {
           Location neighbour = valid.get(random.nextInt(valid.size())); //Picks a random face
           ItemsAdder.placeCustomBlock(neighbour, ItemsAdder.getCustomItem("craftory:cursed_earth"));
           toAdd.add(neighbour);
-          break;
         }
       } else {
         closedList.add(loc);
