@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
@@ -46,8 +48,8 @@ public class Magic implements Listener {
 
   private void wandUsed(Block block) {
     float spell_range = 1.5f;
-    System.out.println("Wand stuff");
-    ArrayList<ItemStack> items = getItemsInRadius(block.getLocation().add(0, 1, 0), spell_range);
+    Bukkit.getLogger().info("Wand stuff");
+    ArrayList<ItemStack> items = getItemsInRadius(block.getLocation().clone().add(0, 1, 0), spell_range);
     int amount;
     for (ItemStack i : items) {
       amount = i.getAmount();
@@ -70,9 +72,10 @@ public class Magic implements Listener {
     return counts;
   }
 
-  private ArrayList<ItemStack> fuseItems(ArrayList<ItemStack> items,
-      HashMap<Material, Integer> inputs, HashMap<Material, Integer> products,
+  private ArrayList<ItemStack> fuseItems(ArrayList<ItemStack> items, HashMap<Material, Integer>[] recipe,
       HashMap<Material, Integer> counts) {
+    HashMap<Material, Integer> inputs = recipe[0];
+    HashMap<Material, Integer> products = recipe[1];
     if (counts == null) {
       counts = getItemCounts(items);
     }
@@ -80,6 +83,7 @@ public class Magic implements Listener {
     for (Entry<Material, Integer> entry : counts
         .entrySet()) { //Work out how many of the product can be made
       Material key = entry.getKey();
+      if(!inputs.containsKey(key)) continue;
       Integer value = entry.getValue();
       int temp = value / inputs.get(key); //Divide by number of item required for recipe
       min = min < temp ? min : temp;
@@ -88,9 +92,9 @@ public class Magic implements Listener {
       min = 0;
     }
     final int productAmounts = min;
-    System.out.println("Fusion");
-    System.out.println(counts);
-    System.out.println(productAmounts);
+    Bukkit.getLogger().info("Fusion");
+    Bukkit.getLogger().info(counts.toString());
+    Bukkit.getLogger().info(Integer.toString(productAmounts));
     //Ensure the right amount of each item is removed
     for (Entry<Material, Integer> e : counts.entrySet()) {
       Material key = e.getKey();
@@ -141,19 +145,13 @@ public class Magic implements Listener {
     HashMap<Material, Integer> counts = getItemCounts(items);
 
     //Set the recipe
-    HashMap<Material, Integer> inputs = new HashMap<>();
-    HashMap<Material, Integer> products = new HashMap<>();
-    if (counts.containsKey(Material.GOLD_NUGGET) && counts.containsKey(Material.REDSTONE)) {
-      inputs.put(Material.GOLD_NUGGET, 1);
-      inputs.put(Material.REDSTONE, 1);
-      products.put(Material.GLOWSTONE_DUST, 1);
-    }
-
-    if (inputs.size() > 0) { //Fuse and spawn the items
-      ArrayList<ItemStack> toDrop = fuseItems(items, inputs, products, counts);
-      for (ItemStack i : toDrop) {
-        cauldron.getWorld().dropItemNaturally(loc, i);
-      }
+    HashMap<Material, Integer>[] recipe = MagicFusionRecipes.getRecipe(counts);
+    if(recipe==null) return;
+    ArrayList<ItemStack> toDrop = fuseItems(items, recipe, counts);
+    for (ItemStack i : toDrop) {
+      cauldron.getWorld().dropItemNaturally(loc, i);
+      Location particleLoc = loc.clone().add(0.5,0.75,0.5);
+      cauldron.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, particleLoc, 10, 0, 0, 0, 0);
     }
   }
 }
