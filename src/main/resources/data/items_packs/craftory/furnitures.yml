@@ -1,0 +1,15 @@
+info:
+  namespace: craftory
+items:
+  chestpet:
+    display_name: ChestPet
+    permission: computer_desk
+    lore:
+    - '&7Decorative item'
+    resource:
+      material: OAK_WOOD
+      generate: false
+      model_path: block/chestpet
+    behaviours:
+      furniture:
+        small_hitbox: true
