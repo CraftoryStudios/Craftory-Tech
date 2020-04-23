@@ -1,0 +1,23 @@
+info:
+  namespace: craftory
+items:
+  chestpet_walking:
+    display_name: ChestPet Walking
+    permission: chestpet
+    resource:
+      material: OAK_WOOD
+      generate: false
+      model_path: block/chestpet_walking
+    behaviours:
+      furniture:
+        small_hitbox: true
+  chestpet_still:
+    display_name: ChestPet Still
+    permission: chestpet
+    resource:
+      material: OAK_WOOD
+      generate: false
+      model_path: block/chestpet_still
+    behaviours:
+      furniture:
+        small_hitbox: true
