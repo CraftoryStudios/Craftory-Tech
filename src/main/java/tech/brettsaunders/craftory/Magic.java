@@ -72,9 +72,10 @@ public class Magic implements Listener {
     return counts;
   }
 
-  private ArrayList<ItemStack> fuseItems(ArrayList<ItemStack> items,
-      HashMap<Material, Integer> inputs, HashMap<Material, Integer> products,
+  private ArrayList<ItemStack> fuseItems(ArrayList<ItemStack> items, HashMap<Material, Integer>[] recipe,
       HashMap<Material, Integer> counts) {
+    HashMap<Material, Integer> inputs = recipe[0];
+    HashMap<Material, Integer> products = recipe[1];
     if (counts == null) {
       counts = getItemCounts(items);
     }
@@ -82,6 +83,7 @@ public class Magic implements Listener {
     for (Entry<Material, Integer> entry : counts
         .entrySet()) { //Work out how many of the product can be made
       Material key = entry.getKey();
+      if(!inputs.containsKey(key)) continue;
       Integer value = entry.getValue();
       int temp = value / inputs.get(key); //Divide by number of item required for recipe
       min = min < temp ? min : temp;
@@ -143,21 +145,13 @@ public class Magic implements Listener {
     HashMap<Material, Integer> counts = getItemCounts(items);
 
     //Set the recipe
-    HashMap<Material, Integer> inputs = new HashMap<>();
-    HashMap<Material, Integer> products = new HashMap<>();
-    if (counts.containsKey(Material.GOLD_NUGGET) && counts.containsKey(Material.REDSTONE)) {
-      inputs.put(Material.GOLD_NUGGET, 1);
-      inputs.put(Material.REDSTONE, 1);
-      products.put(Material.GLOWSTONE_DUST, 1);
-    }
-
-    if (inputs.size() > 0) { //Fuse and spawn the items
-      ArrayList<ItemStack> toDrop = fuseItems(items, inputs, products, counts);
-      for (ItemStack i : toDrop) {
-        cauldron.getWorld().dropItemNaturally(loc, i);
-        Location particleLoc = loc.clone().add(0.5,0.75,0.5);
-        cauldron.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, particleLoc, 10, 0, 0, 0, 0);
-      }
+    HashMap<Material, Integer>[] recipe = MagicFusionRecipes.getRecipe(counts);
+    if(recipe==null) return;
+    ArrayList<ItemStack> toDrop = fuseItems(items, recipe, counts);
+    for (ItemStack i : toDrop) {
+      cauldron.getWorld().dropItemNaturally(loc, i);
+      Location particleLoc = loc.clone().add(0.5,0.75,0.5);
+      cauldron.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, particleLoc, 10, 0, 0, 0, 0);
     }
   }
 }
