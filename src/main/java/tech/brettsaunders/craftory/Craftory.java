@@ -3,6 +3,7 @@ package tech.brettsaunders.craftory;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,7 +19,7 @@ public final class Craftory extends JavaPlugin {
   public static Craftory plugin;
   public static HashSet<Long> chunkKeys = new HashSet<>();
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
-  public CursedEarth cursedEarth = new CursedEarth();
+  public CursedEarth cursedEarth;
   FileConfiguration config = getConfig();
 
   @Override
@@ -26,6 +27,7 @@ public final class Craftory extends JavaPlugin {
     plugin = this;
     // Plugin startup logic
     getLogger().info("Now Loading!");
+    cursedEarth = new CursedEarth();
     resourceSetup();
 
     //Register
@@ -48,7 +50,7 @@ public final class Craftory extends JavaPlugin {
   @Override
   public void onDisable() {
     //Save Data
-    DataContainer.saveData(chunkKeys, beltManagers, cursedEarth.getEarths(), cursedEarth.getClosedList());
+    DataContainer.saveData(chunkKeys, beltManagers);
     // Plugin shutdown logic
     plugin = null;
   }
@@ -71,12 +73,6 @@ public final class Craftory extends JavaPlugin {
     }
     if (data.beltManagers != null) {
       beltManagers = data.beltManagers;
-    }
-    if (data.earths != null){
-      cursedEarth.setEarths(data.earths);
-    }
-    if (data.closedList != null){
-      cursedEarth.setClosedList(data.closedList);
     }
     config.addDefault("enableMagic", true);
     config.addDefault("enableTech", true);

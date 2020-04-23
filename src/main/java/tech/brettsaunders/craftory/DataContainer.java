@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
@@ -20,15 +19,11 @@ public class DataContainer implements Serializable {
   //Data to Save
   public final HashSet<Long> chunkKeys;
   public final HashMap<Location, BeltManager> beltManagers;
-  public final HashSet<Block> earths;
-  public final HashSet<Block> closedList;
 
   //Used for saving data
-  public DataContainer(HashSet<Long> chunkKeys, HashMap<Location, BeltManager> beltManagers, HashSet<Block> earths, HashSet<Block> closedList) {
+  public DataContainer(HashSet<Long> chunkKeys, HashMap<Location, BeltManager> beltManagers) {
     this.chunkKeys = chunkKeys;
     this.beltManagers = beltManagers;
-    this.earths = earths;
-    this.closedList = closedList;
   }
 
   //Used for loading data
@@ -36,13 +31,9 @@ public class DataContainer implements Serializable {
     if (loadedData == null) {
       this.chunkKeys = null;
       this.beltManagers = null;
-      this.earths = null;
-      this.closedList = null;
     } else {
       this.chunkKeys = loadedData.chunkKeys;
       this.beltManagers = loadedData.beltManagers;
-      this.earths = loadedData.earths;
-      this.closedList = loadedData.closedList;
     }
   }
 
@@ -61,8 +52,8 @@ public class DataContainer implements Serializable {
   }
 
   public static void saveData(HashSet<Long> chunkKeys,
-      HashMap<Location, BeltManager> beltManagers, HashSet<Block> earths, HashSet<Block> closedList) {
-    new DataContainer(chunkKeys, beltManagers, earths, closedList).saveData("Carftory.data");
+      HashMap<Location, BeltManager> beltManagers) {
+    new DataContainer(chunkKeys, beltManagers).saveData("Carftory.data");
   }
 
   public static DataContainer loadData() {
