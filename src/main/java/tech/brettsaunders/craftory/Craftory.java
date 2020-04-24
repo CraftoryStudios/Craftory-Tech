@@ -8,6 +8,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Equipment;
 import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
+import net.citizensnpcs.trait.FollowTrait;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -83,6 +84,7 @@ public final class Craftory extends JavaPlugin {
       npc.spawn(((Player) sender).getLocation());
       npc.setProtected(false);
       npc.getTrait(Equipment.class).set(EquipmentSlot.HELMET, ItemsAdder.getCustomItem("craftory:chestpet_walking"));
+      npc.getTrait(FollowTrait.class).toggle(player, false);
       Zombie chicken = (Zombie) npc.getEntity();
       chicken.setBaby(true);
       chicken.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 1));
