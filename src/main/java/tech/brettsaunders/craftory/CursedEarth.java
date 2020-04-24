@@ -25,7 +25,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 public class CursedEarth implements Listener, Runnable {
 
   private String SAVE_PATH = "CursedEarth.data";
-  BlockUtils bs = new BlockUtils();
+  private BlockUtils bs = new BlockUtils();
   BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
       BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST,
       BlockFace.NORTH_WEST};
@@ -96,7 +96,6 @@ public class CursedEarth implements Listener, Runnable {
     Random random = new Random();
     HashSet<Location> toAdd = new HashSet<>();
     HashSet<Location> toRemove = new HashSet<>();
-    Bukkit.getLogger().info("EARTHS: " + earths.size());
     for (Location loc : earths) {
       if (random.nextInt(5) >= 1) {
         continue;
