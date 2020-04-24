@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory;
 
 import dev.lone.itemsadder.api.ItemsAdder;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,12 +18,13 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 public class CursedEarth implements Listener, Runnable {
 
-  private final String SAVE_PATH = "Craftory_CursedEarth.data";
+  private String SAVE_PATH = "CursedEarth.data";
   BlockUtils bs = new BlockUtils();
   BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
       BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST,
@@ -31,7 +33,8 @@ public class CursedEarth implements Listener, Runnable {
   private transient HashSet<Location> earths;
   private transient HashSet<Location> closedList;
 
-  public CursedEarth() {
+  public CursedEarth(String folder) {
+    SAVE_PATH = folder + File.separator + SAVE_PATH;
     CursedData data;
     try {
       BukkitObjectInputStream in = new BukkitObjectInputStream(
@@ -93,6 +96,7 @@ public class CursedEarth implements Listener, Runnable {
     Random random = new Random();
     HashSet<Location> toAdd = new HashSet<>();
     HashSet<Location> toRemove = new HashSet<>();
+    Bukkit.getLogger().info("EARTHS: " + earths.size());
     for (Location loc : earths) {
       if (random.nextInt(4) >= 1) {
         continue;
@@ -100,15 +104,12 @@ public class CursedEarth implements Listener, Runnable {
       ArrayList<Location> valid = generateValidFaces(
           loc.getBlock()); //Get blocks that it can spread to
       if (valid.size() > 0) {
-        if (random.nextInt(1000) / SPREAD_RATE <= (3 * valid.size())) {
+        if (random.nextInt(1000) <= (3 * valid.size() * SPREAD_RATE)) {
           Location neighbour = valid.get(random.nextInt(valid.size())); //Picks a random face
           ItemsAdder.placeCustomBlock(neighbour, ItemsAdder.getCustomItem("craftory:cursed_earth"));
           toAdd.add(neighbour);
-          Bukkit.getLogger().info("Cursed Spread");
-          break;
         }
       } else {
-        Bukkit.getLogger().info("No valid");
         closedList.add(loc);
         toRemove.add(loc);
       }

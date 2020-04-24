@@ -3,7 +3,7 @@ info:
 recipes:
   crafting_table:
     wand:
-      permission: craftory.belt
+      permission: craftory
       enabled: true
       pattern:
       - XXL
@@ -15,8 +15,24 @@ recipes:
       result:
         item: craftory:wand
         amount: 1
+    life_gem:
+      permission: craftory
+      enabled: true
+      pattern:
+      - OGO
+      - DSE
+      - OIO
+      ingredients:
+        I: IRON_INGOT
+        D: DIAMOND
+        S: SLIME_BALL
+        E: EMERALD
+        G: GOLD_INGOT
+      result:
+        item: craftory:life_gem
+        amount: 1
     cursed_earth:
-      permission: craftory.belt
+      permission: craftory
       enabled: true
       pattern:
       - OOO
@@ -30,15 +46,23 @@ recipes:
 items:
   wand:
     display_name: Wand
-    permission: craftory.belt
+    permission: craftory
     resource:
       material: STICK
       generate: true
       textures:
       - item/wand.png
+  life_gem:
+    display_name: Life Gem
+    permission: craftory
+    resource:
+      material: DIAMOND
+      generate: true
+      textures:
+      - item/life_gem.png
   cursed_earth:
     display_name: Cursed Earth
-    permission: belt
+    permission: craftory
     resource:
       material: STONE
       generate: true
