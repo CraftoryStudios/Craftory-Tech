@@ -14,6 +14,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -79,39 +80,35 @@ public class Barrel implements Listener {
 
   @EventHandler
   public void onBlockBreak(BlockBreakEvent e) {
-    Craftory.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Craftory.plugin,
-        new Runnable() {
-          @Override
-          public void run() {
-            Block block = e.getBlock();
-            if (bs.isCustomBlockType(block, "craftory:barrel") || bs
-                .isCustomBlockType(block, "craftory:reinforced_barrel")) {
-              Location loc = block.getLocation();
-              if (barrels.containsKey(loc)) {
-                barrels.remove(loc);
-              }
-            }
+    Block block = e.getBlock();
+    if (bs.isCustomBlockType(block, "craftory:barrel") || bs
+        .isCustomBlockType(block, "craftory:reinforced_barrel")) {
+      Location loc = block.getLocation();
+
+      if (barrels.containsKey(loc)) {
+        Inventory i = barrels.remove(loc);
+        for (ItemStack item: i.getContents()) {
+          if (item != null){
+            loc.getWorld().dropItemNaturally(loc,item);
           }
-        }, 1L);
+        }
+      }
+    }
   }
 
   @EventHandler
   public void onPlayerRightClick(PlayerInteractEvent e) {
-    Craftory.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Craftory.plugin,
-        new Runnable() {
-          @Override
-          public void run() {
-            Block block = e.getClickedBlock();
-            if (bs.isCustomBlockType(block, "craftory:barrel") || bs
-                .isCustomBlockType(block, "craftory:reinforced_barrel")) {
-              Location loc = block.getLocation();
-              if (barrels.containsKey(loc)) {
-                Inventory inventory = barrels.get(loc);
-                e.getPlayer().openInventory(inventory);
-              }
-            }
-          }
-        }, 1L);
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    Block block = e.getClickedBlock();
+    if (bs.isCustomBlockType(block, "craftory:barrel") || bs
+        .isCustomBlockType(block, "craftory:reinforced_barrel")) {
+      Location loc = block.getLocation();
+      if (barrels.containsKey(loc)) {
+        Inventory inventory = barrels.get(loc);
+        e.getPlayer().openInventory(inventory);
+        e.setCancelled(true);
+      }
+    }
   }
 
   public void save() {
