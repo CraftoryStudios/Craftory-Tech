@@ -64,6 +64,11 @@
       <id>sonatype</id>
       <url>https://oss.sonatype.org/content/groups/public/</url>
     </repository>
+    <repository>
+      <id>minecraft-libraries</id>
+      <name>Minecraft Libraries</name>
+      <url>https://libraries.minecraft.net</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -74,11 +79,22 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot</artifactId>
+      <version>1.15.2-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>tech.brettsaunders.itemsadder</groupId>
       <artifactId>itemsadder</artifactId>
       <scope>system</scope>
       <version>2.0.12</version>
       <systemPath>${project.basedir}/lib/ItemsAdder.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.mojang</groupId>
+      <artifactId>datafixerupper</artifactId>
+      <version>1.0.20</version>
     </dependency>
   </dependencies>
 </project>
