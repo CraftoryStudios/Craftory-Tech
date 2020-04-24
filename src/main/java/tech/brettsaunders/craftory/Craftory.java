@@ -1,17 +1,29 @@
 package tech.brettsaunders.craftory;
 
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
-import org.bukkit.Bukkit;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
+import net.citizensnpcs.api.trait.trait.Equipment;
+import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Chicken;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 
 public final class Craftory extends JavaPlugin {
@@ -45,6 +57,7 @@ public final class Craftory extends JavaPlugin {
       getServer().getPluginManager().registerEvents(new DebugEvents(), this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
     }
+
   }
 
   @Override
@@ -60,8 +73,13 @@ public final class Craftory extends JavaPlugin {
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (command.getName().equals("matty")) {
       Player player = (Player) sender;
-      Block block = player.getLocation().add(0, 0, -2).getBlock();
-      block.setType(Material.STONE);
+      NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.ZOMBIE, "MARTY");
+      npc.spawn(((Player) sender).getLocation());
+      npc.setProtected(false);
+      npc.getTrait(Equipment.class).set(EquipmentSlot.HELMET, ItemsAdder.getCustomItem("craftory:chestpet_walking"));
+      Zombie chicken = (Zombie) npc.getEntity();
+      chicken.setBaby(true);
+      chicken.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 1));
     }
     if (command.getName().equals("setCursedSpreadRate")) {
       try {

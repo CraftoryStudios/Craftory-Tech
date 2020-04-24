@@ -3,7 +3,7 @@ version: ${project.version}
 main: tech.brettsaunders.craftory.Craftory
 api-version: 1.13
 prefix: Craftory
-depend: [ItemsAdder]
+depend: [ItemsAdder, Citizens]
 loadbefore: [ItemsAdder]
 authors: [BrettSaunders]
 description: Adds more functionality to minecraft with only server side modification
