@@ -27,8 +27,8 @@ public class Barrel implements Listener {
 
   private final Integer BARREL_SIZE = 27;
   private final Integer REINFORCED_BARREL_SIZE = 54;
-  private HashMap<Location, Inventory> barrels;
   private final BlockUtils bs = new BlockUtils();
+  private final HashMap<Location, Inventory> barrels;
   private String SAVE_PATH = "Barrel.data";
 
   public Barrel(String folder) {

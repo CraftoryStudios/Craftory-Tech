@@ -9,8 +9,8 @@ import tech.brettsaunders.craftory.BeltManagerContext.Side;
 
 public class BeltManager implements Serializable {
 
-  private ArrayList<Location> belts = new ArrayList<>();
-  private BeltTree tree;
+  private final ArrayList<Location> belts = new ArrayList<>();
+  private final BeltTree tree;
   private int lenght;
 
   public BeltManager(Block block) {

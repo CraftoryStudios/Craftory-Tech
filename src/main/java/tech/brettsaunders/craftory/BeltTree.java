@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 
 public class BeltTree implements Serializable {
 
-  private HashMap<Location, BeltNode> parents = new HashMap<>();
-  private HashMap<Location, BeltNode> mapper = new HashMap<>();
+  private final HashMap<Location, BeltNode> parents = new HashMap<>();
+  private final HashMap<Location, BeltNode> mapper = new HashMap<>();
   private BeltNode root;
 
   public BeltTree(Location location) {
