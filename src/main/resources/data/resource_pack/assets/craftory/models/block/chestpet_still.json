@@ -1,7 +1,7 @@
 {
 	"__comment": "Designed by Benthomas7777 with Cubik Studio - https://cubik.studio",
 	"textures": {
-		"texture": "block/chestpet"
+		"texture": "craftory:block/chestpet"
 	},
 	"elements": [ 	 
 		{
@@ -246,7 +246,7 @@
 			"scale":  [ 0.625, 0.625, 0.625 ]
 		},
 		"head": {
-			"scale":  [ 2, 2, 2 ]
+			"scale":  [ 2.5, 2.5, 2.5 ]
 		},
 		"ground": {
 			"translation":  [ 0, 2, 0 ],
