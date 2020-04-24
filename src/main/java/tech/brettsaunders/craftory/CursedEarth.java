@@ -18,17 +18,16 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 public class CursedEarth implements Listener, Runnable {
 
-  private String SAVE_PATH = "CursedEarth.data";
-  private BlockUtils bs = new BlockUtils();
+  private final BlockUtils bs = new BlockUtils();
   BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
       BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST,
       BlockFace.NORTH_WEST};
+  private String SAVE_PATH = "CursedEarth.data";
   private float SPREAD_RATE = 1.0f;
   private transient HashSet<Location> earths;
   private transient HashSet<Location> closedList;

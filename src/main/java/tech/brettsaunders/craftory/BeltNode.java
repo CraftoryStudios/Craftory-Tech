@@ -6,11 +6,11 @@ import org.bukkit.Location;
 
 public class BeltNode implements Serializable {
 
+  private final Location location;
   private BeltNode child;
   private BeltNode parentBehind;
   private BeltNode parentLeft;
   private BeltNode parentRight;
-  private Location location;
 
   public BeltNode(Location location) {
     this.location = location;

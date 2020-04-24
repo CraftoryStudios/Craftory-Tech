@@ -3,7 +3,6 @@ package tech.brettsaunders.craftory;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,9 +18,9 @@ public final class Craftory extends JavaPlugin {
   public static Craftory plugin;
   public static HashSet<Long> chunkKeys = new HashSet<>();
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
+  FileConfiguration config = getConfig();
   private CursedEarth cursedEarth = null;
   private Barrel barrel = null;
-  FileConfiguration config = getConfig();
 
   @Override
   public void onEnable() {
@@ -54,7 +53,7 @@ public final class Craftory extends JavaPlugin {
   public void onDisable() {
     //Save Data
     DataContainer.saveData(chunkKeys, beltManagers);
-    if(config.getBoolean("enableMagic")){
+    if (config.getBoolean("enableMagic")) {
       cursedEarth.save();
       barrel.save();
     }
@@ -72,7 +71,7 @@ public final class Craftory extends JavaPlugin {
     if (command.getName().equals("setCursedSpreadRate")) {
       try {
         cursedEarth.setSpreadRate(Float.parseFloat(args[0]));
-      }catch (Exception e){
+      } catch (Exception e) {
 
       }
     }

@@ -25,11 +25,11 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 
 public class Barrel implements Listener {
 
-  private String SAVE_PATH = "Barrel.data";
-  private Integer BARREL_SIZE = 27;
-  private Integer REINFORCED_BARREL_SIZE = 54;
+  private final Integer BARREL_SIZE = 27;
+  private final Integer REINFORCED_BARREL_SIZE = 54;
   private HashMap<Location, Inventory> barrels;
-  private BlockUtils bs = new BlockUtils();
+  private final BlockUtils bs = new BlockUtils();
+  private String SAVE_PATH = "Barrel.data";
 
   public Barrel(String folder) {
     SAVE_PATH = folder + File.separator + SAVE_PATH;
@@ -87,9 +87,9 @@ public class Barrel implements Listener {
 
       if (barrels.containsKey(loc)) {
         Inventory i = barrels.remove(loc);
-        for (ItemStack item: i.getContents()) {
-          if (item != null){
-            loc.getWorld().dropItemNaturally(loc,item);
+        for (ItemStack item : i.getContents()) {
+          if (item != null) {
+            loc.getWorld().dropItemNaturally(loc, item);
           }
         }
       }
@@ -98,7 +98,9 @@ public class Barrel implements Listener {
 
   @EventHandler
   public void onPlayerRightClick(PlayerInteractEvent e) {
-    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+      return;
+    }
     Block block = e.getClickedBlock();
     if (bs.isCustomBlockType(block, "craftory:barrel") || bs
         .isCustomBlockType(block, "craftory:reinforced_barrel")) {

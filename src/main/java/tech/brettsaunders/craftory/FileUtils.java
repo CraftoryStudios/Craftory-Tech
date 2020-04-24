@@ -17,6 +17,7 @@ import java.util.jar.JarFile;
 import org.apache.commons.lang.StringUtils;
 
 public class FileUtils {
+
   public static boolean copyFile(final File toCopy, final File destFile) {
     try {
       return FileUtils.copyStream(new FileInputStream(toCopy),
@@ -51,7 +52,7 @@ public class FileUtils {
 
     final JarFile jarFile = jarConnection.getJarFile();
 
-    for (final Enumeration<JarEntry> e = jarFile.entries(); e.hasMoreElements();) {
+    for (final Enumeration<JarEntry> e = jarFile.entries(); e.hasMoreElements(); ) {
       final JarEntry entry = e.nextElement();
       if (entry.getName().startsWith(jarConnection.getEntryName())) {
         final String filename = StringUtils.removeStart(entry.getName(), //
@@ -60,7 +61,7 @@ public class FileUtils {
         final File f = new File(destDir, filename);
         if (!entry.isDirectory()) {
           final InputStream entryInputStream = jarFile.getInputStream(entry);
-          if(!FileUtils.copyStream(entryInputStream, f)){
+          if (!FileUtils.copyStream(entryInputStream, f)) {
             return false;
           }
           entryInputStream.close();
@@ -126,11 +127,12 @@ public class FileUtils {
     if (isEmpty(str) || isEmpty(remove)) {
       return str;
     }
-    if (str.startsWith(remove)){
+    if (str.startsWith(remove)) {
       return str.substring(remove.length());
     }
     return str;
   }
+
   public static boolean isEmpty(CharSequence cs) {
     return cs == null || cs.length() == 0;
   }

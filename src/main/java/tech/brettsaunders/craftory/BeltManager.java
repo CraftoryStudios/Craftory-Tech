@@ -9,9 +9,9 @@ import tech.brettsaunders.craftory.BeltManagerContext.Side;
 
 public class BeltManager implements Serializable {
 
-  private int lenght;
   private ArrayList<Location> belts = new ArrayList<>();
   private BeltTree tree;
+  private int lenght;
 
   public BeltManager(Block block) {
     lenght = 1;
@@ -21,7 +21,7 @@ public class BeltManager implements Serializable {
     belts.add(block.getLocation());
   }
 
-  public int getLenght() {
+  public int getLength() {
     return lenght;
   }
 
@@ -130,7 +130,7 @@ public class BeltManager implements Serializable {
         Bukkit.getLogger().info(belt + "this one");
       }
 
-      lenght = lenght + managerContext.getBeltManager().getLenght();
+      lenght = lenght + managerContext.getBeltManager().getLength();
     }
 
   }
