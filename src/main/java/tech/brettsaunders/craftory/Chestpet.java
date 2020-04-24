@@ -34,7 +34,6 @@ public class Chestpet extends EntityChicken {
   protected void initPathfinder() {
     //PathfinderGoalSelector#a(entity, speed, range?, ???) taken from EntityWolf
     goalSelector.a(0,new PathfinderGoalMoveTowardsTarget(this, 2.0, 3f));
-    goal
   }
 
   protected void initAttributes() {
