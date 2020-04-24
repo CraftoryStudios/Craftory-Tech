@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 
 public class BeltTree implements Serializable {
 
+  private final HashMap<Location, BeltNode> parents = new HashMap<>();
+  private final HashMap<Location, BeltNode> mapper = new HashMap<>();
   private BeltNode root;
-  private HashMap<Location, BeltNode> parents = new HashMap<>();
-  private HashMap<Location, BeltNode> mapper = new HashMap<>();
 
   public BeltTree(Location location) {
     root = new BeltNode(location);
@@ -104,10 +104,10 @@ public class BeltTree implements Serializable {
     }
 
     printResuriveFancy(player, stringBuilder, paddingForBoth, pointerForLeft, node.getParentLeft(),
-        (node.getParentLeft() == node) ? false : true);
+        node.getParentLeft() != node);
     printResuriveFancy(player, stringBuilder, paddingForBoth, pointerForLeft,
-        node.getParentBehind(), (node.getParentBehind() == node) ? false : true);
+        node.getParentBehind(), node.getParentBehind() != node);
     printResuriveFancy(player, stringBuilder, paddingForBoth, pointerForRight,
-        node.getParentRight(), (node.getParentRight() == node) ? false : true);
+        node.getParentRight(), node.getParentRight() != node);
   }
 }

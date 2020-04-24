@@ -43,6 +43,33 @@ recipes:
       result:
         item: craftory:cursed_earth
         amount: 7
+    barrel:
+      permission: craftory
+      enabled: true
+      pattern:
+      - OOO
+      - OCO
+      - OOO
+      ingredients:
+        C: CHEST
+        O: OAK_PLANKS
+      result:
+        item: craftory:barrel
+        amount: 1
+    reinforced_barrel:
+      permission: craftory
+      enabled: true
+      pattern:
+      - ISI
+      - IBI
+      - ISI
+      ingredients:
+        B: craftory:barrel
+        I: IRON_INGOT
+        S: STONE
+      result:
+        item: craftory:reinforced_barrel
+        amount: 1
 items:
   wand:
     display_name: Wand
@@ -68,6 +95,38 @@ items:
       generate: true
       textures:
       - block/cursed_earth.png
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+        - PICKAXE
+        - pickaxe
+  barrel:
+    display_name: Barrel
+    permission: craftory
+    resource:
+      material: STONE
+      generate: true
+      textures:
+      - block/barrel.png
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+        - PICKAXE
+        - pickaxe
+  reinforced_barrel:
+    display_name: Reinforced Barrel
+    permission: craftory
+    resource:
+      material: STONE
+      generate: true
+      textures:
+      - block/reinforced_barrel.png
     specific_properties:
       block:
         placed_model:

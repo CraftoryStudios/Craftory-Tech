@@ -27,30 +27,20 @@ public class BlockUtils {
 
   public boolean isCustomBlockType(Block block, String type) {
     if (ItemsAdder.isCustomBlock(block)) {
-      if (ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block)).equals(type)) {
-        return true;
-      }
+      return ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block)).equals(type);
     }
     return false;
   }
 
   public boolean isBelt(Block block, BlockFace direction) {
     if (direction == BlockFace.EAST) {
-      if (checkIsBelt(block, BELT_EAST)) {
-        return true;
-      }
+      return checkIsBelt(block, BELT_EAST);
     } else if (direction == BlockFace.WEST) {
-      if (checkIsBelt(block, BELT_WEST)) {
-        return true;
-      }
+      return checkIsBelt(block, BELT_WEST);
     } else if (direction == BlockFace.NORTH) {
-      if (checkIsBelt(block, BELT_NORTH)) {
-        return true;
-      }
+      return checkIsBelt(block, BELT_NORTH);
     } else if (direction == BlockFace.SOUTH) {
-      if (checkIsBelt(block, BELT_SOUTH)) {
-        return true;
-      }
+      return checkIsBelt(block, BELT_SOUTH);
     } else {
       Craftory.plugin.getLogger().warning("Belt direction doesn't exist");
     }
@@ -125,7 +115,7 @@ public class BlockUtils {
     BeltManagerContext leadManager = null;
     if (currentBeltManagers.size() >= 1) {
       for (BeltManagerContext context : currentBeltManagers) {
-        Bukkit.getLogger().info(context.getBeltManager().getLenght() + " length");
+        Bukkit.getLogger().info(context.getBeltManager().getLength() + " length");
       }
       Collections.sort(currentBeltManagers);
 

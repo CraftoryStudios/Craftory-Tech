@@ -5,9 +5,9 @@ import org.bukkit.block.Block;
 
 public class BeltManagerContext implements Comparable<BeltManagerContext> {
 
-  private BeltManager beltManager;
-  private Side side;
-  private boolean leadManager;
+  private final BeltManager beltManager;
+  private final Side side;
+  private final boolean leadManager;
   private Block block;
 
   public BeltManagerContext(BeltManager beltManager, Side side) {
@@ -29,7 +29,7 @@ public class BeltManagerContext implements Comparable<BeltManagerContext> {
       return 0;
     }
 
-    if (beltManager.getLenght() < o.getBeltManager().getLenght()) {
+    if (beltManager.getLength() < o.getBeltManager().getLength()) {
       return 1;
     } else {
       return -1;

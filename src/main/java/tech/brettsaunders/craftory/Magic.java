@@ -34,7 +34,7 @@ public class Magic implements Listener {
     if (clicked.getType().equals(Material.CAULDRON)) {
       wandUsedCauldron(clicked);
       return;
-    } else if (clicked.getType().equals(Material.CHEST)){
+    } else if (clicked.getType().equals(Material.CHEST)) {
       wandUsedChest(clicked);
       return;
     }
@@ -53,7 +53,10 @@ public class Magic implements Listener {
     Location loc = chest.getLocation();
     ArrayList<ItemStack> items = getItemsInRadius(loc, 3f);
     HashMap<String, Integer> counts = getItemCounts(items);
-    if(!counts.containsKey("craftory:life_gem") || !counts.containsKey(Material.STICK.toString()) || counts.get(Material.STICK.toString()) < 10) return;
+    if (!counts.containsKey("craftory:life_gem") || !counts.containsKey(Material.STICK.toString())
+        || counts.get(Material.STICK.toString()) < 10) {
+      return;
+    }
     HashMap<String, Integer> remove = new HashMap<>();
     remove.put("craftory:life_gem", 1);
     remove.put(Material.STICK.toString(), 10);
@@ -88,6 +91,7 @@ public class Magic implements Listener {
       cauldron.getWorld().spawnParticle(Particle.EXPLOSION_NORMAL, particleLoc, 10, 0, 0, 0, 0);
     }
   }
+
   private void wandUsed(Block block) {
     float spell_range = 1.5f;
     ArrayList<ItemStack> items = getItemsInRadius(block.getLocation().clone().add(0, 1, 0),
@@ -119,7 +123,7 @@ public class Magic implements Listener {
     return counts;
   }
 
-  private void removeItems(ArrayList<ItemStack> items, HashMap<String, Integer> amounts){
+  private void removeItems(ArrayList<ItemStack> items, HashMap<String, Integer> amounts) {
     for (ItemStack i : items) {
       String s;
       if (ItemsAdder.isCustomItem(i)) {
@@ -127,7 +131,9 @@ public class Magic implements Listener {
       } else {
         s = i.getType().toString();
       }
-      if (!amounts.containsKey(s)) continue;
+      if (!amounts.containsKey(s)) {
+        continue;
+      }
       int toRemove = amounts.get(s);
       if (toRemove > 0 && ((ItemsAdder.isCustomItem(i) && ItemsAdder.matchCustomItemName(i, s))
           || !ItemsAdder.isCustomItem(i) && i.getType().toString().equals(s))) {
@@ -142,6 +148,7 @@ public class Magic implements Listener {
       }
     }
   }
+
   private ArrayList<ItemStack> fuseItems(ArrayList<ItemStack> items,
       HashMap<String, Integer>[] recipe,
       HashMap<String, Integer> counts) {

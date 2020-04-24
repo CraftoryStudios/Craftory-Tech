@@ -31,8 +31,9 @@ public final class Craftory extends JavaPlugin {
   public static Craftory plugin;
   public static HashSet<Long> chunkKeys = new HashSet<>();
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
-  public CursedEarth cursedEarth = null;
   FileConfiguration config = getConfig();
+  private CursedEarth cursedEarth = null;
+  private Barrel barrel = null;
 
   @Override
   public void onEnable() {
@@ -49,6 +50,8 @@ public final class Craftory extends JavaPlugin {
       getServer().getPluginManager().registerEvents(cursedEarth, this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 800L, 80L);
       getServer().getPluginManager().registerEvents(new Magic(), this);
+      barrel = new Barrel(getDataFolder().getPath());
+      getServer().getPluginManager().registerEvents(barrel, this);
     }
 
     //Tech Classes
@@ -64,7 +67,10 @@ public final class Craftory extends JavaPlugin {
   public void onDisable() {
     //Save Data
     DataContainer.saveData(chunkKeys, beltManagers);
-    if(cursedEarth!=null) cursedEarth.save();
+    if (config.getBoolean("enableMagic")) {
+      cursedEarth.save();
+      barrel.save();
+    }
     // Plugin shutdown logic
     plugin = null;
   }
@@ -84,7 +90,7 @@ public final class Craftory extends JavaPlugin {
     if (command.getName().equals("setCursedSpreadRate")) {
       try {
         cursedEarth.setSpreadRate(Float.parseFloat(args[0]));
-      }catch (Exception e){
+      } catch (Exception e) {
 
       }
     }

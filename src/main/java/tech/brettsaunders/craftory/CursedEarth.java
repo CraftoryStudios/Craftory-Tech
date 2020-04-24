@@ -18,17 +18,16 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 public class CursedEarth implements Listener, Runnable {
 
-  private String SAVE_PATH = "CursedEarth.data";
-  BlockUtils bs = new BlockUtils();
+  private final BlockUtils bs = new BlockUtils();
   BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
       BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST,
       BlockFace.NORTH_WEST};
+  private String SAVE_PATH = "CursedEarth.data";
   private float SPREAD_RATE = 1.0f;
   private transient HashSet<Location> earths;
   private transient HashSet<Location> closedList;
@@ -96,15 +95,14 @@ public class CursedEarth implements Listener, Runnable {
     Random random = new Random();
     HashSet<Location> toAdd = new HashSet<>();
     HashSet<Location> toRemove = new HashSet<>();
-    Bukkit.getLogger().info("EARTHS: " + earths.size());
     for (Location loc : earths) {
-      if (random.nextInt(4) >= 1) {
+      if (random.nextInt(5) >= 1) {
         continue;
       } //Stops every block from spreading at the same time, could change this to select random elements rather than iterating and skipping
       ArrayList<Location> valid = generateValidFaces(
           loc.getBlock()); //Get blocks that it can spread to
       if (valid.size() > 0) {
-        if (random.nextInt(1000) <= (3 * valid.size() * SPREAD_RATE)) {
+        if (random.nextInt(10000) <= (3 * valid.size() * SPREAD_RATE)) {
           Location neighbour = valid.get(random.nextInt(valid.size())); //Picks a random face
           ItemsAdder.placeCustomBlock(neighbour, ItemsAdder.getCustomItem("craftory:cursed_earth"));
           toAdd.add(neighbour);
