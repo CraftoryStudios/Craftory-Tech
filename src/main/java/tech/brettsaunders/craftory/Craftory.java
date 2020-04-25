@@ -29,7 +29,7 @@ public final class Craftory extends JavaPlugin {
   FileConfiguration config = getConfig();
   private CursedEarth cursedEarth = null;
   private Barrel barrel = null;
-
+  private ChestPet chestPet = null;
   @Override
   public void onEnable() {
     plugin = this;
@@ -44,9 +44,12 @@ public final class Craftory extends JavaPlugin {
       cursedEarth = new CursedEarth(getDataFolder().getPath());
       getServer().getPluginManager().registerEvents(cursedEarth, this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 800L, 80L);
-      getServer().getPluginManager().registerEvents(new Magic(), this);
+      chestPet = new ChestPet();
+      getServer().getPluginManager().registerEvents(chestPet, this);
+      getServer().getPluginManager().registerEvents(new Magic(chestPet), this);
       barrel = new Barrel(getDataFolder().getPath());
       getServer().getPluginManager().registerEvents(barrel, this);
+
     }
 
     //Tech Classes
@@ -73,15 +76,7 @@ public final class Craftory extends JavaPlugin {
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (command.getName().equals("matty")) {
-      Player player = (Player) sender;
-      NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.ZOMBIE, "MARTY");
-      npc.spawn(((Player) sender).getLocation());
-      npc.setProtected(false);
-      npc.getTrait(Equipment.class).set(EquipmentSlot.HELMET, ItemsAdder.getCustomItem("craftory:chestpet_walking"));
-      npc.getTrait(FollowTrait.class).toggle(player, false);
-      Zombie chicken = (Zombie) npc.getEntity();
-      chicken.setBaby(true);
-      chicken.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 1));
+      chestPet.spawnChestPet((Player) sender, ((Player) sender).getLocation(), null);
     }
     if (command.getName().equals("setCursedSpreadRate")) {
       try {

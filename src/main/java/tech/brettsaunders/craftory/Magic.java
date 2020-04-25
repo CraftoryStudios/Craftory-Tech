@@ -10,14 +10,23 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class Magic implements Listener {
+
+  private final ChestPet chestPet;
+
+  public Magic(ChestPet chestPet) {
+    this.chestPet = chestPet;
+  }
 
   @EventHandler
   public void onPlayerRightClick(PlayerInteractEvent e) {
@@ -35,7 +44,7 @@ public class Magic implements Listener {
       wandUsedCauldron(clicked);
       return;
     } else if (clicked.getType().equals(Material.CHEST)) {
-      wandUsedChest(clicked);
+      wandUsedChest(clicked, e.getPlayer());
       return;
     }
     wandUsed(clicked);
@@ -49,7 +58,7 @@ public class Magic implements Listener {
             .toArray(ItemStack[]::new)));
   }
 
-  private void wandUsedChest(Block chest) {
+  private void wandUsedChest(Block chest, Player player) {
     Location loc = chest.getLocation();
     ArrayList<ItemStack> items = getItemsInRadius(loc, 3f);
     HashMap<String, Integer> counts = getItemCounts(items);
@@ -71,7 +80,10 @@ public class Magic implements Listener {
     chest.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, particleLoc, 10, 0, 0, 0, 0);
     particleLoc = loc.clone().add(-0.5, 1, -0.5);
     chest.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, particleLoc, 10, 0, 0, 0, 0);
-    //TODO spawn the chest thing in.
+    Inventory chestInv = ((Chest) chest.getState()).getBlockInventory();
+    chestPet.spawnChestPet(player, loc, chestInv.getContents());
+    chestInv.setContents(new ItemStack[]{});
+    chest.setType(Material.AIR);
   }
 
   private void wandUsedCauldron(Block cauldron) {
