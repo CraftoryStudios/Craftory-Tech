@@ -82,6 +82,7 @@ public final class Craftory extends JavaPlugin {
       Zombie chicken = (Zombie) npc.getEntity();
       chicken.setBaby(true);
       chicken.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 1));
+      //yeah
     }
     if (command.getName().equals("setCursedSpreadRate")) {
       try {
