@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import net.citizensnpcs.trait.FollowTrait;
 import org.bukkit.Location;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
@@ -53,11 +55,13 @@ public class DataContainer implements Serializable {
 
   public static void saveData(HashSet<Long> chunkKeys,
       HashMap<Location, BeltManager> beltManagers) {
-    new DataContainer(chunkKeys, beltManagers).saveData("Carftory.data");
+    new DataContainer(chunkKeys, beltManagers).saveData(Craftory.plugin.getDataFolder() + File
+        .pathSeparator + "Carftory.data");
   }
 
   public static DataContainer loadData() {
-    return new DataContainer(DataContainer.loadData("Carftory.data"));
+    return new DataContainer(DataContainer.loadData(Craftory.plugin.getDataFolder() + File
+        .pathSeparator +"Carftory.data"));
   }
 
   private boolean saveData(String filePath) {
