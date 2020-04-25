@@ -56,12 +56,12 @@ public class DataContainer implements Serializable {
   public static void saveData(HashSet<Long> chunkKeys,
       HashMap<Location, BeltManager> beltManagers) {
     new DataContainer(chunkKeys, beltManagers).saveData(Craftory.plugin.getDataFolder() + File
-        .pathSeparator + "Carftory.data");
+        .separator + "craftory.data");
   }
 
   public static DataContainer loadData() {
     return new DataContainer(DataContainer.loadData(Craftory.plugin.getDataFolder() + File
-        .pathSeparator +"Carftory.data"));
+        .separator +"craftory.data"));
   }
 
   private boolean saveData(String filePath) {
