@@ -1,24 +1,19 @@
 package tech.brettsaunders.craftory;
 
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.trait.Equipment;
-import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
-import net.citizensnpcs.trait.FollowTrait;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPet;
+import tech.brettsaunders.craftory.tech.belts.BeltEvents;
+import tech.brettsaunders.craftory.tech.belts.BeltManager;
+import tech.brettsaunders.craftory.tech.belts.DebugEvents;
+import tech.brettsaunders.craftory.tech.belts.EntitySerach;
 
 
 public final class Craftory extends JavaPlugin {

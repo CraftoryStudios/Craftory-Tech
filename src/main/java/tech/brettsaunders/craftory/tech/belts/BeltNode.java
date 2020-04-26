@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory;
+package tech.brettsaunders.craftory.tech.belts;
 
 import java.io.Serializable;
 import org.bukkit.Bukkit;

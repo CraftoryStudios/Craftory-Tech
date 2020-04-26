@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory;
+package tech.brettsaunders.craftory.tech.belts;
 
 import java.util.List;
 import org.bukkit.Chunk;
@@ -9,6 +9,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.utils.BlockUtils;
 
 public class EntitySerach implements Runnable {
 

@@ -20,6 +20,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
+import tech.brettsaunders.craftory.utils.BlockUtils;
 
 public class CursedEarth implements Listener, Runnable {
 

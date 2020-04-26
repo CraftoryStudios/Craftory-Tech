@@ -19,6 +19,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPet;
 
 public class Magic implements Listener {
 

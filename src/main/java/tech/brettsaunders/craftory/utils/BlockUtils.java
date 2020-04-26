@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory;
+package tech.brettsaunders.craftory.utils;
 
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.util.ArrayList;
@@ -8,7 +8,10 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import tech.brettsaunders.craftory.BeltManagerContext.Side;
+import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.tech.belts.BeltManager;
+import tech.brettsaunders.craftory.tech.belts.BeltManagerContext;
+import tech.brettsaunders.craftory.tech.belts.BeltManagerContext.Side;
 
 public class BlockUtils {
 

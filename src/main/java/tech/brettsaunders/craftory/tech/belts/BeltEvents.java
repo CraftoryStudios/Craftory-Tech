@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory;
+package tech.brettsaunders.craftory.tech.belts;
 
 import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.Chunk;
@@ -8,6 +8,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import tech.brettsaunders.craftory.utils.BlockUtils;
+import tech.brettsaunders.craftory.Craftory;
 
 public class BeltEvents implements Listener {
 

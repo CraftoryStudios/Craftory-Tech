@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory;
+package tech.brettsaunders.craftory.magic.mobs.chestpet;
 
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class ChestPet implements Listener {
     npc.getTrait(FollowTrait.class).toggle(player, false);
     Zombie chicken = (Zombie) npc.getEntity();
     chicken.setBaby(true);
-    chicken.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 99999, 1));
+    chicken.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
     Inventory inventory = Bukkit.createInventory(null, 27);
     if (items != null) {
       inventory.setContents(items);

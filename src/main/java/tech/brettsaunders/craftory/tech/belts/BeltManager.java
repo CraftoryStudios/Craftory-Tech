@@ -1,11 +1,12 @@
-package tech.brettsaunders.craftory;
+package tech.brettsaunders.craftory.tech.belts;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import tech.brettsaunders.craftory.BeltManagerContext.Side;
+import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.tech.belts.BeltManagerContext.Side;
 
 public class BeltManager implements Serializable {
 

@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory;
+package tech.brettsaunders.craftory.tech.belts;
 
 
 import org.bukkit.block.Block;
