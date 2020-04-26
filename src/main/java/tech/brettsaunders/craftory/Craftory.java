@@ -3,6 +3,7 @@ package tech.brettsaunders.craftory;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -77,7 +78,7 @@ public final class Craftory extends JavaPlugin {
       try {
         cursedEarth.setSpreadRate(Float.parseFloat(args[0]));
       } catch (Exception e) {
-
+        Bukkit.getLogger().info("Invalid use of cursed earth spread setting command");
       }
     }
     return false;

@@ -61,21 +61,18 @@ public class Barrel implements Listener {
   @EventHandler
   public void onBlockPlace(BlockPlaceEvent e) {
     Craftory.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Craftory.plugin,
-        new Runnable() {
-          @Override
-          public void run() {
-            int size;
-            if (bs.isCustomBlockType(e.getBlockPlaced(), "craftory:barrel")) {
-              size = BARREL_SIZE;
+        () -> {
+          int size;
+          if (bs.isCustomBlockType(e.getBlockPlaced(), "craftory:barrel")) {
+            size = BARREL_SIZE;
 
-            } else if (bs.isCustomBlockType(e.getBlockPlaced(), "craftory:reinforced_barrel")) {
-              size = REINFORCED_BARREL_SIZE;
-            } else {
-              return;
-            }
-            barrels.put(e.getBlockPlaced().getLocation(),
-                Bukkit.createInventory(null, size, "Barrel"));
+          } else if (bs.isCustomBlockType(e.getBlockPlaced(), "craftory:reinforced_barrel")) {
+            size = REINFORCED_BARREL_SIZE;
+          } else {
+            return;
           }
+          barrels.put(e.getBlockPlaced().getLocation(),
+              Bukkit.createInventory(null, size, "Barrel"));
         }, 1L);
   }
 

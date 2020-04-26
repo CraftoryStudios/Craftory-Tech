@@ -80,13 +80,10 @@ public class CursedEarth implements Listener, Runnable {
   @EventHandler
   public void onBlockPlace(BlockPlaceEvent event) {
     Craftory.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Craftory.plugin,
-        new Runnable() {
-          @Override
-          public void run() {
-            if (bs.isCustomBlockType(event.getBlockPlaced(), "craftory:cursed_earth")) {
-              //Add the block to the HashSet when it is placed
-              earths.add(event.getBlockPlaced().getLocation());
-            }
+        () -> {
+          if (bs.isCustomBlockType(event.getBlockPlaced(), "craftory:cursed_earth")) {
+            //Add the block to the HashSet when it is placed
+            earths.add(event.getBlockPlaced().getLocation());
           }
         }, 1L);
   }
