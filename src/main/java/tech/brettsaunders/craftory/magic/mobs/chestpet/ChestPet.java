@@ -37,16 +37,13 @@ public class ChestPet implements Listener {
   public void spawnChestPet(Player player, Location loc, ItemStack[] items) {
     NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.ZOMBIE, "MARTY");
     npc.spawn(loc);
-    npc.getTrait(Equipment.class)
-        .set(EquipmentSlot.HELMET, ItemsAdder.getCustomItem("craftory:chestpet_walking"));
-    npc.getTrait(FollowTrait.class).toggle(player, false);
-    Zombie chicken = (Zombie) npc.getEntity();
-    chicken.setBaby(true);
-    chicken.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
+    npc.getTrait(ChestPetTrait.class).toggle(player, false);
+    Zombie npcEntity = (Zombie) npc.getEntity();
     Inventory inventory = Bukkit.createInventory(null, 27);
     if (items != null) {
       inventory.setContents(items);
     }
-    chests.put(chicken.getUniqueId(), inventory);
+    chests.put(npcEntity.getUniqueId(), inventory);
+    npc.getTrait(ChestPetTrait.class).setInventory(inventory);
   }
 }

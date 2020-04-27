@@ -1,19 +1,32 @@
 package tech.brettsaunders.craftory.magic.mobs.chestpet;
 
+import dev.lone.itemsadder.api.ItemsAdder;
+import java.util.List;
 import java.util.UUID;
 
 import java.util.UUID;
+import net.citizensnpcs.api.trait.trait.Equipment;
+import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 /**
  * Persists a {@link Player} to follow while spawned. Optionally allows protecting of the player as well.
@@ -27,6 +40,10 @@ public class ChestPetTrait extends Trait {
   private Player player;
   @Persist
   private boolean protect;
+  @Persist
+  private Inventory inventory;
+
+  private boolean moving = false;
 
   public ChestPetTrait() {
     super("chestpet");
@@ -41,6 +58,32 @@ public class ChestPetTrait extends Trait {
 
   public boolean isEnabled() {
     return enabled;
+  }
+
+  @EventHandler
+  private void onPlayerLeave(PlayerQuitEvent event) {
+    Player playerLeaving = event.getPlayer();
+    if (player != null && playerLeaving == player) {
+      npc.despawn();
+    }
+  }
+
+  @EventHandler
+  private void onPlayerJoin(PlayerJoinEvent event) {
+    Player playerJoining = event.getPlayer();
+    if (player != null && playerJoining == player) {
+      npc.spawn(playerJoining.getLocation());
+    }
+  }
+
+  @Override
+  public void onSpawn() {
+    npc.getTrait(Equipment.class)
+        .set(EquipmentSlot.HELMET, ItemsAdder.getCustomItem("craftory:chestpet_still"));
+    Zombie chicken = (Zombie) npc.getEntity();
+    chicken.setBaby(true);
+    chicken.setCustomNameVisible(false);
+    chicken.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
   }
 
   @EventHandler
@@ -73,6 +116,42 @@ public class ChestPetTrait extends Trait {
     if (!npc.getNavigator().isNavigating()) {
       npc.getNavigator().setTarget(player, false);
     }
+    Zombie chicken = (Zombie) npc.getEntity();
+    if (chicken.getVelocity().length() > 0) {
+      if (!moving) {
+        moving = true;
+        npc.getTrait(Equipment.class)
+            .set(EquipmentSlot.HELMET, ItemsAdder.getCustomItem("craftory:chestpet_walking"));
+      }
+    } else {
+      if (moving) {
+        moving = false;
+        npc.getTrait(Equipment.class)
+            .set(EquipmentSlot.HELMET, ItemsAdder.getCustomItem("craftory:chestpet_still"));
+      }
+    }
+    List<Entity> itemsNearby = chicken.getNearbyEntities(5, 2, 5);
+    if (itemsNearby.size() > 0) {
+      Item nearest = null;
+      double distance = 10;
+      for (int i = 0; i < itemsNearby.size(); i++) {
+        Entity item = itemsNearby.get(i);
+        if (item.getType() != EntityType.DROPPED_ITEM) continue;
+        double tempDistance = item.getLocation().distance(chicken.getLocation());
+        if (tempDistance < 1.6) {
+          nearest = null;
+          pickUp((Item) item);
+          item.remove();
+        } else if (tempDistance < distance) {
+          distance = tempDistance;
+          nearest = (Item) item;
+        }
+      }
+      if (nearest != null) {
+        npc.getNavigator().setTarget((Entity) nearest, false);
+      }
+    }
+
   }
 
   /**
@@ -99,5 +178,15 @@ public class ChestPetTrait extends Trait {
     }
     this.player = null;
     return this.enabled;
+  }
+
+  public void setInventory(Inventory inventory) {
+    this.inventory = inventory;
+  }
+
+  private void pickUp(Item item) {
+    if (inventory != null) {
+      inventory.addItem(item.getItemStack());
+    }
   }
 }

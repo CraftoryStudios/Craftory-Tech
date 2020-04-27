@@ -1,8 +1,11 @@
 package tech.brettsaunders.craftory;
 
 import java.io.File;
+import java.net.Inet4Address;
 import java.util.HashMap;
 import java.util.HashSet;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -10,6 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPet;
+import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPetTrait;
 import tech.brettsaunders.craftory.tech.belts.BeltEvents;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
 import tech.brettsaunders.craftory.tech.belts.DebugEvents;
@@ -52,6 +56,8 @@ public final class Craftory extends JavaPlugin {
       getServer().getPluginManager().registerEvents(new BeltEvents(), this);
       getServer().getPluginManager().registerEvents(new DebugEvents(), this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
+
+      CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ChestPetTrait.class).withName("chestpet"));
     }
 
   }
