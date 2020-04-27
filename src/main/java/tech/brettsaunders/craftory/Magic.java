@@ -41,6 +41,7 @@ public class Magic implements Listener {
       return;
     }
     Block clicked = e.getClickedBlock();
+    if (clicked==null) return;
     if (clicked.getType().equals(Material.CAULDRON)) {
       wandUsedCauldron(clicked);
       return;
@@ -52,7 +53,7 @@ public class Magic implements Listener {
   }
 
   private ArrayList<ItemStack> getItemsInRadius(Location loc, float radius) {
-    return new ArrayList<ItemStack>(
+    return new ArrayList<>(
         Arrays.asList(Arrays.stream(loc.getChunk().getEntities()).filter(e -> e instanceof Item)
             .filter(e -> e.getLocation().distance(loc) <= radius)
             .map(e -> ((Item) e).getItemStack())
@@ -113,7 +114,7 @@ public class Magic implements Listener {
     for (ItemStack i : items) {
       amount = i.getAmount();
       amount *= 2;
-      amount = (amount > i.getMaxStackSize()) ? i.getMaxStackSize() : amount;
+      amount = Math.min(amount, i.getMaxStackSize());
       i.setAmount(amount);
     }
   }
@@ -181,7 +182,7 @@ public class Magic implements Listener {
       }
       Integer value = entry.getValue();
       int temp = value / inputs.get(key); //Divide by number of item required for recipe
-      min = min < temp ? min : temp;
+      min = Math.min(min, temp);
     }
     if (min == Integer.MAX_VALUE) {
       min = 0;
@@ -197,7 +198,6 @@ public class Magic implements Listener {
     }
     //Remove items used
     removeItems(items, counts);
-
     ArrayList<ItemStack> toDrop = new ArrayList<>();
     ItemStack item;
     for (Entry<String, Integer> entry : products.entrySet()) {
@@ -211,20 +211,15 @@ public class Magic implements Listener {
       int max = item.getMaxStackSize();
       int toMake = productAmounts * i;
       while (toMake > 0) {
+        if (ItemsAdder.isCustomItem(s)) {
+          item = ItemsAdder.getCustomItem(s);
+        } else {
+          item = new ItemStack(Material.valueOf(s));
+        }
         if (toMake > max) {
-          if (ItemsAdder.isCustomItem(s)) {
-            item = ItemsAdder.getCustomItem(s);
-          } else {
-            item = new ItemStack(Material.valueOf(s));
-          }
           item.setAmount(max);
           toMake -= max;
         } else {
-          if (ItemsAdder.isCustomItem(s)) {
-            item = ItemsAdder.getCustomItem(s);
-          } else {
-            item = new ItemStack(Material.valueOf(s));
-          }
           item.setAmount(toMake);
           toMake = 0;
         }
