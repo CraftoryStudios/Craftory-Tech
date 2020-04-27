@@ -30,26 +30,26 @@ public final class Craftory extends JavaPlugin {
   private CursedEarth cursedEarth = null;
   private Barrel barrel = null;
   private ChestPet chestPet = null;
+
   @Override
   public void onEnable() {
     plugin = this;
     // Plugin startup logic
     getLogger().info("Now Loading!");
     resourceSetup();
-
     //Register
-
+    String dataFolder = getDataFolder().getPath();
     //Magic Classes
     if (config.getBoolean("enableMagic")) {
-      cursedEarth = new CursedEarth(getDataFolder().getPath());
+      cursedEarth = new CursedEarth(dataFolder);
       getServer().getPluginManager().registerEvents(cursedEarth, this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 800L, 80L);
-      chestPet = new ChestPet();
+      chestPet = new ChestPet(dataFolder);
       getServer().getPluginManager().registerEvents(chestPet, this);
       getServer().getPluginManager().registerEvents(new Magic(chestPet), this);
-      barrel = new Barrel(getDataFolder().getPath());
+      CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ChestPetTrait.class).withName("chestpet"));
+      barrel = new Barrel(dataFolder);
       getServer().getPluginManager().registerEvents(barrel, this);
-
     }
 
     //Tech Classes
@@ -57,8 +57,6 @@ public final class Craftory extends JavaPlugin {
       getServer().getPluginManager().registerEvents(new BeltEvents(), this);
       getServer().getPluginManager().registerEvents(new DebugEvents(), this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
-
-      CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ChestPetTrait.class).withName("chestpet"));
     }
 
   }
@@ -70,6 +68,7 @@ public final class Craftory extends JavaPlugin {
     if (config.getBoolean("enableMagic")) {
       cursedEarth.save();
       barrel.save();
+      chestPet.save();
     }
     // Plugin shutdown logic
     plugin = null;
