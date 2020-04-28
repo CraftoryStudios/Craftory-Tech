@@ -1,7 +1,6 @@
 package tech.brettsaunders.craftory;
 
 import java.io.File;
-import java.net.Inet4Address;
 import java.util.HashMap;
 import java.util.HashSet;
 import net.citizensnpcs.api.CitizensAPI;
@@ -45,7 +44,7 @@ public final class Craftory extends JavaPlugin {
       getServer().getPluginManager().registerEvents(cursedEarth, this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 800L, 80L);
       chestPet = new ChestPet(dataFolder);
-      getServer().getPluginManager().registerEvents(chestPet, this);
+      //getServer().getPluginManager().registerEvents(chestPet, this);
       getServer().getPluginManager().registerEvents(new Magic(chestPet), this);
       CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ChestPetTrait.class).withName("chestpet"));
       barrel = new Barrel(dataFolder);
@@ -77,7 +76,7 @@ public final class Craftory extends JavaPlugin {
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (command.getName().equals("matty")) {
-      chestPet.spawnChestPet((Player) sender, ((Player) sender).getLocation(), null);
+      chestPet.createChestPet((Player) sender, ((Player) sender).getLocation(), null);
     }
     if (command.getName().equals("setCursedSpreadRate")) {
       try {

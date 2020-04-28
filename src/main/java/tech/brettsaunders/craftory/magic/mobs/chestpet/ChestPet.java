@@ -68,7 +68,7 @@ public class ChestPet implements Listener {
     }
   }
 
-  public void spawnChestPet(Player player, Location loc, ItemStack[] items) {
+  public void createChestPet(Player player, Location loc, ItemStack[] items) {
     NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.ZOMBIE, "MARTY");
     npc.spawn(loc);
     npc.getTrait(ChestPetTrait.class).toggle(player, false);

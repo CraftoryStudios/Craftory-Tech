@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.UUID;
 
 import java.util.UUID;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Equipment;
 import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -22,9 +25,11 @@ import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -152,6 +157,13 @@ public class ChestPetTrait extends Trait {
       }
     }
 
+  }
+
+  @EventHandler
+  public void onPlayerIntereactEntity(PlayerInteractEntityEvent e) {
+    if(e.getRightClicked().equals(npc.getEntity())){
+      e.getPlayer().openInventory(inventory);
+    }
   }
 
   /**

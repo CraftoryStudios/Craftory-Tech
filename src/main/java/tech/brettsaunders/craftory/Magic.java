@@ -83,7 +83,7 @@ public class Magic implements Listener {
     particleLoc = loc.clone().add(-0.5, 1, -0.5);
     chest.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, particleLoc, 10, 0, 0, 0, 0);
     Inventory chestInv = ((Chest) chest.getState()).getBlockInventory();
-    chestPet.spawnChestPet(player, loc, chestInv.getContents());
+    chestPet.createChestPet(player, loc, chestInv.getContents());
     chestInv.setContents(new ItemStack[]{});
     chest.setType(Material.AIR);
   }
