@@ -17,7 +17,7 @@ public class BeltEvents implements Listener {
 
   @EventHandler
   public void onBlockPlace(BlockPlaceEvent event) {
-    Craftory.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Craftory.plugin,
+    Craftory.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Craftory.getInstance(),
         new Runnable() {
           @Override
           public void run() {

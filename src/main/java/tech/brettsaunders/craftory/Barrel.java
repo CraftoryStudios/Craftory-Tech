@@ -60,7 +60,7 @@ public class Barrel implements Listener {
 
   @EventHandler
   public void onBlockPlace(BlockPlaceEvent e) {
-    Craftory.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Craftory.plugin,
+    Craftory.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Craftory.getInstance(),
         () -> {
           int size;
           if (bs.isCustomBlockType(e.getBlockPlaced(), "craftory:barrel")) {

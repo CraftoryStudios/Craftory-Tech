@@ -18,22 +18,28 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.utils.BlockUtils;
 
 public class CursedEarth implements Listener, Runnable {
 
+  private final Craftory plugin;
   private final BlockUtils bs = new BlockUtils();
-  BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
+
+  private BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
       BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST,
       BlockFace.NORTH_WEST};
   private String SAVE_PATH = "CursedEarth.data";
   private float SPREAD_RATE = 1.0f;
+
   private transient HashSet<Location> earths;
   private transient HashSet<Location> closedList;
 
+
   public CursedEarth(String folder) {
+    this.plugin = Craftory.getInstance();
     SAVE_PATH = folder + File.separator + SAVE_PATH;
     CursedData data;
     try {
@@ -79,7 +85,7 @@ public class CursedEarth implements Listener, Runnable {
 
   @EventHandler
   public void onBlockPlace(BlockPlaceEvent event) {
-    Craftory.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Craftory.plugin,
+    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin,
         () -> {
           if (bs.isCustomBlockType(event.getBlockPlaced(), "craftory:cursed_earth")) {
             //Add the block to the HashSet when it is placed

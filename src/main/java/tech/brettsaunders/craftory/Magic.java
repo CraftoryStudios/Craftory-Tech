@@ -19,14 +19,16 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPet;
+import tech.brettsaunders.craftory.magic.mobs.chestpet.MagicMobManager;
 
 public class Magic implements Listener {
 
-  private final ChestPet chestPet;
+  private final MagicMobManager magicMobManager;
+  private final Craftory plugin;
 
-  public Magic(ChestPet chestPet) {
-    this.chestPet = chestPet;
+  public Magic(MagicMobManager magicMobManager) {
+    this.plugin = Craftory.getInstance();
+    this.magicMobManager = magicMobManager;
   }
 
   @EventHandler
@@ -83,7 +85,7 @@ public class Magic implements Listener {
     particleLoc = loc.clone().add(-0.5, 1, -0.5);
     chest.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, particleLoc, 10, 0, 0, 0, 0);
     Inventory chestInv = ((Chest) chest.getState()).getBlockInventory();
-    chestPet.createChestPet(player, loc, chestInv.getContents());
+    magicMobManager.createChestPet(player, loc, chestInv.getContents());
     chestInv.setContents(new ItemStack[]{});
     chest.setType(Material.AIR);
   }

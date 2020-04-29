@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPet;
+import tech.brettsaunders.craftory.magic.mobs.chestpet.MagicMobManager;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPetTrait;
 import tech.brettsaunders.craftory.tech.belts.BeltEvents;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
@@ -22,17 +22,20 @@ import tech.brettsaunders.craftory.tech.belts.EntitySerach;
 
 public final class Craftory extends JavaPlugin {
 
-  public static Craftory plugin;
   public static HashSet<Long> chunkKeys = new HashSet<>();
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
   FileConfiguration config = getConfig();
+
+  private static Craftory plugin;
+
   private CursedEarth cursedEarth = null;
   private Barrel barrel = null;
-  private ChestPet chestPet = null;
+  private MagicMobManager magicMobManager = null;
+  private Magic magic = null;
 
   @Override
   public void onEnable() {
-    plugin = this;
+    this.plugin = this;
     // Plugin startup logic
     getLogger().info("Now Loading!");
     resourceSetup();
@@ -40,15 +43,22 @@ public final class Craftory extends JavaPlugin {
     String dataFolder = getDataFolder().getPath();
     //Magic Classes
     if (config.getBoolean("enableMagic")) {
+      //Create Classes
       cursedEarth = new CursedEarth(dataFolder);
-      getServer().getPluginManager().registerEvents(cursedEarth, this);
-      getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 800L, 80L);
-      chestPet = new ChestPet(dataFolder);
-      //getServer().getPluginManager().registerEvents(chestPet, this);
-      getServer().getPluginManager().registerEvents(new Magic(chestPet), this);
-      CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ChestPetTrait.class).withName("chestpet"));
+      magicMobManager = new MagicMobManager(dataFolder);
       barrel = new Barrel(dataFolder);
+      magic = new Magic(magicMobManager);
+
+      //Register Events
+      getServer().getPluginManager().registerEvents(cursedEarth, this);
+      getServer().getPluginManager().registerEvents(magic, this);
       getServer().getPluginManager().registerEvents(barrel, this);
+
+      //Register Tasks
+      getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 800L, 80L);
+
+      //Register Mobs
+      CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ChestPetTrait.class).withName("chestpet"));
     }
 
     //Tech Classes
@@ -67,7 +77,7 @@ public final class Craftory extends JavaPlugin {
     if (config.getBoolean("enableMagic")) {
       cursedEarth.save();
       barrel.save();
-      chestPet.save();
+      magicMobManager.save();
     }
     // Plugin shutdown logic
     plugin = null;
@@ -76,7 +86,7 @@ public final class Craftory extends JavaPlugin {
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (command.getName().equals("matty")) {
-      chestPet.createChestPet((Player) sender, ((Player) sender).getLocation(), null);
+      magicMobManager.createChestPet((Player) sender, ((Player) sender).getLocation(), null);
     }
     if (command.getName().equals("setCursedSpreadRate")) {
       try {
@@ -105,6 +115,10 @@ public final class Craftory extends JavaPlugin {
     File items = new File(getDataFolder().getParentFile(), "ItemsAdder/data/");
     items.mkdirs();
     FileUtils.copyResourcesRecursively(getClass().getResource("/data"), items);
+  }
+
+  public static Craftory getInstance() {
+    return plugin;
   }
 
 }

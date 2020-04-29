@@ -45,7 +45,7 @@ public class BlockUtils {
     } else if (direction == BlockFace.SOUTH) {
       return checkIsBelt(block, BELT_SOUTH);
     } else {
-      Craftory.plugin.getLogger().warning("Belt direction doesn't exist");
+      Craftory.getInstance().getLogger().warning("Belt direction doesn't exist");
     }
     return false;
   }

@@ -19,7 +19,7 @@ public class EntitySerach implements Runnable {
 
   @Override
   public void run() {
-    for (World world : Craftory.plugin.getServer().getWorlds()) {
+    for (World world : Craftory.getInstance().getServer().getWorlds()) {
       List<Player> players = world.getPlayers();
       // No players in this world
       if (players.isEmpty()) {

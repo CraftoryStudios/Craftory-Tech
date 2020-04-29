@@ -32,23 +32,23 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
-public class ChestPet implements Listener {
+public class MagicMobManager implements Listener {
 
-  HashMap<Integer, Inventory> chests;
-  private String SAVE_PATH = "ChestPet.data";
+  HashMap<UUID, Integer> mobData;
+  private String SAVE_PATH = "MagicMobManager.data";
 
-  public ChestPet(String folder) {
+  public MagicMobManager(String folder) {
     SAVE_PATH = folder + File.separator + SAVE_PATH;
-    chests = new HashMap<>();
+    mobData = new HashMap<>();
     try {
       BukkitObjectInputStream in = new BukkitObjectInputStream(
           new GZIPInputStream(new FileInputStream(SAVE_PATH)));
-      ChestPetData data = (ChestPetData) in.readObject();
-      chests = data.chests;
+      MobDataManager data = (MobDataManager) in.readObject();
+      mobData = data.mobDataManager;
       in.close();
-      Bukkit.getLogger().info("*** ChestPets Inventory Loaded");
+      Bukkit.getLogger().info("*** Mobs Loaded");
     } catch (IOException e) {
-      Bukkit.getLogger().info("*** New ChestPets Inventory Created");
+      Bukkit.getLogger().info("*** New Mobs Data Created");
       Bukkit.getLogger().info(e.toString());
       e.printStackTrace();
     } catch (Exception e) {
@@ -57,35 +57,11 @@ public class ChestPet implements Listener {
     }
   }
 
-
-  @EventHandler
-  public void onPlayerIntereactEntity(PlayerInteractEntityEvent e) {
-    if(!CitizensAPI.getNPCRegistry().isNPC(e.getRightClicked())) return;
-    Integer id = CitizensAPI.getNPCRegistry().getNPC(e.getRightClicked()).getId();
-    if (chests.containsKey(id)) {
-      e.getPlayer().openInventory(chests.get(id));
-
-    }
-  }
-
-  public void createChestPet(Player player, Location loc, ItemStack[] items) {
-    NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.ZOMBIE, "MARTY");
-    npc.spawn(loc);
-    npc.getTrait(ChestPetTrait.class).toggle(player, false);
-    Zombie npcEntity = (Zombie) npc.getEntity();
-    Inventory inventory = Bukkit.createInventory(null, 27);
-    if (items != null) {
-      inventory.setContents(items);
-    }
-    chests.put(npc.getId(), inventory);
-    npc.getTrait(ChestPetTrait.class).setInventory(inventory);
-  }
-
   public void save() {
     try {
       BukkitObjectOutputStream out = new BukkitObjectOutputStream(
           new GZIPOutputStream(new FileOutputStream(SAVE_PATH)));
-      out.writeObject(chests);
+      out.writeObject(mobData);
       out.close();
       Bukkit.getLogger().info("Barrel Saved");
     } catch (IOException e) {
@@ -94,15 +70,27 @@ public class ChestPet implements Listener {
     }
   }
 
-  private static class ChestPetData implements Serializable {
-
-    private static transient final long serialVersionUID = -1692222206529284441L;
-
-    protected HashMap<Integer, Inventory> chests;
-
-    public ChestPetData(HashMap<Integer, Inventory> chests) {
-      this.chests = chests;
+  //Mob Spawners
+  public boolean createChestPet(Player player, Location loc, ItemStack[] items) {
+    if (mobData.containsKey(player.getUniqueId())) return false;
+    NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.ZOMBIE, "MARTY");
+    npc.spawn(loc);
+    npc.getTrait(ChestPetTrait.class).toggle(player, false);
+    Zombie npcEntity = (Zombie) npc.getEntity();
+    Inventory inventory = Bukkit.createInventory(null, 27);
+    if (items != null) {
+      inventory.setContents(items);
     }
+    mobData.put(player.getUniqueId(), npc.getId());
+    npc.getTrait(ChestPetTrait.class).setInventory(inventory);
+    return true;
+  }
 
+  private static class MobDataManager implements Serializable {
+    private static transient final long serialVersionUID = -1692222206529284441L;
+    protected HashMap<UUID, Integer> mobDataManager;
+    public MobDataManager(HashMap<UUID, Integer> mobDataManager) {
+      this.mobDataManager = mobDataManager;
+    }
   }
 }
