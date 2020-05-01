@@ -6,9 +6,12 @@ import java.util.UUID;
 
 import java.util.UUID;
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.exception.NPCLoadException;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Equipment;
 import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
+import net.citizensnpcs.api.util.DataKey;
+import net.citizensnpcs.api.util.ItemStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -28,6 +31,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -43,13 +47,15 @@ public class ChestPetTrait extends Trait {
   private Player player;
   @Persist
   private boolean protect;
-  @Persist
+
+  private ItemStack[] contents;
   private Inventory inventory;
 
   private boolean moving = false;
 
   public ChestPetTrait() {
     super("chestpet");
+    contents = new ItemStack[27];
   }
 
   /**
@@ -61,6 +67,43 @@ public class ChestPetTrait extends Trait {
 
   public boolean isEnabled() {
     return enabled;
+  }
+
+  @Override
+  public void load(DataKey key) throws NPCLoadException {
+    contents = parseContents(key);
+  }
+
+  @Override
+  public void onDespawn() {
+    saveContents();
+  }
+
+  private ItemStack[] parseContents(DataKey key) throws NPCLoadException {
+    ItemStack[] contents = new ItemStack[72];
+    for (DataKey slotKey : key.getIntegerSubKeys()) {
+      contents[Integer.parseInt(slotKey.name())] = ItemStorage.loadItemStack(slotKey);
+    }
+    return contents;
+  }
+
+  @Override
+  public void save(DataKey key) {
+    int slot = 0;
+    for (ItemStack item : contents) {
+      // Clear previous items to avoid conflicts
+      key.removeKey(String.valueOf(slot));
+      if (item != null) {
+        ItemStorage.saveItem(key.getRelative(String.valueOf(slot)), item);
+      }
+      slot++;
+    }
+  }
+
+  private void saveContents() {
+    if (inventory != null) {
+      contents = inventory.getContents();
+    }
   }
 
   @EventHandler
@@ -81,6 +124,13 @@ public class ChestPetTrait extends Trait {
 
   @Override
   public void onSpawn() {
+    if (inventory == null) {
+      inventory = Bukkit.createInventory(null, 27);
+    }
+    for (int i = 0; i < inventory.getSize(); i++) {
+      inventory.setItem(i, contents[i]);
+    }
+
     npc.getTrait(Equipment.class)
         .set(EquipmentSlot.HELMET, ItemsAdder.getCustomItem("craftory:chestpet_still"));
     Zombie chicken = (Zombie) npc.getEntity();
@@ -105,6 +155,7 @@ public class ChestPetTrait extends Trait {
 
   @Override
   public void run() {
+    saveContents();
     if (player == null || !player.isValid()) {
       if (followingUUID == null)
         return;
