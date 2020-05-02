@@ -109,7 +109,7 @@ public class ChestPetTrait extends Trait {
   @EventHandler
   private void onPlayerLeave(PlayerQuitEvent event) {
     Player playerLeaving = event.getPlayer();
-    if (player != null && playerLeaving == player) {
+    if (followingUUID != null && playerLeaving.getUniqueId() == followingUUID) {
       npc.despawn();
     }
   }
@@ -117,7 +117,7 @@ public class ChestPetTrait extends Trait {
   @EventHandler
   private void onPlayerJoin(PlayerJoinEvent event) {
     Player playerJoining = event.getPlayer();
-    if (player != null && playerJoining == player) {
+    if (followingUUID != null && playerJoining.getUniqueId() == followingUUID) {
       npc.spawn(playerJoining.getLocation());
     }
   }
