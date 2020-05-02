@@ -171,7 +171,7 @@ public class ChestPetTrait extends Trait {
       npc.getNavigator().setTarget(player, false);
     }
     Zombie chicken = (Zombie) npc.getEntity();
-    if (chicken.getVelocity().length() > 0) {
+    if (chicken.getVelocity().length() > 0.08) {
       if (!moving) {
         moving = true;
         npc.getTrait(Equipment.class)
