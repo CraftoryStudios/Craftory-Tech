@@ -1,0 +1,47 @@
+info:
+  namespace: craftory
+recipes:
+  crafting_table:
+    belt:
+      permission: craftory.belt
+      enabled: true
+      pattern:
+        - XXX
+        - OOO
+        - XXX
+      ingredients:
+        O: STONE
+      result:
+        item: craftory:belt
+        amount: 1
+items:
+  belt:
+    display_name: Belt
+    permission: belt
+    resource:
+      material: STONE
+      generate: false
+      model_path: block/north/conveyor_n
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+          - PICKAXE
+          - pickaxe
+  power_connector:
+    display_name: Power Connector
+    permission: craftory_tech
+    resource:
+      material: IRON_BLOCK
+      generate: false
+      model_path: block/power_connector
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+        - PICKAXE
+        - pickaxe

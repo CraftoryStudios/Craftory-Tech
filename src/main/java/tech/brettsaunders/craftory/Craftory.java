@@ -18,6 +18,8 @@ import tech.brettsaunders.craftory.tech.belts.BeltEvents;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
 import tech.brettsaunders.craftory.tech.belts.DebugEvents;
 import tech.brettsaunders.craftory.tech.belts.EntitySerach;
+import tech.brettsaunders.craftory.tech.power.Beam;
+import tech.brettsaunders.craftory.tech.power.PowerManager;
 
 
 public final class Craftory extends JavaPlugin {
@@ -32,6 +34,7 @@ public final class Craftory extends JavaPlugin {
   private Barrel barrel = null;
   private MagicMobManager magicMobManager = null;
   private Magic magic = null;
+  private PowerManager powerManager = null;
 
   @Override
   public void onEnable() {
@@ -48,11 +51,13 @@ public final class Craftory extends JavaPlugin {
       magicMobManager = new MagicMobManager(dataFolder);
       barrel = new Barrel(dataFolder);
       magic = new Magic(magicMobManager);
+      powerManager = new PowerManager();
 
       //Register Events
       getServer().getPluginManager().registerEvents(cursedEarth, this);
       getServer().getPluginManager().registerEvents(magic, this);
       getServer().getPluginManager().registerEvents(barrel, this);
+      getServer().getPluginManager().registerEvents(powerManager, this);
 
       //Register Tasks
       getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 800L, 80L);
@@ -66,12 +71,19 @@ public final class Craftory extends JavaPlugin {
       getServer().getPluginManager().registerEvents(new BeltEvents(), this);
       getServer().getPluginManager().registerEvents(new DebugEvents(), this);
       getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
+
     }
+
+    //OnEnables
+    powerManager.onEnable();
 
   }
 
   @Override
   public void onDisable() {
+    //OnDisalbe
+    powerManager.onDisable();
+
     //Save Data
     DataContainer.saveData(chunkKeys, beltManagers);
     if (config.getBoolean("enableMagic")) {
@@ -86,7 +98,13 @@ public final class Craftory extends JavaPlugin {
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (command.getName().equals("matty")) {
-      magicMobManager.createChestPet((Player) sender, ((Player) sender).getLocation(), null);
+      //magicMobManager.createChestPet((Player) sender, ((Player) sender).getLocation(), null);
+      try {
+        Beam beam = new Beam(((Player) sender).getLocation(),((Player) sender).getLocation().add(0,1,0), 10, 50);
+        beam.start(this);
+      } catch (ReflectiveOperationException e) {
+        e.printStackTrace();
+      }
     }
     if (command.getName().equals("setCursedSpreadRate")) {
       try {
