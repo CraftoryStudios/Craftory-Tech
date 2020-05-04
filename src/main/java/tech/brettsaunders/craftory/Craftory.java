@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.MagicMobManager;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPetTrait;
+import tech.brettsaunders.craftory.multiBlock.MultiBlockManager;
 import tech.brettsaunders.craftory.tech.belts.BeltEvents;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
 import tech.brettsaunders.craftory.tech.belts.DebugEvents;
@@ -35,15 +36,19 @@ public final class Craftory extends JavaPlugin {
   private MagicMobManager magicMobManager = null;
   private Magic magic = null;
   private PowerManager powerManager = null;
-
+  private MultiBlockManager multiBlockManager;
   @Override
   public void onEnable() {
-    this.plugin = this;
+    plugin = this;
     // Plugin startup logic
     getLogger().info("Now Loading!");
     resourceSetup();
     //Register
     String dataFolder = getDataFolder().getPath();
+
+    //General Classes
+    multiBlockManager = new MultiBlockManager(dataFolder);
+
     //Magic Classes
     if (config.getBoolean("enableMagic")) {
       //Create Classes
@@ -91,6 +96,7 @@ public final class Craftory extends JavaPlugin {
       barrel.save();
       magicMobManager.save();
     }
+    multiBlockManager.save();
     // Plugin shutdown logic
     plugin = null;
   }

@@ -79,9 +79,7 @@ public abstract class MultiBlock {
    *
    * @param e The event
    */
-  public void activeBlockEvent(Event e) {
-
-  }
+  public abstract void activeBlockEvent(Event e);
 
   /**
    * Form the multi-block structure into its full form
