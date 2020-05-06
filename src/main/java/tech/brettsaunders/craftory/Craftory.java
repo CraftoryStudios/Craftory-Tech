@@ -30,12 +30,12 @@ public final class Craftory extends JavaPlugin {
   FileConfiguration config = getConfig();
 
   private static Craftory plugin;
+  private static PowerManager powerManager = null;
 
   private CursedEarth cursedEarth = null;
   private Barrel barrel = null;
   private MagicMobManager magicMobManager = null;
   private Magic magic = null;
-  private PowerManager powerManager = null;
   private MultiBlockManager multiBlockManager;
   @Override
   public void onEnable() {
@@ -144,5 +144,7 @@ public final class Craftory extends JavaPlugin {
   public static Craftory getInstance() {
     return plugin;
   }
+
+  public static PowerManager getPowerManager() { return powerManager; }
 
 }
