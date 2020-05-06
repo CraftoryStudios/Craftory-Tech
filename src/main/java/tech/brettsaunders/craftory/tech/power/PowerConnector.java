@@ -2,11 +2,12 @@ package tech.brettsaunders.craftory.tech.power;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerConnector implements Serializable {
+
   private Location location;
   private ArrayList<Location> connectionTo;
   private ArrayList<Location> connectionFrom;
@@ -45,18 +46,20 @@ public class PowerConnector implements Serializable {
 
   public void buildBeams() {
     connectionTo.forEach((connector -> {
-      Bukkit.getLogger().info(connector.toString());
       formBeam(connector);
     }));
+    Logger.debug("All power beams built");
   }
 
   private void formBeam(Location connector) {
     try {
-      Beam beam = new Beam(location.clone().add(0.5,0,0.5), connector.clone().add(0.5,0,0.5), -1, 25);
+      Beam beam = new Beam(location.clone().add(0.5, 0, 0.5), connector.clone().add(0.5, 0, 0.5),
+          -1, 25);
       beam.start(plugin);
       beams.add(beam);
     } catch (ReflectiveOperationException e) {
-      e.printStackTrace();
+      Logger.warn("Couldn't form power beam");
+      Logger.debug(e.toString());
     }
   }
 

@@ -37,12 +37,15 @@ public final class Craftory extends JavaPlugin {
   private MagicMobManager magicMobManager = null;
   private Magic magic = null;
   private MultiBlockManager multiBlockManager;
+  private static boolean debugMode = false;
+
   @Override
   public void onEnable() {
-    plugin = this;
     // Plugin startup logic
-    getLogger().info("Now Loading!");
+    plugin = this;
     resourceSetup();
+    this.debugMode = config.getBoolean("debugMode");
+
     //Register
     String dataFolder = getDataFolder().getPath();
 
@@ -133,6 +136,7 @@ public final class Craftory extends JavaPlugin {
     }
     config.addDefault("enableMagic", true);
     config.addDefault("enableTech", true);
+    config.addDefault("debugMode", false);
     config.options().copyDefaults(true);
     saveConfig();
 
@@ -146,5 +150,7 @@ public final class Craftory extends JavaPlugin {
   }
 
   public static PowerManager getPowerManager() { return powerManager; }
+
+  public static boolean getDebugMode() { return debugMode; }
 
 }

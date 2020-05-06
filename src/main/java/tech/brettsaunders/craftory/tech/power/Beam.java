@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class Beam {
   private final int duration;
@@ -90,7 +91,8 @@ public class Beam {
           }
           if (time != -1) time--;
         }catch (ReflectiveOperationException e) {
-          e.printStackTrace();
+          Logger.warn("Issue with Power Beam packet sending");
+          Logger.debug(e.toString());
         }
       }
 
@@ -102,7 +104,8 @@ public class Beam {
             Packets.sendPacket(p, destroyPacket);
           }
         }catch (ReflectiveOperationException e) {
-          e.printStackTrace();
+          Logger.warn("Issue sending Power Beam cancel packet");
+          Logger.debug(e.toString());
         }
         run = null;
       }
@@ -251,7 +254,8 @@ public class Beam {
         fakeSquidWatcher = createFakeDataWatcher();
         tryWatcherSet(fakeSquidWatcher, watcherObject1, (byte) 32);
       }catch (ReflectiveOperationException e) {
-        e.printStackTrace();
+        Logger.warn("Issue setting up Beam Class data");
+        Logger.debug(e.toString());
       }
     }
 

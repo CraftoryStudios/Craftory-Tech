@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -24,6 +23,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.utils.BlockUtils;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerManager implements Listener {
   private HashMap<Location, PowerConnector> beamConnectors;
@@ -108,9 +108,10 @@ public class PowerManager implements Listener {
       PowerManagerData data = (PowerManagerData) in.readObject();
       beamConnectors = data.beamConnectors;
       in.close();
-      Bukkit.getLogger().info("[Craftory]" + ChatColor.GREEN + "PowerManager Loaded");
+      Logger.info("PowerManager Loaded");
     } catch (IOException | ClassNotFoundException e) {
-      Bukkit.getLogger().info("[Craftory]" + ChatColor.GREEN + " New PowerManager Data Created");
+      Logger.warn("New PowerManager Data Created");
+      Logger.debug(e.toString());
     }
   }
 
@@ -121,9 +122,10 @@ public class PowerManager implements Listener {
           new GZIPOutputStream(new FileOutputStream(DATA_PATH)));
       out.writeObject(data);
       out.close();
-      Bukkit.getLogger().info("[Craftory]" + ChatColor.GREEN + " PowerManager Data Saved");
+      Logger.info("PowerManager Data Saved");
     } catch (IOException e) {
-      Bukkit.getLogger().info("[Craftory]" + ChatColor.YELLOW + " PowerManager Data failed to save");
+      Logger.warn("Couldn't save PowerManager Data");
+      Logger.debug(e.toString());
     }
   }
 
