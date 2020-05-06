@@ -2,15 +2,14 @@
 	"__comment": "Designed by Benthomas7777 with Cubik Studio - https://cubik.studio",
 	"textures": {
 		"particle": "#conveyor",
-		"conveyor": "craftory-extra:block/conveyor",
-		"wall": "craftory-extra:block/conveyor_casing_side"
+		"conveyor": "extra:block/conveyor",
+		"wall": "extra:block/conveyor_casing_side"
 	},
 	"elements": [ 	 
 		{
 			"__comment": "Element",
 			"from": [ 1, 0, 0 ],
 			"to": [ 15, 14.5, 16 ],
-			"shade": false,
 			"faces": {
 				"down": { "uv": [ 1, 16, 15, 0 ], "texture": "#conveyor", "rotation": 180 },
 				"up": { "uv": [ 1, 16, 15, 0 ], "texture": "#conveyor", "rotation": 180 },
@@ -22,7 +21,6 @@
 			"__comment": "Element",
 			"from": [ 0, 0, 0 ],
 			"to": [ 1, 16, 16 ],
-			"shade": false,
 			"faces": {
 				"down": { "uv": [ 0, 15, 1, 1 ], "texture": "#wall" },
 				"up": { "uv": [ 0, 15, 1, 1 ], "texture": "#wall" },
@@ -36,7 +34,6 @@
 			"__comment": "Element",
 			"from": [ 15, 0, 0 ],
 			"to": [ 16, 16, 16 ],
-			"shade": false,
 			"faces": {
 				"down": { "uv": [ 0, 15, 1, 1 ], "texture": "#wall" },
 				"up": { "uv": [ 0, 15, 1, 1 ], "texture": "#wall" },
@@ -47,10 +44,17 @@
 			}
 		},
 		{
+			"__comment": "North",
+			"from": [ 1, 14.5, 0 ],
+			"to": [ 15, 16, 0.001 ],
+			"faces": {
+				"south": { "uv": [ 1, 0, 15, 1.5 ], "texture": "#wall" }
+			}
+		},
+		{
 			"__comment": "South",
 			"from": [ 1, 14.5, 16 ],
 			"to": [ 15, 16, 16.001 ],
-			"shade": false,
 			"faces": {
 				"north": { "uv": [ 1, 0, 15, 1.5 ], "texture": "#wall" }
 			}

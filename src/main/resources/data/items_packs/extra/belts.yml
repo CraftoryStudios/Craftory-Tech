@@ -1,5 +1,5 @@
 info:
-  namespace: craftory-extra
+  namespace: extra
 items:
   beltn:
     display_name: Belt
@@ -229,7 +229,7 @@ items:
 loots:
   blocks:
     beltn:
-      type: craftory-extra:beltn
+      type: extra:beltn
       items:
         belt:
           item: craftory:belt
@@ -237,7 +237,7 @@ loots:
           max_amount: 1
           chance: 100
     beltns:
-      type: craftory-extra:beltns
+      type: extra:beltns
       items:
         belt:
           item: craftory:belt
@@ -245,7 +245,7 @@ loots:
           max_amount: 1
           chance: 100
     belts:
-      type: craftory-extra:belts
+      type: extra:belts
       items:
         belt:
           item: craftory:belt
@@ -253,7 +253,7 @@ loots:
           max_amount: 1
           chance: 100
     belteast:
-      type: craftory-extra:belteast
+      type: extra:belteast
       items:
         belt:
           item: craftory:belt
@@ -261,7 +261,7 @@ loots:
           max_amount: 1
           chance: 100
     belteastee:
-      type: craftory-extra:belteastee
+      type: extra:belteastee
       items:
         belt:
           item: craftory:belt
@@ -269,7 +269,7 @@ loots:
           max_amount: 1
           chance: 100
     belteastew:
-      type: craftory-extra:belteastew
+      type: extra:belteastew
       items:
         belt:
           item: craftory:belt
@@ -277,7 +277,7 @@ loots:
           max_amount: 1
           chance: 100
     belteastw:
-      type: craftory-extra:belteastw
+      type: extra:belteastw
       items:
         belt:
           item: craftory:belt
@@ -285,7 +285,7 @@ loots:
           max_amount: 1
           chance: 100
     beltwest:
-      type: craftory-extra:beltwest
+      type: extra:beltwest
       items:
         belt:
           item: craftory:belt
@@ -293,7 +293,7 @@ loots:
           max_amount: 1
           chance: 100
     beltwestw:
-      type: craftory-extra:beltwestw
+      type: extra:beltwestw
       items:
         belt:
           item: craftory:belt
@@ -301,7 +301,7 @@ loots:
           max_amount: 1
           chance: 100
     beltwestew:
-      type: craftory-extra:beltwestew
+      type: extra:beltwestew
       items:
         belt:
           item: craftory:belt
@@ -309,7 +309,7 @@ loots:
           max_amount: 1
           chance: 100
     beltweste:
-      type: craftory-extra:beltweste
+      type: extra:beltweste
       items:
         belt:
           item: craftory:belt
@@ -317,7 +317,7 @@ loots:
           max_amount: 1
           chance: 100
     beltsouth:
-      type: craftory-extra:beltsouth
+      type: extra:beltsouth
       items:
         belt:
           item: craftory:belt
@@ -325,7 +325,7 @@ loots:
           max_amount: 1
           chance: 100
     beltsouthn:
-      type: craftory-extra:beltsouthn
+      type: extra:beltsouthn
       items:
         belt:
           item: craftory:belt
@@ -333,7 +333,7 @@ loots:
           max_amount: 1
           chance: 100
     beltsouthsn:
-      type: craftory-extra:beltsouthsn
+      type: extra:beltsouthsn
       items:
         belt:
           item: craftory:belt
@@ -341,7 +341,7 @@ loots:
           max_amount: 1
           chance: 100
     beltsouths:
-      type: craftory-extra:beltsouths
+      type: extra:beltsouths
       items:
         belt:
           item: craftory:belt

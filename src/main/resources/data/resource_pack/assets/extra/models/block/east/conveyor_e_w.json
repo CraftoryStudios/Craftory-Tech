@@ -2,8 +2,8 @@
 	"__comment": "Designed by Benthomas7777 with Cubik Studio - https://cubik.studio",
 	"textures": {
 		"particle": "#conveyor",
-		"conveyor": "craftory-extra:block/conveyor",
-		"wall": "craftory-extra:block/conveyor_casing_side"
+		"conveyor": "extra:block/conveyor",
+		"wall": "extra:block/conveyor_casing_side"
 	},
 	"elements": [ 	 
 		{
@@ -44,11 +44,11 @@
 			}
 		},
 		{
-			"__comment": "East",
-			"from": [ 15.999, 14.5, 1 ],
-			"to": [ 16, 16, 15 ],
+			"__comment": "Box6",
+			"from": [ -0.001, 14.5, 1 ],
+			"to": [ 0, 16, 15 ],
 			"faces": {
-				"west": { "uv": [ 1, 0, 15, 1.5 ], "texture": "#wall" }
+				"east": { "uv": [ 1, 0, 15, 1.5 ], "texture": "#wall" }
 			}
 		}
 	]
