@@ -18,7 +18,6 @@ public class BeltManager implements Serializable {
     lenght = 1;
     tree = new BeltTree(block.getLocation());
     Craftory.beltManagers.put(block.getLocation(), this);
-    Bukkit.getLogger().info(this.toString());
     belts.add(block.getLocation());
   }
 
@@ -74,7 +73,6 @@ public class BeltManager implements Serializable {
         node.setChild(tree.getNodeAt(leadBlock.getLocation()));
         break;
     }
-    Bukkit.getLogger().info("HERE");
 
     for (BeltManagerContext managerContext : currentBeltManagers) {
       if (managerContext.getBeltManager() == this) {
@@ -128,7 +126,6 @@ public class BeltManager implements Serializable {
       for (Location belt : managerContext.getBeltManager().getBelts()) {
         Craftory.beltManagers.replace(belt, this);
         belts.add(belt);
-        Bukkit.getLogger().info(belt + "this one");
       }
 
       lenght = lenght + managerContext.getBeltManager().getLength();

@@ -15,6 +15,7 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.commons.lang.StringUtils;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class FileUtils {
 
@@ -23,7 +24,8 @@ public class FileUtils {
       return FileUtils.copyStream(new FileInputStream(toCopy),
           new FileOutputStream(destFile));
     } catch (final FileNotFoundException e) {
-      e.printStackTrace();
+      Logger.warn("File not found when copying resources");
+      Logger.debug(e.toString());
     }
     return false;
   }
@@ -97,7 +99,7 @@ public class FileUtils {
     try {
       return FileUtils.copyStream(is, new FileOutputStream(f));
     } catch (final FileNotFoundException e) {
-      e.printStackTrace();
+      Logger.warn("File not found when copying resource stream");
     }
     return false;
   }

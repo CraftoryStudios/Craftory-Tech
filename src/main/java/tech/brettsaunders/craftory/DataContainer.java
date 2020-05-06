@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class DataContainer implements Serializable {
 
@@ -47,8 +48,8 @@ public class DataContainer implements Serializable {
       in.close();
       return data;
     } catch (ClassNotFoundException | IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      Logger.warn("Issue loading Data Container");
+      Logger.debug(e.toString());
       return null;
     }
   }

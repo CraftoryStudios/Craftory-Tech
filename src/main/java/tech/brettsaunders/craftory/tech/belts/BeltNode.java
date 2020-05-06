@@ -14,7 +14,6 @@ public class BeltNode implements Serializable {
 
   public BeltNode(Location location) {
     this.location = location;
-    Bukkit.getLogger().info(toString());
   }
 
   public void setChild(BeltNode child) {

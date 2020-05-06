@@ -80,17 +80,17 @@ public class BlockUtils {
     if (isBelt(blockFront, right) && hasBeltManager(blockFront)) {
       currentBeltManagers
           .add(new BeltManagerContext(getBeltManager(blockFront), Side.SidewaysRight, blockFront));
-      Bukkit.getLogger().info("Front Sideways Right");
+      Logger.debug("Front Sideways Right");
     }
     //Front Sideways Left
     if (isBelt(blockFront, left) && hasBeltManager(blockFront)) {
       currentBeltManagers
           .add(new BeltManagerContext(getBeltManager(blockFront), Side.SidewaysLeft, blockFront));
-      Bukkit.getLogger().info("Front Sideways Left");
+      Logger.debug("Front Sideways Left");
     }
     //Back
     if (isBelt(blockBehind, front) && hasBeltManager(blockBehind)) {
-      Bukkit.getLogger().info("Behind");
+      Logger.debug("Behind");
       currentBeltManagers
           .add(new BeltManagerContext(getBeltManager(blockBehind), Side.Back, blockBehind));
     }
@@ -98,27 +98,29 @@ public class BlockUtils {
     if (isBelt(blockFront, front) && hasBeltManager(blockFront)) {
       currentBeltManagers
           .add(new BeltManagerContext(getBeltManager(blockFront), Side.Front, blockFront));
-      Bukkit.getLogger().info("Front");
+      Logger.debug("Front");
     }
     //Left
     if (isBelt(blockLeft, right) && hasBeltManager(blockLeft)) {
       currentBeltManagers
           .add(new BeltManagerContext(getBeltManager(blockLeft), Side.Left, blockLeft));
-      Bukkit.getLogger().info("Left");
+      Logger.debug("Left");
     }
     //Right
     if (isBelt(blockRight, left) && hasBeltManager(blockRight)) {
       currentBeltManagers
           .add(new BeltManagerContext(getBeltManager(blockRight), Side.Right, blockRight));
-      Bukkit.getLogger().info("Right");
+      Logger.debug("Right");
     }
 
-    Bukkit.getLogger().info("LIST OF " + currentBeltManagers.toString());
-    Bukkit.getLogger().info("SIZE" + currentBeltManagers.size());
+    Logger.debug("LIST OF " + currentBeltManagers.toString());
+    Logger.debug("SIZE" + currentBeltManagers.size());
     BeltManagerContext leadManager = null;
     if (currentBeltManagers.size() >= 1) {
-      for (BeltManagerContext context : currentBeltManagers) {
-        Bukkit.getLogger().info(context.getBeltManager().getLength() + " length");
+      if (Craftory.getDebugMode()) {
+        for (BeltManagerContext context : currentBeltManagers) {
+          Logger.debug(context.getBeltManager().getLength() + " length");
+        }
       }
       Collections.sort(currentBeltManagers);
 
@@ -127,13 +129,13 @@ public class BlockUtils {
 
     if (leadManager == null) {
       leadManager = new BeltManagerContext(new BeltManager(block), Side.None);
-      Bukkit.getLogger().info("NEW MANAGER");
+      Logger.debug("NEW MANAGER");
     } else {
       leadManager.getBeltManager()
           .addBelt(block, leadManager.getSide(), leadManager.getBlock(), currentBeltManagers);
-      Bukkit.getLogger().info("OLD MANAGER");
+      Logger.debug("OLD MANAGER");
     }
-    Bukkit.getLogger().warning("----------------------------------------");
+    Logger.debug("----------------------------------------");
   }
 
   public void onNorthBeltPlace(Block block) {

@@ -21,6 +21,7 @@ import tech.brettsaunders.craftory.tech.belts.DebugEvents;
 import tech.brettsaunders.craftory.tech.belts.EntitySerach;
 import tech.brettsaunders.craftory.tech.power.Beam;
 import tech.brettsaunders.craftory.tech.power.PowerManager;
+import tech.brettsaunders.craftory.utils.Logger;
 
 
 public final class Craftory extends JavaPlugin {
@@ -112,14 +113,19 @@ public final class Craftory extends JavaPlugin {
         Beam beam = new Beam(((Player) sender).getLocation(),((Player) sender).getLocation().add(0,1,0), 10, 50);
         beam.start(this);
       } catch (ReflectiveOperationException e) {
-        e.printStackTrace();
+        Logger.warn("Invalid use of Beam create");
+        Logger.debug(e.toString());
       }
     }
     if (command.getName().equals("setCursedSpreadRate")) {
       try {
         cursedEarth.setSpreadRate(Float.parseFloat(args[0]));
       } catch (Exception e) {
-        Bukkit.getLogger().info("Invalid use of cursed earth spread setting command");
+        if (sender instanceof Player) {
+          ((Player) sender).sendMessage("Invalid use of cursed earth spread setting command");
+        } else {
+          Logger.warn("Invalid use of cursed earth spread setting command");
+        }
       }
     }
     return false;

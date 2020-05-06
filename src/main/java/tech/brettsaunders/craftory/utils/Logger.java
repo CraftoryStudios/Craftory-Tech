@@ -9,6 +9,7 @@ public class Logger {
   static String debugPrefix = "[" + Craftory.getInstance().getDescription().getPrefix() + " Debug] ";
   static final ChatColor INFO_COLOR = ChatColor.GREEN;
   static final ChatColor ERROR_COLOR = ChatColor.RED;
+  static final ChatColor DEBUG_COLOR = ChatColor.AQUA;
   static boolean debugMode = Craftory.getDebugMode();
 
   public static void info(String logMessage) {
@@ -28,7 +29,7 @@ public class Logger {
   }
 
   public static void debug(String logMessage) {
-    if (debugMode) Bukkit.getLogger().info( debugPrefix + logMessage);
+    if (debugMode) Bukkit.getLogger().info( debugPrefix + DEBUG_COLOR + logMessage);
   }
 
 }

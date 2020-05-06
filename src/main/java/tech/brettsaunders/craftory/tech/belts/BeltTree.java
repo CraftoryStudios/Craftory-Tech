@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class BeltTree implements Serializable {
 
@@ -62,20 +63,20 @@ public class BeltTree implements Serializable {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("\n");
     printResuriveFancy(player, stringBuilder, "", "", root, true);
-    Bukkit.getLogger().info(stringBuilder.toString());
+    Logger.info(stringBuilder.toString());
   }
 
   private void printResurive(BeltNode node) {
     if (node == null) {
       return;
     }
-    Bukkit.getLogger().info("Node :: " + node.toString());
+    Logger.infoDiscrete("Node :: " + node.toString());
 
-    Bukkit.getLogger().warning("Behind");
+    Logger.info("Behind");
     printResurive(node.getParentBehind());
-    Bukkit.getLogger().warning("Left");
+    Logger.info("Left");
     printResurive(node.getParentLeft());
-    Bukkit.getLogger().warning("Right");
+    Logger.info("Right");
     printResurive(node.getParentRight());
   }
 
