@@ -22,13 +22,15 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.utils.BlockUtils;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class CursedEarth implements Listener, Runnable {
 
   private final Craftory plugin;
   private final BlockUtils bs = new BlockUtils();
 
-  private BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
+  private final BlockFace[] faces = {BlockFace.SELF, BlockFace.NORTH, BlockFace.NORTH_EAST,
+      BlockFace.EAST,
       BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST,
       BlockFace.NORTH_WEST};
   private String SAVE_PATH = "CursedEarth.data";
@@ -49,24 +51,24 @@ public class CursedEarth implements Listener, Runnable {
       earths = data.earths;
       closedList = data.closedList;
       in.close();
-      Bukkit.getLogger().info("*** Cursed Earth Loaded");
+      Logger.info("*** Cursed Earth Loaded");
     } catch (IOException e) {
       earths = new HashSet<>();
       closedList = new HashSet<>();
-      Bukkit.getLogger().info("*** New Cursed Earth Created");
-      Bukkit.getLogger().info(e.toString());
-      e.printStackTrace();
+      Logger.warn("*** New Cursed Earth Created");
+      Logger.debug(e.toString());
     } catch (Exception e) {
       earths = new HashSet<>();
       closedList = new HashSet<>();
-      Bukkit.getLogger().info(e.toString());
+      Logger.warn("Cursed earth loading failed");
+      Logger.debug(e.toString());
       e.printStackTrace();
     }
   }
 
   public void setSpreadRate(float spreadRate) {
     SPREAD_RATE = spreadRate;
-    Bukkit.getLogger().info("Spread rate set to: " + spreadRate);
+    Logger.info("Spread rate set to: " + spreadRate);
   }
 
   public void save() {
@@ -76,10 +78,10 @@ public class CursedEarth implements Listener, Runnable {
           new GZIPOutputStream(new FileOutputStream(SAVE_PATH)));
       out.writeObject(data);
       out.close();
-      Bukkit.getLogger().info("Cursed Earth Saved");
+      Logger.info("Cursed Earth Saved");
     } catch (IOException e) {
       e.printStackTrace();
-      Bukkit.getLogger().info("Cursed Earth failed to save " + e);
+      Logger.error("Cursed Earth failed to save " + e);
     }
   }
 

@@ -20,6 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class MultiBlockManager {
 
@@ -40,14 +41,12 @@ public class MultiBlockManager {
       data = (MutliBlockData) in.readObject();
       multiBlocks = data.multiBlocks;
       in.close();
-      Bukkit.getLogger().info("*** MultiBlockManager Loaded");
+      Logger.info("*** MultiBlockManager Loaded");
     } catch (IOException e) {
-      Bukkit.getLogger().info("*** New MultiBlockManager Created");
-      Bukkit.getLogger().info(e.toString());
-      e.printStackTrace();
+      Logger.warn("*** New MultiBlockManager Created");
+      Logger.debug(e.toString());
     } catch (Exception e) {
-      Bukkit.getLogger().info(e.toString());
-      e.printStackTrace();
+      Logger.debug(e.toString());
     }
   }
 
@@ -89,10 +88,10 @@ public class MultiBlockManager {
           new GZIPOutputStream(new FileOutputStream(SAVE_PATH)));
       out.writeObject(data);
       out.close();
-      Bukkit.getLogger().info("Barrel Saved");
+      Logger.info("Barrel Saved");
     } catch (IOException e) {
       e.printStackTrace();
-      Bukkit.getLogger().info("Barrel failed to save " + e);
+      Logger.warn("Barrel failed to save " + e);
     }
   }
 

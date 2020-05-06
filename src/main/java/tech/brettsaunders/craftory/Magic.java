@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.MagicMobManager;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class Magic implements Listener {
 
@@ -173,8 +174,8 @@ public class Magic implements Listener {
     if (counts == null) {
       counts = getItemCounts(items);
     }
-    Bukkit.getLogger().info("Fusion");
-    Bukkit.getLogger().info(counts.toString());
+    Logger.debug("Fusion");
+    Logger.debug(counts.toString());
     int min = Integer.MAX_VALUE;
     //Work out how many of the product can be made
     for (Entry<String, Integer> entry : counts.entrySet()) {
@@ -190,7 +191,7 @@ public class Magic implements Listener {
       min = 0;
     }
     final int productAmounts = min;
-    Bukkit.getLogger().info(Integer.toString(productAmounts));
+    Logger.debug(Integer.toString(productAmounts));
     //Ensure the right amount of each item is removed
     for (Entry<String, Integer> e : counts.entrySet()) {
       String key = e.getKey();

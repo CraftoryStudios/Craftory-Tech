@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.utils.BlockUtils;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class Barrel implements Listener {
 
@@ -47,14 +48,11 @@ public class Barrel implements Listener {
         barrels.put(e.getKey(), i);
       }
       in.close();
-      Bukkit.getLogger().info("*** Barrels Loaded");
+      Logger.info("*** Barrels Loaded");
     } catch (IOException e) {
-      Bukkit.getLogger().info("*** New Barrels Created");
-      Bukkit.getLogger().info(e.toString());
-      e.printStackTrace();
+      Logger.info("*** New Barrels Created");
     } catch (Exception e) {
-      Bukkit.getLogger().info(e.toString());
-      e.printStackTrace();
+      Logger.error(e.toString());
     }
   }
 
@@ -127,10 +125,10 @@ public class Barrel implements Listener {
           new GZIPOutputStream(new FileOutputStream(SAVE_PATH)));
       out.writeObject(data);
       out.close();
-      Bukkit.getLogger().info("Barrel Saved");
+      Logger.info("Barrel Saved");
     } catch (IOException e) {
       e.printStackTrace();
-      Bukkit.getLogger().info("Barrel failed to save " + e);
+      Logger.error("Barrel failed to save " + e);
     }
   }
 
