@@ -2,36 +2,61 @@ package tech.brettsaunders.craftory.tech.power;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.utils.Logger;
 
-public class PowerConnector implements Serializable {
+public class PowerConnector implements Serializable, Listener {
+
+  private final int MAX_CONNECTIONS = 5;
+  private final int MAX_POWER = 100;
 
   private Location location;
   private ArrayList<Location> connectionTo;
   private ArrayList<Location> connectionFrom;
-  private final int maxConnections = 5;
+  private Integer powerLevel;
+  private HashMap<BlockFace, Boolean> outputs;
 
   private transient ArrayList<Beam> beams;
   private transient Craftory plugin;
   private transient PowerManager powerManager;
 
+
   public PowerConnector(Location location) {
     this.location = location;
-    connectionTo = new ArrayList<>(maxConnections);
-    connectionFrom = new ArrayList<>();
+    this.connectionTo = new ArrayList<>(MAX_CONNECTIONS);
+    this.connectionFrom = new ArrayList<>();
+    this.powerLevel = 0;
+
+    //Power Output Sides
+    this.outputs = new HashMap<>();
+    outputs.put(BlockFace.DOWN, false);
+    outputs.put(BlockFace.UP, false);
+    outputs.put(BlockFace.EAST, false);
+    outputs.put(BlockFace.WEST, false);
+    outputs.put(BlockFace.NORTH, false);
+    outputs.put(BlockFace.SOUTH, false);
+
     onEnable();
   }
+
 
   public void onEnable() {
     this.powerManager = Craftory.getPowerManager();
     this.plugin = Craftory.getInstance();
-    beams = new ArrayList<>();
+    this.beams = new ArrayList<>();
   }
 
+
   public boolean addConnection(PowerConnector connectTo) {
-    if (connectionTo.size() < maxConnections) {
+    if (connectionTo.size() < MAX_CONNECTIONS) {
       connectionTo.add(connectTo.getLocation());
       //Add Connected from
       connectTo.addConnectionFrom(location);
@@ -40,9 +65,11 @@ public class PowerConnector implements Serializable {
     return false;
   }
 
+
   public void addConnectionFrom(Location connectFrom) {
     connectionFrom.add(connectFrom);
   }
+
 
   public void buildBeams() {
     connectionTo.forEach((connector -> {
@@ -50,6 +77,7 @@ public class PowerConnector implements Serializable {
     }));
     Logger.debug("All power beams built");
   }
+
 
   private void formBeam(Location connector) {
     try {
@@ -63,14 +91,36 @@ public class PowerConnector implements Serializable {
     }
   }
 
+
   public void destroyBeams() {
     beams.forEach((beam -> {
       beam.stop();
     }));
   }
 
+
   public Location getLocation() {
     return location;
+  }
+
+  private void toggleOutputSide(BlockFace side) {
+    outputs.replace(side, (outputs.get(side) ? false : true));
+  }
+
+  private int increasePowerLevel(int amount) {
+    powerLevel += amount;
+    int powerLeftOver = powerLevel - MAX_POWER;
+    return (powerLeftOver < 0) ? 0 : powerLeftOver;
+  }
+
+  private boolean isMaxCapacity() {
+    return (powerLevel < MAX_POWER) ? false : true;
+  }
+
+  public void openGUI(Player player) {
+    player.sendMessage("Opened");
+    Inventory inventory = Bukkit.createInventory(null, 54, "PowerLevel: " + powerLevel);
+    player.openInventory(inventory);
   }
 
 }

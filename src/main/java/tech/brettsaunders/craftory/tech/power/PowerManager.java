@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power;
 
+import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.io.FileInputStream;
@@ -93,6 +94,17 @@ public class PowerManager implements Listener {
             usingTool.remove(event.getPlayer());
           }
         }
+      }
+    } else {
+      if (event.getAction() == Action.RIGHT_CLICK_BLOCK &&
+          blockUtils.isCustomBlockType(event.getClickedBlock(), "craftory:power_connector")) {
+        PowerConnector powerConnector = beamConnectors.get(event.getClickedBlock().getLocation());
+        //If doesn't exist then create one, should never happen
+        if (powerConnector == null) {
+          powerConnector = new PowerConnector(event.getClickedBlock().getLocation());
+          beamConnectors.put(event.getClickedBlock().getLocation(), powerConnector);
+        }
+        powerConnector.openGUI(event.getPlayer());
       }
     }
   }

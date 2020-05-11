@@ -1,11 +1,14 @@
 package tech.brettsaunders.craftory;
 
+import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
+import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
-import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,7 +22,6 @@ import tech.brettsaunders.craftory.tech.belts.BeltEvents;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
 import tech.brettsaunders.craftory.tech.belts.DebugEvents;
 import tech.brettsaunders.craftory.tech.belts.EntitySerach;
-import tech.brettsaunders.craftory.tech.power.Beam;
 import tech.brettsaunders.craftory.tech.power.PowerManager;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -108,14 +110,18 @@ public final class Craftory extends JavaPlugin {
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (command.getName().equals("matty")) {
-      //magicMobManager.createChestPet((Player) sender, ((Player) sender).getLocation(), null);
-      try {
-        Beam beam = new Beam(((Player) sender).getLocation(),((Player) sender).getLocation().add(0,1,0), 10, 50);
-        beam.start(this);
-      } catch (ReflectiveOperationException e) {
-        Logger.warn("Invalid use of Beam create");
-        Logger.debug(e.toString());
-      }
+      if(!(sender instanceof Player))
+        return true;
+
+      Player player = (Player) sender;
+      FontImageWrapper fontImageWrapper = new FontImageWrapper("mcguis:blank_menu");
+      TexturedInventoryWrapper inventory = new TexturedInventoryWrapper(null,
+          54,
+          ChatColor.BLACK + "   Cell",fontImageWrapper);
+      inventory.showInventory(player);
+      inventory.getInternal().setItem(17, ItemsAdder.getCustomItem("extra:output"));
+
+      return true;
     }
     if (command.getName().equals("setCursedSpreadRate")) {
       try {

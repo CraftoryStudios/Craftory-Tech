@@ -1,0 +1,14 @@
+info:
+  namespace: extra
+items:
+  output:
+    display_name: Output Power
+    resource:
+      material: PAPER
+      generate: true
+      textures:
+        - item/output.png
+font_images:
+  cell:
+    path: "font/gui/cell.png"
+    y_position: 47

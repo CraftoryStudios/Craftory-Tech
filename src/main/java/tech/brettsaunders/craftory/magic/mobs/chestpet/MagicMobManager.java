@@ -44,9 +44,11 @@ public class MagicMobManager implements Listener {
 
   public void save() {
     try {
+      MobDataManager data = new MobDataManager(mobData);
       BukkitObjectOutputStream out = new BukkitObjectOutputStream(
           new GZIPOutputStream(new FileOutputStream(SAVE_PATH)));
-      out.writeObject(mobData);
+
+      out.writeObject(data);
       out.close();
       Logger.info("Magic MobManager Saved");
     } catch (IOException e) {
