@@ -22,7 +22,10 @@ import tech.brettsaunders.craftory.tech.belts.BeltEvents;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
 import tech.brettsaunders.craftory.tech.belts.DebugEvents;
 import tech.brettsaunders.craftory.tech.belts.EntitySerach;
-import tech.brettsaunders.craftory.tech.power.PowerManager;
+import tech.brettsaunders.craftory.tech.power.core.block.BlockCell;
+import tech.brettsaunders.craftory.tech.power.core.manager.PowerManager;
+import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
+import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
 import tech.brettsaunders.craftory.utils.Logger;
 
 
@@ -32,8 +35,9 @@ public final class Craftory extends JavaPlugin {
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
   FileConfiguration config = getConfig();
 
-  private static Craftory plugin;
+  private static Craftory plugin = null;
   private static PowerManager powerManager = null;
+  public static TickableBaseManager tickableBaseManager = null;
 
   private CursedEarth cursedEarth = null;
   private Barrel barrel = null;
@@ -41,6 +45,7 @@ public final class Craftory extends JavaPlugin {
   private Magic magic = null;
   private MultiBlockManager multiBlockManager;
   private static boolean debugMode = false;
+  private static PoweredBlockManager poweredBlockManager = null;
 
   @Override
   public void onEnable() {
@@ -53,6 +58,8 @@ public final class Craftory extends JavaPlugin {
     String dataFolder = getDataFolder().getPath();
 
     //General Classes
+    poweredBlockManager = new PoweredBlockManager();
+    tickableBaseManager = new TickableBaseManager();
     multiBlockManager = new MultiBlockManager(dataFolder);
 
     //Magic Classes
@@ -87,6 +94,8 @@ public final class Craftory extends JavaPlugin {
 
     //OnEnables
     powerManager.onEnable();
+    poweredBlockManager.onEnable();
+    BlockCell.initialize();
 
   }
 
@@ -94,6 +103,7 @@ public final class Craftory extends JavaPlugin {
   public void onDisable() {
     //OnDisalbe
     powerManager.onDisable();
+    poweredBlockManager.onDisable();
 
     //Save Data
     DataContainer.saveData(chunkKeys, beltManagers);
@@ -164,5 +174,7 @@ public final class Craftory extends JavaPlugin {
   public static PowerManager getPowerManager() { return powerManager; }
 
   public static boolean getDebugMode() { return debugMode; }
+
+  public static PoweredBlockManager getPoweredBlockManager() { return poweredBlockManager; }
 
 }

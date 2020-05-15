@@ -1,5 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.api.interfaces;
 
+import org.bukkit.block.BlockFace;
+
 /**
  * Implement this interface on Tile Entities which should provide energy, generally storing it in one or more internal {@link IEnergyStorage} objects.
  */
@@ -13,6 +15,8 @@ public interface IEnergyProvider extends IEnergyHandler {
    * @param simulate   If TRUE, the extraction will only be simulated.
    * @return Amount of energy that was (or would have been, if simulated) extracted.
    */
-  int extractEnergy(EnumFacing from, int maxExtract, boolean simulate);
+  int extractEnergy(BlockFace from, int maxExtract, boolean simulate);
+
+  boolean updateOutputCache(BlockFace inputFrom);
 
 }

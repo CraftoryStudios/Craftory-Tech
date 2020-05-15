@@ -11,8 +11,6 @@ import tech.brettsaunders.craftory.utils.BlockUtils;
 
 public class DebugEvents implements Listener {
 
-  BlockUtils blockUtils = new BlockUtils();
-
   @EventHandler
   public void onPlayerRightClickDebug(PlayerInteractEvent e) {
     if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
@@ -43,4 +41,18 @@ public class DebugEvents implements Listener {
     //e.getPlayer().sendMessage("Location: " + e.getClickedBlock().getLocation().toString());
   }
 
+  @EventHandler
+  public void onPlayerRightClickDebugCell(PlayerInteractEvent e) {
+    if (!(e.getAction() == Action.LEFT_CLICK_BLOCK)) {
+      return;
+    }
+    if (!(ItemsAdder.matchCustomItemName(e.getItem(), "example:example_item"))) {
+      return;
+    }
+    e.getPlayer().sendMessage("YPO");
+    //if (!(Craftory.getPoweredBlockManager().isPowerStorage(e.getClickedBlock().getLocation()))) {
+    //  return;
+    //}
+    e.getPlayer().sendMessage("Energy: " + Craftory.getPoweredBlockManager().getPoweredBlock(e.getClickedBlock().getLocation()).getEnergyStorage().getEnergyStored());
+  }
 }

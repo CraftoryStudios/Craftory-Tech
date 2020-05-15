@@ -1,15 +1,63 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
-import tech.brettsaunders.craftory.tech.power.api.interfaces.EnumFacing;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IPowerInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
-public abstract class BlockPowered implements IPowerInfo, IEnergyReceiver, ITickable {
-
+public abstract class BlockPowered implements IPowerInfo, IEnergyReceiver, ITickable, Listener,
+    Externalizable {
+  private static transient final long serialVersionUID = -1692723606529286331L;
+  public static final BlockFace faces[] = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
   protected EnergyStorage energyStorage = new EnergyStorage(0);
+  protected Location location;
+
+  public BlockPowered(Location location) {
+    init();
+    this.location = location;
+    Craftory.getPoweredBlockManager().addPoweredBlock(location, this);
+  }
+
+  public BlockPowered() {
+    init();
+  }
+
+  public void init() {
+    Craftory.getInstance().getServer().getPluginManager().registerEvents(this, Craftory.getInstance());
+    Craftory.tickableBaseManager.addBaseTickable(this);
+  }
+
+  @Override
+  public void writeExternal(ObjectOutput out) throws IOException {
+    out.writeObject(energyStorage);
+    out.writeObject(location);
+  }
+
+  @Override
+  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    energyStorage = (EnergyStorage) in.readObject();
+    location = (Location) in.readObject();
+  }
+
+  @EventHandler
+  public void onBlockBreak(BlockBreakEvent event) {
+    if(event.getBlock().getLocation() == this.location) {
+      Craftory.getPoweredBlockManager().removePoweredBlock(this.location);
+      Craftory.tickableBaseManager.removeBaseTickable(this); //TODO add check this is removed
+    }
+  }
 
   protected boolean hasEnergy(int energy) {
 
@@ -56,26 +104,36 @@ public abstract class BlockPowered implements IPowerInfo, IEnergyReceiver, ITick
 
   /* IEnergyReceiver */
   @Override
-  public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
+  public int receiveEnergy(BlockFace from, int maxReceive, boolean simulate) {
 
     return energyStorage.receiveEnergy(maxReceive, simulate);
   }
 
   @Override
-  public int getEnergyStored(EnumFacing from) {
+  public int getEnergyStored(BlockFace from) {
 
     return energyStorage.getEnergyStored();
   }
 
   @Override
-  public int getMaxEnergyStored(EnumFacing from) {
+  public int getMaxEnergyStored(BlockFace from) {
 
     return energyStorage.getMaxEnergyStored();
   }
 
   @Override
-  public boolean canConnectEnergy(EnumFacing from) {
+  public boolean canConnectEnergy(BlockFace from) {
 
     return energyStorage.getMaxEnergyStored() > 0;
+  }
+
+  @Override
+  public void updateNeighbourProviders() {
+    for(BlockFace face : faces) {
+      if (Craftory.getPoweredBlockManager().isPowerProvider(this.location.getBlock().getRelative(face).getLocation())) {
+        IEnergyProvider provider = (IEnergyProvider) Craftory.getPoweredBlockManager().getPoweredBlock(this.location.getBlock().getRelative(face).getLocation());
+        provider.updateOutputCache(face.getOppositeFace());
+      }
+    }
   }
 }

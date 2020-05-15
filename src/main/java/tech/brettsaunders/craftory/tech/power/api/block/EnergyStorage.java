@@ -1,12 +1,18 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyStorage;
 
 /**
  * Implementation of {@link IEnergyStorage}
  */
-public class EnergyStorage implements IEnergyStorage {
+public class EnergyStorage implements IEnergyStorage, Externalizable {
+
+  private static transient final long serialVersionUID = -1692723296529286331L;
 
   protected int energy;
   protected int capacity;
@@ -30,6 +36,28 @@ public class EnergyStorage implements IEnergyStorage {
     this.maxExtract = maxExtract;
   }
 
+  /* Saving and Loading */
+  public EnergyStorage(){
+
+  }
+
+  @Override
+  public void writeExternal(ObjectOutput out) throws IOException {
+    out.writeInt(energy);
+    out.writeInt(capacity);
+    out.writeInt(maxReceive);
+    out.writeInt(maxExtract);
+  }
+
+  @Override
+  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    energy = in.readInt();
+    capacity = in.readInt();
+    maxReceive = in.readInt();
+    maxExtract = in.readInt();
+  }
+
+  /* Common Methods */
   public EnergyStorage readFromNBT(NBTCompound nbt) {
 
     this.energy = nbt.getInteger("Energy");
@@ -144,5 +172,4 @@ public class EnergyStorage implements IEnergyStorage {
 
     return capacity;
   }
-
 }

@@ -1,6 +1,5 @@
-package tech.brettsaunders.craftory.tech.power;
+package tech.brettsaunders.craftory.tech.power.core.manager;
 
-import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +22,7 @@ import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.tech.power.core.block.PowerConnector;
 import tech.brettsaunders.craftory.utils.BlockUtils;
 import tech.brettsaunders.craftory.utils.Logger;
 
