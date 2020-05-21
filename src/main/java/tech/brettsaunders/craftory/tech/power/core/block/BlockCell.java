@@ -8,23 +8,18 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.ArrayList;
-import java.util.Collections;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.helpers.MathHelper;
-import tech.brettsaunders.craftory.tech.power.api.block.BlockPowered;
+import tech.brettsaunders.craftory.tech.power.api.block.EnergyOutputted;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
-import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IMachineGUI;
 import tech.brettsaunders.craftory.utils.Logger;
 
-public class BlockCell extends BlockPowered implements IEnergyProvider, Externalizable {
+public class BlockCell extends EnergyOutputted implements Externalizable,
+    IMachineGUI {
 
   private static transient final long serialVersionUID = -1692728206529286331L;
 
@@ -34,16 +29,11 @@ public class BlockCell extends BlockPowered implements IEnergyProvider, External
   public static final int[] XFER_SCALE = { 1, 4, 9, 16, 25 };
   public static final int[] RECV = { 1, 4, 9, 16, 25 };
   public static final int[] SEND = { 1, 4, 9, 16, 25 };
-  public static final Integer[] DEFAULT_SIDES_CONFIG = { 0, 0, 0, 0, 0, 0 };  //NORTH, EAST, SOUTH, WEST, UP, DOWN
-  public static final int CONFIG_NONE = 0;
-  public static final int CONFIG_OUTPUT = 1;
-  public static final int CONFIG_INPUT = 2;
+
+
   public static FontImageWrapper fontImageWrapper;
   public static TexturedInventoryWrapper inventory;
-
   protected boolean enabled = true;
-  protected ArrayList<Integer> sidesConfig = new ArrayList<>(6);
-  protected ArrayList<Boolean> sidesCache = new ArrayList<>(6);
   public int amountSend;
   public int amountReceive;
   protected int level;
@@ -56,12 +46,11 @@ public class BlockCell extends BlockPowered implements IEnergyProvider, External
     init();
     level = 0;
     energyStorage = new EnergyStorage(getMaxCapacity(0));
-    Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
-    generateSideCache();
     energyStorage.setEnergyStored(1000);
   }
 
   public BlockCell() {
+    super();
     init();
   }
 
@@ -72,6 +61,7 @@ public class BlockCell extends BlockPowered implements IEnergyProvider, External
         ChatColor.BLACK + "   Cell",fontImageWrapper);
   }
 
+  @Override
   public void showInterface(Player player) {
     inventory.showInventory(player);
     inventory.getInternal().setItem(17, ItemsAdder.getCustomItem("extra:output"));
@@ -81,8 +71,6 @@ public class BlockCell extends BlockPowered implements IEnergyProvider, External
   public void writeExternal(ObjectOutput out) throws IOException {
     super.writeExternal(out);
     out.writeBoolean(enabled);
-    out.writeObject(sidesConfig);
-    out.writeObject(sidesCache);
     out.writeInt(amountSend);
     out.writeInt(amountReceive);
     out.writeInt(level);
@@ -93,8 +81,6 @@ public class BlockCell extends BlockPowered implements IEnergyProvider, External
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     super.readExternal(in);
     enabled = in.readBoolean();
-    sidesConfig = (ArrayList<Integer>) in.readObject();
-    sidesCache = (ArrayList<Boolean>) in.readObject();
     amountSend = in.readInt();
     amountReceive = in.readInt();
     level = in.readInt();
@@ -144,32 +130,6 @@ public class BlockCell extends BlockPowered implements IEnergyProvider, External
     }
   }
 
-  /* IEnergyProvider */
-  @Override
-  public boolean updateOutputCache(BlockFace inputFrom) {
-    //NORTH, EAST, SOUTH, WEST, UP, DOWN
-    int side = -1;
-    switch (inputFrom) {
-      case NORTH: side = 0;
-      break;
-      case EAST: side = 1;
-      break;
-      case SOUTH: side = 2;
-      break;
-      case WEST: side = 3;
-      break;
-      case UP: side = 4;
-      break;
-      case DOWN: side = 5;
-      break;
-    }
-    if (side != -1) {
-      sidesCache.set(side, true);
-      return true;
-    }
-    return false;
-  }
-
   /* IEnergyReceiver */
   @Override
   public int extractEnergy(BlockFace from, int maxExtract, boolean simulate) {
@@ -197,30 +157,5 @@ public class BlockCell extends BlockPowered implements IEnergyProvider, External
   public boolean canConnectEnergy(BlockFace from) {
 
     return true;
-  }
-
-  /* BlockHelpers */
-  public int insertEnergyIntoAdjacentEnergyReceiver(int side, int energy, boolean simulate) {
-    Location targetLocation = this.location.getBlock().getRelative(faces[side]).getLocation();
-    if (Craftory.getPoweredBlockManager().isPowerReciever(targetLocation)) {
-      return Craftory.getPoweredBlockManager().getPoweredBlock(targetLocation).receiveEnergy(BlockFace.EAST, energy, simulate);
-    } else {
-      sidesCache.set(side, false);
-    }
-    return 0;
-  }
-
-  //TODO on block place add to cache
-  private void generateSideCache() {
-    int i = 0;
-    for(BlockFace face : faces) {
-      if (Craftory.getPoweredBlockManager().isPowerReciever(this.location.getBlock().getRelative(face).getLocation())) {
-        sidesCache.add(i, true);
-        Logger.info("Cached side " + i);
-      } else {
-        sidesCache.add(i, false);
-      }
-      i++;
-    }
   }
 }

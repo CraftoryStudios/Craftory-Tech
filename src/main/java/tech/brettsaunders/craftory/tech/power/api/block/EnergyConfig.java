@@ -1,6 +1,12 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-public class EnergyConfig {
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.function.DoubleToIntFunction;
+
+public class EnergyConfig implements Externalizable {
 
   public int minPower = 2;
   public int maxPower = 20;
@@ -38,5 +44,25 @@ public class EnergyConfig {
     energyRamp = maxPowerLevel / basePower;
 
     return true;
+  }
+
+  @Override
+  public void writeExternal(ObjectOutput out) throws IOException {
+    out.writeInt(minPower);
+    out.writeInt(maxPower);
+    out.writeInt(maxEnergy);
+    out.writeInt(minPowerLevel);
+    out.writeInt(maxPowerLevel);
+    out.writeInt(energyRamp);
+  }
+
+  @Override
+  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    minPower = in.readInt();
+    maxPower = in.readInt();
+    maxEnergy = in.readInt();
+    minPowerLevel = in.readInt();
+    maxPowerLevel = in.readInt();
+    energyRamp = in.readInt();
   }
 }

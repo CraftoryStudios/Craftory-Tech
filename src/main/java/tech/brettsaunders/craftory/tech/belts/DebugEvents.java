@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.utils.BlockUtils;
 
 public class DebugEvents implements Listener {
 
@@ -50,9 +49,9 @@ public class DebugEvents implements Listener {
       return;
     }
     e.getPlayer().sendMessage("YPO");
-    //if (!(Craftory.getPoweredBlockManager().isPowerStorage(e.getClickedBlock().getLocation()))) {
+    //if (!(Craftory.getBlockPoweredManager().isPowerStorage(e.getClickedBlock().getLocation()))) {
     //  return;
     //}
-    e.getPlayer().sendMessage("Energy: " + Craftory.getPoweredBlockManager().getPoweredBlock(e.getClickedBlock().getLocation()).getEnergyStorage().getEnergyStored());
+    e.getPlayer().sendMessage("Energy: " + Craftory.getBlockPoweredManager().getPoweredBlock(e.getClickedBlock().getLocation()).getEnergyStorage().getEnergyStored());
   }
 }

@@ -10,10 +10,12 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.MagicMobManager;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPetTrait;
@@ -23,8 +25,9 @@ import tech.brettsaunders.craftory.tech.belts.BeltManager;
 import tech.brettsaunders.craftory.tech.belts.DebugEvents;
 import tech.brettsaunders.craftory.tech.belts.EntitySerach;
 import tech.brettsaunders.craftory.tech.power.core.block.BlockCell;
+import tech.brettsaunders.craftory.tech.power.core.manager.BlockPoweredManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PowerManager;
-import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
+import tech.brettsaunders.craftory.tech.power.core.manager.SolidFuelManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -45,7 +48,7 @@ public final class Craftory extends JavaPlugin {
   private Magic magic = null;
   private MultiBlockManager multiBlockManager;
   private static boolean debugMode = false;
-  private static PoweredBlockManager poweredBlockManager = null;
+  private static BlockPoweredManager blockPoweredManager = null;
 
   @Override
   public void onEnable() {
@@ -58,9 +61,12 @@ public final class Craftory extends JavaPlugin {
     String dataFolder = getDataFolder().getPath();
 
     //General Classes
-    poweredBlockManager = new PoweredBlockManager();
+    blockPoweredManager = new BlockPoweredManager();
     tickableBaseManager = new TickableBaseManager();
     multiBlockManager = new MultiBlockManager(dataFolder);
+
+    //Add Fuel
+    SolidFuelManager.addFuel(new ItemStack(Material.COAL), 100);
 
     //Magic Classes
     if (config.getBoolean("enableMagic")) {
@@ -94,7 +100,7 @@ public final class Craftory extends JavaPlugin {
 
     //OnEnables
     powerManager.onEnable();
-    poweredBlockManager.onEnable();
+    blockPoweredManager.onEnable();
     BlockCell.initialize();
 
   }
@@ -103,7 +109,7 @@ public final class Craftory extends JavaPlugin {
   public void onDisable() {
     //OnDisalbe
     powerManager.onDisable();
-    poweredBlockManager.onDisable();
+    blockPoweredManager.onDisable();
 
     //Save Data
     DataContainer.saveData(chunkKeys, beltManagers);
@@ -175,6 +181,6 @@ public final class Craftory extends JavaPlugin {
 
   public static boolean getDebugMode() { return debugMode; }
 
-  public static PoweredBlockManager getPoweredBlockManager() { return poweredBlockManager; }
+  public static BlockPoweredManager getBlockPoweredManager() { return blockPoweredManager; }
 
 }

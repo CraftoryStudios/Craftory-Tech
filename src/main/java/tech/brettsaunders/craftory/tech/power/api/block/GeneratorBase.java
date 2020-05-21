@@ -1,14 +1,16 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.io.Externalizable;
-import java.util.HashSet;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.tech.helpers.MathHelper;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
-import tech.brettsaunders.craftory.tech.power.api.interfaces.IPowerInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
-public abstract class GeneratorBase implements ITickable, IEnergyProvider, IPowerInfo,
+public abstract class GeneratorBase implements ITickable, IEnergyProvider, IEnergyInfo,
     Externalizable {
 
   protected static final int MIN_BASE_POWER = 10;
@@ -28,6 +30,7 @@ public abstract class GeneratorBase implements ITickable, IEnergyProvider, IPowe
   protected int lastEnergy;
   protected boolean isActive;
   protected boolean wasActive;
+  protected int energyMod = ENERGY_BASE;
 
   protected EnergyStorage energyStorage;
   protected EnergyConfig energyConfig;
@@ -156,6 +159,32 @@ public abstract class GeneratorBase implements ITickable, IEnergyProvider, IPowe
   //TODO Might need method to reset variables on placement
 
   //TODO Save - energystorage, fuelrf
+  @Override
+  public void writeExternal(ObjectOutput out) throws IOException {
+    out.writeInt(fuelRF);
+    out.writeInt(maxFuelRF);
+    out.writeByte(level);
+    out.writeInt(lastEnergy);
+    out.writeBoolean(isActive);
+    out.writeBoolean(wasActive);
+    out.writeInt(energyMod);
+    out.writeObject(energyStorage);
+    out.writeObject(energyConfig);
+  }
+
+  @Override
+  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    fuelRF = in.readInt();
+    maxFuelRF = in.readInt();
+    level = in.readByte();
+    lastEnergy = in.readInt();
+    isActive = in.readBoolean();
+    wasActive = in.readBoolean();
+    energyMod = in.readInt();
+    energyStorage = (EnergyStorage) in.readObject();
+    energyConfig = (EnergyConfig) in.readObject();
+
+  }
 
   //TODO GUI/ Invetory
 

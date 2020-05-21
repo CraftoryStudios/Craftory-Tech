@@ -1,7 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.core.manager;
 
 import com.google.common.collect.ImmutableSet;
-import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import java.util.Set;
 import org.bukkit.inventory.ItemStack;
