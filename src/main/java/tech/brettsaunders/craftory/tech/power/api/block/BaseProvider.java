@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -8,9 +7,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 import tech.brettsaunders.craftory.utils.Logger;
@@ -100,7 +97,6 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     }
   }
 
-  //TODO on block place add to cache
   private void generateSideCache() {
     int i = 0;
     for(BlockFace face : faces) {

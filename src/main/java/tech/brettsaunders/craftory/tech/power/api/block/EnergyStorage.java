@@ -58,25 +58,6 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
   }
 
   /* Common Methods */
-  public EnergyStorage readFromNBT(NBTCompound nbt) {
-
-    this.energy = nbt.getInteger("Energy");
-
-    if (energy > capacity) {
-      energy = capacity;
-    }
-    return this;
-  }
-
-  public NBTCompound writeToNBT(NBTCompound nbt) {
-
-    if (energy < 0) {
-      energy = 0;
-    }
-    nbt.setInteger("Energy", energy);
-    return nbt;
-  }
-
   public EnergyStorage setCapacity(int capacity) {
 
     this.capacity = capacity;

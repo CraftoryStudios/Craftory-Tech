@@ -31,6 +31,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
 
   /* Construction */
   public PoweredBlock(Location location) {
+    super();
     this.location = location;
     this.energyStorage = new EnergyStorage(0);
     isReceiver = false;
@@ -46,6 +47,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
 
   /* Saving, Setup and Loading */
   public PoweredBlock(){
+    super();
     init();
   }
 

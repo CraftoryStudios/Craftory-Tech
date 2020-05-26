@@ -7,12 +7,10 @@ public class IronCell extends BaseCell {
 
   public IronCell(Location location) {
     super(location);
-    isReceiver = true;
   }
 
   public IronCell() {
     super();
-    isReceiver = true;
   }
 
 }

@@ -6,7 +6,9 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
 import org.bukkit.entity.Player;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
 public abstract class BlockGUI implements Externalizable {
 
@@ -18,11 +20,12 @@ public abstract class BlockGUI implements Externalizable {
   private String title;
   private String backgroundImage;
 
+  private ArrayList<IGUIComponent> components = new ArrayList<>();
+
   /* Saving, Setup and Loading */
   public BlockGUI() {
     updateGUI();
     title = "";
-
   }
 
   @Override
