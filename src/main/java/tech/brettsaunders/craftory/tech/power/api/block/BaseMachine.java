@@ -43,4 +43,6 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   public void update() {
 
   }
+
+  public int howMuchDoYouNeed() { return 10;}
 }

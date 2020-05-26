@@ -28,7 +28,6 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   protected boolean isReceiver;
   protected boolean isProvider;
 
-
   /* Construction */
   public PoweredBlock(Location location) {
     super();
@@ -64,7 +63,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   }
 
   /* Info Methods */
-  protected IEnergyStorage getEnergyStorage(){
+  public EnergyStorage getEnergyStorage(){
     return energyStorage;
   }
 

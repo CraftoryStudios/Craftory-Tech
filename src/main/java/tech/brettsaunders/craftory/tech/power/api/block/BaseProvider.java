@@ -125,4 +125,5 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     return true;
   }
 
+  public int howMuchCanYouGiveMe() { return 10;}
 }
