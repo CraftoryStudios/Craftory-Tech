@@ -60,3 +60,18 @@ items:
         break_tools_whitelist:
           - PICKAXE
           - pickaxe
+  soild_fuel_generator:
+    display_name: Soild Fuel Generator
+    permission: craftory_tech
+    resource:
+      material: IRON_BLOCK
+      generate: false
+      model_path: block/power_connector
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+          - PICKAXE
+          - pickaxe

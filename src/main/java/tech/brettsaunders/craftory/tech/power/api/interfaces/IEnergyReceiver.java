@@ -17,9 +17,4 @@ public interface IEnergyReceiver extends IEnergyHandler {
    */
   int receiveEnergy(BlockFace from, int maxReceive, boolean simulate);
 
-  /**
-   * Update all providers around block to inform them of new receiver
-   */
-  void updateNeighbourProviders();
-
 }

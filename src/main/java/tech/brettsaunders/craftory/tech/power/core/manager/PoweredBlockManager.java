@@ -24,7 +24,8 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.core.block.BlockCell;
+import tech.brettsaunders.craftory.tech.power.core.block.IronCell;
+import tech.brettsaunders.craftory.tech.power.core.block.SolidFuelGenerator;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredBlockManager implements Listener {
@@ -125,7 +126,10 @@ public class PoweredBlockManager implements Listener {
 
           switch (ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(event.getBlockPlaced()))) {
             case "craftory:power_cell":
-              poweredBlock = new BlockCell(location);
+              poweredBlock = new IronCell(location);
+              break;
+            case "craftory:soild_fuel_generator":
+              poweredBlock = new SolidFuelGenerator(location);
               break;
             default:
               throw new IllegalStateException("Unexpected value: " + ItemsAdder
@@ -146,6 +150,7 @@ public class PoweredBlockManager implements Listener {
     if (isReceiver(location)) {
       updateAdjacentProviders(location, false);
     }
+    Craftory.tickableBaseManager.removeBaseTickable(getPoweredBlock(location));
     removePoweredBlock(location);
   }
 

@@ -141,10 +141,10 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     //TODO Missing
   }
 
-  @Override
-  public int extractEnergy(BlockFace from, int maxExtract, boolean simulate) {
-    return energyStorage.extractEnergy(Math.min(maxPower * 2, maxExtract), simulate);
-  }
+//  @Override
+//  public int extractEnergy(BlockFace from, int maxExtract, boolean simulate) {
+//    return energyStorage.extractEnergy(Math.min(maxPower * 2, maxExtract), simulate);
+//  }
 
   @Override
   public int getInfoEnergyPerTick() {

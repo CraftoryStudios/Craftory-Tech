@@ -8,6 +8,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
@@ -15,7 +16,7 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider,
     Externalizable {
-  public static final Integer[] DEFAULT_SIDES_CONFIG = { 0, 0, 0, 0, 0, 0 };  //NORTH, EAST, SOUTH, WEST, UP, DOWN
+  public static final Integer[] DEFAULT_SIDES_CONFIG = { 1, 1, 1, 1, 1, 1 };  //NORTH, EAST, SOUTH, WEST, UP, DOWN
   public static final int CONFIG_NONE = 0;
   public static final int CONFIG_OUTPUT = 1;
   public static final int CONFIG_INPUT = 2;

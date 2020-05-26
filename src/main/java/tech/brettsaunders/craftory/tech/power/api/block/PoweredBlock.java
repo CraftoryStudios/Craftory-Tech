@@ -36,15 +36,12 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     isReceiver = false;
     isProvider = false;
     init();
-    //TODO Register new Block with Manager
-    //Craftory.getBlockPoweredManager().addPoweredBlock(location, this);
   }
 
   /* Shared Startup and Loading */
   public void init() {
     //Register for Base Updates
     Craftory.tickableBaseManager.addBaseTickable(this);
-    //TODO Reigster for place and break events
   }
 
   /* Saving, Setup and Loading */
@@ -70,12 +67,10 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   }
 
   protected boolean hasEnergy(int energy) {
-
     return energyStorage.getEnergyStored() >= energy;
   }
 
   protected int getEnergySpace() {
-
     return energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored();
   }
 
@@ -101,7 +96,6 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
 
   @Override
   public int getInfoEnergyStored() {
-
     return energyStorage.getEnergyStored();
   }
 }
