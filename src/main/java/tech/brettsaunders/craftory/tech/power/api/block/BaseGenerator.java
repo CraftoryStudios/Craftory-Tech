@@ -30,12 +30,14 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   public BaseGenerator() {
     super();
     isActive = true;
+    isProvider = true;
   }
 
   public BaseGenerator(Location location) {
     super(location);
     energyStorage = new EnergyStorage(maxEnergy, maxPower * 2);
     isActive = true;
+    isProvider = true;
   }
 
   public final void setEnergyStored(int quantity) {

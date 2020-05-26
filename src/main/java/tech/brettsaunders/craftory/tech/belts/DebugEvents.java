@@ -41,17 +41,18 @@ public class DebugEvents implements Listener {
   }
 
   @EventHandler
-  public void onPlayerRightClickDebugCell(PlayerInteractEvent e) {
+  public void onPlayerRightClickDebugT(PlayerInteractEvent e) {
     if (!(e.getAction() == Action.LEFT_CLICK_BLOCK)) {
       return;
     }
-    if (!(ItemsAdder.matchCustomItemName(e.getItem(), "example:example_item"))) {
+    if (!(e.hasItem())) {
       return;
     }
-    e.getPlayer().sendMessage("YPO");
-    //if (!(Craftory.getBlockPoweredManager().isPowerStorage(e.getClickedBlock().getLocation()))) {
-    //  return;
-    //}
-    e.getPlayer().sendMessage("Energy: " + Craftory.getBlockPoweredManager().getPoweredBlock(e.getClickedBlock().getLocation()).getEnergyStorage().getEnergyStored());
+    //e.getPlayer().sendMessage("Hello");
+    //Craftory.getBlockPoweredManager().print(e.getPlayer());
+
+    if (Craftory.getBlockPoweredManager().isPoweredBlock(e.getClickedBlock().getLocation())) {
+      e.getPlayer().sendMessage("Stored: "+Craftory.getBlockPoweredManager().getPoweredBlock(e.getClickedBlock().getLocation()).getInfoEnergyStored());
+    }
   }
 }

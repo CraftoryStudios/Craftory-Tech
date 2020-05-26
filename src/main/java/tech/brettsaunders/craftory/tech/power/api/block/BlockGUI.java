@@ -21,6 +21,8 @@ public abstract class BlockGUI implements Externalizable {
   /* Saving, Setup and Loading */
   public BlockGUI() {
     updateGUI();
+    title = "";
+
   }
 
   @Override
@@ -56,10 +58,7 @@ public abstract class BlockGUI implements Externalizable {
     if (title != null && !backgroundImage.isEmpty()) {
       inventoryInterface = new TexturedInventoryWrapper(null, 54, title, new FontImageWrapper(backgroundImage));
     } else {
-      if (title.isEmpty()) {
-        title = "";
-      }
-      inventoryInterface = new TexturedInventoryWrapper(null, 54, title, new FontImageWrapper(""));
+      inventoryInterface = new TexturedInventoryWrapper(null, 54, title, new FontImageWrapper("mcguis:blank_menu"));
     }
   }
 

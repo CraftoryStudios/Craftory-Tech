@@ -8,7 +8,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import tech.brettsaunders.craftory.tech.power.core.block.BlockCell;
 import tech.brettsaunders.craftory.utils.BlockUtils;
 import tech.brettsaunders.craftory.Craftory;
 
@@ -105,8 +104,6 @@ public class BeltEvents implements Listener {
               blockUtils.onEastBeltPlace(event.getBlockPlaced());
             }
             //NORTH
-          } else if (blockUtils.isCustomBlockType(event.getBlockPlaced(), "craftory:power_cell")) {
-            new BlockCell(event.getBlockPlaced().getLocation());
           }
 
           Block checkBlock = event.getBlockPlaced().getLocation().add(0, -1, 0).getBlock();

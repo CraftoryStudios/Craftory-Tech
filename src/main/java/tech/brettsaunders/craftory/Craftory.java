@@ -24,11 +24,8 @@ import tech.brettsaunders.craftory.tech.belts.BeltEvents;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
 import tech.brettsaunders.craftory.tech.belts.DebugEvents;
 import tech.brettsaunders.craftory.tech.belts.EntitySerach;
-import tech.brettsaunders.craftory.tech.power.core.block.BlockCell;
-import tech.brettsaunders.craftory.tech.power.core.manager.BlockPoweredManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PowerManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
-import tech.brettsaunders.craftory.tech.power.core.manager.SolidFuelManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -66,9 +63,6 @@ public final class Craftory extends JavaPlugin {
     tickableBaseManager = new TickableBaseManager();
     multiBlockManager = new MultiBlockManager(dataFolder);
 
-    //Add Fuel
-    SolidFuelManager.addFuel(new ItemStack(Material.COAL), 100);
-
     //Magic Classes
     if (config.getBoolean("enableMagic")) {
       //Create Classes
@@ -102,8 +96,6 @@ public final class Craftory extends JavaPlugin {
     //OnEnables
     powerManager.onEnable();
     blockPoweredManager.onEnable();
-    BlockCell.initialize();
-
   }
 
   @Override

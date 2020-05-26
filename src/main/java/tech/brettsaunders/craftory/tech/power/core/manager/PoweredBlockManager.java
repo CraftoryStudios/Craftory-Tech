@@ -12,6 +12,7 @@ import java.util.zip.GZIPOutputStream;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -30,7 +31,7 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredBlockManager implements Listener {
 
-  private static final String DATA_PATH = Craftory.getInstance().getDataFolder().getPath() + File.separator + "PowerManager.data";
+  private static final String DATA_PATH = Craftory.getInstance().getDataFolder().getPath() + File.separator + "PowerBlockManager.data";
   public static final BlockFace faces[] = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
 
   private HashMap<Location, PoweredBlock> poweredBlocks;
@@ -59,6 +60,8 @@ public class PoweredBlockManager implements Listener {
   public PoweredBlock getPoweredBlock(Location location) {
     return poweredBlocks.get(location);
   }
+
+  public boolean isPoweredBlock(Location location) {return poweredBlocks.containsKey(location);}
 
   public void removePoweredBlock(Location location) {
     poweredBlocks.remove(location);
@@ -109,11 +112,18 @@ public class PoweredBlockManager implements Listener {
   }
 
   public boolean isProvider(Location location) {
-    return poweredBlocks.get(location).isProvider();
+    if (isPoweredBlock(location)) {
+      return poweredBlocks.get(location).isProvider();
+    }
+    return false;
+
   }
 
   public boolean isReceiver(Location location) {
-    return poweredBlocks.get(location).isReceiver();
+    if (isPoweredBlock(location)) {
+      return poweredBlocks.get(location).isReceiver();
+    }
+    return false;
   }
 
   @EventHandler
@@ -132,8 +142,7 @@ public class PoweredBlockManager implements Listener {
               poweredBlock = new SolidFuelGenerator(location);
               break;
             default:
-              throw new IllegalStateException("Unexpected value: " + ItemsAdder
-                  .getCustomItemName(ItemsAdder.getCustomBlock(event.getBlockPlaced())));
+              return;
           }
 
           addPoweredBlock(location, poweredBlock);
@@ -162,6 +171,10 @@ public class PoweredBlockManager implements Listener {
         ((BaseProvider) getPoweredBlock(block.getLocation())).updateOutputCache(face.getOppositeFace(), setTo);
       }
     }
+  }
+
+  public void print(Player player) {
+    player.sendMessage(poweredBlocks.toString());
   }
 
   private static class PowerBlockManagerData implements Serializable {

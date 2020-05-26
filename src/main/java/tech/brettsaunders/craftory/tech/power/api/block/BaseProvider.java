@@ -10,6 +10,7 @@ import java.util.Collections;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 import tech.brettsaunders.craftory.utils.Logger;
@@ -90,8 +91,11 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
   protected void transferEnergy() {
     for (int i = 0; i < sidesConfig.size(); i++) {
-      if (sidesConfig.get(i) == CONFIG_OUTPUT && sidesCache.get(i)) {
-        energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i, Math.min(amountToSend, energyStorage.getEnergyStored()), false));
+      if (sidesConfig.get(i) == CONFIG_OUTPUT) {
+        if (sidesCache.get(i)) {
+          energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
+              Math.min(amountToSend, energyStorage.getEnergyStored()), false));
+        }
       }
     }
   }

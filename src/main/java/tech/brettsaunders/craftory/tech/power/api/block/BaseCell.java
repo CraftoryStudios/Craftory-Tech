@@ -15,10 +15,14 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
   public BaseCell(Location location) {
     super(location);
     energyStorage = new EnergyStorage(CAPACITY_BASE);
+    isReceiver = true;
+    isProvider = true;
   }
 
   public BaseCell() {
     super();
+    isReceiver = true;
+    isProvider = true;
   }
 
   @Override
