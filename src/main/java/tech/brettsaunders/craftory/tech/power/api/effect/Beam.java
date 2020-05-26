@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory.tech.power;
+package tech.brettsaunders.craftory.tech.power.api.effect;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

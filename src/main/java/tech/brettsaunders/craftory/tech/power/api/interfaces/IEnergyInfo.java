@@ -6,7 +6,7 @@ package tech.brettsaunders.craftory.tech.power.api.interfaces;
  * This is used for reporting purposes - Energy transactions are handled via the RF API!
  */
 
-public interface IPowerInfo {
+public interface IEnergyInfo {
 
   /**
    * Returns energy usage/generation per tick (Power/t).

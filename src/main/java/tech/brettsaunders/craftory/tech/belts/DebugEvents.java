@@ -7,11 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.utils.BlockUtils;
 
 public class DebugEvents implements Listener {
-
-  BlockUtils blockUtils = new BlockUtils();
 
   @EventHandler
   public void onPlayerRightClickDebug(PlayerInteractEvent e) {
@@ -43,4 +40,19 @@ public class DebugEvents implements Listener {
     //e.getPlayer().sendMessage("Location: " + e.getClickedBlock().getLocation().toString());
   }
 
+  @EventHandler
+  public void onPlayerRightClickDebugT(PlayerInteractEvent e) {
+    if (!(e.getAction() == Action.LEFT_CLICK_BLOCK)) {
+      return;
+    }
+    if (!(e.hasItem())) {
+      return;
+    }
+    //e.getPlayer().sendMessage("Hello");
+    //Craftory.getBlockPoweredManager().print(e.getPlayer());
+
+    if (Craftory.getBlockPoweredManager().isPoweredBlock(e.getClickedBlock().getLocation())) {
+      e.getPlayer().sendMessage("Stored: "+Craftory.getBlockPoweredManager().getPoweredBlock(e.getClickedBlock().getLocation()).getInfoEnergyStored());
+    }
+  }
 }

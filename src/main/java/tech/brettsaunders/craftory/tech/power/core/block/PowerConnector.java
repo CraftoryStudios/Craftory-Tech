@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory.tech.power;
+package tech.brettsaunders.craftory.tech.power.core.block;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,9 +8,10 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.tech.power.api.effect.Beam;
+import tech.brettsaunders.craftory.tech.power.core.manager.PowerManager;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerConnector implements Serializable, Listener {

@@ -10,10 +10,12 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.MagicMobManager;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPetTrait;
@@ -22,7 +24,9 @@ import tech.brettsaunders.craftory.tech.belts.BeltEvents;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
 import tech.brettsaunders.craftory.tech.belts.DebugEvents;
 import tech.brettsaunders.craftory.tech.belts.EntitySerach;
-import tech.brettsaunders.craftory.tech.power.PowerManager;
+import tech.brettsaunders.craftory.tech.power.core.manager.PowerManager;
+import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
+import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
 import tech.brettsaunders.craftory.utils.Logger;
 
 
@@ -32,8 +36,9 @@ public final class Craftory extends JavaPlugin {
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
   FileConfiguration config = getConfig();
 
-  private static Craftory plugin;
+  private static Craftory plugin = null;
   private static PowerManager powerManager = null;
+  public static TickableBaseManager tickableBaseManager = null;
 
   private CursedEarth cursedEarth = null;
   private Barrel barrel = null;
@@ -41,6 +46,7 @@ public final class Craftory extends JavaPlugin {
   private Magic magic = null;
   private MultiBlockManager multiBlockManager;
   private static boolean debugMode = false;
+  private static PoweredBlockManager blockPoweredManager = null;
 
   @Override
   public void onEnable() {
@@ -53,6 +59,8 @@ public final class Craftory extends JavaPlugin {
     String dataFolder = getDataFolder().getPath();
 
     //General Classes
+    blockPoweredManager = new PoweredBlockManager();
+    tickableBaseManager = new TickableBaseManager();
     multiBlockManager = new MultiBlockManager(dataFolder);
 
     //Magic Classes
@@ -87,13 +95,14 @@ public final class Craftory extends JavaPlugin {
 
     //OnEnables
     powerManager.onEnable();
-
+    blockPoweredManager.onEnable();
   }
 
   @Override
   public void onDisable() {
     //OnDisalbe
     powerManager.onDisable();
+    blockPoweredManager.onDisable();
 
     //Save Data
     DataContainer.saveData(chunkKeys, beltManagers);
@@ -164,5 +173,7 @@ public final class Craftory extends JavaPlugin {
   public static PowerManager getPowerManager() { return powerManager; }
 
   public static boolean getDebugMode() { return debugMode; }
+
+  public static PoweredBlockManager getBlockPoweredManager() { return blockPoweredManager; }
 
 }
