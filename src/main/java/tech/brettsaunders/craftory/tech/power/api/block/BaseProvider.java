@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -12,22 +13,24 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 import tech.brettsaunders.craftory.utils.Logger;
 
-public abstract class EnergyOutputted extends PoweredBlock implements IEnergyProvider,
+public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider,
     Externalizable {
   public static final Integer[] DEFAULT_SIDES_CONFIG = { 0, 0, 0, 0, 0, 0 };  //NORTH, EAST, SOUTH, WEST, UP, DOWN
   public static final int CONFIG_NONE = 0;
   public static final int CONFIG_OUTPUT = 1;
   public static final int CONFIG_INPUT = 2;
+  protected static final int amountToSend = 10;
+
   protected ArrayList<Integer> sidesConfig = new ArrayList<>(6);
   protected ArrayList<Boolean> sidesCache = new ArrayList<>(6);
 
-  public EnergyOutputted(Location location) {
+  public BaseProvider(Location location) {
     super(location);
     Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
     generateSideCache();
   }
 
-  public EnergyOutputted(){}
+  public BaseProvider(){}
 
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
@@ -44,7 +47,7 @@ public abstract class EnergyOutputted extends PoweredBlock implements IEnergyPro
   }
 
   @Override
-  public boolean updateOutputCache(BlockFace inputFrom) {
+  public boolean updateOutputCache(BlockFace inputFrom, Boolean setTo) {
     //NORTH, EAST, SOUTH, WEST, UP, DOWN
     int side = -1;
     switch (inputFrom) {
@@ -62,7 +65,7 @@ public abstract class EnergyOutputted extends PoweredBlock implements IEnergyPro
         break;
     }
     if (side != -1) {
-      sidesCache.set(side, true);
+      sidesCache.set(side, setTo);
       return true;
     }
     return false;
@@ -70,19 +73,33 @@ public abstract class EnergyOutputted extends PoweredBlock implements IEnergyPro
 
   public int insertEnergyIntoAdjacentEnergyReceiver(int side, int energy, boolean simulate) {
     Location targetLocation = this.location.getBlock().getRelative(faces[side]).getLocation();
-    if (Craftory.getBlockPoweredManager().isPowerReciever(targetLocation)) {
-      return Craftory.getBlockPoweredManager().getPoweredBlock(targetLocation).receiveEnergy(BlockFace.EAST, energy, simulate);
+    if (Craftory.getBlockPoweredManager().isReceiver(targetLocation)) {
+      if (Craftory.getBlockPoweredManager().isProvider(targetLocation)) {
+        return ((BaseCell) Craftory.getBlockPoweredManager().getPoweredBlock(targetLocation))
+            .receiveEnergy(BlockFace.EAST, energy, simulate);
+      } else {
+        return ((BaseMachine) Craftory.getBlockPoweredManager().getPoweredBlock(targetLocation))
+            .receiveEnergy(BlockFace.EAST, energy, simulate);
+      }
     } else {
       sidesCache.set(side, false);
     }
     return 0;
   }
 
+  protected void transferEnergy() {
+    for (int i = 0; i < sidesConfig.size(); i++) {
+      if (sidesConfig.get(i) == CONFIG_OUTPUT && sidesCache.get(i)) {
+        energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i, Math.min(amountToSend, energyStorage.getEnergyStored()), false));
+      }
+    }
+  }
+
   //TODO on block place add to cache
   private void generateSideCache() {
     int i = 0;
     for(BlockFace face : faces) {
-      if (Craftory.getBlockPoweredManager().isPowerReciever(this.location.getBlock().getRelative(face).getLocation())) {
+      if (Craftory.getBlockPoweredManager().isReceiver(this.location.getBlock().getRelative(face).getLocation())) {
         sidesCache.add(i, true);
         Logger.info("Cached side " + i);
       } else {
@@ -90,6 +107,21 @@ public abstract class EnergyOutputted extends PoweredBlock implements IEnergyPro
       }
       i++;
     }
+  }
+
+  @Override
+  public int getEnergyStored(BlockFace from) {
+    return energyStorage.getEnergyStored();
+  }
+
+  @Override
+  public int getMaxEnergyStored(BlockFace from) {
+    return energyStorage.getMaxEnergyStored();
+  }
+
+  @Override
+  public boolean canConnectEnergy(BlockFace from) {
+    return true;
   }
 
 }

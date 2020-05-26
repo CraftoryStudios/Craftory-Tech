@@ -9,8 +9,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.tech.power.api.block.EnergyConfig;
-import tech.brettsaunders.craftory.tech.power.api.block.GeneratorBase;
+import tech.brettsaunders.craftory.tech.power.api.old.EnergyConfig;
+import tech.brettsaunders.craftory.tech.power.api.old.GeneratorBase;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IMachineGUI;
 import tech.brettsaunders.craftory.tech.power.core.manager.SolidFuelManager;
 

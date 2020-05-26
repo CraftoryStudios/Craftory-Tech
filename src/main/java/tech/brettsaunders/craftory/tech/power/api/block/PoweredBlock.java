@@ -25,11 +25,16 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   /* Per Object Variables */
   protected EnergyStorage energyStorage;
   protected Location location;
+  protected boolean isReceiver;
+  protected boolean isProvider;
+
 
   /* Construction */
   public PoweredBlock(Location location) {
     this.location = location;
     this.energyStorage = new EnergyStorage(0);
+    isReceiver = false;
+    isProvider = false;
     init();
     //TODO Register new Block with Manager
     //Craftory.getBlockPoweredManager().addPoweredBlock(location, this);
@@ -72,6 +77,15 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   protected int getEnergySpace() {
 
     return energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored();
+  }
+
+  /* Block Type */
+  public boolean isProvider() {
+    return isProvider;
+  }
+
+  public boolean isReceiver() {
+    return isReceiver;
   }
 
   /* IEnergyInfo */

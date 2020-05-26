@@ -17,6 +17,6 @@ public interface IEnergyProvider extends IEnergyHandler {
    */
   int extractEnergy(BlockFace from, int maxExtract, boolean simulate);
 
-  boolean updateOutputCache(BlockFace inputFrom);
+  boolean updateOutputCache(BlockFace inputFrom, Boolean setTo);
 
 }

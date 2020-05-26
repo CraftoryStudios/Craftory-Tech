@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.core.manager;
 
-import com.sun.xml.internal.ws.api.addressing.OneWayFeature;
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,15 +10,19 @@ import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.BlockCell;
 import tech.brettsaunders.craftory.utils.Logger;
@@ -27,6 +30,7 @@ import tech.brettsaunders.craftory.utils.Logger;
 public class PoweredBlockManager implements Listener {
 
   private static final String DATA_PATH = Craftory.getInstance().getDataFolder().getPath() + File.separator + "PowerManager.data";
+  public static final BlockFace faces[] = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
 
   private HashMap<Location, PoweredBlock> poweredBlocks;
 
@@ -103,17 +107,56 @@ public class PoweredBlockManager implements Listener {
     }
   }
 
+  public boolean isProvider(Location location) {
+    return poweredBlocks.get(location).isProvider();
+  }
+
+  public boolean isReceiver(Location location) {
+    return poweredBlocks.get(location).isReceiver();
+  }
+
   @EventHandler
   public void onPoweredBlockPlace(BlockPlaceEvent event) {
     Location location = event.getBlockPlaced().getLocation();
     Craftory.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Craftory.getInstance(),
         () -> {
+          PoweredBlock poweredBlock;
+          if (!ItemsAdder.isCustomBlock(event.getBlockPlaced())) return;
+
           switch (ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(event.getBlockPlaced()))) {
             case "craftory:power_cell":
-              addPoweredBlock(location, new BlockCell(location));
+              poweredBlock = new BlockCell(location);
               break;
+            default:
+              throw new IllegalStateException("Unexpected value: " + ItemsAdder
+                  .getCustomItemName(ItemsAdder.getCustomBlock(event.getBlockPlaced())));
+          }
+
+          addPoweredBlock(location, poweredBlock);
+          if (poweredBlock.isReceiver()) {
+            updateAdjacentProviders(location, true);
           }
         }, 1L);
+  }
+
+  @EventHandler
+  public void onPoweredBlockBreak(BlockBreakEvent event) {
+    Location location = event.getBlock().getLocation();
+    if (!poweredBlocks.containsKey(location)) return;
+    if (isReceiver(location)) {
+      updateAdjacentProviders(location, false);
+    }
+    removePoweredBlock(location);
+  }
+
+  private void updateAdjacentProviders(Location location, Boolean setTo) {
+    Block block;
+    for (BlockFace face : faces) {
+      block = location.getBlock().getRelative(face);
+      if (ItemsAdder.isCustomBlock(block) && poweredBlocks.containsKey(block.getLocation()) && isProvider(block.getLocation())) {
+        ((BaseProvider) getPoweredBlock(block.getLocation())).updateOutputCache(face.getOppositeFace(), setTo);
+      }
+    }
   }
 
   private static class PowerBlockManagerData implements Serializable {

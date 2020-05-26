@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory.tech.power.api.block;
+package tech.brettsaunders.craftory.tech.power.api.old;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.tech.helpers.MathHelper;
+import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
