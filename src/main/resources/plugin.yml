@@ -15,3 +15,6 @@ commands:
   setCursedSpreadRate:
     description: Sets the rate that cursed earth spreads
     usage: /<command> rate(1.0 is default)
+  toggleDebugMode:
+    description: Toggle debug mode
+    usage: /<command>

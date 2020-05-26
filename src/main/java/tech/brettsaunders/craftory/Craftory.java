@@ -135,6 +135,7 @@ public final class Craftory extends JavaPlugin {
     if (command.getName().equals("setCursedSpreadRate")) {
       try {
         cursedEarth.setSpreadRate(Float.parseFloat(args[0]));
+        return true;
       } catch (Exception e) {
         if (sender instanceof Player) {
           ((Player) sender).sendMessage("Invalid use of cursed earth spread setting command");
@@ -142,6 +143,12 @@ public final class Craftory extends JavaPlugin {
           Logger.warn("Invalid use of cursed earth spread setting command");
         }
       }
+    }
+
+    if (command.getName().equals("toggleDebugMode")) {
+      debugMode = !debugMode;
+      sender.sendMessage("Mode switch to " + debugMode);
+      return true;
     }
     return false;
   }
