@@ -126,6 +126,29 @@ public class PoweredBlockManager implements Listener {
     return false;
   }
 
+  /* Block Type Getters */
+  public boolean isCell(Location location) {
+    if (isPoweredBlock(location)) {
+      return poweredBlocks.get(location).isProvider() && poweredBlocks.get(location).isReceiver();
+    }
+    return false;
+  }
+
+  public boolean isGenerator(Location location) {
+    if (isPoweredBlock(location)) {
+      return poweredBlocks.get(location).isProvider() && !poweredBlocks.get(location).isReceiver();
+    }
+    return false;
+  }
+
+  public boolean isMachine(Location location) {
+    if (isPoweredBlock(location)) {
+      return !poweredBlocks.get(location).isProvider() &&!poweredBlocks.get(location).isReceiver();
+    }
+    return false;
+  }
+
+  /* Events */
   @EventHandler
   public void onPoweredBlockPlace(BlockPlaceEvent event) {
     Location location = event.getBlockPlaced().getLocation();
