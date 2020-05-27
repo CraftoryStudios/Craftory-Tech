@@ -21,9 +21,8 @@ import tech.brettsaunders.craftory.utils.Items.Power;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerConnectorManager implements Listener {
-  public HashSet<UUID> viewingConnections;
-
-  private HashMap<UUID, Location> formingConnection;
+  public transient HashSet<UUID> viewingConnections;
+  private transient HashMap<UUID, Location> formingConnection;
   private transient ArrayList<Beam> activeBeams;
 
   public PowerConnectorManager() {
