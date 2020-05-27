@@ -20,6 +20,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -53,11 +55,13 @@ public class PoweredBlockManager implements Listener {
     init();
   }
 
-  public void onEnable() {
+  @EventHandler
+  public void onEnable(PluginEnableEvent event) {
     load();
   }
 
-  public void onDisable() {
+  @EventHandler
+  public void onDisable(PluginDisableEvent event) {
     save();
   }
 

@@ -3,45 +3,28 @@ package tech.brettsaunders.craftory.tech.power.core.manager;
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.effect.Beam;
 import tech.brettsaunders.craftory.utils.BlockUtils;
 import tech.brettsaunders.craftory.utils.Blocks;
-import tech.brettsaunders.craftory.utils.Items;
 import tech.brettsaunders.craftory.utils.Items.Power;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerConnectorManager implements Listener {
-  public transient HashSet<UUID> viewingConnections;
   private transient HashMap<UUID, Location> formingConnection;
   private transient ArrayList<Beam> activeBeams;
 
   public PowerConnectorManager() {
-    viewingConnections = new HashSet<>();
     formingConnection = new HashMap<>();
     activeBeams = new ArrayList<>();
     generatorPowerBeams();
-  }
-
-  @EventHandler
-  public void holdingWrench(PlayerItemHeldEvent event) {
-    UUID playerUUID = event.getPlayer().getUniqueId();
-    if (viewingConnections.contains(playerUUID)) {
-      if (!ItemsAdder.matchCustomItemName(event.getPlayer().getInventory().getItemInMainHand(), Items.Power.WRENCH)) {
-        viewingConnections.remove(playerUUID);
-      }
-    } else if (ItemsAdder.matchCustomItemName(event.getPlayer().getInventory().getItemInMainHand(), Items.Power.WRENCH)) {
-      viewingConnections.add(playerUUID);
-    }
   }
 
   @EventHandler
@@ -97,7 +80,7 @@ public class PowerConnectorManager implements Listener {
 
   private void formBeam(Location fromLoc, Location toLoc) {
     try {
-      Beam beam = new Beam(fromLoc.clone().add(0.5, 0, 0.5), toLoc.clone().add(0.5, 0, 0.5),
+      Beam beam = new Beam(fromLoc.clone().add(0.5, 0.1, 0.5), toLoc.clone().add(1.5, 0.1, 0.5),
           -1, 25);
       beam.start(Craftory.getInstance());
       activeBeams.add(beam);

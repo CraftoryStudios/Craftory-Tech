@@ -23,7 +23,6 @@ import tech.brettsaunders.craftory.tech.belts.BeltManager;
 import tech.brettsaunders.craftory.tech.belts.DebugEvents;
 import tech.brettsaunders.craftory.tech.belts.EntitySerach;
 import tech.brettsaunders.craftory.tech.power.core.manager.PowerConnectorManager;
-import tech.brettsaunders.craftory.tech.power.core.manager.PowerManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
 import tech.brettsaunders.craftory.utils.Logger;
@@ -36,7 +35,6 @@ public final class Craftory extends JavaPlugin {
   FileConfiguration config = getConfig();
 
   private static Craftory plugin = null;
-  private static PowerManager powerManager = null;
   public static TickableBaseManager tickableBaseManager = null;
   public static PowerConnectorManager powerConnectorManager = null;
 
@@ -71,13 +69,12 @@ public final class Craftory extends JavaPlugin {
       magicMobManager = new MagicMobManager(dataFolder);
       barrel = new Barrel(dataFolder);
       magic = new Magic(magicMobManager);
-      powerManager = new PowerManager();
 
       //Register Events
       getServer().getPluginManager().registerEvents(cursedEarth, this);
       getServer().getPluginManager().registerEvents(magic, this);
       getServer().getPluginManager().registerEvents(barrel, this);
-      getServer().getPluginManager().registerEvents(powerManager, this);
+      getServer().getPluginManager().registerEvents(powerConnectorManager, this);
 
       //Register Tasks
       getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 800L, 80L);
@@ -93,18 +90,10 @@ public final class Craftory extends JavaPlugin {
       getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
 
     }
-
-    //OnEnables
-    powerManager.onEnable();
-    blockPoweredManager.onEnable();
   }
 
   @Override
   public void onDisable() {
-    //OnDisalbe
-    powerManager.onDisable();
-    blockPoweredManager.onDisable();
-
     //Save Data
     DataContainer.saveData(chunkKeys, beltManagers);
     if (config.getBoolean("enableMagic")) {
@@ -177,8 +166,6 @@ public final class Craftory extends JavaPlugin {
   public static Craftory getInstance() {
     return plugin;
   }
-
-  public static PowerManager getPowerManager() { return powerManager; }
 
   public static boolean getDebugMode() { return debugMode; }
 
