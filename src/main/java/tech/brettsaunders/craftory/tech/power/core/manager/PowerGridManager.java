@@ -12,15 +12,32 @@ import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 
 public class PowerGridManager implements Externalizable {
 
-  HashSet<BaseCell> cells = new HashSet<>();
-  HashSet<BaseProvider> generators = new HashSet<>();
-  HashSet<BaseMachine> machines = new HashSet<>();
+  private HashSet<BaseCell> cells = new HashSet<>();
+  private HashSet<BaseProvider> generators = new HashSet<>();
+  private HashSet<BaseMachine> machines = new HashSet<>();
+
+  public HashSet<BaseCell> getCells() {
+    return cells;
+  }
+
+  public HashSet<BaseProvider> getGenerators() {
+    return generators;
+  }
+
+  public HashSet<BaseMachine> getMachines() {
+    return machines;
+  }
+
+  public int getGridSize() {
+    return cells.size() + generators.size() + machines.size();
+  }
+
 
   public void doStuff() {
     int produced = whatDidYouMakeToday();
     int needed = whatDoTheyNeed();
     if (needed > produced) {
-      produced += raidTheBank(needed-produced);
+      produced += raidTheBank(needed - produced);
     }
     if (produced > needed) {
       int extra = giveThePeopleWhatTheyWant(produced);
@@ -105,5 +122,12 @@ public class PowerGridManager implements Externalizable {
     cells = (HashSet<BaseCell>) in.readObject();
     generators = (HashSet<BaseProvider>) in.readObject();
     machines = (HashSet<BaseMachine>) in.readObject();
+  }
+
+  public PowerGridManager combineManagers(PowerGridManager other) {
+    cells.addAll(other.getCells());
+    generators.addAll(other.getGenerators());
+    machines.addAll(other.getMachines());
+    return this;
   }
 }
