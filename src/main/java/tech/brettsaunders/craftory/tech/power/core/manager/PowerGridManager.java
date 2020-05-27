@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.HashSet;
+import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
@@ -15,6 +17,11 @@ public class PowerGridManager implements Externalizable {
   private HashSet<BaseCell> cells = new HashSet<>();
   private HashSet<BaseProvider> generators = new HashSet<>();
   private HashSet<BaseMachine> machines = new HashSet<>();
+  private HashSet<Location> powerConnectors = new HashSet<>();
+
+  public PowerGridManager(Location powerConnector) {
+    addPowerConnector(powerConnector);
+  }
 
   public HashSet<BaseCell> getCells() {
     return cells;
@@ -129,5 +136,22 @@ public class PowerGridManager implements Externalizable {
     generators.addAll(other.getGenerators());
     machines.addAll(other.getMachines());
     return this;
+  }
+
+  /* Common Methods */
+  public boolean addPowerConnector(Location location) {
+    return this.powerConnectors.add(location);
+  }
+
+  public boolean addPowerCell(BaseCell cell) {
+    return this.cells.add(cell);
+  }
+
+  public boolean addMachine(BaseMachine machine) {
+    return this.machines.add(machine);
+  }
+
+  public boolean addGenerator(BaseGenerator generator) {
+    return this.generators.add(generator);
   }
 }

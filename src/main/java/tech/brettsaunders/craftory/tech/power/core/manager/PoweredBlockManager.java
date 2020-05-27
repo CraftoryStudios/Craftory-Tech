@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.bukkit.Location;
@@ -20,13 +21,19 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.WorldSaveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.IronCell;
 import tech.brettsaunders.craftory.tech.power.core.block.SolidFuelGenerator;
+import tech.brettsaunders.craftory.utils.Blocks;
+import tech.brettsaunders.craftory.utils.Blocks.Power;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredBlockManager implements Listener {
@@ -35,9 +42,11 @@ public class PoweredBlockManager implements Listener {
   public static final BlockFace faces[] = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
 
   private HashMap<Location, PoweredBlock> poweredBlocks;
+  private HashSet<PowerGridManager> powerGridManagers;
 
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();
+    powerGridManagers = new HashSet<>();
     init();
   }
 
@@ -74,6 +83,7 @@ public class PoweredBlockManager implements Listener {
           new GZIPInputStream(new FileInputStream(DATA_PATH)));
       PowerBlockManagerData data = (PowerBlockManagerData) in.readObject();
       poweredBlocks = data.poweredBlocks;
+      powerGridManagers = data.powerGridManagers;
       in.close();
       Logger.info("PowerBlockManager Loaded");
     } catch (IOException | ClassNotFoundException e) {
@@ -84,7 +94,7 @@ public class PoweredBlockManager implements Listener {
 
   public void save() {
     try {
-      PowerBlockManagerData data = new PowerBlockManagerData(poweredBlocks);
+      PowerBlockManagerData data = new PowerBlockManagerData(poweredBlocks, powerGridManagers);
       BukkitObjectOutputStream out = new BukkitObjectOutputStream(
           new GZIPOutputStream(new FileOutputStream(DATA_PATH)));
       out.writeObject(data);
@@ -143,7 +153,7 @@ public class PoweredBlockManager implements Listener {
 
   public boolean isMachine(Location location) {
     if (isPoweredBlock(location)) {
-      return !poweredBlocks.get(location).isProvider() &&!poweredBlocks.get(location).isReceiver();
+      return !poweredBlocks.get(location).isProvider() && !poweredBlocks.get(location).isReceiver();
     }
     return false;
   }
@@ -154,24 +164,40 @@ public class PoweredBlockManager implements Listener {
     Location location = event.getBlockPlaced().getLocation();
     Craftory.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Craftory.getInstance(),
         () -> {
-          PoweredBlock poweredBlock;
+          PoweredBlock poweredBlock = null;
           if (!ItemsAdder.isCustomBlock(event.getBlockPlaced())) return;
 
-          switch (ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(event.getBlockPlaced()))) {
-            case "craftory:power_cell":
+          ItemStack blockPlacedItemStack = ItemsAdder.getCustomBlock(event.getBlockPlaced());
+          String blockPlacedName = ItemsAdder.getCustomItemName(blockPlacedItemStack);
+
+          switch (blockPlacedName) {
+
+            case Blocks.Power.POWER_CELL:
               poweredBlock = new IronCell(location);
               break;
-            case "craftory:soild_fuel_generator":
+
+            case Blocks.Power.SOLID_FUEL_GENERATOR:
               poweredBlock = new SolidFuelGenerator(location);
               break;
+
+            case Blocks.Power.POWER_CONNECTOR:
+              PowerGridManager manager = new PowerGridManager(location);
+              getAdjacentPowerBlocks(location, manager);
+              powerGridManagers.add(manager);
+              break;
+
             default:
               return;
           }
 
-          addPoweredBlock(location, poweredBlock);
-          if (poweredBlock.isReceiver()) {
-            updateAdjacentProviders(location, true);
+          //Carry out PoweredBlock Base Setup
+          if (poweredBlock != null) {
+            addPoweredBlock(location, poweredBlock);
+            if (poweredBlock.isReceiver()) {
+              updateAdjacentProviders(location, true);
+            }
           }
+
         }, 1L);
   }
 
@@ -196,6 +222,22 @@ public class PoweredBlockManager implements Listener {
     }
   }
 
+  private void getAdjacentPowerBlocks(Location location, PowerGridManager powerGridManager) {
+    Block block;
+    for (BlockFace face : faces) {
+      block = location.getBlock().getRelative(face);
+      if (ItemsAdder.isCustomBlock(block) && poweredBlocks.containsKey(block.getLocation())) {
+        if (isCell(location)) {
+          powerGridManager.addPowerCell((BaseCell) getPoweredBlock(location));
+        } else if (isGenerator(location)) {
+          powerGridManager.addGenerator((BaseGenerator) getPoweredBlock(location));
+        } else if (isMachine(location)) {
+          powerGridManager.addMachine((BaseMachine) getPoweredBlock(location));
+        }
+      }
+    }
+  }
+
   public void print(Player player) {
     player.sendMessage(poweredBlocks.toString());
   }
@@ -203,8 +245,10 @@ public class PoweredBlockManager implements Listener {
   private static class PowerBlockManagerData implements Serializable {
     private static transient final long serialVersionUID = -1692723206529286331L;
     protected HashMap<Location, PoweredBlock> poweredBlocks;
-    public PowerBlockManagerData(HashMap<Location, PoweredBlock> poweredBlocks) {
+    protected HashSet<PowerGridManager> powerGridManagers;
+    public PowerBlockManagerData(HashMap<Location, PoweredBlock> poweredBlocks, HashSet<PowerGridManager> powerGridManagers) {
       this.poweredBlocks = poweredBlocks;
+      this.powerGridManagers = powerGridManagers;
     }
   }
 
