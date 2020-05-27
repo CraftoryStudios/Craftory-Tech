@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class Beam {
@@ -79,7 +80,7 @@ public class Beam {
             return;
           }
           for (Player p : start.getWorld().getPlayers()) {
-            if (isCloseEnough(p.getLocation())) {
+            if (isCloseEnough(p.getLocation(), p)) {
               if (!show.contains(p)) {
                 sendStartPackets(p);
                 show.add(p);
@@ -163,9 +164,13 @@ public class Beam {
     Packets.sendPacket(p, teamAddPacket);
   }
 
-  private boolean isCloseEnough(Location location) {
-    return start.distanceSquared(location) <= distanceSquared ||
-        end.distanceSquared(location) <= distanceSquared;
+  private boolean isCloseEnough(Location location, Player player) { //TODO FIx UP
+    if (Craftory.powerConnectorManager.viewingConnections.contains(player.getUniqueId())) {
+      return start.distanceSquared(location) <= distanceSquared ||
+          end.distanceSquared(location) <= distanceSquared;
+    } else {
+      return false;
+    }
   }
 
 

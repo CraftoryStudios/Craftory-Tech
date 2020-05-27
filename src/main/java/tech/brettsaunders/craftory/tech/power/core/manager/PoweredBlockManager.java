@@ -43,7 +43,7 @@ public class PoweredBlockManager implements Listener {
 
   private HashMap<Location, PoweredBlock> poweredBlocks;
 
-  private HashSet<PowerGridManager> powerGridManagers;
+  public HashSet<PowerGridManager> powerGridManagers;
   private HashMap<Location, PowerGridManager> powerConnectors;
 
   public PoweredBlockManager() {
@@ -269,6 +269,10 @@ public class PoweredBlockManager implements Listener {
     powerConnectors.put(location, manger);
     //TODO for every merge or place of a power connector
     //TODO when merge change this
+  }
+
+  public PowerGridManager getPowerGridManager(Location location) {
+    return powerConnectors.get(location);
   }
 
   private static class PowerBlockManagerData implements Serializable {

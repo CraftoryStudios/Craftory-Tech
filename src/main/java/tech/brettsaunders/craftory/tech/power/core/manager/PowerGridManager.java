@@ -18,7 +18,7 @@ public class PowerGridManager implements Externalizable {
   private HashSet<BaseCell> cells = new HashSet<>();
   private HashSet<BaseProvider> generators = new HashSet<>();
   private HashSet<BaseMachine> machines = new HashSet<>();
-  private HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
+  public HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
 
   public PowerGridManager(Location powerConnector) {
     addPowerConnector(powerConnector);
@@ -136,6 +136,7 @@ public class PowerGridManager implements Externalizable {
     cells.addAll(other.getCells());
     generators.addAll(other.getGenerators());
     machines.addAll(other.getMachines());
+    powerConnectors.putAll(other.powerConnectors);
     return this;
   }
 
@@ -143,6 +144,12 @@ public class PowerGridManager implements Externalizable {
   public boolean addPowerConnector(Location location) {
     this.powerConnectors.put(location, new HashSet<>());
     return true;
+  }
+
+  public void addPowerConnectorConnection(Location from, Location to) {
+    HashSet<Location> temp = powerConnectors.get(from);
+    temp.add(to);
+    powerConnectors.replace(from, temp);
   }
 
   public boolean addPowerCell(BaseCell cell) {

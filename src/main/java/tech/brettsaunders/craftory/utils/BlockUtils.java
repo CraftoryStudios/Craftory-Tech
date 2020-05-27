@@ -35,6 +35,13 @@ public class BlockUtils {
     return false;
   }
 
+  public static boolean isCustomTypeBlock(Block block, String type) {
+    if (ItemsAdder.isCustomBlock(block)) {
+      return ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block)).equals(type);
+    }
+    return false;
+  }
+
   public boolean isBelt(Block block, BlockFace direction) {
     if (direction == BlockFace.EAST) {
       return checkIsBelt(block, BELT_EAST);

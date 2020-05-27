@@ -22,6 +22,7 @@ import tech.brettsaunders.craftory.tech.belts.BeltEvents;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
 import tech.brettsaunders.craftory.tech.belts.DebugEvents;
 import tech.brettsaunders.craftory.tech.belts.EntitySerach;
+import tech.brettsaunders.craftory.tech.power.core.manager.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PowerManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
@@ -37,6 +38,7 @@ public final class Craftory extends JavaPlugin {
   private static Craftory plugin = null;
   private static PowerManager powerManager = null;
   public static TickableBaseManager tickableBaseManager = null;
+  public static PowerConnectorManager powerConnectorManager = null;
 
   private CursedEarth cursedEarth = null;
   private Barrel barrel = null;
@@ -59,6 +61,7 @@ public final class Craftory extends JavaPlugin {
     //General Classes
     blockPoweredManager = new PoweredBlockManager();
     tickableBaseManager = new TickableBaseManager();
+    powerConnectorManager = new PowerConnectorManager(); //TODO Loading
     multiBlockManager = new MultiBlockManager(dataFolder);
 
     //Magic Classes
