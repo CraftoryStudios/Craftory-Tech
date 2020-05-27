@@ -42,11 +42,14 @@ public class PoweredBlockManager implements Listener {
   public static final BlockFace faces[] = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
 
   private HashMap<Location, PoweredBlock> poweredBlocks;
+
   private HashSet<PowerGridManager> powerGridManagers;
+  private HashMap<Location, PowerGridManager> powerConnectors;
 
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();
     powerGridManagers = new HashSet<>();
+    powerConnectors = new HashMap<>();
     init();
   }
 
@@ -165,6 +168,7 @@ public class PoweredBlockManager implements Listener {
     Craftory.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Craftory.getInstance(),
         () -> {
           PoweredBlock poweredBlock = null;
+          int type = 0;
           if (!ItemsAdder.isCustomBlock(event.getBlockPlaced())) return;
 
           ItemStack blockPlacedItemStack = ItemsAdder.getCustomBlock(event.getBlockPlaced());
@@ -174,16 +178,18 @@ public class PoweredBlockManager implements Listener {
 
             case Blocks.Power.POWER_CELL:
               poweredBlock = new IronCell(location);
+              type = 2;
               break;
 
             case Blocks.Power.SOLID_FUEL_GENERATOR:
               poweredBlock = new SolidFuelGenerator(location);
+              type = 1;
               break;
 
             case Blocks.Power.POWER_CONNECTOR:
               PowerGridManager manager = new PowerGridManager(location);
               getAdjacentPowerBlocks(location, manager);
-              powerGridManagers.add(manager);
+              addPowerGridManager(location, manager);
               break;
 
             default:
@@ -194,7 +200,7 @@ public class PoweredBlockManager implements Listener {
           if (poweredBlock != null) {
             addPoweredBlock(location, poweredBlock);
             if (poweredBlock.isReceiver()) {
-              updateAdjacentProviders(location, true);
+              updateAdjacentProviders(location, true, type);
             }
           }
 
@@ -206,18 +212,34 @@ public class PoweredBlockManager implements Listener {
     Location location = event.getBlock().getLocation();
     if (!poweredBlocks.containsKey(location)) return;
     if (isReceiver(location)) {
-      updateAdjacentProviders(location, false);
+      updateAdjacentProviders(location, false, 0);
     }
     Craftory.tickableBaseManager.removeBaseTickable(getPoweredBlock(location));
     removePoweredBlock(location);
   }
 
-  private void updateAdjacentProviders(Location location, Boolean setTo) {
+  //TODO CLEAN UP
+  private void updateAdjacentProviders(Location location, Boolean setTo, int type) {
     Block block;
     for (BlockFace face : faces) {
       block = location.getBlock().getRelative(face);
-      if (ItemsAdder.isCustomBlock(block) && poweredBlocks.containsKey(block.getLocation()) && isProvider(block.getLocation())) {
-        ((BaseProvider) getPoweredBlock(block.getLocation())).updateOutputCache(face.getOppositeFace(), setTo);
+      if (ItemsAdder.isCustomBlock(block)) {
+        if (poweredBlocks.containsKey(block.getLocation()) && isProvider(block.getLocation())) {
+          ((BaseProvider) getPoweredBlock(block.getLocation())).updateOutputCache(face.getOppositeFace(), setTo);
+        } else if (setTo && ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block)) == Power.POWER_CONNECTOR) { //TODO fix type part - seperate
+          switch (type) {
+            case 0:
+              powerConnectors.get(location).addMachine((BaseMachine) getPoweredBlock(location));
+              break;
+            case 1:
+              powerConnectors.get(location).addGenerator((BaseGenerator) getPoweredBlock(location));
+              break;
+            case 2:
+              powerConnectors.get(location).addPowerCell((BaseCell) getPoweredBlock(location));
+              break;
+          }
+
+        }
       }
     }
   }
@@ -240,6 +262,13 @@ public class PoweredBlockManager implements Listener {
 
   public void print(Player player) {
     player.sendMessage(poweredBlocks.toString());
+  }
+
+  private void addPowerGridManager(Location location, PowerGridManager manger) {
+    powerGridManagers.add(manger);
+    powerConnectors.put(location, manger);
+    //TODO for every merge or place of a power connector
+    //TODO when merge change this
   }
 
   private static class PowerBlockManagerData implements Serializable {
