@@ -4,6 +4,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.HashMap;
 import java.util.HashSet;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
@@ -17,7 +18,7 @@ public class PowerGridManager implements Externalizable {
   private HashSet<BaseCell> cells = new HashSet<>();
   private HashSet<BaseProvider> generators = new HashSet<>();
   private HashSet<BaseMachine> machines = new HashSet<>();
-  private HashSet<Location> powerConnectors = new HashSet<>();
+  private HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
 
   public PowerGridManager(Location powerConnector) {
     addPowerConnector(powerConnector);
@@ -140,7 +141,8 @@ public class PowerGridManager implements Externalizable {
 
   /* Common Methods */
   public boolean addPowerConnector(Location location) {
-    return this.powerConnectors.add(location);
+    this.powerConnectors.put(location, new HashSet<>());
+    return true;
   }
 
   public boolean addPowerCell(BaseCell cell) {
