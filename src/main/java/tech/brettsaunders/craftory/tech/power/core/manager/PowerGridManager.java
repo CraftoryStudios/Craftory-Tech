@@ -12,8 +12,9 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
-public class PowerGridManager implements Externalizable {
+public class PowerGridManager implements Externalizable, ITickable {
 
   private HashSet<BaseCell> cells = new HashSet<>();
   private HashSet<BaseProvider> generators = new HashSet<>();
@@ -41,7 +42,7 @@ public class PowerGridManager implements Externalizable {
   }
 
 
-  public void doStuff() {
+  public void update() {
     int produced = whatDidYouMakeToday();
     int needed = whatDoTheyNeed();
     if (needed > produced) {
