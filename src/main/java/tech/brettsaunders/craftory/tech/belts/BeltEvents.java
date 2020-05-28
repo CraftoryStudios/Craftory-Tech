@@ -108,9 +108,8 @@ public class BeltEvents implements Listener {
 
           Block checkBlock = event.getBlockPlaced().getLocation().add(0, -1, 0).getBlock();
           if (ItemsAdder.isCustomBlock(checkBlock)) {
-
-            //if (ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(checkBlock)).equals("craftory:belt"))
-            event.getBlockPlaced().breakNaturally();
+            String name = ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(checkBlock));
+            if(blockUtils.BELTS.contains(name)) event.getBlockPlaced().breakNaturally();
           }
         }, 1L);
   }

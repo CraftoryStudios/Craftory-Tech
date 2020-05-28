@@ -26,7 +26,7 @@ public class BlockUtils {
   final List<String> BELT_WEST = Arrays
       .asList("extra:beltwestew", "extra:beltweste", "extra:beltwestw",
           "extra:beltwest");
-  final List<List> BELTS = Arrays.asList(BELT_SOUTH, BELT_NORTH, BELT_EAST, BELT_WEST);
+  public final List<List> BELTS = Arrays.asList(BELT_SOUTH, BELT_NORTH, BELT_EAST, BELT_WEST);
 
   public boolean isCustomBlockType(Block block, String type) {
     if (ItemsAdder.isCustomBlock(block)) {
