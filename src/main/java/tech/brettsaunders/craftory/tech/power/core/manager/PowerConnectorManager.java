@@ -79,8 +79,21 @@ public class PowerConnectorManager implements Listener {
   }
 
   private void formBeam(Location fromLoc, Location toLoc) {
+    double x = (fromLoc.getX() - toLoc.getX());
+    double y = (fromLoc.getY() - toLoc.getY());
+    double z = (fromLoc.getZ() - toLoc.getZ());
+    double mag = Math.sqrt((x*x)+(y*y)+(z*z));
+    double xAngle = Math.acos(x/mag);
+    double yAngle = Math.acos(y/mag);
+    double zAngle = Math.acos(z/mag);
+    mag -=1; //reduce size by one to fix the issue
+    x -= mag * Math.cos(xAngle);
+    y -= mag * Math.cos(yAngle);
+    z -= mag * Math.cos(zAngle);
+    Location to = toLoc.clone();
+    to.add(x, y, z);
     try {
-      Beam beam = new Beam(fromLoc.clone().add(0.5, 0.1, 0.5), toLoc.clone().add(1.5, 0.1, 0.5),
+      Beam beam = new Beam(fromLoc.clone().add(0.5, 0.1, 0.5), to.clone().add(0.5, 0.1, 0.5),
           -1, 25);
       beam.start(Craftory.getInstance());
       activeBeams.add(beam);
