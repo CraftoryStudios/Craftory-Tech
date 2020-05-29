@@ -44,9 +44,9 @@ public class MultiBlockManager {
       Logger.info("*** MultiBlockManager Loaded");
     } catch (IOException e) {
       Logger.warn("*** New MultiBlockManager Created");
-      Logger.debug(e.toString());
+      Logger.debug(e);
     } catch (Exception e) {
-      Logger.debug(e.toString());
+      Logger.debug(e);
     }
   }
 

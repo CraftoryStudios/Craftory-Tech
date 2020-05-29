@@ -3,6 +3,9 @@ package tech.brettsaunders.craftory;
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
+import io.sentry.Sentry;
+import io.sentry.SentryClient;
+import io.sentry.SentryClientFactory;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +33,8 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public final class Craftory extends JavaPlugin {
 
+  public static SentryClient sentry;
+
   public static HashSet<Long> chunkKeys = new HashSet<>();
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
   FileConfiguration config = getConfig();
@@ -50,6 +55,11 @@ public final class Craftory extends JavaPlugin {
   public void onEnable() {
     // Plugin startup logic
     plugin = this;
+    //Sentry
+    Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818");
+    sentry = SentryClientFactory.sentryClient();
+    Sentry.getContext().addTag("version", "0.1.0");
+    //Setup
     resourceSetup();
     this.debugMode = config.getBoolean("debugMode");
 
@@ -138,6 +148,7 @@ public final class Craftory extends JavaPlugin {
     if (command.getName().equals("toggleDebugMode")) {
       debugMode = !debugMode;
       sender.sendMessage("Mode switch to " + debugMode);
+      Sentry.capture("AHHHHH");
       return true;
     }
     return false;

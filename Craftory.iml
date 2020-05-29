@@ -58,5 +58,8 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.citizensnpcs:citizens-v1_15_R1:2.0.26-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: de.tr7zw:item-nbt-api:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: de.tr7zw:functional-annotations:0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: io.sentry:sentry:1.7.30" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.24" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.0" level="project" />
   </component>
 </module>

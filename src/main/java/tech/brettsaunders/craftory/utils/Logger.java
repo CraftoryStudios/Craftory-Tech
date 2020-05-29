@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.utils;
 
+import io.sentry.Sentry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import tech.brettsaunders.craftory.Craftory;
@@ -22,14 +23,21 @@ public class Logger {
 
   public static void warn(String logMessage) {
     Bukkit.getLogger().warning(prefix + logMessage);
+    Sentry.capture("WARN: " + logMessage);
   }
 
   public static void error(String logMessage) {
     Bukkit.getLogger().warning(ERROR_COLOR + prefix + logMessage);
+    Sentry.capture("ERROR: " + logMessage);
   }
 
   public static void debug(String logMessage) {
     if (debugMode) Bukkit.getLogger().info( debugPrefix + DEBUG_COLOR + logMessage);
+  }
+
+  public static void debug(Throwable logMessage) {
+    if (debugMode) Bukkit.getLogger().info( debugPrefix + DEBUG_COLOR + logMessage.toString());
+    Sentry.capture(logMessage);
   }
 
 }

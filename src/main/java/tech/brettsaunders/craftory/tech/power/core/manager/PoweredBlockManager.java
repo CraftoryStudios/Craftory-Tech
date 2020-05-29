@@ -95,7 +95,7 @@ public class PoweredBlockManager implements Listener {
       Logger.info("PowerBlockManager Loaded");
     } catch (IOException | ClassNotFoundException e) {
       Logger.warn("New PowerBlockManager Data Created");
-      Logger.debug(e.toString());
+      Logger.debug(e);
     }
   }
 
@@ -109,7 +109,7 @@ public class PoweredBlockManager implements Listener {
       Logger.info("PowerBlockManager Data Saved");
     } catch (IOException e) {
       Logger.warn("Couldn't save PowerBlockManager Data");
-      Logger.debug(e.toString());
+      Logger.debug(e);
     }
   }
 

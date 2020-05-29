@@ -49,7 +49,7 @@ public class DataContainer implements Serializable {
       return data;
     } catch (ClassNotFoundException | IOException e) {
       Logger.warn("Issue loading Data Container");
-      Logger.debug(e.toString());
+      Logger.debug(e);
       return null;
     }
   }

@@ -56,12 +56,12 @@ public class CursedEarth implements Listener, Runnable {
       earths = new HashSet<>();
       closedList = new HashSet<>();
       Logger.warn("*** New Cursed Earth Created");
-      Logger.debug(e.toString());
+      Logger.debug(e);
     } catch (Exception e) {
       earths = new HashSet<>();
       closedList = new HashSet<>();
       Logger.warn("Cursed earth loading failed");
-      Logger.debug(e.toString());
+      Logger.debug(e);
       e.printStackTrace();
     }
   }

@@ -38,7 +38,7 @@ public class MagicMobManager implements Listener {
       Logger.info("Magic MobManager Loaded");
     } catch (IOException | ClassNotFoundException e) {
       Logger.info("Created new Magic MobManager Data");
-      Logger.debug(e.toString());
+      Logger.debug(e);
     }
   }
 
@@ -53,7 +53,7 @@ public class MagicMobManager implements Listener {
       Logger.info("Magic MobManager Saved");
     } catch (IOException e) {
       Logger.warn("Failed to load Magic MobManager");
-      Logger.debug(e.toString());
+      Logger.debug(e);
     }
   }
 
