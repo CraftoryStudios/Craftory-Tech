@@ -63,7 +63,7 @@ public final class Craftory extends JavaPlugin {
     // Plugin startup logic
     plugin = this;
     //Sentry
-    Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818?release="+VERSION);
+    Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818?debug=false&&environment=WIP&&release="+VERSION);
     sentry = SentryClientFactory.sentryClient();
     //Setup
     resourceSetup();
