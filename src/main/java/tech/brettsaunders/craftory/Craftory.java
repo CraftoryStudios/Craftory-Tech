@@ -6,11 +6,16 @@ import dev.lone.itemsadder.api.ItemsAdder;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.SentryClientFactory;
+import io.sentry.SentryOptions;
+import io.sentry.event.User;
+import io.sentry.event.UserBuilder;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.UUID;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -51,16 +56,20 @@ public final class Craftory extends JavaPlugin {
   private static boolean debugMode = false;
   private static PoweredBlockManager blockPoweredManager = null;
 
+  private static final String VERSION = "0.0.1";
+
   @Override
   public void onEnable() {
     // Plugin startup logic
     plugin = this;
     //Sentry
-    Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818");
+    Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818?release="+VERSION);
     sentry = SentryClientFactory.sentryClient();
-    Sentry.getContext().addTag("version", "0.1.0");
     //Setup
     resourceSetup();
+    Sentry.getContext().setUser(new UserBuilder().setId(config.getString("serverUUID")).build());
+    Sentry.getContext().addTag("BukkitVersion", Bukkit.getBukkitVersion());
+    Sentry.getContext().addExtra("Plugins", Bukkit.getPluginManager().getPlugins());
     this.debugMode = config.getBoolean("debugMode");
 
     //Register
@@ -166,6 +175,7 @@ public final class Craftory extends JavaPlugin {
     config.addDefault("enableMagic", true);
     config.addDefault("enableTech", true);
     config.addDefault("debugMode", false);
+    config.addDefault("serverUUID", UUID.randomUUID().toString());
     config.options().copyDefaults(true);
     saveConfig();
 
