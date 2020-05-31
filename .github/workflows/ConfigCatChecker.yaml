@@ -1,17 +1,15 @@
 name: ConfigCatChecker
 
-on: [push]
+on: push
 
 jobs:
-  build:
-
+  ConfigCatFeatureFlagCleanup:
+    name: ConfigCat Feature Flag Cleanup
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+    - name: ConfigCat Feature Flag Cleanup
+      uses: configcat/github-action-feature-flag-cleanup@2.0.1
+      with:
+        configcat-sdk-key: ${{ secrets.CONFIG_CAT_SDK_KEY }}
+        fail-on-warnings: false
