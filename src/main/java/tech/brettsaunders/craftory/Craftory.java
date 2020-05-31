@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory;
 
+import com.configcat.ConfigCatClient;
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
@@ -13,6 +14,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.logging.Filter;
+import java.util.logging.LogRecord;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.Bukkit;
@@ -57,11 +60,16 @@ public final class Craftory extends JavaPlugin {
   private static PoweredBlockManager blockPoweredManager = null;
 
   private static final String VERSION = "0.0.1";
+  public static ConfigCatClient client;
+  public static com.configcat.User userObject;
 
   @Override
   public void onEnable() {
     // Plugin startup logic
     plugin = this;
+    //Config Cat
+    client = new ConfigCatClient("ZQXYCPf7NU2CTWoYzBtWaw/Yh2WoF-Us0ebNjMrmh2T-w");
+
     //Sentry
     Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818?debug=false&&environment=WIP&&release="+VERSION);
     sentry = SentryClientFactory.sentryClient();
@@ -71,6 +79,8 @@ public final class Craftory extends JavaPlugin {
     Sentry.getContext().addTag("BukkitVersion", Bukkit.getBukkitVersion());
     Sentry.getContext().addExtra("Plugins", Bukkit.getPluginManager().getPlugins());
     this.debugMode = config.getBoolean("debugMode");
+    Boolean isAwesomeFeatureEnabled = client.getValue(Boolean.class, "isAwesomeFeatureEnabled", userObject, false);
+    Logger.info("isAwesomeFeatureEnabled: " + isAwesomeFeatureEnabled);
 
     //Register
     String dataFolder = getDataFolder().getPath();
@@ -157,7 +167,6 @@ public final class Craftory extends JavaPlugin {
     if (command.getName().equals("toggleDebugMode")) {
       debugMode = !debugMode;
       sender.sendMessage("Mode switch to " + debugMode);
-      Sentry.capture("AHHHHH");
       return true;
     }
     return false;
@@ -176,6 +185,7 @@ public final class Craftory extends JavaPlugin {
     config.addDefault("enableTech", true);
     config.addDefault("debugMode", false);
     config.addDefault("serverUUID", UUID.randomUUID().toString());
+    userObject = com.configcat.User.newBuilder().build(config.getString("serverUUID"));
     config.options().copyDefaults(true);
     saveConfig();
 
