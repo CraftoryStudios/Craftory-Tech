@@ -4,6 +4,7 @@ import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class GBattery implements IGUIComponent {
 
@@ -33,13 +34,13 @@ public class GBattery implements IGUIComponent {
     int top = 0;
     if (amountFilled != 0) {
       if (amountFilled > 50) {
-        top = (int) Math.round((amountFilled - 50) / 20);
+        top = (int) Math.round((amountFilled - 50) * 0.4);
         bottom = 20;
       } else {
-        bottom = (int) Math.round(amountFilled / 20);
+        bottom = (int) Math.round(amountFilled * 0.4);
       }
     }
-
+    Logger.info(Integer.toString(top) + " _ " + Integer.toString(bottom));
     String bottomTexture = "extra:bar_"+bottom+"_b";
     String topTexture = "extra:bar_"+top+"_t";
     inventory.setItem(TOP_SLOT, ItemsAdder.getCustomItem(topTexture));
