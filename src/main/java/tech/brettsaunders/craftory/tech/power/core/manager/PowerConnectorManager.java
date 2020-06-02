@@ -37,31 +37,33 @@ public class PowerConnectorManager implements Listener {
 
       if (!formingConnection.containsKey(event.getPlayer().getUniqueId())) {
         //First Power Connector selected
+        if(Craftory.getBlockPoweredManager().getPowerGridManager(event.getClickedBlock().getLocation())==null) return;
         formingConnection.put(event.getPlayer().getUniqueId(), event.getClickedBlock().getLocation());
         event.getPlayer().sendMessage("Click Second Power Connector To Form Connection");
       } else {
         //Locations
         Location toLoc = event.getClickedBlock().getLocation();
         Location fromLoc = formingConnection.get(event.getPlayer().getUniqueId());
-
         //Second Power Connector selected
         PowerGridManager powerGridManagerTo = Craftory.getBlockPoweredManager().getPowerGridManager(toLoc);
         PowerGridManager powerGridManagerFrom = Craftory.getBlockPoweredManager().getPowerGridManager(fromLoc);
-
         //Both have manager and not same power connector
         if (powerGridManagerFrom != null && powerGridManagerTo != null
             && fromLoc != toLoc) {
-
           //Form Graphical Connection
           formingConnection.remove(event.getPlayer().getUniqueId());
           powerGridManagerFrom.addPowerConnectorConnection(fromLoc, toLoc);
-
           //Merge Managers
           if (powerGridManagerFrom != powerGridManagerTo) {
             powerGridManagerFrom.combineManagers(powerGridManagerTo);
           }
           formBeam(fromLoc, toLoc);
           event.getPlayer().sendMessage("Connection formed");
+        } else {
+          Logger.info("Failed to make connection");
+          Logger.debug((powerGridManagerFrom==null) +"");
+          Logger.debug((powerGridManagerTo==null) +"");
+          Logger.debug((fromLoc == toLoc)+"");
         }
       }
 
