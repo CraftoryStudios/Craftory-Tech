@@ -40,7 +40,6 @@ public class GBattery implements IGUIComponent {
         bottom = (int) Math.round(amountFilled * 0.4);
       }
     }
-    Logger.info(Integer.toString(top) + " _ " + Integer.toString(bottom));
     String bottomTexture = "extra:bar_"+bottom+"_b";
     String topTexture = "extra:bar_"+top+"_t";
     inventory.setItem(TOP_SLOT, ItemsAdder.getCustomItem(topTexture));
