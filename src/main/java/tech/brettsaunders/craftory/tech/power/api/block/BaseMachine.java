@@ -41,7 +41,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   @Override
   public void update() {
-
+    super.update();
   }
 
   public int howMuchDoYouNeed() { return 10;}

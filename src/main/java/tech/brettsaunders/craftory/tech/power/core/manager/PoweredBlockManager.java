@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.core.manager;
 
+import dev.lone.itemsadder.api.FontImages.PlayerHUDsHolderWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,7 +53,7 @@ public class PoweredBlockManager implements Listener {
     poweredBlocks = new HashMap<>();
     powerGridManagers = new HashSet<>();
     powerConnectors = new HashMap<>();
-    init();
+    Craftory.getInstance().getServer().getPluginManager().registerEvents(this, Craftory.getInstance());
   }
 
   @EventHandler
@@ -63,10 +64,6 @@ public class PoweredBlockManager implements Listener {
   @EventHandler
   public void onDisable(PluginDisableEvent event) {
     save();
-  }
-
-  public void init() {
-    Craftory.getInstance().getServer().getPluginManager().registerEvents(this, Craftory.getInstance());
   }
 
   public void addPoweredBlock(Location location, PoweredBlock blockPowered) {
@@ -84,7 +81,6 @@ public class PoweredBlockManager implements Listener {
   }
 
   public void load() {
-    init();
     try {
       BukkitObjectInputStream in = new BukkitObjectInputStream(
           new GZIPInputStream(new FileInputStream(DATA_PATH)));
@@ -169,45 +165,47 @@ public class PoweredBlockManager implements Listener {
   @EventHandler
   public void onPoweredBlockPlace(BlockPlaceEvent event) {
     Location location = event.getBlockPlaced().getLocation();
-    Craftory.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Craftory.getInstance(),
-        () -> {
-          PoweredBlock poweredBlock = null;
-          int type = 0;
-          if (!ItemsAdder.isCustomBlock(event.getBlockPlaced())) return;
+    Craftory.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(
+        Craftory.getInstance(), new Runnable() {
+          @Override
+          public void run() {
+            PoweredBlock poweredBlock = null;
+            int type = 0;
+            if (!ItemsAdder.isCustomBlock(event.getBlockPlaced())) return;
 
-          ItemStack blockPlacedItemStack = ItemsAdder.getCustomBlock(event.getBlockPlaced());
-          String blockPlacedName = ItemsAdder.getCustomItemName(blockPlacedItemStack);
+            ItemStack blockPlacedItemStack = ItemsAdder.getCustomBlock(event.getBlockPlaced());
+            String blockPlacedName = ItemsAdder.getCustomItemName(blockPlacedItemStack);
 
-          switch (blockPlacedName) {
+            switch (blockPlacedName) {
 
-            case Blocks.Power.POWER_CELL:
-              poweredBlock = new IronCell(location);
-              type = 2;
-              break;
+              case Blocks.Power.POWER_CELL:
+                poweredBlock = new IronCell(location);
+                type = 2;
+                break;
 
-            case Blocks.Power.SOLID_FUEL_GENERATOR:
-              poweredBlock = new SolidFuelGenerator(location);
-              type = 1;
-              break;
+              case Blocks.Power.SOLID_FUEL_GENERATOR:
+                poweredBlock = new SolidFuelGenerator(location);
+                type = 1;
+                break;
 
-            case Blocks.Power.POWER_CONNECTOR:
-              PowerGridManager manager = new PowerGridManager(location);
-              getAdjacentPowerBlocks(location, manager);
-              addPowerGridManager(location, manager);
-              break;
+              case Blocks.Power.POWER_CONNECTOR:
+                PowerGridManager manager = new PowerGridManager(location);
+                getAdjacentPowerBlocks(location, manager);
+                addPowerGridManager(location, manager);
+                break;
 
-            default:
-              return;
-          }
+              default:
+                return;
+            }
 
-          //Carry out PoweredBlock Base Setup
-          if (poweredBlock != null) {
-            addPoweredBlock(location, poweredBlock);
-            if (poweredBlock.isReceiver()) {
-              updateAdjacentProviders(location, true, type);
+            //Carry out PoweredBlock Base Setup
+            if (poweredBlock != null) {
+              addPoweredBlock(location, poweredBlock);
+              if (poweredBlock.isReceiver()) {
+                updateAdjacentProviders(location, true, type);
+              }
             }
           }
-
         }, 1L);
   }
 

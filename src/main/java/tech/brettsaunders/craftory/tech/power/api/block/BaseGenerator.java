@@ -46,6 +46,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
 
   @Override
   public void update() {
+    super.update();
 
     boolean curActive = isActive;
 

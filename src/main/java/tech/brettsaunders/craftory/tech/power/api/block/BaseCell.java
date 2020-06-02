@@ -6,6 +6,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, Externalizable {
@@ -17,12 +18,14 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
     energyStorage = new EnergyStorage(CAPACITY_BASE);
     isReceiver = true;
     isProvider = true;
+    addGUIComponent(new GBattery(getInventory(), energyStorage));
   }
 
   public BaseCell() {
     super();
     isReceiver = true;
     isProvider = true;
+
   }
 
   @Override
@@ -39,7 +42,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
 
   @Override
   public void update() {
-      transferEnergy();
+    super.update();
+    transferEnergy();
   }
 
   @Override

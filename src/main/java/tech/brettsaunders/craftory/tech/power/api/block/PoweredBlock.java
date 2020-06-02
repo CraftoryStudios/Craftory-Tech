@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
-import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
 /**
@@ -60,6 +59,12 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     energyStorage = (EnergyStorage) in.readObject();
     location = (Location) in.readObject();
+  }
+
+  /* Update Loop */
+  @Override
+  public void update() {
+    updateInterface();
   }
 
   /* Info Methods */

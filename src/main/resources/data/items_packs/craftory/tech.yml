@@ -15,6 +15,14 @@ recipes:
         item: craftory:belt
         amount: 1
 items:
+  wrench:
+    display_name: Wrench
+    permission: craftory
+    resource:
+      material: STICK
+      generate: true
+      textures:
+      - item/wrench.png
   belt:
     display_name: Belt
     permission: belt

@@ -2,13 +2,17 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public abstract class BlockGUI implements Externalizable {
 
@@ -58,17 +62,31 @@ public abstract class BlockGUI implements Externalizable {
   }
 
   private void updateGUI() {
-    if (title != null && !backgroundImage.isEmpty()) {
-      inventoryInterface = new TexturedInventoryWrapper(null, 54, title, new FontImageWrapper(backgroundImage));
-    } else {
-      inventoryInterface = new TexturedInventoryWrapper(null, 54, title, new FontImageWrapper("mcguis:blank_menu"));
+//    if (title != null && !backgroundImage.isEmpty()) {
+//      inventoryInterface = new TexturedInventoryWrapper(null, 54, title, new FontImageWrapper(backgroundImage));
+//    } else {
+//
+//    }
+    title = ChatColor.DARK_GRAY+ "Cell";
+    inventoryInterface = new TexturedInventoryWrapper(null, 54, title, new FontImageWrapper("extra:cell"));
+  }
+
+  public void updateInterface() {
+    for  (IGUIComponent component: components) {
+      component.update();
     }
   }
 
+   public void addGUIComponent(IGUIComponent component) {
+    components.add(component);
+     Logger.info("Added Component");
+   }
+
+   public Inventory getInventory() {
+    return inventoryInterface.getInternal();
+   }
+
   public void openGUI(Player player) {
-    if (inventoryInterface == null) {
-      updateGUI();
-    }
     inventoryInterface.showInventory(player);
   }
 }
