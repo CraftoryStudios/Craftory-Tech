@@ -68,6 +68,7 @@ public abstract class BlockGUI implements Externalizable {
 //
 //    }
     title = ChatColor.DARK_GRAY+ "Cell";
+
     inventoryInterface = new TexturedInventoryWrapper(null, 54, title, new FontImageWrapper("extra:cell"));
   }
 

@@ -18,9 +18,8 @@ items:
     display_name: OUTPUT
     resource:
       material: PAPER
-      generate: true
-      textures:
-        - item/output_green.png
+      generate: false
+      model_path: item/output_green
   bar_0_b:
     display_name: 
     resource:
@@ -278,4 +277,13 @@ items:
 font_images:
   cell:
     path: "font/gui/cell.png"
+    y_position: 47
+  cell2:
+    path: "font/gui/cell2.png"
+    y_position: 47
+  cell3:
+    path: "font/gui/cell3.png"
+    y_position: 47
+  cell4:
+    path: "font/gui/cell4.png"
     y_position: 47

@@ -9,27 +9,31 @@ import java.util.Collections;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider,
     Externalizable {
-  public static final Integer[] DEFAULT_SIDES_CONFIG = { 1, 1, 1, 1, 1, 1 };  //NORTH, EAST, SOUTH, WEST, UP, DOWN
+  public static final Boolean[] DEFAULT_SIDES_CONFIG = { false, false, false, false, false, false };  //NORTH, EAST, SOUTH, WEST, UP, DOWN
   public static final int CONFIG_NONE = 0;
   public static final int CONFIG_OUTPUT = 1;
   public static final int CONFIG_INPUT = 2;
   protected static final int amountToSend = 10;
 
-  protected ArrayList<Integer> sidesConfig = new ArrayList<>(6);
+  protected ArrayList<Boolean> sidesConfig = new ArrayList<>(6);
   protected ArrayList<Boolean> sidesCache = new ArrayList<>(6);
 
   public BaseProvider(Location location) {
     super(location);
     Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
     generateSideCache();
+    addGUIComponent(new GOutputConfig(getInventory(), sidesConfig));
   }
 
-  public BaseProvider(){}
+  public BaseProvider(){
+    super();
+  }
 
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
@@ -41,8 +45,9 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     super.readExternal(in);
-    sidesConfig = (ArrayList<Integer>) in.readObject();
+    sidesConfig = (ArrayList<Boolean>) in.readObject();
     sidesCache = (ArrayList<Boolean>) in.readObject();
+    addGUIComponent(new GOutputConfig(getInventory(), sidesConfig));
   }
 
   @Override
@@ -88,7 +93,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
   protected void transferEnergy() {
     for (int i = 0; i < sidesConfig.size(); i++) {
-      if (sidesConfig.get(i) == CONFIG_OUTPUT) {
+      if (sidesConfig.get(i) == true) {
         if (sidesCache.get(i)) {
           energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
               Math.min(amountToSend, energyStorage.getEnergyStored()), false));
