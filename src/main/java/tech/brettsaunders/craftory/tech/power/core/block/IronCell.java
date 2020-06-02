@@ -5,6 +5,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 
 public class IronCell extends BaseCell {
 
+
   public IronCell(Location location) {
     super(location);
   }

@@ -10,7 +10,7 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, Externalizable {
-  public static final int CAPACITY_BASE = 2000000;
+  public static final int CAPACITY_BASE = 41000;
   protected static final int amountReceive = 10;
 
   public BaseCell(Location location) {

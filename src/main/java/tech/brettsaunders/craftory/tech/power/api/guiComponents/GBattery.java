@@ -4,7 +4,6 @@ import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class GBattery implements IGUIComponent {
 

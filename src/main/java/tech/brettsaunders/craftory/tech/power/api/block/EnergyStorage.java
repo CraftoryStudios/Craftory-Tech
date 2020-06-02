@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import de.tr7zw.changeme.nbtapi.NBTCompound;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;

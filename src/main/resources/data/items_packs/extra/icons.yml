@@ -8,7 +8,19 @@ items:
       generate: true
       textures:
         - item/output.png
-
+  output_disabled:
+    display_name: DISABLED
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/output_disabled
+  output_green:
+    display_name: OUTPUT
+    resource:
+      material: PAPER
+      generate: true
+      textures:
+        - item/output_green.png
   bar_0_b:
     display_name: 
     resource:
