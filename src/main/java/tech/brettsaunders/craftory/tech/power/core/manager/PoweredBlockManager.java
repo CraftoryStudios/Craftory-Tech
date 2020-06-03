@@ -173,7 +173,7 @@ public class PoweredBlockManager implements Listener {
           @Override
           public void run() {
             PoweredBlock poweredBlock = null;
-            int type = 0;
+            PoweredBlockType type = PoweredBlockType.MACHINE;
             if (!ItemsAdder.isCustomBlock(event.getBlockPlaced())) return;
 
             ItemStack blockPlacedItemStack = ItemsAdder.getCustomBlock(event.getBlockPlaced());
@@ -183,30 +183,30 @@ public class PoweredBlockManager implements Listener {
 
               case Power.IRON_CELL:
                 poweredBlock = new IronCell(location);
-                type = 2;
+                type = PoweredBlockType.CELL;
                 break;
               case Power.GOLD_CELL:
                 poweredBlock = new GoldCell(location);
-                type = 2;
+                type = PoweredBlockType.CELL;
                 break;
               case Power.DIAMOND_CELL:
                 poweredBlock = new DiamondCell(location);
-                type = 2;
+                type = PoweredBlockType.CELL;
                 break;
               case Power.EMERALD_CELL:
                 poweredBlock = new EmeraldCell(location);
-                type = 2;
+                type = PoweredBlockType.CELL;
                 break;
 
               case Blocks.Power.SOLID_FUEL_GENERATOR:
                 poweredBlock = new SolidFuelGenerator(location);
-                type = 1;
+                type = PoweredBlockType.GENERATOR;
                 break;
-
               case Blocks.Power.POWER_CONNECTOR:
                 PowerGridManager manager = new PowerGridManager(location);
                 getAdjacentPowerBlocks(location, manager);
                 addPowerGridManager(location, manager);
+                type = PoweredBlockType.CELL;
                 break;
 
               default:
@@ -229,7 +229,7 @@ public class PoweredBlockManager implements Listener {
     Location location = event.getBlock().getLocation();
     if (!poweredBlocks.containsKey(location)) return;
     if (isReceiver(location)) {
-      updateAdjacentProviders(location, false, 0);
+      updateAdjacentProviders(location, false, PoweredBlockType.MACHINE);
     }
     Craftory.tickableBaseManager.removeBaseTickable(getPoweredBlock(location));
     removePoweredBlock(location);
@@ -249,7 +249,7 @@ public class PoweredBlockManager implements Listener {
   }
 
   //TODO CLEAN UP
-  private void updateAdjacentProviders(Location location, Boolean setTo, int type) {
+  private void updateAdjacentProviders(Location location, Boolean setTo, PoweredBlockType type) {
     Block block;
     for (BlockFace face : faces) {
       block = location.getBlock().getRelative(face);
@@ -258,13 +258,13 @@ public class PoweredBlockManager implements Listener {
           ((BaseProvider) getPoweredBlock(block.getLocation())).updateOutputCache(face.getOppositeFace(), setTo);
         } else if (setTo && ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block)) == Power.POWER_CONNECTOR) { //TODO fix type part - seperate
           switch (type) {
-            case 0:
+            case MACHINE:
               powerConnectors.get(location).addMachine((BaseMachine) getPoweredBlock(location));
               break;
-            case 1:
+            case GENERATOR:
               powerConnectors.get(location).addGenerator((BaseGenerator) getPoweredBlock(location));
               break;
-            case 2:
+            case CELL:
               powerConnectors.get(location).addPowerCell((BaseCell) getPoweredBlock(location));
               break;
           }

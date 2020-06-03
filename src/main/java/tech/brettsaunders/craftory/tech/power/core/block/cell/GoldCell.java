@@ -3,6 +3,7 @@ package tech.brettsaunders.craftory.tech.power.core.block.cell;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 
 /**
  * Energy Cell
@@ -13,12 +14,11 @@ import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
  * Level: 1 (GOLD)
  */
 public class GoldCell extends BaseCell {
+  private static final byte CLEVEL = 1;
+  private static final int C_OUTPUT_AMOUNT = 800;
 
   public GoldCell(Location location) {
-    super(location);
-    level = 1;
-    //TODO find a way to not redeclare this to update level
-    energyStorage = new EnergyStorage(CAPACITY_BASE * CAPACITY_LEVEL[level]);
+    super(location, CLEVEL, C_OUTPUT_AMOUNT);
   }
 
   public GoldCell() {

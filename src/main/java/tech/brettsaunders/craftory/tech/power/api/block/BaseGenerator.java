@@ -5,36 +5,32 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 
 public abstract class BaseGenerator extends BaseProvider implements Externalizable {
-
-  protected static final int ENERGY_BASE = 100;
-  protected static final int POWER_BASE = 100;
-
-  protected int minPower = 2;
-  protected int maxPower = 20;
-  protected int maxEnergy = 20000;
-  protected int minPowerLevel = maxEnergy / 10;
-  protected int maxPowerLevel = 9 * maxEnergy / 10;
-  protected int energyRamp = maxPowerLevel / maxPower;
+  protected static final int CAPACITY_BASE = 40000;
+  protected static final double[] CAPACITY_LEVEL = { 1, 1.5, 2, 3 };
 
   protected int fuelRF;
   protected int maxFuelRF;
-  protected byte level;
   protected int lastEnergy;
   protected boolean isActive;
   protected boolean wasActive;
-  protected int energyMod = ENERGY_BASE;
 
   public BaseGenerator() {
     super();
     isActive = true;
     isProvider = true;
+    isActive = false;
+    wasActive = false;
+    lastEnergy = 0;
+    maxFuelRF = 0;
   }
 
-  public BaseGenerator(Location location) {
-    super(location);
-    energyStorage = new EnergyStorage(maxEnergy, maxPower * 2);
+  public BaseGenerator(Location location, byte level, int outputAmount) {
+    super(location, level, outputAmount);
+    energyStorage = new EnergyStorage((int) (CAPACITY_BASE * CAPACITY_LEVEL[level]));
+    addGUIComponent(new GBattery(getInventory(), energyStorage));
     isActive = true;
     isProvider = true;
   }
@@ -82,16 +78,6 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     return true;
   }
 
-  protected int calcEnergy() {
-    if (energyStorage.getEnergyStored() <= minPowerLevel) {
-      return maxPower;
-    }
-    if (energyStorage.getEnergyStored() > maxPowerLevel) {
-      return minPower;
-    }
-    return (energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored()) / energyRamp;
-  }
-
   protected abstract boolean canStart();
 
   protected boolean canFinish() {
@@ -110,22 +96,15 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   }
 
   protected int processTick() {
-    lastEnergy = calcEnergy();
-    energyStorage.modifyEnergyStored(lastEnergy);
+    energyStorage.modifyEnergyStored(80); //TODO need to fix look at old code
     fuelRF -= lastEnergy;
-    transferEnergy();
+    lastEnergy = transferEnergy();
     return lastEnergy;
   }
 
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
     out.writeInt(fuelRF);
-    out.writeInt(maxFuelRF);
-    out.writeByte(level);
-    out.writeInt(lastEnergy);
-    out.writeBoolean(isActive);
-    out.writeBoolean(wasActive);
-    out.writeInt(energyMod);
     out.writeObject(energyStorage);
     //TODO Missing
   }
@@ -133,20 +112,9 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     fuelRF = in.readInt();
-    maxFuelRF = in.readInt();
-    level = in.readByte();
-    lastEnergy = in.readInt();
-    isActive = in.readBoolean();
-    wasActive = in.readBoolean();
-    energyMod = in.readInt();
     energyStorage = (EnergyStorage) in.readObject();
     //TODO Missing
   }
-
-//  @Override
-//  public int extractEnergy(BlockFace from, int maxExtract, boolean simulate) {
-//    return energyStorage.extractEnergy(Math.min(maxPower * 2, maxExtract), simulate);
-//  }
 
   @Override
   public int getInfoEnergyPerTick() {
@@ -154,11 +122,6 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
       return 0;
     }
     return lastEnergy;
-  }
-
-  @Override
-  public int getInfoMaxEnergyPerTick() {
-    return maxPower;
   }
 
   @Override

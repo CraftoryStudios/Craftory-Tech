@@ -9,8 +9,8 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   protected static final int amountReceive = 10;
 
-  public BaseMachine(Location location) {
-    super(location);
+  public BaseMachine(Location location, byte level) {
+    super(location, level);
     isReceiver = true;
   }
 

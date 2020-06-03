@@ -15,12 +15,12 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
   protected static final int MAX_INPUT = 200;
   protected static final int[] INPUT_LEVEL = { 1, 4, 40, 160 };
 
-  public BaseCell(Location location) {
-    super(location);
+  public BaseCell(Location location, byte level, int outputAmount) {
+    super(location, level, outputAmount);
     energyStorage = new EnergyStorage(CAPACITY_BASE * CAPACITY_LEVEL[level]);
+    addGUIComponent(new GBattery(getInventory(), energyStorage));
     isReceiver = true;
     isProvider = true;
-    addGUIComponent(new GBattery(getInventory(), energyStorage));
   }
 
   public BaseCell() {

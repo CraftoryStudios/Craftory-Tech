@@ -29,13 +29,13 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   protected byte level;
 
   /* Construction */
-  public PoweredBlock(Location location) {
+  public PoweredBlock(Location location, byte level) {
     super();
     this.location = location;
     this.energyStorage = new EnergyStorage(0);
     isReceiver = false;
     isProvider = false;
-    level = 0;
+    this.level = level;
     init();
   }
 
