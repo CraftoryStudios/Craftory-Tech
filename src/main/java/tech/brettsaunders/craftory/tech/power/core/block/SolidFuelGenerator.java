@@ -7,6 +7,8 @@ import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 
 public class SolidFuelGenerator extends BaseGenerator {
+  private static final byte CLEVEL = 0;
+  private static final int C_OUTPUT_AMOUNT = 80;
 
   //protected static final int FUEL_SLOT = 22;
   //public static final boolean enable = true; //Fix
@@ -18,7 +20,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   }
 
   public SolidFuelGenerator(Location location) {
-    super(location);
+    super(location, CLEVEL, C_OUTPUT_AMOUNT);
   }
 
 
@@ -31,7 +33,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   @Override
   protected void processStart() {
 //    maxFuelRF = SolidFuelManager.getFuelEnergy(getFuelItem()) * energyMod / ENERGY_BASE;
-    maxFuelRF = 1 * energyMod / ENERGY_BASE;
+    maxFuelRF = outputAmount;
     if (maxFuelRF != 0) {
       fuelRF += maxFuelRF;
 //      if (getFuelItem().getAmount() > 1) {

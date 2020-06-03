@@ -19,13 +19,14 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   public static final int CONFIG_NONE = 0;
   public static final int CONFIG_OUTPUT = 1;
   public static final int CONFIG_INPUT = 2;
-  protected static final int amountToSend = 10;
+  protected static int outputAmount = 0;
 
   protected ArrayList<Boolean> sidesConfig = new ArrayList<>(6);
   protected ArrayList<Boolean> sidesCache = new ArrayList<>(6);
 
-  public BaseProvider(Location location) {
-    super(location);
+  public BaseProvider(Location location, byte level, int outputAmount) {
+    super(location, level);
+    this.outputAmount = outputAmount;
     Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
     generateSideCache();
     addGUIComponent(new GOutputConfig(getInventory(), sidesConfig));
@@ -91,15 +92,17 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     return 0;
   }
 
-  protected void transferEnergy() {
+  protected int transferEnergy() {
+    int amountTransferred = 0;
     for (int i = 0; i < sidesConfig.size(); i++) {
       if (sidesConfig.get(i) == true) {
         if (sidesCache.get(i)) {
-          energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
-              Math.min(amountToSend, energyStorage.getEnergyStored()), false));
+          amountTransferred += energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
+              Math.min(outputAmount, energyStorage.getEnergyStored()), false));
         }
       }
     }
+    return amountTransferred;
   }
 
   private void generateSideCache() {
@@ -123,6 +126,11 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   @Override
   public int getMaxEnergyStored(BlockFace from) {
     return energyStorage.getMaxEnergyStored();
+  }
+
+  @Override
+  public int getInfoMaxEnergyPerTick() {
+    return outputAmount;
   }
 
   @Override

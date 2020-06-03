@@ -107,7 +107,7 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
     }
   }
 
-  public void modifyEnergyStored(int energy) {
+  public int modifyEnergyStored(int energy) {
 
     this.energy += energy;
 
@@ -116,6 +116,7 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
     } else if (this.energy < 0) {
       this.energy = 0;
     }
+    return energy;
   }
 
   /* IEnergyStorage */
