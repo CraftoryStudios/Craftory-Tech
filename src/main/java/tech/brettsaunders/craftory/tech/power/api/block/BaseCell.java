@@ -10,12 +10,14 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, Externalizable {
-  public static final int CAPACITY_BASE = 41000;
-  protected static final int amountReceive = 10;
+  protected static final int CAPACITY_BASE = 400000;
+  protected static final int[] CAPACITY_LEVEL = { 1, 5, 50, 200 };
+  protected static final int MAX_INPUT = 200;
+  protected static final int[] INPUT_LEVEL = { 1, 4, 40, 160 };
 
   public BaseCell(Location location) {
     super(location);
-    energyStorage = new EnergyStorage(CAPACITY_BASE);
+    energyStorage = new EnergyStorage(CAPACITY_BASE * CAPACITY_LEVEL[level]);
     isReceiver = true;
     isProvider = true;
     addGUIComponent(new GBattery(getInventory(), energyStorage));
@@ -48,7 +50,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
 
   @Override
   public int receiveEnergy(BlockFace from, int maxReceive, boolean simulate) {
-    return energyStorage.receiveEnergy(Math.min(maxReceive, amountReceive), simulate);
+    return energyStorage.receiveEnergy(Math.min(maxReceive, MAX_INPUT * INPUT_LEVEL[level]), simulate);
   }
 
   @Override

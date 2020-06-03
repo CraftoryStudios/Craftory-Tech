@@ -42,15 +42,4 @@ public class DebugEvents implements Listener {
 
     //e.getPlayer().sendMessage("Location: " + e.getClickedBlock().getLocation().toString());
   }
-
-  @EventHandler
-  public void onWrenchRightClick(CustomBlockInteractEvent e) {
-    if (e.getAction() != Action.LEFT_CLICK_BLOCK) return;
-    if (!ItemsAdder.matchCustomItemName(e.getItem(), Power.WRENCH)) return;
-
-    //Show power levels
-    if (Craftory.getBlockPoweredManager().isPoweredBlock(e.getClickedBlock().getLocation())) {
-      e.getPlayer().sendMessage("Stored: "+Craftory.getBlockPoweredManager().getPoweredBlock(e.getClickedBlock().getLocation()).getInfoEnergyStored());
-    }
-  }
 }

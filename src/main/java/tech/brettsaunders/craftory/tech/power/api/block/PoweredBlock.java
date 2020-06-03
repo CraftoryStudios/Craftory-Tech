@@ -26,6 +26,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   protected Location location;
   protected boolean isReceiver;
   protected boolean isProvider;
+  protected byte level;
 
   /* Construction */
   public PoweredBlock(Location location) {
@@ -34,6 +35,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     this.energyStorage = new EnergyStorage(0);
     isReceiver = false;
     isProvider = false;
+    level = 0;
     init();
   }
 
@@ -53,12 +55,14 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   public void writeExternal(ObjectOutput out) throws IOException {
     out.writeObject(energyStorage);
     out.writeObject(location);
+    out.writeByte(level);
   }
 
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     energyStorage = (EnergyStorage) in.readObject();
     location = (Location) in.readObject();
+    level = in.readByte();
   }
 
   /* Update Loop */
@@ -103,5 +107,9 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   @Override
   public int getInfoEnergyStored() {
     return energyStorage.getEnergyStored();
+  }
+
+  public int getInfoEnergyCapacity() {
+    return energyStorage.getMaxEnergyStored();
   }
 }

@@ -53,13 +53,58 @@ items:
         break_tools_whitelist:
         - PICKAXE
         - pickaxe
-  power_cell:
-    display_name: Power Cell
+  iron_cell:
+    display_name: Iron Energy Cell
     permission: craftory_tech
     resource:
       material: IRON_BLOCK
       generate: false
-      model_path: block/power_connector
+      model_path: block/iron_cell
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+          - PICKAXE
+          - pickaxe
+  gold_cell:
+    display_name: Gold Energy Cell
+    permission: craftory_tech
+    resource:
+      material: GOLD_BLOCK
+      generate: false
+      model_path: block/gold_cell
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+          - PICKAXE
+          - pickaxe
+  diamond_cell:
+    display_name: Diamond Energy Cell
+    permission: craftory_tech
+    resource:
+      material: DIAMOND_BLOCK
+      generate: false
+      model_path: block/diamond_cell
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+          - PICKAXE
+          - pickaxe
+  emerald_cell:
+    display_name: Emerald Energy Cell
+    permission: craftory_tech
+    resource:
+      material: EMERALD_BLOCK
+      generate: false
+      model_path: block/emerald_cell
     specific_properties:
       block:
         placed_model:

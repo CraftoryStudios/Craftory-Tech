@@ -2,7 +2,6 @@ package tech.brettsaunders.craftory.tech.power.core.manager;
 
 import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
 import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
-import dev.lone.itemsadder.api.FontImages.PlayerHUDsHolderWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +19,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -35,10 +33,14 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.core.block.IronCell;
+import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
+import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
+import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
+import tech.brettsaunders.craftory.tech.power.core.block.cell.IronCell;
 import tech.brettsaunders.craftory.tech.power.core.block.SolidFuelGenerator;
 import tech.brettsaunders.craftory.utils.Blocks;
 import tech.brettsaunders.craftory.utils.Blocks.Power;
+import tech.brettsaunders.craftory.utils.Items;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredBlockManager implements Listener {
@@ -179,8 +181,20 @@ public class PoweredBlockManager implements Listener {
 
             switch (blockPlacedName) {
 
-              case Blocks.Power.POWER_CELL:
+              case Power.IRON_CELL:
                 poweredBlock = new IronCell(location);
+                type = 2;
+                break;
+              case Power.GOLD_CELL:
+                poweredBlock = new GoldCell(location);
+                type = 2;
+                break;
+              case Power.DIAMOND_CELL:
+                poweredBlock = new DiamondCell(location);
+                type = 2;
+                break;
+              case Power.EMERALD_CELL:
+                poweredBlock = new EmeraldCell(location);
                 type = 2;
                 break;
 
@@ -219,6 +233,19 @@ public class PoweredBlockManager implements Listener {
     }
     Craftory.tickableBaseManager.removeBaseTickable(getPoweredBlock(location));
     removePoweredBlock(location);
+  }
+
+  @EventHandler
+  public void onWrenchLeftClick(PlayerInteractEvent e) {
+    if (e.getAction() != Action.LEFT_CLICK_BLOCK) return;
+    if (!ItemsAdder.matchCustomItemName(e.getItem(), Items.Power.WRENCH)) return;
+    e.setCancelled(true);
+
+    //Show power levels
+    if (isPoweredBlock(e.getClickedBlock().getLocation())) {
+      PoweredBlock block = getPoweredBlock(e.getClickedBlock().getLocation());
+      e.getPlayer().sendMessage("Stored: "+block.getInfoEnergyStored() + " / " + block.getInfoEnergyCapacity());
+    }
   }
 
   //TODO CLEAN UP
