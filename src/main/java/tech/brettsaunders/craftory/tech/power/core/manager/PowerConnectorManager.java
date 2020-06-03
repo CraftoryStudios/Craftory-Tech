@@ -81,6 +81,15 @@ public class PowerConnectorManager implements Listener {
   }
 
   private void formBeam(Location fromLoc, Location toLoc) {
+    /*
+    THIS SHOULDN'T WORK OR BE NEEDED
+     */
+    Location l = fromLoc.clone();
+    fromLoc = toLoc.clone();
+    toLoc = l.clone();
+    /*
+    THIS SHOULDN'T WORK OR BE NEEDED
+     */
     double x = (fromLoc.getX() - toLoc.getX());
     double y = (fromLoc.getY() - toLoc.getY());
     double z = (fromLoc.getZ() - toLoc.getZ());
