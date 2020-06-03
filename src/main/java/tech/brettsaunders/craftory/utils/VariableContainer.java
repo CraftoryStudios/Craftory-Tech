@@ -1,6 +1,6 @@
 package tech.brettsaunders.craftory.utils;
 
-public class DataContainer<T> {
+public class VariableContainer<T> {
   private T t;
 
   public T getT() {
@@ -11,7 +11,7 @@ public class DataContainer<T> {
     this.t = t;
   }
 
-  public DataContainer(T t) {
+  public VariableContainer(T t) {
     this.t = t;
   }
 }
