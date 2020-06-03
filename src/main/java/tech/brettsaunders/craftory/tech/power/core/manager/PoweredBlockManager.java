@@ -117,12 +117,11 @@ public class PoweredBlockManager implements Listener {
   }
 
   @EventHandler
-  public void onGUIOpen(PlayerInteractEvent event) {
-    if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-      if (poweredBlocks.containsKey(event.getClickedBlock().getLocation())) {
-        //Open GUI of Powered Block
-        poweredBlocks.get(event.getClickedBlock().getLocation()).openGUI(event.getPlayer());
-      }
+  public void onGUIBlockClick(CustomBlockInteractEvent e) {
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    if (poweredBlocks.containsKey(e.getClickedBlock().getLocation())) {
+      //Open GUI of Powered Block
+      poweredBlocks.get(e.getClickedBlock().getLocation()).openGUI(e.getPlayer());
     }
   }
 
