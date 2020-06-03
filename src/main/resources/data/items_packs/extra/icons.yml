@@ -273,7 +273,78 @@ items:
       material: PAPER
       generate: false
       model_path: item/bar_20_t
-
+  light_on:
+    display_name:
+    resource:
+      material: EMERALD
+      generate: false
+      model_path: item/light/light_on
+  light_off:
+    display_name:
+    resource:
+      material: REDSTONE
+      generate: false
+      model_path: item/light/light_off
+  arrow_0:
+    display_name:
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/arrow/arrow_0
+  arrow_1:
+    display_name:
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/arrow/arrow_1
+  arrow_2:
+    display_name:
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/arrow/arrow_2
+  arrow_3:
+    display_name:
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/arrow/arrow_3
+  arrow_4:
+    display_name:
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/arrow/arrow_4
+  arrow_5:
+    display_name:
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/arrow/arrow_5
+  arrow_6:
+    display_name:
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/arrow/arrow_6
+  arrow_7:
+    display_name:
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/arrow/arrow_7
+  arrow_8:
+    display_name:
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/arrow/arrow_8
+  arrow_9:
+    display_name:
+    resource:
+      material: PAPER
+      generate: false
+      model_path: item/arrow/arrow_9
 font_images:
   cell:
     path: "font/gui/cell.png"

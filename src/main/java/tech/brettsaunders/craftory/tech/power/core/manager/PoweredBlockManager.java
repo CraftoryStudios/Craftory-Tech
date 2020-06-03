@@ -38,6 +38,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.IronCell;
 import tech.brettsaunders.craftory.tech.power.core.block.SolidFuelGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
 import tech.brettsaunders.craftory.utils.Blocks;
 import tech.brettsaunders.craftory.utils.Blocks.Power;
 import tech.brettsaunders.craftory.utils.Items;
@@ -208,7 +209,10 @@ public class PoweredBlockManager implements Listener {
                 addPowerGridManager(location, manager);
                 type = PoweredBlockType.CELL;
                 break;
-
+              case Power.IRON_ELECTRIC_FURNACE:
+                poweredBlock = new IronElectricFurnace(location);
+                type = PoweredBlockType.MACHINE;
+                break;
               default:
                 return;
             }

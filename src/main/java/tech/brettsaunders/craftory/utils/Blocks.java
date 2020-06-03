@@ -8,5 +8,6 @@ public class Blocks {
     public static final String EMERALD_CELL = "craftory:emerald_cell";
     public static final String SOLID_FUEL_GENERATOR = "craftory:soild_fuel_generator";
     public static final String POWER_CONNECTOR = "craftory:power_connector";
+    public static final String IRON_ELECTRIC_FURNACE = "craftory:iron_electric_furnace";
   }
 }

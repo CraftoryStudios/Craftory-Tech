@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class GBattery implements IGUIComponent {
 
@@ -22,7 +23,9 @@ public class GBattery implements IGUIComponent {
 
   @Override
   public void update() {
+    Logger.info("update");
     setLevelIndicator();
+
   }
 
   private void setLevelIndicator() {
