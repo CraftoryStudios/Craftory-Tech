@@ -2,9 +2,10 @@ package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
 import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class GBattery implements IGUIComponent {
 
@@ -25,11 +26,10 @@ public class GBattery implements IGUIComponent {
   }
 
   private void setLevelIndicator() {
+    //Percentage of capacity filled
     double amountFilled = ((double)storage.getEnergyStored() / (double)storage.getMaxEnergyStored()) * (double)100;
-    //Logger.info(amountFilled+"");
-    //int changeAmount = (int) (amountFilled / 40);
-    //if (changeAmount == previousAmount) return;
-    //previousAmount = changeAmount;
+
+    //Calculate amount of power bars to display
     int bottom = 0;
     int top = 0;
     if (amountFilled != 0) {
@@ -40,9 +40,24 @@ public class GBattery implements IGUIComponent {
         bottom = (int) Math.round(amountFilled * 0.4);
       }
     }
-    String bottomTexture = "extra:bar_"+bottom+"_b";
+
+
+    //Get Top Battery Icon and set Display Name
     String topTexture = "extra:bar_"+top+"_t";
-    inventory.setItem(TOP_SLOT, ItemsAdder.getCustomItem(topTexture));
-    inventory.setItem(BOTTOM_SLOT, ItemsAdder.getCustomItem(bottomTexture));
+    ItemStack topItem = ItemsAdder.getCustomItem(topTexture);
+    ItemMeta topMeta = topItem.getItemMeta();
+    topMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
+    topItem.setItemMeta(topMeta);
+
+    //Get Bottom Battery Icon and set Display Name
+    String bottomTexture = "extra:bar_"+bottom+"_b";
+    ItemStack bottomItem = ItemsAdder.getCustomItem(bottomTexture);
+    ItemMeta bottomMeta = bottomItem.getItemMeta();
+    bottomMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
+    bottomItem.setItemMeta(bottomMeta);
+
+    //Display in Inventory
+    inventory.setItem(TOP_SLOT, topItem);
+    inventory.setItem(BOTTOM_SLOT, bottomItem);
   }
 }

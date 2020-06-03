@@ -27,7 +27,6 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
     super();
     isReceiver = true;
     isProvider = true;
-
   }
 
   @Override

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
-import org.bukkit.block.BlockFace;
 
 public abstract class BaseGenerator extends BaseProvider implements Externalizable {
 
