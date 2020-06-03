@@ -3,6 +3,9 @@ package tech.brettsaunders.craftory;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTTileEntity;
+import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
+import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -79,12 +82,10 @@ public class Barrel implements Listener {
   }
 
   @EventHandler
-  public void onBlockBreak(BlockBreakEvent e) {
-    Block block = e.getBlock();
-    if (bs.isCustomBlockType(block, "craftory:barrel") || bs
-        .isCustomBlockType(block, "craftory:reinforced_barrel")) {
-      Location loc = block.getLocation();
-
+  public void onBarrelBreak(CustomBlockBreakEvent e) {
+    if (ItemsAdder.matchCustomItemName(e.getCustomBlockItem(), "craftory:barrel") ||
+        ItemsAdder.matchCustomItemName(e.getCustomBlockItem(), "craftory:reinforced_barrel")) {
+      Location loc = e.getBlock().getLocation();
       if (barrels.containsKey(loc)) {
         Inventory i = barrels.remove(loc);
         for (ItemStack item : i.getContents()) {
@@ -97,14 +98,12 @@ public class Barrel implements Listener {
   }
 
   @EventHandler
-  public void onPlayerRightClick(PlayerInteractEvent e) {
-    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
-      return;
-    }
-    Block block = e.getClickedBlock();
-    if (bs.isCustomBlockType(block, "craftory:barrel") || bs
-        .isCustomBlockType(block, "craftory:reinforced_barrel")) {
-      Location loc = block.getLocation();
+  public void onInteractWithBarrel(CustomBlockInteractEvent e) {
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+    if (ItemsAdder.matchCustomItemName(e.getCustomBlockItem(), "craftory:barrel") ||
+        ItemsAdder.matchCustomItemName(e.getCustomBlockItem(), "craftory:reinforced_barrel")) {
+      Location loc = e.getClickedBlock().getLocation();
       if (barrels.containsKey(loc)) {
         Inventory inventory = barrels.get(loc);
         e.getPlayer().openInventory(inventory);

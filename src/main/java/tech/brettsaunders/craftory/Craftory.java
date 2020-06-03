@@ -1,21 +1,18 @@
 package tech.brettsaunders.craftory;
 
 import com.configcat.ConfigCatClient;
+import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.SentryClientFactory;
-import io.sentry.SentryOptions;
-import io.sentry.event.User;
 import io.sentry.event.UserBuilder;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
-import java.util.logging.Filter;
-import java.util.logging.LogRecord;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
 import org.bukkit.Bukkit;
@@ -25,6 +22,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.MagicMobManager;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPetTrait;
@@ -120,6 +118,7 @@ public final class Craftory extends JavaPlugin {
 
     }
   }
+
 
   @Override
   public void onDisable() {

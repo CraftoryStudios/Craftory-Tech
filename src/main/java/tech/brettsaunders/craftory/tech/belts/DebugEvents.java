@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.belts;
 
+import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
 import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -7,6 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.utils.Items;
+import tech.brettsaunders.craftory.utils.Items.Power;
 
 public class DebugEvents implements Listener {
 
@@ -41,16 +44,11 @@ public class DebugEvents implements Listener {
   }
 
   @EventHandler
-  public void onPlayerRightClickDebugT(PlayerInteractEvent e) {
-    if (!(e.getAction() == Action.LEFT_CLICK_BLOCK)) {
-      return;
-    }
-    if (!(e.hasItem())) {
-      return;
-    }
-    //e.getPlayer().sendMessage("Hello");
-    //Craftory.getBlockPoweredManager().print(e.getPlayer());
+  public void onWrenchRightClick(CustomBlockInteractEvent e) {
+    if (e.getAction() != Action.LEFT_CLICK_BLOCK) return;
+    if (!ItemsAdder.matchCustomItemName(e.getItem(), Power.WRENCH)) return;
 
+    //Show power levels
     if (Craftory.getBlockPoweredManager().isPoweredBlock(e.getClickedBlock().getLocation())) {
       e.getPlayer().sendMessage("Stored: "+Craftory.getBlockPoweredManager().getPoweredBlock(e.getClickedBlock().getLocation()).getInfoEnergyStored());
     }

@@ -1,5 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.core.manager;
 
+import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
+import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
 import dev.lone.itemsadder.api.FontImages.PlayerHUDsHolderWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
@@ -210,7 +212,7 @@ public class PoweredBlockManager implements Listener {
   }
 
   @EventHandler
-  public void onPoweredBlockBreak(BlockBreakEvent event) {
+  public void onPoweredBlockBreak(CustomBlockBreakEvent event) {
     Location location = event.getBlock().getLocation();
     if (!poweredBlocks.containsKey(location)) return;
     if (isReceiver(location)) {
