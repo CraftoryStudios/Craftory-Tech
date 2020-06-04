@@ -128,6 +128,51 @@ items:
         break_tools_whitelist:
           - PICKAXE
           - pickaxe
+  gold_electric_furnace:
+    display_name: Gold Electric Furnace
+    permission: craftory_tech
+    resource:
+      material: GOLD_BLOCK
+      generate: false
+      model_path: block/gold_electric_furnace
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+          - PICKAXE
+          - pickaxe
+  diamond_electric_furnace:
+    display_name: Iron Electric Furnace
+    permission: craftory_tech
+    resource:
+      material: DIAMOND_BLOCK
+      generate: false
+      model_path: block/diamond_electric_furnace
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+          - PICKAXE
+          - pickaxe
+  emerald_electric_furnace:
+    display_name: Emerald Electric Furnace
+    permission: craftory_tech
+    resource:
+      material: EMERALD_BLOCK
+      generate: false
+      model_path: block/emerald_electric_furnace
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+          - PICKAXE
+          - pickaxe
   soild_fuel_generator:
     display_name: Soild Fuel Generator
     permission: craftory_tech
