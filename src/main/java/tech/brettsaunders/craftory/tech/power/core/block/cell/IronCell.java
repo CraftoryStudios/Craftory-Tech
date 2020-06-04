@@ -3,6 +3,7 @@ package tech.brettsaunders.craftory.tech.power.core.block.cell;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.utils.Logger;
 
 /**
  * Energy Cell
@@ -18,6 +19,7 @@ public class IronCell extends BaseCell {
 
   public IronCell(Location location) {
     super(location, CLEVEL, C_OUTPUT_AMOUNT);
+    Logger.debug("TEST");
   }
 
   public IronCell() {
