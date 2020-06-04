@@ -16,10 +16,11 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 public abstract class PoweredBlock extends BlockGUI implements ITickable,
     IEnergyInfo, Externalizable {
 
-  public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
-      BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   /* Static Constants Private */
   private static final long serialVersionUID = 10011L;
+  /* Static Constants Protected */
+  protected static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
+      BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   /* Per Object Variables Saved */
   protected EnergyStorage energyStorage;
   protected Location location;
