@@ -19,7 +19,7 @@ public class IronCell extends BaseCell {
 
   public IronCell(Location location) {
     super(location, CLEVEL, C_OUTPUT_AMOUNT);
-    Logger.debug("TEST1");
+    Logger.debug("TEST3");
   }
 
   public IronCell() {
