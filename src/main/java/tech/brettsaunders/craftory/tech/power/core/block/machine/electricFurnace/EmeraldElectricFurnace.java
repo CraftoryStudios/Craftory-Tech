@@ -5,7 +5,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseElectricFurnace;
 
 public class EmeraldElectricFurnace extends BaseElectricFurnace {
 
-  private static final byte CLEVEL = 2;
+  private static final byte CLEVEL = 3;
 
   public EmeraldElectricFurnace(Location location){
     super(location, CLEVEL);

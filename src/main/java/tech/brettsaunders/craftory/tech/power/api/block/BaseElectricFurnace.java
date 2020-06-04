@@ -20,7 +20,7 @@ public class BaseElectricFurnace extends BaseMachine{
 
   //Normal MC furnace takes 200 ticks to smelt an item
   protected static final int[] COOKING_TIME_LEVEL = {200,150,100,50};
-  protected static final int[] ENERGY_CONSUMPTION_LEVEL = {20,25,35,50};
+  protected static final int[] ENERGY_CONSUMPTION_LEVEL = {20,30,50,100};
   protected static final int[] CAPACITY_LEVEL = { 5000, 10000, 25000, 50000};
   private static final int INPUT_LOCATION = 22;
   private static final int OUTPUT_LOCATION = 26;
@@ -39,6 +39,7 @@ public class BaseElectricFurnace extends BaseMachine{
     super(location, level);
     init();
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
+    energyStorage.maxReceive = ENERGY_CONSUMPTION_LEVEL[level] * 5;
     addGUIComponent(new GOneToOneMachine(getInventory(), 24, progressContainer));
     addGUIComponent(new GBattery(getInventory(), energyStorage));
     addGUIComponent(new GIndicator(getInventory(), runningContainer));

@@ -5,7 +5,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseElectricFurnace;
 
 public class DiamondElectricFurnace extends BaseElectricFurnace {
 
-  private static final byte CLEVEL = 3;
+  private static final byte CLEVEL = 2;
 
   public DiamondElectricFurnace(Location location){
     super(location, CLEVEL);
