@@ -13,6 +13,7 @@ import org.bukkit.inventory.Recipe;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
+import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class BaseElectricFurnace extends BaseMachine{
@@ -33,6 +34,7 @@ public class BaseElectricFurnace extends BaseMachine{
   private FurnaceRecipe currentRecipe = null;
   private VariableContainer<Boolean> runningContainer;
   private VariableContainer<Double> progressContainer;
+
   public BaseElectricFurnace(Location location, byte level) {
     super(location, level);
     init();

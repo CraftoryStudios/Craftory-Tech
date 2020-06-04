@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
+import tech.brettsaunders.craftory.utils.Logger;
 
 /**
  * A standard powered block
@@ -36,19 +37,13 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     isReceiver = false;
     isProvider = false;
     this.level = level;
-    init();
-  }
-
-  /* Shared Startup and Loading */
-  public void init() {
-    //Register for Base Updates
     Craftory.tickableBaseManager.addBaseTickable(this);
   }
 
   /* Saving, Setup and Loading */
   public PoweredBlock(){
     super();
-    init();
+    Craftory.tickableBaseManager.addBaseTickable(this);
   }
 
   @Override
