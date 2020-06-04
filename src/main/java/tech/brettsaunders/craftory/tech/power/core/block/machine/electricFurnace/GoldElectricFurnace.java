@@ -3,15 +3,15 @@ package tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnac
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseElectricFurnace;
 
-public class IronElectricFurnace extends BaseElectricFurnace {
+public class GoldElectricFurnace extends BaseElectricFurnace {
 
-  private static final byte CLEVEL = 0;
+  private static final byte CLEVEL = 1;
 
-  public IronElectricFurnace(Location location){
+  public GoldElectricFurnace(Location location){
     super(location, CLEVEL);
   }
 
-  public IronElectricFurnace() {
+  public GoldElectricFurnace() {
     super();
   }
 
