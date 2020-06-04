@@ -277,14 +277,16 @@ items:
     display_name:
     resource:
       material: EMERALD
-      generate: false
-      model_path: item/light/light_on
+      generate: true
+      textures:
+        - item/light/light_on.png
   light_off:
     display_name:
     resource:
       material: REDSTONE
-      generate: false
-      model_path: item/light/light_off
+      generate: true
+      textures:
+        - item/light/light_off.png
   arrow_0:
     display_name:
     resource:
