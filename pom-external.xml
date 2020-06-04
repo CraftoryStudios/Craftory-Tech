@@ -66,11 +66,11 @@
           <injar>${project.build.finalName}.jar</injar>
           <outjar>${project.build.finalName}.jar</outjar>
           <outputDirectory>${project.build.directory}</outputDirectory>
-          <proguardInclude>${basedir}/proguard.conf</proguardInclude>
           <libs>
             <lib>${java.home}/lib/rt.jar</lib>
             <lib>${java.home}/lib/jsse.jar</lib>
           </libs>
+          <proguardInclude>${basedir}/proguard.conf</proguardInclude>
         </configuration>
       </plugin>
     </plugins>
