@@ -1,10 +1,10 @@
 package tech.brettsaunders.craftory.tech.belts;
 
 import java.io.Serializable;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class BeltNode implements Serializable {
+
   private static final long serialVersionUID = 10002L;
 
   private final Location location;

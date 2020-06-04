@@ -15,26 +15,40 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider,
     Externalizable {
+
+  /* Static Constants Protected */
+  protected static final Boolean[] DEFAULT_SIDES_CONFIG = {false, false, false, false, false,
+      false};  //NORTH, EAST, SOUTH, WEST, UP, DOWN
+  /* Static Constants Private */
   private static final long serialVersionUID = 10008L;
-  public static final Boolean[] DEFAULT_SIDES_CONFIG = { false, false, false, false, false, false };  //NORTH, EAST, SOUTH, WEST, UP, DOWN
-  public static final int CONFIG_NONE = 0;
-  public static final int CONFIG_OUTPUT = 1;
-  public static final int CONFIG_INPUT = 2;
-  protected int outputAmount = 0;
+  /* Per Object Variables Saved */
+  protected int outputAmount;
+  protected ArrayList<Boolean> sidesConfig;
+  protected ArrayList<Boolean> sidesCache;
 
-  protected ArrayList<Boolean> sidesConfig = new ArrayList<>(6);
-  protected ArrayList<Boolean> sidesCache = new ArrayList<>(6);
+  /* Per Object Variables Not-Saved */
 
+
+  /* Construction */
   public BaseProvider(Location location, byte level, int outputAmount) {
     super(location, level);
     this.outputAmount = outputAmount;
+    init();
     Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
     generateSideCache();
     addGUIComponent(new GOutputConfig(getInventory(), sidesConfig));
   }
 
-  public BaseProvider(){
+  /* Saving, Setup and Loading */
+  public BaseProvider() {
     super();
+    init();
+  }
+
+  /* Common Load and Construction */
+  private void init() {
+    sidesConfig = new ArrayList<>(6);
+    sidesCache = new ArrayList<>(6);
   }
 
   @Override
@@ -54,22 +68,44 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     addGUIComponent(new GOutputConfig(getInventory(), sidesConfig));
   }
 
+  /* Update Loop */
+  protected int transferEnergy() {
+    int amountTransferred = 0;
+    for (int i = 0; i < sidesConfig.size(); i++) {
+      if (sidesConfig.get(i) == true) {
+        if (sidesCache.get(i)) {
+          amountTransferred += energyStorage
+              .modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
+                  Math.min(outputAmount, energyStorage.getEnergyStored()), false));
+        }
+      }
+    }
+    return amountTransferred;
+  }
+
+  /* Internal Helper Functions */
   @Override
   public boolean updateOutputCache(BlockFace inputFrom, Boolean setTo) {
     //NORTH, EAST, SOUTH, WEST, UP, DOWN
     int side = -1;
     switch (inputFrom) {
-      case NORTH: side = 0;
+      case NORTH:
+        side = 0;
         break;
-      case EAST: side = 1;
+      case EAST:
+        side = 1;
         break;
-      case SOUTH: side = 2;
+      case SOUTH:
+        side = 2;
         break;
-      case WEST: side = 3;
+      case WEST:
+        side = 3;
         break;
-      case UP: side = 4;
+      case UP:
+        side = 4;
         break;
-      case DOWN: side = 5;
+      case DOWN:
+        side = 5;
         break;
     }
     if (side != -1) {
@@ -84,10 +120,10 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     if (Craftory.getBlockPoweredManager().isReceiver(targetLocation)) {
       if (Craftory.getBlockPoweredManager().isProvider(targetLocation)) {
         return ((BaseCell) Craftory.getBlockPoweredManager().getPoweredBlock(targetLocation))
-            .receiveEnergy(BlockFace.EAST, energy, simulate);
+            .receiveEnergy(energy, simulate);
       } else {
         return ((BaseMachine) Craftory.getBlockPoweredManager().getPoweredBlock(targetLocation))
-            .receiveEnergy(BlockFace.EAST, energy, simulate);
+            .receiveEnergy(energy, simulate);
       }
     } else {
       sidesCache.set(side, false);
@@ -95,23 +131,11 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     return 0;
   }
 
-  protected int transferEnergy() {
-    int amountTransferred = 0;
-    for (int i = 0; i < sidesConfig.size(); i++) {
-      if (sidesConfig.get(i) == true) {
-        if (sidesCache.get(i)) {
-          amountTransferred += energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
-              Math.min(outputAmount, energyStorage.getEnergyStored()), false));
-        }
-      }
-    }
-    return amountTransferred;
-  }
-
   private void generateSideCache() {
     int i = 0;
-    for(BlockFace face : faces) {
-      if (Craftory.getBlockPoweredManager().isReceiver(this.location.getBlock().getRelative(face).getLocation())) {
+    for (BlockFace face : faces) {
+      if (Craftory.getBlockPoweredManager()
+          .isReceiver(this.location.getBlock().getRelative(face).getLocation())) {
         sidesCache.add(i, true);
         Logger.info("Cached side " + i);
       } else {
@@ -121,25 +145,31 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     }
   }
 
+  /* IEnergyHandler */
   @Override
-  public int getEnergyStored(BlockFace from) {
+  public int getEnergyStored() {
     return energyStorage.getEnergyStored();
   }
 
   @Override
-  public int getMaxEnergyStored(BlockFace from) {
+  public int getMaxEnergyStored() {
     return energyStorage.getMaxEnergyStored();
   }
 
+  /* IEnergyInfo */
   @Override
   public int getInfoMaxEnergyPerTick() {
     return outputAmount;
   }
 
+  /* IEnergyConnection */
   @Override
-  public boolean canConnectEnergy(BlockFace from) {
+  public boolean canConnectEnergy() {
     return true;
   }
 
-  public int howMuchCanYouGiveMe() { return 10;}
+  /* External Methods */
+  public int maxOutputEnergy() {
+    return outputAmount;
+  }
 }

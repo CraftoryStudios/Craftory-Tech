@@ -9,25 +9,26 @@ import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
-import tech.brettsaunders.craftory.utils.Logger;
 
 /**
- * A standard powered block
- * Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
+ * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
  */
 public abstract class PoweredBlock extends BlockGUI implements ITickable,
     IEnergyInfo, Externalizable {
 
-  /* Static Constants */
+  /* Static Constants Private */
   private static final long serialVersionUID = 10011L;
-  public static final BlockFace faces[] = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
-
-  /* Per Object Variables */
+  /* Static Constants Protected */
+  protected static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
+      BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
+  /* Per Object Variables Saved */
   protected EnergyStorage energyStorage;
   protected Location location;
-  protected boolean isReceiver;
-  protected boolean isProvider;
   protected byte level;
+  /* Per Object Variables Not-Saved */
+  protected transient boolean isReceiver;
+  protected transient boolean isProvider;
+
 
   /* Construction */
   public PoweredBlock(Location location, byte level) {
@@ -41,13 +42,14 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   }
 
   /* Saving, Setup and Loading */
-  public PoweredBlock(){
+  public PoweredBlock() {
     super();
     Craftory.tickableBaseManager.addBaseTickable(this);
   }
 
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
+    super.writeExternal(out);
     out.writeObject(energyStorage);
     out.writeObject(location);
     out.writeByte(level);
@@ -55,6 +57,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
 
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    super.readExternal(in);
     energyStorage = (EnergyStorage) in.readObject();
     location = (Location) in.readObject();
     level = in.readByte();
@@ -67,7 +70,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   }
 
   /* Info Methods */
-  public EnergyStorage getEnergyStorage(){
+  public EnergyStorage getEnergyStorage() {
     return energyStorage;
   }
 

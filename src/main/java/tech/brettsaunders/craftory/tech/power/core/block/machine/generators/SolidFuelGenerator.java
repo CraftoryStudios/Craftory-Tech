@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory.tech.power.core.block;
+package tech.brettsaunders.craftory.tech.power.core.block.machine.generators;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -7,21 +7,24 @@ import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 
 public class SolidFuelGenerator extends BaseGenerator {
+
+  /* Static Constants Private */
   private static final long serialVersionUID = 10020L;
-  private static final byte CLEVEL = 0;
+  private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 80;
 
   //protected static final int FUEL_SLOT = 22;
   //public static final boolean enable = true; //Fix
   //public static final int basePower = 40; //Fix
 
-
+  /* Construction */
   public SolidFuelGenerator() {
     super();
   }
 
+  /* Saving, Setup and Loading */
   public SolidFuelGenerator(Location location) {
-    super(location, CLEVEL, C_OUTPUT_AMOUNT);
+    super(location, C_LEVEL, C_OUTPUT_AMOUNT);
   }
 
 

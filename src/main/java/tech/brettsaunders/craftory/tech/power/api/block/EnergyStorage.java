@@ -11,33 +11,38 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyStorage;
  */
 public class EnergyStorage implements IEnergyStorage, Externalizable {
 
+  /* Static Constants Private */
   private static final long serialVersionUID = 10010L;
 
+  /* Static Constants Protected */
+
+  /* Per Object Variables Saved */
   protected int energy;
   protected int capacity;
   protected int maxReceive;
   protected int maxExtract;
 
-  public EnergyStorage(int capacity) {
+  /* Per Object Variables Not-Saved */
 
+
+  /* Construction */
+  public EnergyStorage(int capacity) {
     this(capacity, capacity, capacity);
   }
 
   public EnergyStorage(int capacity, int maxTransfer) {
-
     this(capacity, maxTransfer, maxTransfer);
   }
 
   public EnergyStorage(int capacity, int maxReceive, int maxExtract) {
-
     this.capacity = capacity;
     this.maxReceive = maxReceive;
     this.maxExtract = maxExtract;
   }
 
-  /* Saving and Loading */
-  public EnergyStorage(){
-
+  /* Saving, Setup and Loading */
+  public EnergyStorage() {
+    super();
   }
 
   @Override
@@ -49,7 +54,7 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
   }
 
   @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+  public void readExternal(ObjectInput in) throws IOException {
     energy = in.readInt();
     capacity = in.readInt();
     maxReceive = in.readInt();
@@ -74,21 +79,15 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
     return this;
   }
 
+  public int getMaxReceive() {
+
+    return maxReceive;
+  }
+
   public EnergyStorage setMaxReceive(int maxReceive) {
 
     this.maxReceive = maxReceive;
     return this;
-  }
-
-  public EnergyStorage setMaxExtract(int maxExtract) {
-
-    this.maxExtract = maxExtract;
-    return this;
-  }
-
-  public int getMaxReceive() {
-
-    return maxReceive;
   }
 
   public int getMaxExtract() {
@@ -96,15 +95,10 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
     return maxExtract;
   }
 
-  public void setEnergyStored(int energy) {
+  public EnergyStorage setMaxExtract(int maxExtract) {
 
-    this.energy = energy;
-
-    if (this.energy > capacity) {
-      this.energy = capacity;
-    } else if (this.energy < 0) {
-      this.energy = 0;
-    }
+    this.maxExtract = maxExtract;
+    return this;
   }
 
   public int modifyEnergyStored(int energy) {
@@ -146,6 +140,17 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
   public int getEnergyStored() {
 
     return energy;
+  }
+
+  public void setEnergyStored(int energy) {
+
+    this.energy = energy;
+
+    if (this.energy > capacity) {
+      this.energy = capacity;
+    } else if (this.energy < 0) {
+      this.energy = 0;
+    }
   }
 
   @Override

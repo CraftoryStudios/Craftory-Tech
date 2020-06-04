@@ -15,12 +15,12 @@ public abstract class MultiBlock {
       {{{"minecraft:stone", "minecraft:stone", "minecraft:stone"}},
           {{"minecraft:stone", "minecraft:stone", "minecraft:stone"}},
           {{"minecraft:stone", "minecraft:stone", "minecraft:stone"}}};
+  private static final String controlBlockType = "machine_core";
   private final int controlX = 1;
   private final int controlY = 0;
   private final int controlZ = 1;
-  private Location controlBlockLocation;
-  private static final String controlBlockType = "machine_core";
   private final ArrayList<Location> activeBlocks = new ArrayList<>();
+  private Location controlBlockLocation;
 
   public MultiBlock(Block controlBlock) {
     controlBlockLocation = controlBlock.getLocation();

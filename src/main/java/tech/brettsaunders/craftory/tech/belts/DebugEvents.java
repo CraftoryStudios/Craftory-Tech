@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.tech.belts;
 
-import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
 import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -8,8 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.utils.Items;
-import tech.brettsaunders.craftory.utils.Items.Power;
 
 public class DebugEvents implements Listener {
 

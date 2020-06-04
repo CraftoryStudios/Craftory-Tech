@@ -5,5 +5,4 @@ public interface ILevelable {
   boolean setLevel(int level);
 
 
-
 }

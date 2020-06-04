@@ -6,14 +6,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class GBattery implements IGUIComponent {
 
-  private EnergyStorage storage;
-  private Inventory inventory;
   private static final int TOP_SLOT = 10;
   private static final int BOTTOM_SLOT = 37;
+  private EnergyStorage storage;
+  private Inventory inventory;
   private int previousAmount = -1;
 
   public GBattery(Inventory inventory, EnergyStorage storage) {
@@ -29,7 +28,8 @@ public class GBattery implements IGUIComponent {
 
   private void setLevelIndicator() {
     //Percentage of capacity filled
-    double amountFilled = ((double)storage.getEnergyStored() / (double)storage.getMaxEnergyStored()) * (double)100;
+    double amountFilled =
+        ((double) storage.getEnergyStored() / (double) storage.getMaxEnergyStored()) * (double) 100;
 
     //Calculate amount of power bars to display
     int bottom = 0;
@@ -43,16 +43,15 @@ public class GBattery implements IGUIComponent {
       }
     }
 
-
     //Get Top Battery Icon and set Display Name
-    String topTexture = "extra:bar_"+top+"_t";
+    String topTexture = "extra:bar_" + top + "_t";
     ItemStack topItem = ItemsAdder.getCustomItem(topTexture);
     ItemMeta topMeta = topItem.getItemMeta();
     topMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
     topItem.setItemMeta(topMeta);
 
     //Get Bottom Battery Icon and set Display Name
-    String bottomTexture = "extra:bar_"+bottom+"_b";
+    String bottomTexture = "extra:bar_" + bottom + "_b";
     ItemStack bottomItem = ItemsAdder.getCustomItem(bottomTexture);
     ItemMeta bottomMeta = bottomItem.getItemMeta();
     bottomMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());

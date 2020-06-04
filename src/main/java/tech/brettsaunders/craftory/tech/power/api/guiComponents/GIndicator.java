@@ -9,9 +9,9 @@ import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class GIndicator implements IGUIComponent {
 
-  private Inventory inventory;
   private final int slot;
   private final VariableContainer<Boolean> state;
+  private Inventory inventory;
 
   public GIndicator(Inventory inventory, int slot,
       VariableContainer<Boolean> state) {
@@ -20,7 +20,7 @@ public class GIndicator implements IGUIComponent {
     this.state = state;
   }
 
-  public GIndicator(Inventory inventory, VariableContainer<Boolean> state){
+  public GIndicator(Inventory inventory, VariableContainer<Boolean> state) {
     this.inventory = inventory;
     this.state = state;
     this.slot = 52;
@@ -31,7 +31,7 @@ public class GIndicator implements IGUIComponent {
     ItemStack light;
     String name;
 
-    if(state.getT()){
+    if (state.getT()) {
       light = ItemsAdder.getCustomItem("extra:light_on");
       name = "Machine Running";
     } else {
@@ -41,6 +41,6 @@ public class GIndicator implements IGUIComponent {
     ItemMeta meta = light.getItemMeta();
     meta.setDisplayName(name);
     light.setItemMeta(meta);
-    inventory.setItem(slot,light);
+    inventory.setItem(slot, light);
   }
 }

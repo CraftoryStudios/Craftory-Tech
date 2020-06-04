@@ -1,7 +1,6 @@
 package tech.brettsaunders.craftory;
 
 import com.configcat.ConfigCatClient;
-import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
@@ -22,10 +21,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
-import tech.brettsaunders.craftory.magic.mobs.chestpet.MagicMobManager;
 import tech.brettsaunders.craftory.magic.mobs.chestpet.ChestPetTrait;
+import tech.brettsaunders.craftory.magic.mobs.chestpet.MagicMobManager;
 import tech.brettsaunders.craftory.multiBlock.MultiBlockManager;
 import tech.brettsaunders.craftory.tech.belts.BeltEvents;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
@@ -39,27 +37,35 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public final class Craftory extends JavaPlugin {
 
+  private static final String VERSION = "0.0.1";
   public static SentryClient sentry;
-
   public static HashSet<Long> chunkKeys = new HashSet<>();
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
-  FileConfiguration config = getConfig();
-
-  private static Craftory plugin = null;
   public static TickableBaseManager tickableBaseManager = null;
   public static PowerConnectorManager powerConnectorManager = null;
-
+  public static ConfigCatClient client;
+  public static com.configcat.User userObject;
+  private static Craftory plugin = null;
+  private static boolean debugMode = false;
+  private static PoweredBlockManager blockPoweredManager = null;
+  FileConfiguration config = getConfig();
   private CursedEarth cursedEarth = null;
   private Barrel barrel = null;
   private MagicMobManager magicMobManager = null;
   private Magic magic = null;
   private MultiBlockManager multiBlockManager;
-  private static boolean debugMode = false;
-  private static PoweredBlockManager blockPoweredManager = null;
 
-  private static final String VERSION = "0.0.1";
-  public static ConfigCatClient client;
-  public static com.configcat.User userObject;
+  public static Craftory getInstance() {
+    return plugin;
+  }
+
+  public static boolean getDebugMode() {
+    return debugMode;
+  }
+
+  public static PoweredBlockManager getBlockPoweredManager() {
+    return blockPoweredManager;
+  }
 
   @Override
   public void onEnable() {
@@ -69,15 +75,18 @@ public final class Craftory extends JavaPlugin {
     client = new ConfigCatClient("ZQXYCPf7NU2CTWoYzBtWaw/Yh2WoF-Us0ebNjMrmh2T-w");
 
     //Sentry
-    Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818?debug=false&&environment=WIP&&release="+VERSION);
+    Sentry.init(
+        "https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818?debug=false&&environment=WIP&&release="
+            + VERSION);
     sentry = SentryClientFactory.sentryClient();
     //Setup
     resourceSetup();
     Sentry.getContext().setUser(new UserBuilder().setId(config.getString("serverUUID")).build());
     Sentry.getContext().addTag("BukkitVersion", Bukkit.getBukkitVersion());
     Sentry.getContext().addExtra("Plugins", Bukkit.getPluginManager().getPlugins());
-    this.debugMode = config.getBoolean("debugMode");
-    Boolean isAwesomeFeatureEnabled = client.getValue(Boolean.class, "isAwesomeFeatureEnabled", userObject, false);
+    debugMode = config.getBoolean("debugMode");
+    Boolean isAwesomeFeatureEnabled = client
+        .getValue(Boolean.class, "isAwesomeFeatureEnabled", userObject, false);
     Logger.info("isAwesomeFeatureEnabled: " + isAwesomeFeatureEnabled);
 
     //Register
@@ -107,7 +116,8 @@ public final class Craftory extends JavaPlugin {
       getServer().getScheduler().scheduleSyncRepeatingTask(this, cursedEarth, 800L, 80L);
 
       //Register Mobs
-      CitizensAPI.getTraitFactory().registerTrait(TraitInfo.create(ChestPetTrait.class).withName("chestpet"));
+      CitizensAPI.getTraitFactory()
+          .registerTrait(TraitInfo.create(ChestPetTrait.class).withName("chestpet"));
     }
 
     //Tech Classes
@@ -117,8 +127,8 @@ public final class Craftory extends JavaPlugin {
       getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
 
     }
+    blockPoweredManager.onEnable();
   }
-
 
   @Override
   public void onDisable() {
@@ -130,6 +140,7 @@ public final class Craftory extends JavaPlugin {
       magicMobManager.save();
     }
     multiBlockManager.save();
+    blockPoweredManager.onDisable();
     // Plugin shutdown logic
     plugin = null;
   }
@@ -137,14 +148,15 @@ public final class Craftory extends JavaPlugin {
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (command.getName().equals("matty")) {
-      if(!(sender instanceof Player))
+      if (!(sender instanceof Player)) {
         return true;
+      }
 
       Player player = (Player) sender;
       FontImageWrapper fontImageWrapper = new FontImageWrapper("mcguis:blank_menu");
       TexturedInventoryWrapper inventory = new TexturedInventoryWrapper(null,
           54,
-          ChatColor.BLACK + "   Cell",fontImageWrapper);
+          ChatColor.BLACK + "   Cell", fontImageWrapper);
       inventory.showInventory(player);
       inventory.getInternal().setItem(17, ItemsAdder.getCustomItem("extra:output"));
 
@@ -156,7 +168,7 @@ public final class Craftory extends JavaPlugin {
         return true;
       } catch (Exception e) {
         if (sender instanceof Player) {
-          ((Player) sender).sendMessage("Invalid use of cursed earth spread setting command");
+          sender.sendMessage("Invalid use of cursed earth spread setting command");
         } else {
           Logger.warn("Invalid use of cursed earth spread setting command");
         }
@@ -192,13 +204,5 @@ public final class Craftory extends JavaPlugin {
     items.mkdirs();
     FileUtils.copyResourcesRecursively(getClass().getResource("/data"), items);
   }
-
-  public static Craftory getInstance() {
-    return plugin;
-  }
-
-  public static boolean getDebugMode() { return debugMode; }
-
-  public static PoweredBlockManager getBlockPoweredManager() { return blockPoweredManager; }
 
 }

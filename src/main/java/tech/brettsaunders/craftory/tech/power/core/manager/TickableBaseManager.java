@@ -5,6 +5,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
 public class TickableBaseManager {
+
   ArrayList<ITickable> tickableObjects;
 
   public TickableBaseManager() {
