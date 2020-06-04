@@ -92,6 +92,7 @@ public class BaseElectricFurnace extends BaseMachine{
       runningContainer.setT(true);
     }else {
       runningContainer.setT(false);
+      
     }
     progressContainer.setT(((double) tickCount) / cookingTime);
   }

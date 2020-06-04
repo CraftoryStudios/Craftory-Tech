@@ -12,6 +12,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   public BaseMachine(Location location, byte level) {
     super(location, level);
     isReceiver = true;
+
   }
 
   public BaseMachine() {
