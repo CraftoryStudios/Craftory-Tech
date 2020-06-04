@@ -5,7 +5,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 
 /**
  * Energy Cell
- *
+ * <p>
  * Capacity: 2,000,000 Max Input: 800 Max Output: 800 Level: 1 (GOLD)
  */
 public class GoldCell extends BaseCell {

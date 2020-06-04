@@ -4,8 +4,6 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.Iterator;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
@@ -114,14 +112,21 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     }
     String inputType = inputSlot.getType().toString();
     //If the recipe is unchanged there is no need to find the recipe.
-    if(currentRecipe!=null && currentRecipe.getInput().getType().toString().equals(inputType)){
-      if(outputSlot==null) return true;
-      if(outputSlot.getType().toString()==currentRecipe.getResult().getType().toString() && outputSlot.getAmount() < outputSlot.getMaxStackSize()) return true;
+    if (currentRecipe != null && currentRecipe.getInput().getType().toString().equals(inputType)) {
+      if (outputSlot == null) {
+        return true;
+      }
+      if (outputSlot.getType().toString() == currentRecipe.getResult().getType().toString()
+          && outputSlot.getAmount() < outputSlot.getMaxStackSize()) {
+        return true;
+      }
     }
     FurnaceRecipe furnaceRecipe;
-    for (Recipe recipe: RecipeUtils.getFurnaceRecipes()) {
+    for (Recipe recipe : RecipeUtils.getFurnaceRecipes()) {
       furnaceRecipe = (FurnaceRecipe) recipe;
-      if(furnaceRecipe.getInput().getType().toString() != inputType) continue;
+      if (furnaceRecipe.getInput().getType().toString() != inputType) {
+        continue;
+      }
       currentRecipe = furnaceRecipe;
       if (outputSlot == null) {
         return true;

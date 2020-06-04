@@ -5,7 +5,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 
 /**
  * Energy Cell
- *
+ * <p>
  * Capacity: 400,000 Max Input: 200 Max Output: 200 Level: 0 (IRON)
  */
 public class IronCell extends BaseCell {

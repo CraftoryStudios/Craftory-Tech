@@ -2,7 +2,7 @@ package tech.brettsaunders.craftory.tech.power.api.interfaces;
 
 /**
  * Implement this interface on objects which can report information about their energy usage.
- *
+ * <p>
  * This is used for reporting purposes - Energy transactions are handled via the RF API!
  */
 

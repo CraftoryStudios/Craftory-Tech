@@ -5,7 +5,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 
 /**
  * Energy Cell
- *
+ * <p>
  * Capacity: 80,000,000 Max Input: 32,000 Max Output: 32,000 Level: 3 (Emerald)
  */
 public class EmeraldCell extends BaseCell {

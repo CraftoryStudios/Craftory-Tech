@@ -7,13 +7,10 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public abstract class BlockGUI implements Externalizable {
 
@@ -27,7 +24,7 @@ public abstract class BlockGUI implements Externalizable {
 
   /* Saving, Setup and Loading */
   public BlockGUI() {
-        updateGUI(); //TODO THE ISSUE
+    updateGUI(); //TODO THE ISSUE
   }
 
   @Override

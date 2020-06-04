@@ -218,10 +218,10 @@ public class ChestPetTrait extends Trait {
   /**
    * Toggles and/or sets the {@link OfflinePlayer} to follow and whether to protect them (similar to
    * wolves in Minecraft, attack whoever attacks the player).
-   *
+   * <p>
    * Will toggle if the {@link OfflinePlayer} is the player currently being followed.
    *
-   * @param player the player to follow
+   * @param player  the player to follow
    * @param protect whether to protect the player
    * @return whether the trait is enabled
    */

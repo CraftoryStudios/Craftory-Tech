@@ -41,8 +41,8 @@ public class Beam {
   /**
    * Create a Beam instance
    *
-   * @param start Location where Beam will starts
-   * @param end Location where Beam will ends
+   * @param start    Location where Beam will starts
+   * @param end      Location where Beam will ends
    * @param duration Duration of Beam in seconds (<i>-1 if infinite</i>)
    * @param distance Distance where Beam will be visible
    */
