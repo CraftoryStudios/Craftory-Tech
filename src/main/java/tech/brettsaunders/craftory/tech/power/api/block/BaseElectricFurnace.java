@@ -104,11 +104,12 @@ public class BaseElectricFurnace extends BaseMachine{
     String inputType = inputSlot.getType().toString();
     Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
     while(recipeIterator.hasNext()) {
-      FurnaceRecipe recipe = (FurnaceRecipe) recipeIterator.next();
+      Recipe recipe = recipeIterator.next();
       if(!(recipe instanceof FurnaceRecipe)) continue;
+      FurnaceRecipe furnaceRecipe = (FurnaceRecipe) recipe;
 
-      if(recipe.getInput().getType().toString() != inputType) continue;
-      currentRecipe = recipe;
+      if(furnaceRecipe.getInput().getType().toString() != inputType) continue;
+      currentRecipe = furnaceRecipe;
       if(outputSlot==null) return true;
       if(outputSlot.getType().toString()==recipe.getResult().getType().toString() && outputSlot.getAmount() < outputSlot.getMaxStackSize()) return true;
     }
