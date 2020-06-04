@@ -15,12 +15,12 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider,
     Externalizable {
-  /* Static Constants Private */
-  private static final long serialVersionUID = 10008L;
 
   /* Static Constants Protected */
-  protected static final Boolean[] DEFAULT_SIDES_CONFIG = { false, false, false, false, false, false };  //NORTH, EAST, SOUTH, WEST, UP, DOWN
-
+  protected static final Boolean[] DEFAULT_SIDES_CONFIG = {false, false, false, false, false,
+      false};  //NORTH, EAST, SOUTH, WEST, UP, DOWN
+  /* Static Constants Private */
+  private static final long serialVersionUID = 10008L;
   /* Per Object Variables Saved */
   protected int outputAmount;
   protected ArrayList<Boolean> sidesConfig;
@@ -39,16 +39,16 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     addGUIComponent(new GOutputConfig(getInventory(), sidesConfig));
   }
 
+  /* Saving, Setup and Loading */
+  public BaseProvider() {
+    super();
+    init();
+  }
+
   /* Common Load and Construction */
   private void init() {
     sidesConfig = new ArrayList<>(6);
     sidesCache = new ArrayList<>(6);
-  }
-
-  /* Saving, Setup and Loading */
-  public BaseProvider(){
-    super();
-    init();
   }
 
   @Override
@@ -74,8 +74,9 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     for (int i = 0; i < sidesConfig.size(); i++) {
       if (sidesConfig.get(i) == true) {
         if (sidesCache.get(i)) {
-          amountTransferred += energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
-              Math.min(outputAmount, energyStorage.getEnergyStored()), false));
+          amountTransferred += energyStorage
+              .modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
+                  Math.min(outputAmount, energyStorage.getEnergyStored()), false));
         }
       }
     }
@@ -88,17 +89,23 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     //NORTH, EAST, SOUTH, WEST, UP, DOWN
     int side = -1;
     switch (inputFrom) {
-      case NORTH: side = 0;
+      case NORTH:
+        side = 0;
         break;
-      case EAST: side = 1;
+      case EAST:
+        side = 1;
         break;
-      case SOUTH: side = 2;
+      case SOUTH:
+        side = 2;
         break;
-      case WEST: side = 3;
+      case WEST:
+        side = 3;
         break;
-      case UP: side = 4;
+      case UP:
+        side = 4;
         break;
-      case DOWN: side = 5;
+      case DOWN:
+        side = 5;
         break;
     }
     if (side != -1) {
@@ -126,8 +133,9 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
   private void generateSideCache() {
     int i = 0;
-    for(BlockFace face : faces) {
-      if (Craftory.getBlockPoweredManager().isReceiver(this.location.getBlock().getRelative(face).getLocation())) {
+    for (BlockFace face : faces) {
+      if (Craftory.getBlockPoweredManager()
+          .isReceiver(this.location.getBlock().getRelative(face).getLocation())) {
         sidesCache.add(i, true);
         Logger.info("Cached side " + i);
       } else {
@@ -161,5 +169,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   }
 
   /* External Methods */
-  public int maxOutputEnergy() { return outputAmount;}
+  public int maxOutputEnergy() {
+    return outputAmount;
+  }
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -44,7 +43,9 @@ public class Magic implements Listener {
       return;
     }
     Block clicked = e.getClickedBlock();
-    if (clicked==null) return;
+    if (clicked == null) {
+      return;
+    }
     if (clicked.getType().equals(Material.CAULDRON)) {
       wandUsedCauldron(clicked);
       return;

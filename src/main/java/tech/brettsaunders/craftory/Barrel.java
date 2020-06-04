@@ -1,8 +1,5 @@
 package tech.brettsaunders.craftory;
 
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.NBTItem;
-import de.tr7zw.changeme.nbtapi.NBTTileEntity;
 import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
 import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
 import dev.lone.itemsadder.api.ItemsAdder;
@@ -17,14 +14,10 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -65,20 +58,21 @@ public class Barrel implements Listener {
 
   @EventHandler
   public void onBlockPlace(BlockPlaceEvent e) {
-    Craftory.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Craftory.getInstance(),
-        () -> {
-          int size;
-          if (bs.isCustomBlockType(e.getBlockPlaced(), "craftory:barrel")) {
-            size = BARREL_SIZE;
+    Craftory.getInstance().getServer().getScheduler()
+        .scheduleSyncDelayedTask(Craftory.getInstance(),
+            () -> {
+              int size;
+              if (bs.isCustomBlockType(e.getBlockPlaced(), "craftory:barrel")) {
+                size = BARREL_SIZE;
 
-          } else if (bs.isCustomBlockType(e.getBlockPlaced(), "craftory:reinforced_barrel")) {
-            size = REINFORCED_BARREL_SIZE;
-          } else {
-            return;
-          }
-          barrels.put(e.getBlockPlaced().getLocation(),
-              Bukkit.createInventory(null, size, "Barrel"));
-        }, 1L);
+              } else if (bs.isCustomBlockType(e.getBlockPlaced(), "craftory:reinforced_barrel")) {
+                size = REINFORCED_BARREL_SIZE;
+              } else {
+                return;
+              }
+              barrels.put(e.getBlockPlaced().getLocation(),
+                  Bukkit.createInventory(null, size, "Barrel"));
+            }, 1L);
   }
 
   @EventHandler
@@ -99,7 +93,9 @@ public class Barrel implements Listener {
 
   @EventHandler
   public void onInteractWithBarrel(CustomBlockInteractEvent e) {
-    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+      return;
+    }
 
     if (ItemsAdder.matchCustomItemName(e.getCustomBlockItem(), "craftory:barrel") ||
         ItemsAdder.matchCustomItemName(e.getCustomBlockItem(), "craftory:reinforced_barrel")) {

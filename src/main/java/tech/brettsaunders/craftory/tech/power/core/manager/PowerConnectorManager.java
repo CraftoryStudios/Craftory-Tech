@@ -18,6 +18,7 @@ import tech.brettsaunders.craftory.utils.Items.Power;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerConnectorManager implements Listener {
+
   private transient HashMap<UUID, Location> formingConnection;
   private transient ArrayList<Beam> activeBeams;
 
@@ -33,20 +34,28 @@ public class PowerConnectorManager implements Listener {
     if (ItemsAdder.matchCustomItemName(event.getItem(), Power.WRENCH)
         && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
       //Check Power Connector
-      if (!BlockUtils.isCustomTypeBlock(event.getClickedBlock(), Blocks.Power.POWER_CONNECTOR)) return;
+      if (!BlockUtils.isCustomTypeBlock(event.getClickedBlock(), Blocks.Power.POWER_CONNECTOR)) {
+        return;
+      }
 
       if (!formingConnection.containsKey(event.getPlayer().getUniqueId())) {
         //First Power Connector selected
-        if(Craftory.getBlockPoweredManager().getPowerGridManager(event.getClickedBlock().getLocation())==null) return;
-        formingConnection.put(event.getPlayer().getUniqueId(), event.getClickedBlock().getLocation());
+        if (Craftory.getBlockPoweredManager()
+            .getPowerGridManager(event.getClickedBlock().getLocation()) == null) {
+          return;
+        }
+        formingConnection
+            .put(event.getPlayer().getUniqueId(), event.getClickedBlock().getLocation());
         event.getPlayer().sendMessage("Click Second Power Connector To Form Connection");
       } else {
         //Locations
         Location toLoc = event.getClickedBlock().getLocation();
         Location fromLoc = formingConnection.get(event.getPlayer().getUniqueId());
         //Second Power Connector selected
-        PowerGridManager powerGridManagerTo = Craftory.getBlockPoweredManager().getPowerGridManager(toLoc);
-        PowerGridManager powerGridManagerFrom = Craftory.getBlockPoweredManager().getPowerGridManager(fromLoc);
+        PowerGridManager powerGridManagerTo = Craftory.getBlockPoweredManager()
+            .getPowerGridManager(toLoc);
+        PowerGridManager powerGridManagerFrom = Craftory.getBlockPoweredManager()
+            .getPowerGridManager(fromLoc);
         //Both have manager and not same power connector
         if (powerGridManagerFrom != null && powerGridManagerTo != null
             && fromLoc != toLoc) {
@@ -61,9 +70,9 @@ public class PowerConnectorManager implements Listener {
           event.getPlayer().sendMessage("Connection formed");
         } else {
           Logger.info("Failed to make connection");
-          Logger.debug((powerGridManagerFrom==null) +"");
-          Logger.debug((powerGridManagerTo==null) +"");
-          Logger.debug((fromLoc == toLoc)+"");
+          Logger.debug((powerGridManagerFrom == null) + "");
+          Logger.debug((powerGridManagerTo == null) + "");
+          Logger.debug((fromLoc == toLoc) + "");
         }
       }
 
@@ -93,11 +102,11 @@ public class PowerConnectorManager implements Listener {
     double x = (fromLoc.getX() - toLoc.getX());
     double y = (fromLoc.getY() - toLoc.getY());
     double z = (fromLoc.getZ() - toLoc.getZ());
-    double mag = Math.sqrt((x*x)+(y*y)+(z*z));
-    double xAngle = Math.acos(x/mag);
-    double yAngle = Math.acos(y/mag);
-    double zAngle = Math.acos(z/mag);
-    mag -=1; //reduce size by one to fix the issue
+    double mag = Math.sqrt((x * x) + (y * y) + (z * z));
+    double xAngle = Math.acos(x / mag);
+    double yAngle = Math.acos(y / mag);
+    double zAngle = Math.acos(z / mag);
+    mag -= 1; //reduce size by one to fix the issue
     x -= mag * Math.cos(xAngle);
     y -= mag * Math.cos(yAngle);
     z -= mag * Math.cos(zAngle);

@@ -2,7 +2,8 @@ package tech.brettsaunders.craftory.tech.helpers;
 
 public final class MathHelper {
 
-  private MathHelper() {}
+  private MathHelper() {
+  }
 
   public static int clamp(int a, int min, int max) {
 

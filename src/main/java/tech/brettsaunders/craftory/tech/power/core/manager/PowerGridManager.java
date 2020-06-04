@@ -15,11 +15,12 @@ import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
 public class PowerGridManager implements Externalizable, ITickable {
+
   private static final long serialVersionUID = 10021L;
+  public HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
   private HashSet<BaseCell> cells = new HashSet<>();
   private HashSet<BaseProvider> generators = new HashSet<>();
   private HashSet<BaseMachine> machines = new HashSet<>();
-  public HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
 
   public PowerGridManager(Location powerConnector) {
     addPowerConnector(powerConnector);
@@ -59,7 +60,7 @@ public class PowerGridManager implements Externalizable, ITickable {
   /* Calculates how much energy the generators produced this tick */
   private int whatDidYouMakeToday() {
     int amount = 0;
-    for (BaseProvider generator: generators) {
+    for (BaseProvider generator : generators) {
       amount += generator.maxOutputEnergy();
     }
     return amount;
@@ -68,7 +69,7 @@ public class PowerGridManager implements Externalizable, ITickable {
   /* Calculates how much energy the machines can take this tick */
   private int whatDoTheyNeed() {
     int amount = 0;
-    for (BaseMachine machine: machines){
+    for (BaseMachine machine : machines) {
       amount += machine.maxReceiveEnergy();
     }
     return amount;
@@ -76,25 +77,29 @@ public class PowerGridManager implements Externalizable, ITickable {
 
   /**
    * Attempts to gather energy from storage
+   *
    * @param goal amount of energy to gather
    * @return amount gathered
    */
   private int raidTheBank(int goal) {
     int amount = 0;
-    for (BaseCell cell: cells) {
+    for (BaseCell cell : cells) {
       EnergyStorage e = cell.getEnergyStorage();
-      amount += e.extractEnergy((goal - amount),false);
-      if(amount >= goal) break;
+      amount += e.extractEnergy((goal - amount), false);
+      if (amount >= goal) {
+        break;
+      }
     }
     return amount;
   }
 
   /**
    * Puts excess energy into storage
+   *
    * @param amount the amount of excess energy
    */
   private void fillTheBanks(int amount) {
-    for (BaseCell cell: cells) {
+    for (BaseCell cell : cells) {
       amount -= cell.receiveEnergy(amount, false);
     }
   }
@@ -102,8 +107,8 @@ public class PowerGridManager implements Externalizable, ITickable {
   /* Provides the machines with energy.
    * Used when there is enough for all the machines  */
   private int giveThePeopleWhatTheyWant(int amount) {
-    for (BaseMachine machine: machines) {
-      amount -= machine.receiveEnergy(amount,false);
+    for (BaseMachine machine : machines) {
+      amount -= machine.receiveEnergy(amount, false);
     }
     return amount;
   }
@@ -111,10 +116,10 @@ public class PowerGridManager implements Externalizable, ITickable {
   /* Shares the available energy amongst the machines
    * Used when there is not enough for all machines  */
   private void shareThisAmongstThePeople(int amount) {
-    int allotment = amount/machines.size();
+    int allotment = amount / machines.size();
     while (amount > 0) {
-      for (BaseMachine machine: machines) {
-        amount -= machine.receiveEnergy(allotment,false);
+      for (BaseMachine machine : machines) {
+        amount -= machine.receiveEnergy(allotment, false);
       }
     }
   }

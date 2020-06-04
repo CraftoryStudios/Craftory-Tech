@@ -10,12 +10,12 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, Externalizable {
 
+  protected static final int CAPACITY_BASE = 400000;
+  protected static final int[] CAPACITY_LEVEL = {1, 5, 50, 200};
+  protected static final int MAX_INPUT = 200;
+  protected static final int[] INPUT_LEVEL = {1, 4, 40, 160};
   /* Static Constants */
   private static final long serialVersionUID = 10004L;
-  protected static final int CAPACITY_BASE = 400000;
-  protected static final int[] CAPACITY_LEVEL = { 1, 5, 50, 200 };
-  protected static final int MAX_INPUT = 200;
-  protected static final int[] INPUT_LEVEL = { 1, 4, 40, 160 };
 
   /* Construction */
   public BaseCell(Location location, byte level, int outputAmount) {
@@ -55,7 +55,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
   /* IEnergyReciever */
   @Override
   public int receiveEnergy(int maxReceive, boolean simulate) {
-    return energyStorage.receiveEnergy(Math.min(maxReceive, MAX_INPUT * INPUT_LEVEL[level]), simulate);
+    return energyStorage
+        .receiveEnergy(Math.min(maxReceive, MAX_INPUT * INPUT_LEVEL[level]), simulate);
   }
 
   @Override

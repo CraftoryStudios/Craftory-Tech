@@ -10,7 +10,7 @@ public class IronElectricFurnace extends BaseElectricFurnace {
   private static final byte C_LEVEL = 0;
 
   /* Construction */
-  public IronElectricFurnace(Location location){
+  public IronElectricFurnace(Location location) {
     super(location, C_LEVEL);
   }
 

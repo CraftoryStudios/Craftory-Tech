@@ -4,6 +4,9 @@ import dev.lone.itemsadder.api.ItemsAdder;
 import java.util.List;
 import java.util.UUID;
 import net.citizensnpcs.api.exception.NPCLoadException;
+import net.citizensnpcs.api.persistence.Persist;
+import net.citizensnpcs.api.trait.Trait;
+import net.citizensnpcs.api.trait.TraitName;
 import net.citizensnpcs.api.trait.trait.Equipment;
 import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
 import net.citizensnpcs.api.util.DataKey;
@@ -18,9 +21,6 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import net.citizensnpcs.api.persistence.Persist;
-import net.citizensnpcs.api.trait.Trait;
-import net.citizensnpcs.api.trait.TraitName;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -30,10 +30,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 /**
- * Persists a {@link Player} to follow while spawned. Optionally allows protecting of the player as well.
+ * Persists a {@link Player} to follow while spawned. Optionally allows protecting of the player as
+ * well.
  */
 @TraitName("chestpet")
 public class ChestPetTrait extends Trait {
+
   @Persist("active")
   private boolean enabled = false;
   @Persist
@@ -56,7 +58,8 @@ public class ChestPetTrait extends Trait {
    * Returns whether the trait is actively following a {@link Player}.
    */
   public boolean isActive() {
-    return enabled && npc.isSpawned() && player != null && npc.getEntity().getWorld().equals(player.getWorld());
+    return enabled && npc.isSpawned() && player != null && npc.getEntity().getWorld()
+        .equals(player.getWorld());
   }
 
   public boolean isEnabled() {
@@ -151,8 +154,9 @@ public class ChestPetTrait extends Trait {
   public void run() {
     saveContents();
     if (player == null || !player.isValid()) {
-      if (followingUUID == null)
+      if (followingUUID == null) {
         return;
+      }
       player = Bukkit.getPlayer(followingUUID);
       if (player == null) {
         return;
@@ -184,7 +188,9 @@ public class ChestPetTrait extends Trait {
       double distance = 10;
       for (int i = 0; i < itemsNearby.size(); i++) {
         Entity item = itemsNearby.get(i);
-        if (item.getType() != EntityType.DROPPED_ITEM) continue;
+        if (item.getType() != EntityType.DROPPED_ITEM) {
+          continue;
+        }
         double tempDistance = item.getLocation().distance(chicken.getLocation());
         if (tempDistance < 1.6) {
           nearest = null;
@@ -196,7 +202,7 @@ public class ChestPetTrait extends Trait {
         }
       }
       if (nearest != null) {
-        npc.getNavigator().setTarget((Entity) nearest, false);
+        npc.getNavigator().setTarget(nearest, false);
       }
     }
 
@@ -204,21 +210,19 @@ public class ChestPetTrait extends Trait {
 
   @EventHandler
   public void onPlayerIntereactEntity(PlayerInteractEntityEvent e) {
-    if(e.getRightClicked().equals(npc.getEntity())){
+    if (e.getRightClicked().equals(npc.getEntity())) {
       e.getPlayer().openInventory(inventory);
     }
   }
 
   /**
-   * Toggles and/or sets the {@link OfflinePlayer} to follow and whether to protect them (similar to wolves in
-   * Minecraft, attack whoever attacks the player).
+   * Toggles and/or sets the {@link OfflinePlayer} to follow and whether to protect them (similar to
+   * wolves in Minecraft, attack whoever attacks the player).
    *
    * Will toggle if the {@link OfflinePlayer} is the player currently being followed.
    *
-   * @param player
-   *            the player to follow
-   * @param protect
-   *            whether to protect the player
+   * @param player the player to follow
+   * @param protect whether to protect the player
    * @return whether the trait is enabled
    */
   public boolean toggle(OfflinePlayer player, boolean protect) {
@@ -227,7 +231,8 @@ public class ChestPetTrait extends Trait {
       this.enabled = !enabled;
     }
     this.followingUUID = player.getUniqueId();
-    if (npc.getNavigator().isNavigating() && this.player != null && npc.getNavigator().getEntityTarget() != null
+    if (npc.getNavigator().isNavigating() && this.player != null
+        && npc.getNavigator().getEntityTarget() != null
         && this.player == npc.getNavigator().getEntityTarget().getTarget()) {
       npc.getNavigator().cancelNavigation();
     }

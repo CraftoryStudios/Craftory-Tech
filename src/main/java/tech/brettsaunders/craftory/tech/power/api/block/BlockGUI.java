@@ -2,7 +2,6 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -67,25 +66,26 @@ public abstract class BlockGUI implements Externalizable {
 //    } else {
 //
 //    }
-    title = ChatColor.DARK_GRAY+ "Cell";
+    title = ChatColor.DARK_GRAY + "Cell";
 
-    inventoryInterface = new TexturedInventoryWrapper(null, 54, title, new FontImageWrapper("extra:cell"));
+    inventoryInterface = new TexturedInventoryWrapper(null, 54, title,
+        new FontImageWrapper("extra:cell"));
   }
 
   public void updateInterface() {
-    for  (IGUIComponent component: components) {
+    for (IGUIComponent component : components) {
       component.update();
     }
   }
 
-   public void addGUIComponent(IGUIComponent component) {
+  public void addGUIComponent(IGUIComponent component) {
     components.add(component);
-     Logger.info("Added Component");
-   }
+    Logger.info("Added Component");
+  }
 
-   public Inventory getInventory() {
+  public Inventory getInventory() {
     return inventoryInterface.getInternal();
-   }
+  }
 
   public void openGUI(Player player) {
     inventoryInterface.showInventory(player);

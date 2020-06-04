@@ -14,21 +14,18 @@ import org.bukkit.inventory.Recipe;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
-import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class BaseElectricFurnace extends BaseMachine implements Externalizable {
 
+  /* Static Constants Protected */
+  protected static final int[] COOKING_TIME_LEVEL = {200, 150, 100, 50}; //MC 200 ticks
+  protected static final int[] ENERGY_CONSUMPTION_LEVEL = {20, 30, 50, 100};
+  protected static final int[] CAPACITY_LEVEL = {5000, 10000, 25000, 50000};
   /* Static Constants Private */
   private static final long serialVersionUID = 10005L;
   private static final int INPUT_LOCATION = 22;
   private static final int OUTPUT_LOCATION = 26;
-
-  /* Static Constants Protected */
-  protected static final int[] COOKING_TIME_LEVEL = {200,150,100,50}; //MC 200 ticks
-  protected static final int[] ENERGY_CONSUMPTION_LEVEL = {20,30,50,100};
-  protected static final int[] CAPACITY_LEVEL = { 5000, 10000, 25000, 50000};
-
   /* Per Object Variables Saved */
   private Inventory inventory;
 
@@ -53,6 +50,12 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     addGUIComponent(new GIndicator(getInventory(), runningContainer));
   }
 
+  /* Saving, Setup and Loading */
+  public BaseElectricFurnace() {
+    super();
+    init();
+  }
+
   /* Common Load and Construction */
   public void init() {
     cookingTime = COOKING_TIME_LEVEL[level];
@@ -60,12 +63,6 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     inventory = getInventory();
     runningContainer = new VariableContainer<>(false);
     progressContainer = new VariableContainer<>(0d);
-  }
-
-  /* Saving, Setup and Loading */
-  public BaseElectricFurnace() {
-    super();
-    init();
   }
 
   @Override
@@ -85,13 +82,13 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   public void update() {
     super.update();
     updateSlots();
-    if(validateContense() && energyStorage.getEnergyStored() >= energyConsumption) {
+    if (validateContense() && energyStorage.getEnergyStored() >= energyConsumption) {
       energyStorage.modifyEnergyStored(-energyConsumption);
-      tickCount +=1;
-      if(tickCount==cookingTime){
-        tickCount =0;
-        inputSlot.setAmount(inputSlot.getAmount()-1);
-        if(outputSlot==null) {
+      tickCount += 1;
+      if (tickCount == cookingTime) {
+        tickCount = 0;
+        inputSlot.setAmount(inputSlot.getAmount() - 1);
+        if (outputSlot == null) {
           outputSlot = currentRecipe.getResult();
         } else {
           outputSlot.setAmount(outputSlot.getAmount() + currentRecipe.getResult().getAmount());
@@ -99,29 +96,42 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
         inventory.setItem(OUTPUT_LOCATION, outputSlot);
       }
       runningContainer.setT(true);
-    }else runningContainer.setT(false);
+    } else {
+      runningContainer.setT(false);
+    }
     progressContainer.setT(((double) tickCount) / cookingTime);
   }
 
   /* Internal Helper Functions */
-  private void updateSlots(){
+  private void updateSlots() {
     inputSlot = inventory.getItem(INPUT_LOCATION);
     outputSlot = inventory.getItem(OUTPUT_LOCATION);
   }
 
   private boolean validateContense() {
-    if(inputSlot==null) return false;
+    if (inputSlot == null) {
+      return false;
+    }
     String inputType = inputSlot.getType().toString();
     Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
-    while(recipeIterator.hasNext()) {
+    while (recipeIterator.hasNext()) {
       Recipe recipe = recipeIterator.next();
-      if(!(recipe instanceof FurnaceRecipe)) continue;
+      if (!(recipe instanceof FurnaceRecipe)) {
+        continue;
+      }
       FurnaceRecipe furnaceRecipe = (FurnaceRecipe) recipe;
 
-      if(furnaceRecipe.getInput().getType().toString() != inputType) continue;
+      if (furnaceRecipe.getInput().getType().toString() != inputType) {
+        continue;
+      }
       currentRecipe = furnaceRecipe;
-      if(outputSlot==null) return true;
-      if(outputSlot.getType().toString()==recipe.getResult().getType().toString() && outputSlot.getAmount() < outputSlot.getMaxStackSize()) return true;
+      if (outputSlot == null) {
+        return true;
+      }
+      if (outputSlot.getType().toString() == recipe.getResult().getType().toString()
+          && outputSlot.getAmount() < outputSlot.getMaxStackSize()) {
+        return true;
+      }
     }
     currentRecipe = null;
     return false;

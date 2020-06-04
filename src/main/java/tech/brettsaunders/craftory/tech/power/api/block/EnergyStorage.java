@@ -41,7 +41,7 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
   }
 
   /* Saving, Setup and Loading */
-  public EnergyStorage(){
+  public EnergyStorage() {
     super();
   }
 
@@ -79,21 +79,15 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
     return this;
   }
 
+  public int getMaxReceive() {
+
+    return maxReceive;
+  }
+
   public EnergyStorage setMaxReceive(int maxReceive) {
 
     this.maxReceive = maxReceive;
     return this;
-  }
-
-  public EnergyStorage setMaxExtract(int maxExtract) {
-
-    this.maxExtract = maxExtract;
-    return this;
-  }
-
-  public int getMaxReceive() {
-
-    return maxReceive;
   }
 
   public int getMaxExtract() {
@@ -101,15 +95,10 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
     return maxExtract;
   }
 
-  public void setEnergyStored(int energy) {
+  public EnergyStorage setMaxExtract(int maxExtract) {
 
-    this.energy = energy;
-
-    if (this.energy > capacity) {
-      this.energy = capacity;
-    } else if (this.energy < 0) {
-      this.energy = 0;
-    }
+    this.maxExtract = maxExtract;
+    return this;
   }
 
   public int modifyEnergyStored(int energy) {
@@ -151,6 +140,17 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
   public int getEnergyStored() {
 
     return energy;
+  }
+
+  public void setEnergyStored(int energy) {
+
+    this.energy = energy;
+
+    if (this.energy > capacity) {
+      this.energy = capacity;
+    } else if (this.energy < 0) {
+      this.energy = 0;
+    }
   }
 
   @Override

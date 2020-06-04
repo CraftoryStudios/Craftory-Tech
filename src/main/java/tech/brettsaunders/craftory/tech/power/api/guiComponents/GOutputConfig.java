@@ -29,16 +29,21 @@ public class GOutputConfig implements IGUIComponent, Listener {
   public GOutputConfig(Inventory inventory, ArrayList<Boolean> config) {
     this.inventory = inventory;
     this.config = config;
-    Craftory.getInstance().getServer().getPluginManager().registerEvents(this, Craftory.getInstance());
+    Craftory.getInstance().getServer().getPluginManager()
+        .registerEvents(this, Craftory.getInstance());
   }
 
   @EventHandler
   public void onInventoryInteract(final InventoryClickEvent event) {
-    if(event.getInventory() != inventory) return;
+    if (event.getInventory() != inventory) {
+      return;
+    }
     event.setCancelled(true);
 
     final ItemStack clickedItem = event.getCurrentItem();
-    if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
+    if (clickedItem == null || clickedItem.getType() == Material.AIR) {
+      return;
+    }
 
     switch (event.getRawSlot()) {
       case NORTH_SLOT:

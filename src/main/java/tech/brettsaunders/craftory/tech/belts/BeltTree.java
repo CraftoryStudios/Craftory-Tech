@@ -2,13 +2,13 @@ package tech.brettsaunders.craftory.tech.belts;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class BeltTree implements Serializable {
+
   private static final long serialVersionUID = 10003L;
 
   private final HashMap<Location, BeltNode> parents = new HashMap<>();

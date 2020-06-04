@@ -36,11 +36,11 @@ import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.IronCell;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.DiamondElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
 import tech.brettsaunders.craftory.utils.Blocks;
 import tech.brettsaunders.craftory.utils.Blocks.Power;
 import tech.brettsaunders.craftory.utils.Items;
@@ -48,19 +48,20 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredBlockManager implements Listener {
 
-  private static final String DATA_PATH = Craftory.getInstance().getDataFolder().getPath() + File.separator + "PowerBlockManager.data";
-  public static final BlockFace faces[] = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
-
-  private HashMap<Location, PoweredBlock> poweredBlocks;
-
+  public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
+      BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
+  private static final String DATA_PATH =
+      Craftory.getInstance().getDataFolder().getPath() + File.separator + "PowerBlockManager.data";
   public HashSet<PowerGridManager> powerGridManagers;
+  private HashMap<Location, PoweredBlock> poweredBlocks;
   private HashMap<Location, PowerGridManager> powerConnectors;
 
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();
     powerGridManagers = new HashSet<>();
     powerConnectors = new HashMap<>();
-    Craftory.getInstance().getServer().getPluginManager().registerEvents(this, Craftory.getInstance());
+    Craftory.getInstance().getServer().getPluginManager()
+        .registerEvents(this, Craftory.getInstance());
   }
 
   public void onEnable() {
@@ -79,7 +80,9 @@ public class PoweredBlockManager implements Listener {
     return poweredBlocks.get(location);
   }
 
-  public boolean isPoweredBlock(Location location) {return poweredBlocks.containsKey(location);}
+  public boolean isPoweredBlock(Location location) {
+    return poweredBlocks.containsKey(location);
+  }
 
   public void removePoweredBlock(Location location) {
     poweredBlocks.remove(location);
@@ -127,7 +130,9 @@ public class PoweredBlockManager implements Listener {
 
   @EventHandler
   public void onGUIBlockClick(CustomBlockInteractEvent e) {
-    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+      return;
+    }
     if (poweredBlocks.containsKey(e.getClickedBlock().getLocation())) {
       //Open GUI of Powered Block
       poweredBlocks.get(e.getClickedBlock().getLocation()).openGUI(e.getPlayer());
@@ -181,7 +186,9 @@ public class PoweredBlockManager implements Listener {
           public void run() {
             PoweredBlock poweredBlock = null;
             PoweredBlockType type = PoweredBlockType.MACHINE;
-            if (!ItemsAdder.isCustomBlock(event.getBlockPlaced())) return;
+            if (!ItemsAdder.isCustomBlock(event.getBlockPlaced())) {
+              return;
+            }
 
             ItemStack blockPlacedItemStack = ItemsAdder.getCustomBlock(event.getBlockPlaced());
             String blockPlacedName = ItemsAdder.getCustomItemName(blockPlacedItemStack);
@@ -249,7 +256,9 @@ public class PoweredBlockManager implements Listener {
   @EventHandler
   public void onPoweredBlockBreak(CustomBlockBreakEvent event) {
     Location location = event.getBlock().getLocation();
-    if (!poweredBlocks.containsKey(location)) return;
+    if (!poweredBlocks.containsKey(location)) {
+      return;
+    }
     if (isReceiver(location)) {
       updateAdjacentProviders(location, false, PoweredBlockType.MACHINE);
     }
@@ -259,14 +268,19 @@ public class PoweredBlockManager implements Listener {
 
   @EventHandler
   public void onWrenchLeftClick(PlayerInteractEvent e) {
-    if (e.getAction() != Action.LEFT_CLICK_BLOCK) return;
-    if (!ItemsAdder.matchCustomItemName(e.getItem(), Items.Power.WRENCH)) return;
+    if (e.getAction() != Action.LEFT_CLICK_BLOCK) {
+      return;
+    }
+    if (!ItemsAdder.matchCustomItemName(e.getItem(), Items.Power.WRENCH)) {
+      return;
+    }
     e.setCancelled(true);
 
     //Show power levels
     if (isPoweredBlock(e.getClickedBlock().getLocation())) {
       PoweredBlock block = getPoweredBlock(e.getClickedBlock().getLocation());
-      e.getPlayer().sendMessage("Stored: "+block.getInfoEnergyStored() + " / " + block.getInfoEnergyCapacity());
+      e.getPlayer().sendMessage(
+          "Stored: " + block.getInfoEnergyStored() + " / " + block.getInfoEnergyCapacity());
     }
   }
 
@@ -277,8 +291,10 @@ public class PoweredBlockManager implements Listener {
       block = location.getBlock().getRelative(face);
       if (ItemsAdder.isCustomBlock(block)) {
         if (poweredBlocks.containsKey(block.getLocation()) && isProvider(block.getLocation())) {
-          ((BaseProvider) getPoweredBlock(block.getLocation())).updateOutputCache(face.getOppositeFace(), setTo);
-        } else if (setTo && ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block)) == Power.POWER_CONNECTOR) { //TODO fix type part - seperate
+          ((BaseProvider) getPoweredBlock(block.getLocation()))
+              .updateOutputCache(face.getOppositeFace(), setTo);
+        } else if (setTo && ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block))
+            == Power.POWER_CONNECTOR) { //TODO fix type part - seperate
           switch (type) {
             case MACHINE:
               powerConnectors.get(location).addMachine((BaseMachine) getPoweredBlock(location));
@@ -328,10 +344,13 @@ public class PoweredBlockManager implements Listener {
   }
 
   private static class PowerBlockManagerData implements Serializable {
+
     private static final long serialVersionUID = 9999L;
     protected HashMap<Location, PoweredBlock> poweredBlocks;
     protected HashSet<PowerGridManager> powerGridManagers;
-    public PowerBlockManagerData(HashMap<Location, PoweredBlock> poweredBlocks, HashSet<PowerGridManager> powerGridManagers) {
+
+    public PowerBlockManagerData(HashMap<Location, PoweredBlock> poweredBlocks,
+        HashSet<PowerGridManager> powerGridManagers) {
       this.poweredBlocks = poweredBlocks;
       this.powerGridManagers = powerGridManagers;
     }

@@ -1,7 +1,9 @@
 package tech.brettsaunders.craftory.utils;
 
 public class Blocks {
+
   public class Power {
+
     public static final String IRON_CELL = "craftory:iron_cell";
     public static final String GOLD_CELL = "craftory:gold_cell";
     public static final String DIAMOND_CELL = "craftory:diamond_cell";

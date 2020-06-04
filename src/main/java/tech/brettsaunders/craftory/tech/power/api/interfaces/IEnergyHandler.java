@@ -1,10 +1,10 @@
 package tech.brettsaunders.craftory.tech.power.api.interfaces;
 
 /**
- * Implement this interface on Tile Entities which should handle energy, generally storing it in one or more internal {@link IEnergyStorage} objects.
+ * Implement this interface on Tile Entities which should handle energy, generally storing it in one
+ * or more internal {@link IEnergyStorage} objects.
  *
  * Note that {@link IEnergyReceiver} and {@link IEnergyProvider} are extensions of this.
- *
  */
 public interface IEnergyHandler extends IEnergyConnection {
 

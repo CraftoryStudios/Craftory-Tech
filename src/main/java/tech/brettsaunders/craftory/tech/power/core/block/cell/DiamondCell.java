@@ -6,10 +6,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 /**
  * Energy Cell
  *
- * Capacity: 20,000,000
- * Max Input: 8000
- * Max Output: 8000
- * Level: 2 (DIAMOND)
+ * Capacity: 20,000,000 Max Input: 8000 Max Output: 8000 Level: 2 (DIAMOND)
  */
 public class DiamondCell extends BaseCell {
 

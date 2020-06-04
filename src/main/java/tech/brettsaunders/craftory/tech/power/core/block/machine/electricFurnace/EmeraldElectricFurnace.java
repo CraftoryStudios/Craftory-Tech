@@ -10,7 +10,7 @@ public class EmeraldElectricFurnace extends BaseElectricFurnace {
   private static final byte C_LEVEL = 3;
 
   /* Construction */
-  public EmeraldElectricFurnace(Location location){
+  public EmeraldElectricFurnace(Location location) {
     super(location, C_LEVEL);
   }
 

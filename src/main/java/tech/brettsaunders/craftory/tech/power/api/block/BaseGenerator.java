@@ -4,20 +4,16 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.sql.Time;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public abstract class BaseGenerator extends BaseProvider implements Externalizable {
 
-  /* Static Constants Private */
-  private static final long serialVersionUID = 10006L;
-
   /* Static Constants Protected */
   protected static final int CAPACITY_BASE = 40000;
-  protected static final double[] CAPACITY_LEVEL = { 1, 1.5, 2, 3 };
-
+  protected static final double[] CAPACITY_LEVEL = {1, 1.5, 2, 3};
+  /* Static Constants Private */
+  private static final long serialVersionUID = 10006L;
   /* Per Object Variables Saved */
   protected int fuelRF;
 
@@ -34,13 +30,6 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     init();
   }
 
-  /* Common Load and Construction */
-  private void init() {
-    isActive = true;
-    isProvider = true;
-    addGUIComponent(new GBattery(getInventory(), energyStorage));
-  }
-
   /* Saving, Setup and Loading */
   public BaseGenerator() {
     super();
@@ -48,6 +37,13 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     wasActive = false;
     lastEnergy = 0;
     maxFuelRF = 0;
+  }
+
+  /* Common Load and Construction */
+  private void init() {
+    isActive = true;
+    isProvider = true;
+    addGUIComponent(new GBattery(getInventory(), energyStorage));
   }
 
   @Override
@@ -111,9 +107,11 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
 
   protected abstract void processStart();
 
-  protected void processFinish(){}
+  protected void processFinish() {
+  }
 
-  protected void processIdle(){}
+  protected void processIdle() {
+  }
 
   protected void processOff() {
     isActive = false;

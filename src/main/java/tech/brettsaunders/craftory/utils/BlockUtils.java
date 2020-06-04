@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
@@ -28,14 +27,14 @@ public class BlockUtils {
           "extra:beltwest");
   public final List<List> BELTS = Arrays.asList(BELT_SOUTH, BELT_NORTH, BELT_EAST, BELT_WEST);
 
-  public boolean isCustomBlockType(Block block, String type) {
+  public static boolean isCustomTypeBlock(Block block, String type) {
     if (ItemsAdder.isCustomBlock(block)) {
       return ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block)).equals(type);
     }
     return false;
   }
 
-  public static boolean isCustomTypeBlock(Block block, String type) {
+  public boolean isCustomBlockType(Block block, String type) {
     if (ItemsAdder.isCustomBlock(block)) {
       return ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block)).equals(type);
     }

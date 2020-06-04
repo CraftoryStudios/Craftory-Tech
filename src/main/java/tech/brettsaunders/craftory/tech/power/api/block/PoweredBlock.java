@@ -9,19 +9,17 @@ import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
-import tech.brettsaunders.craftory.utils.Logger;
 
 /**
- * A standard powered block
- * Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
+ * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
  */
 public abstract class PoweredBlock extends BlockGUI implements ITickable,
     IEnergyInfo, Externalizable {
 
+  public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
+      BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   /* Static Constants Private */
   private static final long serialVersionUID = 10011L;
-  public static final BlockFace faces[] = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
-
   /* Per Object Variables Saved */
   protected EnergyStorage energyStorage;
   protected Location location;
@@ -43,7 +41,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   }
 
   /* Saving, Setup and Loading */
-  public PoweredBlock(){
+  public PoweredBlock() {
     super();
     Craftory.tickableBaseManager.addBaseTickable(this);
   }
@@ -71,7 +69,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   }
 
   /* Info Methods */
-  public EnergyStorage getEnergyStorage(){
+  public EnergyStorage getEnergyStorage() {
     return energyStorage;
   }
 

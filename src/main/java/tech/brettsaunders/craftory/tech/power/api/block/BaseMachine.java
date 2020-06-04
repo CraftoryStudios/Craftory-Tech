@@ -8,11 +8,11 @@ import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver, Externalizable {
-  /* Static Constants Private */
-  private static final long serialVersionUID = 10007L;
 
   /* Static Constants Protected */
   protected static final int amountReceive = 10;
+  /* Static Constants Private */
+  private static final long serialVersionUID = 10007L;
 
   /* Per Object Variables Saved */
 
@@ -26,16 +26,16 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
     init();
   }
 
-  /* Common Load and Construction */
-  private void init() {
-    isReceiver = true;
-  }
-
   /* Saving, Setup and Loading */
   public BaseMachine() {
     super();
     init();
 
+  }
+
+  /* Common Load and Construction */
+  private void init() {
+    isReceiver = true;
   }
 
   @Override
@@ -72,5 +72,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   }
 
   /* External Methods */
-  public int maxReceiveEnergy() { return amountReceive;}
+  public int maxReceiveEnergy() {
+    return amountReceive;
+  }
 }

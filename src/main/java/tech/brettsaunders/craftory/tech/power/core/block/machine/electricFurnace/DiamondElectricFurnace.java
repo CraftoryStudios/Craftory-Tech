@@ -10,7 +10,7 @@ public class DiamondElectricFurnace extends BaseElectricFurnace {
   private static final byte C_LEVEL = 2;
 
   /* Construction */
-  public DiamondElectricFurnace(Location location){
+  public DiamondElectricFurnace(Location location) {
     super(location, C_LEVEL);
   }
 

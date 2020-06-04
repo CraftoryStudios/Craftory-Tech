@@ -59,7 +59,9 @@ public class MagicMobManager implements Listener {
 
   //Mob Spawners
   public boolean createChestPet(Player player, Location loc, ItemStack[] items) {
-    if (mobData.containsKey(player.getUniqueId().toString())) return false;
+    if (mobData.containsKey(player.getUniqueId().toString())) {
+      return false;
+    }
     NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.ZOMBIE, "MARTY");
     npc.spawn(loc);
     npc.getTrait(ChestPetTrait.class).toggle(player, false);
@@ -73,8 +75,10 @@ public class MagicMobManager implements Listener {
   }
 
   private static class MobDataManager implements Serializable {
+
     private static transient final long serialVersionUID = -1692222206529284441L;
     protected HashMap<String, String> mobDataManager;
+
     public MobDataManager(HashMap<String, String> mobDataManager) {
       this.mobDataManager = mobDataManager;
     }
