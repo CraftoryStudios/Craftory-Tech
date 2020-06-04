@@ -6,7 +6,7 @@ import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver, Externalizable {
-
+  private static final long serialVersionUID = 10007L;
   protected static final int amountReceive = 10;
 
   public BaseMachine(Location location, byte level) {

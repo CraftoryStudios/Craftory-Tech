@@ -18,6 +18,8 @@ import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class BaseElectricFurnace extends BaseMachine{
 
+  private static final long serialVersionUID = 10005L;
+
   //Normal MC furnace takes 200 ticks to smelt an item
   protected static final int[] COOKING_TIME_LEVEL = {200,150,100,50};
   protected static final int[] ENERGY_CONSUMPTION_LEVEL = {20,30,50,100};

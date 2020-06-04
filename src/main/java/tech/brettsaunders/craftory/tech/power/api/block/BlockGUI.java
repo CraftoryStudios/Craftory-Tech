@@ -16,8 +16,9 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public abstract class BlockGUI implements Externalizable {
 
+
   /* Static Constants */
-  private static final long serialVersionUID = 100000000L;
+  private static final long serialVersionUID = 10009L;
 
   /* Per Object Variables */
   private TexturedInventoryWrapper inventoryInterface;

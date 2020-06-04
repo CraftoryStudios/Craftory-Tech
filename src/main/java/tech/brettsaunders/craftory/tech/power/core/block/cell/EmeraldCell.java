@@ -14,6 +14,7 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
  * Level: 3 (Emerald)
  */
 public class EmeraldCell extends BaseCell {
+  private static final long serialVersionUID = 10013L;
   private static final byte CLEVEL = 3;
   private static final int C_OUTPUT_AMOUNT = 32000;
 

@@ -11,7 +11,7 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyStorage;
  */
 public class EnergyStorage implements IEnergyStorage, Externalizable {
 
-  private static transient final long serialVersionUID = -1692723296529286331L;
+  private static final long serialVersionUID = 10010L;
 
   protected int energy;
   protected int capacity;

@@ -14,6 +14,7 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
  * Level: 1 (GOLD)
  */
 public class GoldCell extends BaseCell {
+  private static final long serialVersionUID = 10014L;
   private static final byte CLEVEL = 1;
   private static final int C_OUTPUT_AMOUNT = 800;
 
