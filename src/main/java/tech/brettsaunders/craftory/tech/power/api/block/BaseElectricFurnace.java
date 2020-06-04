@@ -85,6 +85,7 @@ public class BaseElectricFurnace extends BaseMachine{
           } else {
             outputSlot.setAmount(outputSlot.getAmount() + currentRecipe.getResult().getAmount());
           }
+          inventory.setItem(OUTPUT_LOCATION, outputSlot);
         }
       }
       runningContainer.setT(true);
@@ -103,8 +104,9 @@ public class BaseElectricFurnace extends BaseMachine{
     String inputType = inputSlot.getType().toString();
     Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
     while(recipeIterator.hasNext()) {
-      if(!(recipeIterator.next() instanceof FurnaceRecipe)) continue;
       FurnaceRecipe recipe = (FurnaceRecipe) recipeIterator.next();
+      if(!(recipe instanceof FurnaceRecipe)) continue;
+
       if(recipe.getInput().getType().toString() != inputType) continue;
       currentRecipe = recipe;
       if(outputSlot==null) return true;

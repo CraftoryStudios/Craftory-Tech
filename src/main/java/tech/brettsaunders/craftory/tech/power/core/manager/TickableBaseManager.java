@@ -14,7 +14,7 @@ public class TickableBaseManager {
       for (int i = 0; i < tickableObjects.size(); i++) {
         tickableObjects.get(i).update();
       }
-    }, 0L, 4L);
+    }, 0L, 1L);
   }
 
   public void addBaseTickable(ITickable object) {
