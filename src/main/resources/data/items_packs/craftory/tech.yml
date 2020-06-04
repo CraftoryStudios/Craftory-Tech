@@ -173,8 +173,8 @@ items:
         break_tools_whitelist:
           - PICKAXE
           - pickaxe
-  soild_fuel_generator:
-    display_name: Soild Fuel Generator
+  solid_fuel_generator:
+    display_name: Solid Fuel Generator
     permission: craftory_tech
     resource:
       material: IRON_BLOCK
