@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -16,27 +17,32 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
-public class BaseElectricFurnace extends BaseMachine{
+public class BaseElectricFurnace extends BaseMachine implements Externalizable {
 
+  /* Static Constants Private */
   private static final long serialVersionUID = 10005L;
-
-  //Normal MC furnace takes 200 ticks to smelt an item
-  protected static final int[] COOKING_TIME_LEVEL = {200,150,100,50};
-  protected static final int[] ENERGY_CONSUMPTION_LEVEL = {20,30,50,100};
-  protected static final int[] CAPACITY_LEVEL = { 5000, 10000, 25000, 50000};
   private static final int INPUT_LOCATION = 22;
   private static final int OUTPUT_LOCATION = 26;
 
-  private ItemStack inputSlot;
-  private ItemStack outputSlot;
-  private Inventory inventory;
-  private int cookingTime;
-  private int energyConsumption;
-  private int tickCount = 0;
-  private FurnaceRecipe currentRecipe = null;
-  private VariableContainer<Boolean> runningContainer;
-  private VariableContainer<Double> progressContainer;
+  /* Static Constants Protected */
+  protected static final int[] COOKING_TIME_LEVEL = {200,150,100,50}; //MC 200 ticks
+  protected static final int[] ENERGY_CONSUMPTION_LEVEL = {20,30,50,100};
+  protected static final int[] CAPACITY_LEVEL = { 5000, 10000, 25000, 50000};
 
+  /* Per Object Variables Saved */
+  private Inventory inventory;
+
+  /* Per Object Variables Not-Saved */
+  private transient ItemStack inputSlot;
+  private transient ItemStack outputSlot;
+  private transient int cookingTime;
+  private transient int energyConsumption;
+  private transient int tickCount = 0;
+  private transient FurnaceRecipe currentRecipe = null;
+  private transient VariableContainer<Boolean> runningContainer;
+  private transient VariableContainer<Double> progressContainer;
+
+  /* Construction */
   public BaseElectricFurnace(Location location, byte level) {
     super(location, level);
     init();
@@ -47,12 +53,7 @@ public class BaseElectricFurnace extends BaseMachine{
     addGUIComponent(new GIndicator(getInventory(), runningContainer));
   }
 
-  public BaseElectricFurnace() {
-    super();
-    init();
-  }
-
-  /* Shared Startup and Loading */
+  /* Common Load and Construction */
   public void init() {
     cookingTime = COOKING_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
@@ -61,13 +62,21 @@ public class BaseElectricFurnace extends BaseMachine{
     progressContainer = new VariableContainer<>(0d);
   }
 
+  /* Saving, Setup and Loading */
+  public BaseElectricFurnace() {
+    super();
+    init();
+  }
+
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
+    super.writeExternal(out);
     out.writeObject(inventory);
   }
 
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    super.readExternal(in);
     inventory = (Inventory) in.readObject();
   }
 
@@ -93,6 +102,8 @@ public class BaseElectricFurnace extends BaseMachine{
     }else runningContainer.setT(false);
     progressContainer.setT(((double) tickCount) / cookingTime);
   }
+
+  /* Internal Helper Functions */
   private void updateSlots(){
     inputSlot = inventory.getItem(INPUT_LOCATION);
     outputSlot = inventory.getItem(OUTPUT_LOCATION);
@@ -115,4 +126,5 @@ public class BaseElectricFurnace extends BaseMachine{
     currentRecipe = null;
     return false;
   }
+
 }

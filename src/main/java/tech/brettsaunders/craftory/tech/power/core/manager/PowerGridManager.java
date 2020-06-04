@@ -60,7 +60,7 @@ public class PowerGridManager implements Externalizable, ITickable {
   private int whatDidYouMakeToday() {
     int amount = 0;
     for (BaseProvider generator: generators) {
-      amount += generator.howMuchCanYouGiveMe();
+      amount += generator.maxOutputEnergy();
     }
     return amount;
   }
@@ -69,7 +69,7 @@ public class PowerGridManager implements Externalizable, ITickable {
   private int whatDoTheyNeed() {
     int amount = 0;
     for (BaseMachine machine: machines){
-      amount += machine.howMuchDoYouNeed();
+      amount += machine.maxReceiveEnergy();
     }
     return amount;
   }
@@ -95,7 +95,7 @@ public class PowerGridManager implements Externalizable, ITickable {
    */
   private void fillTheBanks(int amount) {
     for (BaseCell cell: cells) {
-      amount -= cell.receiveEnergy(null, amount, false);
+      amount -= cell.receiveEnergy(amount, false);
     }
   }
 
@@ -103,7 +103,7 @@ public class PowerGridManager implements Externalizable, ITickable {
    * Used when there is enough for all the machines  */
   private int giveThePeopleWhatTheyWant(int amount) {
     for (BaseMachine machine: machines) {
-      amount -= machine.receiveEnergy(null,amount,false);
+      amount -= machine.receiveEnergy(amount,false);
     }
     return amount;
   }
@@ -114,7 +114,7 @@ public class PowerGridManager implements Externalizable, ITickable {
     int allotment = amount/machines.size();
     while (amount > 0) {
       for (BaseMachine machine: machines) {
-        amount -= machine.receiveEnergy(null,allotment,false);
+        amount -= machine.receiveEnergy(allotment,false);
       }
     }
   }

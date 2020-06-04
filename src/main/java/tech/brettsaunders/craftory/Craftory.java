@@ -117,6 +117,7 @@ public final class Craftory extends JavaPlugin {
       getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
 
     }
+    blockPoweredManager.onEnable();
   }
 
 
@@ -130,6 +131,7 @@ public final class Craftory extends JavaPlugin {
       magicMobManager.save();
     }
     multiBlockManager.save();
+    blockPoweredManager.onDisable();
     // Plugin shutdown logic
     plugin = null;
   }

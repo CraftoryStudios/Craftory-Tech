@@ -1,7 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.interfaces;
 
-import org.bukkit.block.BlockFace;
-
 /**
  * Implement this interface on Tile Entities which should handle energy, generally storing it in one or more internal {@link IEnergyStorage} objects.
  *
@@ -13,11 +11,11 @@ public interface IEnergyHandler extends IEnergyConnection {
   /**
    * Returns the amount of energy currently stored.
    */
-  int getEnergyStored(BlockFace from);
+  int getEnergyStored();
 
   /**
    * Returns the maximum amount of energy that can be stored.
    */
-  int getMaxEnergyStored(BlockFace from);
+  int getMaxEnergyStored();
 
 }

@@ -4,42 +4,65 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.sql.Time;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public abstract class BaseGenerator extends BaseProvider implements Externalizable {
+
+  /* Static Constants Private */
   private static final long serialVersionUID = 10006L;
+
+  /* Static Constants Protected */
   protected static final int CAPACITY_BASE = 40000;
   protected static final double[] CAPACITY_LEVEL = { 1, 1.5, 2, 3 };
 
+  /* Per Object Variables Saved */
   protected int fuelRF;
-  protected int maxFuelRF;
-  protected int lastEnergy;
-  protected boolean isActive;
-  protected boolean wasActive;
 
-  public BaseGenerator() {
-    super();
+  /* Per Object Variables Not-Saved */
+  protected transient int maxFuelRF;
+  protected transient int lastEnergy;
+  protected transient boolean isActive;
+  protected transient boolean wasActive;
+
+  /* Construction */
+  public BaseGenerator(Location location, byte level, int outputAmount) {
+    super(location, level, outputAmount);
+    energyStorage = new EnergyStorage((int) (CAPACITY_BASE * CAPACITY_LEVEL[level]));
+    init();
+  }
+
+  /* Common Load and Construction */
+  private void init() {
     isActive = true;
     isProvider = true;
-    isActive = false;
+    addGUIComponent(new GBattery(getInventory(), energyStorage));
+  }
+
+  /* Saving, Setup and Loading */
+  public BaseGenerator() {
+    super();
+    init();
     wasActive = false;
     lastEnergy = 0;
     maxFuelRF = 0;
   }
 
-  public BaseGenerator(Location location, byte level, int outputAmount) {
-    super(location, level, outputAmount);
-    energyStorage = new EnergyStorage((int) (CAPACITY_BASE * CAPACITY_LEVEL[level]));
-    addGUIComponent(new GBattery(getInventory(), energyStorage));
-    isActive = true;
-    isProvider = true;
+  @Override
+  public void writeExternal(ObjectOutput out) throws IOException {
+    super.writeExternal(out);
+    out.writeInt(fuelRF);
   }
 
-  public final void setEnergyStored(int quantity) {
-    energyStorage.setEnergyStored(quantity);
+  @Override
+  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    super.readExternal(in);
+    fuelRF = in.readInt();
   }
 
+  /* Update Loop */
   @Override
   public void update() {
     super.update();
@@ -72,8 +95,9 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     }
   }
 
-  //Time check factor to slow down check speed;
+  /* Internal Helper Functions */
   protected boolean timeCheck() {
+    //Time check factor to slow down check speed;
     //Core Props
     //return world.getTotalWorldTime() % TIME_CONSTANT == 0;
     return true;
@@ -103,20 +127,12 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     return lastEnergy;
   }
 
-  @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    out.writeInt(fuelRF);
-    out.writeObject(energyStorage);
-    //TODO Missing
+  /* External Methods */
+  public final void setEnergyStored(int quantity) {
+    energyStorage.setEnergyStored(quantity);
   }
 
-  @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    fuelRF = in.readInt();
-    energyStorage = (EnergyStorage) in.readObject();
-    //TODO Missing
-  }
-
+  /* IEnergyInfo */
   @Override
   public int getInfoEnergyPerTick() {
     if (!isActive) {

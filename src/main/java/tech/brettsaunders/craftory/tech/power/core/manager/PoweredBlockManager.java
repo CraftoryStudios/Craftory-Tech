@@ -5,6 +5,7 @@ import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -21,8 +22,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -37,7 +36,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.IronCell;
-import tech.brettsaunders.craftory.tech.power.core.block.SolidFuelGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.DiamondElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
@@ -64,13 +63,11 @@ public class PoweredBlockManager implements Listener {
     Craftory.getInstance().getServer().getPluginManager().registerEvents(this, Craftory.getInstance());
   }
 
-  @EventHandler
-  public void onEnable(PluginEnableEvent event) {
+  public void onEnable() {
     load();
   }
 
-  @EventHandler
-  public void onDisable(PluginDisableEvent event) {
+  public void onDisable() {
     save();
   }
 
@@ -97,9 +94,14 @@ public class PoweredBlockManager implements Listener {
       powerGridManagers = data.powerGridManagers;
       in.close();
       Logger.info("PowerBlockManager Loaded");
-    } catch (IOException | ClassNotFoundException e) {
-      Logger.warn("New PowerBlockManager Data Created");
+    } catch (FileNotFoundException e) {
+      Logger.debug("First Run - Generating PowerBlockManager Data");
+    } catch (IOException e) {
+      Logger.error("PowerBlockManager IO Loading Issue");
       Logger.debug(e);
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
     }
   }
 
@@ -114,6 +116,7 @@ public class PoweredBlockManager implements Listener {
     } catch (IOException e) {
       Logger.warn("Couldn't save PowerBlockManager Data");
       Logger.debug(e);
+      e.printStackTrace();
     }
   }
 
@@ -325,7 +328,7 @@ public class PoweredBlockManager implements Listener {
   }
 
   private static class PowerBlockManagerData implements Serializable {
-    private static transient final long serialVersionUID = -1692723206529286331L;
+    private static final long serialVersionUID = 9999L;
     protected HashMap<Location, PoweredBlock> poweredBlocks;
     protected HashSet<PowerGridManager> powerGridManagers;
     public PowerBlockManagerData(HashMap<Location, PoweredBlock> poweredBlocks, HashSet<PowerGridManager> powerGridManagers) {

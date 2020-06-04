@@ -4,13 +4,17 @@ import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseElectricFurnace;
 
 public class IronElectricFurnace extends BaseElectricFurnace {
-  private static final long serialVersionUID = 10019L;
-  private static final byte CLEVEL = 0;
 
+  /* Static Constants Private */
+  private static final long serialVersionUID = 10019L;
+  private static final byte C_LEVEL = 0;
+
+  /* Construction */
   public IronElectricFurnace(Location location){
-    super(location, CLEVEL);
+    super(location, C_LEVEL);
   }
 
+  /* Saving, Setup and Loading */
   public IronElectricFurnace() {
     super();
   }

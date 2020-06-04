@@ -5,18 +5,19 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
-import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, Externalizable {
-  private static final long serialVersionUID = 10004L;
 
+  /* Static Constants */
+  private static final long serialVersionUID = 10004L;
   protected static final int CAPACITY_BASE = 400000;
   protected static final int[] CAPACITY_LEVEL = { 1, 5, 50, 200 };
   protected static final int MAX_INPUT = 200;
   protected static final int[] INPUT_LEVEL = { 1, 4, 40, 160 };
 
+  /* Construction */
   public BaseCell(Location location, byte level, int outputAmount) {
     super(location, level, outputAmount);
     energyStorage = new EnergyStorage(CAPACITY_BASE * CAPACITY_LEVEL[level]);
@@ -25,6 +26,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
     isProvider = true;
   }
 
+  /* Saving, Setup and Loading */
   public BaseCell() {
     super();
     isReceiver = true;
@@ -43,29 +45,31 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
     energyStorage = (EnergyStorage) in.readObject();
   }
 
+  /* Update Loop */
   @Override
   public void update() {
     super.update();
     transferEnergy();
   }
 
+  /* IEnergyReciever */
   @Override
-  public int receiveEnergy(BlockFace from, int maxReceive, boolean simulate) {
+  public int receiveEnergy(int maxReceive, boolean simulate) {
     return energyStorage.receiveEnergy(Math.min(maxReceive, MAX_INPUT * INPUT_LEVEL[level]), simulate);
   }
 
   @Override
-  public int getEnergyStored(BlockFace from) {
+  public int getEnergyStored() {
     return energyStorage.getEnergyStored();
   }
 
   @Override
-  public int getMaxEnergyStored(BlockFace from) {
+  public int getMaxEnergyStored() {
     return energyStorage.getMaxEnergyStored();
   }
 
   @Override
-  public boolean canConnectEnergy(BlockFace from) {
+  public boolean canConnectEnergy() {
     return true;
   }
 }
