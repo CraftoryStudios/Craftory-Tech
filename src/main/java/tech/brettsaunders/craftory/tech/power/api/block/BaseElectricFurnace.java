@@ -74,25 +74,21 @@ public class BaseElectricFurnace extends BaseMachine{
   public void update() {
     super.update();
     updateSlots();
-    if(validateContense()) {
-      if(energyStorage.getEnergyStored() >= energyConsumption){
-        energyStorage.modifyEnergyStored(-energyConsumption);
-        tickCount +=1;
-        if(tickCount==cookingTime){
-          tickCount =0;
-          inputSlot.setAmount(inputSlot.getAmount()-1);
-          if(outputSlot==null) { //TODO ensure this ItemStack modification effects the items in the inventory
-            outputSlot = currentRecipe.getResult();
-          } else {
-            outputSlot.setAmount(outputSlot.getAmount() + currentRecipe.getResult().getAmount());
-          }
-          inventory.setItem(OUTPUT_LOCATION, outputSlot);
+    if(validateContense() && energyStorage.getEnergyStored() >= energyConsumption) {
+      energyStorage.modifyEnergyStored(-energyConsumption);
+      tickCount +=1;
+      if(tickCount==cookingTime){
+        tickCount =0;
+        inputSlot.setAmount(inputSlot.getAmount()-1);
+        if(outputSlot==null) {
+          outputSlot = currentRecipe.getResult();
+        } else {
+          outputSlot.setAmount(outputSlot.getAmount() + currentRecipe.getResult().getAmount());
         }
+        inventory.setItem(OUTPUT_LOCATION, outputSlot);
       }
       runningContainer.setT(true);
-    }else {
-      runningContainer.setT(false);
-    }
+    }else runningContainer.setT(false);
     progressContainer.setT(((double) tickCount) / cookingTime);
   }
   private void updateSlots(){
