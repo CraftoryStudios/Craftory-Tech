@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "craftory:block/emerald_electric_furnace",
+		"particle": "craftory:block/emerald_electric_furnace"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 5.333, 5.333, 10.666], "texture": "#0"},
+				"east": {"uv": [10.6665, 5.333, 15.9995, 10.666], "texture": "#0"},
+				"south": {"uv": [10.6665, 0, 15.9995, 5.333], "texture": "#0"},
+				"west": {"uv": [5.333, 5.333, 10.666, 10.666], "texture": "#0"},
+				"up": {"uv": [5.333, 0, 10.666, 5.333], "texture": "#0"},
+				"down": {"uv": [0, 0, 5.333, 5.333], "texture": "#0"}
+			}
+		}
+	]
+}

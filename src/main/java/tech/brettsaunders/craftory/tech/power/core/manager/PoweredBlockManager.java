@@ -38,6 +38,9 @@ import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.IronCell;
 import tech.brettsaunders.craftory.tech.power.core.block.SolidFuelGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.DiamondElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
 import tech.brettsaunders.craftory.utils.Blocks;
 import tech.brettsaunders.craftory.utils.Blocks.Power;
@@ -211,6 +214,18 @@ public class PoweredBlockManager implements Listener {
                 break;
               case Power.IRON_ELECTRIC_FURNACE:
                 poweredBlock = new IronElectricFurnace(location);
+                type = PoweredBlockType.MACHINE;
+                break;
+              case Power.GOLD_ELECTRIC_FURNACE:
+                poweredBlock = new GoldElectricFurnace(location);
+                type = PoweredBlockType.MACHINE;
+                break;
+              case Power.EMERALD_ELECTRIC_FURNACE:
+                poweredBlock = new EmeraldElectricFurnace(location);
+                type = PoweredBlockType.MACHINE;
+                break;
+              case Power.DIAMOND_ELECTRIC_FURNACE:
+                poweredBlock = new DiamondElectricFurnace(location);
                 type = PoweredBlockType.MACHINE;
                 break;
               default:
