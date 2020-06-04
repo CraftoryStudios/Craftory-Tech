@@ -14,6 +14,7 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
 import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class BaseElectricFurnace extends BaseMachine{
@@ -99,6 +100,20 @@ public class BaseElectricFurnace extends BaseMachine{
   private boolean validateContense() {
     if(inputSlot==null) return false;
     String inputType = inputSlot.getType().toString();
+    //If the recipe is unchanged there is no need to find the recipe.
+    if(currentRecipe!=null && currentRecipe.getInput().getType().toString().equals(inputType)){
+      if(outputSlot==null) return true;
+      if(outputSlot.getType().toString()==currentRecipe.getResult().getType().toString() && outputSlot.getAmount() < outputSlot.getMaxStackSize()) return true;
+    }
+    FurnaceRecipe furnaceRecipe;
+    for (Recipe recipe: RecipeUtils.getFurnaceRecipes()) {
+      furnaceRecipe = (FurnaceRecipe) recipe;
+      if(furnaceRecipe.getInput().getType().toString() != inputType) continue;
+      currentRecipe = furnaceRecipe;
+      if(outputSlot==null) return true;
+      if(outputSlot.getType().toString()==recipe.getResult().getType().toString() && outputSlot.getAmount() < outputSlot.getMaxStackSize()) return true;
+    }
+    /*
     Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
     while(recipeIterator.hasNext()) {
       Recipe recipe = recipeIterator.next();
@@ -110,6 +125,8 @@ public class BaseElectricFurnace extends BaseMachine{
       if(outputSlot==null) return true;
       if(outputSlot.getType().toString()==recipe.getResult().getType().toString() && outputSlot.getAmount() < outputSlot.getMaxStackSize()) return true;
     }
+
+     */
     currentRecipe = null;
     return false;
   }
