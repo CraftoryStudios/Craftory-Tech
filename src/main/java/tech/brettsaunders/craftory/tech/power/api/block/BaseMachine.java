@@ -7,8 +7,9 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver, Externalizable {
 
+  private static final long serialVersionUID = 10007L;
   protected int amountReceive;
-
+  
   public BaseMachine(Location location, byte level, int amountReceive) {
     super(location, level);
     this.amountReceive = amountReceive;

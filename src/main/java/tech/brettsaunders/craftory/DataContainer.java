@@ -17,7 +17,7 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class DataContainer implements Serializable {
 
-  private static transient final long serialVersionUID = -1681012206529286330L;
+  private static final long serialVersionUID = 10022L;
 
   //Data to Save
   public final HashSet<Long> chunkKeys;

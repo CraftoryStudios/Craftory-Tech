@@ -14,6 +14,8 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
  * Level: 2 (DIAMOND)
  */
 public class DiamondCell extends BaseCell {
+  private static final long serialVersionUID = 10012L;
+
   private static final byte CLEVEL = 2;
   private static final int C_OUTPUT_AMOUNT = 8000;
 

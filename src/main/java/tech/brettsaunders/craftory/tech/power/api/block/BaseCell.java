@@ -10,6 +10,8 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, Externalizable {
+  private static final long serialVersionUID = 10004L;
+
   protected static final int CAPACITY_BASE = 400000;
   protected static final int[] CAPACITY_LEVEL = { 1, 5, 50, 200 };
   protected static final int MAX_INPUT = 200;

@@ -19,7 +19,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     IEnergyInfo, Externalizable {
 
   /* Static Constants */
-  private static final long serialVersionUID = 100000001L;
+  private static final long serialVersionUID = 10011L;
   public static final BlockFace faces[] = { BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
 
   /* Per Object Variables */

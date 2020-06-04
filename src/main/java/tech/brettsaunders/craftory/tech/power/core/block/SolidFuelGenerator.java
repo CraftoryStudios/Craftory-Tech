@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 
 public class SolidFuelGenerator extends BaseGenerator {
+  private static final long serialVersionUID = 10020L;
   private static final byte CLEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 80;
 

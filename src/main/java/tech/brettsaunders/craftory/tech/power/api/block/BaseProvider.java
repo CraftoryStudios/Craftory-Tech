@@ -15,11 +15,12 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider,
     Externalizable {
+  private static final long serialVersionUID = 10008L;
   public static final Boolean[] DEFAULT_SIDES_CONFIG = { false, false, false, false, false, false };  //NORTH, EAST, SOUTH, WEST, UP, DOWN
   public static final int CONFIG_NONE = 0;
   public static final int CONFIG_OUTPUT = 1;
   public static final int CONFIG_INPUT = 2;
-  protected static int outputAmount = 0;
+  protected int outputAmount = 0;
 
   protected ArrayList<Boolean> sidesConfig = new ArrayList<>(6);
   protected ArrayList<Boolean> sidesCache = new ArrayList<>(6);
@@ -41,6 +42,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     super.writeExternal(out);
     out.writeObject(sidesConfig);
     out.writeObject(sidesCache);
+    out.writeInt(outputAmount);
   }
 
   @Override
@@ -48,6 +50,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     super.readExternal(in);
     sidesConfig = (ArrayList<Boolean>) in.readObject();
     sidesCache = (ArrayList<Boolean>) in.readObject();
+    outputAmount = in.readInt();
     addGUIComponent(new GOutputConfig(getInventory(), sidesConfig));
   }
 

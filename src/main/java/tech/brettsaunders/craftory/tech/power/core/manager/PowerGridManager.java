@@ -15,7 +15,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
 public class PowerGridManager implements Externalizable, ITickable {
-
+  private static final long serialVersionUID = 10021L;
   private HashSet<BaseCell> cells = new HashSet<>();
   private HashSet<BaseProvider> generators = new HashSet<>();
   private HashSet<BaseMachine> machines = new HashSet<>();

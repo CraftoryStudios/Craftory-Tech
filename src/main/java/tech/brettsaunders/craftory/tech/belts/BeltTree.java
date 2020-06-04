@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class BeltTree implements Serializable {
+  private static final long serialVersionUID = 10003L;
 
   private final HashMap<Location, BeltNode> parents = new HashMap<>();
   private final HashMap<Location, BeltNode> mapper = new HashMap<>();

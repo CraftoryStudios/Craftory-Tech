@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 
 public abstract class BaseGenerator extends BaseProvider implements Externalizable {
+  private static final long serialVersionUID = 10006L;
   protected static final int CAPACITY_BASE = 40000;
   protected static final double[] CAPACITY_LEVEL = { 1, 1.5, 2, 3 };
 

@@ -9,6 +9,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.belts.BeltManagerContext.Side;
 
 public class BeltManager implements Serializable {
+  private static final long serialVersionUID = 10001L;
 
   private final ArrayList<Location> belts = new ArrayList<>();
   private final BeltTree tree;
