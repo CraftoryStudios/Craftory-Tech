@@ -7,10 +7,11 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver, Externalizable {
 
-  protected static final int amountReceive = 10;
+  protected int amountReceive;
 
-  public BaseMachine(Location location, byte level) {
+  public BaseMachine(Location location, byte level, int amountReceive) {
     super(location, level);
+    this.amountReceive = amountReceive;
     isReceiver = true;
 
   }

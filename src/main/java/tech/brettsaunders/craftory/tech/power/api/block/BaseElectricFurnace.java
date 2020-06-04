@@ -37,10 +37,9 @@ public class BaseElectricFurnace extends BaseMachine{
   private VariableContainer<Double> progressContainer;
 
   public BaseElectricFurnace(Location location, byte level) {
-    super(location, level);
+    super(location, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
     init();
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
-    energyStorage.maxReceive = ENERGY_CONSUMPTION_LEVEL[level] * 5;
     addGUIComponent(new GOneToOneMachine(getInventory(), 24, progressContainer));
     addGUIComponent(new GBattery(getInventory(), energyStorage));
     addGUIComponent(new GIndicator(getInventory(), runningContainer));
@@ -113,20 +112,6 @@ public class BaseElectricFurnace extends BaseMachine{
       if(outputSlot==null) return true;
       if(outputSlot.getType().toString()==recipe.getResult().getType().toString() && outputSlot.getAmount() < outputSlot.getMaxStackSize()) return true;
     }
-    /*
-    Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
-    while(recipeIterator.hasNext()) {
-      Recipe recipe = recipeIterator.next();
-      if(!(recipe instanceof FurnaceRecipe)) continue;
-      FurnaceRecipe furnaceRecipe = (FurnaceRecipe) recipe;
-
-      if(furnaceRecipe.getInput().getType().toString() != inputType) continue;
-      currentRecipe = furnaceRecipe;
-      if(outputSlot==null) return true;
-      if(outputSlot.getType().toString()==recipe.getResult().getType().toString() && outputSlot.getAmount() < outputSlot.getMaxStackSize()) return true;
-    }
-
-     */
     currentRecipe = null;
     return false;
   }
