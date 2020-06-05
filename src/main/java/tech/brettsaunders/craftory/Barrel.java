@@ -99,7 +99,7 @@ public class Barrel implements Listener {
 
     if (ItemsAdder.matchCustomItemName(e.getCustomBlockItem(), "craftory:barrel") ||
         ItemsAdder.matchCustomItemName(e.getCustomBlockItem(), "craftory:reinforced_barrel")) {
-      Location loc = e.getClickedBlock().getLocation();
+      Location loc = e.getBlockClicked().getLocation();
       if (barrels.containsKey(loc)) {
         Inventory inventory = barrels.get(loc);
         e.getPlayer().openInventory(inventory);

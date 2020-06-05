@@ -133,9 +133,9 @@ public class PoweredBlockManager implements Listener {
     if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
       return;
     }
-    if (poweredBlocks.containsKey(e.getClickedBlock().getLocation())) {
+    if (poweredBlocks.containsKey(e.getBlockClicked().getLocation())) {
       //Open GUI of Powered Block
-      poweredBlocks.get(e.getClickedBlock().getLocation()).openGUI(e.getPlayer());
+      poweredBlocks.get(e.getBlockClicked().getLocation()).openGUI(e.getPlayer());
     }
   }
 
