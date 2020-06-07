@@ -1,11 +1,14 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
+import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, Externalizable {
@@ -21,7 +24,6 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
   public BaseCell(Location location, byte level, int outputAmount) {
     super(location, level, outputAmount);
     energyStorage = new EnergyStorage(CAPACITY_BASE * CAPACITY_LEVEL[level]);
-    addGUIComponent(new GBattery(getInventory(), energyStorage));
     isReceiver = true;
     isProvider = true;
   }
@@ -72,5 +74,12 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
   @Override
   public boolean canConnectEnergy() {
     return true;
+  }
+
+  @Override
+  public void setupGUI() {
+    Inventory inventory = setInterfaceTitle("Cell", new FontImageWrapper("extra:cell"));
+    addGUIComponent(new GBattery(inventory, energyStorage));
+    addGUIComponent(new GOutputConfig(inventory, sidesConfig));
   }
 }

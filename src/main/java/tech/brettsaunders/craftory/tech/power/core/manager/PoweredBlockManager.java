@@ -2,6 +2,7 @@ package tech.brettsaunders.craftory.tech.power.core.manager;
 
 import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
 import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
+import dev.lone.itemsadder.api.Events.ItemsAdderFirstLoadEvent;
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +32,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
+import tech.brettsaunders.craftory.tech.power.api.block.BlockGUI;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
@@ -126,6 +128,13 @@ public class PoweredBlockManager implements Listener {
   @EventHandler
   public void onWorldSave(WorldSaveEvent event) {
     save();
+  }
+
+  @EventHandler
+  public void onItemsAdderLoaded(ItemsAdderFirstLoadEvent e) {
+    poweredBlocks.forEach( ((location, poweredBlock) -> {
+      poweredBlock.setupGUI();
+    }));
   }
 
   @EventHandler

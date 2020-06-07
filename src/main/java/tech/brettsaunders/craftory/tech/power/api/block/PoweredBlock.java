@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -49,7 +50,6 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
 
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
-    super.writeExternal(out);
     out.writeObject(energyStorage);
     out.writeObject(location);
     out.writeByte(level);
@@ -57,7 +57,6 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
 
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    super.readExternal(in);
     energyStorage = (EnergyStorage) in.readObject();
     location = (Location) in.readObject();
     level = in.readByte();

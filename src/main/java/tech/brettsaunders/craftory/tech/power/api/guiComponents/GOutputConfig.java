@@ -20,9 +20,6 @@ public class GOutputConfig implements IGUIComponent, Listener {
   private static final int UP_SLOT = 24;
   private static final int DOWN_SLOT = 42;
 
-  private static final ItemStack DISABLED = ItemsAdder.getCustomItem("extra:output_disabled");
-  private static final ItemStack OUTPUT = ItemsAdder.getCustomItem("extra:output_green");
-
   private Inventory inventory;
   private ArrayList<Boolean> config;
 
@@ -70,12 +67,17 @@ public class GOutputConfig implements IGUIComponent, Listener {
 
   @Override
   public void update() {
-    //NORTH, EAST, SOUTH, WEST, UP, DOWN
-    inventory.setItem(NORTH_SLOT, config.get(0) == false ? DISABLED.clone() : OUTPUT.clone());
-    inventory.setItem(EAST_SLOT, config.get(1) == false ? DISABLED.clone() : OUTPUT.clone());
-    inventory.setItem(SOUTH_SLOT, config.get(2) == false ? DISABLED.clone() : OUTPUT.clone());
-    inventory.setItem(WEST_SLOT, config.get(3) == false ? DISABLED.clone() : OUTPUT.clone());
-    inventory.setItem(UP_SLOT, config.get(4) == false ? DISABLED.clone() : OUTPUT.clone());
-    inventory.setItem(DOWN_SLOT, config.get(5) == false ? DISABLED.clone() : OUTPUT.clone());
+    if (ItemsAdder.areItemsLoaded()) {
+      final ItemStack DISABLED = ItemsAdder.getCustomItem("extra:output_disabled");
+      final ItemStack OUTPUT = ItemsAdder.getCustomItem("extra:output_green");
+
+      //NORTH, EAST, SOUTH, WEST, UP, DOWN
+      inventory.setItem(NORTH_SLOT, config.get(0) == false ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(EAST_SLOT, config.get(1) == false ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(SOUTH_SLOT, config.get(2) == false ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(WEST_SLOT, config.get(3) == false ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(UP_SLOT, config.get(4) == false ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(DOWN_SLOT, config.get(5) == false ? DISABLED.clone() : OUTPUT.clone());
+    }
   }
 }

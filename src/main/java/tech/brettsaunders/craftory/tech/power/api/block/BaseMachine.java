@@ -1,10 +1,14 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
+import org.bukkit.inventory.Inventory;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver, Externalizable {
@@ -25,6 +29,9 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
     super(location, level);
     this.amountReceive = amountReceive;
     init();
+    if (ItemsAdder.areItemsLoaded()) {
+      setupGUI();
+    }
   }
 
   /* Saving, Setup and Loading */
@@ -75,5 +82,11 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   /* External Methods */
   public int maxReceiveEnergy() {
     return amountReceive;
+  }
+
+  @Override
+  public void setupGUI() {
+    Inventory inventory = setInterfaceTitle("Machine", new FontImageWrapper("extra:cell"));
+    addGUIComponent(new GBattery(inventory, energyStorage));
   }
 }

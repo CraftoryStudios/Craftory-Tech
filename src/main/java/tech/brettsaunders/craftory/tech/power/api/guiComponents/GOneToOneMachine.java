@@ -29,11 +29,13 @@ public class GOneToOneMachine implements IGUIComponent {
 
   @Override
   public void update() {
-    int x = (int) Math.floor(progress.getT() * 10);
-    ItemStack arrow = ItemsAdder.getCustomItem("extra:arrow_" + x);
-    ItemMeta meta = arrow.getItemMeta();
-    meta.setDisplayName(null);
-    arrow.setItemMeta(meta);
-    inventory.setItem(slot, arrow);
+    if (ItemsAdder.areItemsLoaded()) {
+      int x = (int) Math.floor(progress.getT() * 10);
+      ItemStack arrow = ItemsAdder.getCustomItem("extra:arrow_" + x);
+      ItemMeta meta = arrow.getItemMeta();
+      meta.setDisplayName(null);
+      arrow.setItemMeta(meta);
+      inventory.setItem(slot, arrow);
+    }
   }
 }

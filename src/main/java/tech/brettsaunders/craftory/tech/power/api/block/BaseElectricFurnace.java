@@ -1,5 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -43,9 +45,9 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     super(location, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
     init();
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
-    addGUIComponent(new GOneToOneMachine(getInventory(), 24, progressContainer));
-    addGUIComponent(new GBattery(getInventory(), energyStorage));
-    addGUIComponent(new GIndicator(getInventory(), runningContainer));
+    if (ItemsAdder.areItemsLoaded()) {
+      setupGUI();
+    }
   }
 
   /* Saving, Setup and Loading */
@@ -58,7 +60,6 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   public void init() {
     cookingTime = COOKING_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
-    inventory = getInventory();
     runningContainer = new VariableContainer<>(false);
     progressContainer = new VariableContainer<>(0d);
   }
@@ -75,10 +76,20 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     inventory = (Inventory) in.readObject();
   }
 
+  @Override
+  public void setupGUI() {
+    Inventory inventory = setInterfaceTitle("Electric Furnace", new FontImageWrapper("extra:cell"));
+    this.inventory = inventory;
+    addGUIComponent(new GOneToOneMachine(inventory, 24, progressContainer));
+    addGUIComponent(new GBattery(inventory, energyStorage));
+    addGUIComponent(new GIndicator(inventory, runningContainer));
+  }
+
   /* Update Loop */
   @Override
   public void update() {
     super.update();
+    if (inventory == null) return;
     updateSlots();
     if (validateContense() && energyStorage.getEnergyStored() >= energyConsumption) {
       energyStorage.modifyEnergyStored(-energyConsumption);

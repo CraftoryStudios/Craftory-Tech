@@ -22,8 +22,9 @@ public class GBattery implements IGUIComponent {
 
   @Override
   public void update() {
-    setLevelIndicator();
-
+    if (ItemsAdder.areItemsLoaded()) {
+      setLevelIndicator();
+    }
   }
 
   private void setLevelIndicator() {

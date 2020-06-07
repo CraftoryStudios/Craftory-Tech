@@ -1,5 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -9,7 +11,6 @@ import java.util.Collections;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -36,7 +37,9 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     init();
     Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
     generateSideCache();
-    addGUIComponent(new GOutputConfig(getInventory(), sidesConfig));
+    if (ItemsAdder.areItemsLoaded()) {
+      setupGUI();
+    }
   }
 
   /* Saving, Setup and Loading */
@@ -65,7 +68,6 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     sidesConfig = (ArrayList<Boolean>) in.readObject();
     sidesCache = (ArrayList<Boolean>) in.readObject();
     outputAmount = in.readInt();
-    addGUIComponent(new GOutputConfig(getInventory(), sidesConfig));
   }
 
   /* Update Loop */

@@ -1,11 +1,14 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
+import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 
 public abstract class BaseGenerator extends BaseProvider implements Externalizable {
 
@@ -43,19 +46,20 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   private void init() {
     isActive = true;
     isProvider = true;
-    addGUIComponent(new GBattery(getInventory(), energyStorage));
   }
 
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
     super.writeExternal(out);
     out.writeInt(fuelRF);
+    out.writeObject(energyStorage);
   }
 
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     super.readExternal(in);
     fuelRF = in.readInt();
+    energyStorage = (EnergyStorage) in.readObject();
   }
 
   /* Update Loop */
@@ -142,6 +146,13 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   @Override
   public int getInfoEnergyStored() {
     return energyStorage.getEnergyStored();
+  }
+
+  @Override
+  public void setupGUI() {
+    Inventory inventory = setInterfaceTitle("Generator", new FontImageWrapper("extra:cell"));
+    addGUIComponent(new GBattery(inventory, energyStorage));
+    addGUIComponent(new GOutputConfig(inventory, sidesConfig));
   }
 
 }
