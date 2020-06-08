@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -39,13 +38,13 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     isReceiver = false;
     isProvider = false;
     this.level = level;
-    Craftory.tickableBaseManager.addBaseTickable(this);
+    Craftory.tickableBaseManager.addFastUpdate(this);
   }
 
   /* Saving, Setup and Loading */
   public PoweredBlock() {
     super();
-    Craftory.tickableBaseManager.addBaseTickable(this);
+    Craftory.tickableBaseManager.addFastUpdate(this);
   }
 
   @Override

@@ -284,7 +284,7 @@ public class PoweredBlockManager implements Listener {
     if (isReceiver(location)) {
       updateAdjacentProviders(location, false, PoweredBlockType.MACHINE);
     }
-    Craftory.tickableBaseManager.removeBaseTickable(getPoweredBlock(location));
+    Craftory.tickableBaseManager.removeFastUpdate(getPoweredBlock(location));
     removePoweredBlock(location);
   }
 
