@@ -3,11 +3,8 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
 import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.ArrayList;
-import org.bukkit.Bukkit;
+import java.util.HashSet;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
@@ -19,7 +16,14 @@ public abstract class BlockGUI implements Externalizable {
 
   /* Per Object Variables */
   private TexturedInventoryWrapper inventoryInterface;
-  private ArrayList<IGUIComponent> components = new ArrayList<>();
+  private final ArrayList<IGUIComponent> components = new ArrayList<>();
+
+  protected HashSet<Integer> interactableSlots = new HashSet<>();
+
+  public HashSet<Integer> getInteractableSlots() {
+    return interactableSlots;
+  }
+
 
   /* Saving, Setup and Loading */
   public BlockGUI() {
@@ -33,6 +37,10 @@ public abstract class BlockGUI implements Externalizable {
     for (IGUIComponent component : components) {
       component.update();
     }
+  }
+
+  public Inventory getInventory() {
+    return inventoryInterface.getInternal();
   }
 
   public void addGUIComponent(IGUIComponent component) {
