@@ -6,6 +6,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
@@ -91,6 +92,10 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     inventory.setItem(INPUT_LOCATION, inputSlot);
     inventory.setItem(OUTPUT_LOCATION, outputSlot);
     this.inventoryInterface = inventory;
+    HashSet<Integer> protectedslots = new HashSet<>();
+    protectedslots.add(INPUT_LOCATION);
+    protectedslots.add(OUTPUT_LOCATION);
+    fillBlankSlots(protectedslots);
   }
 
   /* Update Loop */

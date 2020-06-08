@@ -1,6 +1,13 @@
 info:
   namespace: extra
 items:
+  invisible:
+    display_name:
+    resource:
+      material: PAPER
+      generate: true
+      textures:
+        - item/invisible.png
   output:
     display_name: Output Power
     resource:
