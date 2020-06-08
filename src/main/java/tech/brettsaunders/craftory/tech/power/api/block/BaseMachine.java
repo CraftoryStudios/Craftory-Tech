@@ -44,6 +44,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   /* Common Load and Construction */
   private void init() {
     isReceiver = true;
+    energyStorage.setMaxReceive(amountReceive);
   }
 
   @Override
@@ -88,5 +89,9 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   public void setupGUI() {
     Inventory inventory = setInterfaceTitle("Machine", new FontImageWrapper("extra:cell"));
     addGUIComponent(new GBattery(inventory, energyStorage));
+  }
+
+  public int getEnergyNeeded() {
+    return Math.min(amountReceive, (energyStorage.capacity - energyStorage.energy));
   }
 }

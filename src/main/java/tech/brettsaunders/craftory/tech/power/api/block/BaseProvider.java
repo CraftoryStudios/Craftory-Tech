@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
@@ -173,5 +172,9 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   /* External Methods */
   public int maxOutputEnergy() {
     return outputAmount;
+  }
+
+  public int getEnergyAvailable() {
+    return Math.min(energyStorage.energy, outputAmount);
   }
 }

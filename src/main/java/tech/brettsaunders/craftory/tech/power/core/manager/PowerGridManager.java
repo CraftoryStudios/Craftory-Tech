@@ -21,9 +21,13 @@ public class PowerGridManager implements Externalizable, ITickable {
   private HashSet<BaseCell> cells = new HashSet<>();
   private HashSet<BaseProvider> generators = new HashSet<>();
   private HashSet<BaseMachine> machines = new HashSet<>();
+  private int machinesNeedingEnergy = 0;
 
   public PowerGridManager(Location powerConnector) {
     addPowerConnector(powerConnector);
+  }
+
+  public PowerGridManager() {
   }
 
   public HashSet<BaseCell> getCells() {
@@ -44,8 +48,8 @@ public class PowerGridManager implements Externalizable, ITickable {
 
 
   public void update() {
-    int produced = whatDidYouMakeToday();
     int needed = whatDoTheyNeed();
+    int produced = calculateEnergyProduced(needed);
     if (needed > produced) {
       produced += raidTheBank(needed - produced);
     }
@@ -58,19 +62,31 @@ public class PowerGridManager implements Externalizable, ITickable {
   }
 
   /* Calculates how much energy the generators produced this tick */
-  private int whatDidYouMakeToday() {
+  private int calculateEnergyProduced(int goal) {
     int amount = 0;
     for (BaseProvider generator : generators) {
-      amount += generator.maxOutputEnergy();
+      amount += generator.getEnergyAvailable();
+      //TODO take energy from generator
+      if (amount >= goal) {
+        break;
+      }
     }
     return amount;
   }
 
   /* Calculates how much energy the machines can take this tick */
   private int whatDoTheyNeed() {
+    machinesNeedingEnergy = 0;
     int amount = 0;
+    int e;
     for (BaseMachine machine : machines) {
-      amount += machine.maxReceiveEnergy();
+      e = machine.getEnergyNeeded();
+      if (e > 0) {
+        amount += machine.getEnergyNeeded();
+        machinesNeedingEnergy += 1;
+      }
+
+
     }
     return amount;
   }
@@ -116,7 +132,10 @@ public class PowerGridManager implements Externalizable, ITickable {
   /* Shares the available energy amongst the machines
    * Used when there is not enough for all machines  */
   private void shareThisAmongstThePeople(int amount) {
-    int allotment = amount / machines.size();
+    if (machinesNeedingEnergy < 1) {
+      machinesNeedingEnergy = 1;
+    }
+    int allotment = amount / machinesNeedingEnergy;
     while (amount > 0) {
       for (BaseMachine machine : machines) {
         amount -= machine.receiveEnergy(allotment, false);
