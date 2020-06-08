@@ -19,7 +19,14 @@ public abstract class BlockGUI implements Externalizable {
 
   /* Per Object Variables */
   private TexturedInventoryWrapper inventoryInterface;
-  private ArrayList<IGUIComponent> components = new ArrayList<>();
+  private final ArrayList<IGUIComponent> components = new ArrayList<>();
+
+  protected HashSet<Integer> interactableSlots = new HashSet<>();
+
+  public HashSet<Integer> getInteractableSlots() {
+    return interactableSlots;
+  }
+
 
   /* Saving, Setup and Loading */
   public BlockGUI() {
@@ -33,6 +40,10 @@ public abstract class BlockGUI implements Externalizable {
     for (IGUIComponent component : components) {
       component.update();
     }
+  }
+
+  public Inventory getInventory() {
+    return inventoryInterface.getInternal();
   }
 
   public void addGUIComponent(IGUIComponent component) {

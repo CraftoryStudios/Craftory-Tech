@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -24,6 +25,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.WorldSaveEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
@@ -32,7 +34,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
-import tech.brettsaunders.craftory.tech.power.api.block.BlockGUI;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
@@ -56,7 +57,7 @@ public class PoweredBlockManager implements Listener {
       Craftory.getInstance().getDataFolder().getPath() + File.separator + "PowerBlockManager.data";
   public HashSet<PowerGridManager> powerGridManagers;
   private HashMap<Location, PoweredBlock> poweredBlocks;
-  private HashMap<Location, PowerGridManager> powerConnectors;
+  private final HashMap<Location, PowerGridManager> powerConnectors;
 
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();
@@ -268,6 +269,18 @@ public class PoweredBlockManager implements Listener {
     if (!poweredBlocks.containsKey(location)) {
       return;
     }
+    // Drop items
+    PoweredBlock b = poweredBlocks.get(location);
+    World world = location.getWorld();
+    Inventory inventory = b.getInventory();
+    ItemStack item;
+    for (Integer i : b.getInteractableSlots()) {
+      item = inventory.getItem(i);
+      if (item != null) {
+        world.dropItemNaturally(location, item);
+      }
+    }
+
     if (isReceiver(location)) {
       updateAdjacentProviders(location, false, PoweredBlockType.MACHINE);
     }

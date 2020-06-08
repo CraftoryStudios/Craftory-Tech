@@ -16,7 +16,6 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   /* Static Constants Private */
   private static final long serialVersionUID = 10007L;
-
   /* Per Object Variables Saved */
   protected int amountReceive;
 

@@ -6,6 +6,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Arrays;
 import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -63,6 +64,7 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
     runningContainer = new VariableContainer<>(false);
     progressContainer = new VariableContainer<>(0d);
+    interactableSlots = new HashSet<>(Arrays.asList(INPUT_LOCATION, OUTPUT_LOCATION));
   }
 
   @Override
@@ -140,7 +142,7 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
       if (outputSlot == null) {
         return true;
       }
-      if (outputSlot.getType().toString() == currentRecipe.getResult().getType().toString()
+      if (outputSlot.getType().toString().equals(currentRecipe.getResult().getType().toString())
           && outputSlot.getAmount() < outputSlot.getMaxStackSize()) {
         return true;
       }
