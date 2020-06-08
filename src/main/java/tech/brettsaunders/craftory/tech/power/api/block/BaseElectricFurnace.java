@@ -88,7 +88,7 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   @Override
   public void setupGUI() {
     Inventory inventory = setInterfaceTitle("Electric Furnace", new FontImageWrapper("extra:cell"));
-    addGUIComponent(new GOneToOneMachine(inventory, 24, progressContainer));
+    addGUIComponent(new GOneToOneMachine(inventory, 24, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer));
     inventory.setItem(INPUT_LOCATION, inputSlot);
