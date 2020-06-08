@@ -11,7 +11,7 @@ public class GOneToOneMachine implements IGUIComponent {
 
   private final int slot;
   private final VariableContainer<Double> progress;
-  private Inventory inventory;
+  private final Inventory inventory;
 
   public GOneToOneMachine(Inventory inventory, int slot,
       VariableContainer<Double> progress) {
@@ -33,7 +33,7 @@ public class GOneToOneMachine implements IGUIComponent {
       int x = (int) Math.floor(progress.getT() * 10);
       ItemStack arrow = ItemsAdder.getCustomItem("extra:arrow_" + x);
       ItemMeta meta = arrow.getItemMeta();
-      meta.setDisplayName(null);
+      meta.setDisplayName("");
       arrow.setItemMeta(meta);
       inventory.setItem(slot, arrow);
     }
