@@ -28,11 +28,11 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   private static final int INPUT_LOCATION = 22;
   private static final int OUTPUT_LOCATION = 26;
   /* Per Object Variables Saved */
-  private Inventory inventory;
+  private ItemStack inputSlot;
+  private ItemStack outputSlot;
 
   /* Per Object Variables Not-Saved */
-  private transient ItemStack inputSlot;
-  private transient ItemStack outputSlot;
+  private transient Inventory inventoryInterface;
   private transient int cookingTime;
   private transient int energyConsumption;
   private transient int tickCount = 0;
@@ -67,29 +67,37 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
     super.writeExternal(out);
-    out.writeObject(inventory);
+    updateSlots();
+    out.writeObject(inputSlot);
+    out.writeObject(outputSlot);
+    out.writeObject(energyStorage);
+
   }
 
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     super.readExternal(in);
-    inventory = (Inventory) in.readObject();
+    inputSlot = (ItemStack) in.readObject();
+    outputSlot = (ItemStack) in.readObject();
+    energyStorage = (EnergyStorage) in.readObject();
   }
 
   @Override
   public void setupGUI() {
     Inventory inventory = setInterfaceTitle("Electric Furnace", new FontImageWrapper("extra:cell"));
-    this.inventory = inventory;
     addGUIComponent(new GOneToOneMachine(inventory, 24, progressContainer));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer));
+    inventory.setItem(INPUT_LOCATION, inputSlot);
+    inventory.setItem(OUTPUT_LOCATION, outputSlot);
+    this.inventoryInterface = inventory;
   }
 
   /* Update Loop */
   @Override
   public void update() {
     super.update();
-    if (inventory == null) return;
+    if (inventoryInterface == null) return;
     updateSlots();
     if (validateContense() && energyStorage.getEnergyStored() >= energyConsumption) {
       energyStorage.modifyEnergyStored(-energyConsumption);
@@ -102,7 +110,7 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
         } else {
           outputSlot.setAmount(outputSlot.getAmount() + currentRecipe.getResult().getAmount());
         }
-        inventory.setItem(OUTPUT_LOCATION, outputSlot);
+        inventoryInterface.setItem(OUTPUT_LOCATION, outputSlot);
       }
       runningContainer.setT(true);
     } else {
@@ -113,8 +121,8 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
 
   /* Internal Helper Functions */
   private void updateSlots() {
-    inputSlot = inventory.getItem(INPUT_LOCATION);
-    outputSlot = inventory.getItem(OUTPUT_LOCATION);
+    inputSlot = inventoryInterface.getItem(INPUT_LOCATION);
+    outputSlot = inventoryInterface.getItem(OUTPUT_LOCATION);
   }
 
   private boolean validateContense() {

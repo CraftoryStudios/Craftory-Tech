@@ -36,9 +36,6 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     init();
     Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
     generateSideCache();
-    if (ItemsAdder.areItemsLoaded()) {
-      setupGUI();
-    }
   }
 
   /* Saving, Setup and Loading */

@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -31,6 +32,9 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     super(location, level, outputAmount);
     energyStorage = new EnergyStorage((int) (CAPACITY_BASE * CAPACITY_LEVEL[level]));
     init();
+    if (ItemsAdder.areItemsLoaded()) {
+      setupGUI();
+    }
   }
 
   /* Saving, Setup and Loading */
