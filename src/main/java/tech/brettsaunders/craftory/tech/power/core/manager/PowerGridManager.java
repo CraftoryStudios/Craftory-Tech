@@ -61,6 +61,9 @@ public class PowerGridManager implements Externalizable, ITickable {
     }
   }
 
+  @Override
+  public void slowUpdate() {}
+
   /* Calculates how much energy the generators produced this tick */
   private int calculateEnergyProduced(int goal) {
     int amount = 0;

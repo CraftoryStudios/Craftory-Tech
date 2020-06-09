@@ -17,7 +17,7 @@ public class TickableBaseManager {
     /* Slow Update */
     plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
       for (int i = 0; i < tickableSlowUpdate.size(); i++) {
-        tickableSlowUpdate.get(i).fastUpdate();
+        tickableSlowUpdate.get(i).slowUpdate();
       }
     }, 0L, 4L);
 
