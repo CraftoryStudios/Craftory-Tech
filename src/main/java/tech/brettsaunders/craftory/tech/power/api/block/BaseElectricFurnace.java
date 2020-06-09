@@ -22,6 +22,7 @@ import org.bukkit.inventory.Recipe;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
+import tech.brettsaunders.craftory.utils.HopperItemMovement;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -149,7 +150,16 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   private void processHoppers() {
     //Process incoming hoppers
     if(hopperInCounter != 0) hopperInCounter-=1;
+    else {
+      ItemStack stack = HopperItemMovement.moveItemsIn(location,inputSlot);
+      if(stack !=null) {
+        inputSlot = stack;
+        hopperInCounter = HOPPER_DELAY;
+      }
+    }
     if(hopperOutCounter != 0) hopperOutCounter-=1;
+    else if(HopperItemMovement.moveItemsOut(location, outputSlot)) hopperOutCounter = HOPPER_DELAY;
+    /*
     Block b;
     ItemStack[] hopperItems;
     BlockFace facing;
@@ -193,7 +203,7 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
           hopperOutCounter = HOPPER_DELAY;
         }
       }
-    }
+    } */
     //Set inventory to equal slots
     inventoryInterface.setItem(INPUT_LOCATION, inputSlot);
     inventoryInterface.setItem(OUTPUT_LOCATION, outputSlot);
