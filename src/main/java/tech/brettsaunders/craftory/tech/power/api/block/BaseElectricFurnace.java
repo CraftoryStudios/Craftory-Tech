@@ -153,14 +153,14 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     FurnaceRecipe furnaceRecipe;
     for (Recipe recipe : RecipeUtils.getFurnaceRecipes()) {
       furnaceRecipe = (FurnaceRecipe) recipe;
-      if (furnaceRecipe.getInput().getType().toString() != inputType) {
+      if (!furnaceRecipe.getInput().getType().toString().equals(inputType)) {
         continue;
       }
       currentRecipe = furnaceRecipe;
       if (outputSlot == null) {
         return true;
       }
-      if (outputSlot.getType().toString() == recipe.getResult().getType().toString()
+      if (outputSlot.getType().toString().equals(recipe.getResult().getType().toString())
           && outputSlot.getAmount() < outputSlot.getMaxStackSize()) {
         return true;
       }
