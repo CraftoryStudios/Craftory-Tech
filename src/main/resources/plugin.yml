@@ -1,13 +1,14 @@
-name: Craftory
+name: ${name}
 version: ${project.version}
-main: tech.brettsaunders.craftory.Craftory
-api-version: 1.13
+description: ${description}
+website: ${url}
+author: ${author}
+main: ${mainClass}
+
 prefix: Craftory
 depend: [ItemsAdder, Citizens]
 loadafter: [ItemsAdder]
-authors: [BrettSaunders]
-description: Adds more functionality to minecraft with only server side modification
-website: brettsaunders.tech
+
 commands:
   matty:
     description: TEST
@@ -18,3 +19,5 @@ commands:
   toggleDebugMode:
     description: Toggle debug mode
     usage: /<command>
+
+permissions: {}

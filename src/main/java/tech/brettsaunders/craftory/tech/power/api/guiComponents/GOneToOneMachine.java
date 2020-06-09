@@ -53,6 +53,8 @@ public class GOneToOneMachine implements IGUIComponent, Listener {
     if (event.getRawSlot() != inputSlot && event.getRawSlot() != outputSlot && event.getRawSlot() < 54) {
       event.setCancelled(true);
     }
+
+    //TODO Need to add shift click
     //Stop inserting items into output slot
     if (event.getRawSlot() == outputSlot) {
       if (outputDisabledActions.contains(event.getAction())) {

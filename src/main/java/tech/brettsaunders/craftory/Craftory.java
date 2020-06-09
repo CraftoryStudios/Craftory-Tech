@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory;
 
-import com.configcat.ConfigCatClient;
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
 import dev.lone.itemsadder.api.ItemsAdder;
@@ -14,6 +13,7 @@ import java.util.HashSet;
 import java.util.UUID;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.trait.TraitInfo;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -43,8 +43,6 @@ public final class Craftory extends JavaPlugin {
   public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
   public static TickableBaseManager tickableBaseManager = null;
   public static PowerConnectorManager powerConnectorManager = null;
-  public static ConfigCatClient client;
-  public static com.configcat.User userObject;
   private static Craftory plugin = null;
   private static boolean debugMode = false;
   private static PoweredBlockManager blockPoweredManager = null;
@@ -71,9 +69,9 @@ public final class Craftory extends JavaPlugin {
   public void onEnable() {
     // Plugin startup logic
     plugin = this;
-    //Config Cat
-    client = new ConfigCatClient("ZQXYCPf7NU2CTWoYzBtWaw/Yh2WoF-Us0ebNjMrmh2T-w");
-
+    //bStats
+    int pluginId = 7804;
+    Metrics metrics = new Metrics(this, pluginId);
     //Sentry
     Sentry.init(
         "https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818?debug=false&&environment=WIP&&release="
@@ -85,9 +83,6 @@ public final class Craftory extends JavaPlugin {
     Sentry.getContext().addTag("BukkitVersion", Bukkit.getBukkitVersion());
     Sentry.getContext().addExtra("Plugins", Bukkit.getPluginManager().getPlugins());
     debugMode = config.getBoolean("debugMode");
-    Boolean isAwesomeFeatureEnabled = client
-        .getValue(Boolean.class, "isAwesomeFeatureEnabled", userObject, false);
-    Logger.info("isAwesomeFeatureEnabled: " + isAwesomeFeatureEnabled);
 
     //Register
     String dataFolder = getDataFolder().getPath();
@@ -196,7 +191,6 @@ public final class Craftory extends JavaPlugin {
     config.addDefault("enableTech", true);
     config.addDefault("debugMode", false);
     config.addDefault("serverUUID", UUID.randomUUID().toString());
-    userObject = com.configcat.User.newBuilder().build(config.getString("serverUUID"));
     config.options().copyDefaults(true);
     saveConfig();
 
