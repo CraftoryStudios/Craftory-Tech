@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory;
+package tech.brettsaunders.craftory.utils;
 
 
 import java.io.File;
@@ -15,7 +15,6 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.apache.commons.lang.StringUtils;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class FileUtils {
 

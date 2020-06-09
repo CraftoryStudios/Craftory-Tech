@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory;
+package tech.brettsaunders.craftory.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,8 +12,8 @@ import java.util.zip.GZIPOutputStream;
 import org.bukkit.Location;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.belts.BeltManager;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class DataContainer implements Serializable {
 
