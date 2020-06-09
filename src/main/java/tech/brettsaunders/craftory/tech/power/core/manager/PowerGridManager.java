@@ -47,7 +47,7 @@ public class PowerGridManager implements Externalizable, ITickable {
   }
 
 
-  public void update() {
+  public void fastUpdate() {
     int needed = whatDoTheyNeed();
     int produced = calculateEnergyProduced(needed);
     if (needed > produced) {

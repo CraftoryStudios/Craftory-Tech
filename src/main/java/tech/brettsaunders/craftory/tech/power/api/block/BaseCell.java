@@ -53,8 +53,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
 
   /* Update Loop */
   @Override
-  public void update() {
-    super.update();
+  public void fastUpdate() {
+    super.fastUpdate();
     transferEnergy();
   }
 

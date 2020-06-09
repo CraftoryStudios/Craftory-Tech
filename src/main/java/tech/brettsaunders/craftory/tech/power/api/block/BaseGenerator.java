@@ -68,8 +68,8 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
 
   /* Update Loop */
   @Override
-  public void update() {
-    super.update();
+  public void fastUpdate() {
+    super.fastUpdate();
 
     boolean curActive = isActive;
 

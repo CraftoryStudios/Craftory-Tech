@@ -6,7 +6,6 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
@@ -63,9 +62,12 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
 
   /* Update Loop */
   @Override
-  public void update() {
-    updateInterface();
+  public void fastUpdate() {
+
   }
+
+  @Override
+  public void slowUpdate() {updateInterface();}
 
   /* Info Methods */
   public EnergyStorage getEnergyStorage() {
