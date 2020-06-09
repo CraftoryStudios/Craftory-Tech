@@ -16,12 +16,14 @@ import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class GOneToOneMachine implements IGUIComponent, Listener {
 
+  private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
+      .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
+          InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
   private final int slot;
   private final VariableContainer<Double> progress;
   private final Inventory inventory;
   private final int inputSlot;
   private final int outputSlot;
-  private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays.asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL, InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
 
   public GOneToOneMachine(Inventory inventory, int slot,
       VariableContainer<Double> progress, int inputSlot, int outputSlot) {
@@ -50,7 +52,8 @@ public class GOneToOneMachine implements IGUIComponent, Listener {
     }
 
     //Stop moving items from any slot put intractable
-    if (event.getRawSlot() != inputSlot && event.getRawSlot() != outputSlot && event.getRawSlot() < 54) {
+    if (event.getRawSlot() != inputSlot && event.getRawSlot() != outputSlot
+        && event.getRawSlot() < 54) {
       event.setCancelled(true);
     }
 

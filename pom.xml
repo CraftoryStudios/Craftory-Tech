@@ -1,103 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>tech.brettsaunders</groupId>
   <artifactId>Craftory</artifactId>
-  <version>0.1.0</version>
-  <packaging>jar</packaging>
-
-  <name>Craftory</name>
-
-  <description>Adds more functionality to minecraft with only server side modification</description>
-  <properties>
-    <author>BrettSaunders</author>
-    <mainClass>tech.brettsaunders.craftory.Craftory</mainClass>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.8</java.version>
-  </properties>
-  <url>brettsaunders.tech</url>
-
-  <repositories>
-    <repository>
-      <id>spigotmc-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-    </repository>
-    <repository>
-      <id>sonatype</id>
-      <url>https://oss.sonatype.org/content/groups/public/</url>
-    </repository>
-    <repository>
-      <id>everything</id>
-      <url>https://repo.citizensnpcs.co/</url>
-    </repository>
-    <repository>
-      <id>codemc-repo</id>
-      <url>https://repo.codemc.io/repository/maven-public/</url>
-    </repository>
-  </repositories>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
-      <version>1.15.2-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>tech.brettsaunders.itemsadder</groupId>
-      <artifactId>itemsadder</artifactId>
-      <scope>system</scope>
-      <version>2.0.24</version>
-      <systemPath>${project.basedir}/lib/ItemsAdder.jar</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>net.citizensnpcs</groupId>
-      <artifactId>citizens</artifactId>
-      <version>2.0.26-SNAPSHOT</version>
-      <type>jar</type>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.sentry</groupId>
-      <artifactId>sentry</artifactId>
-      <version>1.7.30</version>
-    </dependency>
-    <dependency>
-      <groupId>org.bstats</groupId>
-      <artifactId>bstats-bukkit</artifactId>
-      <version>1.7</version>
-      <scope>compile</scope>
-    </dependency>
-  </dependencies>
 
   <build>
     <defaultGoal>clean package</defaultGoal>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
         </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>3.8.1</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
-        <executions>
-          <execution>
-            <id>shade</id>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
           <relocations>
             <relocation>
@@ -106,6 +26,17 @@
             </relocation>
           </relocations>
         </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <id>shade</id>
+            <phase>package</phase>
+          </execution>
+        </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+        <version>3.2.4</version>
       </plugin>
     </plugins>
     <resources>
@@ -120,13 +51,71 @@
       <resource>
         <directory>src/main/resources</directory>
         <!-- Keep filtering at false for other resources to prevent bad magic -->
-        <filtering>false</filtering>
         <excludes>
           <exclude>**/*.java</exclude>
           <exclude>plugin.yml</exclude>
         </excludes>
+        <filtering>false</filtering>
       </resource>
     </resources>
   </build>
+  <dependencies>
+    <dependency>
+      <artifactId>spigot-api</artifactId>
+      <groupId>org.spigotmc</groupId>
+      <scope>provided</scope>
+      <version>1.15.2-R0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <artifactId>itemsadder</artifactId>
+      <groupId>tech.brettsaunders.itemsadder</groupId>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/ItemsAdder.jar</systemPath>
+      <version>2.0.24</version>
+    </dependency>
+    <dependency>
+      <artifactId>sentry</artifactId>
+      <groupId>io.sentry</groupId>
+      <version>1.7.30</version>
+    </dependency>
+    <dependency>
+      <artifactId>bstats-bukkit</artifactId>
+      <groupId>org.bstats</groupId>
+      <scope>compile</scope>
+      <version>1.7</version>
+    </dependency>
+  </dependencies>
+  <description>Adds more functionality to minecraft with only server side modification</description>
+  <groupId>tech.brettsaunders</groupId>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>Craftory</name>
+  <packaging>jar</packaging>
+  <properties>
+    <author>BrettSaunders</author>
+    <java.version>1.8</java.version>
+    <mainClass>tech.brettsaunders.craftory.Craftory</mainClass>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>spigotmc-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>sonatype</id>
+      <url>https://oss.sonatype.org/content/groups/public/</url>
+    </repository>
+    <repository>
+      <id>codemc-repo</id>
+      <url>https://repo.codemc.io/repository/maven-public/</url>
+    </repository>
+  </repositories>
+
+  <url>brettsaunders.tech</url>
+
+  <version>0.1.0</version>
 
 </project>

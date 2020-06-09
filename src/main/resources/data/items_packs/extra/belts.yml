@@ -14,8 +14,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   beltns:
     display_name: Belt
     permission: belt
@@ -29,8 +29,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   belts:
     display_name: Belt
     permission: belt
@@ -44,8 +44,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   belteast:
     display_name: Belt
     permission: belt
@@ -59,8 +59,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   belteastee:
     display_name: Belt
     permission: belt
@@ -74,8 +74,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   belteastew:
     display_name: Belt
     permission: belt
@@ -89,8 +89,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   belteastw:
     display_name: Belt
     permission: belt
@@ -104,8 +104,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   beltwest:
     display_name: Belt
     permission: belt
@@ -119,8 +119,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   beltwestw:
     display_name: Belt
     permission: belt
@@ -134,8 +134,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   beltwestew:
     display_name: Belt
     permission: belt
@@ -149,8 +149,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   beltweste:
     display_name: Belt
     permission: belt
@@ -164,8 +164,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   beltsouth:
     display_name: Belt
     permission: belt
@@ -179,8 +179,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   beltsouthn:
     display_name: Belt
     permission: belt
@@ -194,8 +194,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   beltsouthsn:
     display_name: Belt
     permission: belt
@@ -209,8 +209,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   beltsouths:
     display_name: Belt
     permission: belt
@@ -224,8 +224,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
 loots:
   blocks:
     beltn:

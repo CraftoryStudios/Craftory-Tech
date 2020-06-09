@@ -22,7 +22,7 @@ items:
       material: STICK
       generate: true
       textures:
-      - item/wrench.png
+        - item/wrench.png
   belt:
     display_name: Belt
     permission: belt
@@ -51,8 +51,8 @@ items:
           type: REAL
           break_particles: BLOCK
         break_tools_whitelist:
-        - PICKAXE
-        - pickaxe
+          - PICKAXE
+          - pickaxe
   iron_cell:
     display_name: Iron Energy Cell
     permission: craftory_tech

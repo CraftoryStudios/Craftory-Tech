@@ -16,20 +16,17 @@ public abstract class BlockGUI implements Externalizable {
 
   /* Static Constants */
   private static final long serialVersionUID = 10009L;
-
+  private final ArrayList<IGUIComponent> components = new ArrayList<>();
+  protected HashSet<Integer> interactableSlots = new HashSet<>();
   /* Per Object Variables */
   private TexturedInventoryWrapper inventoryInterface;
-  private final ArrayList<IGUIComponent> components = new ArrayList<>();
-
-  protected HashSet<Integer> interactableSlots = new HashSet<>();
-
-  public HashSet<Integer> getInteractableSlots() {
-    return interactableSlots;
-  }
-
 
   /* Saving, Setup and Loading */
   public BlockGUI() {
+  }
+
+  public HashSet<Integer> getInteractableSlots() {
+    return interactableSlots;
   }
 
   public abstract void setupGUI();

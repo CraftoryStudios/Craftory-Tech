@@ -55,9 +55,9 @@ public class PoweredBlockManager implements Listener {
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   private static final String DATA_PATH =
       Craftory.getInstance().getDataFolder().getPath() + File.separator + "PowerBlockManager.data";
+  private final HashMap<Location, PowerGridManager> powerConnectors;
   public HashSet<PowerGridManager> powerGridManagers;
   private HashMap<Location, PoweredBlock> poweredBlocks;
-  private final HashMap<Location, PowerGridManager> powerConnectors;
 
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();
@@ -133,7 +133,7 @@ public class PoweredBlockManager implements Listener {
 
   @EventHandler
   public void onItemsAdderLoaded(ItemsAdderFirstLoadEvent e) {
-    poweredBlocks.forEach( ((location, poweredBlock) -> {
+    poweredBlocks.forEach(((location, poweredBlock) -> {
       poweredBlock.setupGUI();
     }));
   }

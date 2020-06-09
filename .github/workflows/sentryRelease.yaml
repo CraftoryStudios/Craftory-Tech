@@ -3,7 +3,7 @@ name: sentryRelease
 on:
   release:
     types: [published, prereleased]
-    
+
 jobs:
   createSentryRelease:
     runs-on: ubuntu-latest
