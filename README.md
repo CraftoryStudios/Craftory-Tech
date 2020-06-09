@@ -1,4 +1,4 @@
-![Maven](https://github.com/brettsaunders21/Craftory/workflows/Maven/badge.svg)
+![Pre-Release](https://github.com/brettsaunders21/Craftory/workflows/Pre-Release/badge.svg) ![TaggedRelease](https://github.com/brettsaunders21/Craftory/workflows/TaggedRelease/badge.svg?event=label) ![sentryRelease](https://github.com/brettsaunders21/Craftory/workflows/sentryRelease/badge.svg)
 
 # Craftory Lite - ALPHA
 
