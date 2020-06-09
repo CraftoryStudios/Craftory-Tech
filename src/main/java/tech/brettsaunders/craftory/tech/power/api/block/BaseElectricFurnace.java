@@ -7,8 +7,14 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Hopper;
+import org.bukkit.block.data.Directional;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -41,6 +47,9 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   private transient FurnaceRecipe currentRecipe = null;
   private transient VariableContainer<Boolean> runningContainer;
   private transient VariableContainer<Double> progressContainer;
+  private transient int HOPPER_DELAY = 8;
+  private transient int hopperInCounter = 0;
+  private transient int hopperOutCounter = 0;
 
   /* Construction */
   public BaseElectricFurnace(Location location, byte level) {
@@ -127,12 +136,67 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
       runningContainer.setT(false);
     }
     progressContainer.setT(((double) tickCount) / cookingTime);
+    processHoppers();
   }
 
   /* Internal Helper Functions */
   private void updateSlots() {
     inputSlot = inventoryInterface.getItem(INPUT_LOCATION);
     outputSlot = inventoryInterface.getItem(OUTPUT_LOCATION);
+  }
+
+  private static final BlockFace[] inputDirections = {BlockFace.NORTH,BlockFace.EAST,BlockFace.SOUTH,BlockFace.WEST,BlockFace.UP};
+  private void processHoppers() {
+    //Process incoming hoppers
+    if(hopperInCounter != 0) hopperInCounter-=1;
+    if(hopperOutCounter != 0) hopperOutCounter-=1;
+    Block b;
+    ItemStack[] hopperItems;
+    BlockFace facing;
+    if(hopperInCounter==0 && (inputSlot==null || inputSlot.getAmount() < inputSlot.getMaxStackSize())){
+      for(BlockFace face: inputDirections) {
+        b = location.getBlock().getRelative(face);
+        if (b.getType().equals(Material.HOPPER)){
+          facing = ((Directional) b.getBlockData()).getFacing();
+          if(!facing.equals(face.getOppositeFace())) continue; //Skip if hopper is not facing block
+          hopperItems = ((Hopper) b.getState()).getInventory().getContents();
+          for(ItemStack item: hopperItems){
+            if(item==null) continue;
+            if(inputSlot==null){
+              inputSlot = item.clone();
+              inputSlot.setAmount(1);
+              item.setAmount(item.getAmount()-1);
+              hopperInCounter = HOPPER_DELAY;
+              break;
+            } else if(inputSlot.getType().toString().equals(item.getType().toString()) && inputSlot.getAmount() < inputSlot.getMaxStackSize()) {
+              inputSlot.setAmount(inputSlot.getAmount()+1);
+              item.setAmount(item.getAmount()-1);
+              hopperInCounter = HOPPER_DELAY;
+              break;
+            }
+          }
+        }
+      }
+    }
+    //Process outgoing hopper
+    if(hopperOutCounter==0 && outputSlot!=null){
+      //Only do if there is something to output
+      b = location.getBlock().getRelative(BlockFace.DOWN);
+      if (b.getType().equals(Material.HOPPER)){
+        ItemStack toMove = outputSlot.clone();
+        toMove.setAmount(1);
+        Inventory hopperInventory = ((Hopper)b.getState()).getInventory();
+        HashMap<Integer, ItemStack> failedItems = hopperInventory.addItem(toMove);
+        if(failedItems.isEmpty()){
+          outputSlot.setAmount(outputSlot.getAmount()-1);
+        } else {
+          hopperOutCounter = HOPPER_DELAY;
+        }
+      }
+    }
+    //Set inventory to equal slots
+    inventoryInterface.setItem(INPUT_LOCATION, inputSlot);
+    inventoryInterface.setItem(OUTPUT_LOCATION, outputSlot);
   }
 
   private boolean validateContense() {
