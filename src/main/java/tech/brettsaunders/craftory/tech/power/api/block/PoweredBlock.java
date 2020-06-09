@@ -28,13 +28,15 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   protected EnergyStorage energyStorage;
   protected Location location;
   protected byte level;
-  protected ItemStack[] inputSlots = {};
-  protected int[] inputLocations = {};
-  protected ItemStack[] outputSlots = {};
-  protected int[] outputLocations = {};
+  /* Hopper control variables */
+  protected ItemStack[] inputSlots = {}; //The ItemStacks of the inputs
+  protected int[] inputLocations = {};  //The inventory locations of inputs
+  protected ItemStack[] outputSlots = {}; //The ItemStacks of the outputs
+  protected int[] outputLocations = {}; //The inventory locations of outputs
   /* Per Object Variables Not-Saved */
   protected transient boolean isReceiver;
   protected transient boolean isProvider;
+  /* Hopper stuff */
   protected transient int HOPPER_DELAY = 8;
   protected transient int hopperInCounter = 0;
   protected transient int hopperOutCounter = 0;
@@ -105,18 +107,14 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     }
     if(outputSlots.length > 0 && hopperOutCounter != 0) hopperOutCounter-=1;
     else {
-      boolean added = false;
       for (int i = 0; i < outputSlots.length; i++) {
         if(HopperItemMovement.moveItemsOut(location, outputSlots[i])){
-          added = true;
+          hopperOutCounter = HOPPER_DELAY;
         }
         getInventory().setItem(outputLocations[i], outputSlots[i]);
       }
-      if(added) hopperOutCounter = HOPPER_DELAY;
     }
     //Set inventory to equal slots
-
-
   }
 
   /* Info Methods */
