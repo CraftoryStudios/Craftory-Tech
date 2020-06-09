@@ -38,13 +38,13 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     isReceiver = false;
     isProvider = false;
     this.level = level;
-    Craftory.tickableBaseManager.addFastUpdate(this);
+    //Craftory.tickableBaseManager.addFastUpdate(this);
   }
 
   /* Saving, Setup and Loading */
   public PoweredBlock() {
     super();
-    Craftory.tickableBaseManager.addFastUpdate(this);
+    //Craftory.tickableBaseManager.addFastUpdate(this);
   }
 
   @Override

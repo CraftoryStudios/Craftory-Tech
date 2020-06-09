@@ -10,10 +10,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -35,6 +38,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
@@ -49,7 +53,7 @@ import tech.brettsaunders.craftory.utils.Blocks.Power;
 import tech.brettsaunders.craftory.utils.Items;
 import tech.brettsaunders.craftory.utils.Logger;
 
-public class PoweredBlockManager implements Listener {
+public class PoweredBlockManager implements Listener, ITickable {
 
   public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
@@ -65,6 +69,7 @@ public class PoweredBlockManager implements Listener {
     powerConnectors = new HashMap<>();
     Craftory.getInstance().getServer().getPluginManager()
         .registerEvents(this, Craftory.getInstance());
+    Craftory.tickableBaseManager.addFastUpdate(this);
   }
 
   public void onEnable() {
@@ -364,6 +369,25 @@ public class PoweredBlockManager implements Listener {
   public PowerGridManager getPowerGridManager(Location location) {
     return powerConnectors.get(location);
   }
+
+  @Override
+  public void update() {
+    //Generate HashMap of loaded chunks in worlds
+    HashMap<World, HashSet> loadedChunkWorlds = new HashMap<>();
+    HashSet<Chunk> loadedChunks;
+    for (World world : Bukkit.getWorlds()) {
+      loadedChunks = new HashSet<>(Arrays.asList(world.getLoadedChunks()));
+      loadedChunkWorlds.put(world, loadedChunks);
+    }
+
+    //If in loaded chunk, call update
+    poweredBlocks.forEach(((location, poweredBlock) -> {
+      if (loadedChunkWorlds.get(location.getWorld()).contains(location.getChunk())) {
+        poweredBlock.update();
+      }
+    }));
+  }
+
 
   private static class PowerBlockManagerData implements Serializable {
 

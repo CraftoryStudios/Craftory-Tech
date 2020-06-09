@@ -71,8 +71,8 @@ public final class Craftory extends JavaPlugin {
     debugMode = config.getBoolean("debugMode");
 
     //General Classes
-    blockPoweredManager = new PoweredBlockManager();
     tickableBaseManager = new TickableBaseManager();
+    blockPoweredManager = new PoweredBlockManager();
     powerConnectorManager = new PowerConnectorManager(); //TODO Loading
     //Register Events
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
