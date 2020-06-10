@@ -136,7 +136,7 @@ public class PoweredBlockManager implements Listener, ITickable {
 
   @EventHandler
   public void onWorldSave(WorldSaveEvent event) {
-    //save();
+    save();
   }
 
   @EventHandler
