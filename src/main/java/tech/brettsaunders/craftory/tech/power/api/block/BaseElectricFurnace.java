@@ -7,8 +7,14 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Hopper;
+import org.bukkit.block.data.Directional;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +22,7 @@ import org.bukkit.inventory.Recipe;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
+import tech.brettsaunders.craftory.utils.HopperItemMovement;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -30,11 +37,8 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   private static final int INPUT_LOCATION = 22;
   private static final int OUTPUT_LOCATION = 26;
   /* Per Object Variables Saved */
-  private ItemStack inputSlot;
-  private ItemStack outputSlot;
 
   /* Per Object Variables Not-Saved */
-  private transient Inventory inventoryInterface;
   private transient int cookingTime;
   private transient int energyConsumption;
   private transient int tickCount = 0;
@@ -42,11 +46,16 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   private transient VariableContainer<Boolean> runningContainer;
   private transient VariableContainer<Double> progressContainer;
 
+
   /* Construction */
   public BaseElectricFurnace(Location location, byte level) {
     super(location, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
     init();
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
+    inputSlots = new ItemStack[]{null};
+    outputSlots = new ItemStack[]{null};
+    inputLocations = new int[]{INPUT_LOCATION};
+    outputLocations = new int[]{OUTPUT_LOCATION};
     if (ItemsAdder.areItemsLoaded()) {
       setupGUI();
     }
@@ -71,8 +80,6 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   public void writeExternal(ObjectOutput out) throws IOException {
     super.writeExternal(out);
     updateSlots();
-    out.writeObject(inputSlot);
-    out.writeObject(outputSlot);
     out.writeObject(energyStorage);
 
   }
@@ -80,8 +87,6 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     super.readExternal(in);
-    inputSlot = (ItemStack) in.readObject();
-    outputSlot = (ItemStack) in.readObject();
     energyStorage = (EnergyStorage) in.readObject();
   }
 
@@ -92,8 +97,8 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
         new GOneToOneMachine(inventory, 24, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer));
-    inventory.setItem(INPUT_LOCATION, inputSlot);
-    inventory.setItem(OUTPUT_LOCATION, outputSlot);
+    inventory.setItem(INPUT_LOCATION, inputSlots[0]);
+    inventory.setItem(OUTPUT_LOCATION, outputSlots[0]);
     this.inventoryInterface = inventory;
     HashSet<Integer> protectedslots = new HashSet<>();
     protectedslots.add(INPUT_LOCATION);
@@ -114,13 +119,13 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
       tickCount += 1;
       if (tickCount == cookingTime) {
         tickCount = 0;
-        inputSlot.setAmount(inputSlot.getAmount() - 1);
-        if (outputSlot == null) {
-          outputSlot = currentRecipe.getResult();
+        inputSlots[0].setAmount(inputSlots[0].getAmount() - 1);
+        if (outputSlots[0] == null) {
+          outputSlots[0] = currentRecipe.getResult();
         } else {
-          outputSlot.setAmount(outputSlot.getAmount() + currentRecipe.getResult().getAmount());
+          outputSlots[0].setAmount(outputSlots[0].getAmount() + currentRecipe.getResult().getAmount());
         }
-        inventoryInterface.setItem(OUTPUT_LOCATION, outputSlot);
+        inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots[0]);
       }
       runningContainer.setT(true);
     } else {
@@ -131,22 +136,24 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
 
   /* Internal Helper Functions */
   private void updateSlots() {
-    inputSlot = inventoryInterface.getItem(INPUT_LOCATION);
-    outputSlot = inventoryInterface.getItem(OUTPUT_LOCATION);
+    inputSlots[0] = inventoryInterface.getItem(INPUT_LOCATION);
+    outputSlots[0] = inventoryInterface.getItem(OUTPUT_LOCATION);
   }
 
+
+
   private boolean validateContense() {
-    if (inputSlot == null) {
+    if (inputSlots[0] == null) {
       return false;
     }
-    String inputType = inputSlot.getType().toString();
+    String inputType = inputSlots[0].getType().toString();
     //If the recipe is unchanged there is no need to find the recipe.
     if (currentRecipe != null && currentRecipe.getInput().getType().toString().equals(inputType)) {
-      if (outputSlot == null) {
+      if (outputSlots[0] == null) {
         return true;
       }
-      if (outputSlot.getType().toString().equals(currentRecipe.getResult().getType().toString())
-          && outputSlot.getAmount() < outputSlot.getMaxStackSize()) {
+      if (outputSlots[0].getType().toString().equals(currentRecipe.getResult().getType().toString())
+          && outputSlots[0].getAmount() < outputSlots[0].getMaxStackSize()) {
         return true;
       }
     }
@@ -157,11 +164,11 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
         continue;
       }
       currentRecipe = furnaceRecipe;
-      if (outputSlot == null) {
+      if (outputSlots[0] == null) {
         return true;
       }
-      if (outputSlot.getType().toString().equals(recipe.getResult().getType().toString())
-          && outputSlot.getAmount() < outputSlot.getMaxStackSize()) {
+      if (outputSlots[0].getType().toString().equals(recipe.getResult().getType().toString())
+          && outputSlots[0].getAmount() < outputSlots[0].getMaxStackSize()) {
         return true;
       }
     }

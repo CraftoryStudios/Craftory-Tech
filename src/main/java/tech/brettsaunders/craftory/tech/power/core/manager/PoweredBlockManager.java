@@ -135,7 +135,7 @@ public class PoweredBlockManager implements Listener, ITickable {
 
   @EventHandler
   public void onWorldSave(WorldSaveEvent event) {
-    save();
+    //save();
   }
 
   @EventHandler
@@ -150,6 +150,8 @@ public class PoweredBlockManager implements Listener, ITickable {
     if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
       return;
     }
+    if (e.getPlayer().isSneaking()) return;
+
     if (poweredBlocks.containsKey(e.getBlockClicked().getLocation())) {
       //Open GUI of Powered Block
       poweredBlocks.get(e.getBlockClicked().getLocation()).openGUI(e.getPlayer());
