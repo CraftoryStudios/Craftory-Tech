@@ -80,6 +80,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     return amountTransferred;
   }
 
+  //TODO compare to energyStorage.extractEnergy
   public int retrieveEnergy(int energy) {
     int energyExtracted = Math.min(energy, maxOutput);
     energyStorage.modifyEnergyStored(-energyExtracted);

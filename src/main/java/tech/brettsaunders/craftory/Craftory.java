@@ -10,19 +10,13 @@ import java.util.HashSet;
 import java.util.UUID;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import tech.brettsaunders.craftory.tech.belts.BeltEvents;
-import tech.brettsaunders.craftory.tech.belts.BeltManager;
-import tech.brettsaunders.craftory.tech.belts.DebugEvents;
-import tech.brettsaunders.craftory.tech.belts.EntitySerach;
 import tech.brettsaunders.craftory.tech.power.core.manager.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
-import tech.brettsaunders.craftory.utils.DataContainer;
 import tech.brettsaunders.craftory.utils.FileUtils;
 
 
@@ -30,8 +24,6 @@ public final class Craftory extends JavaPlugin {
 
   private static final String VERSION = "0.0.1";
   public static SentryClient sentry;
-  public static HashSet<Long> chunkKeys = new HashSet<>();
-  public static HashMap<Location, BeltManager> beltManagers = new HashMap<>();
   public static TickableBaseManager tickableBaseManager = null;
   public static PowerConnectorManager powerConnectorManager = null;
   private static Craftory plugin = null;
@@ -76,17 +68,12 @@ public final class Craftory extends JavaPlugin {
     powerConnectorManager = new PowerConnectorManager(); //TODO Loading
     //Register Events
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
-
-    getServer().getPluginManager().registerEvents(new BeltEvents(), this);
-    getServer().getPluginManager().registerEvents(new DebugEvents(), this);
-    getServer().getScheduler().scheduleSyncRepeatingTask(this, new EntitySerach(), 1L, 1L);
     blockPoweredManager.onEnable();
   }
 
   @Override
   public void onDisable() {
     //Save Data
-    DataContainer.saveData(chunkKeys, beltManagers);
     blockPoweredManager.onDisable();
     // Plugin shutdown logic
     plugin = null;
@@ -104,13 +91,6 @@ public final class Craftory extends JavaPlugin {
 
   public void resourceSetup() {
     //Load Data
-    DataContainer data = DataContainer.loadData();
-    if (data.chunkKeys != null) {
-      chunkKeys = data.chunkKeys;
-    }
-    if (data.beltManagers != null) {
-      beltManagers = data.beltManagers;
-    }
     config.addDefault("enableTech", true);
     config.addDefault("debugMode", false);
     config.addDefault("serverUUID", UUID.randomUUID().toString());

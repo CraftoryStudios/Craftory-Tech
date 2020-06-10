@@ -1,18 +1,126 @@
 info:
   namespace: craftory
 recipes:
+  cooking:
+    steel_ingot:
+      permission: craftory
+      ingredient:
+        item: IRON_INGOT
+      machines:
+        - FURNACE
+        - BLAST_FURNACE
+      exp: 1
+      cook_time: 200
+      result:
+        item: craftory:steel_ingot
+        amount: 1
   crafting_table:
-    belt:
-      permission: craftory.belt
+    iron_cell:
+      permission: craftory
       enabled: true
       pattern:
-        - XXX
-        - OOO
-        - XXX
+        - SSS
+        - SCS
+        - SSS
       ingredients:
-        O: STONE
+        C: craftory:iron_core
+        S: craftory:steel_ingot
       result:
-        item: craftory:belt
+        item: craftory:iron_cell
+        amount: 1
+    gold_cell:
+      permission: craftory
+      enabled: true
+      pattern:
+        - SSS
+        - SCS
+        - SSS
+      ingredients:
+        C: craftory:gold_core
+        S: craftory:steel_ingot
+      result:
+        item: craftory:gold_cell
+        amount: 1
+    diamond_cell:
+      permission: craftory
+      enabled: true
+      pattern:
+        - SSS
+        - SCS
+        - SSS
+      ingredients:
+        C: craftory:diamond_core
+        S: craftory:steel_ingot
+      result:
+        item: craftory:diamond_cell
+        amount: 1
+    emerald_cell:
+      permission: craftory
+      enabled: true
+      pattern:
+        - SSS
+        - SCS
+        - SSS
+      ingredients:
+        C: craftory:emerald_core
+        S: craftory:steel_ingot
+      result:
+        item: craftory:emerald_cell
+        amount: 1
+
+    iron_core:
+      permission: craftory
+      enabled: true
+      pattern:
+        - III
+        - IRI
+        - III
+      ingredients:
+        I: IRON_INGOT
+        R: REDSTONE
+      result:
+        item: craftory:iron_core
+        amount: 1
+    gold_core:
+      permission: craftory
+      enabled: true
+      pattern:
+        - GGG
+        - GRG
+        - GGG
+      ingredients:
+        G: GOLD_INGOT
+        R: REDSTONE_BLOCK
+      result:
+        item: craftory:gold_core
+        amount: 1
+    diamond_core:
+      permission: craftory
+      enabled: true
+      pattern:
+        - DRD
+        - DGD
+        - DRD
+      ingredients:
+        G: craftory:gold_core
+        D: DIAMOND
+        R: REDSTONE_BLOCK
+      result:
+        item: craftory:diamond_core
+        amount: 1
+    emerald_core:
+      permission: craftory
+      enabled: true
+      pattern:
+        - ERE
+        - EDE
+        - ERE
+      ingredients:
+        E: EMERALD
+        D: craftory:diamond_core
+        R: REDSTONE_BLOCK
+      result:
+        item: craftory:emerald_core
         amount: 1
 items:
   wrench:
@@ -23,21 +131,6 @@ items:
       generate: true
       textures:
         - item/wrench.png
-  belt:
-    display_name: Belt
-    permission: belt
-    resource:
-      material: STONE
-      generate: false
-      model_path: block/north/conveyor_n
-    specific_properties:
-      block:
-        placed_model:
-          type: REAL
-          break_particles: BLOCK
-        break_tools_whitelist:
-          - PICKAXE
-          - pickaxe
   power_connector:
     display_name: Power Connector
     permission: craftory_tech
@@ -144,7 +237,7 @@ items:
           - PICKAXE
           - pickaxe
   diamond_electric_furnace:
-    display_name: Iron Electric Furnace
+    display_name: Diamond Electric Furnace
     permission: craftory_tech
     resource:
       material: DIAMOND_BLOCK

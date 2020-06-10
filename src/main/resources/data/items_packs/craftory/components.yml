@@ -1,0 +1,43 @@
+info:
+  namespace: craftory
+items:
+  iron_core:
+    display_name: Iron Core
+    permission: craftory
+    resource:
+      material: PAPER
+      generate: false
+      model_path: items/components/cores/iron_core
+
+  gold_core:
+    display_name: Iron Core
+    permission: craftory
+    resource:
+      material: PAPER
+      generate: false
+      model_path: items/components/cores/gold_core
+
+  diamond_core:
+    display_name: Iron Core
+    permission: craftory
+    resource:
+      material: PAPER
+      generate: false
+      model_path: items/components/cores/diamond_core
+
+  emerald_core:
+    display_name: Emerald Core
+    permission: craftory
+    resource:
+      material: PAPER
+      generate: false
+      model_path: items/components/cores/emerald_core
+
+  steel_ingot:
+    display_name: Steel Ingot
+    permission: craftory
+    resource:
+      material: IRON_INGOT
+      generate: true
+      textures:
+        - item/components/ingots/steel_ingot.png
