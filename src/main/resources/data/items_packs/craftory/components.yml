@@ -40,4 +40,4 @@ items:
       material: IRON_INGOT
       generate: true
       textures:
-        - items/components/ingots/steel_ingot.png
+        - item/components/ingots/steel_ingot.png

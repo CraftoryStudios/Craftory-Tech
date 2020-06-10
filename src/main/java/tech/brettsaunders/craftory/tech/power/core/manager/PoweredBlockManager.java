@@ -59,7 +59,7 @@ public class PoweredBlockManager implements Listener, ITickable {
   public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   private static final String DATA_PATH =
-      Craftory.getInstance().getDataFolder().getPath() + File.separator + "PowerBlockManager.data";
+      Craftory.getInstance().getDataFolder().getPath() + File.separator + "data" + File.separator + "PowerBlockManager.data";
   private final HashMap<Location, PowerGridManager> powerConnectors;
   public HashSet<PowerGridManager> powerGridManagers;
   private HashMap<Location, PoweredBlock> poweredBlocks;
