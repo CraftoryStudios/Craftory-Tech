@@ -17,14 +17,14 @@ public class TickableBaseManager {
     /* Slow Update */
     plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
       for (int i = 0; i < tickableSlowUpdate.size(); i++) {
-        tickableSlowUpdate.get(i).update();
+        tickableSlowUpdate.get(i).slowUpdate();
       }
     }, 0L, 4L);
 
     /* Fast Update */
     plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
       for (int i = 0; i < tickableFastUpdate.size(); i++) {
-        tickableFastUpdate.get(i).update();
+        tickableFastUpdate.get(i).fastUpdate();
       }
     }, 0L, 1L);
   }

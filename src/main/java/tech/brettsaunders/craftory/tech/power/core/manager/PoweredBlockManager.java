@@ -62,6 +62,7 @@ public class PoweredBlockManager implements Listener, ITickable {
   private final HashMap<Location, PowerGridManager> powerConnectors;
   public HashSet<PowerGridManager> powerGridManagers;
   private HashMap<Location, PoweredBlock> poweredBlocks;
+  private HashMap<World, HashSet> loadedChunkWorlds = new HashMap<>();
 
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();
@@ -70,6 +71,7 @@ public class PoweredBlockManager implements Listener, ITickable {
     Craftory.getInstance().getServer().getPluginManager()
         .registerEvents(this, Craftory.getInstance());
     Craftory.tickableBaseManager.addFastUpdate(this);
+    Craftory.tickableBaseManager.addSlowUpdate(this);
   }
 
   public void onEnable() {
@@ -373,9 +375,18 @@ public class PoweredBlockManager implements Listener, ITickable {
   }
 
   @Override
-  public void update() {
+  public void fastUpdate() {
+    //If in loaded chunk, call update
+    poweredBlocks.forEach(((location, poweredBlock) -> {
+      if (loadedChunkWorlds.get(location.getWorld()).contains(location.getChunk())) {
+        poweredBlock.fastUpdate();
+      }
+    }));
+  }
+
+  @Override
+  public void slowUpdate() {
     //Generate HashMap of loaded chunks in worlds
-    HashMap<World, HashSet> loadedChunkWorlds = new HashMap<>();
     HashSet<Chunk> loadedChunks;
     for (World world : Bukkit.getWorlds()) {
       loadedChunks = new HashSet<>(Arrays.asList(world.getLoadedChunks()));
@@ -385,7 +396,7 @@ public class PoweredBlockManager implements Listener, ITickable {
     //If in loaded chunk, call update
     poweredBlocks.forEach(((location, poweredBlock) -> {
       if (loadedChunkWorlds.get(location.getWorld()).contains(location.getChunk())) {
-        poweredBlock.update();
+        poweredBlock.slowUpdate();
       }
     }));
   }

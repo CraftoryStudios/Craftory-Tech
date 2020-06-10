@@ -47,7 +47,7 @@ public class PowerGridManager implements Externalizable, ITickable {
   }
 
 
-  public void update() {
+  public void fastUpdate() {
     int needed = whatDoTheyNeed();
     int produced = calculateEnergyProduced(needed);
     if (needed > produced) {
@@ -60,6 +60,9 @@ public class PowerGridManager implements Externalizable, ITickable {
       shareThisAmongstThePeople(produced);
     }
   }
+
+  @Override
+  public void slowUpdate() {}
 
   /* Calculates how much energy the generators produced this tick */
   private int calculateEnergyProduced(int goal) {

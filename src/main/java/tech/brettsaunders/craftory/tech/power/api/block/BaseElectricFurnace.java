@@ -108,8 +108,8 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
 
   /* Update Loop */
   @Override
-  public void update() {
-    super.update();
+  public void fastUpdate() {
+    super.fastUpdate();
     if (inventoryInterface == null) {
       return;
     }

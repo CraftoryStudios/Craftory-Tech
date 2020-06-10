@@ -86,9 +86,8 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
 
   /* Update Loop */
   @Override
-  public void update() {
-    updateInterface();
-    processHoppers();
+  public void fastUpdate() {
+
   }
 
   private void processHoppers() {
@@ -119,6 +118,9 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     }
     //Set inventory to equal slots
   }
+
+  @Override
+  public void slowUpdate() {updateInterface();}
 
   /* Info Methods */
   public EnergyStorage getEnergyStorage() {
