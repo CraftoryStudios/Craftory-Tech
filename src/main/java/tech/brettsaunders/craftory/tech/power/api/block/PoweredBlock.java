@@ -93,25 +93,28 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
 
   private void processHoppers() {
     if(inventoryInterface==null) return;
+
     //Process incoming hoppers
     if(inputSlots.length > 0 && hopperInCounter != 0) hopperInCounter-=1;
     else {
       for (int i = 0; i < inputSlots.length; i++) {
+        inputSlots[i] = inventoryInterface.getItem(inputLocations[i]);
         ItemStack stack = HopperItemMovement.moveItemsIn(location,inputSlots[i]);
         if(stack !=null) {
           inputSlots[i] = stack;
           hopperInCounter = HOPPER_DELAY;
         }
-        getInventory().setItem(inputLocations[i], inputSlots[i]);
+        inventoryInterface.setItem(inputLocations[i], inputSlots[i]);
       }
     }
     if(outputSlots.length > 0 && hopperOutCounter != 0) hopperOutCounter-=1;
     else {
       for (int i = 0; i < outputSlots.length; i++) {
+        outputSlots[i] = inventoryInterface.getItem(outputLocations[i]);
         if(HopperItemMovement.moveItemsOut(location, outputSlots[i])){
           hopperOutCounter = HOPPER_DELAY;
         }
-        getInventory().setItem(outputLocations[i], outputSlots[i]);
+        inventoryInterface.setItem(outputLocations[i], outputSlots[i]);
       }
     }
     //Set inventory to equal slots
