@@ -10,14 +10,17 @@ import java.util.HashSet;
 import java.util.UUID;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.tech.power.core.manager.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
+import tech.brettsaunders.craftory.utils.Logger;
 
 
 public final class Craftory extends JavaPlugin {

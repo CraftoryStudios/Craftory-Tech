@@ -35,7 +35,11 @@ public class GOutputConfig implements IGUIComponent, Listener {
     if (event.getInventory() != inventory) {
       return;
     }
-    event.setCancelled(true);
+
+    //Stop moving items from any slot put intractable
+    if (event.getRawSlot() != 12 && event.getRawSlot() < 54) {
+      event.setCancelled(true); //TODO Move so don't have to use 22
+    }
 
     final ItemStack clickedItem = event.getCurrentItem();
     if (clickedItem == null || clickedItem.getType() == Material.AIR) {

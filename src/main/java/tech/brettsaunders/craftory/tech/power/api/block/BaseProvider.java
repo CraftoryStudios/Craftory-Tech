@@ -80,6 +80,12 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     return amountTransferred;
   }
 
+  @Override
+  public void fastUpdate() {
+    super.fastUpdate();
+    transferEnergy();
+  }
+
   //TODO compare to energyStorage.extractEnergy
   public int retrieveEnergy(int energy) {
     int energyExtracted = Math.min(energy, maxOutput);
@@ -175,7 +181,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   }
 
   /* External Methods */
-  public int maxOutputEnergy() {
+  public int getMaxOutput() {
     return maxOutput;
   }
 

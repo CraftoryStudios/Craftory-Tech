@@ -51,13 +51,6 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
     energyStorage = (EnergyStorage) in.readObject();
   }
 
-  /* Update Loop */
-  @Override
-  public void fastUpdate() {
-    super.fastUpdate();
-    transferEnergy();
-  }
-
   /* IEnergyReciever */
   @Override
   public int receiveEnergy(int maxReceive, boolean simulate) {

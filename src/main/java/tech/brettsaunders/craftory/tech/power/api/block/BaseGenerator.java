@@ -48,7 +48,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
 
   /* Common Load and Construction */
   private void init() {
-    isActive = true;
+    isActive = false;
     isProvider = true;
   }
 
@@ -71,11 +71,8 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   public void fastUpdate() {
     super.fastUpdate();
 
-    boolean curActive = isActive;
-
     if (isActive) {
       processTick();
-
       if (canFinish()) {
         if (!canStart()) {
           processOff();
@@ -127,9 +124,9 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   }
 
   protected int processTick() {
-    energyStorage.modifyEnergyStored(80); //TODO need to fix look at old code
+    lastEnergy = getMaxOutput();
+    energyStorage.modifyEnergyStored(lastEnergy); //TODO need to fix look at old code
     fuelRF -= lastEnergy;
-    lastEnergy = transferEnergy();
     return lastEnergy;
   }
 
