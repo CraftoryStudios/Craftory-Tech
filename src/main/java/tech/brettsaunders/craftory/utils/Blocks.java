@@ -14,5 +14,6 @@ public class Blocks {
     public static final String GOLD_ELECTRIC_FURNACE = "craftory:gold_electric_furnace";
     public static final String DIAMOND_ELECTRIC_FURNACE = "craftory:diamond_electric_furnace";
     public static final String EMERALD_ELECTRIC_FURNACE = "craftory:emerald_electric_furnace";
+    public static final String IRON_FOUNDRY = "craftory:iron_foundry";
   }
 }

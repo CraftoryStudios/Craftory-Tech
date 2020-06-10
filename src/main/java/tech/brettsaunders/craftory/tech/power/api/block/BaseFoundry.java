@@ -20,6 +20,7 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
 import tech.brettsaunders.craftory.utils.Items;
 import tech.brettsaunders.craftory.utils.Items.Components;
+import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -129,8 +130,13 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
     }
     String inputType1 = inputSlots[0].getType().toString();
     String inputType2 = inputSlots[1].getType().toString();
-    String outputType = outputSlots[0].getType().toString();
-    if (outputSlots[0]!=null && (!outputType.equals(Components.STEEL_INGOT) || outputSlots[0].getAmount() == outputSlots[0].getMaxStackSize())) return false;
+    if (outputSlots == null) {
+      Logger.info("wtf");
+    }
+    if(outputSlots[0]!=null){
+      String outputType = ItemsAdder.getCustomItemName(outputSlots[0]);
+      if (!outputType.equals(Components.STEEL_INGOT) || outputSlots[0].getAmount() == outputSlots[0].getMaxStackSize()) return false;
+    }
     return (inputType1.equals(Material.IRON_ORE.toString()) && inputType2.equals(Material.COAL.toString())) ||
         (inputType1.equals(Material.COAL.toString()) && inputType2.equals(Material.IRON_ORE.toString()));
   }
