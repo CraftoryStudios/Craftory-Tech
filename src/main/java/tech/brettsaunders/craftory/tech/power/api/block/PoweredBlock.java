@@ -134,7 +134,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     return energyStorage.getEnergyStored() >= energy;
   }
 
-  protected int getEnergySpace() {
+  public int getEnergySpace() {
     return energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored();
   }
 

@@ -17,16 +17,16 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   /* Static Constants Private */
   private static final long serialVersionUID = 10007L;
   /* Per Object Variables Saved */
-  protected int amountReceive;
+  protected int maxReceive;
 
   /* Per Object Variables Not-Saved */
 
 
   /* Construction */
-  public BaseMachine(Location location, byte level, int amountReceive) {
+  public BaseMachine(Location location, byte level, int maxReceive) {
     super(location, level);
-    this.amountReceive = amountReceive;
-    energyStorage.setMaxReceive(amountReceive);
+    this.maxReceive = maxReceive;
+    energyStorage.setMaxReceive(maxReceive);
     init();
   }
 
@@ -44,19 +44,19 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
     super.writeExternal(out);
-    out.writeInt(amountReceive);
+    out.writeInt(maxReceive);
   }
 
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     super.readExternal(in);
-    amountReceive = in.readInt();
+    maxReceive = in.readInt();
   }
 
   /* IEnergyReceiver */
   @Override
   public int receiveEnergy(int maxReceive, boolean simulate) {
-    return energyStorage.receiveEnergy(Math.min(maxReceive, amountReceive), simulate);
+    return energyStorage.receiveEnergy(Math.min(maxReceive, this.maxReceive), simulate);
   }
 
   /* IEnergyHandler */
@@ -70,6 +70,11 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
     return energyStorage.getMaxEnergyStored();
   }
 
+  @Override
+  public int getEnergySpace() {
+    return Math.max(energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored(), maxReceive);
+  }
+
   /* IEnergyConnection */
   @Override
   public boolean canConnectEnergy() {
@@ -78,16 +83,12 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   /* External Methods */
   public int maxReceiveEnergy() {
-    return amountReceive;
+    return maxReceive;
   }
 
   @Override
   public void setupGUI() {
     Inventory inventory = setInterfaceTitle("Machine", new FontImageWrapper("extra:cell"));
     addGUIComponent(new GBattery(inventory, energyStorage));
-  }
-
-  public int getEnergyNeeded() {
-    return Math.min(amountReceive, (energyStorage.capacity - energyStorage.energy));
   }
 }

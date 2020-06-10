@@ -83,9 +83,9 @@ public class PowerGridManager implements Externalizable, ITickable {
     int amount = 0;
     int e;
     for (BaseMachine machine : machines) {
-      e = machine.getEnergyNeeded();
+      e = machine.getEnergySpace();
       if (e > 0) {
-        amount += machine.getEnergyNeeded();
+        amount += machine.getEnergySpace();
         machinesNeedingEnergy += 1;
       }
 

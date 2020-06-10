@@ -21,7 +21,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   /* Static Constants Private */
   private static final long serialVersionUID = 10008L;
   /* Per Object Variables Saved */
-  protected int outputAmount;
+  protected int maxOutput;
   protected ArrayList<Boolean> sidesConfig;
   protected ArrayList<Boolean> sidesCache;
 
@@ -29,9 +29,9 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
 
   /* Construction */
-  public BaseProvider(Location location, byte level, int outputAmount) {
+  public BaseProvider(Location location, byte level, int maxOutput) {
     super(location, level);
-    this.outputAmount = outputAmount;
+    this.maxOutput = maxOutput;
     init();
     Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
     generateSideCache();
@@ -54,7 +54,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     super.writeExternal(out);
     out.writeObject(sidesConfig);
     out.writeObject(sidesCache);
-    out.writeInt(outputAmount);
+    out.writeInt(maxOutput);
   }
 
   @Override
@@ -62,7 +62,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     super.readExternal(in);
     sidesConfig = (ArrayList<Boolean>) in.readObject();
     sidesCache = (ArrayList<Boolean>) in.readObject();
-    outputAmount = in.readInt();
+    maxOutput = in.readInt();
   }
 
   /* Update Loop */
@@ -73,12 +73,20 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
         if (sidesCache.get(i)) {
           amountTransferred += energyStorage
               .modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
-                  Math.min(outputAmount, energyStorage.getEnergyStored()), false));
+                  Math.min(maxOutput, energyStorage.getEnergyStored()), false));
         }
       }
     }
     return amountTransferred;
   }
+
+  public int retrieveEnergy(int energy) {
+    int energyExtracted = Math.min(energy, maxOutput);
+    energyStorage.modifyEnergyStored(-energyExtracted);
+    return energyExtracted;
+  }
+
+
 
   /* Internal Helper Functions */
   @Override
@@ -156,7 +164,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   /* IEnergyInfo */
   @Override
   public int getInfoMaxEnergyPerTick() {
-    return outputAmount;
+    return maxOutput;
   }
 
   /* IEnergyConnection */
@@ -167,10 +175,10 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
   /* External Methods */
   public int maxOutputEnergy() {
-    return outputAmount;
+    return maxOutput;
   }
 
   public int getEnergyAvailable() {
-    return Math.min(energyStorage.energy, outputAmount);
+    return Math.min(energyStorage.energy, maxOutput);
   }
 }
