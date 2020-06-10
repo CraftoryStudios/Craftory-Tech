@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
+import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver, Externalizable {
 
@@ -20,7 +21,11 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   protected int maxReceive;
 
   /* Per Object Variables Not-Saved */
-
+  protected transient VariableContainer<Boolean> runningContainer;
+  protected transient VariableContainer<Double> progressContainer;
+  protected transient int processTime;
+  protected transient int energyConsumption;
+  protected transient int tickCount = 0;
 
   /* Construction */
   public BaseMachine(Location location, byte level, int maxReceive) {
@@ -39,7 +44,36 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   /* Common Load and Construction */
   private void init() {
     isReceiver = true;
+    runningContainer = new VariableContainer<>(false);
+    progressContainer = new VariableContainer<>(0d);
   }
+
+
+  /* Update Loop */
+  @Override
+  public void fastUpdate() {
+    super.fastUpdate();
+    if (inventoryInterface == null) {
+      return;
+    }
+    updateSlots();
+    if (validateContense() && energyStorage.getEnergyStored() >= energyConsumption) {
+      runningContainer.setT(true);
+      energyStorage.modifyEnergyStored(-energyConsumption);
+      tickCount += 1;
+      if (tickCount == processTime) {
+        tickCount = 0;
+        processComplete();
+      }
+    } else {
+      runningContainer.setT(false);
+    }
+    progressContainer.setT(((double) tickCount) / processTime);
+  }
+
+  protected  abstract void processComplete();
+  protected abstract boolean validateContense();
+  protected abstract void updateSlots();
 
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
