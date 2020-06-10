@@ -10,7 +10,7 @@ items:
       model_path: items/components/cores/iron_core
 
   gold_core:
-    display_name: Iron Core
+    display_name: Gold Core
     permission: craftory
     resource:
       material: PAPER
@@ -18,7 +18,7 @@ items:
       model_path: items/components/cores/gold_core
 
   diamond_core:
-    display_name: Iron Core
+    display_name: Diamond Core
     permission: craftory
     resource:
       material: PAPER
