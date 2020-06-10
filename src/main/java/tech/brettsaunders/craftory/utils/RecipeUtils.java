@@ -52,8 +52,8 @@ public class RecipeUtils {
     }
     //Add foundry iron + coal -> steel recipe
     HashMap<String, Integer> ingredients = new HashMap<>();
-    ingredients.put(Material.COAL.toString(),1);
-    ingredients.put(Material.IRON_ORE.toString(),1);
+    ingredients.put(Material.COAL.toString(), 1);
+    ingredients.put(Material.IRON_INGOT.toString(), 1);
     HashMap<String, Integer> products = new HashMap<>();
     products.put(Components.STEEL_INGOT,1);
     twoToOneRecipes.add(new CustomMachineRecipe(ingredients,products));
