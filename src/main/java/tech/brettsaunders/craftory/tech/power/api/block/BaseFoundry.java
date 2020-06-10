@@ -17,6 +17,9 @@ import org.bukkit.inventory.Recipe;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
+import tech.brettsaunders.craftory.utils.Items;
+import tech.brettsaunders.craftory.utils.Items.Components;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -62,8 +65,6 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
   public void init() {
     processTime = PROCESSING_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
-    runningContainer = new VariableContainer<>(false);
-    progressContainer = new VariableContainer<>(0d);
     interactableSlots = new HashSet<>(Arrays.asList(INPUT_LOCATION1,INPUT_LOCATION2, OUTPUT_LOCATION));
   }
 
@@ -84,6 +85,8 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
   @Override
   public void setupGUI() {
     Inventory inventory = setInterfaceTitle("Foundry", new FontImageWrapper("extra:cell"));
+    addGUIComponent(
+        new GTwoToOneMachine(inventory, 24, progressContainer, INPUT_LOCATION1,INPUT_LOCATION2, OUTPUT_LOCATION));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer));
     inventory.setItem(INPUT_LOCATION1, inputSlots[0]);
@@ -101,10 +104,11 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
   @Override
   protected void processComplete(){
     inputSlots[0].setAmount(inputSlots[0].getAmount() - 1);
+    inputSlots[1].setAmount(inputSlots[1].getAmount() - 1);
     if (outputSlots[0] == null) {
-      outputSlots[0] = currentRecipe.getResult();
+      outputSlots[0] = ItemsAdder.getCustomItem(Components.STEEL_INGOT);
     } else {
-      outputSlots[0].setAmount(outputSlots[0].getAmount() + currentRecipe.getResult().getAmount());
+      outputSlots[0].setAmount(outputSlots[0].getAmount() + 1);
     }
     inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots[0]);
   }
@@ -126,7 +130,7 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
     String inputType1 = inputSlots[0].getType().toString();
     String inputType2 = inputSlots[1].getType().toString();
     String outputType = outputSlots[0].getType().toString();
-    if (outputType.equals())
+    if (outputSlots[0]!=null && (!outputType.equals(Components.STEEL_INGOT) || outputSlots[0].getAmount() == outputSlots[0].getMaxStackSize())) return false;
     return (inputType1.equals(Material.IRON_ORE.toString()) && inputType2.equals(Material.COAL.toString())) ||
         (inputType1.equals(Material.COAL.toString()) && inputType2.equals(Material.IRON_ORE.toString()));
   }
