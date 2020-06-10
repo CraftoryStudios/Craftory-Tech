@@ -8,6 +8,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -22,6 +23,7 @@ import tech.brettsaunders.craftory.utils.Items;
 import tech.brettsaunders.craftory.utils.Items.Components;
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
+import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class BaseFoundry extends BaseMachine implements Externalizable {
@@ -38,7 +40,7 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
 
   /* Per Object Variables Not-Saved */
 
-  private transient FurnaceRecipe currentRecipe = null;
+  private transient CustomMachineRecipe currentRecipe = null;
 
 
 
@@ -125,19 +127,51 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
 
   @Override
   protected boolean validateContense() {
-    if (inputSlots[0] == null || inputSlots[1] ==null) {
+    if (inputSlots[0] == null || inputSlots[1]==null) {
       return false;
     }
-    String inputType1 = inputSlots[0].getType().toString();
-    String inputType2 = inputSlots[1].getType().toString();
-    if (outputSlots == null) {
-      Logger.info("wtf");
-    }
+    String inputType1 = Items.getItemName(inputSlots[0]);
+    String inputType2 = Items.getItemName(inputSlots[1]);
+    int inputAmount1 = inputSlots[0].getAmount();
+    int inputAmount2 = inputSlots[1].getAmount();
+    String outputType = null;
     if(outputSlots[0]!=null){
-      String outputType = ItemsAdder.getCustomItemName(outputSlots[0]);
-      if (!outputType.equals(Components.STEEL_INGOT) || outputSlots[0].getAmount() == outputSlots[0].getMaxStackSize()) return false;
+      outputType = Items.getItemName(outputSlots[0]);
     }
-    return (inputType1.equals(Material.IRON_ORE.toString()) && inputType2.equals(Material.COAL.toString())) ||
-        (inputType1.equals(Material.COAL.toString()) && inputType2.equals(Material.IRON_ORE.toString()));
+    //If the recipe is unchanged there is no need to find the recipe.
+
+    if(currentRecipe != null){
+      boolean valid = true;
+      for(Map.Entry<String, Integer> entry : currentRecipe.getIngredients().entrySet()) {
+        String item = entry.getKey();
+        int number = entry.getValue();
+        if (!((item.equals(inputType1) && inputAmount1 >= number) || (item.equals(inputType2)
+            && inputAmount2 >= number))) {
+          valid = false;
+          break;
+        }
+      }
+      if(valid && outputSlots[0]!=null){
+        if(currentRecipe.getProducts().keySet().contains(outputType) && (outputSlots[0].getAmount() +currentRecipe.getProducts().get(outputType)) <= outputSlots[0].getMaxStackSize()) return true;
+      }
+    }
+    for(CustomMachineRecipe recipe: RecipeUtils.getTwoToOneRecipes()) {
+      boolean valid = true;
+      for(Map.Entry<String, Integer> entry : recipe.getIngredients().entrySet()) {
+        String item = entry.getKey();
+        int number = entry.getValue();
+        if (!((item.equals(inputType1) && inputAmount1 >= number) || (item.equals(inputType2)
+            && inputAmount2 >= number))) {
+          valid = false;
+          break;
+        }
+      }
+      if(valid){
+        currentRecipe = recipe;
+        if(outputSlots[0]==null || (currentRecipe.getProducts().keySet().contains(outputType) && (outputSlots[0].getAmount()+currentRecipe.getProducts().get(outputType)) <= outputSlots[0].getMaxStackSize())) return true;
+      }
+    }
+    currentRecipe = null;
+    return false;
   }
 }
