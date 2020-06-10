@@ -6,6 +6,7 @@ import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.util.ArrayList;
 import java.util.HashSet;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -53,22 +54,8 @@ public abstract class BlockGUI implements Externalizable {
   }
 
   protected Inventory setInterfaceTitle(String title, FontImageWrapper wrapper) {
-    inventoryInterface = new TexturedInventoryWrapper(null, 54, title,
+    inventoryInterface = new TexturedInventoryWrapper(null, 54, ChatColor.DARK_GRAY + title,
         wrapper);
     return inventoryInterface.getInternal();
-  }
-
-  protected void fillBlankSlots(HashSet<Integer> protectedSlots) {
-    int inventorySize = inventoryInterface.getInternal().getSize();
-    ItemStack invisibleItem = ItemsAdder.getCustomItem("extra:invisible");
-    ItemMeta invisibleItemMeta = invisibleItem.getItemMeta();
-    invisibleItemMeta.setDisplayName("");
-    invisibleItem.setItemMeta(invisibleItemMeta);
-
-    for (int i = 0; i < inventorySize; i++) {
-      if (!(protectedSlots.contains(i)) && inventoryInterface.getInternal().getItem(i) == null) {
-        inventoryInterface.getInternal().setItem(i, invisibleItem.clone());
-      }
-    }
   }
 }

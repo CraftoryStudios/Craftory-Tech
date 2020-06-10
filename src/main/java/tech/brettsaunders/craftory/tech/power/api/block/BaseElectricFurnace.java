@@ -6,6 +6,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.bukkit.Location;
@@ -45,8 +46,8 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
     inputSlots = new ItemStack[]{null};
     outputSlots = new ItemStack[]{null};
-    inputLocations = new int[]{INPUT_LOCATION};
-    outputLocations = new int[]{OUTPUT_LOCATION};
+    inputLocations.add(INPUT_LOCATION);
+    outputLocations.add(OUTPUT_LOCATION);
     if (ItemsAdder.areItemsLoaded()) {
       setupGUI();
     }
@@ -91,10 +92,6 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     inventory.setItem(INPUT_LOCATION, inputSlots[0]);
     inventory.setItem(OUTPUT_LOCATION, outputSlots[0]);
     this.inventoryInterface = inventory;
-    HashSet<Integer> protectedslots = new HashSet<>();
-    protectedslots.add(INPUT_LOCATION);
-    protectedslots.add(OUTPUT_LOCATION);
-    fillBlankSlots(protectedslots);
   }
 
 

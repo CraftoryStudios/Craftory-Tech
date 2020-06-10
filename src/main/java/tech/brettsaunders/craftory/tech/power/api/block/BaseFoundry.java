@@ -6,6 +6,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -51,8 +52,9 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
     inputSlots = new ItemStack[]{null,null};
     outputSlots = new ItemStack[]{null};
-    inputLocations = new int[]{INPUT_LOCATION1, INPUT_LOCATION2};
-    outputLocations = new int[]{OUTPUT_LOCATION};
+    inputLocations.add(INPUT_LOCATION1);
+    inputLocations.add(INPUT_LOCATION2);
+    outputLocations.add(OUTPUT_LOCATION);
     if (ItemsAdder.areItemsLoaded()) {
       setupGUI();
     }
@@ -96,11 +98,6 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
     inventory.setItem(INPUT_LOCATION2, inputSlots[1]);
     inventory.setItem(OUTPUT_LOCATION, outputSlots[0]);
     this.inventoryInterface = inventory;
-    HashSet<Integer> protectedslots = new HashSet<>();
-    protectedslots.add(INPUT_LOCATION1);
-    protectedslots.add(INPUT_LOCATION2);
-    protectedslots.add(OUTPUT_LOCATION);
-    fillBlankSlots(protectedslots);
   }
 
 

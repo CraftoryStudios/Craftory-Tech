@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.HashSet;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +22,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   private static final int C_OUTPUT_AMOUNT = 80;
 
   protected static final int FUEL_SLOT = 12;
+  private transient ItemStack fuelItem;
 
   /* Construction */
   public SolidFuelGenerator() {
@@ -30,6 +32,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   /* Saving, Setup and Loading */
   public SolidFuelGenerator(Location location) {
     super(location, C_LEVEL, C_OUTPUT_AMOUNT);
+    inputLocations.add(FUEL_SLOT);
   }
 
 
@@ -56,8 +59,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     super.readExternal(in);
-    ItemStack fuelItem = (ItemStack) in.readObject();
-    getInventory().setItem(FUEL_SLOT, fuelItem);
+    fuelItem = (ItemStack) in.readObject();
   }
 
   protected ItemStack getFuelItem() {
@@ -76,12 +78,12 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Solid Fuel Generator", new FontImageWrapper("extra:cell"));
+    Inventory inventory = setInterfaceTitle("Fuel Generator", new FontImageWrapper("extra:cell"));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig));
-    HashSet<Integer> protectedSlots = new HashSet<>();
-    protectedSlots.add(FUEL_SLOT);
-    fillBlankSlots(protectedSlots);
+    if (fuelItem != null) {
+      getInventory().setItem(FUEL_SLOT, fuelItem);
+    }
   }
 
 }

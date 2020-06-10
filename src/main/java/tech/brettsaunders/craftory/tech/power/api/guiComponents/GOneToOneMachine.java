@@ -14,7 +14,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
-public class GOneToOneMachine implements IGUIComponent, Listener {
+public class GOneToOneMachine implements IGUIComponent {
 
   private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
       .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
@@ -32,8 +32,6 @@ public class GOneToOneMachine implements IGUIComponent, Listener {
     this.progress = progress;
     this.inputSlot = inputSlot;
     this.outputSlot = outputSlot;
-    Craftory.getInstance().getServer().getPluginManager()
-        .registerEvents(this, Craftory.getInstance());
   }
 
   public GOneToOneMachine(Inventory inventory,
@@ -43,28 +41,6 @@ public class GOneToOneMachine implements IGUIComponent, Listener {
     this.outputSlot = outputSlot;
     this.inputSlot = inputSlot;
     this.slot = 24;
-  }
-
-  @EventHandler
-  public void onInventoryInteract(final InventoryClickEvent event) {
-    if (event.getInventory() != inventory) {
-      return;
-    }
-
-    //Stop moving items from any slot put intractable
-    if (event.getRawSlot() != inputSlot && event.getRawSlot() != outputSlot
-        && event.getRawSlot() < 54) {
-      event.setCancelled(true);
-    }
-
-    //TODO Need to add shift click
-    //Stop inserting items into output slot
-    if (event.getRawSlot() == outputSlot) {
-      if (outputDisabledActions.contains(event.getAction())) {
-        event.setCancelled(true);
-      }
-    }
-
   }
 
   @Override
