@@ -1,6 +1,8 @@
 name: sentryRelease
 
-on: [push]
+on: 
+  release:	
+    types: [published, prereleased]
 
 jobs:
   createSentryRelease:
