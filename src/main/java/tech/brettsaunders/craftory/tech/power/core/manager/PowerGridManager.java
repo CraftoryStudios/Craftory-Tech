@@ -49,7 +49,8 @@ public class PowerGridManager implements Externalizable, ITickable {
 
   public void fastUpdate() {
     int needed = whatDoTheyNeed();
-    int produced = calculateEnergyProduced(needed);
+    int cellCapacity = calculateStorageSpace();
+    int produced = calculateEnergyProduced(needed + cellCapacity);
     if (needed > produced) {
       produced += raidTheBank(needed - produced);
     }
@@ -64,15 +65,24 @@ public class PowerGridManager implements Externalizable, ITickable {
   @Override
   public void slowUpdate() {}
 
-  /* Calculates how much energy the generators produced this tick */
-  private int calculateEnergyProduced(int goal) {
+  private int calculateStorageSpace() {
     int amount = 0;
+    for (BaseCell cell : cells) {
+      amount += cell.getEnergySpace();
+    }
+    return amount;
+  }
+
+  /* Calculates how much energy the generators produced this tick */
+  private int calculateEnergyProduced(int limit) {
+    int amount = 0;
+    int e;
     for (BaseProvider generator : generators) {
-      amount += generator.getEnergyAvailable();
-      //TODO take energy from generator
-      if (amount >= goal) {
-        break;
-      }
+      e = generator.getEnergyAvailable();
+      if (amount + e > limit) e = limit - amount;
+      e = generator.retrieveEnergy(e);
+      amount +=e;
+      if (amount == limit) break;
     }
     return amount;
   }
@@ -85,11 +95,9 @@ public class PowerGridManager implements Externalizable, ITickable {
     for (BaseMachine machine : machines) {
       e = machine.getEnergySpace();
       if (e > 0) {
-        amount += machine.getEnergySpace();
+        amount += e;
         machinesNeedingEnergy += 1;
       }
-
-
     }
     return amount;
   }
@@ -103,8 +111,7 @@ public class PowerGridManager implements Externalizable, ITickable {
   private int raidTheBank(int goal) {
     int amount = 0;
     for (BaseCell cell : cells) {
-      EnergyStorage e = cell.getEnergyStorage();
-      amount += e.extractEnergy((goal - amount), false);
+      amount += cell.retrieveEnergy((goal-amount));
       if (amount >= goal) {
         break;
       }
@@ -135,10 +142,10 @@ public class PowerGridManager implements Externalizable, ITickable {
   /* Shares the available energy amongst the machines
    * Used when there is not enough for all machines  */
   private void shareThisAmongstThePeople(int amount) {
-    if (machinesNeedingEnergy < 1) {
-      machinesNeedingEnergy = 1;
+    int allotment = 1;
+    if (machinesNeedingEnergy > 1) {
+      allotment = amount / machinesNeedingEnergy;
     }
-    int allotment = amount / machinesNeedingEnergy;
     while (amount > 0) {
       for (BaseMachine machine : machines) {
         amount -= machine.receiveEnergy(allotment, false);
