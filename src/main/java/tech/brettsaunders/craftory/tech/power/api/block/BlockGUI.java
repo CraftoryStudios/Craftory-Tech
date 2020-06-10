@@ -34,6 +34,7 @@ public abstract class BlockGUI implements Externalizable {
   /*GUI Methods */
 
   public void updateInterface() {
+    if (inventoryInterface == null || inventoryInterface.getInternal().getViewers().size() <= 0) return;
     for (IGUIComponent component : components) {
       component.update();
     }

@@ -37,7 +37,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   protected transient boolean isReceiver;
   protected transient boolean isProvider;
   /* Hopper stuff */
-  protected transient int HOPPER_DELAY = 8;
+  protected transient int HOPPER_DELAY = 2;
   protected transient int hopperInCounter = 0;
   protected transient int hopperOutCounter = 0;
   protected transient Inventory inventoryInterface;
@@ -120,7 +120,10 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   }
 
   @Override
-  public void slowUpdate() {updateInterface();}
+  public void slowUpdate() {
+    updateInterface();
+    processHoppers();
+  }
 
   /* Info Methods */
   public EnergyStorage getEnergyStorage() {
