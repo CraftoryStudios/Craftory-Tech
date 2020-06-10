@@ -206,6 +206,21 @@ items:
         break_tools_whitelist:
           - PICKAXE
           - pickaxe
+  iron_foundry:
+    display_name: Iron Foundry
+    permission: craftory_tech
+    resource:
+      material: IRON_BLOCK
+      generate: false
+      model_path: block/iron_foundry
+    specific_properties:
+      block:
+        placed_model:
+          type: REAL
+          break_particles: BLOCK
+        break_tools_whitelist:
+          - PICKAXE
+          - pickaxe
   iron_electric_furnace:
     display_name: Iron Electric Furnace
     permission: craftory_tech

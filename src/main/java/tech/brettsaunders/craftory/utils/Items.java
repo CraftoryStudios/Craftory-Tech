@@ -1,5 +1,8 @@
 package tech.brettsaunders.craftory.utils;
 
+import dev.lone.itemsadder.api.ItemsAdder;
+import org.bukkit.inventory.ItemStack;
+
 public class Items {
 
   public class Power {
@@ -13,6 +16,14 @@ public class Items {
     public static final String DIAMOND_CORE = "craftory:diamond_core";
     public static final String GOLD_CORE = "craftory:gold_core";
     public static final String IRON_CORE = "craftory:iron_core";
+  }
+
+  public static String getItemName(ItemStack itemStack) {
+    if(ItemsAdder.isCustomItem(itemStack)) {
+      return ItemsAdder.getCustomItemName(itemStack);
+    } else {
+      return itemStack.getType().toString();
+    }
   }
 
 }

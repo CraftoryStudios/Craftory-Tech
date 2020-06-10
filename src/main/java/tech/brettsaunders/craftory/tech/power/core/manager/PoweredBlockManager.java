@@ -47,6 +47,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
 import tech.brettsaunders.craftory.utils.Blocks;
 import tech.brettsaunders.craftory.utils.Blocks.Power;
@@ -213,7 +214,6 @@ public class PoweredBlockManager implements Listener, ITickable {
             String blockPlacedName = ItemsAdder.getCustomItemName(blockPlacedItemStack);
 
             switch (blockPlacedName) {
-
               case Power.IRON_CELL:
                 poweredBlock = new IronCell(location);
                 type = PoweredBlockType.CELL;
@@ -255,6 +255,10 @@ public class PoweredBlockManager implements Listener, ITickable {
                 break;
               case Power.DIAMOND_ELECTRIC_FURNACE:
                 poweredBlock = new DiamondElectricFurnace(location);
+                type = PoweredBlockType.MACHINE;
+                break;
+              case Power.IRON_FOUNDRY:
+                poweredBlock = new IronFoundry(location);
                 type = PoweredBlockType.MACHINE;
                 break;
               default:

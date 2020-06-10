@@ -7,14 +7,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Hopper;
-import org.bukkit.block.data.Directional;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +16,7 @@ import org.bukkit.inventory.Recipe;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
-import tech.brettsaunders.craftory.utils.HopperItemMovement;
+import tech.brettsaunders.craftory.utils.Items;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -39,12 +33,9 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   /* Per Object Variables Saved */
 
   /* Per Object Variables Not-Saved */
-  private transient int cookingTime;
-  private transient int energyConsumption;
-  private transient int tickCount = 0;
+
   private transient FurnaceRecipe currentRecipe = null;
-  private transient VariableContainer<Boolean> runningContainer;
-  private transient VariableContainer<Double> progressContainer;
+
 
 
   /* Construction */
@@ -69,7 +60,7 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
 
   /* Common Load and Construction */
   public void init() {
-    cookingTime = COOKING_TIME_LEVEL[level];
+    processTime = COOKING_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
     runningContainer = new VariableContainer<>(false);
     progressContainer = new VariableContainer<>(0d);
@@ -106,47 +97,32 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
     fillBlankSlots(protectedslots);
   }
 
-  /* Update Loop */
+
   @Override
-  public void fastUpdate() {
-    super.fastUpdate();
-    if (inventoryInterface == null) {
-      return;
-    }
-    updateSlots();
-    if (validateContense() && energyStorage.getEnergyStored() >= energyConsumption) {
-      energyStorage.modifyEnergyStored(-energyConsumption);
-      tickCount += 1;
-      if (tickCount == cookingTime) {
-        tickCount = 0;
-        inputSlots[0].setAmount(inputSlots[0].getAmount() - 1);
-        if (outputSlots[0] == null) {
-          outputSlots[0] = currentRecipe.getResult();
-        } else {
-          outputSlots[0].setAmount(outputSlots[0].getAmount() + currentRecipe.getResult().getAmount());
-        }
-        inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots[0]);
-      }
-      runningContainer.setT(true);
+  protected void processComplete(){
+    inputSlots[0].setAmount(inputSlots[0].getAmount() - 1);
+    if (outputSlots[0] == null) {
+      outputSlots[0] = currentRecipe.getResult();
     } else {
-      runningContainer.setT(false);
+      outputSlots[0].setAmount(outputSlots[0].getAmount() + currentRecipe.getResult().getAmount());
     }
-    progressContainer.setT(((double) tickCount) / cookingTime);
+    inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots[0]);
   }
 
   /* Internal Helper Functions */
-  private void updateSlots() {
+  @Override
+  protected void updateSlots() {
     inputSlots[0] = inventoryInterface.getItem(INPUT_LOCATION);
     outputSlots[0] = inventoryInterface.getItem(OUTPUT_LOCATION);
   }
 
 
-
-  private boolean validateContense() {
+  @Override
+  protected boolean validateContense() {
     if (inputSlots[0] == null) {
       return false;
     }
-    String inputType = inputSlots[0].getType().toString();
+    String inputType = Items.getItemName(inputSlots[0]);
     //If the recipe is unchanged there is no need to find the recipe.
     if (currentRecipe != null && currentRecipe.getInput().getType().toString().equals(inputType)) {
       if (outputSlots[0] == null) {
@@ -167,7 +143,7 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
       if (outputSlots[0] == null) {
         return true;
       }
-      if (outputSlots[0].getType().toString().equals(recipe.getResult().getType().toString())
+      if (Items.getItemName(outputSlots[0]).equals(recipe.getResult().getType().toString())
           && outputSlots[0].getAmount() < outputSlots[0].getMaxStackSize()) {
         return true;
       }

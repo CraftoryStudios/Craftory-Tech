@@ -27,7 +27,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   /* Per Object Variables Saved */
   protected EnergyStorage energyStorage;
   protected Location location;
-  protected byte level;
+  protected int level;
   /* Hopper control variables */
   protected ItemStack[] inputSlots = {}; //The ItemStacks of the inputs
   protected int[] inputLocations = {};  //The inventory locations of inputs
@@ -63,7 +63,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   public void writeExternal(ObjectOutput out) throws IOException {
     out.writeObject(energyStorage);
     out.writeObject(location);
-    out.writeByte(level);
+    out.writeInt(level);
     out.writeObject(inputSlots);
     out.writeObject(inputLocations);
     out.writeObject(outputSlots);
@@ -74,7 +74,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     energyStorage = (EnergyStorage) in.readObject();
     location = (Location) in.readObject();
-    level = in.readByte();
+    level = in.readInt();
     try {
       inputSlots = (ItemStack[]) in.readObject();
       inputLocations = (int[]) in.readObject();
