@@ -122,6 +122,19 @@ recipes:
       result:
         item: craftory:emerald_core
         amount: 1
+
+    wrench:
+      permission: craftory
+      enabled: true
+      pattern:
+        - SXS
+        - XSX
+        - XSX
+      ingredients:
+        I: craftory:steel_ingot
+      result:
+        item: craftory:wrench
+        amount: 1
 items:
   wrench:
     display_name: Wrench
