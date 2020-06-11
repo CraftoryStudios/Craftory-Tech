@@ -4,6 +4,7 @@ import io.sentry.Sentry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.Utilities;
 
 public class Logger {
 
@@ -13,7 +14,7 @@ public class Logger {
   static String prefix = "[" + Craftory.getInstance().getDescription().getPrefix() + "] ";
   static String debugPrefix =
       "[" + Craftory.getInstance().getDescription().getPrefix() + " Debug] ";
-  static boolean debugMode = Craftory.getDebugMode();
+  static boolean debugMode = Utilities.config.getBoolean("general.debug");
 
   public static void info(String logMessage) {
     Bukkit.getLogger().info(prefix + INFO_COLOR + logMessage);

@@ -33,6 +33,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
@@ -49,6 +50,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
+import tech.brettsaunders.craftory.tech.power.core.utils.PoweredBlockType;
 import tech.brettsaunders.craftory.utils.Blocks;
 import tech.brettsaunders.craftory.utils.Blocks.Power;
 import tech.brettsaunders.craftory.utils.Items;
@@ -58,12 +60,15 @@ public class PoweredBlockManager implements Listener, ITickable {
 
   public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
-  private static final String DATA_PATH =
-      Craftory.getInstance().getDataFolder().getPath() + File.separator + "data" + File.separator + "PowerBlockManager.data";
+  private static final String DATA_PATH;
   private final HashMap<Location, PowerGridManager> powerConnectors;
   public HashSet<PowerGridManager> powerGridManagers;
   private HashMap<Location, PoweredBlock> poweredBlocks;
   private HashMap<World, HashSet> loadedChunkWorlds = new HashMap<>();
+
+  static {
+    DATA_PATH = Utilities.DATA_FOLDER + File.separator + "poweredBlock.data";
+  }
 
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();

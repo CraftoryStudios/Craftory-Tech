@@ -10,8 +10,15 @@ depend: [ItemsAdder]
 loadafter: [ItemsAdder]
 
 commands:
-  toggleDebugMode:
-    description: Toggle debug mode
-    usage: /<command>
+  craftory:
+    description: Craftory commands.
+  cf:
+    description: Cratory commands.
 
-permissions: {}
+permissions:
+  craftory:
+    default: op
+  craftory.debug:
+    default: op
+  craftory.help:
+    default: op
