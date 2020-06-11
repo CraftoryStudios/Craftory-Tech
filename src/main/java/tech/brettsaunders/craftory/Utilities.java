@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -92,8 +93,12 @@ public class Utilities {
             + Craftory.VERSION);
     sentry = SentryClientFactory.sentryClient();
     Sentry.getContext().setUser(new UserBuilder().setId(data.getString("reporting.serverUUID")).build());
-    Sentry.getContext().addTag("BukkitVersion", Bukkit.getBukkitVersion());
+    Sentry.getContext().addTag("Bukkit Version", Bukkit.getBukkitVersion());
     Sentry.getContext().addExtra("Plugins", Bukkit.getPluginManager().getPlugins());
+  }
+
+  static void done() {
+    Bukkit.getLogger().info("[" + Craftory.getInstance().getDescription().getPrefix() + "] " + ChatColor.GREEN + "Finished Loading!");
   }
 
   /* Helper Functions */

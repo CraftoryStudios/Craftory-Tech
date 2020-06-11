@@ -24,7 +24,7 @@ public class FileUtils {
           new FileOutputStream(destFile));
     } catch (final FileNotFoundException e) {
       Logger.warn("File not found when copying resources");
-      Logger.debug(e);
+      Logger.captureError(e);
     }
     return false;
   }

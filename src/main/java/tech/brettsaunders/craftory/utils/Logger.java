@@ -40,10 +40,11 @@ public class Logger {
     }
   }
 
-  public static void debug(Throwable logMessage) {
-    if (debugMode) {
-      Bukkit.getLogger().info(debugPrefix + DEBUG_COLOR + logMessage.toString());
-    }
+  public static void captureError(Throwable logMessage) {
+    Sentry.capture(logMessage);
+  }
+
+  public static void captureError(String logMessage) {
     Sentry.capture(logMessage);
   }
 

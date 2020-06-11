@@ -57,14 +57,16 @@ public class RecipeUtils {
     HashMap<String, Integer> products = new HashMap<>();
     products.put(Components.STEEL_INGOT,1);
     twoToOneRecipes.add(new CustomMachineRecipe(ingredients,products));
-    Logger.info("All: " + allRecipes.size());
-    Logger.info("Shaped: " + shapedRecipes.size());
-    Logger.info("Shapeless: " + shapelessRecipes.size());
-    Logger.info("Stone Cutting: " + stonecuttingRecipes.size());
-    Logger.info("Furnace: " + furnaceRecipes.size());
-    Logger.info("Blasting: " + blastingRecipes.size());
-    Logger.info("Smoking: " + smokingRecipeRecipes.size());
-    Logger.info("Campfire: " + campfireRecipes.size());
+    Logger.debug("Extracting Bukkit Recipes");
+    Logger.debug("All: " + allRecipes.size());
+    Logger.debug("Shaped: " + shapedRecipes.size());
+    Logger.debug("Shapeless: " + shapelessRecipes.size());
+    Logger.debug("Stone Cutting: " + stonecuttingRecipes.size());
+    Logger.debug("Furnace: " + furnaceRecipes.size());
+    Logger.debug("Blasting: " + blastingRecipes.size());
+    Logger.debug("Smoking: " + smokingRecipeRecipes.size());
+    Logger.debug("Campfire: " + campfireRecipes.size());
+    Logger.debug("Finished Extracting");
   }
 
   public static HashSet<Recipe> getAllRecipes() {

@@ -117,10 +117,9 @@ public class PoweredBlockManager implements Listener, ITickable {
       Logger.debug("First Run - Generating PowerBlockManager Data");
     } catch (IOException e) {
       Logger.error("PowerBlockManager IO Loading Issue");
-      Logger.debug(e);
-      e.printStackTrace();
+      Logger.captureError(e);
     } catch (ClassNotFoundException e) {
-      e.printStackTrace();
+      Logger.captureError(e);
     }
   }
 
@@ -131,11 +130,10 @@ public class PoweredBlockManager implements Listener, ITickable {
           new GZIPOutputStream(new FileOutputStream(DATA_PATH)));
       out.writeObject(data);
       out.close();
-      Logger.info("PowerBlockManager Data Saved");
+      Logger.debug("Powered Block Data Saved");
     } catch (IOException e) {
-      Logger.warn("Couldn't save PowerBlockManager Data");
-      Logger.debug(e);
-      e.printStackTrace();
+      Logger.warn("Couldn't save Powered Block Data");
+      Logger.captureError(e);
     }
   }
 
@@ -320,7 +318,7 @@ public class PoweredBlockManager implements Listener, ITickable {
     if (isPoweredBlock(e.getClickedBlock().getLocation())) {
       PoweredBlock block = getPoweredBlock(e.getClickedBlock().getLocation());
       e.getPlayer().sendMessage(
-          "Stored: " + block.getInfoEnergyStored() + " / " + block.getInfoEnergyCapacity());
+          "Stored: " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity() + " RE");
     }
   }
 

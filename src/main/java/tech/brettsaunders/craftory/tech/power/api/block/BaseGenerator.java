@@ -19,10 +19,10 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   /* Static Constants Private */
   private static final long serialVersionUID = 10006L;
   /* Per Object Variables Saved */
-  protected int fuelRF;
+  protected int fuelRE;
 
   /* Per Object Variables Not-Saved */
-  protected transient int maxFuelRF;
+  protected transient int maxFuelRE;
   protected transient int lastEnergy;
   protected transient boolean isActive;
   protected transient boolean wasActive;
@@ -43,7 +43,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     init();
     wasActive = false;
     lastEnergy = 0;
-    maxFuelRF = 0;
+    maxFuelRE = 0;
   }
 
   /* Common Load and Construction */
@@ -55,14 +55,14 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
     super.writeExternal(out);
-    out.writeInt(fuelRF);
+    out.writeInt(fuelRE);
     out.writeObject(energyStorage);
   }
 
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     super.readExternal(in);
-    fuelRF = in.readInt();
+    fuelRE = in.readInt();
     energyStorage = (EnergyStorage) in.readObject();
   }
 
@@ -107,7 +107,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   protected abstract boolean canStart();
 
   protected boolean canFinish() {
-    return fuelRF <= 0;
+    return fuelRE <= 0;
   }
 
   protected abstract void processStart();
@@ -126,7 +126,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   protected int processTick() {
     lastEnergy = getMaxOutput();
     energyStorage.modifyEnergyStored(lastEnergy); //TODO need to fix look at old code
-    fuelRF -= lastEnergy;
+    fuelRE -= lastEnergy;
     return lastEnergy;
   }
 

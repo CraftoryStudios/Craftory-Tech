@@ -44,8 +44,8 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   @Override
   protected void processStart() {
-    maxFuelRF = SolidFuelManager.getFuelEnergy(getFuelItem().getType().name());
-    fuelRF += maxFuelRF;
+    maxFuelRE = SolidFuelManager.getFuelEnergy(getFuelItem().getType().name());
+    fuelRE += maxFuelRE;
     consumeFuel();
   }
 

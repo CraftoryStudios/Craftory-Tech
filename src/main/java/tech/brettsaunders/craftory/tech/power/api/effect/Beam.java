@@ -97,7 +97,7 @@ public class Beam {
           }
         } catch (ReflectiveOperationException e) {
           Logger.warn("Issue with Power Beam packet sending");
-          Logger.debug(e);
+          Logger.captureError(e);
         }
       }
 
@@ -110,7 +110,7 @@ public class Beam {
           }
         } catch (ReflectiveOperationException e) {
           Logger.warn("Issue sending Power Beam cancel packet");
-          Logger.debug(e);
+          Logger.captureError(e);
         }
         run = null;
       }
@@ -271,7 +271,7 @@ public class Beam {
         tryWatcherSet(fakeSquidWatcher, watcherObject1, (byte) 32);
       } catch (ReflectiveOperationException e) {
         Logger.warn("Issue setting up Beam Class data");
-        Logger.debug(e);
+        Logger.captureError(e);
       }
     }
 
