@@ -8,11 +8,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import tech.brettsaunders.craftory.Utilities;
 
-public class Command_Help implements CommandExecutor, TabCompleter {
+public class Command_Debug implements CommandExecutor, TabCompleter {
 
   public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
     if (args.length == 1) {
-      Utilities.msg(sender, "&8/&akc help  &7-&f  Shows this list");
+      Boolean debugMode = Utilities.config.getBoolean("general.debug");
+      Utilities.config.set("general.debug", !debugMode);
+      Utilities.saveConfigFile();
+      Utilities.msg(sender, "Debug Mode Toggled to " + !debugMode);
     } else {
       Utilities.msg(sender, "Usage");
     }
