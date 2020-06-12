@@ -112,11 +112,11 @@ public class PoweredBlockManager implements Listener, ITickable {
       poweredBlocks = data.poweredBlocks;
       powerGridManagers = data.powerGridManagers;
       in.close();
-      Logger.info("PowerBlockManager Loaded");
+      Logger.info("Powered Block Data Loaded");
     } catch (FileNotFoundException e) {
-      Logger.debug("First Run - Generating PowerBlockManager Data");
+      Logger.debug("First Run - Generating Powered Block Data");
     } catch (IOException e) {
-      Logger.error("PowerBlockManager IO Loading Issue");
+      Logger.error("Powered Block Data IO Loading Issue");
       Logger.captureError(e);
     } catch (ClassNotFoundException e) {
       Logger.captureError(e);

@@ -9,15 +9,20 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
 public class GBattery implements IGUIComponent {
 
-  private static final int TOP_SLOT = 10;
-  private static final int BOTTOM_SLOT = 37;
+  private final int TOP_SLOT;
+  private final int BOTTOM_SLOT;
   private EnergyStorage storage;
   private Inventory inventory;
-  private int previousAmount = -1;
 
-  public GBattery(Inventory inventory, EnergyStorage storage) {
+  public GBattery(Inventory inventory, EnergyStorage storage, int top_slot) {
     this.inventory = inventory;
     this.storage = storage;
+    TOP_SLOT = top_slot;
+    BOTTOM_SLOT = top_slot + 27;
+  }
+
+  public GBattery(Inventory inventory, EnergyStorage storage) {
+    this(inventory, storage, 10);
   }
 
   @Override
@@ -58,8 +63,25 @@ public class GBattery implements IGUIComponent {
     bottomMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
     bottomItem.setItemMeta(bottomMeta);
 
+    //Fill other battery slots
+    ItemStack batteryIndicator = ItemsAdder.getCustomItem("extra:invisible");
+    ItemMeta batteryIndicatorMeta = batteryIndicator.getItemMeta();
+    batteryIndicatorMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
+    batteryIndicator.setItemMeta(batteryIndicatorMeta);
+
     //Display in Inventory
     inventory.setItem(TOP_SLOT, topItem);
     inventory.setItem(BOTTOM_SLOT, bottomItem);
+
+    //Fill other slots
+    for (int i = -1; i < 1; i++) {
+      int x = TOP_SLOT + i;
+      for (int j = -1; j < 5; j++) {
+        int slot = x + (9 * j);
+        if (slot > -1 && slot < 54 && slot != TOP_SLOT && slot != BOTTOM_SLOT) {
+          inventory.setItem(slot, batteryIndicator);
+        }
+      }
+    }
   }
 }

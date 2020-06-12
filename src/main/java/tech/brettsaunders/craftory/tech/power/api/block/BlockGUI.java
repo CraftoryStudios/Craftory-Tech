@@ -42,6 +42,7 @@ public abstract class BlockGUI implements Externalizable {
   }
 
   public Inventory getInventory() {
+    if (inventoryInterface == null) return null;
     return inventoryInterface.getInternal();
   }
 

@@ -63,6 +63,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   }
 
   protected ItemStack getFuelItem() {
+    if (getInventory() == null) return null;
     return getInventory().getItem(FUEL_SLOT);
   }
 

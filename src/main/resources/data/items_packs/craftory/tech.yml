@@ -1,19 +1,6 @@
 info:
   namespace: craftory
 recipes:
-  cooking:
-    steel_ingot:
-      permission: craftory
-      ingredient:
-        item: IRON_INGOT
-      machines:
-        - FURNACE
-        - BLAST_FURNACE
-      exp: 1
-      cook_time: 200
-      result:
-        item: craftory:steel_ingot
-        amount: 1
   crafting_table:
     iron_cell:
       permission: craftory
@@ -131,7 +118,7 @@ recipes:
         - XSX
         - XSX
       ingredients:
-        I: craftory:steel_ingot
+        S: craftory:steel_ingot
       result:
         item: craftory:wrench
         amount: 1
