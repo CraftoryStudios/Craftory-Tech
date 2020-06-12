@@ -13,19 +13,29 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
 public class GOutputConfig implements IGUIComponent, Listener {
 
-  private static final int NORTH_SLOT = 32;
-  private static final int EAST_SLOT = 33;
-  private static final int SOUTH_SLOT = 34;
-  private static final int WEST_SLOT = 41;
-  private static final int UP_SLOT = 24;
-  private static final int DOWN_SLOT = 42;
+  private final int NORTH_SLOT;
+  private final int EAST_SLOT;
+  private final int SOUTH_SLOT;
+  private final int WEST_SLOT;
+  private final int UP_SLOT;
+  private final int DOWN_SLOT;
 
   private Inventory inventory;
   private ArrayList<Boolean> config;
 
   public GOutputConfig(Inventory inventory, ArrayList<Boolean> config) {
+    this(inventory, config, 34);
+  }
+
+  public GOutputConfig(Inventory inventory, ArrayList<Boolean> config, int middleSlot) {
     this.inventory = inventory;
     this.config = config;
+    NORTH_SLOT = middleSlot - 1;
+    SOUTH_SLOT = middleSlot;
+    EAST_SLOT = middleSlot + 1;
+    WEST_SLOT = middleSlot + 8;
+    UP_SLOT = middleSlot -9;
+    DOWN_SLOT = middleSlot + 9;
     Craftory.getInstance().getServer().getPluginManager()
         .registerEvents(this, Craftory.getInstance());
   }
@@ -41,26 +51,19 @@ public class GOutputConfig implements IGUIComponent, Listener {
       return;
     }
 
-    switch (event.getRawSlot()) {
-      case NORTH_SLOT:
-        config.set(0, !config.get(0));
-        break;
-      case EAST_SLOT:
-        config.set(1, !config.get(1));
-        break;
-      case SOUTH_SLOT:
-        config.set(2, !config.get(2));
-        break;
-      case WEST_SLOT:
-        config.set(3, !config.get(3));
-        break;
-      case UP_SLOT:
-        config.set(4, !config.get(4));
-        break;
-      case DOWN_SLOT:
-        config.set(5, !config.get(5));
-        break;
-
+    int rawSlot = event.getRawSlot();
+    if (rawSlot == NORTH_SLOT) {
+      config.set(0, !config.get(0));
+    } else if (rawSlot == EAST_SLOT) {
+      config.set(1, !config.get(1));
+    } else if (rawSlot == SOUTH_SLOT) {
+      config.set(2, !config.get(2));
+    } else if (rawSlot == WEST_SLOT) {
+      config.set(3, !config.get(3));
+    } else if (rawSlot == UP_SLOT) {
+      config.set(4, !config.get(4));
+    } else if (rawSlot == DOWN_SLOT) {
+      config.set(5, !config.get(5));
     }
   }
 
