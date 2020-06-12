@@ -16,9 +16,11 @@ public final class Craftory extends JavaPlugin {
   public static PowerConnectorManager powerConnectorManager = null;
   private static Craftory plugin = null;
   private static PoweredBlockManager blockPoweredManager = null;
+
   public static Craftory getInstance() {
     return plugin;
   }
+
   public static PoweredBlockManager getBlockPoweredManager() {
     return blockPoweredManager;
   }

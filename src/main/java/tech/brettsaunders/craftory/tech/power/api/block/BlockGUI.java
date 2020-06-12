@@ -2,15 +2,12 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
 public abstract class BlockGUI implements Externalizable {
@@ -35,14 +32,18 @@ public abstract class BlockGUI implements Externalizable {
   /*GUI Methods */
 
   public void updateInterface() {
-    if (inventoryInterface == null || inventoryInterface.getInternal().getViewers().size() <= 0) return;
+    if (inventoryInterface == null || inventoryInterface.getInternal().getViewers().size() <= 0) {
+      return;
+    }
     for (IGUIComponent component : components) {
       component.update();
     }
   }
 
   public Inventory getInventory() {
-    if (inventoryInterface == null) return null;
+    if (inventoryInterface == null) {
+      return null;
+    }
     return inventoryInterface.getInternal();
   }
 

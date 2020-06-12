@@ -55,8 +55,8 @@ public class RecipeUtils {
     ingredients.put(Material.COAL.toString(), 1);
     ingredients.put(Material.IRON_INGOT.toString(), 1);
     HashMap<String, Integer> products = new HashMap<>();
-    products.put(Components.STEEL_INGOT,1);
-    twoToOneRecipes.add(new CustomMachineRecipe(ingredients,products));
+    products.put(Components.STEEL_INGOT, 1);
+    twoToOneRecipes.add(new CustomMachineRecipe(ingredients, products));
     Logger.debug("Extracting Bukkit Recipes");
     Logger.debug("All: " + allRecipes.size());
     Logger.debug("Shaped: " + shapedRecipes.size());
@@ -101,20 +101,27 @@ public class RecipeUtils {
     return stonecuttingRecipes;
   }
 
-  public static HashSet<ICustomRecipe> getCustomRecipes() { return customRecipes;  }
-
-  public static HashSet<CustomMachineRecipe> getTwoToOneRecipes() { return twoToOneRecipes;  }
-
-  public interface ICustomRecipe {
-    HashMap<String,Integer> getIngredients();
-    HashMap<String,Integer> getProducts();
+  public static HashSet<ICustomRecipe> getCustomRecipes() {
+    return customRecipes;
   }
 
-  public static class CustomMachineRecipe implements ICustomRecipe{
-    HashMap<String,Integer> ingredients;
-    HashMap<String,Integer> products;
+  public static HashSet<CustomMachineRecipe> getTwoToOneRecipes() {
+    return twoToOneRecipes;
+  }
 
-    CustomMachineRecipe(HashMap<String,Integer> ingredients, HashMap<String,Integer> products) {
+  public interface ICustomRecipe {
+
+    HashMap<String, Integer> getIngredients();
+
+    HashMap<String, Integer> getProducts();
+  }
+
+  public static class CustomMachineRecipe implements ICustomRecipe {
+
+    HashMap<String, Integer> ingredients;
+    HashMap<String, Integer> products;
+
+    CustomMachineRecipe(HashMap<String, Integer> ingredients, HashMap<String, Integer> products) {
       this.ingredients = ingredients;
       this.products = products;
     }

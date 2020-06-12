@@ -11,7 +11,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
-import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
 public class PowerGridManager implements Externalizable, ITickable {
@@ -63,7 +62,8 @@ public class PowerGridManager implements Externalizable, ITickable {
   }
 
   @Override
-  public void slowUpdate() {}
+  public void slowUpdate() {
+  }
 
   private int calculateStorageSpace() {
     int amount = 0;
@@ -79,10 +79,14 @@ public class PowerGridManager implements Externalizable, ITickable {
     int e;
     for (BaseProvider generator : generators) {
       e = generator.getEnergyAvailable();
-      if (amount + e > limit) e = limit - amount;
+      if (amount + e > limit) {
+        e = limit - amount;
+      }
       e = generator.retrieveEnergy(e);
-      amount +=e;
-      if (amount == limit) break;
+      amount += e;
+      if (amount == limit) {
+        break;
+      }
     }
     return amount;
   }
@@ -111,7 +115,7 @@ public class PowerGridManager implements Externalizable, ITickable {
   private int raidTheBank(int goal) {
     int amount = 0;
     for (BaseCell cell : cells) {
-      amount += cell.retrieveEnergy((goal-amount));
+      amount += cell.retrieveEnergy((goal - amount));
       if (amount >= goal) {
         break;
       }

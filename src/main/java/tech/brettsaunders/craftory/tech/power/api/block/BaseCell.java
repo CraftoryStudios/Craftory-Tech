@@ -70,7 +70,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
 
   @Override
   public int getEnergySpace() {
-    return Math.max(energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored(), MAX_INPUT * INPUT_LEVEL[level]);
+    return Math.max(energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored(),
+        MAX_INPUT * INPUT_LEVEL[level]);
   }
 
   @Override

@@ -6,7 +6,6 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.bukkit.Location;
@@ -36,7 +35,6 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   /* Per Object Variables Not-Saved */
 
   private transient FurnaceRecipe currentRecipe = null;
-
 
 
   /* Construction */
@@ -96,7 +94,7 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
 
 
   @Override
-  protected void processComplete(){
+  protected void processComplete() {
     inputSlots[0].setAmount(inputSlots[0].getAmount() - 1);
     if (outputSlots[0] == null) {
       outputSlots[0] = currentRecipe.getResult();

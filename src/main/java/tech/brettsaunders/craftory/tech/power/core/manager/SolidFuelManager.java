@@ -3,6 +3,7 @@ package tech.brettsaunders.craftory.tech.power.core.manager;
 import java.util.HashMap;
 
 public class SolidFuelManager {
+
   private static HashMap<String, Integer> fuelMap = new HashMap<>();
 
   static {
@@ -180,8 +181,10 @@ public class SolidFuelManager {
   }
 
   public static int getFuelEnergy(String fuel) {
-    if (fuel.isEmpty()) return 0;
-    return fuelMap.getOrDefault(fuel,0);
+    if (fuel.isEmpty()) {
+      return 0;
+    }
+    return fuelMap.getOrDefault(fuel, 0);
   }
 
 }

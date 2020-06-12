@@ -10,7 +10,8 @@ import tech.brettsaunders.craftory.Utilities;
 
 public class Command_Debug implements CommandExecutor, TabCompleter {
 
-  public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
+  public boolean onCommand(final CommandSender sender, final Command command, final String label,
+      final String[] args) {
     if (args.length == 1) {
       Boolean debugMode = Utilities.config.getBoolean("general.debug");
       Utilities.config.set("general.debug", !debugMode);

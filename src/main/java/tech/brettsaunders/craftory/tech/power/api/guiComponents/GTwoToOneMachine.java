@@ -15,6 +15,7 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class GTwoToOneMachine implements IGUIComponent, Listener {
+
   private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
       .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
           InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
@@ -53,7 +54,8 @@ public class GTwoToOneMachine implements IGUIComponent, Listener {
       return;
     }
     //Stop moving items from any slot put intractable
-    if (event.getRawSlot() != inputSlot1 && event.getRawSlot() != inputSlot2 && event.getRawSlot() != outputSlot
+    if (event.getRawSlot() != inputSlot1 && event.getRawSlot() != inputSlot2
+        && event.getRawSlot() != outputSlot
         && event.getRawSlot() < 54) {
       event.setCancelled(true);
     }

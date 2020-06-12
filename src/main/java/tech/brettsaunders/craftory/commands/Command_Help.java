@@ -10,7 +10,8 @@ import tech.brettsaunders.craftory.Utilities;
 
 public class Command_Help implements CommandExecutor, TabCompleter {
 
-  public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
+  public boolean onCommand(final CommandSender sender, final Command command, final String label,
+      final String[] args) {
     if (args.length == 1) {
       Utilities.msg(sender, "&8/&acf help  &7-&f  Shows this list");
       Utilities.msg(sender, "&8/&acf toggleDebug  &7-&f  Toggles showing debug messages (OP Only)");

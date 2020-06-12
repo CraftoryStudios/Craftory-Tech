@@ -34,7 +34,7 @@ public class GOutputConfig implements IGUIComponent, Listener {
     SOUTH_SLOT = middleSlot;
     EAST_SLOT = middleSlot + 1;
     WEST_SLOT = middleSlot + 8;
-    UP_SLOT = middleSlot -9;
+    UP_SLOT = middleSlot - 9;
     DOWN_SLOT = middleSlot + 9;
     Craftory.getInstance().getServer().getPluginManager()
         .registerEvents(this, Craftory.getInstance());

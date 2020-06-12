@@ -4,8 +4,6 @@ import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.HashSet;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,12 +14,11 @@ import tech.brettsaunders.craftory.tech.power.core.manager.SolidFuelManager;
 
 public class SolidFuelGenerator extends BaseGenerator {
 
+  protected static final int FUEL_SLOT = 12;
   /* Static Constants Private */
   private static final long serialVersionUID = 10020L;
   private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 80;
-
-  protected static final int FUEL_SLOT = 12;
   private transient ItemStack fuelItem;
 
   /* Construction */
@@ -38,7 +35,9 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   @Override
   protected boolean canStart() {
-    if (getFuelItem() == null) return false;
+    if (getFuelItem() == null) {
+      return false;
+    }
     return SolidFuelManager.getFuelEnergy(getFuelItem().getType().name()) > 0;
   }
 
@@ -63,7 +62,9 @@ public class SolidFuelGenerator extends BaseGenerator {
   }
 
   protected ItemStack getFuelItem() {
-    if (getInventory() == null) return null;
+    if (getInventory() == null) {
+      return null;
+    }
     return getInventory().getItem(FUEL_SLOT);
   }
 

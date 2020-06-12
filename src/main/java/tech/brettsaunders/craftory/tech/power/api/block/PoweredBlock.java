@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
-import javax.sound.sampled.Line.Info;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
@@ -19,7 +17,6 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 import tech.brettsaunders.craftory.utils.HopperItemMovement;
-import tech.brettsaunders.craftory.utils.Logger;
 
 /**
  * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
@@ -90,7 +87,8 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
       inputLocations = (ArrayList<Integer>) in.readObject();
       outputSlots = (ItemStack[]) in.readObject();
       outputLocations = (ArrayList<Integer>) in.readObject();
-    } catch (Exception e) { }
+    } catch (Exception e) {
+    }
 
   }
 
@@ -101,26 +99,30 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   }
 
   private void processHoppers() {
-    if(inventoryInterface==null) return;
+    if (inventoryInterface == null) {
+      return;
+    }
 
     //Process incoming hoppers
-    if(inputSlots.length > 0 && hopperInCounter != 0) hopperInCounter-=1;
-    else {
+    if (inputSlots.length > 0 && hopperInCounter != 0) {
+      hopperInCounter -= 1;
+    } else {
       for (int i = 0; i < inputSlots.length; i++) {
         inputSlots[i] = inventoryInterface.getItem(inputLocations.get(i));
-        ItemStack stack = HopperItemMovement.moveItemsIn(location,inputSlots[i]);
-        if(stack !=null) {
+        ItemStack stack = HopperItemMovement.moveItemsIn(location, inputSlots[i]);
+        if (stack != null) {
           inputSlots[i] = stack;
           hopperInCounter = HOPPER_DELAY;
         }
         inventoryInterface.setItem(inputLocations.get(i), inputSlots[i]);
       }
     }
-    if(outputSlots.length > 0 && hopperOutCounter != 0) hopperOutCounter-=1;
-    else {
+    if (outputSlots.length > 0 && hopperOutCounter != 0) {
+      hopperOutCounter -= 1;
+    } else {
       for (int i = 0; i < outputSlots.length; i++) {
         outputSlots[i] = inventoryInterface.getItem(outputLocations.get(i));
-        if(HopperItemMovement.moveItemsOut(location, outputSlots[i])){
+        if (HopperItemMovement.moveItemsOut(location, outputSlots[i])) {
           hopperOutCounter = HOPPER_DELAY;
         }
         inventoryInterface.setItem(outputLocations.get(i), outputSlots[i]);
@@ -143,7 +145,8 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     }
 
     //Stop moving items from any slot but intractable ones
-    if ((!inputLocations.contains(event.getRawSlot())) && (!outputLocations.contains(event.getRawSlot()))
+    if ((!inputLocations.contains(event.getRawSlot())) && (!outputLocations
+        .contains(event.getRawSlot()))
         && event.getRawSlot() < 54) {
       event.setCancelled(true);
     }
@@ -162,9 +165,13 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
           amount = 0;
           break;
         }
-        if (destinationItemStack.getAmount() == destinationItemStack.getMaxStackSize()) continue;
+        if (destinationItemStack.getAmount() == destinationItemStack.getMaxStackSize()) {
+          continue;
+        }
         if (destinationItemStack.getType().equals(sourceItemStack.getType())) {
-          int amountGive = Math.min(destinationItemStack.getMaxStackSize() - destinationItemStack.getAmount(), amount);
+          int amountGive = Math
+              .min(destinationItemStack.getMaxStackSize() - destinationItemStack.getAmount(),
+                  amount);
           destinationItemStack.setAmount(destinationItemStack.getAmount() + amountGive);
           getInventory().setItem(inputSlot, destinationItemStack);
           amount = amount - amountGive;
@@ -174,7 +181,9 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
       event.getView().getBottomInventory().setItem(event.getSlot(), sourceItemStack);
     }
 
-    if (event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.PLACE_SOME || event.getAction() == InventoryAction.PLACE_ONE) {
+    if (event.getAction() == InventoryAction.PLACE_ALL
+        || event.getAction() == InventoryAction.PLACE_SOME
+        || event.getAction() == InventoryAction.PLACE_ONE) {
       if (outputLocations.contains(event.getRawSlot())) {
         event.setCancelled(true);
       }

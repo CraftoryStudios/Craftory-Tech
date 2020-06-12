@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory;
 
-import com.google.common.base.Strings;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.SentryClientFactory;
@@ -9,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,6 +18,7 @@ import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
 
 public class Utilities {
+
   public final static String DATA_FOLDER;
   public static FileConfiguration config;
   public static FileConfiguration data;
@@ -28,8 +27,10 @@ public class Utilities {
   private static File dataFile = new File(Craftory.getInstance().getDataFolder(), "data.yml");
 
   static {
-    config = YamlConfiguration.loadConfiguration(new File(Craftory.getInstance().getDataFolder(), "config.yml"));
-    data = YamlConfiguration.loadConfiguration(new File(Craftory.getInstance().getDataFolder(), "data.yml"));
+    config = YamlConfiguration
+        .loadConfiguration(new File(Craftory.getInstance().getDataFolder(), "config.yml"));
+    data = YamlConfiguration
+        .loadConfiguration(new File(Craftory.getInstance().getDataFolder(), "data.yml"));
     DATA_FOLDER = Craftory.getInstance().getDataFolder().getPath() + File.separator + "data";
   }
 
@@ -72,8 +73,10 @@ public class Utilities {
 
   static void startMetrics() {
     Metrics metrics = new Metrics(Craftory.getInstance(), 7804);
-    metrics.addCustomChart(new Metrics.SimplePie("debugEnabled", () -> config.getString("general.debug")));
-    metrics.addCustomChart(new Metrics.SimplePie("techEnabled", () -> config.getString("general.techEnabled")));
+    metrics.addCustomChart(
+        new Metrics.SimplePie("debugEnabled", () -> config.getString("general.debug")));
+    metrics.addCustomChart(
+        new Metrics.SimplePie("techEnabled", () -> config.getString("general.techEnabled")));
   }
 
   static void registerCommandsAndCompletions() {
@@ -92,13 +95,16 @@ public class Utilities {
         "https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818?debug=false&&environment=WIP&&release="
             + Craftory.VERSION);
     sentry = SentryClientFactory.sentryClient();
-    Sentry.getContext().setUser(new UserBuilder().setId(data.getString("reporting.serverUUID")).build());
+    Sentry.getContext()
+        .setUser(new UserBuilder().setId(data.getString("reporting.serverUUID")).build());
     Sentry.getContext().addTag("Bukkit Version", Bukkit.getBukkitVersion());
     Sentry.getContext().addExtra("Plugins", Bukkit.getPluginManager().getPlugins());
   }
 
   static void done() {
-    Bukkit.getLogger().info("[" + Craftory.getInstance().getDescription().getPrefix() + "] " + ChatColor.GREEN + "Finished Loading!");
+    Bukkit.getLogger().info(
+        "[" + Craftory.getInstance().getDescription().getPrefix() + "] " + ChatColor.GREEN
+            + "Finished Loading!");
   }
 
   /* Helper Functions */

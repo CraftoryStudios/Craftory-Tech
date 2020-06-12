@@ -33,6 +33,34 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
     DebugTab = new Command_Debug();
   }
 
+  public static ArrayList<String> filterTabs(ArrayList<String> list, String[] origArgs) {
+    if (origArgs.length == 0) {
+      return list;
+    }
+    Iterator<String> itel = list.iterator();
+    String label = origArgs[origArgs.length - 1].toLowerCase();
+    while (itel.hasNext()) {
+      String name = itel.next();
+      if (name.toLowerCase().startsWith(label)) {
+        continue;
+      }
+      itel.remove();
+    }
+    return list;
+  }
+
+  public static String[] getArgs(String[] args) {
+    ArrayList<String> newArgs = new ArrayList<>();
+    for (int i = 0; i < args.length - 1; i++) {
+      String s = args[i];
+      if (s.trim().isEmpty()) {
+        continue;
+      }
+      newArgs.add(s);
+    }
+    return newArgs.toArray(new String[0]);
+  }
+
   @Override
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
@@ -78,30 +106,4 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
     }
     return null;
   }
-
-
-    public static ArrayList<String> filterTabs(ArrayList<String> list, String[] origArgs) {
-      if (origArgs.length == 0)
-        return list;
-      Iterator<String> itel = list.iterator();
-      String label = origArgs[origArgs.length - 1].toLowerCase();
-      while (itel.hasNext()) {
-        String name = itel.next();
-        if (name.toLowerCase().startsWith(label))
-          continue;
-        itel.remove();
-      }
-      return list;
-    }
-
-    public static String[] getArgs(String[] args) {
-      ArrayList<String> newArgs = new ArrayList<>();
-      for (int i = 0; i < args.length - 1; i++) {
-        String s = args[i];
-        if (s.trim().isEmpty())
-          continue;
-        newArgs.add(s);
-      }
-      return newArgs.toArray(new String[0]);
-    }
 }

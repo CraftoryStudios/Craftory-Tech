@@ -11,7 +11,8 @@ import tech.brettsaunders.craftory.Utilities;
 
 public class Command_Main implements CommandExecutor, TabCompleter {
 
-  public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
+  public boolean onCommand(final CommandSender sender, final Command command, final String label,
+      final String[] args) {
     Utilities.msg(sender, "[Craftory] &fRunning &9v" + Craftory.VERSION);
     Utilities.msg(sender, "[Craftory] &fMade by &6 Brett Saunders & Matty Jones &f, © ");
     return true;

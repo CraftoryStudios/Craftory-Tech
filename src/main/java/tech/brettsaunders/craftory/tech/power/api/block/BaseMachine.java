@@ -71,8 +71,10 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
     progressContainer.setT(((double) tickCount) / processTime);
   }
 
-  protected  abstract void processComplete();
+  protected abstract void processComplete();
+
   protected abstract boolean validateContense();
+
   protected abstract void updateSlots();
 
   @Override
@@ -106,7 +108,8 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   @Override
   public int getEnergySpace() {
-    return Math.max(energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored(), maxReceive);
+    return Math
+        .max(energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored(), maxReceive);
   }
 
   /* IEnergyConnection */

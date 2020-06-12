@@ -61,14 +61,15 @@ public class PoweredBlockManager implements Listener, ITickable {
   public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   private static final String DATA_PATH;
-  private final HashMap<Location, PowerGridManager> powerConnectors;
-  public HashSet<PowerGridManager> powerGridManagers;
-  private HashMap<Location, PoweredBlock> poweredBlocks;
-  private HashMap<World, HashSet> loadedChunkWorlds = new HashMap<>();
 
   static {
     DATA_PATH = Utilities.DATA_FOLDER + File.separator + "poweredBlock.data";
   }
+
+  private final HashMap<Location, PowerGridManager> powerConnectors;
+  public HashSet<PowerGridManager> powerGridManagers;
+  private HashMap<Location, PoweredBlock> poweredBlocks;
+  private HashMap<World, HashSet> loadedChunkWorlds = new HashMap<>();
 
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();
@@ -154,7 +155,9 @@ public class PoweredBlockManager implements Listener, ITickable {
     if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
       return;
     }
-    if (e.getPlayer().isSneaking()) return;
+    if (e.getPlayer().isSneaking()) {
+      return;
+    }
 
     if (poweredBlocks.containsKey(e.getBlockClicked().getLocation())) {
       //Open GUI of Powered Block
@@ -318,7 +321,8 @@ public class PoweredBlockManager implements Listener, ITickable {
     if (isPoweredBlock(e.getClickedBlock().getLocation())) {
       PoweredBlock block = getPoweredBlock(e.getClickedBlock().getLocation());
       e.getPlayer().sendMessage(
-          "Stored: " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity() + " RE");
+          "Stored: " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
+              + " RE");
     }
   }
 
