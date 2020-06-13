@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class Utilities {
 
@@ -91,6 +92,7 @@ public class Utilities {
   }
 
   static void errorReporting() {
+    Logger.info("///////// Please ignore Sentry.io Warnings ///////");
     Sentry.init(
         "https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818?debug=false&&environment=WIP&&release="
             + Craftory.VERSION);
@@ -99,6 +101,7 @@ public class Utilities {
         .setUser(new UserBuilder().setId(data.getString("reporting.serverUUID")).build());
     Sentry.getContext().addTag("Bukkit Version", Bukkit.getBukkitVersion());
     Sentry.getContext().addExtra("Plugins", Bukkit.getPluginManager().getPlugins());
+    Logger.info("///////// Please ignore Sentry.io Warnings ///////");
   }
 
   static void done() {

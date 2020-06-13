@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
+import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public abstract class BaseGenerator extends BaseProvider implements Externalizable {
 
@@ -22,6 +23,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   protected int fuelRE;
 
   /* Per Object Variables Not-Saved */
+  protected transient VariableContainer<Boolean> runningContainer;
   protected transient int maxFuelRE;
   protected transient int lastEnergy;
   protected transient boolean isActive;
@@ -50,6 +52,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   private void init() {
     isActive = false;
     isProvider = true;
+    runningContainer = new VariableContainer<>(false);
   }
 
   @Override
@@ -110,7 +113,9 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     return fuelRE <= 0;
   }
 
-  protected abstract void processStart();
+  protected void processStart() {
+    runningContainer.setT(true);
+  }
 
   protected void processFinish() {
   }
@@ -121,6 +126,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   protected void processOff() {
     isActive = false;
     wasActive = true;
+    runningContainer.setT(false);
   }
 
   protected int processTick() {

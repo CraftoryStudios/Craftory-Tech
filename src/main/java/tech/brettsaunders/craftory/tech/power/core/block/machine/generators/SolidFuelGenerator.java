@@ -9,12 +9,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.core.manager.SolidFuelManager;
 
 public class SolidFuelGenerator extends BaseGenerator {
 
-  protected static final int FUEL_SLOT = 12;
+  protected static final int FUEL_SLOT = 22;
   /* Static Constants Private */
   private static final long serialVersionUID = 10020L;
   private static final byte C_LEVEL = 0;
@@ -43,6 +44,7 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   @Override
   protected void processStart() {
+    super.processStart();
     maxFuelRE = SolidFuelManager.getFuelEnergy(getFuelItem().getType().name());
     fuelRE += maxFuelRE;
     consumeFuel();
@@ -80,9 +82,11 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Fuel Generator", new FontImageWrapper("extra:cell"));
+    Inventory inventory = setInterfaceTitle("Fuel Generator", new FontImageWrapper("extra:generator"));
     addGUIComponent(new GBattery(inventory, energyStorage));
-    addGUIComponent(new GOutputConfig(inventory, sidesConfig));
+    addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43));
+    addGUIComponent(new GIndicator(inventory, runningContainer, 31));
+    inputLocations.add(FUEL_SLOT);
     if (fuelItem != null) {
       getInventory().setItem(FUEL_SLOT, fuelItem);
     }

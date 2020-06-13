@@ -14,13 +14,13 @@ items:
       material: PAPER
       generate: true
       textures:
-        - item/output.png
+        - item/output/output.png
   output_disabled:
     display_name: DISABLED
     resource:
       material: PAPER
       generate: false
-      model_path: item/output_disabled
+      model_path: item/output/output_disabled
   output_green:
     display_name: OUTPUT
     resource:
@@ -32,254 +32,254 @@ items:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_0_b
+      model_path: item/battery/bar_0_b
   bar_1_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_1_b
+      model_path: item/battery/bar_1_b
   bar_2_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_2_b
+      model_path: item/battery/bar_2_b
   bar_3_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_3_b
+      model_path: item/battery/bar_3_b
   bar_4_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_4_b
+      model_path: item/battery/bar_4_b
   bar_5_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_5_b
+      model_path: item/battery/bar_5_b
   bar_6_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_6_b
+      model_path: item/battery/bar_6_b
   bar_7_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_7_b
+      model_path: item/battery/bar_7_b
   bar_8_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_8_b
+      model_path: item/battery/bar_8_b
   bar_9_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_9_b
+      model_path: item/battery/bar_9_b
   bar_10_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_10_b
+      model_path: item/battery/bar_10_b
   bar_11_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_11_b
+      model_path: item/battery/bar_11_b
   bar_12_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_12_b
+      model_path: item/battery/bar_12_b
   bar_13_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_13_b
+      model_path: item/battery/bar_13_b
   bar_14_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_14_b
+      model_path: item/battery/bar_14_b
   bar_15_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_15_b
+      model_path: item/battery/bar_15_b
   bar_16_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_16_b
+      model_path: item/battery/bar_16_b
   bar_17_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_17_b
+      model_path: item/battery/bar_17_b
   bar_18_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_18_b
+      model_path: item/battery/bar_18_b
   bar_19_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_19_b
+      model_path: item/battery/bar_19_b
   bar_20_b:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_20_b
+      model_path: item/battery/bar_20_b
 
   bar_0_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_0_t
+      model_path: item/battery/bar_0_t
   bar_1_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_1_t
+      model_path: item/battery/bar_1_t
   bar_2_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_2_t
+      model_path: item/battery/bar_2_t
   bar_3_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_3_t
+      model_path: item/battery/bar_3_t
   bar_4_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_4_t
+      model_path: item/battery/bar_4_t
   bar_5_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_5_t
+      model_path: item/battery/bar_5_t
   bar_6_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_6_t
+      model_path: item/battery/bar_6_t
   bar_7_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_7_t
+      model_path: item/battery/bar_7_t
   bar_8_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_8_t
+      model_path: item/battery/bar_8_t
   bar_9_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_9_t
+      model_path: item/battery/bar_9_t
   bar_10_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_10_t
+      model_path: item/battery/bar_10_t
   bar_11_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_11_t
+      model_path: item/battery/bar_11_t
   bar_12_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_12_t
+      model_path: item/battery/bar_12_t
   bar_13_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_13_t
+      model_path: item/battery/bar_13_t
   bar_14_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_14_t
+      model_path: item/battery/bar_14_t
   bar_15_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_15_t
+      model_path: item/battery/bar_15_t
   bar_16_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_16_t
+      model_path: item/battery/bar_16_t
   bar_17_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_17_t
+      model_path: item/battery/bar_17_t
   bar_18_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_18_t
+      model_path: item/battery/bar_18_t
   bar_19_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_19_t
+      model_path: item/battery/bar_19_t
   bar_20_t:
     display_name:
     resource:
       material: PAPER
       generate: false
-      model_path: item/bar_20_t
+      model_path: item/battery/bar_20_t
   light_on:
     display_name:
     resource:
@@ -358,12 +358,9 @@ font_images:
   cell:
     path: "font/gui/cell.png"
     y_position: 47
-  cell2:
-    path: "font/gui/cell2.png"
+  generator:
+    path: "font/gui/generator.png"
     y_position: 47
-  cell3:
-    path: "font/gui/cell3.png"
-    y_position: 47
-  cell4:
-    path: "font/gui/cell4.png"
+  furnace:
+    path: "font/gui/furnace.png"
     y_position: 47

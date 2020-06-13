@@ -28,8 +28,8 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   protected static final int[] CAPACITY_LEVEL = {5000, 10000, 25000, 50000};
   /* Static Constants Private */
   private static final long serialVersionUID = 10005L;
-  private static final int INPUT_LOCATION = 22;
-  private static final int OUTPUT_LOCATION = 26;
+  private static final int INPUT_LOCATION = 21;
+  private static final int OUTPUT_LOCATION = 25;
   /* Per Object Variables Saved */
 
   /* Per Object Variables Not-Saved */
@@ -82,11 +82,11 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Electric Furnace", new FontImageWrapper("extra:cell"));
+    Inventory inventory = setInterfaceTitle("Electric Furnace", new FontImageWrapper("extra:furnace"));
     addGUIComponent(
-        new GOneToOneMachine(inventory, 24, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));
+        new GOneToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));
     addGUIComponent(new GBattery(inventory, energyStorage));
-    addGUIComponent(new GIndicator(inventory, runningContainer));
+    addGUIComponent(new GIndicator(inventory, runningContainer, 30));
     inventory.setItem(INPUT_LOCATION, inputSlots[0]);
     inventory.setItem(OUTPUT_LOCATION, outputSlots[0]);
     this.inventoryInterface = inventory;
