@@ -364,3 +364,6 @@ font_images:
   furnace:
     path: "font/gui/furnace.png"
     y_position: 47
+  foundry:
+    path: "font/gui/foundry.png"
+    y_position: 47

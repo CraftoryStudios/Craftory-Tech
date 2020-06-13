@@ -83,6 +83,6 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
   public void setupGUI() {
     Inventory inventory = setInterfaceTitle("Cell", new FontImageWrapper("extra:cell"));
     addGUIComponent(new GBattery(inventory, energyStorage));
-    addGUIComponent(new GOutputConfig(inventory, sidesConfig));
+    addGUIComponent(new GOutputConfig(inventory, sidesConfig,22));
   }
 }

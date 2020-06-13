@@ -28,9 +28,9 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
   protected static final int[] CAPACITY_LEVEL = {5000, 10000, 25000, 50000};
   /* Static Constants Private */
   private static final long serialVersionUID = 10023L;
-  private static final int INPUT_LOCATION1 = 21;
-  private static final int INPUT_LOCATION2 = 22;
-  private static final int OUTPUT_LOCATION = 26;
+  private static final int INPUT_LOCATION1 = 12;
+  private static final int INPUT_LOCATION2 = 30;
+  private static final int OUTPUT_LOCATION = 25;
   /* Per Object Variables Saved */
 
   /* Per Object Variables Not-Saved */
@@ -83,12 +83,12 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Foundry", new FontImageWrapper("extra:cell"));
+    Inventory inventory = setInterfaceTitle("Foundry", new FontImageWrapper("extra:foundry"));
     addGUIComponent(
-        new GTwoToOneMachine(inventory, 24, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
+        new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
             OUTPUT_LOCATION));
     addGUIComponent(new GBattery(inventory, energyStorage));
-    addGUIComponent(new GIndicator(inventory, runningContainer));
+    addGUIComponent(new GIndicator(inventory, runningContainer,21));
     inventory.setItem(INPUT_LOCATION1, inputSlots[0]);
     inventory.setItem(INPUT_LOCATION2, inputSlots[1]);
     inventory.setItem(OUTPUT_LOCATION, outputSlots[0]);
