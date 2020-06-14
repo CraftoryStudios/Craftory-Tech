@@ -7,7 +7,7 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
 public class TickableBaseManager {
 
-  ArrayList<ITickable> tickableUpdate;
+  final ArrayList<ITickable> tickableUpdate;
   public TickableBaseManager() {
     tickableUpdate = new ArrayList<>();
     Craftory plugin = Craftory.getInstance();
@@ -16,8 +16,8 @@ public class TickableBaseManager {
     /* Update */
     plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
       worldTime.getAndIncrement();
-      for (int i = 0; i < tickableUpdate.size(); i++) {
-        tickableUpdate.get(i).update(worldTime.get());
+      for (ITickable iTickable : tickableUpdate) {
+        iTickable.update(worldTime.get());
       }
     }, 0L, 1L);
   }

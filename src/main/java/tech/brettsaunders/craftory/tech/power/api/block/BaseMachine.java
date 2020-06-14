@@ -57,7 +57,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
       return;
     }
     updateSlots();
-    if (validateContense() && energyStorage.getEnergyStored() >= energyConsumption) {
+    if (validateContentes() && energyStorage.getEnergyStored() >= energyConsumption) {
       runningContainer.setT(true);
       energyStorage.modifyEnergyStored(-energyConsumption);
       tickCount += 1;
@@ -73,7 +73,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   protected abstract void processComplete();
 
-  protected abstract boolean validateContense();
+  protected abstract boolean validateContentes();
 
   protected abstract void updateSlots();
 

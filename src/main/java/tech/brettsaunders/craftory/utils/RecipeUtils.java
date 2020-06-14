@@ -14,7 +14,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.SmokingRecipe;
 import org.bukkit.inventory.StonecuttingRecipe;
-import tech.brettsaunders.craftory.utils.Items.Components;
+import tech.brettsaunders.craftory.CoreHolder;
 
 public class RecipeUtils {
 
@@ -55,7 +55,7 @@ public class RecipeUtils {
     ingredients.put(Material.COAL.toString(), 1);
     ingredients.put(Material.IRON_INGOT.toString(), 1);
     HashMap<String, Integer> products = new HashMap<>();
-    products.put(Components.STEEL_INGOT, 1);
+    products.put(CoreHolder.Items.STEEL_INGOT, 1);
     twoToOneRecipes.add(new CustomMachineRecipe(ingredients, products));
     Logger.debug("Extracting Bukkit Recipes");
     Logger.debug("All: " + allRecipes.size());
@@ -118,8 +118,8 @@ public class RecipeUtils {
 
   public static class CustomMachineRecipe implements ICustomRecipe {
 
-    HashMap<String, Integer> ingredients;
-    HashMap<String, Integer> products;
+    final HashMap<String, Integer> ingredients;
+    final HashMap<String, Integer> products;
 
     CustomMachineRecipe(HashMap<String, Integer> ingredients, HashMap<String, Integer> products) {
       this.ingredients = ingredients;

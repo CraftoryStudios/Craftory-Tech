@@ -57,6 +57,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     out.writeInt(maxOutput);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     super.readExternal(in);
@@ -66,10 +67,10 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   }
 
   /* Update Loop */
-  protected int transferEnergy() {
+  protected void transferEnergy() {
     int amountTransferred = 0;
     for (int i = 0; i < sidesConfig.size(); i++) {
-      if (sidesConfig.get(i) == true) {
+      if (sidesConfig.get(i)) {
         if (sidesCache.get(i)) {
           amountTransferred += energyStorage
               .modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
@@ -77,7 +78,6 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
         }
       }
     }
-    return amountTransferred;
   }
 
   @Override

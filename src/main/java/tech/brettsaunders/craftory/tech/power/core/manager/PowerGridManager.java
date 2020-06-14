@@ -16,7 +16,7 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 public class PowerGridManager implements Externalizable, ITickable {
 
   private static final long serialVersionUID = 10021L;
-  public HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
+  public final HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
   private HashSet<BaseCell> cells = new HashSet<>();
   private HashSet<BaseProvider> generators = new HashSet<>();
   private HashSet<BaseMachine> machines = new HashSet<>();
@@ -160,6 +160,7 @@ public class PowerGridManager implements Externalizable, ITickable {
     out.writeObject(machines);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     cells = (HashSet<BaseCell>) in.readObject();
@@ -167,18 +168,16 @@ public class PowerGridManager implements Externalizable, ITickable {
     machines = (HashSet<BaseMachine>) in.readObject();
   }
 
-  public PowerGridManager combineManagers(PowerGridManager other) {
+  public void combineManagers(PowerGridManager other) {
     cells.addAll(other.getCells());
     generators.addAll(other.getGenerators());
     machines.addAll(other.getMachines());
     powerConnectors.putAll(other.powerConnectors);
-    return this;
   }
 
   /* Common Methods */
-  public boolean addPowerConnector(Location location) {
+  public void addPowerConnector(Location location) {
     this.powerConnectors.put(location, new HashSet<>());
-    return true;
   }
 
   public void addPowerConnectorConnection(Location from, Location to) {
@@ -187,15 +186,15 @@ public class PowerGridManager implements Externalizable, ITickable {
     powerConnectors.replace(from, temp);
   }
 
-  public boolean addPowerCell(BaseCell cell) {
-    return this.cells.add(cell);
+  public void addPowerCell(BaseCell cell) {
+    this.cells.add(cell);
   }
 
-  public boolean addMachine(BaseMachine machine) {
-    return this.machines.add(machine);
+  public void addMachine(BaseMachine machine) {
+    this.machines.add(machine);
   }
 
-  public boolean addGenerator(BaseGenerator generator) {
-    return this.generators.add(generator);
+  public void addGenerator(BaseGenerator generator) {
+    this.generators.add(generator);
   }
 }

@@ -11,10 +11,10 @@ public class Logger {
   static final ChatColor INFO_COLOR = ChatColor.GREEN;
   static final ChatColor ERROR_COLOR = ChatColor.RED;
   static final ChatColor DEBUG_COLOR = ChatColor.AQUA;
-  static String prefix = "[" + Craftory.getInstance().getDescription().getPrefix() + "] ";
-  static String debugPrefix =
+  static final String prefix = "[" + Craftory.getInstance().getDescription().getPrefix() + "] ";
+  static final String debugPrefix =
       "[" + Craftory.getInstance().getDescription().getPrefix() + " Debug] ";
-  static boolean debugMode = Utilities.config.getBoolean("general.debug");
+  static final boolean debugMode = Utilities.config.getBoolean("general.debug");
 
   public static void info(String logMessage) {
     Bukkit.getLogger().info(prefix + INFO_COLOR + logMessage);

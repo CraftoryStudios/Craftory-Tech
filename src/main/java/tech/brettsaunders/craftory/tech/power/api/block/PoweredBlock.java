@@ -18,7 +18,6 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 import tech.brettsaunders.craftory.utils.HopperItemMovement;
-import tech.brettsaunders.craftory.utils.Logger;
 
 /**
  * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
@@ -44,7 +43,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   protected transient boolean isReceiver;
   protected transient boolean isProvider;
   /* Hopper stuff */
-  protected transient int HOPPER_DELAY = 2;
+  protected final transient int HOPPER_DELAY = 2;
   protected transient int hopperInCounter = 0;
   protected transient int hopperOutCounter = 0;
   protected transient Inventory inventoryInterface;
@@ -79,6 +78,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     out.writeObject(outputLocations);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     energyStorage = (EnergyStorage) in.readObject();
@@ -89,7 +89,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
       inputLocations = (ArrayList<Integer>) in.readObject();
       outputSlots = (ItemStack[]) in.readObject();
       outputLocations = (ArrayList<Integer>) in.readObject();
-    } catch (Exception e) {
+    } catch (Exception ignored) {
     }
 
   }

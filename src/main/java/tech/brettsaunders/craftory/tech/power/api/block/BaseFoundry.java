@@ -12,11 +12,10 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
-import tech.brettsaunders.craftory.utils.Items;
-import tech.brettsaunders.craftory.utils.Items.Components;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 
@@ -101,7 +100,7 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
     inputSlots[0].setAmount(inputSlots[0].getAmount() - 1);
     inputSlots[1].setAmount(inputSlots[1].getAmount() - 1);
     if (outputSlots[0] == null) {
-      outputSlots[0] = ItemsAdder.getCustomItem(Components.STEEL_INGOT);
+      outputSlots[0] = ItemsAdder.getCustomItem(CoreHolder.Items.STEEL_INGOT);
     } else {
       outputSlots[0].setAmount(outputSlots[0].getAmount() + 1);
     }
@@ -118,17 +117,17 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
 
 
   @Override
-  protected boolean validateContense() {
+  protected boolean validateContentes() {
     if (inputSlots[0] == null || inputSlots[1] == null) {
       return false;
     }
-    String inputType1 = Items.getItemName(inputSlots[0]);
-    String inputType2 = Items.getItemName(inputSlots[1]);
+    String inputType1 = CoreHolder.getItemName(inputSlots[0]);
+    String inputType2 = CoreHolder.getItemName(inputSlots[1]);
     int inputAmount1 = inputSlots[0].getAmount();
     int inputAmount2 = inputSlots[1].getAmount();
     String outputType = null;
     if (outputSlots[0] != null) {
-      outputType = Items.getItemName(outputSlots[0]);
+      outputType = CoreHolder.getItemName(outputSlots[0]);
     }
     //If the recipe is unchanged there is no need to find the recipe.
 

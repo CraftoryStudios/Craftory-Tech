@@ -14,8 +14,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import tech.brettsaunders.craftory.utils.Blocks;
-import tech.brettsaunders.craftory.utils.Items.Power;
+import tech.brettsaunders.craftory.CoreHolder;
+import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class Beam {
@@ -28,15 +28,12 @@ public class Beam {
   private final Object destroyPacket;
   private final Object metadataPacketGuardian;
   private final Object metadataPacketSquid;
-  private final Object fakeGuardianDataWatcher;
   private final int squid;
-  private final UUID squidUUID;
   private final int guardian;
-  private final UUID guardianUUID;
   private Location start;
   private Location end;
   private BukkitRunnable run;
-  private HashSet<Player> show = new HashSet<>();
+  private final HashSet<Player> show = new HashSet<>();
 
   /**
    * Create a Beam instance
@@ -55,14 +52,14 @@ public class Beam {
 
     createSquidPacket = Packets.createPacketSquidSpawn(end);
     squid = (int) Packets.getField(Packets.packetSpawn, "a", createSquidPacket);
-    squidUUID = (UUID) Packets.getField(Packets.packetSpawn, "b", createSquidPacket);
+    UUID squidUUID = (UUID) Packets.getField(Packets.packetSpawn, "b", createSquidPacket);
     metadataPacketSquid = Packets.createPacketMetadata(squid, Packets.fakeSquidWatcher);
     Packets.setDirtyWatcher(Packets.fakeSquidWatcher);
 
-    fakeGuardianDataWatcher = Packets.createFakeDataWatcher();
+    Object fakeGuardianDataWatcher = Packets.createFakeDataWatcher();
     createGuardianPacket = Packets.createPacketGuardianSpawn(start, fakeGuardianDataWatcher, squid);
     guardian = (int) Packets.getField(Packets.packetSpawn, "a", createGuardianPacket);
-    guardianUUID = (UUID) Packets.getField(Packets.packetSpawn, "b", createGuardianPacket);
+    UUID guardianUUID = (UUID) Packets.getField(Packets.packetSpawn, "b", createGuardianPacket);
     metadataPacketGuardian = Packets.createPacketMetadata(guardian, fakeGuardianDataWatcher);
 
     teamAddPacket = Packets.createPacketTeamAddEntities(squidUUID, guardianUUID);
@@ -169,9 +166,9 @@ public class Beam {
   }
 
   private boolean isCloseEnough(Location location, Player player) { //TODO FIx UP
-    if (ItemsAdder.matchCustomItemName(player.getInventory().getItemInMainHand(), Power.WRENCH) ||
+    if (ItemsAdder.matchCustomItemName(player.getInventory().getItemInMainHand(), CoreHolder.Items.WRENCH) ||
         ItemsAdder.matchCustomItemName(player.getInventory().getItemInMainHand(),
-            Blocks.Power.POWER_CONNECTOR)) {
+            CoreHolder.Blocks.POWER_CONNECTOR)) {
       return start.distanceSquared(location) <= distanceSquared ||
           end.distanceSquared(location) <= distanceSquared;
     } else {
@@ -183,13 +180,13 @@ public class Beam {
   private static class Packets {
 
     private static int lastIssuedEID = 2000000000;
-    private static int version = Integer.parseInt(
+    private static final int version = Integer.parseInt(
         Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]
             .substring(1).split("_")[1]);
-    private static String npack =
+    private static final String npack =
         "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName()
             .replace(".", ",").split(",")[3] + ".";
-    private static String cpack = Bukkit.getServer().getClass().getPackage().getName() + ".";
+    private static final String cpack = Bukkit.getServer().getClass().getPackage().getName() + ".";
     private static Object packetTeamCreate;
     private static Constructor<?> watcherConstructor;
     private static Method watcherSet;
@@ -359,6 +356,7 @@ public class Beam {
       return packet;
     }
 
+    @SuppressWarnings("unchecked")
     public static Object createPacketTeamAddEntities(UUID squidUUID, UUID guardianUUID)
         throws ReflectiveOperationException {
       Object packet = packetTeam.newInstance();

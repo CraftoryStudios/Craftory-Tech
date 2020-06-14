@@ -20,8 +20,8 @@ public class GOutputConfig implements IGUIComponent, Listener {
   private final int UP_SLOT;
   private final int DOWN_SLOT;
 
-  private Inventory inventory;
-  private ArrayList<Boolean> config;
+  private final Inventory inventory;
+  private final ArrayList<Boolean> config;
 
   public GOutputConfig(Inventory inventory, ArrayList<Boolean> config) {
     this(inventory, config, 34);
@@ -74,12 +74,12 @@ public class GOutputConfig implements IGUIComponent, Listener {
       final ItemStack OUTPUT = ItemsAdder.getCustomItem("extra:output_green");
 
       //NORTH, EAST, SOUTH, WEST, UP, DOWN
-      inventory.setItem(NORTH_SLOT, config.get(0) == false ? DISABLED.clone() : OUTPUT.clone());
-      inventory.setItem(EAST_SLOT, config.get(1) == false ? DISABLED.clone() : OUTPUT.clone());
-      inventory.setItem(SOUTH_SLOT, config.get(2) == false ? DISABLED.clone() : OUTPUT.clone());
-      inventory.setItem(WEST_SLOT, config.get(3) == false ? DISABLED.clone() : OUTPUT.clone());
-      inventory.setItem(UP_SLOT, config.get(4) == false ? DISABLED.clone() : OUTPUT.clone());
-      inventory.setItem(DOWN_SLOT, config.get(5) == false ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(NORTH_SLOT, !config.get(0) ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(EAST_SLOT, !config.get(1) ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(SOUTH_SLOT, !config.get(2) ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(WEST_SLOT, !config.get(3) ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(UP_SLOT, !config.get(4) ? DISABLED.clone() : OUTPUT.clone());
+      inventory.setItem(DOWN_SLOT, !config.get(5) ? DISABLED.clone() : OUTPUT.clone());
     }
   }
 }

@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class SolidFuelManager {
 
-  private static HashMap<String, Integer> fuelMap = new HashMap<>();
+  private static final HashMap<String, Integer> fuelMap = new HashMap<>();
 
   static {
     fuelMap.put("COAL", 24000);

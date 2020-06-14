@@ -13,10 +13,11 @@ import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
+import tech.brettsaunders.craftory.CoreHolder;
+import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
-import tech.brettsaunders.craftory.utils.Items;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -113,11 +114,11 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
 
 
   @Override
-  protected boolean validateContense() {
+  protected boolean validateContentes() {
     if (inputSlots[0] == null) {
       return false;
     }
-    String inputType = Items.getItemName(inputSlots[0]);
+    String inputType = CoreHolder.getItemName(inputSlots[0]);
     //If the recipe is unchanged there is no need to find the recipe.
     if (currentRecipe != null && currentRecipe.getInput().getType().toString().equals(inputType)) {
       if (outputSlots[0] == null) {
@@ -138,7 +139,7 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
       if (outputSlots[0] == null) {
         return true;
       }
-      if (Items.getItemName(outputSlots[0]).equals(recipe.getResult().getType().toString())
+      if (CoreHolder.getItemName(outputSlots[0]).equals(recipe.getResult().getType().toString())
           && outputSlots[0].getAmount() < outputSlots[0].getMaxStackSize()) {
         return true;
       }

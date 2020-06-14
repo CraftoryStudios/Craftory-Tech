@@ -11,7 +11,7 @@ public class GIndicator implements IGUIComponent {
 
   private final int slot;
   private final VariableContainer<Boolean> state;
-  private Inventory inventory;
+  private final Inventory inventory;
 
   public GIndicator(Inventory inventory, VariableContainer<Boolean> state) {
     this(inventory, state, 52);

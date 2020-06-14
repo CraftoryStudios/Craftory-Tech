@@ -12,9 +12,6 @@ import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class GOneToOneMachine implements IGUIComponent {
 
-  private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
-      .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
-          InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
   private final int slot;
   private final VariableContainer<Double> progress;
   private final Inventory inventory;

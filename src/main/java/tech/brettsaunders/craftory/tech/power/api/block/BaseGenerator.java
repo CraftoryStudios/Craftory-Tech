@@ -128,11 +128,10 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     runningContainer.setT(false);
   }
 
-  protected int processTick() {
+  protected void processTick() {
     lastEnergy = getMaxOutput();
     energyStorage.modifyEnergyStored(lastEnergy); //TODO need to fix look at old code
     fuelRE -= lastEnergy;
-    return lastEnergy;
   }
 
   /* External Methods */

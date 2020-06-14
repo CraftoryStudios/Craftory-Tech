@@ -84,10 +84,9 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
     return maxReceive;
   }
 
-  public EnergyStorage setMaxReceive(int maxReceive) {
+  public void setMaxReceive(int maxReceive) {
 
     this.maxReceive = maxReceive;
-    return this;
   }
 
   public int getMaxExtract() {
@@ -95,10 +94,9 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
     return maxExtract;
   }
 
-  public EnergyStorage setMaxExtract(int maxExtract) {
+  public void setMaxExtract(int maxExtract) {
 
     this.maxExtract = maxExtract;
-    return this;
   }
 
   public int modifyEnergyStored(int energy) {

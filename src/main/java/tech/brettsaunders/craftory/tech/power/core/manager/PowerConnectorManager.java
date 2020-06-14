@@ -10,17 +10,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.PluginDisableEvent;
+import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.effect.Beam;
 import tech.brettsaunders.craftory.utils.BlockUtils;
-import tech.brettsaunders.craftory.utils.Blocks;
-import tech.brettsaunders.craftory.utils.Items.Power;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerConnectorManager implements Listener {
 
-  private transient HashMap<UUID, Location> formingConnection;
-  private transient ArrayList<Beam> activeBeams;
+  private final transient HashMap<UUID, Location> formingConnection;
+  private final transient ArrayList<Beam> activeBeams;
 
   public PowerConnectorManager() {
     formingConnection = new HashMap<>();
@@ -31,10 +30,10 @@ public class PowerConnectorManager implements Listener {
   @EventHandler
   public void useWrenchFormConnection(PlayerInteractEvent event) {
     //Check using wrench
-    if (ItemsAdder.matchCustomItemName(event.getItem(), Power.WRENCH)
+    if (ItemsAdder.matchCustomItemName(event.getItem(), CoreHolder.Items.WRENCH)
         && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
       //Check Power Connector
-      if (!BlockUtils.isCustomTypeBlock(event.getClickedBlock(), Blocks.Power.POWER_CONNECTOR)) {
+      if (!BlockUtils.isCustomTypeBlock(event.getClickedBlock(), CoreHolder.Blocks.POWER_CONNECTOR)) {
         return;
       }
 
@@ -81,11 +80,9 @@ public class PowerConnectorManager implements Listener {
 
   private void generatorPowerBeams() {
     for (PowerGridManager gridManager : Craftory.getBlockPoweredManager().powerGridManagers) {
-      gridManager.powerConnectors.forEach((from, value) -> {
-        value.forEach((to) -> {
-          formBeam(from, to);
-        });
-      });
+      gridManager.powerConnectors.forEach((from, value) -> value.forEach((to) -> {
+        formBeam(from, to);
+      }));
     }
   }
 
@@ -124,9 +121,7 @@ public class PowerConnectorManager implements Listener {
   }
 
   private void destroyActiveBeams() {
-    activeBeams.forEach((beam -> {
-      beam.stop();
-    }));
+    activeBeams.forEach((Beam::stop));
   }
 
   @EventHandler

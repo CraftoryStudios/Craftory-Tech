@@ -11,8 +11,8 @@ public class GBattery implements IGUIComponent {
 
   private final int TOP_SLOT;
   private final int BOTTOM_SLOT;
-  private EnergyStorage storage;
-  private Inventory inventory;
+  private final EnergyStorage storage;
+  private final Inventory inventory;
 
   public GBattery(Inventory inventory, EnergyStorage storage, int top_slot) {
     this.inventory = inventory;

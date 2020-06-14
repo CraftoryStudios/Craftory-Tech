@@ -12,14 +12,14 @@ import tech.brettsaunders.craftory.Utilities;
 public class CommandWrapper implements CommandExecutor, TabCompleter {
 
   /* Commands */
-  private CommandExecutor MainCommand;
-  private CommandExecutor HelpCommand;
-  private CommandExecutor DebugCommand;
+  private final CommandExecutor MainCommand;
+  private final CommandExecutor HelpCommand;
+  private final CommandExecutor DebugCommand;
 
   /* Tab Complete */
-  private TabCompleter MainTab;
-  private TabCompleter HelpTab;
-  private TabCompleter DebugTab;
+  private final TabCompleter MainTab;
+  private final TabCompleter HelpTab;
+  private final TabCompleter DebugTab;
 
   public CommandWrapper() {
     /* Commands */
