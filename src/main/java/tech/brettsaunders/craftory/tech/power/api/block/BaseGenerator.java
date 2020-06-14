@@ -71,9 +71,8 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
 
   /* Update Loop */
   @Override
-  public void fastUpdate() {
-    super.fastUpdate();
-
+  public void update(long worldTime) {
+    super.update(worldTime);
     if (isActive) {
       processTick();
       if (canFinish()) {

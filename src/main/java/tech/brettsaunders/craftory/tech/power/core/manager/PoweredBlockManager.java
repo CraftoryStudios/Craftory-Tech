@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.management.ManagementFactory;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +33,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
+import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
@@ -77,8 +79,7 @@ public class PoweredBlockManager implements Listener, ITickable {
     powerConnectors = new HashMap<>();
     Craftory.getInstance().getServer().getPluginManager()
         .registerEvents(this, Craftory.getInstance());
-    Craftory.tickableBaseManager.addFastUpdate(this);
-    Craftory.tickableBaseManager.addSlowUpdate(this);
+    Craftory.tickableBaseManager.addUpdate(this);
   }
 
   public void onEnable() {
@@ -303,7 +304,7 @@ public class PoweredBlockManager implements Listener, ITickable {
     if (isReceiver(location)) {
       updateAdjacentProviders(location, false, PoweredBlockType.MACHINE);
     }
-    Craftory.tickableBaseManager.removeFastUpdate(getPoweredBlock(location));
+    Craftory.tickableBaseManager.removeUpdate(getPoweredBlock(location));
     removePoweredBlock(location);
   }
 
@@ -386,32 +387,23 @@ public class PoweredBlockManager implements Listener, ITickable {
   }
 
   @Override
-  public void fastUpdate() {
-    //If in loaded chunk, call update
-    poweredBlocks.forEach(((location, poweredBlock) -> {
-      if (loadedChunkWorlds.get(location.getWorld()).contains(location.getChunk())) {
-        poweredBlock.fastUpdate();
+  public void update(long worldTime) {
+    if (worldTime % CoreHolder.FOUR_TICKS == 0) {
+      //Generate HashMap of loaded chunks in worlds
+      HashSet<Chunk> loadedChunks;
+      for (World world : Bukkit.getWorlds()) {
+        loadedChunks = new HashSet<>(Arrays.asList(world.getLoadedChunks()));
+        loadedChunkWorlds.put(world, loadedChunks);
       }
-    }));
-  }
-
-  @Override
-  public void slowUpdate() {
-    //Generate HashMap of loaded chunks in worlds
-    HashSet<Chunk> loadedChunks;
-    for (World world : Bukkit.getWorlds()) {
-      loadedChunks = new HashSet<>(Arrays.asList(world.getLoadedChunks()));
-      loadedChunkWorlds.put(world, loadedChunks);
     }
 
     //If in loaded chunk, call update
     poweredBlocks.forEach(((location, poweredBlock) -> {
-      if (loadedChunkWorlds.get(location.getWorld()).contains(location.getChunk())) {
-        poweredBlock.slowUpdate();
+      if (loadedChunkWorlds != null && loadedChunkWorlds.get(location.getWorld()).contains(location.getChunk())) {
+        poweredBlock.update(worldTime);
       }
     }));
   }
-
 
   private static class PowerBlockManagerData implements Serializable {
 

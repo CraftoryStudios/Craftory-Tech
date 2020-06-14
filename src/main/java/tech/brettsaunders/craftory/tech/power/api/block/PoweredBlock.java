@@ -13,10 +13,12 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 import tech.brettsaunders.craftory.utils.HopperItemMovement;
+import tech.brettsaunders.craftory.utils.Logger;
 
 /**
  * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
@@ -94,8 +96,11 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
 
   /* Update Loop */
   @Override
-  public void fastUpdate() {
-
+  public void update(long worldTime) {
+    if (worldTime % CoreHolder.FOUR_TICKS == 0) {
+      updateInterface();
+      processHoppers();
+    }
   }
 
   private void processHoppers() {
@@ -129,12 +134,6 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
       }
     }
     //Set inventory to equal slots
-  }
-
-  @Override
-  public void slowUpdate() {
-    updateInterface();
-    processHoppers();
   }
 
   /* GUI Events */

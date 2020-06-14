@@ -1,49 +1,33 @@
 package tech.brettsaunders.craftory.tech.power.core.manager;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicLong;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
 public class TickableBaseManager {
 
-  ArrayList<ITickable> tickableSlowUpdate;
-  ArrayList<ITickable> tickableFastUpdate;
-
+  ArrayList<ITickable> tickableUpdate;
   public TickableBaseManager() {
-    tickableSlowUpdate = new ArrayList<>();
-    tickableFastUpdate = new ArrayList<>();
+    tickableUpdate = new ArrayList<>();
     Craftory plugin = Craftory.getInstance();
+    AtomicLong worldTime = new AtomicLong();
 
-    /* Slow Update */
+    /* Update */
     plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-      for (int i = 0; i < tickableSlowUpdate.size(); i++) {
-        tickableSlowUpdate.get(i).slowUpdate();
-      }
-    }, 0L, 4L);
-
-    /* Fast Update */
-    plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-      for (int i = 0; i < tickableFastUpdate.size(); i++) {
-        tickableFastUpdate.get(i).fastUpdate();
+      worldTime.getAndIncrement();
+      for (int i = 0; i < tickableUpdate.size(); i++) {
+        tickableUpdate.get(i).update(worldTime.get());
       }
     }, 0L, 1L);
   }
 
-  public void addFastUpdate(ITickable object) {
-    tickableFastUpdate.add(object);
+  public void addUpdate(ITickable object) {
+    tickableUpdate.add(object);
   }
 
-  public void removeFastUpdate(ITickable object) {
-    tickableFastUpdate.remove(object);
+  public void removeUpdate(ITickable object) {
+    tickableUpdate.remove(object);
   }
-
-  public void addSlowUpdate(ITickable object) {
-    tickableSlowUpdate.add(object);
-  }
-
-  public void removeSlowUpdate(ITickable object) {
-    tickableSlowUpdate.remove(object);
-  }
-
 
 }

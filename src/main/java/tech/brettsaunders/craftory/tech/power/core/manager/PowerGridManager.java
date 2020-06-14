@@ -46,7 +46,7 @@ public class PowerGridManager implements Externalizable, ITickable {
   }
 
 
-  public void fastUpdate() {
+  public void update(long worldTime) {
     int needed = whatDoTheyNeed();
     int cellCapacity = calculateStorageSpace();
     int produced = calculateEnergyProduced(needed + cellCapacity);
@@ -59,10 +59,6 @@ public class PowerGridManager implements Externalizable, ITickable {
     } else {
       shareThisAmongstThePeople(produced);
     }
-  }
-
-  @Override
-  public void slowUpdate() {
   }
 
   private int calculateStorageSpace() {
