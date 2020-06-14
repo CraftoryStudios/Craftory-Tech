@@ -51,8 +51,8 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   /* Update Loop */
   @Override
-  public void fastUpdate() {
-    super.fastUpdate();
+  public void update(long worldTime) {
+    super.update(worldTime);
     if (inventoryInterface == null) {
       return;
     }

@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.generators;
 
 import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
+import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;

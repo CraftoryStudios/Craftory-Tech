@@ -81,8 +81,8 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   }
 
   @Override
-  public void fastUpdate() {
-    super.fastUpdate();
+  public void update(long worldTime) {
+    super.update(worldTime);
     transferEnergy();
   }
 
