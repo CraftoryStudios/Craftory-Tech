@@ -131,6 +131,14 @@ items:
       generate: true
       textures:
         - item/wrench.png
+  configurator:
+    display_name: Configurator
+    permission: craftory
+    resource:
+      material: STICK
+      generate: true
+      textures:
+        - item/wrench.png
   power_connector:
     display_name: Power Connector
     permission: craftory_tech

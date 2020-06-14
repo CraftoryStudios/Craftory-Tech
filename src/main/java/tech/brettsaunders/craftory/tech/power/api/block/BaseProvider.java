@@ -156,6 +156,15 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     }
   }
 
+  public ArrayList<Boolean> getSideConfig() {
+    return sidesConfig;
+  }
+
+  public void setSidesConfig(ArrayList<Boolean> config) {
+    sidesConfig.clear();
+    sidesConfig.addAll(config);
+  }
+
   /* IEnergyHandler */
   @Override
   public int getEnergyStored() {

@@ -16,6 +16,7 @@ public class Items {
   public class Power {
 
     public static final String WRENCH = "craftory:wrench";
+    public static final String CONFIGURATOR = "craftory:configurator";
   }
 
   public class Components {

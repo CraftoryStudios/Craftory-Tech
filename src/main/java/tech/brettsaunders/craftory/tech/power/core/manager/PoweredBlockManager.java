@@ -10,9 +10,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import org.bukkit.Bukkit;
@@ -69,12 +71,15 @@ public class PoweredBlockManager implements Listener, ITickable {
   private final HashMap<Location, PowerGridManager> powerConnectors;
   public HashSet<PowerGridManager> powerGridManagers;
   private HashMap<Location, PoweredBlock> poweredBlocks;
-  private HashMap<World, HashSet> loadedChunkWorlds = new HashMap<>();
+  private HashMap<World, HashSet> loadedChunkWorlds;
+  private HashMap<UUID, ArrayList<Boolean>> sidesConfigCopying;
 
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();
     powerGridManagers = new HashSet<>();
     powerConnectors = new HashMap<>();
+    sidesConfigCopying = new HashMap<>();
+    loadedChunkWorlds = new HashMap<>();
     Craftory.getInstance().getServer().getPluginManager()
         .registerEvents(this, Craftory.getInstance());
     Craftory.tickableBaseManager.addFastUpdate(this);
@@ -155,13 +160,14 @@ public class PoweredBlockManager implements Listener, ITickable {
     if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
       return;
     }
-    if (e.getPlayer().isSneaking()) {
+    if (e.getPlayer().isSneaking() || ItemsAdder.matchCustomItemName(e.getItem(), Items.Power.CONFIGURATOR)) {
       return;
     }
 
     if (poweredBlocks.containsKey(e.getBlockClicked().getLocation())) {
       //Open GUI of Powered Block
       poweredBlocks.get(e.getBlockClicked().getLocation()).openGUI(e.getPlayer());
+      e.setCancelled(true);
     }
   }
 
@@ -324,6 +330,36 @@ public class PoweredBlockManager implements Listener, ITickable {
           "Stored: " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
               + " RE");
     }
+  }
+
+  @EventHandler
+  public void onConfigurator(final PlayerInteractEvent e) {
+    if (!ItemsAdder.matchCustomItemName(e.getItem(), Items.Power.CONFIGURATOR)) {
+      return;
+    }
+    e.setCancelled(true);
+
+    final Player player = e.getPlayer();
+    if (e.getAction() == Action.RIGHT_CLICK_AIR && player.isSneaking()) {
+      sidesConfigCopying.remove(player.getUniqueId());
+      player.sendMessage("Removed Sides Config Copy Data");
+    }
+
+    if (isProvider(e.getClickedBlock().getLocation())) {
+      BaseProvider provider = (BaseProvider) getPoweredBlock(e.getClickedBlock().getLocation());
+      if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
+        sidesConfigCopying.put(player.getUniqueId(), provider.getSideConfig());
+        player.sendMessage("Copied Sides Config");
+      } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (sidesConfigCopying.containsKey(player.getUniqueId())) {
+          provider.setSidesConfig(sidesConfigCopying.get(player.getUniqueId()));
+          player.sendMessage("Pasted Sides Config");
+        } else {
+          player.sendMessage("No Sides Config Data Found, Please Copy First");
+        }
+      }
+    }
+    return;
   }
 
   //TODO CLEAN UP
