@@ -17,6 +17,7 @@ public class PowerGridManager implements Externalizable, ITickable {
 
   private static final long serialVersionUID = 10021L;
   public final HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
+  private HashMap<Location, HashSet<Location>> machineConnections = new HashMap<>();
   private HashSet<BaseCell> cells = new HashSet<>();
   private HashSet<BaseProvider> generators = new HashSet<>();
   private HashSet<BaseMachine> machines = new HashSet<>();

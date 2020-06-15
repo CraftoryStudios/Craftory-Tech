@@ -30,6 +30,7 @@ public class RecipeUtils {
   private static final HashSet<CustomMachineRecipe> twoToOneRecipes = new HashSet<>();
 
   static {
+    Logger.debug("Extracting Bukkit Recipes");
     Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
     while (recipeIterator.hasNext()) {
       Recipe recipe = recipeIterator.next();
@@ -57,7 +58,6 @@ public class RecipeUtils {
     HashMap<String, Integer> products = new HashMap<>();
     products.put(CoreHolder.Items.STEEL_INGOT, 1);
     twoToOneRecipes.add(new CustomMachineRecipe(ingredients, products));
-    Logger.debug("Extracting Bukkit Recipes");
     Logger.debug("All: " + allRecipes.size());
     Logger.debug("Shaped: " + shapedRecipes.size());
     Logger.debug("Shapeless: " + shapelessRecipes.size());
