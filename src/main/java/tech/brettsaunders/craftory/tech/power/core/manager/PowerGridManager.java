@@ -69,12 +69,25 @@ public class PowerGridManager implements Externalizable, ITickable {
           if(!closedSet.contains(l)) openList.add(l);
         }
       }
+      grid.findPoweredBlocks();
       managers.add(grid);
     }
-
     return managers;
   }
 
+  private void findPoweredBlocks() {
+    cells = new HashSet<>();
+    generators = new HashSet<>();
+    machines = new HashSet<>();
+    for(HashSet<Location> set: blockConnections.values()){
+      for(Location location: set) {
+        //TODO get which type of block it is and only add to correct one
+        cells.add(location);
+        generators.add(location);
+        machines.add(location);
+      }
+    }
+  }
   public HashSet<Location> getCells() {
     return cells;
   }
@@ -236,8 +249,13 @@ public class PowerGridManager implements Externalizable, ITickable {
 
   public void addPowerConnectorConnection(Location from, Location to) {
     HashSet<Location> temp = powerConnectors.get(from);
+    if(temp==null) temp = new HashSet<>();
     temp.add(to);
-    powerConnectors.replace(from, temp);
+    powerConnectors.put(from, temp);
+    temp = powerConnectors.get(to);
+    if(temp==null) temp = new HashSet<>();
+    temp.add(from);
+    powerConnectors.put(to, temp);
   }
 
   public void addPowerCell(Location connector, Location cellLocation) {
