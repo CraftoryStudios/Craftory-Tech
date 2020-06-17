@@ -358,6 +358,7 @@ public class PoweredBlockManager implements Listener, ITickable {
   //TODO CLEAN UP
   private void updateAdjacentProviders(Location location, Boolean setTo, PoweredBlockType type) {
     Block block;
+    Location connectorLocation = location;
     for (BlockFace face : faces) {
       block = location.getBlock().getRelative(face);
       if (ItemsAdder.isCustomBlock(block)) {
@@ -368,13 +369,13 @@ public class PoweredBlockManager implements Listener, ITickable {
             == CoreHolder.Blocks.POWER_CONNECTOR) { //TODO fix type part - seperate
           switch (type) {
             case MACHINE:
-              powerConnectors.get(location).addMachine((BaseMachine) getPoweredBlock(location));
+              powerConnectors.get(location).addMachine(connectorLocation, location);
               break;
             case GENERATOR:
-              powerConnectors.get(location).addGenerator((BaseGenerator) getPoweredBlock(location));
+              powerConnectors.get(location).addGenerator(connectorLocation, location);
               break;
             case CELL:
-              powerConnectors.get(location).addPowerCell((BaseCell) getPoweredBlock(location));
+              powerConnectors.get(location).addPowerCell(connectorLocation, location);
               break;
           }
 
@@ -385,15 +386,16 @@ public class PoweredBlockManager implements Listener, ITickable {
 
   private void getAdjacentPowerBlocks(Location location, PowerGridManager powerGridManager) {
     Block block;
+    Location connectorLocation = location;
     for (BlockFace face : faces) {
       block = location.getBlock().getRelative(face);
       if (ItemsAdder.isCustomBlock(block) && poweredBlocks.containsKey(block.getLocation())) {
         if (isCell(location)) {
-          powerGridManager.addPowerCell((BaseCell) getPoweredBlock(location));
+          powerGridManager.addPowerCell(connectorLocation, location);
         } else if (isGenerator(location)) {
-          powerGridManager.addGenerator((BaseGenerator) getPoweredBlock(location));
+          powerGridManager.addGenerator(connectorLocation, location);
         } else if (isMachine(location)) {
-          powerGridManager.addMachine((BaseMachine) getPoweredBlock(location));
+          powerGridManager.addMachine(connectorLocation, location);
         }
       }
     }
