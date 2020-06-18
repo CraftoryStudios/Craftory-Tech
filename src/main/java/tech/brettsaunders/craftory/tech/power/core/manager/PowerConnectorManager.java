@@ -147,7 +147,7 @@ public class PowerConnectorManager implements Listener {
     try {
       Beam beam = new Beam(fromLoc.clone().add(0.5, 0.1, 0.5), to.clone().add(0.5, 0.1, 0.5),
           -1, 25);
-      beam.start(Craftory.getInstance());
+      beam.start(Craftory.plugin);
       addBeamToList(fromLoc, beam);
       addBeamToList(toLoc, beam);
     } catch (ReflectiveOperationException e) {
