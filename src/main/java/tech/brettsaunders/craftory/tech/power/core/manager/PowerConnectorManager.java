@@ -1,12 +1,10 @@
 package tech.brettsaunders.craftory.tech.power.core.manager;
 
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -14,12 +12,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.api.effect.Beam;
-import tech.brettsaunders.craftory.utils.BlockUtils;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerConnectorManager implements Listener {
@@ -36,10 +34,10 @@ public class PowerConnectorManager implements Listener {
   @EventHandler
   public void useWrenchFormConnection(PlayerInteractEvent event) {
     //Check using wrench
-    if (ItemsAdder.matchCustomItemName(event.getItem(), CoreHolder.Items.WRENCH)
+    if (CustomItemManager.matchCustomItemName(event.getItem(), CoreHolder.Items.WRENCH)
         && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
       //Check Power Connector
-      if (BlockUtils.isCustomTypeBlock(event.getClickedBlock(), CoreHolder.Blocks.POWER_CONNECTOR)) {
+      if (Craftory.customBlockManager.isCustomBlockOfType(event.getClickedBlock().getLocation(), CoreHolder.Blocks.POWER_CONNECTOR)) {
         if (!formingConnection.containsKey(event.getPlayer().getUniqueId())) {
           //First Power Connector selected
           if (Craftory.getBlockPoweredManager()
@@ -149,7 +147,7 @@ public class PowerConnectorManager implements Listener {
     try {
       Beam beam = new Beam(fromLoc.clone().add(0.5, 0.1, 0.5), to.clone().add(0.5, 0.1, 0.5),
           -1, 25);
-      beam.start(Craftory.getInstance());
+      beam.start(Craftory.plugin);
       addBeamToList(fromLoc, beam);
       addBeamToList(toLoc, beam);
     } catch (ReflectiveOperationException e) {

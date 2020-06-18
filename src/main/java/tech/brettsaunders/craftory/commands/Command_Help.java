@@ -15,6 +15,8 @@ public class Command_Help implements CommandExecutor, TabCompleter {
     if (args.length == 1) {
       Utilities.msg(sender, "&8/&acf help  &7-&f  Shows this list");
       Utilities.msg(sender, "&8/&acf toggleDebug  &7-&f  Toggles showing debug messages (OP Only)");
+      Utilities.msg(sender, "&8/&acf give  &7-&f  Give player a custom item");
+      Utilities.msg(sender, "&8/&acf giveBlock  &7-&f  Give player a custom block item");
     } else {
       Utilities.msg(sender, "Usage");
     }

@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.effect;
 
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import tech.brettsaunders.craftory.CoreHolder;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class Beam {
@@ -166,8 +165,8 @@ public class Beam {
   }
 
   private boolean isCloseEnough(Location location, Player player) { //TODO FIx UP
-    if (ItemsAdder.matchCustomItemName(player.getInventory().getItemInMainHand(), CoreHolder.Items.WRENCH) ||
-        ItemsAdder.matchCustomItemName(player.getInventory().getItemInMainHand(),
+    if (CustomItemManager.matchCustomItemName(player.getInventory().getItemInMainHand(), CoreHolder.Items.WRENCH) ||
+        CustomItemManager.matchCustomItemName(player.getInventory().getItemInMainHand(),
             CoreHolder.Blocks.POWER_CONNECTOR)) {
       return start.distanceSquared(location) <= distanceSquared ||
           end.distanceSquared(location) <= distanceSquared;

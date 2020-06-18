@@ -4,10 +4,8 @@ description: ${description}
 website: ${url}
 author: ${author}
 main: ${mainClass}
-
+api-version: 1.13
 prefix: Craftory
-depend: [ItemsAdder]
-loadafter: [ItemsAdder]
 
 commands:
   craftory:

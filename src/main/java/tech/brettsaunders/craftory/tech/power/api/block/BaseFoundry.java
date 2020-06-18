@@ -1,7 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -13,6 +11,8 @@ import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder;
+import tech.brettsaunders.craftory.api.font.Font;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
@@ -47,9 +47,7 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
     inputLocations.add(INPUT_LOCATION1);
     inputLocations.add(INPUT_LOCATION2);
     outputLocations.add(OUTPUT_LOCATION);
-    if (ItemsAdder.areItemsLoaded()) {
-      setupGUI();
-    }
+    setupGUI();
   }
 
   /* Saving, Setup and Loading */
@@ -82,7 +80,7 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Foundry", new FontImageWrapper("extra:foundry"));
+    Inventory inventory = setInterfaceTitle("Foundry", Font.FOUNDRY_GUI.label+"");
     addGUIComponent(
         new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
             OUTPUT_LOCATION));
@@ -100,7 +98,7 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
     inputSlots[0].setAmount(inputSlots[0].getAmount() - 1);
     inputSlots[1].setAmount(inputSlots[1].getAmount() - 1);
     if (outputSlots[0] == null) {
-      outputSlots[0] = ItemsAdder.getCustomItem(CoreHolder.Items.STEEL_INGOT);
+      outputSlots[0] = CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT, false);
     } else {
       outputSlots[0].setAmount(outputSlots[0].getAmount() + 1);
     }
@@ -121,13 +119,13 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
     if (inputSlots[0] == null || inputSlots[1] == null) {
       return false;
     }
-    String inputType1 = CoreHolder.getItemName(inputSlots[0]);
-    String inputType2 = CoreHolder.getItemName(inputSlots[1]);
+    String inputType1 = CustomItemManager.getCustomItemName(inputSlots[0]);
+    String inputType2 = CustomItemManager.getCustomItemName(inputSlots[1]);
     int inputAmount1 = inputSlots[0].getAmount();
     int inputAmount2 = inputSlots[1].getAmount();
     String outputType = null;
     if (outputSlots[0] != null) {
-      outputType = CoreHolder.getItemName(outputSlots[0]);
+      outputType = CustomItemManager.getCustomItemName(outputSlots[0]);
     }
     //If the recipe is unchanged there is no need to find the recipe.
 

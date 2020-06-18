@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.util.ArrayList;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -9,6 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
 public class GOutputConfig implements IGUIComponent, Listener {
@@ -36,8 +36,8 @@ public class GOutputConfig implements IGUIComponent, Listener {
     WEST_SLOT = middleSlot + 8;
     UP_SLOT = middleSlot - 9;
     DOWN_SLOT = middleSlot + 9;
-    Craftory.getInstance().getServer().getPluginManager()
-        .registerEvents(this, Craftory.getInstance());
+    Craftory.plugin.getServer().getPluginManager()
+        .registerEvents(this, Craftory.plugin);
   }
 
   @EventHandler
@@ -69,9 +69,8 @@ public class GOutputConfig implements IGUIComponent, Listener {
 
   @Override
   public void update() {
-    if (ItemsAdder.areItemsLoaded()) {
-      final ItemStack DISABLED = ItemsAdder.getCustomItem("extra:output_disabled");
-      final ItemStack OUTPUT = ItemsAdder.getCustomItem("extra:output_green");
+      final ItemStack DISABLED = CustomItemManager.getCustomItem("output_disabled", false);
+      final ItemStack OUTPUT = CustomItemManager.getCustomItem("output_green", false);
 
       //NORTH, EAST, SOUTH, WEST, UP, DOWN
       inventory.setItem(NORTH_SLOT, !config.get(0) ? DISABLED.clone() : OUTPUT.clone());
@@ -81,5 +80,4 @@ public class GOutputConfig implements IGUIComponent, Listener {
       inventory.setItem(UP_SLOT, !config.get(4) ? DISABLED.clone() : OUTPUT.clone());
       inventory.setItem(DOWN_SLOT, !config.get(5) ? DISABLED.clone() : OUTPUT.clone());
     }
-  }
 }

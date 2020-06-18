@@ -1,9 +1,9 @@
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
-import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
@@ -27,9 +27,7 @@ public class GBattery implements IGUIComponent {
 
   @Override
   public void update() {
-    if (ItemsAdder.areItemsLoaded()) {
       setLevelIndicator();
-    }
   }
 
   private void setLevelIndicator() {
@@ -50,21 +48,21 @@ public class GBattery implements IGUIComponent {
     }
 
     //Get Top Battery Icon and set Display Name
-    String topTexture = "extra:bar_" + top + "_t";
-    ItemStack topItem = ItemsAdder.getCustomItem(topTexture);
+    String topTexture = "bar_" + top + "_t";
+    ItemStack topItem = CustomItemManager.getCustomItem(topTexture, false);
     ItemMeta topMeta = topItem.getItemMeta();
     topMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
     topItem.setItemMeta(topMeta);
 
     //Get Bottom Battery Icon and set Display Name
-    String bottomTexture = "extra:bar_" + bottom + "_b";
-    ItemStack bottomItem = ItemsAdder.getCustomItem(bottomTexture);
+    String bottomTexture = "bar_" + bottom + "_b";
+    ItemStack bottomItem = CustomItemManager.getCustomItem(bottomTexture, false);
     ItemMeta bottomMeta = bottomItem.getItemMeta();
     bottomMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
     bottomItem.setItemMeta(bottomMeta);
 
     //Fill other battery slots
-    ItemStack batteryIndicator = ItemsAdder.getCustomItem("extra:invisible");
+    ItemStack batteryIndicator = CustomItemManager.getCustomItem("invisible", false);
     ItemMeta batteryIndicatorMeta = batteryIndicator.getItemMeta();
     batteryIndicatorMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
     batteryIndicator.setItemMeta(batteryIndicatorMeta);

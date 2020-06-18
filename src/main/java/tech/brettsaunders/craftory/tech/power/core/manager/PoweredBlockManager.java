@@ -1,9 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.core.manager;
 
-import dev.lone.itemsadder.api.Events.CustomBlockBreakEvent;
-import dev.lone.itemsadder.api.Events.CustomBlockInteractEvent;
-import dev.lone.itemsadder.api.Events.ItemsAdderFirstLoadEvent;
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,7 +24,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.inventory.Inventory;
@@ -38,6 +33,10 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
+import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
+import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
@@ -76,13 +75,14 @@ public class PoweredBlockManager implements Listener, ITickable {
     powerGrids = new HashMap<>();
     sidesConfigCopying = new HashMap<>();
     loadedChunkWorlds = new HashMap<>();
-    Craftory.getInstance().getServer().getPluginManager()
-        .registerEvents(this, Craftory.getInstance());
+    Craftory.plugin.getServer().getPluginManager()
+        .registerEvents(this, Craftory.plugin);
     Craftory.tickableBaseManager.addUpdate(this);
   }
 
   public void onEnable() {
     load();
+    poweredBlocks.forEach(((location, poweredBlock) -> poweredBlock.setupGUI()));
   }
 
   public void onDisable() {
@@ -144,16 +144,11 @@ public class PoweredBlockManager implements Listener, ITickable {
   }
 
   @EventHandler
-  public void onItemsAdderLoaded(ItemsAdderFirstLoadEvent e) {
-    poweredBlocks.forEach(((location, poweredBlock) -> poweredBlock.setupGUI()));
-  }
-
-  @EventHandler
   public void onGUIBlockClick(CustomBlockInteractEvent e) {
     if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
       return;
     }
-    if (e.getPlayer().isSneaking() || ItemsAdder.matchCustomItemName(e.getItem(), CoreHolder.Items.CONFIGURATOR)) {
+    if (e.getPlayer().isSneaking() || CustomItemManager.matchCustomItemName(e.getItem(), CoreHolder.Items.CONFIGURATOR)) {
       return;
     }
 
@@ -203,65 +198,56 @@ public class PoweredBlockManager implements Listener, ITickable {
 
   /* Events */
   @EventHandler
-  public void onPoweredBlockPlace(BlockPlaceEvent event) {
-    Location location = event.getBlockPlaced().getLocation();
-    Craftory.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(
-        Craftory.getInstance(), () -> {
+  public void onPoweredBlockPlace(CustomBlockPlaceEvent event) {
           PoweredBlock poweredBlock = null;
-          PoweredBlockType type = PoweredBlockType.MACHINE;
-          if (!ItemsAdder.isCustomBlock(event.getBlockPlaced())) {
-            return;
-          }
+          PoweredBlockType type;
 
-          ItemStack blockPlacedItemStack = ItemsAdder.getCustomBlock(event.getBlockPlaced());
-          String blockPlacedName = ItemsAdder.getCustomItemName(blockPlacedItemStack);
-
-          switch (blockPlacedName) {
+          switch (event.getCustomBlockName()) {
             case CoreHolder.Blocks.IRON_CELL:
-              poweredBlock = new IronCell(location);
+              poweredBlock = new IronCell(event.getLocation());
               type = PoweredBlockType.CELL;
               break;
             case CoreHolder.Blocks.GOLD_CELL:
-              poweredBlock = new GoldCell(location);
+              poweredBlock = new GoldCell(event.getLocation());
               type = PoweredBlockType.CELL;
               break;
             case CoreHolder.Blocks.DIAMOND_CELL:
-              poweredBlock = new DiamondCell(location);
+              poweredBlock = new DiamondCell(event.getLocation());
               type = PoweredBlockType.CELL;
               break;
             case CoreHolder.Blocks.EMERALD_CELL:
-              poweredBlock = new EmeraldCell(location);
+              poweredBlock = new EmeraldCell(event.getLocation());
               type = PoweredBlockType.CELL;
               break;
 
             case CoreHolder.Blocks.SOLID_FUEL_GENERATOR:
-              poweredBlock = new SolidFuelGenerator(location);
+              poweredBlock = new SolidFuelGenerator(event.getLocation());
               type = PoweredBlockType.GENERATOR;
               break;
             case CoreHolder.Blocks.POWER_CONNECTOR:
-              PowerGridManager manager = new PowerGridManager(location);
-              getAdjacentPowerBlocks(location, manager);
-              addPowerGridManager(location, manager);
+              PowerGridManager manager = new PowerGridManager(event.getLocation());
+              getAdjacentPowerBlocks(event.getLocation(), manager);
+              addPowerGridManager(event.getLocation(), manager);
               type = PoweredBlockType.CELL;
               break;
             case CoreHolder.Blocks.IRON_ELECTRIC_FURNACE:
-              poweredBlock = new IronElectricFurnace(location);
+              poweredBlock = new IronElectricFurnace(event.getLocation());
               type = PoweredBlockType.MACHINE;
               break;
             case CoreHolder.Blocks.GOLD_ELECTRIC_FURNACE:
-              poweredBlock = new GoldElectricFurnace(location);
+              poweredBlock = new GoldElectricFurnace(event.getLocation());
               type = PoweredBlockType.MACHINE;
               break;
             case CoreHolder.Blocks.EMERALD_ELECTRIC_FURNACE:
-              poweredBlock = new EmeraldElectricFurnace(location);
+              poweredBlock = new EmeraldElectricFurnace(event.getLocation());
               type = PoweredBlockType.MACHINE;
               break;
             case CoreHolder.Blocks.DIAMOND_ELECTRIC_FURNACE:
-              poweredBlock = new DiamondElectricFurnace(location);
+              poweredBlock = new DiamondElectricFurnace(event.getLocation());
               type = PoweredBlockType.MACHINE;
               break;
             case CoreHolder.Blocks.IRON_FOUNDRY:
-              poweredBlock = new IronFoundry(location);
+              poweredBlock = new IronFoundry(event.getLocation());
               type = PoweredBlockType.MACHINE;
               break;
             default:
@@ -270,17 +256,16 @@ public class PoweredBlockManager implements Listener, ITickable {
 
           //Carry out PoweredBlock Base Setup
           if (poweredBlock != null) {
-            addPoweredBlock(location, poweredBlock);
+            addPoweredBlock(event.getLocation(), poweredBlock);
             if (poweredBlock.isReceiver()) {
-              updateAdjacentProviders(location, true, type);
+              updateAdjacentProviders(event.getLocation(), true, type);
             }
           }
-        }, 1L);
   }
 
   @EventHandler
   public void onPoweredBlockBreak(CustomBlockBreakEvent event) {
-    Location location = event.getBlock().getLocation();
+    Location location = event.getLocation();
     if(powerGrids.containsKey(location)) { //GRID / Power connector stuff
       Craftory.powerConnectorManager.destroyBeams(location);
       if(powerGrids.get(location).getGridSize() > 1){
@@ -325,7 +310,7 @@ public class PoweredBlockManager implements Listener, ITickable {
     if (e.getAction() != Action.LEFT_CLICK_BLOCK) {
       return;
     }
-    if (!ItemsAdder.matchCustomItemName(e.getItem(), CoreHolder.Items.WRENCH)) {
+    if (!CustomItemManager.matchCustomItemName(e.getItem(), CoreHolder.Items.WRENCH)) {
       return;
     }
     e.setCancelled(true);
@@ -344,7 +329,7 @@ public class PoweredBlockManager implements Listener, ITickable {
 
   @EventHandler
   public void onConfigurator(final PlayerInteractEvent e) {
-    if (!ItemsAdder.matchCustomItemName(e.getItem(), CoreHolder.Items.CONFIGURATOR)) {
+    if (!CustomItemManager.matchCustomItemName(e.getItem(), CoreHolder.Items.CONFIGURATOR)) {
       return;
     }
     e.setCancelled(true);
@@ -378,11 +363,11 @@ public class PoweredBlockManager implements Listener, ITickable {
     for (BlockFace face : faces) {
       block = location.getBlock().getRelative(face);
       blockLocation = block.getLocation();
-      if (ItemsAdder.isCustomBlock(block)) {
+      if (Craftory.customBlockManager.isCustomBlock(blockLocation)) {
         if (poweredBlocks.containsKey(blockLocation) && isProvider(blockLocation)) {
           ((BaseProvider) getPoweredBlock(blockLocation))
               .updateOutputCache(face.getOppositeFace(), setTo);
-        } else if (setTo && ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block))
+        } else if (setTo && Craftory.customBlockManager.getCustomBlockName(blockLocation)
             == CoreHolder.Blocks.POWER_CONNECTOR) { //TODO fix type part - seperate
           switch (type) {
             case MACHINE:
@@ -410,12 +395,10 @@ public class PoweredBlockManager implements Listener, ITickable {
   }
 
   private void getAdjacentPowerBlocks(Location location, PowerGridManager powerGridManager) {
-    Block block;
     Location blockLocation;
     for (BlockFace face : faces) {
-      block = location.getBlock().getRelative(face);
-      blockLocation = block.getLocation();
-      if (ItemsAdder.isCustomBlock(block) && poweredBlocks.containsKey(blockLocation)) {
+      blockLocation = location.getBlock().getRelative(face).getLocation();
+      if (Craftory.customBlockManager.isCustomBlock(blockLocation) && poweredBlocks.containsKey(blockLocation)) {
         if (isCell(blockLocation)) {
           powerGridManager.addPowerCell(location, blockLocation);
         } else if (isGenerator(blockLocation)) {

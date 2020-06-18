@@ -15,22 +15,30 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
   private final CommandExecutor MainCommand;
   private final CommandExecutor HelpCommand;
   private final CommandExecutor DebugCommand;
+  private final CommandExecutor GiveCommand;
+  private final CommandExecutor GiveBlockCommand;
 
   /* Tab Complete */
   private final TabCompleter MainTab;
   private final TabCompleter HelpTab;
   private final TabCompleter DebugTab;
+  private final TabCompleter GiveTab;
+  private final TabCompleter GiveBlockTab;
 
   public CommandWrapper() {
     /* Commands */
     MainCommand = new Command_Main();
     HelpCommand = new Command_Help();
     DebugCommand = new Command_Debug();
+    GiveCommand = new Command_GiveItem();
+    GiveBlockCommand = new Command_GiveBlock();
 
     /* Tab Complete */
     MainTab = new Command_Main();
     HelpTab = new Command_Help();
     DebugTab = new Command_Debug();
+    GiveTab = new Command_GiveItem();
+    GiveBlockTab = new Command_GiveBlock();
   }
 
   public static ArrayList<String> filterTabs(ArrayList<String> list, String[] origArgs) {
@@ -80,6 +88,18 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
         } else {
           Utilities.msg(sender, "You Don't have Permissions for that");
         }
+      } else if (args[0].equalsIgnoreCase("give")) {
+        if (sender.hasPermission("craftory.give")) {
+          return GiveCommand.onCommand(sender, command, label, args);
+        } else {
+          Utilities.msg(sender, "You Don't have Permissions for that");
+        }
+      } else if (args[0].equalsIgnoreCase("giveBlock")) {
+        if (sender.hasPermission("craftory.give")) {
+          return GiveBlockCommand.onCommand(sender, command, label, args);
+        } else {
+          Utilities.msg(sender, "You Don't have Permissions for that");
+        }
       }
     }
     return true;
@@ -101,6 +121,14 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
       } else if (args[0].equalsIgnoreCase("toggleDebug")) {
         if (sender.hasPermission("craftory.debug")) {
           return DebugTab.onTabComplete(sender, command, label, args);
+        }
+      } else if (args[0].equalsIgnoreCase("give")) {
+        if (sender.hasPermission("craftory.give")) {
+          return GiveTab.onTabComplete(sender, command, label, args);
+        }
+      } else if (args[0].equalsIgnoreCase("giveBlock")) {
+        if (sender.hasPermission("craftory.give")) {
+          return GiveBlockTab.onTabComplete(sender, command, label, args);
         }
       }
     }

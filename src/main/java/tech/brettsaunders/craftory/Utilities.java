@@ -24,15 +24,15 @@ public class Utilities {
   public static FileConfiguration config;
   public static FileConfiguration data;
   public static SentryClient sentry;
-  private static File configFile = new File(Craftory.getInstance().getDataFolder(), "config.yml");
-  private static File dataFile = new File(Craftory.getInstance().getDataFolder(), "data.yml");
+  private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
+  private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
 
   static {
     config = YamlConfiguration
-        .loadConfiguration(new File(Craftory.getInstance().getDataFolder(), "config.yml"));
+        .loadConfiguration(new File(Craftory.plugin.getDataFolder(), "config.yml"));
     data = YamlConfiguration
-        .loadConfiguration(new File(Craftory.getInstance().getDataFolder(), "data.yml"));
-    DATA_FOLDER = Craftory.getInstance().getDataFolder().getPath() + File.separator + "data";
+        .loadConfiguration(new File(Craftory.plugin.getDataFolder(), "data.yml"));
+    DATA_FOLDER = Craftory.plugin.getDataFolder().getPath() + File.separator + "data";
   }
 
   static void pluginBanner() {
@@ -73,7 +73,7 @@ public class Utilities {
   }
 
   static void startMetrics() {
-    Metrics metrics = new Metrics(Craftory.getInstance(), 7804);
+    Metrics metrics = new Metrics(Craftory.plugin, 7804);
     metrics.addCustomChart(
         new Metrics.SimplePie("debugEnabled", () -> config.getString("general.debug")));
     metrics.addCustomChart(
@@ -81,10 +81,10 @@ public class Utilities {
   }
 
   static void registerCommandsAndCompletions() {
-    Craftory.getInstance().getCommand("craftory").setExecutor(new CommandWrapper());
-    Craftory.getInstance().getCommand("cf").setExecutor(new CommandWrapper());
-    Craftory.getInstance().getCommand("craftory").setTabCompleter(new CommandWrapper());
-    Craftory.getInstance().getCommand("cf").setTabCompleter(new CommandWrapper());
+    Craftory.plugin.getCommand("craftory").setExecutor(new CommandWrapper());
+    Craftory.plugin.getCommand("cf").setExecutor(new CommandWrapper());
+    Craftory.plugin.getCommand("craftory").setTabCompleter(new CommandWrapper());
+    Craftory.plugin.getCommand("cf").setTabCompleter(new CommandWrapper());
   }
 
   static void registerEvents() {
@@ -106,21 +106,21 @@ public class Utilities {
 
   static void done() {
     Bukkit.getLogger().info(
-        "[" + Craftory.getInstance().getDescription().getPrefix() + "] " + ChatColor.GREEN
+        "[" + Craftory.plugin.getDescription().getPrefix() + "] " + ChatColor.GREEN
             + "Finished Loading!");
   }
 
   /* Helper Functions */
   public static void reloadConfigFile() {
     if (configFile == null) {
-      configFile = new File(Craftory.getInstance().getDataFolder(), "config.yml");
+      configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
     }
     config = YamlConfiguration.loadConfiguration(configFile);
   }
 
   public static void reloadDataFile() {
     if (dataFile == null) {
-      dataFile = new File(Craftory.getInstance().getDataFolder(), "data.yml");
+      dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
     }
     data = YamlConfiguration.loadConfiguration(dataFile);
   }

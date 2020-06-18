@@ -24,6 +24,10 @@
               <pattern>org.bstats</pattern>
               <shadedPattern>tech.brettsaunders.craftory.external</shadedPattern>
             </relocation>
+            <relocation>
+              <pattern>de.tr7zw.changeme.nbtapi</pattern>
+              <shadedPattern>tech.brettsaunders.craftory.external</shadedPattern>
+            </relocation>
           </relocations>
         </configuration>
         <executions>
@@ -67,13 +71,6 @@
       <version>1.15.2-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <artifactId>itemsadder</artifactId>
-      <groupId>tech.brettsaunders.itemsadder</groupId>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/ItemsAdder.jar</systemPath>
-      <version>2.0.24</version>
-    </dependency>
-    <dependency>
       <artifactId>sentry</artifactId>
       <groupId>io.sentry</groupId>
       <version>1.7.30</version>
@@ -84,8 +81,13 @@
       <scope>compile</scope>
       <version>1.7</version>
     </dependency>
+    <dependency>
+      <groupId>de.tr7zw</groupId>
+      <artifactId>item-nbt-api</artifactId>
+      <version>2.3.1</version>
+    </dependency>
   </dependencies>
-  <description>Adds more functionality to minecraft with only server side modification</description>
+  <description>Adds more functionality to Minecraft with only server side modification</description>
   <groupId>tech.brettsaunders</groupId>
 
   <modelVersion>4.0.0</modelVersion>
