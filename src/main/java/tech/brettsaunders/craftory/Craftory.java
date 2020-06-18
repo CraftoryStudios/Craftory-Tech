@@ -10,12 +10,13 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
-import tech.brettsaunders.craftory.utils.FileUtils;
 
 
 public final class Craftory extends JavaPlugin {
 
   public static final String VERSION = "0.0.1";
+  public static final String RESOURCE_PACK = "https://www.dropbox.com/sh/45htag43dxcjl3v/AACycbwia_WD7bCuRSk0XeUZa?raw=1";
+  public static final String HASH = "8679A74C535E9317E9EBFD8AD32F167A";
 
   public static TickableBaseManager tickableBaseManager = null;
   public static PowerConnectorManager powerConnectorManager = null;
@@ -37,15 +38,12 @@ public final class Craftory extends JavaPlugin {
     Utilities.pluginBanner();
     Utilities.createDataPath();
     Utilities.createConfigs();
-    setupResources();
     Utilities.registerCommandsAndCompletions();
     Utilities.registerEvents();
     /* Needs sorting */
     customBlockConfigFile = new File(getDataFolder(), "customBlockConfig.yml");
     customItemConfigFile = new File(getDataFolder(), "customItemConfig.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
-    customItemConfig.addDefault("items", null);
-    customItemConfig.options().copyDefaults(true);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
     CustomItemManager.setup(customItemConfig,customBlocksConfig);
 
@@ -73,12 +71,4 @@ public final class Craftory extends JavaPlugin {
     Utilities.saveConfigFile();
     plugin = null;
   }
-
-
-  public void setupResources() {
-    File items = new File(getDataFolder().getParentFile(), "ItemsAdder/data/");
-    items.mkdirs();
-    FileUtils.copyResourcesRecursively(getClass().getResource("/data"), items);
-  }
-
 }
