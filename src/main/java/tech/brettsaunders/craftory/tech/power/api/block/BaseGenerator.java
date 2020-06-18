@@ -152,7 +152,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle(Font.GENERATOR_GUI.label+"Generator");
+    Inventory inventory = setInterfaceTitle("Generator", Font.GENERATOR_GUI.label+"");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig));
   }
