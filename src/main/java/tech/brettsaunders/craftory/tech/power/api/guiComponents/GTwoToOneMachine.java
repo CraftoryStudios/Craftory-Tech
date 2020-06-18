@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.util.Arrays;
 import java.util.HashSet;
 import org.bukkit.event.EventHandler;
@@ -11,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -34,8 +34,8 @@ public class GTwoToOneMachine implements IGUIComponent, Listener {
     this.inputSlot1 = inputSlot1;
     this.inputSlot2 = inputSlot2;
     this.outputSlot = outputSlot;
-    Craftory.getInstance().getServer().getPluginManager()
-        .registerEvents(this, Craftory.getInstance());
+    Craftory.plugin.getServer().getPluginManager()
+        .registerEvents(this, Craftory.plugin);
   }
 
   public GTwoToOneMachine(Inventory inventory,
@@ -72,13 +72,11 @@ public class GTwoToOneMachine implements IGUIComponent, Listener {
 
   @Override
   public void update() {
-    if (ItemsAdder.areItemsLoaded()) {
       int x = (int) Math.floor(progress.getT() * 10);
-      ItemStack arrow = ItemsAdder.getCustomItem("extra:arrow_" + x);
+      ItemStack arrow = CustomItemManager.getCustomItem("arrow_" + x, false);
       ItemMeta meta = arrow.getItemMeta();
       meta.setDisplayName("");
       arrow.setItemMeta(meta);
       inventory.setItem(arrowSlot, arrow);
     }
-  }
 }

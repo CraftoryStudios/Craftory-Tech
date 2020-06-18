@@ -1,13 +1,12 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
+import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.utils.VariableContainer;
@@ -34,9 +33,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     super(location, level, outputAmount);
     energyStorage = new EnergyStorage((int) (CAPACITY_BASE * CAPACITY_LEVEL[level]));
     init();
-    if (ItemsAdder.areItemsLoaded()) {
-      setupGUI();
-    }
+    setupGUI();
   }
 
   /* Saving, Setup and Loading */
@@ -155,7 +152,7 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Generator", new FontImageWrapper("extra:cell"));
+    Inventory inventory = setInterfaceTitle(Font.GENERATOR_GUI+"Generator");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig));
   }

@@ -1,12 +1,12 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
+import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.utils.VariableContainer;
@@ -125,7 +125,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Machine", new FontImageWrapper("extra:cell"));
+    Inventory inventory = setInterfaceTitle(Font.CELL_GUI+"Machine");
     addGUIComponent(new GBattery(inventory, energyStorage));
   }
 }

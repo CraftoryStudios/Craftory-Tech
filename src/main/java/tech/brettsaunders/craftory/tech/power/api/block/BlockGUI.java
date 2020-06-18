@@ -1,10 +1,9 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
-import dev.lone.itemsadder.api.FontImages.TexturedInventoryWrapper;
 import java.io.Externalizable;
 import java.util.ArrayList;
 import java.util.HashSet;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -17,7 +16,7 @@ public abstract class BlockGUI implements Externalizable {
   private final ArrayList<IGUIComponent> components = new ArrayList<>();
   protected HashSet<Integer> interactableSlots = new HashSet<>();
   /* Per Object Variables */
-  private TexturedInventoryWrapper inventoryInterface;
+  private Inventory inventoryInterface;
 
   /* Saving, Setup and Loading */
   public BlockGUI() {
@@ -32,7 +31,7 @@ public abstract class BlockGUI implements Externalizable {
   /*GUI Methods */
 
   public void updateInterface() {
-    if (inventoryInterface == null || inventoryInterface.getInternal().getViewers().size() <= 0) {
+    if (inventoryInterface == null || inventoryInterface.getViewers().size() <= 0) {
       return;
     }
     for (IGUIComponent component : components) {
@@ -44,7 +43,7 @@ public abstract class BlockGUI implements Externalizable {
     if (inventoryInterface == null) {
       return null;
     }
-    return inventoryInterface.getInternal();
+    return inventoryInterface;
   }
 
   public void addGUIComponent(IGUIComponent component) {
@@ -52,12 +51,11 @@ public abstract class BlockGUI implements Externalizable {
   }
 
   public void openGUI(Player player) {
-    inventoryInterface.showInventory(player);
+    player.openInventory(inventoryInterface);
   }
 
-  protected Inventory setInterfaceTitle(String title, FontImageWrapper wrapper) {
-    inventoryInterface = new TexturedInventoryWrapper(null, 54, ChatColor.DARK_GRAY + title,
-        wrapper);
-    return inventoryInterface.getInternal();
+  protected Inventory setInterfaceTitle(String title) {
+    inventoryInterface = Bukkit.createInventory(null, 54, ChatColor.DARK_GRAY + title);
+    return inventoryInterface;
   }
 }

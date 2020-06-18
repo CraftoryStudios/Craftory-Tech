@@ -1,13 +1,12 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
-import dev.lone.itemsadder.api.ItemsAdder;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
+import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
@@ -27,9 +26,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
     energyStorage = new EnergyStorage(CAPACITY_BASE * CAPACITY_LEVEL[level]);
     isReceiver = true;
     isProvider = true;
-    if (ItemsAdder.areItemsLoaded()) {
-      setupGUI();
-    }
+    setupGUI();
   }
 
   /* Saving, Setup and Loading */
@@ -81,7 +78,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Cell", new FontImageWrapper("extra:cell"));
+    Inventory inventory = setInterfaceTitle(Font.CELL_GUI+"Cell");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig,22));
   }

@@ -1,9 +1,9 @@
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
-import dev.lone.itemsadder.api.ItemsAdder;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -25,15 +25,14 @@ public class GIndicator implements IGUIComponent {
 
   @Override
   public void update() {
-    if (ItemsAdder.areItemsLoaded()) {
       ItemStack light;
       String name;
 
       if (state.getT()) {
-        light = ItemsAdder.getCustomItem("extra:light_on");
+        light = CustomItemManager.getCustomItem("extra:light_on", false);
         name = "Machine Running";
       } else {
-        light = ItemsAdder.getCustomItem("extra:light_off");
+        light = CustomItemManager.getCustomItem("extra:light_off", false);
         name = "Machine Off";
       }
       ItemMeta meta = light.getItemMeta();
@@ -41,5 +40,4 @@ public class GIndicator implements IGUIComponent {
       light.setItemMeta(meta);
       inventory.setItem(slot, light);
     }
-  }
 }

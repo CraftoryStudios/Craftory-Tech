@@ -56,15 +56,15 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     isReceiver = false;
     isProvider = false;
     this.level = level;
-    Craftory.getInstance().getServer().getPluginManager()
-        .registerEvents(this, Craftory.getInstance());
+    Craftory.plugin.getServer().getPluginManager()
+        .registerEvents(this, Craftory.plugin);
   }
 
   /* Saving, Setup and Loading */
   public PoweredBlock() {
     super();
-    Craftory.getInstance().getServer().getPluginManager()
-        .registerEvents(this, Craftory.getInstance());
+    Craftory.plugin.getServer().getPluginManager()
+        .registerEvents(this, Craftory.plugin);
   }
 
   @Override

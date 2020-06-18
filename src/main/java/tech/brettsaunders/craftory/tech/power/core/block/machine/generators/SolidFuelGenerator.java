@@ -1,12 +1,12 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.generators;
 
-import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
@@ -82,7 +82,7 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Fuel Generator", new FontImageWrapper("extra:generator"));
+    Inventory inventory = setInterfaceTitle(Font.GENERATOR_GUI+"Fuel Generator");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43));
     addGUIComponent(new GIndicator(inventory, runningContainer, 31));

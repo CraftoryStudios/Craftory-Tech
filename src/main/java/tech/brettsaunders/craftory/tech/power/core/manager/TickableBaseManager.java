@@ -10,7 +10,7 @@ public class TickableBaseManager {
   final ArrayList<ITickable> tickableUpdate;
   public TickableBaseManager() {
     tickableUpdate = new ArrayList<>();
-    Craftory plugin = Craftory.getInstance();
+    Craftory plugin = Craftory.plugin;
     AtomicLong worldTime = new AtomicLong();
 
     /* Update */
