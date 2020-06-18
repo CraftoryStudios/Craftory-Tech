@@ -69,15 +69,15 @@ public class GOutputConfig implements IGUIComponent, Listener {
 
   @Override
   public void update() {
-      final ItemStack DISABLED = CustomItemManager.getCustomItem("output_disabled", false);
-      final ItemStack OUTPUT = CustomItemManager.getCustomItem("output_green", false);
+    final ItemStack DISABLED = CustomItemManager.getCustomItem("output_disabled", false);
+    final ItemStack OUTPUT = CustomItemManager.getCustomItem("output_green", false);
 
-      //NORTH, EAST, SOUTH, WEST, UP, DOWN
-      inventory.setItem(NORTH_SLOT, !config.get(0) ? DISABLED.clone() : OUTPUT.clone());
-      inventory.setItem(EAST_SLOT, !config.get(1) ? DISABLED.clone() : OUTPUT.clone());
-      inventory.setItem(SOUTH_SLOT, !config.get(2) ? DISABLED.clone() : OUTPUT.clone());
-      inventory.setItem(WEST_SLOT, !config.get(3) ? DISABLED.clone() : OUTPUT.clone());
-      inventory.setItem(UP_SLOT, !config.get(4) ? DISABLED.clone() : OUTPUT.clone());
-      inventory.setItem(DOWN_SLOT, !config.get(5) ? DISABLED.clone() : OUTPUT.clone());
-    }
+    //NORTH, EAST, SOUTH, WEST, UP, DOWN
+    inventory.setItem(NORTH_SLOT, !config.get(0) ? DISABLED.clone() : OUTPUT.clone());
+    inventory.setItem(EAST_SLOT, !config.get(1) ? DISABLED.clone() : OUTPUT.clone());
+    inventory.setItem(SOUTH_SLOT, !config.get(2) ? DISABLED.clone() : OUTPUT.clone());
+    inventory.setItem(WEST_SLOT, !config.get(3) ? DISABLED.clone() : OUTPUT.clone());
+    inventory.setItem(UP_SLOT, !config.get(4) ? DISABLED.clone() : OUTPUT.clone());
+    inventory.setItem(DOWN_SLOT, !config.get(5) ? DISABLED.clone() : OUTPUT.clone());
+  }
 }

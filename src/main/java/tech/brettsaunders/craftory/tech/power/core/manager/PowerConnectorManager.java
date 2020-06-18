@@ -37,7 +37,8 @@ public class PowerConnectorManager implements Listener {
     if (CustomItemManager.matchCustomItemName(event.getItem(), CoreHolder.Items.WRENCH)
         && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
       //Check Power Connector
-      if (Craftory.customBlockManager.isCustomBlockOfType(event.getClickedBlock().getLocation(), CoreHolder.Blocks.POWER_CONNECTOR)) {
+      if (Craftory.customBlockManager.isCustomBlockOfType(event.getClickedBlock().getLocation(),
+          CoreHolder.Blocks.POWER_CONNECTOR)) {
         if (!formingConnection.containsKey(event.getPlayer().getUniqueId())) {
           //First Power Connector selected
           if (Craftory.getBlockPoweredManager()
@@ -64,18 +65,21 @@ public class PowerConnectorManager implements Listener {
             powerGridManagerFrom.addPowerConnectorConnection(fromLoc, toLoc);
             //Merge Managers
             if (powerGridManagerFrom != powerGridManagerTo) {
-              if(powerGridManagerFrom.getGridSize() >= powerGridManagerTo.getGridSize()) {
+              if (powerGridManagerFrom.getGridSize() >= powerGridManagerTo.getGridSize()) {
                 powerGridManagerFrom.combineGrid(powerGridManagerTo);
                 powerGridManagerFrom.addPowerConnectorConnection(fromLoc, toLoc);
-                Craftory.getBlockPoweredManager().mergeGrids(powerGridManagerTo, powerGridManagerFrom);
+                Craftory.getBlockPoweredManager()
+                    .mergeGrids(powerGridManagerTo, powerGridManagerFrom);
               } else {
                 powerGridManagerTo.combineGrid(powerGridManagerFrom);
                 powerGridManagerTo.addPowerConnectorConnection(fromLoc, toLoc);
-                Craftory.getBlockPoweredManager().mergeGrids(powerGridManagerFrom, powerGridManagerTo);
+                Craftory.getBlockPoweredManager()
+                    .mergeGrids(powerGridManagerFrom, powerGridManagerTo);
               }
 
             }
             formBeam(fromLoc, toLoc);
+            formBeam(toLoc, fromLoc);
             event.getPlayer().sendMessage("Connection formed");
           } else {
             formingConnection.remove(event.getPlayer().getUniqueId());
@@ -85,29 +89,31 @@ public class PowerConnectorManager implements Listener {
             Logger.debug((fromLoc == toLoc) + "");
           }
         }
-      } else if(Craftory.getBlockPoweredManager().isPoweredBlock(event.getClickedBlock().getLocation()) && formingConnection.containsKey(event.getPlayer().getUniqueId())){
+      } else if (
+          Craftory.getBlockPoweredManager().isPoweredBlock(event.getClickedBlock().getLocation())
+              && formingConnection.containsKey(event.getPlayer().getUniqueId())) {
 
         Location toLoc = event.getClickedBlock().getLocation();
         Location fromLoc = formingConnection.get(event.getPlayer().getUniqueId());
         PowerGridManager gridManager = Craftory.getBlockPoweredManager()
             .getPowerGridManager(fromLoc);
         PoweredBlock block = Craftory.getBlockPoweredManager().getPoweredBlock(toLoc);
-        if(block instanceof BaseMachine){
+        if (block instanceof BaseMachine) {
           gridManager.addMachine(fromLoc, toLoc);
-        } else if(block instanceof BaseGenerator){
+        } else if (block instanceof BaseGenerator) {
           gridManager.addGenerator(fromLoc, toLoc);
-        } else if(block instanceof BaseCell){
-          gridManager.addPowerCell(fromLoc,toLoc);
+        } else if (block instanceof BaseCell) {
+          gridManager.addPowerCell(fromLoc, toLoc);
         } else {
           event.getPlayer().sendMessage("block didnt match type");
           formingConnection.remove(event.getPlayer().getUniqueId());
           return;
         }
-        formBeam(fromLoc, toLoc);
+        formBeam(fromLoc, toLoc); //ee
+        formBeam(toLoc, fromLoc);
         event.getPlayer().sendMessage("Machine Connected");
         formingConnection.remove(event.getPlayer().getUniqueId());
       }
-
 
 
     }
@@ -156,27 +162,27 @@ public class PowerConnectorManager implements Listener {
     }
   }
 
-  private void addBeamToList(Location location, Beam beam){
+  private void addBeamToList(Location location, Beam beam) {
     ArrayList<Beam> temp;
-    if(activeBeams.containsKey(location)){
+    if (activeBeams.containsKey(location)) {
       temp = activeBeams.get(location);
       temp.add(beam);
-      activeBeams.put(location,temp);
+      activeBeams.put(location, temp);
     } else {
-      activeBeams.put(location,new ArrayList<>(Arrays.asList(beam)));
+      activeBeams.put(location, new ArrayList<>(Arrays.asList(beam)));
     }
   }
 
   public void destroyBeams(Location loc) {
-    if(activeBeams.containsKey(loc)){
-      activeBeams.get(loc).forEach((Beam::stop));
+    if (activeBeams.containsKey(loc)) {
+      activeBeams.get(loc).forEach(Beam::stop);
       activeBeams.remove(loc);
     }
   }
 
   private void destroyActiveBeams() {
-    for(ArrayList<Beam> list: activeBeams.values()){
-      list.forEach((Beam::stop));
+    for (ArrayList<Beam> list : activeBeams.values()) {
+      list.forEach(Beam::stop);
     }
   }
 

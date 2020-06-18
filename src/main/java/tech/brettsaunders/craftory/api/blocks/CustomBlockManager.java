@@ -41,14 +41,15 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class CustomBlockManager implements Listener {
 
-  private FileConfiguration customBlocksConfig;
-  private File customBlockConfigFile = new File(Craftory.plugin.getDataFolder(),
+  private final static String DATA_FOLDER =
+      Craftory.plugin.getDataFolder() + File.separator + "data";
+  private final FileConfiguration customBlocksConfig;
+  private final File customBlockConfigFile = new File(Craftory.plugin.getDataFolder(),
       "customBlockConfig.yml");
-  private HashMap<Location, CustomBlock> activeCustomBlocks;
-  private HashMap<Chunk, ArrayList<Location>> activeChunks;
-  private LRUCache<Chunk, ArrayList<CustomBlock>> customBlockLRUCache;
-  private HashMap<String, CustomBlockData> customBlockDataHashMap;
-  private final static String DATA_FOLDER = Craftory.plugin.getDataFolder() + File.separator + "data";
+  private final HashMap<Location, CustomBlock> activeCustomBlocks;
+  private final HashMap<Chunk, ArrayList<Location>> activeChunks;
+  private final LRUCache<Chunk, ArrayList<CustomBlock>> customBlockLRUCache;
+  private final HashMap<String, CustomBlockData> customBlockDataHashMap;
 
   public CustomBlockManager() {
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
@@ -146,7 +147,8 @@ public class CustomBlockManager implements Listener {
       } else {
         removeCustomBlock(activeCustomBlocks.get(location));
         removeIfLastActiveChunk(location);
-        location.getWorld().dropItemNaturally(location, CustomItemManager.getCustomItem(blockName, true));
+        location.getWorld()
+            .dropItemNaturally(location, CustomItemManager.getCustomItem(blockName, true));
         activeCustomBlocks.remove(location);
       }
       Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
@@ -205,7 +207,8 @@ public class CustomBlockManager implements Listener {
   public void onCustomBlockInteract(PlayerInteractEvent e) {
     if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
       if (activeCustomBlocks.containsKey(e.getClickedBlock().getLocation())) {
-        CustomBlockInteractEvent customBlockInteractEvent = new CustomBlockInteractEvent(e.getAction(), e.getClickedBlock(), e.getBlockFace(), e.getItem(),e.getPlayer());
+        CustomBlockInteractEvent customBlockInteractEvent = new CustomBlockInteractEvent(
+            e.getAction(), e.getClickedBlock(), e.getBlockFace(), e.getItem(), e.getPlayer());
         Bukkit.getServer().getPluginManager().callEvent(customBlockInteractEvent);
       }
     }
@@ -219,7 +222,7 @@ public class CustomBlockManager implements Listener {
   }
 
   public String getCustomBlockName(Location location) {
-    if(isCustomBlock(location)) {
+    if (isCustomBlock(location)) {
       return activeCustomBlocks.get(location).blockName;
     }
     return "UNKNOWN";
@@ -227,9 +230,7 @@ public class CustomBlockManager implements Listener {
 
   public boolean isCustomBlockOfType(Location location, String typeName) {
     if (isCustomBlock(location)) {
-      if (getCustomBlockName(location).equals(typeName)) {
-        return true;
-      }
+      return getCustomBlockName(location).equals(typeName);
     }
     return false;
   }

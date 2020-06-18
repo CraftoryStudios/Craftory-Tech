@@ -55,7 +55,8 @@ public abstract class BlockGUI implements Externalizable {
   }
 
   protected Inventory setInterfaceTitle(String title, String guiImage) {
-    String titleBuilder = NegativeSpaceFont.MINUS_16.label + guiImage + NegativeSpaceFont.MINUS_128.label + title;
+    String titleBuilder =
+        NegativeSpaceFont.MINUS_16.label + guiImage + NegativeSpaceFont.MINUS_128.label + title;
     inventoryInterface = Bukkit.createInventory(null, 54, titleBuilder);
     return inventoryInterface;
   }

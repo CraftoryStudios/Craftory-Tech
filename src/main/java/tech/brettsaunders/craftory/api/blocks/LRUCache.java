@@ -3,7 +3,8 @@ package tech.brettsaunders.craftory.api.blocks;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-public class LRUCache<K,V> extends LinkedHashMap<K, V> {
+public class LRUCache<K, V> extends LinkedHashMap<K, V> {
+
   private final int capacity;
 
   public LRUCache(int capacity) {
@@ -12,7 +13,7 @@ public class LRUCache<K,V> extends LinkedHashMap<K, V> {
   }
 
   @Override
-  protected boolean removeEldestEntry(Entry<K,V> eldest) {
+  protected boolean removeEldestEntry(Entry<K, V> eldest) {
     return (size() > this.capacity);
   }
 

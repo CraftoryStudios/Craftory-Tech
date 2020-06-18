@@ -3,7 +3,6 @@ package tech.brettsaunders.craftory.tech.power.core.block.machine.generators;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import org.bukkit.Location;
@@ -45,7 +44,7 @@ public class SolidFuelGenerator extends BaseGenerator {
     if (getFuelItem() == null) {
       return false;
     }
-    return SolidFuelManager.getFuelEnergy(getFuelItem().getType().name()) > 0;
+    return getEnergySpace() > 0 && SolidFuelManager.getFuelEnergy(getFuelItem().getType().name()) > 0;
   }
 
   @Override
@@ -88,7 +87,7 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Fuel Generator", Font.GENERATOR_GUI.label+"");
+    Inventory inventory = setInterfaceTitle("Fuel Generator", Font.GENERATOR_GUI.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43));
     addGUIComponent(new GIndicator(inventory, runningContainer, 31));

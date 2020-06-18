@@ -29,16 +29,16 @@ public class Beam {
   private final Object metadataPacketSquid;
   private final int squid;
   private final int guardian;
+  private final HashSet<Player> show = new HashSet<>();
   private Location start;
   private Location end;
   private BukkitRunnable run;
-  private final HashSet<Player> show = new HashSet<>();
 
   /**
    * Create a Beam instance
    *
-   * @param start Location where Beam will starts
-   * @param end Location where Beam will ends
+   * @param start    Location where Beam will starts
+   * @param end      Location where Beam will ends
    * @param duration Duration of Beam in seconds (<i>-1 if infinite</i>)
    * @param distance Distance where Beam will be visible
    */
@@ -116,7 +116,9 @@ public class Beam {
 
   public void stop() {
     //Validate.isTrue(run != null, "Task not started");
-    if(run!=null) run.cancel();
+    if (run != null) {
+      run.cancel();
+    }
   }
 
   public void moveStart(Location location) throws ReflectiveOperationException {
@@ -165,7 +167,8 @@ public class Beam {
   }
 
   private boolean isCloseEnough(Location location, Player player) { //TODO FIx UP
-    if (CustomItemManager.matchCustomItemName(player.getInventory().getItemInMainHand(), CoreHolder.Items.WRENCH) ||
+    if (CustomItemManager
+        .matchCustomItemName(player.getInventory().getItemInMainHand(), CoreHolder.Items.WRENCH) ||
         CustomItemManager.matchCustomItemName(player.getInventory().getItemInMainHand(),
             CoreHolder.Blocks.POWER_CONNECTOR)) {
       return start.distanceSquared(location) <= distanceSquared ||
@@ -178,7 +181,6 @@ public class Beam {
 
   private static class Packets {
 
-    private static int lastIssuedEID = 2000000000;
     private static final int version = Integer.parseInt(
         Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]
             .substring(1).split("_")[1]);
@@ -186,6 +188,7 @@ public class Beam {
         "net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName()
             .replace(".", ",").split(",")[3] + ".";
     private static final String cpack = Bukkit.getServer().getClass().getPackage().getName() + ".";
+    private static int lastIssuedEID = 2000000000;
     private static Object packetTeamCreate;
     private static Constructor<?> watcherConstructor;
     private static Method watcherSet;

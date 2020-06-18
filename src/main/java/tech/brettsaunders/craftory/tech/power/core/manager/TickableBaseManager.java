@@ -8,6 +8,7 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 public class TickableBaseManager {
 
   final ArrayList<ITickable> tickableUpdate;
+
   public TickableBaseManager() {
     tickableUpdate = new ArrayList<>();
     Craftory plugin = Craftory.plugin;

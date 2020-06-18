@@ -34,7 +34,9 @@ public class PowerGridManager implements Externalizable, ITickable {
   }
 
   /**
-   * Splits a power grid into the needed amount of new grids based on the power connector that broke the grid
+   * Splits a power grid into the needed amount of new grids based on the power connector that broke
+   * the grid
+   *
    * @param breakPoint The location of the broken power connector
    * @return A list of the individual grids (could just be one)
    */
@@ -44,44 +46,50 @@ public class PowerGridManager implements Externalizable, ITickable {
     HashSet<Location> neighbours = powerConnectors.remove(breakPoint);
     Logger.info("connector had: " + neighbours.size());
     HashSet<Location> closedSet = new HashSet<>();
-    for(Location location: neighbours) { //Loop through all the neighbours of broken connector
-      if(closedSet.contains(location)) {
-        Logger.info("neighbour already explored");
-        continue; //If this neighbour isn't part of one of the new grids make one
-      }
-      closedSet.add(location);
-      Logger.info("making new grid");
-      PowerGridManager grid = new PowerGridManager();
-      HashSet<Location> connections = powerConnectors.get(location);
-      if(connections!=null) {
-        connections.remove(breakPoint);
-        grid.powerConnectors.put(location, connections);
-        grid.blockConnections.put(location, blockConnections.get(location));
-        ArrayList<Location> openList = new ArrayList<>(connections);
-        Location connection;
-        while (openList.size() > 0){ //Add all its connections to the grid
-          connection = openList.remove(0);
-          if(closedSet.contains(connection)) continue; //Skip if they are already in a grid
-          closedSet.add(connection);
-          //Add it to the grid
-          if(blockConnections.containsKey(connection)){
-            grid.blockConnections.put(connection, blockConnections.get(connection));
-          }
-          HashSet<Location> connectionConnections = powerConnectors.get(connection);
-          if(connectionConnections==null)continue;
-          connectionConnections.remove(breakPoint);
-          grid.powerConnectors.put(connection,connectionConnections);
+    for (Location location : neighbours) { //Loop through all the neighbours of broken connector
 
-
-          //Continue traversal
-          for(Location l: connectionConnections) {
-            if(!closedSet.contains(l)) openList.add(l);
+    }
+    neighbours.forEach(location -> {
+      if (!closedSet.contains(location)) {
+        closedSet.add(location);
+        Logger.info("making new grid");
+        PowerGridManager grid = new PowerGridManager();
+        HashSet<Location> connections = powerConnectors.get(location);
+        if (connections != null) {
+          connections.remove(breakPoint);
+          grid.powerConnectors.put(location, connections);
+          grid.blockConnections.put(location, blockConnections.get(location));
+          ArrayList<Location> openList = new ArrayList<>(connections);
+          Location connection;
+          while (openList.size() > 0) { //Add all its connections to the grid
+            connection = openList.remove(0);
+            if (closedSet.contains(connection)) {
+              continue; //Skip if they are already in a grid
+            }
+            closedSet.add(connection);
+            //Add it to the grid
+            if (blockConnections.containsKey(connection)) {
+              grid.blockConnections.put(connection, blockConnections.get(connection));
+            }
+            HashSet<Location> connectionConnections = powerConnectors.get(connection);
+            if (connectionConnections == null) {
+              continue;
+            }
+            connectionConnections.remove(breakPoint);
+            grid.powerConnectors.put(connection, connectionConnections);
+            //Continue traversal
+            connectionConnections.forEach(loc -> {
+              if (!closedSet.contains(loc)) {
+                openList.add(loc);
+              }
+            });
           }
         }
+        grid.findPoweredBlocks();
+        managers.add(grid);
       }
-      grid.findPoweredBlocks();
-      managers.add(grid);
-    }
+
+    });
     return managers;
   }
 
@@ -91,16 +99,20 @@ public class PowerGridManager implements Externalizable, ITickable {
     machines = new HashSet<>();
     PoweredBlock block;
     Logger.info("grid has " + blockConnections.size() + " machine connections");
-    for(HashSet<Location> set: blockConnections.values()){
-      if(set==null) continue;
-      for(Location location: set) {
-        if(location==null) continue;
+    for (HashSet<Location> set : blockConnections.values()) {
+      if (set == null) {
+        continue;
+      }
+      for (Location location : set) {
+        if (location == null) {
+          continue;
+        }
         block = Craftory.getBlockPoweredManager().getPoweredBlock(location);
-        if (block instanceof BaseCell){
+        if (block instanceof BaseCell) {
           cells.add(location);
-        } else if(block instanceof  BaseGenerator) {
+        } else if (block instanceof BaseGenerator) {
           generators.add(location);
-        }else if(block instanceof BaseMachine) {
+        } else if (block instanceof BaseMachine) {
           machines.add(location);
         } else {
           Logger.info("Machine is not one of known types");
@@ -108,6 +120,7 @@ public class PowerGridManager implements Externalizable, ITickable {
       }
     }
   }
+
   public HashSet<Location> getCells() {
     return cells;
   }
@@ -146,7 +159,7 @@ public class PowerGridManager implements Externalizable, ITickable {
     HashSet<Location> toRemove = new HashSet<>();
     for (Location loc : cells) {
       BaseCell cell = (BaseCell) Craftory.getBlockPoweredManager().getPoweredBlock(loc);
-      if(cell==null){
+      if (cell == null) {
         toRemove.add(loc);
         continue;
       }
@@ -162,8 +175,9 @@ public class PowerGridManager implements Externalizable, ITickable {
     int e;
     HashSet<Location> toRemove = new HashSet<>();
     for (Location loc : generators) {
-      BaseGenerator generator = (BaseGenerator) Craftory.getBlockPoweredManager().getPoweredBlock(loc);
-      if(generator==null){
+      BaseGenerator generator = (BaseGenerator) Craftory.getBlockPoweredManager()
+          .getPoweredBlock(loc);
+      if (generator == null) {
         toRemove.add(loc);
         continue;
       }
@@ -189,7 +203,7 @@ public class PowerGridManager implements Externalizable, ITickable {
     HashSet<Location> toRemove = new HashSet<>();
     for (Location loc : machines) {
       BaseMachine machine = (BaseMachine) Craftory.getBlockPoweredManager().getPoweredBlock(loc);
-      if(machine==null){
+      if (machine == null) {
         toRemove.add(loc);
         continue;
       }
@@ -252,7 +266,7 @@ public class PowerGridManager implements Externalizable, ITickable {
     }
     int c = 0;
     while (amount > 1 && c < 3) {
-      c+=1;
+      c += 1;
       for (Location loc : machines) {
         BaseMachine machine = (BaseMachine) Craftory.getBlockPoweredManager().getPoweredBlock(loc);
         amount -= machine.receiveEnergy(allotment, false);
@@ -291,33 +305,39 @@ public class PowerGridManager implements Externalizable, ITickable {
 
   public void addPowerConnectorConnection(Location from, Location to) {
     HashSet<Location> temp = powerConnectors.get(from);
-    if(temp==null) temp = new HashSet<>();
+    if (temp == null) {
+      temp = new HashSet<>();
+    }
     temp.add(to);
     powerConnectors.put(from, temp);
     temp = powerConnectors.get(to);
-    if(temp==null) temp = new HashSet<>();
+    if (temp == null) {
+      temp = new HashSet<>();
+    }
     temp.add(from);
     powerConnectors.put(to, temp);
   }
 
   public void addPowerCell(Location connector, Location cellLocation) {
     cells.add(cellLocation);
-    addBlockConnection(connector,cellLocation);
+    addBlockConnection(connector, cellLocation);
   }
 
   public void addMachine(Location connector, Location machineLocation) {
     machines.add(machineLocation);
-    addBlockConnection(connector,machineLocation);
+    addBlockConnection(connector, machineLocation);
   }
 
   public void addGenerator(Location connector, Location generatorLocation) {
     generators.add(generatorLocation);
-    addBlockConnection(connector,generatorLocation);
+    addBlockConnection(connector, generatorLocation);
   }
 
   private void addBlockConnection(Location connector, Location machine) {
     HashSet<Location> temp = blockConnections.get(connector);
-    if(temp==null) temp = new HashSet<>();
+    if (temp == null) {
+      temp = new HashSet<>();
+    }
     temp.add(machine);
     blockConnections.put(connector, temp);
   }
