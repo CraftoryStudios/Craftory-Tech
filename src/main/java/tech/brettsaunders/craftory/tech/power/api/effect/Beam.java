@@ -116,8 +116,8 @@ public class Beam {
   }
 
   public void stop() {
-    Validate.isTrue(run != null, "Task not started");
-    run.cancel();
+    //Validate.isTrue(run != null, "Task not started");
+    if(run!=null) run.cancel();
   }
 
   public void moveStart(Location location) throws ReflectiveOperationException {

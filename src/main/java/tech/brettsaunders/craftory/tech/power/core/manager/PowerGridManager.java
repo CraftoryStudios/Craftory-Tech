@@ -64,11 +64,14 @@ public class PowerGridManager implements Externalizable, ITickable {
           if(closedSet.contains(connection)) continue; //Skip if they are already in a grid
           closedSet.add(connection);
           //Add it to the grid
+          if(blockConnections.containsKey(connection)){
+            grid.blockConnections.put(connection, blockConnections.get(connection));
+          }
           HashSet<Location> connectionConnections = powerConnectors.get(connection);
           if(connectionConnections==null)continue;
           connectionConnections.remove(breakPoint);
           grid.powerConnectors.put(connection,connectionConnections);
-          grid.blockConnections.put(connection, blockConnections.get(connection));
+
 
           //Continue traversal
           for(Location l: connectionConnections) {
@@ -87,6 +90,7 @@ public class PowerGridManager implements Externalizable, ITickable {
     generators = new HashSet<>();
     machines = new HashSet<>();
     PoweredBlock block;
+    Logger.info("grid has " + blockConnections.size() + " machine connections");
     for(HashSet<Location> set: blockConnections.values()){
       if(set==null) continue;
       for(Location location: set) {
@@ -98,6 +102,8 @@ public class PowerGridManager implements Externalizable, ITickable {
           generators.add(location);
         }else if(block instanceof BaseMachine) {
           machines.add(location);
+        } else {
+          Logger.info("Machine is not one of known types");
         }
       }
     }
@@ -120,7 +126,7 @@ public class PowerGridManager implements Externalizable, ITickable {
 
 
   public void update(long worldTime) {
-    Logger.info(cells.size() + " " + generators.size() + " " + machines.size());
+    //Logger.info(cells.size() + " " + generators.size() + " " + machines.size());
     int needed = whatDoTheyNeed();
     int cellCapacity = calculateStorageSpace();
     int produced = calculateEnergyProduced(needed + cellCapacity);
@@ -313,7 +319,7 @@ public class PowerGridManager implements Externalizable, ITickable {
     HashSet<Location> temp = blockConnections.get(connector);
     if(temp==null) temp = new HashSet<>();
     temp.add(machine);
-    blockConnections.replace(connector, temp);
+    blockConnections.put(connector, temp);
   }
 
 }
