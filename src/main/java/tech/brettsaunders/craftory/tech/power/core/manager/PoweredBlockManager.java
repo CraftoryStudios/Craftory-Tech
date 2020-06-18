@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -35,13 +37,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.CoreHolder;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
-import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
@@ -68,7 +65,7 @@ public class PoweredBlockManager implements Listener, ITickable {
     DATA_PATH = Utilities.DATA_FOLDER + File.separator + "poweredBlock.data";
   }
 
-  private final HashMap<Location, PowerGridManager> powerConnectors;
+  private final HashMap<Location, PowerGridManager> powerGrids;
   public HashSet<PowerGridManager> powerGridManagers;
   private HashMap<Location, PoweredBlock> poweredBlocks;
   private HashMap<World, HashSet> loadedChunkWorlds;
@@ -77,7 +74,7 @@ public class PoweredBlockManager implements Listener, ITickable {
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();
     powerGridManagers = new HashSet<>();
-    powerConnectors = new HashMap<>();
+    powerGrids = new HashMap<>();
     sidesConfigCopying = new HashMap<>();
     loadedChunkWorlds = new HashMap<>();
     Craftory.getInstance().getServer().getPluginManager()
@@ -285,6 +282,21 @@ public class PoweredBlockManager implements Listener, ITickable {
   @EventHandler
   public void onPoweredBlockBreak(CustomBlockBreakEvent event) {
     Location location = event.getBlock().getLocation();
+    if(powerGrids.containsKey(location)) { //GRID / Power connector stuff
+      if(powerGrids.get(location).getGridSize() > 1){
+        List<PowerGridManager> newGrids = powerGrids.get(location).splitGrids(location);
+        for(Location l: powerGrids.get(location).powerConnectors.keySet()) {
+          powerGrids.remove(l);
+        }
+        for(PowerGridManager grid: newGrids){
+          for(Location loc: grid.powerConnectors.keySet()){
+            powerGrids.put(loc, grid);
+          }
+        }
+      }
+      powerGrids.remove(location);
+    }
+
     if (!poweredBlocks.containsKey(location)) {
       return;
     }
@@ -323,6 +335,9 @@ public class PoweredBlockManager implements Listener, ITickable {
       e.getPlayer().sendMessage(
           "Stored: " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
               + " RE");
+    } else if(powerGrids.containsKey(e.getClickedBlock().getLocation())) {
+      e.getPlayer().sendMessage(powerGrids.get(e.getClickedBlock().getLocation()).toString());
+      e.getPlayer().sendMessage(powerGrids.values().toString());
     }
   }
 
@@ -358,24 +373,25 @@ public class PoweredBlockManager implements Listener, ITickable {
   //TODO CLEAN UP
   private void updateAdjacentProviders(Location location, Boolean setTo, PoweredBlockType type) {
     Block block;
-    Location connectorLocation = location;
+    Location blockLocation;
     for (BlockFace face : faces) {
       block = location.getBlock().getRelative(face);
+      blockLocation = block.getLocation();
       if (ItemsAdder.isCustomBlock(block)) {
-        if (poweredBlocks.containsKey(block.getLocation()) && isProvider(block.getLocation())) {
-          ((BaseProvider) getPoweredBlock(block.getLocation()))
+        if (poweredBlocks.containsKey(blockLocation) && isProvider(blockLocation)) {
+          ((BaseProvider) getPoweredBlock(blockLocation))
               .updateOutputCache(face.getOppositeFace(), setTo);
         } else if (setTo && ItemsAdder.getCustomItemName(ItemsAdder.getCustomBlock(block))
             == CoreHolder.Blocks.POWER_CONNECTOR) { //TODO fix type part - seperate
           switch (type) {
             case MACHINE:
-              powerConnectors.get(location).addMachine(connectorLocation, location);
+              powerGrids.get(location).addMachine(location, blockLocation);
               break;
             case GENERATOR:
-              powerConnectors.get(location).addGenerator(connectorLocation, location);
+              powerGrids.get(location).addGenerator(location, blockLocation);
               break;
             case CELL:
-              powerConnectors.get(location).addPowerCell(connectorLocation, location);
+              powerGrids.get(location).addPowerCell(location, blockLocation);
               break;
           }
 
@@ -384,18 +400,27 @@ public class PoweredBlockManager implements Listener, ITickable {
     }
   }
 
+  public void mergeGrids(PowerGridManager old, PowerGridManager merged) {
+    for (HashMap.Entry<Location, PowerGridManager> entry : powerGrids.entrySet()) {
+      if(entry.getValue().equals(old)){
+        powerGrids.put(entry.getKey(),merged);
+      }
+    }
+  }
+
   private void getAdjacentPowerBlocks(Location location, PowerGridManager powerGridManager) {
     Block block;
-    Location connectorLocation = location;
+    Location blockLocation;
     for (BlockFace face : faces) {
       block = location.getBlock().getRelative(face);
-      if (ItemsAdder.isCustomBlock(block) && poweredBlocks.containsKey(block.getLocation())) {
-        if (isCell(location)) {
-          powerGridManager.addPowerCell(connectorLocation, location);
-        } else if (isGenerator(location)) {
-          powerGridManager.addGenerator(connectorLocation, location);
-        } else if (isMachine(location)) {
-          powerGridManager.addMachine(connectorLocation, location);
+      blockLocation = block.getLocation();
+      if (ItemsAdder.isCustomBlock(block) && poweredBlocks.containsKey(blockLocation)) {
+        if (isCell(blockLocation)) {
+          powerGridManager.addPowerCell(location, blockLocation);
+        } else if (isGenerator(blockLocation)) {
+          powerGridManager.addGenerator(location, blockLocation);
+        } else if (isMachine(blockLocation)) {
+          powerGridManager.addMachine(location, blockLocation);
         }
       }
     }
@@ -407,13 +432,13 @@ public class PoweredBlockManager implements Listener, ITickable {
 
   private void addPowerGridManager(Location location, PowerGridManager manger) {
     powerGridManagers.add(manger);
-    powerConnectors.put(location, manger);
+    powerGrids.put(location, manger);
     //TODO for every merge or place of a power connector
     //TODO when merge change this
   }
 
   public PowerGridManager getPowerGridManager(Location location) {
-    return powerConnectors.get(location);
+    return powerGrids.get(location);
   }
 
   @Override
@@ -437,6 +462,10 @@ public class PoweredBlockManager implements Listener, ITickable {
       }));
     } catch (NullPointerException e) {
       Logger.debug(e.toString());
+    }
+
+    for(PowerGridManager gridManager: new HashSet<PowerGridManager>(powerGrids.values())){
+      gridManager.update(worldTime);
     }
   }
 

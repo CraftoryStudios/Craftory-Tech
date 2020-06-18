@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -12,6 +13,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
+import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.api.effect.Beam;
 import tech.brettsaunders.craftory.utils.BlockUtils;
 import tech.brettsaunders.craftory.utils.Logger;
@@ -33,47 +38,78 @@ public class PowerConnectorManager implements Listener {
     if (ItemsAdder.matchCustomItemName(event.getItem(), CoreHolder.Items.WRENCH)
         && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
       //Check Power Connector
-      if (!BlockUtils.isCustomTypeBlock(event.getClickedBlock(), CoreHolder.Blocks.POWER_CONNECTOR)) {
-        return;
-      }
+      if (BlockUtils.isCustomTypeBlock(event.getClickedBlock(), CoreHolder.Blocks.POWER_CONNECTOR)) {
+        if (!formingConnection.containsKey(event.getPlayer().getUniqueId())) {
+          //First Power Connector selected
+          if (Craftory.getBlockPoweredManager()
+              .getPowerGridManager(event.getClickedBlock().getLocation()) == null) {
+            return;
+          }
+          formingConnection
+              .put(event.getPlayer().getUniqueId(), event.getClickedBlock().getLocation());
+          event.getPlayer().sendMessage("Click Second Power Connector To Form Connection");
+        } else {
+          //Locations
+          Location toLoc = event.getClickedBlock().getLocation();
+          Location fromLoc = formingConnection.get(event.getPlayer().getUniqueId());
+          //Second Power Connector selected
+          PowerGridManager powerGridManagerTo = Craftory.getBlockPoweredManager()
+              .getPowerGridManager(toLoc);
+          PowerGridManager powerGridManagerFrom = Craftory.getBlockPoweredManager()
+              .getPowerGridManager(fromLoc);
+          //Both have manager and not same power connector
+          if (powerGridManagerFrom != null && powerGridManagerTo != null
+              && !fromLoc.equals(toLoc)) {
+            //Form Graphical Connection
+            formingConnection.remove(event.getPlayer().getUniqueId());
+            powerGridManagerFrom.addPowerConnectorConnection(fromLoc, toLoc);
+            //Merge Managers
+            if (powerGridManagerFrom != powerGridManagerTo) {
+              if(powerGridManagerFrom.getGridSize() >= powerGridManagerTo.getGridSize()) {
+                powerGridManagerFrom.combineGrid(powerGridManagerTo);
+                powerGridManagerFrom.addPowerConnectorConnection(fromLoc, toLoc);
+                Craftory.getBlockPoweredManager().mergeGrids(powerGridManagerTo, powerGridManagerFrom);
+              } else {
+                powerGridManagerTo.combineGrid(powerGridManagerFrom);
+                powerGridManagerTo.addPowerConnectorConnection(fromLoc, toLoc);
+                Craftory.getBlockPoweredManager().mergeGrids(powerGridManagerFrom, powerGridManagerTo);
+              }
 
-      if (!formingConnection.containsKey(event.getPlayer().getUniqueId())) {
-        //First Power Connector selected
-        if (Craftory.getBlockPoweredManager()
-            .getPowerGridManager(event.getClickedBlock().getLocation()) == null) {
-          return;
+            }
+            formBeam(fromLoc, toLoc);
+            event.getPlayer().sendMessage("Connection formed");
+          } else {
+            formingConnection.remove(event.getPlayer().getUniqueId());
+            Logger.info("Failed to make connection");
+            Logger.debug((powerGridManagerFrom == null) + "");
+            Logger.debug((powerGridManagerTo == null) + "");
+            Logger.debug((fromLoc == toLoc) + "");
+          }
         }
-        formingConnection
-            .put(event.getPlayer().getUniqueId(), event.getClickedBlock().getLocation());
-        event.getPlayer().sendMessage("Click Second Power Connector To Form Connection");
-      } else {
-        //Locations
+      } else if(Craftory.getBlockPoweredManager().isPoweredBlock(event.getClickedBlock().getLocation()) && formingConnection.containsKey(event.getPlayer().getUniqueId())){
+
         Location toLoc = event.getClickedBlock().getLocation();
         Location fromLoc = formingConnection.get(event.getPlayer().getUniqueId());
-        //Second Power Connector selected
-        PowerGridManager powerGridManagerTo = Craftory.getBlockPoweredManager()
-            .getPowerGridManager(toLoc);
-        PowerGridManager powerGridManagerFrom = Craftory.getBlockPoweredManager()
+        PowerGridManager gridManager = Craftory.getBlockPoweredManager()
             .getPowerGridManager(fromLoc);
-        //Both have manager and not same power connector
-        if (powerGridManagerFrom != null && powerGridManagerTo != null
-            && fromLoc != toLoc) {
-          //Form Graphical Connection
-          formingConnection.remove(event.getPlayer().getUniqueId());
-          powerGridManagerFrom.addPowerConnectorConnection(fromLoc, toLoc);
-          //Merge Managers
-          if (powerGridManagerFrom != powerGridManagerTo) {
-            powerGridManagerFrom.combineManagers(powerGridManagerTo);
-          }
-          formBeam(fromLoc, toLoc);
-          event.getPlayer().sendMessage("Connection formed");
+        PoweredBlock block = Craftory.getBlockPoweredManager().getPoweredBlock(toLoc);
+        if(block instanceof BaseMachine){
+          gridManager.addMachine(fromLoc, toLoc);
+        } else if(block instanceof BaseGenerator){
+          gridManager.addGenerator(fromLoc, toLoc);
+        } else if(block instanceof BaseCell){
+          gridManager.addPowerCell(fromLoc,toLoc);
         } else {
-          Logger.info("Failed to make connection");
-          Logger.debug((powerGridManagerFrom == null) + "");
-          Logger.debug((powerGridManagerTo == null) + "");
-          Logger.debug((fromLoc == toLoc) + "");
+          event.getPlayer().sendMessage("block didnt match type");
+          formingConnection.remove(event.getPlayer().getUniqueId());
+          return;
         }
+        formBeam(fromLoc, toLoc);
+        event.getPlayer().sendMessage("Machine Connected");
+        formingConnection.remove(event.getPlayer().getUniqueId());
       }
+
+
 
     }
   }
