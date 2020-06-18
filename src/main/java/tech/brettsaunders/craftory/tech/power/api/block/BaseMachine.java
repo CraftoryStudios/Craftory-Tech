@@ -125,7 +125,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle(Font.CELL_GUI+"Machine");
+    Inventory inventory = setInterfaceTitle(Font.CELL_GUI.label+"Machine");
     addGUIComponent(new GBattery(inventory, energyStorage));
   }
 }

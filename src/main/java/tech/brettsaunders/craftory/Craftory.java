@@ -10,13 +10,14 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
+import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 
 
 public final class Craftory extends JavaPlugin {
 
   public static final String VERSION = "0.0.1";
-  public static final String RESOURCE_PACK = "https://www.dropbox.com/sh/45htag43dxcjl3v/AACycbwia_WD7bCuRSk0XeUZa?raw=1";
-  public static final String HASH = "8679A74C535E9317E9EBFD8AD32F167A";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/aa0f3bd84950b35e1d6e82c55affb43b57a48b29.zip";
+  public static final String HASH = "aa0f3bd84950b35e1d6e82c55affb43b57a48b29";
 
   public static TickableBaseManager tickableBaseManager = null;
   public static PowerConnectorManager powerConnectorManager = null;
@@ -40,6 +41,7 @@ public final class Craftory extends JavaPlugin {
     Utilities.createConfigs();
     Utilities.registerCommandsAndCompletions();
     Utilities.registerEvents();
+    new ResourcePackEvents();
     /* Needs sorting */
     customBlockConfigFile = new File(getDataFolder(), "customBlockConfig.yml");
     customItemConfigFile = new File(getDataFolder(), "customItemConfig.yml");

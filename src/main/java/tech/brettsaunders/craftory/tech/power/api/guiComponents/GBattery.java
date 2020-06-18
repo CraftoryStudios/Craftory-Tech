@@ -48,21 +48,21 @@ public class GBattery implements IGUIComponent {
     }
 
     //Get Top Battery Icon and set Display Name
-    String topTexture = "extra:bar_" + top + "_t";
+    String topTexture = "bar_" + top + "_t";
     ItemStack topItem = CustomItemManager.getCustomItem(topTexture, false);
     ItemMeta topMeta = topItem.getItemMeta();
     topMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
     topItem.setItemMeta(topMeta);
 
     //Get Bottom Battery Icon and set Display Name
-    String bottomTexture = "extra:bar_" + bottom + "_b";
+    String bottomTexture = "bar_" + bottom + "_b";
     ItemStack bottomItem = CustomItemManager.getCustomItem(bottomTexture, false);
     ItemMeta bottomMeta = bottomItem.getItemMeta();
     bottomMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
     bottomItem.setItemMeta(bottomMeta);
 
     //Fill other battery slots
-    ItemStack batteryIndicator = CustomItemManager.getCustomItem("extra:invisible", false);
+    ItemStack batteryIndicator = CustomItemManager.getCustomItem("invisible", false);
     ItemMeta batteryIndicatorMeta = batteryIndicator.getItemMeta();
     batteryIndicatorMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
     batteryIndicator.setItemMeta(batteryIndicatorMeta);

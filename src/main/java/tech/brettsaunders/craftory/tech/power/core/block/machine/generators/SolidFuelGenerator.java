@@ -82,7 +82,7 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle(Font.GENERATOR_GUI+"Fuel Generator");
+    Inventory inventory = setInterfaceTitle(Font.GENERATOR_GUI.label+"Fuel Generator");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43));
     addGUIComponent(new GIndicator(inventory, runningContainer, 31));

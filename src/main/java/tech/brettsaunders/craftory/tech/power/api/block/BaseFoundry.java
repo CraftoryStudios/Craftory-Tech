@@ -80,7 +80,7 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle(Font.FOUNDRY_GUI+"Foundry");
+    Inventory inventory = setInterfaceTitle(Font.FOUNDRY_GUI.label+"Foundry");
     addGUIComponent(
         new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
             OUTPUT_LOCATION));

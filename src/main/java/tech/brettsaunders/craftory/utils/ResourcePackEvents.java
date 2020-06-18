@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.utils;
 
+import javax.xml.bind.DatatypeConverter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -28,7 +29,6 @@ public class ResourcePackEvents implements Listener {
         break;
       case FAILED_DOWNLOAD:
         e.getPlayer().sendMessage("Craftory: Texture pack download failed... re-trying");
-        e.getPlayer().setResourcePack(Craftory.RESOURCE_PACK, hexStringToByteArray(Craftory.HASH));
         break;
       case SUCCESSFULLY_LOADED:
         e.getPlayer().sendMessage("Craftory: Custom textures now enabled!");
@@ -36,12 +36,7 @@ public class ResourcePackEvents implements Listener {
   }
 
   public static byte[] hexStringToByteArray(String s) {
-    int len = s.length();
-    byte[] data = new byte[len / 2];
-    for (int i = 0; i < len; i += 2) {
-      data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-          + Character.digit(s.charAt(i+1), 16));
-    }
-    return data;
+    byte[] bytes = DatatypeConverter.parseHexBinary(s);
+    return bytes;
   }
 }

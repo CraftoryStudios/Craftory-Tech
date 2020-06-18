@@ -38,11 +38,11 @@ public class Command_GiveBlock implements CommandExecutor, TabCompleter {
 
   public List<String> onTabComplete(CommandSender s, Command c, String label, String[] args) {
     ArrayList<String> tabs = new ArrayList<>();
-    if (args.length == 1) {
+    if (args.length == 2) {
       return getOnlinePlayerNames();
-    } else if (args.length == 2) {
-      tabs.add("<block>");
     } else if (args.length == 3) {
+      tabs.add("<block>");
+    } else if (args.length == 4) {
       tabs.add("<amount>");
     }
     return CommandWrapper.filterTabs(tabs, args);
