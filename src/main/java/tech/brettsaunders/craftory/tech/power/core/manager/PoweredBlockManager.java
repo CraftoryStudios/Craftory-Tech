@@ -267,6 +267,7 @@ public class PoweredBlockManager implements Listener, ITickable {
   public void onPoweredBlockBreak(CustomBlockBreakEvent event) {
     Location location = event.getLocation();
     if(powerGrids.containsKey(location)) { //GRID / Power connector stuff
+      Craftory.powerConnectorManager.destroyBeams(location);
       if(powerGrids.get(location).getGridSize() > 1){
         List<PowerGridManager> newGrids = powerGrids.get(location).splitGrids(location);
         for(Location l: powerGrids.get(location).powerConnectors.keySet()) {
@@ -284,6 +285,7 @@ public class PoweredBlockManager implements Listener, ITickable {
     if (!poweredBlocks.containsKey(location)) {
       return;
     }
+    Craftory.powerConnectorManager.destroyBeams(location); //Destroy any beams
     // Drop items
     PoweredBlock b = poweredBlocks.get(location);
     World world = location.getWorld();

@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.core.manager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Location;
@@ -22,11 +23,11 @@ import tech.brettsaunders.craftory.utils.Logger;
 public class PowerConnectorManager implements Listener {
 
   private final transient HashMap<UUID, Location> formingConnection;
-  private final transient ArrayList<Beam> activeBeams;
+  private final transient HashMap<Location, ArrayList<Beam>> activeBeams;
 
   public PowerConnectorManager() {
     formingConnection = new HashMap<>();
-    activeBeams = new ArrayList<>();
+    activeBeams = new HashMap<>();
     generatorPowerBeams();
   }
 
@@ -146,16 +147,37 @@ public class PowerConnectorManager implements Listener {
     try {
       Beam beam = new Beam(fromLoc.clone().add(0.5, 0.1, 0.5), to.clone().add(0.5, 0.1, 0.5),
           -1, 25);
-      beam.start(Craftory.plugin);
-      activeBeams.add(beam);
+      beam.start(Craftory.getInstance());
+      addBeamToList(fromLoc, beam);
+      addBeamToList(toLoc, beam);
     } catch (ReflectiveOperationException e) {
       Logger.warn("Couldn't form power beam");
       Logger.captureError(e);
     }
   }
 
+  private void addBeamToList(Location location, Beam beam){
+    ArrayList<Beam> temp;
+    if(activeBeams.containsKey(location)){
+      temp = activeBeams.get(location);
+      temp.add(beam);
+      activeBeams.put(location,temp);
+    } else {
+      activeBeams.put(location,new ArrayList<>(Arrays.asList(beam)));
+    }
+  }
+
+  public void destroyBeams(Location loc) {
+    if(activeBeams.containsKey(loc)){
+      activeBeams.get(loc).forEach((Beam::stop));
+      activeBeams.remove(loc);
+    }
+  }
+
   private void destroyActiveBeams() {
-    activeBeams.forEach((Beam::stop));
+    for(ArrayList<Beam> list: activeBeams.values()){
+      list.forEach((Beam::stop));
+    }
   }
 
   @EventHandler
