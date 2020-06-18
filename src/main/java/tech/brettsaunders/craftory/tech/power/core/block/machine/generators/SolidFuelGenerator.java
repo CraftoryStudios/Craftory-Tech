@@ -4,6 +4,9 @@ import dev.lone.itemsadder.api.FontImages.FontImageWrapper;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -25,12 +28,15 @@ public class SolidFuelGenerator extends BaseGenerator {
   /* Construction */
   public SolidFuelGenerator() {
     super();
+    interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
   }
 
   /* Saving, Setup and Loading */
   public SolidFuelGenerator(Location location) {
     super(location, C_LEVEL, C_OUTPUT_AMOUNT);
     inputLocations.add(FUEL_SLOT);
+    inputSlots = new ItemStack[]{null};
+    interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
   }
 
 
@@ -90,6 +96,7 @@ public class SolidFuelGenerator extends BaseGenerator {
     if (fuelItem != null) {
       getInventory().setItem(FUEL_SLOT, fuelItem);
     }
+    this.inventoryInterface = inventory;
   }
 
 }
