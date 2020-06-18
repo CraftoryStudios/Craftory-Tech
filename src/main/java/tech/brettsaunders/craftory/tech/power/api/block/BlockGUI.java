@@ -4,6 +4,7 @@ import java.io.Externalizable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.api.font.NegativeSpaceFont;
@@ -55,7 +56,7 @@ public abstract class BlockGUI implements Externalizable {
   }
 
   protected Inventory setInterfaceTitle(String title, String guiImage) {
-    String titleBuilder = NegativeSpaceFont.MINUS_16.label + guiImage + NegativeSpaceFont.MINUS_128.label + title;
+    String titleBuilder = ChatColor.WHITE +"" + NegativeSpaceFont.MINUS_16.label + guiImage + NegativeSpaceFont.MINUS_128.label + ChatColor.DARK_GRAY + title;
     inventoryInterface = Bukkit.createInventory(null, 54, titleBuilder);
     return inventoryInterface;
   }
