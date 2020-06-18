@@ -10,6 +10,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 
 public class CustomBlockInteractEvent extends Event implements Cancellable {
+
   private static final HandlerList HANDLERS = new HandlerList();
   private final Action action;
   private final Block blockClicked;
@@ -18,13 +19,18 @@ public class CustomBlockInteractEvent extends Event implements Cancellable {
   private final Player player;
   private boolean isCancelled;
 
-  public CustomBlockInteractEvent(Action action, Block blockClicked, BlockFace blockFace, ItemStack itemStack, Player player) {
+  public CustomBlockInteractEvent(Action action, Block blockClicked, BlockFace blockFace,
+      ItemStack itemStack, Player player) {
     this.action = action;
     this.blockClicked = blockClicked;
     this.blockFace = blockFace;
     this.itemStack = itemStack;
     this.player = player;
     this.isCancelled = false;
+  }
+
+  public static HandlerList getHandlerList() {
+    return HANDLERS;
   }
 
   public Action getAction() {
@@ -49,10 +55,6 @@ public class CustomBlockInteractEvent extends Event implements Cancellable {
 
   @Override
   public HandlerList getHandlers() {
-    return HANDLERS;
-  }
-
-  public static HandlerList getHandlerList() {
     return HANDLERS;
   }
 

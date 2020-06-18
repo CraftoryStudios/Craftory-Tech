@@ -25,19 +25,19 @@ public class GIndicator implements IGUIComponent {
 
   @Override
   public void update() {
-      ItemStack light;
-      String name;
+    ItemStack light;
+    String name;
 
-      if (state.getT()) {
-        light = CustomItemManager.getCustomItem("light_on", false);
-        name = "Machine Running";
-      } else {
-        light = CustomItemManager.getCustomItem("light_off", false);
-        name = "Machine Off";
-      }
-      ItemMeta meta = light.getItemMeta();
-      meta.setDisplayName(name);
-      light.setItemMeta(meta);
-      inventory.setItem(slot, light);
+    if (state.getT()) {
+      light = CustomItemManager.getCustomItem("light_on", false);
+      name = "Machine Running";
+    } else {
+      light = CustomItemManager.getCustomItem("light_off", false);
+      name = "Machine Off";
     }
+    ItemMeta meta = light.getItemMeta();
+    meta.setDisplayName(name);
+    light.setItemMeta(meta);
+    inventory.setItem(slot, light);
+  }
 }

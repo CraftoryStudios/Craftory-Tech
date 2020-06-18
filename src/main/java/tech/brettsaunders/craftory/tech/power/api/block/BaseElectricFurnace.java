@@ -79,7 +79,8 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Electric Furnace", Font.FURNACE_GUI.label+""); //TODO Furnance
+    Inventory inventory = setInterfaceTitle("Electric Furnace",
+        Font.FURNACE_GUI.label + ""); //TODO Furnance
     addGUIComponent(
         new GOneToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));
     addGUIComponent(new GBattery(inventory, energyStorage));
@@ -135,7 +136,8 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
       if (outputSlots[0] == null) {
         return true;
       }
-      if (CustomItemManager.getCustomItemName(outputSlots[0]).equals(recipe.getResult().getType().toString())
+      if (CustomItemManager.getCustomItemName(outputSlots[0])
+          .equals(recipe.getResult().getType().toString())
           && outputSlots[0].getAmount() < outputSlots[0].getMaxStackSize()) {
         return true;
       }

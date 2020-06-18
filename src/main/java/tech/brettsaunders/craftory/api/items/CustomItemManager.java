@@ -11,15 +11,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class CustomItemManager implements Listener {
-  private static HashMap<String,Integer> itemIDCache = new HashMap<>();
-  private static String CUSTOM_ITEM = "CUSTOM_ITEM";
-  private static String CUSTOM_BLOCK_ITEM = "CUSTOM_BLOCK_ITEM";
 
-  public static void setup(FileConfiguration customItemConfig, FileConfiguration customBlocksConfig) {
+  private static final HashMap<String, Integer> itemIDCache = new HashMap<>();
+  private static final String CUSTOM_ITEM = "CUSTOM_ITEM";
+  private static final String CUSTOM_BLOCK_ITEM = "CUSTOM_BLOCK_ITEM";
+
+  public static void setup(FileConfiguration customItemConfig,
+      FileConfiguration customBlocksConfig) {
     ConfigurationSection items = customItemConfig.getConfigurationSection("items");
     if (items != null) {
       for (String key : items.getKeys(false)) {
-        itemIDCache.put(key, customItemConfig.getInt("items."+key));
+        itemIDCache.put(key, customItemConfig.getInt("items." + key));
       }
     }
 
@@ -63,30 +65,24 @@ public class CustomItemManager implements Listener {
   public static boolean isCustomItem(ItemStack itemStack, boolean includeBlockItems) {
     NBTItem nbtItem = new NBTItem(itemStack);
     if (nbtItem.hasNBTData()) {
-      if (nbtItem.hasKey(CUSTOM_ITEM) || (nbtItem.hasKey(CUSTOM_BLOCK_ITEM) && includeBlockItems)) {
-        return true;
-      }
+      return nbtItem.hasKey(CUSTOM_ITEM) || (nbtItem.hasKey(CUSTOM_BLOCK_ITEM)
+          && includeBlockItems);
     }
     return false;
   }
 
   public static boolean isCustomBlockItem(ItemStack itemStack) {
     NBTItem nbtItem = new NBTItem(itemStack);
-    if (nbtItem.hasNBTData() && nbtItem.hasKey(CUSTOM_BLOCK_ITEM)) {
-      return true;
-    }
-    return false;
+    return nbtItem.hasNBTData() && nbtItem.hasKey(CUSTOM_BLOCK_ITEM);
   }
 
   public static boolean matchCustomItemName(ItemStack itemStack, String customItemName) {
-    if (itemStack == null || itemStack.getType() == Material.AIR ) {
+    if (itemStack == null || itemStack.getType() == Material.AIR) {
       return false;
     }
     NBTItem nbtItem = new NBTItem(itemStack);
-    if (isCustomItem(itemStack,true)) {
-      if (nbtItem.getString("NAME").equals(customItemName)) {
-        return true;
-      }
+    if (isCustomItem(itemStack, true)) {
+      return nbtItem.getString("NAME").equals(customItemName);
     }
     return false;
   }

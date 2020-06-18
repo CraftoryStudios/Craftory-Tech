@@ -22,12 +22,12 @@ public final class Craftory extends JavaPlugin {
   public static TickableBaseManager tickableBaseManager = null;
   public static PowerConnectorManager powerConnectorManager = null;
   public static Craftory plugin = null;
-  private static PoweredBlockManager blockPoweredManager = null;
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
   public static File customItemConfigFile;
   public static FileConfiguration customBlocksConfig;
   public static File customBlockConfigFile;
+  private static PoweredBlockManager blockPoweredManager = null;
 
   public static PoweredBlockManager getBlockPoweredManager() {
     return blockPoweredManager;
@@ -47,7 +47,7 @@ public final class Craftory extends JavaPlugin {
     customItemConfigFile = new File(getDataFolder(), "customItemConfig.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
-    CustomItemManager.setup(customItemConfig,customBlocksConfig);
+    CustomItemManager.setup(customItemConfig, customBlocksConfig);
 
     customBlockManager = new CustomBlockManager();
     tickableBaseManager = new TickableBaseManager();

@@ -72,11 +72,11 @@ public class GTwoToOneMachine implements IGUIComponent, Listener {
 
   @Override
   public void update() {
-      int x = (int) Math.floor(progress.getT() * 10);
-      ItemStack arrow = CustomItemManager.getCustomItem("arrow_" + x, false);
-      ItemMeta meta = arrow.getItemMeta();
-      meta.setDisplayName("");
-      arrow.setItemMeta(meta);
-      inventory.setItem(arrowSlot, arrow);
-    }
+    int x = (int) Math.floor(progress.getT() * 10);
+    ItemStack arrow = CustomItemManager.getCustomItem("arrow_" + x, false);
+    ItemMeta meta = arrow.getItemMeta();
+    meta.setDisplayName("");
+    arrow.setItemMeta(meta);
+    inventory.setItem(arrowSlot, arrow);
+  }
 }

@@ -30,6 +30,8 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   /* Static Constants Private */
   private static final long serialVersionUID = 10011L;
+  /* Hopper stuff */
+  protected final transient int HOPPER_DELAY = 2;
   /* Per Object Variables Saved */
   protected EnergyStorage energyStorage;
   protected Location location;
@@ -42,8 +44,6 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   /* Per Object Variables Not-Saved */
   protected transient boolean isReceiver;
   protected transient boolean isProvider;
-  /* Hopper stuff */
-  protected final transient int HOPPER_DELAY = 2;
   protected transient int hopperInCounter = 0;
   protected transient int hopperOutCounter = 0;
   protected transient Inventory inventoryInterface;

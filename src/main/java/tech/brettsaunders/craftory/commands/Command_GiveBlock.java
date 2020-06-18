@@ -23,12 +23,13 @@ public class Command_GiveBlock implements CommandExecutor, TabCompleter {
     if (args.length == 3) {
       giveCustomItem(1, args[1], args[2]);
       Utilities.msg(sender, "Gave " + args[1] + " 1 " + args[2]);
-    } else if (args.length == 4){
+    } else if (args.length == 4) {
       int amount = 1;
       try {
         amount = Integer.parseInt(args[3]);
-      } catch (NumberFormatException ignored){}
-        giveCustomItem(amount, args[1], args[2]);
+      } catch (NumberFormatException ignored) {
+      }
+      giveCustomItem(amount, args[1], args[2]);
       Utilities.msg(sender, "Gave " + args[1] + " " + amount + " " + args[2]);
     } else {
       Utilities.msg(sender, "Usage: /cf give [Player] [ItemName] <[amount]>");
@@ -51,7 +52,8 @@ public class Command_GiveBlock implements CommandExecutor, TabCompleter {
   private List<String> getOnlinePlayerNames() {
     Player[] players = new Player[Bukkit.getServer().getOnlinePlayers().size()];
     Bukkit.getServer().getOnlinePlayers().toArray(players);
-    List<String> playerNames = Arrays.stream(players).map(Player::getName).collect(Collectors.toList());
+    List<String> playerNames = Arrays.stream(players).map(Player::getName)
+        .collect(Collectors.toList());
     return playerNames;
   }
 

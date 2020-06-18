@@ -6,6 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class CustomBlockBreakEvent extends Event implements Cancellable {
+
   private static final HandlerList HANDLERS = new HandlerList();
   private final Location location;
   private final String name;
@@ -17,13 +18,12 @@ public class CustomBlockBreakEvent extends Event implements Cancellable {
     this.isCancelled = false;
   }
 
-
-  @Override
-  public HandlerList getHandlers() {
+  public static HandlerList getHandlerList() {
     return HANDLERS;
   }
 
-  public static HandlerList getHandlerList() {
+  @Override
+  public HandlerList getHandlers() {
     return HANDLERS;
   }
 
