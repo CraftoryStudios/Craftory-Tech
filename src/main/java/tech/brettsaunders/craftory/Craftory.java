@@ -17,8 +17,8 @@ import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 public final class Craftory extends JavaPlugin {
 
   public static final String VERSION = "0.0.1";
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/4158c81bf79cbbfb594c34f94010ffe495e2cec9.zip";
-  public static final String HASH = "4158c81bf79cbbfb594c34f94010ffe495e2cec9";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/8bd32e0df85d9bdfb23db730014dadefba1537ae.zip";
+  public static final String HASH = "8bd32e0df85d9bdfb23db730014dadefba1537ae";
 
   public static TickableBaseManager tickableBaseManager = null;
   public static PowerConnectorManager powerConnectorManager = null;
