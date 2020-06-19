@@ -52,6 +52,7 @@ public final class Craftory extends JavaPlugin {
     CustomItemManager.setup(customItemConfig, customBlocksConfig);
 
     customBlockManager = new CustomBlockManager();
+    customBlockManager.onEnable();
     tickableBaseManager = new TickableBaseManager();
     blockPoweredManager = new PoweredBlockManager();
     powerConnectorManager = new PowerConnectorManager();
@@ -71,6 +72,7 @@ public final class Craftory extends JavaPlugin {
       e.printStackTrace();
     }
     blockPoweredManager.onDisable();
+    customBlockManager.onDisable();
     Utilities.reloadConfigFile();
     Utilities.saveConfigFile();
     plugin = null;
