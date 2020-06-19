@@ -21,16 +21,16 @@ public class Command_GiveBlock implements CommandExecutor, TabCompleter {
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
     if (args.length == 3) {
-      giveCustomItem(1, args[1], args[2]);
-      Utilities.msg(sender, "Gave " + args[1] + " 1 " + args[2]);
+      giveCustomItem(1, args[1], args[2],sender);
     } else if (args.length == 4) {
       int amount = 1;
       try {
         amount = Integer.parseInt(args[3]);
       } catch (NumberFormatException ignored) {
+        Utilities.msg(sender,"Couldn't give block, amount not recognised");
       }
-      giveCustomItem(amount, args[1], args[2]);
-      Utilities.msg(sender, "Gave " + args[1] + " " + amount + " " + args[2]);
+      if (amount > 64) amount = 64;
+      giveCustomItem(amount, args[1], args[2], sender);
     } else {
       Utilities.msg(sender, "Usage: /cf give [Player] [ItemName] <[amount]>");
     }
@@ -57,7 +57,7 @@ public class Command_GiveBlock implements CommandExecutor, TabCompleter {
     return playerNames;
   }
 
-  private void giveCustomItem(int amount, String playerName, String itemName) {
+  private boolean giveCustomItem(int amount, String playerName, String itemName, CommandSender sender) {
     if (getOnlinePlayerNames().contains(playerName)) {
       ItemStack itemStack = CustomItemManager.getCustomItem(itemName, true);
       if (itemStack != null && itemStack.getType() != Material.AIR) {
@@ -67,11 +67,20 @@ public class Command_GiveBlock implements CommandExecutor, TabCompleter {
           int slot = player.getInventory().firstEmpty();
           if (slot == -1) {
             player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+            Utilities.msg(sender, "Gave " + playerName + " x" + amount + " " + itemName);
+            return true;
           } else {
             player.getInventory().setItem(slot, itemStack);
+            Utilities.msg(sender, "Gave " + playerName + " x" + amount + " " + itemName);
+            return true;
           }
+        } else {
+          Utilities.msg(sender, "Couldn't give block, player doesn't exist");
         }
+      } else {
+        Utilities.msg(sender, "Couldn't give block, block isn't a Custom block");
       }
     }
+    return false;
   }
 }

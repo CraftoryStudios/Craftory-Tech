@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -45,7 +46,7 @@ public class CustomBlockManager implements Listener {
       Craftory.plugin.getDataFolder() + File.separator + "data";
   private final FileConfiguration customBlocksConfig;
   private final File customBlockConfigFile = new File(Craftory.plugin.getDataFolder(),
-      "customBlockConfig.yml");
+      "data/customBlockConfig.yml");
   private final HashMap<Location, CustomBlock> activeCustomBlocks;
   private final HashMap<Chunk, ArrayList<Location>> activeChunks;
   private final LRUCache<Chunk, ArrayList<CustomBlock>> customBlockLRUCache;
@@ -147,8 +148,10 @@ public class CustomBlockManager implements Listener {
       } else {
         removeCustomBlock(activeCustomBlocks.get(location));
         removeIfLastActiveChunk(location);
-        location.getWorld()
-            .dropItemNaturally(location, CustomItemManager.getCustomItem(blockName, true));
+        if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+          location.getWorld()
+              .dropItemNaturally(location, CustomItemManager.getCustomItem(blockName, true));
+        }
         activeCustomBlocks.remove(location);
       }
       Bukkit.getPluginManager().callEvent(customBlockBreakEvent);

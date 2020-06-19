@@ -1,0 +1,89 @@
+blocks:
+  iron_cell:
+    UP: true
+    DOWN: false
+    NORTH: true
+    EAST: false
+    SOUTH: false
+    WEST: false
+    itemID: 6
+  gold_cell:
+    UP: true
+    DOWN: false
+    NORTH: false
+    EAST: false
+    SOUTH: false
+    WEST: false
+    itemID: 10
+  diamond_cell:
+    UP: true
+    DOWN: false
+    NORTH: false
+    EAST: false
+    SOUTH: false
+    WEST: true
+    itemID: 14
+  emerald_cell:
+    UP: false
+    DOWN: false
+    NORTH: false
+    EAST: false
+    SOUTH: true
+    WEST: false
+    itemID: 12
+  solid_fuel_generator:
+    UP: true
+    DOWN: false
+    NORTH: true
+    EAST: false
+    SOUTH: false
+    WEST: true
+    itemID: 1
+  power_connector:
+    UP: true
+    DOWN: false
+    NORTH: true
+    EAST: false
+    SOUTH: false
+    WEST: false
+    itemID: 9
+  iron_electric_furnace:
+    UP: true
+    DOWN: false
+    NORTH: false
+    EAST: false
+    SOUTH: true
+    WEST: false
+    itemID: 8
+  gold_electric_furnace:
+    UP: true
+    DOWN: false
+    NORTH: false
+    EAST: false
+    SOUTH: true
+    WEST: true
+    itemID: 11
+  diamond_electric_furnace:
+    UP: false
+    DOWN: false
+    NORTH: true
+    EAST: false
+    SOUTH: false
+    WEST: false
+    itemID: 15
+  emerald_electric_furnace:
+    UP: false
+    DOWN: false
+    NORTH: true
+    EAST: false
+    SOUTH: false
+    WEST: true
+    itemID: 13
+  iron_foundry:
+    UP: false
+    DOWN: false
+    NORTH: false
+    EAST: false
+    SOUTH: true
+    WEST: true
+    itemID: 7

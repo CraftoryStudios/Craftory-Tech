@@ -10,6 +10,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
+import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 
 
@@ -43,8 +44,9 @@ public final class Craftory extends JavaPlugin {
     Utilities.registerEvents();
     new ResourcePackEvents();
     /* Needs sorting */
-    customBlockConfigFile = new File(getDataFolder(), "customBlockConfig.yml");
-    customItemConfigFile = new File(getDataFolder(), "customItemConfig.yml");
+    FileUtils.copyResourcesRecursively(getClass().getResource("/data"), new File(getDataFolder(),"/data"));
+    customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
+    customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
     CustomItemManager.setup(customItemConfig, customBlocksConfig);

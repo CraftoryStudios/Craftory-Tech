@@ -19,6 +19,7 @@ public class GOutputConfig implements IGUIComponent, Listener {
   private final int WEST_SLOT;
   private final int UP_SLOT;
   private final int DOWN_SLOT;
+  private final boolean ALT;
 
   private final Inventory inventory;
   private final ArrayList<Boolean> config;
@@ -28,6 +29,10 @@ public class GOutputConfig implements IGUIComponent, Listener {
   }
 
   public GOutputConfig(Inventory inventory, ArrayList<Boolean> config, int middleSlot) {
+    this(inventory, config, middleSlot, false);
+  }
+
+  public GOutputConfig(Inventory inventory, ArrayList<Boolean> config, int middleSlot, boolean alt) {
     this.inventory = inventory;
     this.config = config;
     NORTH_SLOT = middleSlot - 1;
@@ -36,6 +41,7 @@ public class GOutputConfig implements IGUIComponent, Listener {
     WEST_SLOT = middleSlot + 8;
     UP_SLOT = middleSlot - 9;
     DOWN_SLOT = middleSlot + 9;
+    ALT = alt;
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
   }
@@ -69,8 +75,8 @@ public class GOutputConfig implements IGUIComponent, Listener {
 
   @Override
   public void update() {
-    final ItemStack DISABLED = CustomItemManager.getCustomItem("output_disabled", false);
-    final ItemStack OUTPUT = CustomItemManager.getCustomItem("output_green", false);
+    final ItemStack DISABLED = CustomItemManager.getCustomItem("output_disabled" + (ALT ? "_alt" : ""), false);
+    final ItemStack OUTPUT = CustomItemManager.getCustomItem("output_green" + (ALT ? "_alt" : ""), false);
 
     //NORTH, EAST, SOUTH, WEST, UP, DOWN
     inventory.setItem(NORTH_SLOT, !config.get(0) ? DISABLED.clone() : OUTPUT.clone());
