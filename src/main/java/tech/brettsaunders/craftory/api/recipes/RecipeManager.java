@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.api.recipes;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -67,10 +66,6 @@ public class RecipeManager implements Listener {
         }
       }
       Bukkit.getServer().addRecipe(shapedRecipe);
-      Logger.info(shapedRecipe.toString());
-      Logger.info(shapedRecipe.getIngredientMap().toString());
-      Logger.info(Arrays.toString(shapedRecipe.getShape()));
-      Logger.info(shapedRecipe.getResult().getType().name());
       customRecipes.put(recipe, customItemsInSlots);
     }
   }
