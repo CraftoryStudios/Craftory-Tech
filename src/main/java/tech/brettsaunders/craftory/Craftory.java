@@ -18,18 +18,18 @@ import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 public final class Craftory extends JavaPlugin {
 
   public static final String VERSION = "0.0.1";
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/00bb8513da7f73316d8305bae6959aac1f4f6f32.zip";
-  public static final String HASH = "00bb8513da7f73316d8305bae6959aac1f4f6f32";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/a2a9baa294addc5a2fab3e4056f40c36a5108a0d.zip";
+  public static final String HASH = "a2a9baa294addc5a2fab3e4056f40c36a5108a0d";
 
   public static TickableBaseManager tickableBaseManager = null;
   public static PowerConnectorManager powerConnectorManager = null;
   public static Craftory plugin = null;
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
-  private static File customItemConfigFile;
   public static FileConfiguration customBlocksConfig;
-  private static File customBlockConfigFile;
   public static FileConfiguration customRecipeConfig;
+  private static File customItemConfigFile;
+  private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
   private static PoweredBlockManager blockPoweredManager = null;
 
@@ -65,7 +65,6 @@ public final class Craftory extends JavaPlugin {
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     blockPoweredManager.onEnable();
     Utilities.startMetrics();
-    Utilities.errorReporting();
     Utilities.done();
   }
 

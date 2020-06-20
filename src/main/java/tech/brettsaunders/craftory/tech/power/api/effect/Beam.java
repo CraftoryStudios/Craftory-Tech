@@ -37,8 +37,8 @@ public class Beam {
   /**
    * Create a Beam instance
    *
-   * @param start    Location where Beam will starts
-   * @param end      Location where Beam will ends
+   * @param start Location where Beam will starts
+   * @param end Location where Beam will ends
    * @param duration Duration of Beam in seconds (<i>-1 if infinite</i>)
    * @param distance Distance where Beam will be visible
    */
@@ -93,7 +93,6 @@ public class Beam {
           }
         } catch (ReflectiveOperationException e) {
           Logger.warn("Issue with Power Beam packet sending");
-          Logger.captureError(e);
         }
       }
 
@@ -106,7 +105,6 @@ public class Beam {
           }
         } catch (ReflectiveOperationException e) {
           Logger.warn("Issue sending Power Beam cancel packet");
-          Logger.captureError(e);
         }
         run = null;
       }
@@ -270,7 +268,6 @@ public class Beam {
         tryWatcherSet(fakeSquidWatcher, watcherObject1, (byte) 32);
       } catch (ReflectiveOperationException e) {
         Logger.warn("Issue setting up Beam Class data");
-        Logger.captureError(e);
       }
     }
 

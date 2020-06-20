@@ -40,7 +40,7 @@ public class HopperItemMovement {
    * Checks nearby hoppers and moves the items into the slot, if possible
    *
    * @param location The location of the block
-   * @param slot     The ItemSlot to move them into
+   * @param slot The ItemSlot to move them into
    * @return The item slot with the new items in, OR null if items couldn't be inserted
    */
   public static ItemStack moveItemsIn(Location location, ItemStack slot) {

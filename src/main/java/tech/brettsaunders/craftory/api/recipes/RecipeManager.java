@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.api.recipes;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,6 +15,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class RecipeManager implements Listener {
+
   private HashMap<String, String> customRecipes;
 
   public RecipeManager() {
@@ -29,23 +29,25 @@ public class RecipeManager implements Listener {
     for (String recipe : recipes.getKeys(false)) {
       String customItemsInSlots = "";
       //Result
-      ItemStack result = CustomItemManager.getCustomItem(recipes.getString(recipe+".result.item"));
-      result.setAmount(recipes.getInt(recipe+".result.amount"));
+      ItemStack result = CustomItemManager
+          .getCustomItem(recipes.getString(recipe + ".result.item"));
+      result.setAmount(recipes.getInt(recipe + ".result.amount"));
 
       //Add ShapedRecipe
       NamespacedKey namespacedKey = new NamespacedKey(Craftory.plugin, recipe);
       ShapedRecipe shapedRecipe = new ShapedRecipe(namespacedKey, result);
 
-      ConfigurationSection sectionIn = recipes.getConfigurationSection(recipe+".ingredients");
+      ConfigurationSection sectionIn = recipes.getConfigurationSection(recipe + ".ingredients");
       String[] recipeShape = new String[3];
       int i = 0;
-      for (String row : recipes.getStringList(recipe+".pattern")) {
+      for (String row : recipes.getStringList(recipe + ".pattern")) {
         recipeShape[i] = row;
         String[] rowSlots = row.split("");
         for (String slot : rowSlots) {
           if (slot.equalsIgnoreCase("X")) {
             customItemsInSlots = customItemsInSlots + "X";
-          } else if (CustomItemManager.getCustomItem(sectionIn.getString(slot)).getType() != Material.AIR) {
+          } else if (CustomItemManager.getCustomItem(sectionIn.getString(slot)).getType()
+              != Material.AIR) {
             customItemsInSlots = customItemsInSlots + "C";
           } else {
             customItemsInSlots = customItemsInSlots + "N";
@@ -55,10 +57,10 @@ public class RecipeManager implements Listener {
       }
       shapedRecipe.shape(recipeShape[0], recipeShape[1], recipeShape[2]);
 
-
       for (String ingredient : sectionIn.getKeys(false)) {
         char key = ingredient.charAt(0);
-        if (CustomItemManager.getCustomItem(sectionIn.getString(ingredient)).getType() == Material.AIR) {
+        if (CustomItemManager.getCustomItem(sectionIn.getString(ingredient)).getType()
+            == Material.AIR) {
           Material material = Material.getMaterial(sectionIn.getString(ingredient));
           shapedRecipe.setIngredient(key, material);
         } else {
@@ -67,10 +69,6 @@ public class RecipeManager implements Listener {
         }
       }
       Bukkit.getServer().addRecipe(shapedRecipe);
-      Logger.info(shapedRecipe.toString());
-      Logger.info(shapedRecipe.getIngredientMap().toString());
-      Logger.info(Arrays.toString(shapedRecipe.getShape()));
-      Logger.info(shapedRecipe.getResult().getType().name());
       customRecipes.put(recipe, customItemsInSlots);
     }
   }
@@ -78,7 +76,10 @@ public class RecipeManager implements Listener {
   @EventHandler
   public void onRecipeCompleted(PrepareItemCraftEvent e) {
     String resultName;
-    if (e.getInventory().getResult() == null || e.getInventory().getResult().getType() == Material.AIR) return;
+    if (e.getInventory().getResult() == null
+        || e.getInventory().getResult().getType() == Material.AIR) {
+      return;
+    }
     if (CustomItemManager.isCustomItem(e.getInventory().getResult(), true)) {
       resultName = CustomItemManager.getCustomItemName(e.getInventory().getResult());
     } else {
@@ -86,7 +87,9 @@ public class RecipeManager implements Listener {
     }
 
     String pattern = customRecipes.get(resultName);
-    if (pattern == null) return;
+    if (pattern == null) {
+      return;
+    }
 
     String recipePattern = "";
     for (ItemStack itemStack : e.getInventory().getMatrix()) {

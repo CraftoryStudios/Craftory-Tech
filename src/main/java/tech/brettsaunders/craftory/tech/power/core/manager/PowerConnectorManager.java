@@ -158,7 +158,6 @@ public class PowerConnectorManager implements Listener {
       addBeamToList(toLoc, beam);
     } catch (ReflectiveOperationException e) {
       Logger.warn("Couldn't form power beam");
-      Logger.captureError(e);
     }
   }
 
