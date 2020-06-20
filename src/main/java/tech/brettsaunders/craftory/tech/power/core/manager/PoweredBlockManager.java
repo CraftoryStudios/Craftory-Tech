@@ -64,10 +64,10 @@ public class PoweredBlockManager implements Listener, ITickable {
   }
 
   private final HashMap<Location, PowerGridManager> powerGrids;
-  public HashSet<PowerGridManager> powerGridManagers;
-  private HashMap<Location, PoweredBlock> poweredBlocks;
   private final HashMap<World, HashSet> loadedChunkWorlds;
   private final HashMap<UUID, ArrayList<Boolean>> sidesConfigCopying;
+  public HashSet<PowerGridManager> powerGridManagers;
+  private HashMap<Location, PoweredBlock> poweredBlocks;
 
   public PoweredBlockManager() {
     poweredBlocks = new HashMap<>();

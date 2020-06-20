@@ -92,6 +92,6 @@ public class CustomItemManager implements Listener {
     if (nbtItem.hasNBTData() && nbtItem.hasKey("NAME")) {
       return nbtItem.getString("NAME");
     }
-    return "NOT_CUSTOM_ITEM";
+    return itemStack.getType().toString();
   }
 }

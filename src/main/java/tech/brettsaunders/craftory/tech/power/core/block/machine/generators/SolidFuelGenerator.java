@@ -44,7 +44,8 @@ public class SolidFuelGenerator extends BaseGenerator {
     if (getFuelItem() == null) {
       return false;
     }
-    return getEnergySpace() > 0 && SolidFuelManager.getFuelEnergy(getFuelItem().getType().name()) > 0;
+    return getEnergySpace() > 0
+        && SolidFuelManager.getFuelEnergy(getFuelItem().getType().name()) > 0;
   }
 
   @Override
