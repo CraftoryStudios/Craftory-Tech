@@ -6,6 +6,7 @@ import io.sentry.SentryClientFactory;
 import io.sentry.event.UserBuilder;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.UUID;
 import java.util.logging.Level;
 import org.bstats.bukkit.Metrics;
@@ -159,6 +160,22 @@ public class Utilities {
   private static void drawBanner(final String message) {
     Bukkit.getServer().getConsoleSender().sendMessage(
         ChatColor.translateAlternateColorCodes('&', message));
+  }
+
+  private static String UNIT = "Re";
+  private static DecimalFormat df = new DecimalFormat("###.###");
+  public static String rawToPrefixed(Integer energy) {
+    String s = Integer.toString(energy);
+    int length = s.length();
+    //if(length < 3) return s + " " + UNIT;
+    if(length < 7) return s + " " + UNIT;
+    //if(length < 7) return df.format(energy/1000f) +" K" + UNIT;
+    if(length < 10) return df.format(energy/1000000f) +" M" + UNIT;
+    if(length < 13) return df.format(energy/1000000000f) +" G" + UNIT;
+    if(length < 16) return df.format(energy/1000000000000f) +" T" + UNIT;
+    if(length < 19) return df.format(energy/1000000000000000f) +" P" + UNIT;
+    if(length < 22) return df.format(energy/1000000000000000000f) +" E" + UNIT;
+    return "A bukkit load";
   }
 
 }
