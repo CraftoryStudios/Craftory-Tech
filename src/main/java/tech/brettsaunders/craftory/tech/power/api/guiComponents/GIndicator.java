@@ -29,10 +29,10 @@ public class GIndicator implements IGUIComponent {
     String name;
 
     if (state.getT()) {
-      light = CustomItemManager.getCustomItem("light_on", false);
+      light = CustomItemManager.getCustomItem("light_on");
       name = "Machine Running";
     } else {
-      light = CustomItemManager.getCustomItem("light_off", false);
+      light = CustomItemManager.getCustomItem("light_off");
       name = "Machine Off";
     }
     ItemMeta meta = light.getItemMeta();

@@ -98,7 +98,7 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
     inputSlots[0].setAmount(inputSlots[0].getAmount() - 1);
     inputSlots[1].setAmount(inputSlots[1].getAmount() - 1);
     if (outputSlots[0] == null) {
-      outputSlots[0] = CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT, false);
+      outputSlots[0] = CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT);
     } else {
       outputSlots[0].setAmount(outputSlots[0].getAmount() + 1);
     }

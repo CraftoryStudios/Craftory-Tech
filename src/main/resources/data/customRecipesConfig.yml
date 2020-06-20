@@ -1,0 +1,108 @@
+recipes:
+  iron_cell:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+    result:
+      item: iron_cell
+      amount: 1
+  gold_cell:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      C: gold_core
+      S: steel_ingot
+    result:
+      item: gold_cell
+      amount: 1
+
+  diamond_cell:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      C: diamond_core
+      S: steel_ingot
+    result:
+      item: diamond_cell
+      amount: 1
+
+  emerald_cell:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      C: emerald_core
+      S: steel_ingot
+    result:
+      item: emerald_cell
+      amount: 1
+
+  iron_core:
+    pattern:
+      - III
+      - IRI
+      - III
+    ingredients:
+      I: IRON_INGOT
+      R: REDSTONE
+    result:
+      item: iron_core
+      amount: 1
+
+  gold_core:
+    pattern:
+      - GGG
+      - GRG
+      - GGG
+    ingredients:
+      G: GOLD_INGOT
+      R: REDSTONE_BLOCK
+    result:
+      item: gold_core
+      amount: 1
+
+  diamond_core:
+    pattern:
+      - DRD
+      - DGD
+      - DRD
+    ingredients:
+      G: gold_core
+      D: DIAMOND
+      R: REDSTONE_BLOCK
+    result:
+      item: diamond_core
+      amount: 1
+
+  emerald_core:
+    pattern:
+      - ERE
+      - EDE
+      - ERE
+    ingredients:
+      E: EMERALD
+      D: diamond_core
+      R: REDSTONE_BLOCK
+    result:
+      item: emerald_core
+      amount: 1
+
+  wrench:
+    pattern:
+      - SXS
+      - XSX
+      - XSX
+    ingredients:
+      S: steel_ingot
+    result:
+      item: wrench
+      amount: 1

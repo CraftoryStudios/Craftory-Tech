@@ -142,7 +142,7 @@ public class CustomBlockManager implements Listener {
         removeIfLastActiveChunk(location);
         if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
           location.getWorld()
-              .dropItemNaturally(location, CustomItemManager.getCustomItem(blockName, true));
+              .dropItemNaturally(location, CustomItemManager.getCustomItem(blockName));
         }
         activeCustomBlocks.remove(location);
       }

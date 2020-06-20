@@ -23,7 +23,6 @@ public class Command_Main implements CommandExecutor, TabCompleter {
     tabs.add("help");
     tabs.add("toggleDebug");
     tabs.add("give");
-    tabs.add("giveBlock");
     return CommandWrapper.filterTabs(tabs, args);
   }
 }

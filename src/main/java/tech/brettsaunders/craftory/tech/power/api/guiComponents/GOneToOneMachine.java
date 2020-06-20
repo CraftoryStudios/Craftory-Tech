@@ -36,7 +36,7 @@ public class GOneToOneMachine implements IGUIComponent {
   @Override
   public void update() {
     int x = (int) Math.floor(progress.getT() * 10);
-    ItemStack arrow = CustomItemManager.getCustomItem("arrow_" + x, false);
+    ItemStack arrow = CustomItemManager.getCustomItem("arrow_" + x);
     ItemMeta meta = arrow.getItemMeta();
     meta.setDisplayName("");
     arrow.setItemMeta(meta);

@@ -44,7 +44,7 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
     if (args.length == 2) {
       return getOnlinePlayerNames();
     } else if (args.length == 3) {
-      tabs.add("<item>");
+      return CustomItemManager.getItemNames();
     } else if (args.length == 4) {
       tabs.add("<amount>");
     }
@@ -62,7 +62,7 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
   private boolean giveCustomItem(int amount, String playerName, String itemName,
       CommandSender sender) {
     if (getOnlinePlayerNames().contains(playerName)) {
-      ItemStack itemStack = CustomItemManager.getCustomItem(itemName, false);
+      ItemStack itemStack = CustomItemManager.getCustomItem(itemName);
       if (itemStack != null && itemStack.getType() != Material.AIR) {
         itemStack.setAmount(amount);
         Player player = Craftory.plugin.getServer().getPlayer(playerName);

@@ -77,9 +77,9 @@ public class GOutputConfig implements IGUIComponent, Listener {
   @Override
   public void update() {
     final ItemStack DISABLED = CustomItemManager
-        .getCustomItem("output_disabled" + (ALT ? "_alt" : ""), false);
+        .getCustomItem("output_disabled" + (ALT ? "_alt" : ""));
     final ItemStack OUTPUT = CustomItemManager
-        .getCustomItem("output_green" + (ALT ? "_alt" : ""), false);
+        .getCustomItem("output_green" + (ALT ? "_alt" : ""));
 
     //NORTH, EAST, SOUTH, WEST, UP, DOWN
     inventory.setItem(NORTH_SLOT, !config.get(0) ? DISABLED.clone() : OUTPUT.clone());
