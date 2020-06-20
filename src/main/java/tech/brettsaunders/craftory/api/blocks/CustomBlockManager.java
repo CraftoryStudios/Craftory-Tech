@@ -105,7 +105,7 @@ public class CustomBlockManager implements Listener {
     for (World world : Bukkit.getWorlds()) {
       File directory = new File(DATA_FOLDER + File.separator + world.getName());
       if (directory.exists()) {
-        File filesList[] = directory.listFiles();
+        File[] filesList = directory.listFiles();
         for (File file : filesList) {
           loadCustomRegion(world, file.getName());
           regions++;
@@ -115,7 +115,7 @@ public class CustomBlockManager implements Listener {
     Logger.info("Loaded " + regions + " region data files!");
   }
 
-  public void onDisable()  {
+  public void onDisable() {
     activeChunks.forEach((chunk, customBlockLocations) -> {
       ArrayList<CustomBlock> customBlocks = getCustomBlocksFromLocation(customBlockLocations);
       saveCustomBlocksChunk(chunk, customBlocks);
@@ -233,10 +233,12 @@ public class CustomBlockManager implements Listener {
     //Get Region File
     try {
       NBTFile nbtFile = new NBTFile(
-          new File(DATA_FOLDER + File.separator + customBlocks.get(0).location.getWorld().getName(), getRegionID(customBlocks.get(0).location.getChunk())));
+          new File(DATA_FOLDER + File.separator + customBlocks.get(0).location.getWorld().getName(),
+              getRegionID(customBlocks.get(0).location.getChunk())));
       NBTCompound chunkNBTSection = nbtFile.addCompound(chunkID);
       customBlocks.forEach(customBlock -> {
-        NBTCompound locationNBTSection = chunkNBTSection.addCompound(getLocationID(customBlock.location));
+        NBTCompound locationNBTSection = chunkNBTSection
+            .addCompound(getLocationID(customBlock.location));
         customBlock.writeDataFile(locationNBTSection);
       });
       nbtFile.save();
@@ -246,14 +248,16 @@ public class CustomBlockManager implements Listener {
     }
   }
 
-  private ArrayList<CustomBlock> getCustomBlocksFromLocation(ArrayList<Location> customBlockLocations) {
-    return (ArrayList<CustomBlock>) customBlockLocations.parallelStream().map(loc -> activeCustomBlocks.get(loc)).collect(Collectors.toList());
+  private ArrayList<CustomBlock> getCustomBlocksFromLocation(
+      ArrayList<Location> customBlockLocations) {
+    return (ArrayList<CustomBlock>) customBlockLocations.parallelStream()
+        .map(loc -> activeCustomBlocks.get(loc)).collect(Collectors.toList());
   }
 
   private String getRegionID(Chunk chunk) {
     int regionX = chunk.getX() >> 5;
     int regionZ = chunk.getZ() >> 5;
-    return  "r." + regionX + "," + regionZ + ".nbt";
+    return "r." + regionX + "," + regionZ + ".nbt";
   }
 
   private String getChunkID(Chunk chunk) {
@@ -267,7 +271,8 @@ public class CustomBlockManager implements Listener {
   private void removeCustomBlock(CustomBlock block) {
     try {
       NBTFile nbtFile = new NBTFile(
-          new File(DATA_FOLDER + File.separator + block.location.getWorld().getName(), getRegionID(block.location.getChunk())));
+          new File(DATA_FOLDER + File.separator + block.location.getWorld().getName(),
+              getRegionID(block.location.getChunk())));
       NBTCompound chunk = nbtFile.getCompound(getChunkID(block.location.getChunk()));
       if (chunk != null) {
         String locationName = getLocationID(block.location);
@@ -285,10 +290,14 @@ public class CustomBlockManager implements Listener {
     try {
       NBTFile nbtFile = new NBTFile(
           new File(DATA_FOLDER + File.separator + world.getName(), regionID));
-      if (nbtFile == null) return;
+      if (nbtFile == null) {
+        return;
+      }
       for (String chunkKey : nbtFile.getKeys()) {
         NBTCompound chunkCompound = nbtFile.getCompound(chunkKey);
-        if (chunkCompound == null) return;
+        if (chunkCompound == null) {
+          return;
+        }
         for (String keys : chunkCompound.getKeys()) {
           NBTCompound blockData = chunkCompound.getCompound(keys);
           String[] locationData = keys.split(",");
@@ -361,7 +370,8 @@ public class CustomBlockManager implements Listener {
       return;
     }
     for (String key : blocks.getKeys(false)) {
-      ConfigurationSection block = Craftory.customBlocksConfig.getConfigurationSection("blocks." + key);
+      ConfigurationSection block = Craftory.customBlocksConfig
+          .getConfigurationSection("blocks." + key);
       CustomBlockData data = new CustomBlockData(block.getBoolean("UP"), block.getBoolean("DOWN"),
           block.getBoolean("NORTH"), block.getBoolean("EAST"), block.getBoolean("SOUTH"),
           block.getBoolean("WEST"));

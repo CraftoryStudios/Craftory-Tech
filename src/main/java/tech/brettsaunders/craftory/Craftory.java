@@ -44,7 +44,8 @@ public final class Craftory extends JavaPlugin {
     Utilities.registerEvents();
     new ResourcePackEvents();
     /* Needs sorting */
-    FileUtils.copyResourcesRecursively(getClass().getResource("/data"), new File(getDataFolder(),"/data"));
+    FileUtils.copyResourcesRecursively(getClass().getResource("/data"),
+        new File(getDataFolder(), "/data"));
     customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
     customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);

@@ -27,9 +27,11 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
       try {
         amount = Integer.parseInt(args[3]);
       } catch (NumberFormatException ignored) {
-        Utilities.msg(sender,"Couldn't give block, amount not recognised");
+        Utilities.msg(sender, "Couldn't give block, amount not recognised");
       }
-      if (amount > 64) amount = 64;
+      if (amount > 64) {
+        amount = 64;
+      }
       giveCustomItem(amount, args[1], args[2], sender);
     } else {
       Utilities.msg(sender, "Usage: /cf give [Player] [ItemName] <[amount]>");
@@ -57,7 +59,8 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
     return playerNames;
   }
 
-  private boolean giveCustomItem(int amount, String playerName, String itemName, CommandSender sender) {
+  private boolean giveCustomItem(int amount, String playerName, String itemName,
+      CommandSender sender) {
     if (getOnlinePlayerNames().contains(playerName)) {
       ItemStack itemStack = CustomItemManager.getCustomItem(itemName, false);
       if (itemStack != null && itemStack.getType() != Material.AIR) {

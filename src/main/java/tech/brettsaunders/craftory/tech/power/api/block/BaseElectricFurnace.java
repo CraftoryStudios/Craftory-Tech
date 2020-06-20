@@ -16,6 +16,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
+import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -142,6 +143,7 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
         return true;
       }
     }
+    Logger.info("fail"); //E
     currentRecipe = null;
     return false;
   }
