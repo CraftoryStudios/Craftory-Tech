@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomItemManager implements Listener {
+
   public static final String CUSTOM_ITEM = "CUSTOM_ITEM";
   public static final String CUSTOM_BLOCK_ITEM = "CUSTOM_BLOCK_ITEM";
   private static final HashMap<String, CustomItem> itemIDCache = new HashMap<>();
@@ -22,14 +23,17 @@ public class CustomItemManager implements Listener {
     ConfigurationSection items = customItemConfig.getConfigurationSection("items");
     if (items != null) {
       for (String key : items.getKeys(false)) {
-        Material material = Material.getMaterial(customItemConfig.getString("items."+ key + ".itemModel").toUpperCase());
+        Material material = Material
+            .getMaterial(customItemConfig.getString("items." + key + ".itemModel").toUpperCase());
         if (material == null) {
-          Logger.error(key + " Material doesn't exist :" + customItemConfig.getString("items."+ key + ".itemModel").toUpperCase());
+          Logger.error(key + " Material doesn't exist :" + customItemConfig
+              .getString("items." + key + ".itemModel").toUpperCase());
         } else {
           int itemID = customItemConfig.getInt("items." + key + ".itemID");
           CustomItem customItem = new CustomItem(itemID, material, key);
           itemIDCache.put(key, customItem);
-          if (!(customItemConfig.contains("items."+ key + ".hideItem") && customItemConfig.getBoolean("items."+ key + ".hideItem"))) {
+          if (!(customItemConfig.contains("items." + key + ".hideItem") && customItemConfig
+              .getBoolean("items." + key + ".hideItem"))) {
             itemNames.add(key);
           }
         }
@@ -43,7 +47,8 @@ public class CustomItemManager implements Listener {
         if (block != null) {
           Material material = Material.getMaterial(block.getString("itemModel").toUpperCase());
           if (material == null) {
-            Logger.error(key + " Material doesn't exist :" + block.getString("itemModel").toUpperCase());
+            Logger.error(
+                key + " Material doesn't exist :" + block.getString("itemModel").toUpperCase());
           } else {
             int itemID = block.getInt("itemID");
             CustomItem customItem = new CustomItem(itemID, material, key);

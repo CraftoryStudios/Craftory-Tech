@@ -26,10 +26,10 @@ public final class Craftory extends JavaPlugin {
   public static Craftory plugin = null;
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
-  private static File customItemConfigFile;
   public static FileConfiguration customBlocksConfig;
-  private static File customBlockConfigFile;
   public static FileConfiguration customRecipeConfig;
+  private static File customItemConfigFile;
+  private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
   private static PoweredBlockManager blockPoweredManager = null;
 
@@ -65,7 +65,6 @@ public final class Craftory extends JavaPlugin {
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     blockPoweredManager.onEnable();
     Utilities.startMetrics();
-    Utilities.errorReporting();
     Utilities.done();
   }
 

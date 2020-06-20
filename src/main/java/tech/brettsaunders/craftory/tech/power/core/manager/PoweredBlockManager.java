@@ -118,9 +118,8 @@ public class PoweredBlockManager implements Listener, ITickable {
       Logger.debug("First Run - Generating Powered Block Data");
     } catch (IOException e) {
       Logger.error("Powered Block Data IO Loading Issue");
-      Logger.captureError(e);
     } catch (ClassNotFoundException e) {
-      Logger.captureError(e);
+      Logger.error(e.toString());
     }
   }
 
@@ -134,7 +133,6 @@ public class PoweredBlockManager implements Listener, ITickable {
       Logger.debug("Powered Block Data Saved");
     } catch (IOException e) {
       Logger.warn("Couldn't save Powered Block Data");
-      Logger.captureError(e);
     }
   }
 

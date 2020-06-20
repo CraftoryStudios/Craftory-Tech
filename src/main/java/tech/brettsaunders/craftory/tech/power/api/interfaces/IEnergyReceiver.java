@@ -11,7 +11,7 @@ public interface IEnergyReceiver extends IEnergyHandler {
    * IEnergyReceiver.
    *
    * @param maxReceive Maximum amount of energy to receive.
-   * @param simulate   If TRUE, the charge will only be simulated.
+   * @param simulate If TRUE, the charge will only be simulated.
    * @return Amount of energy that was (or would have been, if simulated) received.
    */
   int receiveEnergy(int maxReceive, boolean simulate);

@@ -1,9 +1,5 @@
 package tech.brettsaunders.craftory;
 
-import io.sentry.Sentry;
-import io.sentry.SentryClient;
-import io.sentry.SentryClientFactory;
-import io.sentry.event.UserBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -16,14 +12,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class Utilities {
 
   public final static String DATA_FOLDER;
   public static FileConfiguration config;
   public static FileConfiguration data;
-  public static SentryClient sentry;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
 
@@ -89,19 +83,6 @@ public class Utilities {
 
   static void registerEvents() {
 
-  }
-
-  static void errorReporting() {
-    Logger.info("///////// Please ignore Sentry.io Warnings ///////");
-    Sentry.init(
-        "https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry.io/5257818?debug=false&&environment=WIP&&release="
-            + Craftory.VERSION);
-    sentry = SentryClientFactory.sentryClient();
-    Sentry.getContext()
-        .setUser(new UserBuilder().setId(data.getString("reporting.serverUUID")).build());
-    Sentry.getContext().addTag("Bukkit Version", Bukkit.getBukkitVersion());
-    Sentry.getContext().addExtra("Plugins", Bukkit.getPluginManager().getPlugins());
-    Logger.info("///////// Please ignore Sentry.io Warnings ///////");
   }
 
   static void done() {
