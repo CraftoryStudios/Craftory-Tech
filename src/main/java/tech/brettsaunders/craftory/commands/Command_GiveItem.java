@@ -44,9 +44,15 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
     if (args.length == 2) {
       return getOnlinePlayerNames();
     } else if (args.length == 3) {
-      return CustomItemManager.getItemNames();
+      if (args[2].isEmpty()) {
+        return CustomItemManager.getItemNames();
+      } else {
+        return CustomItemManager.getItemNames().stream().filter(name -> name.startsWith(args[2]))
+            .collect(
+                Collectors.toList());
+      }
     } else if (args.length == 4) {
-      tabs.add("<amount>");
+        tabs.add("<amount>");
     }
     return CommandWrapper.filterTabs(tabs, args);
   }
