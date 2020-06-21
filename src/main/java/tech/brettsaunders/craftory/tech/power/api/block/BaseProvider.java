@@ -7,10 +7,9 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.bukkit.Location;
-import org.bukkit.block.BlockFace;
+import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider,
     Externalizable {
@@ -23,7 +22,6 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   /* Per Object Variables Saved */
   protected int maxOutput;
   protected ArrayList<Boolean> sidesConfig;
-  protected ArrayList<Boolean> sidesCache;
 
   /* Per Object Variables Not-Saved */
 
@@ -34,7 +32,6 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     this.maxOutput = maxOutput;
     init();
     Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
-    generateSideCache();
   }
 
   /* Saving, Setup and Loading */
@@ -46,14 +43,12 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   /* Common Load and Construction */
   private void init() {
     sidesConfig = new ArrayList<>(6);
-    sidesCache = new ArrayList<>(6);
   }
 
   @Override
   public void writeExternal(ObjectOutput out) throws IOException {
     super.writeExternal(out);
     out.writeObject(sidesConfig);
-    out.writeObject(sidesCache);
     out.writeInt(maxOutput);
   }
 
@@ -62,7 +57,6 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     super.readExternal(in);
     sidesConfig = (ArrayList<Boolean>) in.readObject();
-    sidesCache = (ArrayList<Boolean>) in.readObject();
     maxOutput = in.readInt();
   }
 
@@ -71,7 +65,12 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     int amountTransferred = 0;
     for (int i = 0; i < sidesConfig.size(); i++) {
       if (sidesConfig.get(i)) {
-        if (sidesCache.get(i)) {
+        /*if (sidesCache.get(i)) {
+          amountTransferred += energyStorage
+              .modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
+                  Math.min(maxOutput, energyStorage.getEnergyStored()), false));
+        }*/
+        if(cachedSides.containsKey(faces[i]) && cachedSides.get(faces[i]).equals(INTERACTABLEBLOCK.RECIEVER)){
           amountTransferred += energyStorage
               .modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
                   Math.min(maxOutput, energyStorage.getEnergyStored()), false));
@@ -95,36 +94,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
 
   /* Internal Helper Functions */
-  @Override
-  public boolean updateOutputCache(BlockFace inputFrom, Boolean setTo) {
-    //NORTH, EAST, SOUTH, WEST, UP, DOWN
-    int side = -1;
-    switch (inputFrom) {
-      case NORTH:
-        side = 0;
-        break;
-      case EAST:
-        side = 1;
-        break;
-      case SOUTH:
-        side = 2;
-        break;
-      case WEST:
-        side = 3;
-        break;
-      case UP:
-        side = 4;
-        break;
-      case DOWN:
-        side = 5;
-        break;
-    }
-    if (side != -1) {
-      sidesCache.set(side, setTo);
-      return true;
-    }
-    return false;
-  }
+
 
   public int insertEnergyIntoAdjacentEnergyReceiver(int side, int energy, boolean simulate) {
     Location targetLocation = this.location.getBlock().getRelative(faces[side]).getLocation();
@@ -137,24 +107,11 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
             .receiveEnergy(energy, simulate);
       }
     } else {
-      sidesCache.set(side, false);
+      //sidesCache.set(side, false);
     }
     return 0;
   }
 
-  private void generateSideCache() {
-    int i = 0;
-    for (BlockFace face : faces) {
-      if (Craftory.getBlockPoweredManager()
-          .isReceiver(this.location.getBlock().getRelative(face).getLocation())) {
-        sidesCache.add(i, true);
-        Logger.info("Cached side " + i);
-      } else {
-        sidesCache.add(i, false);
-      }
-      i++;
-    }
-  }
 
   public ArrayList<Boolean> getSideConfig() {
     return sidesConfig;

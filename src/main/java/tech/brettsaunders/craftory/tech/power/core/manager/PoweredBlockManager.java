@@ -1,5 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.core.manager;
 
+import static tech.brettsaunders.craftory.CoreHolder.HOPPER_INTERACT_FACES;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,13 +19,17 @@ import java.util.zip.GZIPOutputStream;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.inventory.Inventory;
@@ -31,6 +37,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import tech.brettsaunders.craftory.CoreHolder;
+import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -256,9 +263,26 @@ public class PoweredBlockManager implements Listener, ITickable {
     //Carry out PoweredBlock Base Setup
     if (poweredBlock != null) {
       addPoweredBlock(event.getLocation(), poweredBlock);
+      cacheSides(event.getLocation(), poweredBlock);
       if (poweredBlock.isReceiver()) {
         updateAdjacentProviders(event.getLocation(), true, type);
       }
+    }
+  }
+
+  @EventHandler
+  public void onVanillaBlockBreak(BlockBreakEvent event) {
+    Block block = event.getBlock();
+    if(block.getType().equals(Material.HOPPER)){
+      updateHopperNeighbour(block,false);
+    }
+  }
+
+  @EventHandler
+  public void onVanillaBlockPlace(BlockPlaceEvent event) {
+    Block block = event.getBlockPlaced();
+    if(block.getType().equals(Material.HOPPER)){
+      updateHopperNeighbour(block,true);
     }
   }
 
@@ -286,17 +310,16 @@ public class PoweredBlockManager implements Listener, ITickable {
     }
     Craftory.powerConnectorManager.destroyBeams(location); //Destroy any beams
     // Drop items
-    PoweredBlock b = poweredBlocks.get(location);
+    PoweredBlock poweredBlock = poweredBlocks.get(location);
     World world = location.getWorld();
-    Inventory inventory = b.getInventory();
+    Inventory inventory = poweredBlock.getInventory();
     ItemStack item;
-    for (Integer i : b.getInteractableSlots()) {
+    for (Integer i : poweredBlock.getInteractableSlots()) {
       item = inventory.getItem(i);
       if (item != null) {
         world.dropItemNaturally(location, item);
       }
     }
-
     if (isReceiver(location)) {
       updateAdjacentProviders(location, false, PoweredBlockType.MACHINE);
     }
@@ -364,8 +387,7 @@ public class PoweredBlockManager implements Listener, ITickable {
       blockLocation = block.getLocation();
       if (Craftory.customBlockManager.isCustomBlock(blockLocation)) {
         if (poweredBlocks.containsKey(blockLocation) && isProvider(blockLocation)) {
-          ((BaseProvider) getPoweredBlock(blockLocation))
-              .updateOutputCache(face.getOppositeFace(), setTo);
+          getPoweredBlock(blockLocation).setSideCache(face.getOppositeFace(),(setTo)?INTERACTABLEBLOCK.RECIEVER:INTERACTABLEBLOCK.NONE);
         } else if (setTo && Craftory.customBlockManager.getCustomBlockName(blockLocation)
             == CoreHolder.Blocks.POWER_CONNECTOR) { //TODO fix type part - seperate
           switch (type) {
@@ -410,6 +432,40 @@ public class PoweredBlockManager implements Listener, ITickable {
     }
   }
 
+  private void cacheSides(Location location, PoweredBlock poweredBlock) {
+    Block b;
+    BlockFace facing;
+    for (BlockFace face : HOPPER_INTERACT_FACES) {
+      b = location.getBlock().getRelative(face);
+      if (b.getType().equals(Material.HOPPER)) {
+        facing = ((Directional) b.getBlockData()).getFacing();
+        if (facing.equals(face.getOppositeFace())) {
+          poweredBlock.setSideCache(face,INTERACTABLEBLOCK.HOPPER_IN);
+        }
+        if(face.equals(BlockFace.DOWN)) {
+          poweredBlock.setSideCache(face,INTERACTABLEBLOCK.HOPPER_OUT);
+        }
+      } else if(isReceiver(b.getLocation())) {
+        poweredBlock.setSideCache(face,INTERACTABLEBLOCK.RECIEVER);
+      }
+    }
+  }
+
+  private void updateHopperNeighbour(Block block, boolean hopperIsPresent) {
+    BlockFace facingDirection = ((Directional)block.getBlockData()).getFacing();
+    PoweredBlock poweredBlock = poweredBlocks.get(block.getRelative(facingDirection).getLocation());
+    if(poweredBlock != null){
+      poweredBlock.setSideCache(facingDirection.getOppositeFace(), (hopperIsPresent)? INTERACTABLEBLOCK.HOPPER_IN
+          : INTERACTABLEBLOCK.NONE);
+      Logger.info("Set block facing to");
+    }
+    poweredBlock = poweredBlocks.get(block.getRelative(BlockFace.UP).getLocation());
+    if(poweredBlock !=null){
+      poweredBlock.setSideCache(BlockFace.DOWN, (hopperIsPresent)? INTERACTABLEBLOCK.HOPPER_OUT
+          : INTERACTABLEBLOCK.NONE);
+    }
+  }
+
   public void print(Player player) {
     player.sendMessage(poweredBlocks.toString());
   }
@@ -446,6 +502,7 @@ public class PoweredBlockManager implements Listener, ITickable {
       }));
     } catch (NullPointerException e) {
       Logger.debug(e.toString());
+      e.printStackTrace();
     }
 
     for (PowerGridManager gridManager : new HashSet<PowerGridManager>(powerGrids.values())) {

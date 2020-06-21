@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder;
@@ -16,10 +18,11 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 
-public class BaseFoundry extends BaseMachine implements Externalizable {
+public class BaseFoundry extends BaseMachine implements Externalizable, IHopperInteract {
 
   /* Static Constants Protected */
   protected static final int[] PROCESSING_TIME_LEVEL = {400, 300, 200, 100}; //MC 200 ticks
@@ -30,6 +33,21 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
   private static final int INPUT_LOCATION1 = 12;
   private static final int INPUT_LOCATION2 = 30;
   private static final int OUTPUT_LOCATION = 25;
+  private static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
+    {
+      put(BlockFace.NORTH,INPUT_LOCATION1);
+      put(BlockFace.EAST,INPUT_LOCATION2);
+      put(BlockFace.SOUTH,INPUT_LOCATION2);
+      put(BlockFace.WEST,INPUT_LOCATION1);
+      put(BlockFace.UP,INPUT_LOCATION1);
+    }
+  };
+
+  private static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
+    {
+      put(BlockFace.DOWN,OUTPUT_LOCATION);
+    }
+  };
   /* Per Object Variables Saved */
 
   /* Per Object Variables Not-Saved */
@@ -170,5 +188,15 @@ public class BaseFoundry extends BaseMachine implements Externalizable {
     }
     currentRecipe = null;
     return false;
+  }
+
+  @Override
+  public HashMap<BlockFace, Integer> getInputFaces() {
+    return inputFaces;
+  }
+
+  @Override
+  public HashMap<BlockFace, Integer> getOutputFaces() {
+    return outputFaces;
   }
 }

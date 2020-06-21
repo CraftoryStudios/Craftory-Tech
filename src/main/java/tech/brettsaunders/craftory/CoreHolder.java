@@ -1,5 +1,7 @@
 package tech.brettsaunders.craftory;
 
+import org.bukkit.block.BlockFace;
+
 public class CoreHolder {
 
   public static final int TICK = 1;
@@ -37,4 +39,13 @@ public class CoreHolder {
     public static final String IRON_CORE = "iron_core";
   }
 
+  public enum INTERACTABLEBLOCK {
+    NONE,
+    RECIEVER,
+    HOPPER_IN,
+    HOPPER_OUT;
+  }
+
+  public static final BlockFace[] HOPPER_INTERACT_FACES = {BlockFace.NORTH, BlockFace.EAST,
+      BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
 }

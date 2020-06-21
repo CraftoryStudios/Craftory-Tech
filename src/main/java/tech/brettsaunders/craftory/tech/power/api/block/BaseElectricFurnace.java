@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -16,11 +18,11 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
-public class BaseElectricFurnace extends BaseMachine implements Externalizable {
+public class BaseElectricFurnace extends BaseMachine implements Externalizable, IHopperInteract {
 
   /* Static Constants Protected */
   protected static final int[] COOKING_TIME_LEVEL = {200, 150, 100, 50}; //MC 200 ticks
@@ -30,6 +32,22 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
   private static final long serialVersionUID = 10005L;
   private static final int INPUT_LOCATION = 21;
   private static final int OUTPUT_LOCATION = 25;
+  private static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
+    {
+      put(BlockFace.NORTH,INPUT_LOCATION);
+      put(BlockFace.EAST,INPUT_LOCATION);
+      put(BlockFace.SOUTH,INPUT_LOCATION);
+      put(BlockFace.WEST,INPUT_LOCATION);
+      put(BlockFace.UP,INPUT_LOCATION);
+    }
+  };
+
+  private static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
+    {
+      put(BlockFace.DOWN,OUTPUT_LOCATION);
+    }
+  };
+
   /* Per Object Variables Saved */
 
   /* Per Object Variables Not-Saved */
@@ -143,9 +161,18 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable {
         return true;
       }
     }
-    Logger.info("fail"); //E
     currentRecipe = null;
     return false;
+  }
+
+  @Override
+  public HashMap<BlockFace, Integer> getInputFaces() {
+    return inputFaces;
+  }
+
+  @Override
+  public HashMap<BlockFace, Integer> getOutputFaces() {
+    return outputFaces;
   }
 
 }
