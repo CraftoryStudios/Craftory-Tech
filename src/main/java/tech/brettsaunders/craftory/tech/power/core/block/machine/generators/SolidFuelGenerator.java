@@ -90,7 +90,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   public void setupGUI() {
     Inventory inventory = setInterfaceTitle("Fuel Generator", Font.GENERATOR_GUI.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
-    addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43));
+    addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43, true));
     addGUIComponent(new GIndicator(inventory, runningContainer, 31));
     inputLocations.add(FUEL_SLOT);
     if (fuelItem != null) {
