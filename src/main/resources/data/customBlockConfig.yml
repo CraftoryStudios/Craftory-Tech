@@ -98,3 +98,12 @@ blocks:
     WEST: true
     itemID: 7
     itemModel: stone
+  crystal:
+    UP: false
+    DOWN: false
+    NORTH: true
+    EAST: false
+    SOUTH: true
+    WEST: false
+    itemID: 15
+    itemModel: stone

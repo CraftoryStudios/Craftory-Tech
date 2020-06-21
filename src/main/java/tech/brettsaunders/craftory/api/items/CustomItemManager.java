@@ -45,6 +45,7 @@ public class CustomItemManager implements Listener {
       for (String key : blocks.getKeys(false)) {
         ConfigurationSection block = customBlocksConfig.getConfigurationSection("blocks." + key);
         if (block != null) {
+          if (!block.contains("itemModel")) continue;
           Material material = Material.getMaterial(block.getString("itemModel").toUpperCase());
           if (material == null) {
             Logger.error(
