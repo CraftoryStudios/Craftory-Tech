@@ -77,9 +77,9 @@ public class Utilities {
 
   static void registerCommandsAndCompletions() {
     Craftory.plugin.getCommand("craftory").setExecutor(new CommandWrapper());
-    Craftory.plugin.getCommand("cf").setExecutor(new CommandWrapper());
+    Craftory.plugin.getCommand("cr").setExecutor(new CommandWrapper());
     Craftory.plugin.getCommand("craftory").setTabCompleter(new CommandWrapper());
-    Craftory.plugin.getCommand("cf").setTabCompleter(new CommandWrapper());
+    Craftory.plugin.getCommand("cr").setTabCompleter(new CommandWrapper());
   }
 
   static void registerEvents() {

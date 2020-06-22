@@ -10,7 +10,7 @@ prefix: Craftory
 commands:
   craftory:
     description: Craftory commands.
-  cf:
+  cr:
     description: Cratory commands.
 
 permissions:

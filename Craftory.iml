@@ -35,7 +35,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.15-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.25" level="project" />
     <orderEntry type="library" name="Maven: org.bstats:bstats-bukkit:1.7" level="project" />
-    <orderEntry type="library" name="Maven: de.tr7zw:item-nbt-api:2.3.1" level="project" />
+    <orderEntry type="library" name="Maven: de.tr7zw:item-nbt-api:2.3.2" level="project" />
     <orderEntry type="library" name="Maven: de.tr7zw:functional-annotations:0.1-SNAPSHOT" level="project" />
   </component>
 </module>

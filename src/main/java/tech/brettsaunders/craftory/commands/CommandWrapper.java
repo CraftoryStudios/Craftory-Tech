@@ -69,7 +69,7 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
     if (command.getName().equalsIgnoreCase("craftory") || command.getName()
-        .equalsIgnoreCase("cf")) {
+        .equalsIgnoreCase("cr")) {
       if (args.length == 0) {
         return MainCommand.onCommand(sender, command, label, args);
       } else if (args[0].equalsIgnoreCase("help")) {
