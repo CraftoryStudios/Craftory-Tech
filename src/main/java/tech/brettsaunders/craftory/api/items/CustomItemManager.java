@@ -21,8 +21,10 @@ public class CustomItemManager implements Listener {
   public static void setup(FileConfiguration customItemConfig,
       FileConfiguration customBlocksConfig) {
     ConfigurationSection items = customItemConfig.getConfigurationSection("items");
+    String displayName = "";
     if (items != null) {
       for (String key : items.getKeys(false)) {
+        displayName = key;
         Material material = Material
             .getMaterial(customItemConfig.getString("items." + key + ".itemModel").toUpperCase());
         if (material == null) {
@@ -30,7 +32,10 @@ public class CustomItemManager implements Listener {
               .getString("items." + key + ".itemModel").toUpperCase());
         } else {
           int itemID = customItemConfig.getInt("items." + key + ".itemID");
-          CustomItem customItem = new CustomItem(itemID, material, key);
+          if (customItemConfig.contains("items." + key + ".displayName")) {
+            displayName = customItemConfig.getString("items." + key + ".displayName");
+          }
+          CustomItem customItem = new CustomItem(itemID, material, displayName);
           itemIDCache.put(key, customItem);
           if (!(customItemConfig.contains("items." + key + ".hideItem") && customItemConfig
               .getBoolean("items." + key + ".hideItem"))) {
@@ -43,6 +48,7 @@ public class CustomItemManager implements Listener {
     ConfigurationSection blocks = customBlocksConfig.getConfigurationSection("blocks");
     if (blocks != null) {
       for (String key : blocks.getKeys(false)) {
+        displayName = key;
         ConfigurationSection block = customBlocksConfig.getConfigurationSection("blocks." + key);
         if (block != null) {
           if (!block.contains("itemModel")) continue;
@@ -52,7 +58,10 @@ public class CustomItemManager implements Listener {
                 key + " Material doesn't exist :" + block.getString("itemModel").toUpperCase());
           } else {
             int itemID = block.getInt("itemID");
-            CustomItem customItem = new CustomItem(itemID, material, key);
+            if (block.contains("displayName")) {
+              displayName = block.getString("displayName");
+            }
+            CustomItem customItem = new CustomItem(itemID, material, displayName);
             itemIDCache.put(key, customItem);
             itemNames.add(key);
           }

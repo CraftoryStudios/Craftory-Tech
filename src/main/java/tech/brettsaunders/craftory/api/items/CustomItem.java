@@ -11,21 +11,15 @@ public class CustomItem {
   private int itemID;
   private ItemStack itemStack;
   private String itemName;
-  private Material material;
 
   public CustomItem(int itemID, Material itemMaterial, String itemName) {
     this.itemID = itemID;
     this.itemName = itemName;
-    this.material = itemMaterial;
     generatorItem(itemMaterial);
   }
 
   public ItemStack getItem() {
     return itemStack.clone();
-  }
-
-  public int getItemID() {
-    return itemID;
   }
 
   private void generatorItem(Material material) {
@@ -43,11 +37,7 @@ public class CustomItem {
       nbtItem.setString(CustomItemManager.CUSTOM_ITEM, itemName);
     }
     nbtItem.setString("NAME", itemName);
-
     itemStack = nbtItem.getItem();
   }
 
-  public Material getMaterial() {
-    return material;
-  }
 }
