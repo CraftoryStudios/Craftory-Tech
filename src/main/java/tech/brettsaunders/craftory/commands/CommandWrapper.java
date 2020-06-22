@@ -99,7 +99,7 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
   public List<String> onTabComplete(final CommandSender sender, final Command command,
       final String label, final String[] args) {
     if (command.getName().equalsIgnoreCase("craftory") || command.getName()
-        .equalsIgnoreCase("cf")) {
+        .equalsIgnoreCase("cr")) {
       if (args.length == 1) {
         if (sender.hasPermission("carftory.help")) {
           return MainTab.onTabComplete(sender, command, label, args);

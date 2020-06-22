@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class GOutputConfig implements IGUIComponent, Listener {
 
@@ -36,12 +37,12 @@ public class GOutputConfig implements IGUIComponent, Listener {
       boolean alt) {
     this.inventory = inventory;
     this.config = config;
-    NORTH_SLOT = middleSlot - 1;
-    SOUTH_SLOT = middleSlot;
-    EAST_SLOT = middleSlot + 1;
-    WEST_SLOT = middleSlot + 8;
+    SOUTH_SLOT = middleSlot - 1;
     UP_SLOT = middleSlot - 9;
     DOWN_SLOT = middleSlot + 9;
+    EAST_SLOT = middleSlot + 8;
+    WEST_SLOT = middleSlot + 1;
+    NORTH_SLOT = middleSlot;
     ALT = alt;
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
@@ -62,9 +63,9 @@ public class GOutputConfig implements IGUIComponent, Listener {
     if (rawSlot == NORTH_SLOT) {
       config.set(0, !config.get(0));
     } else if (rawSlot == EAST_SLOT) {
-      config.set(1, !config.get(1));
+      config.set(1, !config.get(2)); //1
     } else if (rawSlot == SOUTH_SLOT) {
-      config.set(2, !config.get(2));
+      config.set(2, !config.get(1)); //2
     } else if (rawSlot == WEST_SLOT) {
       config.set(3, !config.get(3));
     } else if (rawSlot == UP_SLOT) {

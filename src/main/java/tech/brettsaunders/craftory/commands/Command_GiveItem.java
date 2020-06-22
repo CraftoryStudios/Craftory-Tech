@@ -34,7 +34,7 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
       }
       giveCustomItem(amount, args[1], args[2], sender);
     } else {
-      Utilities.msg(sender, "Usage: /cf give [Player] [ItemName] <[amount]>");
+      Utilities.msg(sender, "Usage: /cr give [Player] [ItemName] <[amount]>");
     }
     return true;
   }
