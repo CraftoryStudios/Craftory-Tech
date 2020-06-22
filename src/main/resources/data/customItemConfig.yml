@@ -11,6 +11,11 @@ items:
   emerald_core:
     itemID: 1
     itemModel: lapis_lazuli
+  magnetised_iron:
+    itemID: 1
+    itemModel: iron_ingot
+
+
   invisible:
     itemID: 5
     itemModel: paper

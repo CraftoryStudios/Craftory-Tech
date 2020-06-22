@@ -10,6 +10,7 @@ recipes:
     result:
       item: iron_cell
       amount: 1
+
   gold_cell:
     pattern:
       - SSS
@@ -44,6 +45,58 @@ recipes:
       S: steel_ingot
     result:
       item: emerald_cell
+      amount: 1
+
+  iron_electric_furnace:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+      F: FURNACE
+    result:
+      item: iron_electric_furnace
+      amount: 1
+
+  gold_electric_furnace:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: gold_core
+      S: steel_ingot
+      F: FURNACE
+    result:
+      item: gold_electric_furnace
+      amount: 1
+
+  diamond_electric_furnace:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: diamond_core
+      S: steel_ingot
+      F: FURNACE
+    result:
+      item: diamond_electric_furnace
+      amount: 1
+
+  emerald_electric_furnace:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: emerald_core
+      S: steel_ingot
+      F: FURNACE
+    result:
+      item: emerald_electric_furnace
       amount: 1
 
   iron_core:
