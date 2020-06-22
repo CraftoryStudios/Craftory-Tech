@@ -30,6 +30,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldSaveEvent;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
@@ -116,6 +117,12 @@ public class CustomBlockManager implements Listener {
   }
 
   public void onDisable() {
+    saveAll();
+  }
+
+
+  private void saveAll() {
+    Logger.info("Saving Custom Block Data");
     activeChunks.forEach((chunk, customBlockLocations) -> {
       ArrayList<CustomBlock> customBlocks = getCustomBlocksFromLocation(customBlockLocations);
       saveCustomBlocksChunk(chunk, customBlocks);
@@ -123,8 +130,13 @@ public class CustomBlockManager implements Listener {
     inactiveCustomBlock.forEach(((chunk, customBlocks) -> {
       saveCustomBlocksChunk(chunk, customBlocks);
     }));
+    Logger.info("Saved Custom Block Data");
   }
 
+  @EventHandler
+  public void onWorldSave(WorldSaveEvent e) {
+    saveAll();
+  }
 
   @EventHandler
   public void onBlockBreak(BlockBreakEvent e) {
@@ -160,7 +172,6 @@ public class CustomBlockManager implements Listener {
     }
   }
 
-  //TODO move in active
   @EventHandler
   public void onChunkUnLoad(ChunkUnloadEvent e) {
     if (activeChunks.containsKey(getChunkID(e.getChunk()))) {
@@ -313,36 +324,6 @@ public class CustomBlockManager implements Listener {
       e.printStackTrace();
     }
   }
-
-//  private void loadCustomBlock(World world, Chunk chunk) {
-//    int regionX = chunk.getX() >> 5;
-//    int regionZ = chunk.getZ() >> 5;
-//    String fileName = "r." + regionX + "," + regionZ + ".nbt";
-//    try {
-//      NBTFile nbtFile = new NBTFile(
-//          new File(DATA_FOLDER + File.separator + world.getName(), fileName));
-//      if (nbtFile == null) {
-//        return;
-//      }
-//      String chunkName = chunk.getX() + "," + chunk.getZ();
-//      NBTCompound chunkCompound = nbtFile.getCompound(chunkName);
-//      if (chunkCompound == null) {
-//        return;
-//      }
-//
-//      for (String keys : chunkCompound.getKeys()) {
-//        NBTCompound blockData = chunkCompound.getCompound(keys);
-//        String[] locationData = keys.split(",");
-//        Location location = new Location(world, Double.parseDouble(locationData[0]),
-//            Double.parseDouble(locationData[1]), Double.parseDouble(locationData[2]));
-//        activeCustomBlocks
-//            .put(location, new CustomBlock(location, blockData.getString("BLOCK_NAME")));
-//        addActiveChunk(location);
-//      }
-//    } catch (IOException exception) {
-//      exception.printStackTrace();
-//    }
-//  }
 
   private void addActiveChunk(Location location) {
     ArrayList<Location> locations = activeChunks

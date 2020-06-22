@@ -11,10 +11,12 @@ public class CustomItem {
   private int itemID;
   private ItemStack itemStack;
   private String itemName;
+  private String displayName;
 
-  public CustomItem(int itemID, Material itemMaterial, String itemName) {
+  public CustomItem(int itemID, Material itemMaterial, String itemName, String displayName) {
     this.itemID = itemID;
     this.itemName = itemName;
+    this.displayName = displayName;
     generatorItem(itemMaterial);
   }
 
@@ -26,7 +28,7 @@ public class CustomItem {
     itemStack = new ItemStack(material);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setCustomModelData(itemID);
-    itemMeta.setDisplayName(itemName);
+    itemMeta.setDisplayName(displayName);
     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     itemStack.setItemMeta(itemMeta);
 

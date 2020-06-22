@@ -35,7 +35,7 @@ public class CustomItemManager implements Listener {
           if (customItemConfig.contains("items." + key + ".displayName")) {
             displayName = customItemConfig.getString("items." + key + ".displayName");
           }
-          CustomItem customItem = new CustomItem(itemID, material, displayName);
+          CustomItem customItem = new CustomItem(itemID, material, key, displayName);
           itemIDCache.put(key, customItem);
           if (!(customItemConfig.contains("items." + key + ".hideItem") && customItemConfig
               .getBoolean("items." + key + ".hideItem"))) {
@@ -61,7 +61,7 @@ public class CustomItemManager implements Listener {
             if (block.contains("displayName")) {
               displayName = block.getString("displayName");
             }
-            CustomItem customItem = new CustomItem(itemID, material, displayName);
+            CustomItem customItem = new CustomItem(itemID, material, key, displayName);
             itemIDCache.put(key, customItem);
             itemNames.add(key);
           }

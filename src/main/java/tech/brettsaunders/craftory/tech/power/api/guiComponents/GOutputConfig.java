@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class GOutputConfig implements IGUIComponent, Listener {
 
@@ -63,9 +62,9 @@ public class GOutputConfig implements IGUIComponent, Listener {
     if (rawSlot == NORTH_SLOT) {
       config.set(0, !config.get(0));
     } else if (rawSlot == EAST_SLOT) {
-      config.set(1, !config.get(2)); //1
+      config.set(2, !config.get(2));
     } else if (rawSlot == SOUTH_SLOT) {
-      config.set(2, !config.get(1)); //2
+      config.set(1, !config.get(1));
     } else if (rawSlot == WEST_SLOT) {
       config.set(3, !config.get(3));
     } else if (rawSlot == UP_SLOT) {
@@ -84,8 +83,8 @@ public class GOutputConfig implements IGUIComponent, Listener {
 
     //NORTH, EAST, SOUTH, WEST, UP, DOWN
     inventory.setItem(NORTH_SLOT, !config.get(0) ? DISABLED.clone() : OUTPUT.clone());
-    inventory.setItem(EAST_SLOT, !config.get(1) ? DISABLED.clone() : OUTPUT.clone());
-    inventory.setItem(SOUTH_SLOT, !config.get(2) ? DISABLED.clone() : OUTPUT.clone());
+    inventory.setItem(SOUTH_SLOT, !config.get(1) ? DISABLED.clone() : OUTPUT.clone());
+    inventory.setItem(EAST_SLOT, !config.get(2) ? DISABLED.clone() : OUTPUT.clone());
     inventory.setItem(WEST_SLOT, !config.get(3) ? DISABLED.clone() : OUTPUT.clone());
     inventory.setItem(UP_SLOT, !config.get(4) ? DISABLED.clone() : OUTPUT.clone());
     inventory.setItem(DOWN_SLOT, !config.get(5) ? DISABLED.clone() : OUTPUT.clone());
