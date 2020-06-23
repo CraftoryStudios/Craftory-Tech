@@ -7,29 +7,43 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class OrePopulator extends BlockPopulator {
 
   @Override
   public void populate(World world, Random random, Chunk chunk) {
-    int x, y, z;
-    boolean isStone;
+    spawnOre(random,chunk,"copper_ore",10,60,3,6,10,60);
+  }
+
+  private void spawnCommonOre(Random r, Chunk chunk, String ore){
+    spawnOre(r, chunk, ore, 10, 60, 3,5,20,75);
+  }
+
+  private void spawnRareOre(Random r, Chunk chunk, String ore) {
+    spawnOre(r, chunk,ore,2,50,1,3,5,20);
+  }
+
+  private void spawnOre(Random r, Chunk chunk, String ore, int attempts, int chance, int minVeinSize, int maxVeinSize, int minHeight, int maxHeight) {
+    int x,y,z;
+    int xx,yy,zz;
     Block block;
-    for (int i = 1; i < 15; i++) {  // Number of tries
-      if (random.nextInt(100) < 60) {  // The chance of spawning
-        x = random.nextInt(15);
-        z = random.nextInt(15);
-        y = random.nextInt(40)+20;  // Get randomized coordinates
-        if (chunk.getBlock(x, y, z).getType() == Material.STONE && !Craftory.customBlockManager.isCustomBlock(chunk.getBlock(x, y, z).getLocation())) {
-          isStone = true;
-          while (isStone) {
-            block = chunk.getBlock(x, y, z);
-            block = Craftory.customBlockManager.getCustomBlock("copper_ore", block);
-            Logger.info("Spawned copper ore");
-            if (random.nextInt(100) < 40)  {   // The chance of continuing the vein
-              switch (random.nextInt(5)) {  // The direction chooser
+    boolean valid;
+    for(int i = 0; i < attempts; i++) {
+      if(r.nextInt(100) < chance) {
+        x = r.nextInt(16);
+        z = r.nextInt(16);
+        y = minHeight + r.nextInt(maxHeight-minHeight);
+        block = chunk.getBlock(x,y,z);
+        if(valid = validBlock(block)){
+          Craftory.customBlockManager.getCustomBlock(ore,block);
+          for (int j = 0; j < maxVeinSize; j++) {
+            if(j >= minVeinSize && r.nextInt(100) < 33) break;
+            for (int k = 0; k < 12; k++) {
+              xx = x;
+              yy = y;
+              zz = z;
+              switch (r.nextInt(6)) {  // The direction chooser
                 case 0: x++; break;
                 case 1: y++; break;
                 case 2: z++; break;
@@ -37,14 +51,33 @@ public class OrePopulator extends BlockPopulator {
                 case 4: y--; break;
                 case 5: z--; break;
               }
-              x = Utilities.clamp(x,0,15);
-              y = Utilities.clamp(y,0,15);
-              z = Utilities.clamp(z,0,15);
-              isStone = (chunk.getBlock(x, y, z).getType() == Material.STONE) && (!Craftory.customBlockManager.isCustomBlock(chunk.getBlock(x, y, z).getLocation()));
-            } else isStone = false;
+              if(x<0||x>15||y<0||y>15||z<0||z>15||(!validBlock(block = chunk.getBlock(x,y,z)))){
+                x = xx;
+                y = yy;
+                z = zz;
+                valid = false;
+              } else {
+                valid = true;
+               break;
+              }
+            }
+            if(valid){
+              Logger.info("Spawned " + j + " block in vein");
+              Craftory.customBlockManager.getCustomBlock(ore,block);
+            }
+            else {
+              Logger.info("Failed to find any locations " + j);
+              break;
+            }
           }
+          
         }
       }
     }
+  }
+  private boolean validBlock(Block block) {
+    //if(Craftory.customBlockManager.isCustomBlock(block.getLocation())) return false;
+    Material type = block.getType();
+    return type.equals(Material.STONE) || type.equals(Material.DIORITE) || type.equals(Material.ANDESITE) || type.equals(Material.GRANITE);
   }
 }
