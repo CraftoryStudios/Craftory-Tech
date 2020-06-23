@@ -2,6 +2,7 @@ package tech.brettsaunders.craftory;
 
 import java.io.File;
 import java.io.IOException;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,6 +14,7 @@ import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
+import tech.brettsaunders.craftory.world.OrePopulator;
 
 
 public final class Craftory extends JavaPlugin {
@@ -32,6 +34,7 @@ public final class Craftory extends JavaPlugin {
   private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
   private static PoweredBlockManager blockPoweredManager = null;
+  private static OrePopulator orePopulator;
 
   public static PoweredBlockManager getBlockPoweredManager() {
     return blockPoweredManager;
@@ -66,6 +69,8 @@ public final class Craftory extends JavaPlugin {
     blockPoweredManager.onEnable();
     Utilities.startMetrics();
     Utilities.done();
+    orePopulator = new OrePopulator();
+    Bukkit.getWorlds().get(0).getPopulators().add(orePopulator);
   }
 
   @Override
@@ -81,5 +86,6 @@ public final class Craftory extends JavaPlugin {
     Utilities.reloadConfigFile();
     Utilities.saveConfigFile();
     plugin = null;
+    Bukkit.getWorlds().get(0).getPopulators().remove(orePopulator);
   }
 }

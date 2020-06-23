@@ -159,3 +159,14 @@ recipes:
     result:
       item: wrench
       amount: 1
+
+  magnetised_iron:
+    pattern:
+      - IXX
+      - IXX
+      - XXX
+    ingredients:
+      I: IRON_INGOT
+    result:
+      item: magnetised_iron
+      amount: 1

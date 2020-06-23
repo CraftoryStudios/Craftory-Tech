@@ -119,3 +119,13 @@ blocks:
     itemID: 15
     itemModel: stone
     displayName: Crystals
+  copper_ore:
+    UP: false
+    DOWN: false
+    NORTH: true
+    EAST: false
+    SOUTH: true
+    WEST: true
+    itemID: 16
+    itemModel: stone
+    displayName: Copper Ore

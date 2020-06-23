@@ -19,6 +19,10 @@ items:
     itemID: 1
     itemModel: iron_ingot
     displayName: Magnetised Iron
+  copper_ingot:
+    itemID: 1
+    itemModel: yellow_dye
+    displayName: Copper Ingot
   wrench:
     itemID: 61
     itemModel: paper

@@ -129,6 +129,10 @@ public class Utilities {
     }
   }
 
+  public static int clamp(int value, int min, int max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
   public static void msg(final CommandSender s, String msg) {
     if (s instanceof Player) {
       msg = ChatColor.translateAlternateColorCodes('&', msg);

@@ -70,27 +70,34 @@ public class CustomBlockManager implements Listener {
     if (e.isCancelled()) {
       customBlockPlaceEvent.setCancelled(true);
     } else {
-      CustomBlockData data = customBlockDataHashMap.get(customBlockItemName);
+
       Block block = e.getBlockPlaced();
-      block.setType(Material.BROWN_MUSHROOM_BLOCK);
+      getCustomBlock(customBlockItemName, block);
 
-      BlockData blockData = block.getBlockData();
-      MultipleFacing multipleFacing = (MultipleFacing) blockData;
-
-      multipleFacing.setFace(
-          BlockFace.UP, data.UP);
-      multipleFacing.setFace(BlockFace.DOWN, data.DOWN);
-      multipleFacing.setFace(BlockFace.NORTH, data.NORTH);
-      multipleFacing.setFace(BlockFace.EAST, data.EAST);
-      multipleFacing.setFace(BlockFace.SOUTH, data.SOUTH);
-      multipleFacing.setFace(BlockFace.WEST, data.WEST);
-      block.setBlockData(multipleFacing);
-
-      activeCustomBlocks
-          .put(block.getLocation(), new CustomBlock(block.getLocation(), customBlockItemName));
-      addActiveChunk(block.getLocation());
     }
     Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
+  }
+
+  public Block getCustomBlock(String customBlockItemName, Block block){
+    CustomBlockData data = customBlockDataHashMap.get(customBlockItemName);
+    block.setType(Material.BROWN_MUSHROOM_BLOCK);
+
+    BlockData blockData = block.getBlockData();
+    MultipleFacing multipleFacing = (MultipleFacing) blockData;
+
+    multipleFacing.setFace(
+        BlockFace.UP, data.UP);
+    multipleFacing.setFace(BlockFace.DOWN, data.DOWN);
+    multipleFacing.setFace(BlockFace.NORTH, data.NORTH);
+    multipleFacing.setFace(BlockFace.EAST, data.EAST);
+    multipleFacing.setFace(BlockFace.SOUTH, data.SOUTH);
+    multipleFacing.setFace(BlockFace.WEST, data.WEST);
+    block.setBlockData(multipleFacing);
+
+    activeCustomBlocks
+        .put(block.getLocation(), new CustomBlock(block.getLocation(), customBlockItemName));
+    addActiveChunk(block.getLocation());
+    return block;
   }
 
   @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
