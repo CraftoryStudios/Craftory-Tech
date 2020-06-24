@@ -13,6 +13,16 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
+import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
+import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
+import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
+import tech.brettsaunders.craftory.tech.power.core.block.cell.IronCell;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.DiamondElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
 
 public class Utilities {
 
@@ -21,6 +31,8 @@ public class Utilities {
   public static FileConfiguration data;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
+  private static String UNIT = "Re";
+  private static DecimalFormat df = new DecimalFormat("###.###");
 
   static {
     config = YamlConfiguration
@@ -86,6 +98,19 @@ public class Utilities {
 
   }
 
+  static void registerBlocks() {
+    Craftory.tickManager.registerCustomBlockClass(DiamondCell.class);
+    Craftory.tickManager.registerCustomBlockClass(EmeraldCell.class);
+    Craftory.tickManager.registerCustomBlockClass(GoldCell.class);
+    Craftory.tickManager.registerCustomBlockClass(IronCell.class);
+    Craftory.tickManager.registerCustomBlockClass(DiamondElectricFurnace.class);
+    Craftory.tickManager.registerCustomBlockClass(EmeraldElectricFurnace.class);
+    Craftory.tickManager.registerCustomBlockClass(GoldElectricFurnace.class);
+    Craftory.tickManager.registerCustomBlockClass(IronElectricFurnace.class);
+    Craftory.tickManager.registerCustomBlockClass(IronFoundry.class);
+    Craftory.tickManager.registerCustomBlockClass(SolidFuelGenerator.class);
+  }
+
   static void done() {
     Bukkit.getLogger().info(
         "[" + Craftory.plugin.getDescription().getPrefix() + "] " + ChatColor.GREEN
@@ -147,19 +172,29 @@ public class Utilities {
         ChatColor.translateAlternateColorCodes('&', message));
   }
 
-  private static String UNIT = "Re";
-  private static DecimalFormat df = new DecimalFormat("###.###");
   public static String rawToPrefixed(Integer energy) {
     String s = Integer.toString(energy);
     int length = s.length();
     //if(length < 3) return s + " " + UNIT;
-    if(length < 7) return s + " " + UNIT;
+    if (length < 7) {
+      return s + " " + UNIT;
+    }
     //if(length < 7) return df.format(energy/1000f) +" K" + UNIT;
-    if(length < 10) return df.format(energy/1000000f) +" M" + UNIT;
-    if(length < 13) return df.format(energy/1000000000f) +" G" + UNIT;
-    if(length < 16) return df.format(energy/1000000000000f) +" T" + UNIT;
-    if(length < 19) return df.format(energy/1000000000000000f) +" P" + UNIT;
-    if(length < 22) return df.format(energy/1000000000000000000f) +" E" + UNIT;
+    if (length < 10) {
+      return df.format(energy / 1000000f) + " M" + UNIT;
+    }
+    if (length < 13) {
+      return df.format(energy / 1000000000f) + " G" + UNIT;
+    }
+    if (length < 16) {
+      return df.format(energy / 1000000000000f) + " T" + UNIT;
+    }
+    if (length < 19) {
+      return df.format(energy / 1000000000000000f) + " P" + UNIT;
+    }
+    if (length < 22) {
+      return df.format(energy / 1000000000000000000f) + " E" + UNIT;
+    }
     return "A bukkit load";
   }
 

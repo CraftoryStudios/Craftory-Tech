@@ -7,11 +7,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
+import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
-import tech.brettsaunders.craftory.tech.power.core.manager.TickableBaseManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.OrePopulator;
@@ -23,13 +23,13 @@ public final class Craftory extends JavaPlugin {
   public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/89bf7f641c86d7c4e3f25225512446066b378145.zip";
   public static final String HASH = "89bf7f641c86d7c4e3f25225512446066b378145";
 
-  public static TickableBaseManager tickableBaseManager = null;
   public static PowerConnectorManager powerConnectorManager = null;
   public static Craftory plugin = null;
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
   public static FileConfiguration customBlocksConfig;
   public static FileConfiguration customRecipeConfig;
+  public static CustomBlockTickManager tickManager;
   private static File customItemConfigFile;
   private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
@@ -59,10 +59,11 @@ public final class Craftory extends JavaPlugin {
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
     CustomItemManager.setup(customItemConfig, customBlocksConfig);
+    tickManager = new CustomBlockTickManager();
+    Utilities.registerBlocks();
     customBlockManager = new CustomBlockManager();
     customBlockManager.onEnable();
     new RecipeManager();
-    tickableBaseManager = new TickableBaseManager();
     blockPoweredManager = new PoweredBlockManager();
     powerConnectorManager = new PowerConnectorManager();
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
@@ -71,6 +72,8 @@ public final class Craftory extends JavaPlugin {
     Utilities.done();
     orePopulator = new OrePopulator();
     Bukkit.getWorlds().get(0).getPopulators().add(orePopulator);
+    tickManager.runTaskTimer(this, 20L, 1L);
+
   }
 
   @Override

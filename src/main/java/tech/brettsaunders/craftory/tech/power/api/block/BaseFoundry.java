@@ -35,17 +35,17 @@ public class BaseFoundry extends BaseMachine implements Externalizable, IHopperI
   private static final int OUTPUT_LOCATION = 25;
   private static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
     {
-      put(BlockFace.NORTH,INPUT_LOCATION1);
-      put(BlockFace.EAST,INPUT_LOCATION2);
-      put(BlockFace.SOUTH,INPUT_LOCATION2);
-      put(BlockFace.WEST,INPUT_LOCATION1);
-      put(BlockFace.UP,INPUT_LOCATION1);
+      put(BlockFace.NORTH, INPUT_LOCATION1);
+      put(BlockFace.EAST, INPUT_LOCATION2);
+      put(BlockFace.SOUTH, INPUT_LOCATION2);
+      put(BlockFace.WEST, INPUT_LOCATION1);
+      put(BlockFace.UP, INPUT_LOCATION1);
     }
   };
 
   private static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
     {
-      put(BlockFace.DOWN,OUTPUT_LOCATION);
+      put(BlockFace.DOWN, OUTPUT_LOCATION);
     }
   };
   /* Per Object Variables Saved */

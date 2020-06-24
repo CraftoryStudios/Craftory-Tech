@@ -9,6 +9,7 @@ import java.util.Collections;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 
 public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider,
@@ -70,7 +71,8 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
               .modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
                   Math.min(maxOutput, energyStorage.getEnergyStored()), false));
         }*/
-        if(cachedSides.containsKey(faces[i]) && cachedSides.get(faces[i]).equals(INTERACTABLEBLOCK.RECIEVER)){
+        if (cachedSides.containsKey(faces[i]) && cachedSides.get(faces[i])
+            .equals(INTERACTABLEBLOCK.RECIEVER)) {
           amountTransferred += energyStorage
               .modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
                   Math.min(maxOutput, energyStorage.getEnergyStored()), false));
@@ -79,9 +81,8 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     }
   }
 
-  @Override
-  public void update(long worldTime) {
-    super.update(worldTime);
+  @Ticking(ticks = 1)
+  public void updateProvider() {
     transferEnergy();
   }
 

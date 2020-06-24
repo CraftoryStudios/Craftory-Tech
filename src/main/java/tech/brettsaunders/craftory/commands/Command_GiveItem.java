@@ -52,7 +52,7 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
                 Collectors.toList());
       }
     } else if (args.length == 4) {
-        tabs.add("<amount>");
+      tabs.add("<amount>");
     }
     return CommandWrapper.filterTabs(tabs, args);
   }

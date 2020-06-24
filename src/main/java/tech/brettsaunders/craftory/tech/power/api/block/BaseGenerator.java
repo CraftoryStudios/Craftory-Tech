@@ -6,6 +6,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
+import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
@@ -67,9 +68,8 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   }
 
   /* Update Loop */
-  @Override
-  public void update(long worldTime) {
-    super.update(worldTime);
+  @Ticking(ticks = 1)
+  public void updateGenerator() {
     if (isActive) {
       processTick();
       if (canFinish()) {

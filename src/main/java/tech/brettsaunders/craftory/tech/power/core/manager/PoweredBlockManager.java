@@ -9,15 +9,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -46,7 +43,6 @@ import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
@@ -60,7 +56,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.Soli
 import tech.brettsaunders.craftory.tech.power.core.utils.PoweredBlockType;
 import tech.brettsaunders.craftory.utils.Logger;
 
-public class PoweredBlockManager implements Listener, ITickable {
+public class PoweredBlockManager implements Listener {
 
   public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
@@ -84,7 +80,6 @@ public class PoweredBlockManager implements Listener, ITickable {
     loadedChunkWorlds = new HashMap<>();
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
-    Craftory.tickableBaseManager.addUpdate(this);
   }
 
   public void onEnable() {
@@ -268,21 +263,22 @@ public class PoweredBlockManager implements Listener, ITickable {
         updateAdjacentProviders(event.getLocation(), true, type);
       }
     }
+    Craftory.tickManager.addTickingBlock(poweredBlock);
   }
 
   @EventHandler
   public void onVanillaBlockBreak(BlockBreakEvent event) {
     Block block = event.getBlock();
-    if(block.getType().equals(Material.HOPPER)){
-      updateHopperNeighbour(block,false);
+    if (block.getType().equals(Material.HOPPER)) {
+      updateHopperNeighbour(block, false);
     }
   }
 
   @EventHandler
   public void onVanillaBlockPlace(BlockPlaceEvent event) {
     Block block = event.getBlockPlaced();
-    if(block.getType().equals(Material.HOPPER)){
-      updateHopperNeighbour(block,true);
+    if (block.getType().equals(Material.HOPPER)) {
+      updateHopperNeighbour(block, true);
     }
   }
 
@@ -323,7 +319,7 @@ public class PoweredBlockManager implements Listener, ITickable {
     if (isReceiver(location)) {
       updateAdjacentProviders(location, false, PoweredBlockType.MACHINE);
     }
-    Craftory.tickableBaseManager.removeUpdate(getPoweredBlock(location));
+    Craftory.tickManager.removeTickingBlock(getPoweredBlock(location));
     removePoweredBlock(location);
   }
 
@@ -387,7 +383,8 @@ public class PoweredBlockManager implements Listener, ITickable {
       blockLocation = block.getLocation();
       if (Craftory.customBlockManager.isCustomBlock(blockLocation)) {
         if (poweredBlocks.containsKey(blockLocation) && isProvider(blockLocation)) {
-          getPoweredBlock(blockLocation).setSideCache(face.getOppositeFace(),(setTo)?INTERACTABLEBLOCK.RECIEVER:INTERACTABLEBLOCK.NONE);
+          getPoweredBlock(blockLocation).setSideCache(face.getOppositeFace(),
+              (setTo) ? INTERACTABLEBLOCK.RECIEVER : INTERACTABLEBLOCK.NONE);
         } else if (setTo && Craftory.customBlockManager.getCustomBlockName(blockLocation)
             == CoreHolder.Blocks.POWER_CONNECTOR) { //TODO fix type part - seperate
           switch (type) {
@@ -440,28 +437,29 @@ public class PoweredBlockManager implements Listener, ITickable {
       if (b.getType().equals(Material.HOPPER)) {
         facing = ((Directional) b.getBlockData()).getFacing();
         if (facing.equals(face.getOppositeFace())) {
-          poweredBlock.setSideCache(face,INTERACTABLEBLOCK.HOPPER_IN);
+          poweredBlock.setSideCache(face, INTERACTABLEBLOCK.HOPPER_IN);
         }
-        if(face.equals(BlockFace.DOWN)) {
-          poweredBlock.setSideCache(face,INTERACTABLEBLOCK.HOPPER_OUT);
+        if (face.equals(BlockFace.DOWN)) {
+          poweredBlock.setSideCache(face, INTERACTABLEBLOCK.HOPPER_OUT);
         }
-      } else if(isReceiver(b.getLocation())) {
-        poweredBlock.setSideCache(face,INTERACTABLEBLOCK.RECIEVER);
+      } else if (isReceiver(b.getLocation())) {
+        poweredBlock.setSideCache(face, INTERACTABLEBLOCK.RECIEVER);
       }
     }
   }
 
   private void updateHopperNeighbour(Block block, boolean hopperIsPresent) {
-    BlockFace facingDirection = ((Directional)block.getBlockData()).getFacing();
+    BlockFace facingDirection = ((Directional) block.getBlockData()).getFacing();
     PoweredBlock poweredBlock = poweredBlocks.get(block.getRelative(facingDirection).getLocation());
-    if(poweredBlock != null){
-      poweredBlock.setSideCache(facingDirection.getOppositeFace(), (hopperIsPresent)? INTERACTABLEBLOCK.HOPPER_IN
-          : INTERACTABLEBLOCK.NONE);
+    if (poweredBlock != null) {
+      poweredBlock.setSideCache(facingDirection.getOppositeFace(),
+          (hopperIsPresent) ? INTERACTABLEBLOCK.HOPPER_IN
+              : INTERACTABLEBLOCK.NONE);
       Logger.info("Set block facing to");
     }
     poweredBlock = poweredBlocks.get(block.getRelative(BlockFace.UP).getLocation());
-    if(poweredBlock !=null){
-      poweredBlock.setSideCache(BlockFace.DOWN, (hopperIsPresent)? INTERACTABLEBLOCK.HOPPER_OUT
+    if (poweredBlock != null) {
+      poweredBlock.setSideCache(BlockFace.DOWN, (hopperIsPresent) ? INTERACTABLEBLOCK.HOPPER_OUT
           : INTERACTABLEBLOCK.NONE);
     }
   }
@@ -479,35 +477,6 @@ public class PoweredBlockManager implements Listener, ITickable {
 
   public PowerGridManager getPowerGridManager(Location location) {
     return powerGrids.get(location);
-  }
-
-  @Override
-  public void update(long worldTime) {
-    if (worldTime % CoreHolder.FOUR_TICKS == 0) {
-      //Generate HashMap of loaded chunks in worlds
-      HashSet<Chunk> loadedChunks;
-      for (World world : Bukkit.getWorlds()) {
-        loadedChunks = new HashSet<>(Arrays.asList(world.getLoadedChunks()));
-        loadedChunkWorlds.put(world, loadedChunks);
-      }
-    }
-
-    //If in loaded chunk, call update
-    try {
-      poweredBlocks.forEach(((location, poweredBlock) -> {
-        if (loadedChunkWorlds != null && loadedChunkWorlds.get(location.getWorld())
-            .contains(location.getChunk())) {
-          poweredBlock.update(worldTime);
-        }
-      }));
-    } catch (NullPointerException e) {
-      Logger.debug(e.toString());
-      e.printStackTrace();
-    }
-
-    for (PowerGridManager gridManager : new HashSet<PowerGridManager>(powerGrids.values())) {
-      gridManager.update(worldTime);
-    }
   }
 
   private static class PowerBlockManagerData implements Serializable {

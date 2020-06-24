@@ -6,6 +6,15 @@ public class CoreHolder {
 
   public static final int TICK = 1;
   public static final int FOUR_TICKS = 4;
+  public static final BlockFace[] HOPPER_INTERACT_FACES = {BlockFace.NORTH, BlockFace.EAST,
+      BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
+
+  public enum INTERACTABLEBLOCK {
+    NONE,
+    RECIEVER,
+    HOPPER_IN,
+    HOPPER_OUT
+  }
 
   /* Block Names */
   public static class Blocks {
@@ -38,14 +47,4 @@ public class CoreHolder {
     public static final String GOLD_CORE = "gold_core";
     public static final String IRON_CORE = "iron_core";
   }
-
-  public enum INTERACTABLEBLOCK {
-    NONE,
-    RECIEVER,
-    HOPPER_IN,
-    HOPPER_OUT;
-  }
-
-  public static final BlockFace[] HOPPER_INTERACT_FACES = {BlockFace.NORTH, BlockFace.EAST,
-      BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
 }

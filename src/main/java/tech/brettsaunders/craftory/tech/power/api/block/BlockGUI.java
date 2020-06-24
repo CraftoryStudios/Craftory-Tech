@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.NegativeSpaceFont;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
@@ -30,7 +31,7 @@ public abstract class BlockGUI implements Externalizable {
   public abstract void setupGUI();
 
   /*GUI Methods */
-
+  @Ticking(ticks = 4)
   public void updateInterface() {
     if (inventoryInterface == null || inventoryInterface.getViewers().size() <= 0) {
       return;

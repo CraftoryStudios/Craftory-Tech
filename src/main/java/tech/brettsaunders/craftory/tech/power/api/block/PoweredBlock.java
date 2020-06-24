@@ -15,26 +15,23 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 
 /**
  * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
  */
-public abstract class PoweredBlock extends BlockGUI implements ITickable,
-    IEnergyInfo, Listener, Externalizable {
+public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, Listener,
+    Externalizable {
 
   /* Static Constants Protected */
   protected static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   /* Static Constants Private */
   private static final long serialVersionUID = 10011L;
-  /* Hopper stuff */
-  protected final transient int HOPPER_DELAY = 2;
   /* Per Object Variables Saved */
   protected EnergyStorage energyStorage;
   protected Location location;
@@ -48,8 +45,6 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   /* Per Object Variables Not-Saved */
   protected transient boolean isReceiver;
   protected transient boolean isProvider;
-  protected transient int hopperInCounter = 0;
-  protected transient int hopperOutCounter = 0;
   protected transient Inventory inventoryInterface;
 
   /* Construction */
@@ -102,11 +97,10 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   }
 
   /* Update Loop */
-  @Override
-  public void update(long worldTime) {
-    if (worldTime % CoreHolder.FOUR_TICKS == 0) {
-      updateInterface();
-      if(this instanceof IHopperInteract) processHoppers();
+  @Ticking(ticks = 1)
+  public void updatePoweredBlock() {
+    if (this instanceof IHopperInteract) {
+      processHoppers();
     }
   }
 
@@ -114,12 +108,14 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
     if (inventoryInterface == null) {
       return;
     }
-    HashMap<BlockFace,Integer> inputFaces = ((IHopperInteract) this).getInputFaces();
-    HashMap<BlockFace,Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
+    HashMap<BlockFace, Integer> inputFaces = ((IHopperInteract) this).getInputFaces();
+    HashMap<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
     inputFaces.forEach((face, slot) -> {
-      if(cachedSides.containsKey(face) && cachedSides.get(face).equals(INTERACTABLEBLOCK.HOPPER_IN)){
+      if (cachedSides.containsKey(face) && cachedSides.get(face)
+          .equals(INTERACTABLEBLOCK.HOPPER_IN)) {
         ItemStack stack = inventoryInterface.getItem(slot);
-        ItemStack[] hopperItems = ((Hopper) location.getBlock().getRelative(face).getState()).getInventory().getContents();
+        ItemStack[] hopperItems = ((Hopper) location.getBlock().getRelative(face).getState())
+            .getInventory().getContents();
         for (ItemStack item : hopperItems) {
           if (item == null) {
             continue;
@@ -136,21 +132,23 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
             break;
           }
         }
-        inventoryInterface.setItem(slot,stack);
+        inventoryInterface.setItem(slot, stack);
       }
     });
 
     outputFaces.forEach((face, slot) -> {
-      if(cachedSides.containsKey(face) && cachedSides.get(face).equals(INTERACTABLEBLOCK.HOPPER_OUT)){
+      if (cachedSides.containsKey(face) && cachedSides.get(face)
+          .equals(INTERACTABLEBLOCK.HOPPER_OUT)) {
         ItemStack stack = inventoryInterface.getItem(slot);
-        if(stack!=null){
+        if (stack != null) {
           ItemStack toMove = stack.clone();
           toMove.setAmount(1);
-          Inventory hopperInventory = ((Hopper)  location.getBlock().getRelative(face).getState()).getInventory();
+          Inventory hopperInventory = ((Hopper) location.getBlock().getRelative(face).getState())
+              .getInventory();
           HashMap<Integer, ItemStack> failedItems = hopperInventory.addItem(toMove);
           if (failedItems.isEmpty()) {
             stack.setAmount(stack.getAmount() - 1);
-            inventoryInterface.setItem(slot,stack);
+            inventoryInterface.setItem(slot, stack);
           }
         }
       }
@@ -214,7 +212,7 @@ public abstract class PoweredBlock extends BlockGUI implements ITickable,
   }
 
   public void setSideCache(BlockFace face, INTERACTABLEBLOCK type) {
-    cachedSides.put(face,type);
+    cachedSides.put(face, type);
   }
 
   /* Info Methods */

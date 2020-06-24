@@ -34,17 +34,17 @@ public class BaseElectricFurnace extends BaseMachine implements Externalizable, 
   private static final int OUTPUT_LOCATION = 25;
   private static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
     {
-      put(BlockFace.NORTH,INPUT_LOCATION);
-      put(BlockFace.EAST,INPUT_LOCATION);
-      put(BlockFace.SOUTH,INPUT_LOCATION);
-      put(BlockFace.WEST,INPUT_LOCATION);
-      put(BlockFace.UP,INPUT_LOCATION);
+      put(BlockFace.NORTH, INPUT_LOCATION);
+      put(BlockFace.EAST, INPUT_LOCATION);
+      put(BlockFace.SOUTH, INPUT_LOCATION);
+      put(BlockFace.WEST, INPUT_LOCATION);
+      put(BlockFace.UP, INPUT_LOCATION);
     }
   };
 
   private static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
     {
-      put(BlockFace.DOWN,OUTPUT_LOCATION);
+      put(BlockFace.DOWN, OUTPUT_LOCATION);
     }
   };
 

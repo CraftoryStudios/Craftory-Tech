@@ -78,7 +78,7 @@ public class CustomBlockManager implements Listener {
     Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
   }
 
-  public Block getCustomBlock(String customBlockItemName, Block block){
+  public Block getCustomBlock(String customBlockItemName, Block block) {
     CustomBlockData data = customBlockDataHashMap.get(customBlockItemName);
     block.setType(Material.BROWN_MUSHROOM_BLOCK);
 
@@ -174,7 +174,13 @@ public class CustomBlockManager implements Listener {
   public void onChunkLoad(ChunkLoadEvent e) {
     if (inactiveCustomBlock.containsKey(getChunkID(e.getChunk()))) {
       ArrayList<CustomBlock> customBlocks = inactiveCustomBlock.get(getChunkID(e.getChunk()));
-      customBlocks.forEach(block -> activeCustomBlocks.put(block.location, block));
+      customBlocks.forEach(block -> {
+        activeCustomBlocks.put(block.location, block);
+        if (Craftory.getBlockPoweredManager().isPoweredBlock(block.location)) {
+          Craftory.tickManager
+              .addTickingBlock(Craftory.getBlockPoweredManager().getPoweredBlock(block.location));
+        }
+      });
       inactiveCustomBlock.remove(getChunkID(e.getChunk()));
     }
   }
@@ -187,6 +193,10 @@ public class CustomBlockManager implements Listener {
         if (activeCustomBlocks.containsKey(location)) {
           customBlocks.add(activeCustomBlocks.get(location));
           activeCustomBlocks.remove(location);
+          if (Craftory.getBlockPoweredManager().isPoweredBlock(location)) {
+            Craftory.tickManager
+                .removeTickingBlock(Craftory.getBlockPoweredManager().getPoweredBlock(location));
+          }
         }
       }
       inactiveCustomBlock.put(getChunkID(e.getChunk()), customBlocks);
@@ -221,7 +231,9 @@ public class CustomBlockManager implements Listener {
         CustomBlockInteractEvent customBlockInteractEvent = new CustomBlockInteractEvent(
             e.getAction(), e.getClickedBlock(), e.getBlockFace(), e.getItem(), e.getPlayer());
         Bukkit.getServer().getPluginManager().callEvent(customBlockInteractEvent);
-        if(e.getAction()==Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) e.setCancelled(true); //eeeeee
+        if (e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) {
+          e.setCancelled(true); //eeeeee
+        }
       }
     }
     return;

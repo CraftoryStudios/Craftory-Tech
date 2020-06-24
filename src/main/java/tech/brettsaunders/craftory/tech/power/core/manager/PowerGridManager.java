@@ -7,16 +7,17 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.scheduler.BukkitRunnable;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.api.interfaces.ITickable;
 import tech.brettsaunders.craftory.utils.Logger;
 
-public class PowerGridManager implements Externalizable, ITickable {
+public class PowerGridManager extends BukkitRunnable implements Externalizable {
 
   private static final long serialVersionUID = 10021L;
   public final HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
@@ -28,9 +29,11 @@ public class PowerGridManager implements Externalizable, ITickable {
 
   public PowerGridManager(Location powerConnector) {
     addPowerConnector(powerConnector);
+    Bukkit.getScheduler().runTaskTimer(Craftory.plugin, this, 10, 1);
   }
 
   public PowerGridManager() {
+    Bukkit.getScheduler().runTaskTimer(Craftory.plugin, this, 10, 1);
   }
 
   /**
@@ -135,23 +138,6 @@ public class PowerGridManager implements Externalizable, ITickable {
 
   public int getGridSize() {
     return powerConnectors.size();
-  }
-
-
-  public void update(long worldTime) {
-    //Logger.info(cells.size() + " " + generators.size() + " " + machines.size());
-    int needed = whatDoTheyNeed();
-    int cellCapacity = calculateStorageSpace();
-    int produced = calculateEnergyProduced(needed + cellCapacity);
-    if (needed > produced) {
-      produced += raidTheBank(needed - produced);
-    }
-    if (produced > needed) {
-      int extra = giveThePeopleWhatTheyWant(produced);
-      fillTheBanks(extra);
-    } else {
-      shareThisAmongstThePeople(produced);
-    }
   }
 
   private int calculateStorageSpace() {
@@ -342,4 +328,20 @@ public class PowerGridManager implements Externalizable, ITickable {
     blockConnections.put(connector, temp);
   }
 
+  @Override
+  public void run() {
+    //Logger.info(cells.size() + " " + generators.size() + " " + machines.size());
+    int needed = whatDoTheyNeed();
+    int cellCapacity = calculateStorageSpace();
+    int produced = calculateEnergyProduced(needed + cellCapacity);
+    if (needed > produced) {
+      produced += raidTheBank(needed - produced);
+    }
+    if (produced > needed) {
+      int extra = giveThePeopleWhatTheyWant(produced);
+      fillTheBanks(extra);
+    } else {
+      shareThisAmongstThePeople(produced);
+    }
+  }
 }

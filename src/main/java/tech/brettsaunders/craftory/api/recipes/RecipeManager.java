@@ -36,13 +36,11 @@ public class RecipeManager implements Listener {
       //Add ShapedRecipe
       NamespacedKey namespacedKey = new NamespacedKey(Craftory.plugin, recipe);
       ShapedRecipe shapedRecipe = null;
-      try{
+      try {
         shapedRecipe = new ShapedRecipe(namespacedKey, result);
       } catch (Exception e) {
         Logger.info("THIS IS BROKE: " + recipe + "  " + result.getType().toString());
       }
-
-
 
       ConfigurationSection sectionIn = recipes.getConfigurationSection(recipe + ".ingredients");
       String[] recipeShape = new String[3];
