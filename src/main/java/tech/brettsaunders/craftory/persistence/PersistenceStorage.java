@@ -3,6 +3,7 @@ package tech.brettsaunders.craftory.persistence;
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import lombok.NonNull;
@@ -10,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.persistence.adapters.DataAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.HashMapAdapter;
+import tech.brettsaunders.craftory.persistence.adapters.HashSetAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.IntegerAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.ItemStackAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.LocationAdapter;
@@ -34,6 +36,7 @@ public class PersistenceStorage {
         registerDataConverter(Long.class, new LongAdapter(), false);
         registerDataConverter(HashMap.class, new HashMapAdapter(), false);
         registerDataConverter(Location.class, new LocationAdapter(), false);
+        registerDataConverter(HashSet.class, new HashSetAdapter(), false);
 
         interfaceConverters = new HashMap<>();
         registerInterfaceConverter(ItemStack.class, new ItemStackAdapter(), false);
