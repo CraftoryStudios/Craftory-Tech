@@ -1,13 +1,14 @@
 package tech.brettsaunders.craftory.api.blocks;
 
 
-import de.tr7zw.changeme.nbtapi.NBTCompound;
 import lombok.Getter;
 import org.bukkit.Location;
+import tech.brettsaunders.craftory.persistence.Persistent;
 
 @Getter
 public class CustomBlock {
 
+  @Persistent
   String blockName;
   Location location;
 
@@ -16,7 +17,4 @@ public class CustomBlock {
     this.blockName = blockName;
   }
 
-  public void writeDataFile(NBTCompound nbtCompound) {
-    nbtCompound.setString("BLOCK_NAME", blockName);
-  }
 }

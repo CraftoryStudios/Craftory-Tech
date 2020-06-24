@@ -98,7 +98,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
 
   /* Update Loop */
   @Ticking(ticks = 8)
-  private void processHoppers() {
+  public void processHoppers() {
     if (!(this instanceof IHopperInteract)) {
       return;
     }

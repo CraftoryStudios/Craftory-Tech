@@ -8,6 +8,8 @@ import java.util.logging.Level;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -170,6 +172,20 @@ public class Utilities {
   private static void drawBanner(final String message) {
     Bukkit.getServer().getConsoleSender().sendMessage(
         ChatColor.translateAlternateColorCodes('&', message));
+  }
+
+  public static String getRegionID(Chunk chunk) {
+    int regionX = chunk.getX() >> 5;
+    int regionZ = chunk.getZ() >> 5;
+    return "r." + regionX + "," + regionZ + ".nbt";
+  }
+
+  public static String getChunkID(Chunk chunk) {
+    return chunk.getX() + "," + chunk.getZ();
+  }
+
+  public static String getLocationID(Location location) {
+    return location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ();
   }
 
   public static String rawToPrefixed(Integer energy) {
