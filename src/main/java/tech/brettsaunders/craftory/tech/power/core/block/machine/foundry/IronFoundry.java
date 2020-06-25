@@ -7,7 +7,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseFoundry;
 public class IronFoundry extends BaseFoundry {
 
   /* Static Constants Private */
-  private static final long serialVersionUID = 10019L;
   private static final byte C_LEVEL = 0;
 
   /* Construction */

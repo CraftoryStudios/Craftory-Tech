@@ -12,7 +12,7 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
-import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManagerV2;
+import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.OrePopulator;
@@ -24,7 +24,7 @@ public final class Craftory extends JavaPlugin {
   public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/4305987a904a41eb68d2eb618c0cf640b46d13b6.zip";
   public static final String HASH = "4305987a904a41eb68d2eb618c0cf640b46d13b6";
 
-  public static PowerConnectorManager powerConnectorManager = null;
+  public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
   public static Craftory plugin = null;
   public static CustomBlockManager customBlockManager;
@@ -32,15 +32,12 @@ public final class Craftory extends JavaPlugin {
   public static FileConfiguration customBlocksConfig;
   public static FileConfiguration customRecipeConfig;
   public static CustomBlockTickManager tickManager;
+  public static PowerGridManager powerGridManager;
+
   private static File customItemConfigFile;
   private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
-  private static PowerGridManagerV2 blockPoweredManager = null;
   private static OrePopulator orePopulator;
-
-  public static PowerGridManagerV2 getBlockPoweredManager() {
-    return blockPoweredManager;
-  }
 
   @Override
   public void onEnable() {
@@ -68,7 +65,7 @@ public final class Craftory extends JavaPlugin {
     customBlockManager = new CustomBlockManager();
     customBlockManager.onEnable();
     new RecipeManager();
-    blockPoweredManager = new PowerGridManagerV2();
+    powerGridManager = new PowerGridManager();
     powerConnectorManager = new PowerConnectorManager();
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     Utilities.startMetrics();

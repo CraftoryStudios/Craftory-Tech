@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
@@ -37,44 +38,42 @@ public class PowerConnectorManager implements Listener {
     if (CustomItemManager.matchCustomItemName(event.getItem(), CoreHolder.Items.WRENCH)
         && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
       //Check Power Connector
-      if (Craftory.customBlockManager.isCustomBlockOfType(event.getClickedBlock().getLocation(),
+      final Location location = event.getClickedBlock().getLocation();
+      if (Craftory.customBlockManager.isCustomBlockOfType(location,
           CoreHolder.Blocks.POWER_CONNECTOR)) {
         if (!formingConnection.containsKey(event.getPlayer().getUniqueId())) {
           //First Power Connector selected
-          if (Craftory.getBlockPoweredManager()
-              .getPowerGridManager(event.getClickedBlock().getLocation()) == null) {
+          if (Craftory.powerGridManager.getPowerGrid(location) == null) {
             return;
           }
           formingConnection
-              .put(event.getPlayer().getUniqueId(), event.getClickedBlock().getLocation());
+              .put(event.getPlayer().getUniqueId(), location);
           event.getPlayer().sendMessage("Click Second Power Connector To Form Connection");
         } else {
           //Locations
-          Location toLoc = event.getClickedBlock().getLocation();
+          Location toLoc = location;
           Location fromLoc = formingConnection.get(event.getPlayer().getUniqueId());
           //Second Power Connector selected
-          PowerGridManager powerGridManagerTo = Craftory.getBlockPoweredManager()
-              .getPowerGridManager(toLoc);
-          PowerGridManager powerGridManagerFrom = Craftory.getBlockPoweredManager()
-              .getPowerGridManager(fromLoc);
+          PowerGrid powerGridTo = Craftory.powerGridManager.getPowerGrid(toLoc);
+          PowerGrid powerGridFrom = Craftory.powerGridManager.getPowerGrid(fromLoc);
           //Both have manager and not same power connector
-          if (powerGridManagerFrom != null && powerGridManagerTo != null
+          if (powerGridFrom != null && powerGridTo != null
               && !fromLoc.equals(toLoc)) {
             //Form Graphical Connection
             formingConnection.remove(event.getPlayer().getUniqueId());
-            powerGridManagerFrom.addPowerConnectorConnection(fromLoc, toLoc);
+            powerGridFrom.addPowerConnectorConnection(fromLoc, toLoc);
             //Merge Managers
-            if (powerGridManagerFrom != powerGridManagerTo) {
-              if (powerGridManagerFrom.getGridSize() >= powerGridManagerTo.getGridSize()) {
-                powerGridManagerFrom.combineGrid(powerGridManagerTo);
-                powerGridManagerFrom.addPowerConnectorConnection(fromLoc, toLoc);
-                Craftory.getBlockPoweredManager()
-                    .mergeGrids(powerGridManagerTo, powerGridManagerFrom);
+            if (powerGridFrom != powerGridTo) {
+              if (powerGridFrom.getGridSize() >= powerGridTo.getGridSize()) {
+                powerGridFrom.addAll(powerGridTo);
+                powerGridFrom.addPowerConnectorConnection(fromLoc, toLoc);
+                Craftory.powerGridManager
+                    .mergeGrids(powerGridTo, powerGridFrom);
               } else {
-                powerGridManagerTo.combineGrid(powerGridManagerFrom);
-                powerGridManagerTo.addPowerConnectorConnection(fromLoc, toLoc);
-                Craftory.getBlockPoweredManager()
-                    .mergeGrids(powerGridManagerFrom, powerGridManagerTo);
+                powerGridTo.addAll(powerGridFrom);
+                powerGridTo.addPowerConnectorConnection(fromLoc, toLoc);
+                Craftory.powerGridManager
+                    .mergeGrids(powerGridFrom, powerGridTo);
               }
 
             }
@@ -84,20 +83,20 @@ public class PowerConnectorManager implements Listener {
           } else {
             formingConnection.remove(event.getPlayer().getUniqueId());
             Logger.info("Failed to make connection");
-            Logger.debug((powerGridManagerFrom == null) + "");
-            Logger.debug((powerGridManagerTo == null) + "");
+            Logger.debug((powerGridFrom == null) + "");
+            Logger.debug((powerGridTo == null) + "");
             Logger.debug((fromLoc == toLoc) + "");
           }
         }
       } else if (
-          Craftory.getBlockPoweredManager().isPoweredBlock(event.getClickedBlock().getLocation())
+          PoweredBlockUtils.isPoweredBlock(location)
               && formingConnection.containsKey(event.getPlayer().getUniqueId())) {
 
-        Location toLoc = event.getClickedBlock().getLocation();
+        Location toLoc = location;
         Location fromLoc = formingConnection.get(event.getPlayer().getUniqueId());
-        PowerGridManager gridManager = Craftory.getBlockPoweredManager()
-            .getPowerGridManager(fromLoc);
-        PoweredBlock block = Craftory.getBlockPoweredManager().getPoweredBlock(toLoc);
+        PowerGrid gridManager = Craftory.powerGridManager
+            .getPowerGrid(fromLoc);
+        PoweredBlock block = PoweredBlockUtils.getPoweredBlock(toLoc);
         if (block instanceof BaseMachine) {
           gridManager.addMachine(fromLoc, toLoc);
         } else if (block instanceof BaseGenerator) {
@@ -120,8 +119,8 @@ public class PowerConnectorManager implements Listener {
   }
 
   private void generatorPowerBeams() {
-    for (PowerGridManager gridManager : Craftory.getBlockPoweredManager().powerGridManagers) {
-      gridManager.powerConnectors.forEach((from, value) -> value.forEach((to) -> {
+    for (PowerGrid powerGrid : Craftory.powerGridManager.getPowerGrids().values()) {
+      powerGrid.getPowerConnectors().forEach((from, value) -> value.forEach((to) -> {
         formBeam(from, to);
       }));
     }

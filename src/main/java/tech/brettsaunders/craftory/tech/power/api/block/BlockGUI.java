@@ -15,7 +15,6 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 public abstract class BlockGUI extends CustomBlock {
 
   /* Static Constants */
-  private static final long serialVersionUID = 10009L;
   private final ArrayList<IGUIComponent> components = new ArrayList<>();
   protected HashSet<Integer> interactableSlots = new HashSet<>();
   /* Per Object Variables */

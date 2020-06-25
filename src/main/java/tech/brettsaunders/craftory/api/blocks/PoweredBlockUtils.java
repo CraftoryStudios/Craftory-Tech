@@ -128,14 +128,13 @@ public class PoweredBlockUtils {
           poweredBlock.setSideCache(face.getOppositeFace(),
               (setTo) ? INTERACTABLEBLOCK.RECIEVER : INTERACTABLEBLOCK.NONE);
         } else if (setTo && Craftory.customBlockManager.getCustomBlockName(blockLocation)
-            == CoreHolder.Blocks.POWER_CONNECTOR) { //TODO fix type part - seperate
-          //TODO PowerGrid
+            == CoreHolder.Blocks.POWER_CONNECTOR) {
           if (isMachine(customBlock)) {
-            powerGrids.get(location).addMachine(location, blockLocation);
+            Craftory.powerGridManager.getPowerGrids().get(location).addMachine(location, blockLocation);
           } else if (isGenerator(customBlock)) {
-            powerGrids.get(location).addGenerator(location, blockLocation);
+            Craftory.powerGridManager.getPowerGrids().get(location).addGenerator(location, blockLocation);
           } else if (isCell(customBlock)) {
-            powerGrids.get(location).addPowerCell(location, blockLocation);
+            Craftory.powerGridManager.getPowerGrids().get(location).addPowerCell(location, blockLocation);
           }
 
         }
@@ -145,7 +144,7 @@ public class PoweredBlockUtils {
 
   public static void updateHopperNeighbour(Block block, boolean hopperIsPresent) {
     BlockFace facingDirection = ((Directional) block.getBlockData()).getFacing();
-    PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock((block.getRelative(facingDirection).getLocation());
+    PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock((block.getRelative(facingDirection).getLocation()));
     if (poweredBlock != null) {
       poweredBlock.setSideCache(facingDirection.getOppositeFace(),
           (hopperIsPresent) ? INTERACTABLEBLOCK.HOPPER_IN

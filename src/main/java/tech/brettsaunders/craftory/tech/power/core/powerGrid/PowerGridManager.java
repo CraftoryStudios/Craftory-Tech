@@ -1,39 +1,88 @@
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import org.bukkit.Bukkit;
+import java.util.List;
+import lombok.Getter;
 import org.bukkit.Location;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.block.BlockFace;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
+import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
+import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.utils.Logger;
 
-public class PowerGridManager extends BukkitRunnable implements Externalizable {
+public class PowerGridManager implements Listener {
 
-  private static final long serialVersionUID = 10021L;
-  public final HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
-  protected final HashMap<Location, HashSet<Location>> blockConnections = new HashMap<>();
-  private HashSet<Location> cells = new HashSet<>();
-  private HashSet<Location> generators = new HashSet<>();
-  private HashSet<Location> machines = new HashSet<>();
-  private int machinesNeedingEnergy = 0;
-
-  public PowerGridManager(Location powerConnector) {
-    addPowerConnector(powerConnector);
-    Bukkit.getScheduler().runTaskTimer(Craftory.plugin, this, 10, 1);
-  }
+  @Getter
+  private final HashMap<Location, PowerGrid> powerGrids;
 
   public PowerGridManager() {
-    Bukkit.getScheduler().runTaskTimer(Craftory.plugin, this, 10, 1);
+    powerGrids = new HashMap<>();
+    Craftory.plugin.getServer().getPluginManager()
+        .registerEvents(this, Craftory.plugin);
+  }
+
+  /* Events */
+  @EventHandler
+  public void onPoweredBlockBreak(CustomBlockBreakEvent event) {
+    Location location = event.getLocation();
+    if (powerGrids.containsKey(location)) { //GRID / Power connector stuff
+      Craftory.powerConnectorManager.destroyBeams(location);
+      if (powerGrids.get(location).getGridSize() > 1) {
+        List<PowerGrid> newGrids = splitGrids(location,  powerGrids.get(location));
+        for (Location l : powerGrids.get(location).getPowerConnectors().keySet()) {
+          powerGrids.remove(l);
+        }
+        for (PowerGrid grid : newGrids) {
+          for (Location loc : grid.getPowerConnectors().keySet()) {
+            powerGrids.put(loc, grid);
+          }
+        }
+      }
+      powerGrids.remove(location);
+    }
+    if (PoweredBlockUtils.isPoweredBlock(location)) {
+      Craftory.powerConnectorManager.destroyBeams(location); //Destroy any beams
+    }
+  }
+
+  /* Grid Splitting */
+  public void mergeGrids(PowerGrid old, PowerGrid merged) {
+    for (HashMap.Entry<Location, PowerGrid> entry : powerGrids.entrySet()) {
+      if (entry.getValue().equals(old)) {
+        powerGrids.put(entry.getKey(), merged);
+      }
+    }
+  }
+
+  private void getAdjacentPowerBlocks(Location location, PowerGrid powerGrid) {
+    Location blockLocation;
+    for (BlockFace face : Utilities.faces) {
+      blockLocation = location.getBlock().getRelative(face).getLocation();
+      if (PoweredBlockUtils.isPoweredBlock(blockLocation)) {
+        PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock(blockLocation);
+        if (PoweredBlockUtils.isCell(poweredBlock)) {
+          powerGrid.addPowerCell(location, blockLocation);
+        } else if (PoweredBlockUtils.isGenerator(poweredBlock)) {
+          powerGrid.addGenerator(location, blockLocation);
+        } else if (PoweredBlockUtils.isMachine(poweredBlock)) {
+          powerGrid.addMachine(location, blockLocation);
+        }
+      }
+    }
+  }
+
+  private void addPowerGrid(Location location, PowerGrid manger) {
+    powerGrids.put(location, manger);
+  }
+
+  public PowerGrid getPowerGrid(Location location) {
+    return powerGrids.get(location);
   }
 
   /**
@@ -43,10 +92,10 @@ public class PowerGridManager extends BukkitRunnable implements Externalizable {
    * @param breakPoint The location of the broken power connector
    * @return A list of the individual grids (could just be one)
    */
-  public ArrayList<PowerGridManager> splitGrids(Location breakPoint) {
-    ArrayList<PowerGridManager> managers = new ArrayList<>();
-    blockConnections.remove(breakPoint);
-    HashSet<Location> neighbours = powerConnectors.remove(breakPoint);
+  public ArrayList<PowerGrid> splitGrids(Location breakPoint, PowerGrid powerGrid) {
+    ArrayList<PowerGrid> managers = new ArrayList<>();
+    powerGrid.getBlockConnections().remove(breakPoint);
+    HashSet<Location> neighbours = powerGrid.getPowerConnectors().remove(breakPoint);
     Logger.info("connector had: " + neighbours.size());
     HashSet<Location> closedSet = new HashSet<>();
     for (Location location : neighbours) { //Loop through all the neighbours of broken connector
@@ -56,12 +105,12 @@ public class PowerGridManager extends BukkitRunnable implements Externalizable {
       if (!closedSet.contains(location)) {
         closedSet.add(location);
         Logger.info("making new grid");
-        PowerGridManager grid = new PowerGridManager();
-        HashSet<Location> connections = powerConnectors.get(location);
+        PowerGrid grid = new PowerGrid();
+        HashSet<Location> connections = powerGrid.getPowerConnectors().get(location);
         if (connections != null) {
           connections.remove(breakPoint);
-          grid.powerConnectors.put(location, connections);
-          grid.blockConnections.put(location, blockConnections.get(location));
+          grid.getPowerConnectors().put(location, connections);
+          grid.getBlockConnections().put(location, powerGrid.getBlockConnections().get(location));
           ArrayList<Location> openList = new ArrayList<>(connections);
           Location connection;
           while (openList.size() > 0) { //Add all its connections to the grid
@@ -71,15 +120,15 @@ public class PowerGridManager extends BukkitRunnable implements Externalizable {
             }
             closedSet.add(connection);
             //Add it to the grid
-            if (blockConnections.containsKey(connection)) {
-              grid.blockConnections.put(connection, blockConnections.get(connection));
+            if (powerGrid.getBlockConnections().containsKey(connection)) {
+              grid.getBlockConnections().put(connection, powerGrid.getBlockConnections().get(connection));
             }
-            HashSet<Location> connectionConnections = powerConnectors.get(connection);
+            HashSet<Location> connectionConnections = powerGrid.getBlockConnections().get(connection);
             if (connectionConnections == null) {
               continue;
             }
             connectionConnections.remove(breakPoint);
-            grid.powerConnectors.put(connection, connectionConnections);
+            grid.getPowerConnectors().put(connection, connectionConnections);
             //Continue traversal
             connectionConnections.forEach(loc -> {
               if (!closedSet.contains(loc)) {
@@ -96,252 +145,6 @@ public class PowerGridManager extends BukkitRunnable implements Externalizable {
     return managers;
   }
 
-  private void findPoweredBlocks() {
-    cells = new HashSet<>();
-    generators = new HashSet<>();
-    machines = new HashSet<>();
-    PoweredBlock block;
-    Logger.info("grid has " + blockConnections.size() + " machine connections");
-    for (HashSet<Location> set : blockConnections.values()) {
-      if (set == null) {
-        continue;
-      }
-      for (Location location : set) {
-        if (location == null) {
-          continue;
-        }
-        block = Craftory.getBlockPoweredManager().getPoweredBlock(location);
-        if (block instanceof BaseCell) {
-          cells.add(location);
-        } else if (block instanceof BaseGenerator) {
-          generators.add(location);
-        } else if (block instanceof BaseMachine) {
-          machines.add(location);
-        } else {
-          Logger.info("Machine is not one of known types");
-        }
-      }
-    }
-  }
-
-  public HashSet<Location> getCells() {
-    return cells;
-  }
-
-  public HashSet<Location> getGenerators() {
-    return generators;
-  }
-
-  public HashSet<Location> getMachines() {
-    return machines;
-  }
-
-  public int getGridSize() {
-    return powerConnectors.size();
-  }
-
-  private int calculateStorageSpace() {
-    int amount = 0;
-    HashSet<Location> toRemove = new HashSet<>();
-    for (Location loc : cells) {
-      BaseCell cell = (BaseCell) Craftory.getBlockPoweredManager().getPoweredBlock(loc);
-      if (cell == null) {
-        toRemove.add(loc);
-        continue;
-      }
-      amount += cell.getEnergySpace();
-    }
-    cells.removeAll(toRemove);
-    return amount;
-  }
-
-  /* Calculates how much energy the generators produced this tick */
-  private int calculateEnergyProduced(int limit) {
-    int amount = 0;
-    int e;
-    HashSet<Location> toRemove = new HashSet<>();
-    for (Location loc : generators) {
-      BaseGenerator generator = (BaseGenerator) Craftory.getBlockPoweredManager()
-          .getPoweredBlock(loc);
-      if (generator == null) {
-        toRemove.add(loc);
-        continue;
-      }
-      e = generator.getEnergyAvailable();
-      if (amount + e > limit) {
-        e = limit - amount;
-      }
-      e = generator.retrieveEnergy(e);
-      amount += e;
-      if (amount == limit) {
-        break;
-      }
-    }
-    generators.removeAll(toRemove);
-    return amount;
-  }
-
-  /* Calculates how much energy the machines can take this tick */
-  private int whatDoTheyNeed() {
-    machinesNeedingEnergy = 0;
-    int amount = 0;
-    int e;
-    HashSet<Location> toRemove = new HashSet<>();
-    for (Location loc : machines) {
-      BaseMachine machine = (BaseMachine) Craftory.getBlockPoweredManager().getPoweredBlock(loc);
-      if (machine == null) {
-        toRemove.add(loc);
-        continue;
-      }
-      e = machine.getEnergySpace();
-      if (e > 0) {
-        amount += e;
-        machinesNeedingEnergy += 1;
-      }
-    }
-    machines.removeAll(toRemove);
-    return amount;
-  }
-
-  /**
-   * Attempts to gather energy from storage
-   *
-   * @param goal amount of energy to gather
-   * @return amount gathered
-   */
-  private int raidTheBank(int goal) {
-    int amount = 0;
-    for (Location loc : cells) {
-      BaseCell cell = (BaseCell) Craftory.getBlockPoweredManager().getPoweredBlock(loc);
-      amount += cell.retrieveEnergy((goal - amount));
-      if (amount >= goal) {
-        break;
-      }
-    }
-    return amount;
-  }
-
-  /**
-   * Puts excess energy into storage
-   *
-   * @param amount the amount of excess energy
-   */
-  private void fillTheBanks(int amount) {
-    for (Location loc : cells) {
-      BaseCell cell = (BaseCell) Craftory.getBlockPoweredManager().getPoweredBlock(loc);
-      amount -= cell.receiveEnergy(amount, false);
-    }
-  }
-
-  /* Provides the machines with energy.
-   * Used when there is enough for all the machines  */
-  private int giveThePeopleWhatTheyWant(int amount) {
-    for (Location loc : machines) {
-      BaseMachine machine = (BaseMachine) Craftory.getBlockPoweredManager().getPoweredBlock(loc);
-      amount -= machine.receiveEnergy(amount, false);
-    }
-    return amount;
-  }
-
-  /* Shares the available energy amongst the machines
-   * Used when there is not enough for all machines  */
-  private void shareThisAmongstThePeople(int amount) {
-    int allotment = amount;
-    if (machinesNeedingEnergy > 1) {
-      allotment = amount / machinesNeedingEnergy;
-    }
-    int c = 0;
-    while (amount > 1 && c < 3) {
-      c += 1;
-      for (Location loc : machines) {
-        BaseMachine machine = (BaseMachine) Craftory.getBlockPoweredManager().getPoweredBlock(loc);
-        amount -= machine.receiveEnergy(allotment, false);
-      }
-    }
-  }
-
-  @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    out.writeObject(cells);
-    out.writeObject(generators);
-    out.writeObject(machines);
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    cells = (HashSet<Location>) in.readObject();
-    generators = (HashSet<Location>) in.readObject();
-    machines = (HashSet<Location>) in.readObject();
-  }
-
-  public void combineGrid(PowerGridManager other) {
-    cells.addAll(other.getCells());
-    generators.addAll(other.getGenerators());
-    machines.addAll(other.getMachines());
-    powerConnectors.putAll(other.powerConnectors);
-    blockConnections.putAll(other.blockConnections);
-  }
 
 
-  /* Common Methods */
-  public void addPowerConnector(Location location) {
-    this.powerConnectors.put(location, new HashSet<>());
-  }
-
-  public void addPowerConnectorConnection(Location from, Location to) {
-    HashSet<Location> temp = powerConnectors.get(from);
-    if (temp == null) {
-      temp = new HashSet<>();
-    }
-    temp.add(to);
-    powerConnectors.put(from, temp);
-    temp = powerConnectors.get(to);
-    if (temp == null) {
-      temp = new HashSet<>();
-    }
-    temp.add(from);
-    powerConnectors.put(to, temp);
-  }
-
-  public void addPowerCell(Location connector, Location cellLocation) {
-    cells.add(cellLocation);
-    addBlockConnection(connector, cellLocation);
-  }
-
-  public void addMachine(Location connector, Location machineLocation) {
-    machines.add(machineLocation);
-    addBlockConnection(connector, machineLocation);
-  }
-
-  public void addGenerator(Location connector, Location generatorLocation) {
-    generators.add(generatorLocation);
-    addBlockConnection(connector, generatorLocation);
-  }
-
-  private void addBlockConnection(Location connector, Location machine) {
-    HashSet<Location> temp = blockConnections.get(connector);
-    if (temp == null) {
-      temp = new HashSet<>();
-    }
-    temp.add(machine);
-    blockConnections.put(connector, temp);
-  }
-
-  @Override
-  public void run() {
-    //Logger.info(cells.size() + " " + generators.size() + " " + machines.size());
-    int needed = whatDoTheyNeed();
-    int cellCapacity = calculateStorageSpace();
-    int produced = calculateEnergyProduced(needed + cellCapacity);
-    if (needed > produced) {
-      produced += raidTheBank(needed - produced);
-    }
-    if (produced > needed) {
-      int extra = giveThePeopleWhatTheyWant(produced);
-      fillTheBanks(extra);
-    } else {
-      shareThisAmongstThePeople(produced);
-    }
-  }
 }

@@ -12,7 +12,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 public class DiamondCell extends BaseCell {
 
   /* Static Constants Private */
-  private static final long serialVersionUID = 10012L;
   private static final byte C_LEVEL = 2;
   private static final int C_OUTPUT_AMOUNT = 8000;
 

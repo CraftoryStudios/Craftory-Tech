@@ -12,7 +12,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 public class GoldCell extends BaseCell {
 
   /* Static Constants Private */
-  private static final long serialVersionUID = 10014L;
   private static final byte C_LEVEL = 1;
   private static final int C_OUTPUT_AMOUNT = 800;
 

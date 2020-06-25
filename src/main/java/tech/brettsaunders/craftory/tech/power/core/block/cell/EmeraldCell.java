@@ -12,7 +12,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 public class EmeraldCell extends BaseCell {
 
   /* Static Constants Private */
-  private static final long serialVersionUID = 10013L;
   private static final byte C_LEVEL = 3;
   private static final int C_OUTPUT_AMOUNT = 32000;
 

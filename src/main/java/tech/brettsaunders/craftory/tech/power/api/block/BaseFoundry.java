@@ -25,7 +25,6 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   protected static final int[] ENERGY_CONSUMPTION_LEVEL = {20, 30, 50, 100};
   protected static final int[] CAPACITY_LEVEL = {5000, 10000, 25000, 50000};
   /* Static Constants Private */
-  private static final long serialVersionUID = 10023L;
   private static final int INPUT_LOCATION1 = 12;
   private static final int INPUT_LOCATION2 = 30;
   private static final int OUTPUT_LOCATION = 25;
