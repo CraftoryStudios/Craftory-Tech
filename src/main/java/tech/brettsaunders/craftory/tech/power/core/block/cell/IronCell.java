@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.cell;
 
 import org.bukkit.Location;
+import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 
 /**
@@ -17,7 +18,7 @@ public class IronCell extends BaseCell {
 
   /* Construction */
   public IronCell(Location location) {
-    super(location, C_LEVEL, C_OUTPUT_AMOUNT);
+    super(location, Blocks.IRON_CELL, C_LEVEL, C_OUTPUT_AMOUNT);
   }
 
   /* Saving, Setup and Loading */

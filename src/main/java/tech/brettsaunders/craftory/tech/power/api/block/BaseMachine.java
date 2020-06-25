@@ -1,24 +1,22 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
+import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
-public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver, Externalizable {
+public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver {
 
   /* Static Constants Protected */
 
   /* Static Constants Private */
   private static final long serialVersionUID = 10007L;
   /* Per Object Variables Saved */
+  @Persistent
   protected int maxReceive;
 
   /* Per Object Variables Not-Saved */
@@ -29,8 +27,8 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   protected transient int tickCount = 0;
 
   /* Construction */
-  public BaseMachine(Location location, byte level, int maxReceive) {
-    super(location, level);
+  public BaseMachine(Location location, String blockName, byte level, int maxReceive) {
+    super(location, blockName, level);
     this.maxReceive = maxReceive;
     energyStorage.setMaxReceive(maxReceive);
     init();
@@ -76,18 +74,6 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   protected abstract boolean validateContentes();
 
   protected abstract void updateSlots();
-
-  @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    super.writeExternal(out);
-    out.writeInt(maxReceive);
-  }
-
-  @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    super.readExternal(in);
-    maxReceive = in.readInt();
-  }
 
   /* IEnergyReceiver */
   @Override

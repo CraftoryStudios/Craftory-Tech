@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace;
 
 import org.bukkit.Location;
+import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseElectricFurnace;
 
 public class DiamondElectricFurnace extends BaseElectricFurnace {
@@ -11,7 +12,7 @@ public class DiamondElectricFurnace extends BaseElectricFurnace {
 
   /* Construction */
   public DiamondElectricFurnace(Location location) {
-    super(location, C_LEVEL);
+    super(location, Blocks.DIAMOND_ELECTRIC_FURNACE,  C_LEVEL);
   }
 
   /* Saving, Setup and Loading */

@@ -1,25 +1,21 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
+import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
-public abstract class BaseGenerator extends BaseProvider implements Externalizable {
+public abstract class BaseGenerator extends BaseProvider {
 
   /* Static Constants Protected */
   protected static final int CAPACITY_BASE = 40000;
   protected static final double[] CAPACITY_LEVEL = {1, 1.5, 2, 3};
-  /* Static Constants Private */
-  private static final long serialVersionUID = 10006L;
   /* Per Object Variables Saved */
+  @Persistent
   protected int fuelRE;
 
   /* Per Object Variables Not-Saved */
@@ -30,8 +26,8 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
   protected transient boolean wasActive;
 
   /* Construction */
-  public BaseGenerator(Location location, byte level, int outputAmount) {
-    super(location, level, outputAmount);
+  public BaseGenerator(Location location, String blockName, byte level, int outputAmount) {
+    super(location, blockName, level, outputAmount);
     energyStorage = new EnergyStorage((int) (CAPACITY_BASE * CAPACITY_LEVEL[level]));
     init();
     setupGUI();
@@ -51,20 +47,6 @@ public abstract class BaseGenerator extends BaseProvider implements Externalizab
     isActive = false;
     isProvider = true;
     runningContainer = new VariableContainer<>(false);
-  }
-
-  @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    super.writeExternal(out);
-    out.writeInt(fuelRE);
-    out.writeObject(energyStorage);
-  }
-
-  @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    super.readExternal(in);
-    fuelRE = in.readInt();
-    energyStorage = (EnergyStorage) in.readObject();
   }
 
   /* Update Loop */

@@ -1,9 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.bukkit.Location;
@@ -18,29 +14,33 @@ import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
+import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
 /**
  * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
  */
-public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, Listener,
-    Externalizable {
+public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, Listener {
 
   /* Static Constants Protected */
   protected static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
-  /* Static Constants Private */
-  private static final long serialVersionUID = 10011L;
   /* Per Object Variables Saved */
+  @Persistent
   protected EnergyStorage energyStorage;
-  protected Location location;
+  @Persistent
   protected int level;
+  @Persistent
   protected HashMap<BlockFace, INTERACTABLEBLOCK> cachedSides;
   /* Hopper control variables */
-  protected ItemStack[] inputSlots = {}; //The ItemStacks of the inputs
+  @Persistent
+  protected ArrayList<ItemStack> inputSlots = new ArrayList<>(); //The ItemStacks of the inputs
+  @Persistent
   protected ArrayList<Integer> inputLocations = new ArrayList<>();  //The inventory locations of inputs
-  protected ItemStack[] outputSlots = {}; //The ItemStacks of the outputs
+  @Persistent
+  protected ArrayList<ItemStack> outputSlots = new ArrayList<>(); //The ItemStacks of the outputs
+  @Persistent
   protected ArrayList<Integer> outputLocations = new ArrayList<>(); //The inventory locations of outputs
   /* Per Object Variables Not-Saved */
   protected transient boolean isReceiver;
@@ -48,9 +48,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   protected transient Inventory inventoryInterface;
 
   /* Construction */
-  public PoweredBlock(Location location, byte level) {
-    super();
-    this.location = location;
+  public PoweredBlock(Location location, String blockName, byte level) {
+    super(location, blockName);
     this.energyStorage = new EnergyStorage(0);
     isReceiver = false;
     isProvider = false;
@@ -65,35 +64,6 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     super();
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
-  }
-
-  @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    out.writeObject(energyStorage);
-    out.writeObject(location);
-    out.writeInt(level);
-    out.writeObject(inputSlots);
-    out.writeObject(inputLocations);
-    out.writeObject(outputSlots);
-    out.writeObject(outputLocations);
-    out.writeObject(cachedSides);
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    energyStorage = (EnergyStorage) in.readObject();
-    location = (Location) in.readObject();
-    level = in.readInt();
-    try {
-      inputSlots = (ItemStack[]) in.readObject();
-      inputLocations = (ArrayList<Integer>) in.readObject();
-      outputSlots = (ItemStack[]) in.readObject();
-      outputLocations = (ArrayList<Integer>) in.readObject();
-      cachedSides = (HashMap<BlockFace, INTERACTABLEBLOCK>) in.readObject();
-    } catch (Exception ignored) {
-    }
-
   }
 
   /* Update Loop */

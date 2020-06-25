@@ -1,9 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.api.font.Font;
@@ -11,18 +7,17 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
-public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, Externalizable {
+public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
 
   protected static final int CAPACITY_BASE = 400000;
   protected static final int[] CAPACITY_LEVEL = {1, 5, 50, 200};
   protected static final int MAX_INPUT = 200;
   protected static final int[] INPUT_LEVEL = {1, 4, 40, 160};
   /* Static Constants */
-  private static final long serialVersionUID = 10004L;
 
   /* Construction */
-  public BaseCell(Location location, byte level, int outputAmount) {
-    super(location, level, outputAmount);
+  public BaseCell(Location location, String blockName, byte level, int outputAmount) {
+    super(location, blockName, level, outputAmount);
     energyStorage = new EnergyStorage(CAPACITY_BASE * CAPACITY_LEVEL[level]);
     isReceiver = true;
     isProvider = true;
@@ -34,18 +29,6 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
     super();
     isReceiver = true;
     isProvider = true;
-  }
-
-  @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    super.writeExternal(out);
-    out.writeObject(energyStorage);
-  }
-
-  @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    super.readExternal(in);
-    energyStorage = (EnergyStorage) in.readObject();
   }
 
   /* IEnergyReceiver */

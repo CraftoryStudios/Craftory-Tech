@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.cell;
 
 import org.bukkit.Location;
+import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 
 /**
@@ -17,7 +18,7 @@ public class EmeraldCell extends BaseCell {
 
   /* Construction */
   public EmeraldCell(Location location) {
-    super(location, C_LEVEL, C_OUTPUT_AMOUNT);
+    super(location, Blocks.EMERALD_CELL, C_LEVEL, C_OUTPUT_AMOUNT);
   }
 
   /* Saving, Setup and Loading */

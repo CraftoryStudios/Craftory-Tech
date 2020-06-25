@@ -2,21 +2,30 @@ package tech.brettsaunders.craftory.persistence;
 
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import lombok.NonNull;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
+import tech.brettsaunders.craftory.persistence.adapters.ArrayListAdapter;
+import tech.brettsaunders.craftory.persistence.adapters.BlockFaceAdapter;
+import tech.brettsaunders.craftory.persistence.adapters.BooleanAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.DataAdapter;
+import tech.brettsaunders.craftory.persistence.adapters.EnergyStorageAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.HashMapAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.HashSetAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.IntegerAdapter;
+import tech.brettsaunders.craftory.persistence.adapters.InteractableBlockAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.ItemStackAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.LocationAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.LongAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.StringAdapter;
+import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.ReflectionUtils;
 
@@ -37,6 +46,11 @@ public class PersistenceStorage {
         registerDataConverter(HashMap.class, new HashMapAdapter(), false);
         registerDataConverter(Location.class, new LocationAdapter(), false);
         registerDataConverter(HashSet.class, new HashSetAdapter(), false);
+        registerDataConverter(EnergyStorage.class, new EnergyStorageAdapter(), false);
+        registerDataConverter(BlockFace.class, new BlockFaceAdapter(), false);
+        registerDataConverter(INTERACTABLEBLOCK.class, new InteractableBlockAdapter(), false);
+        registerDataConverter(ArrayList.class, new ArrayListAdapter(), false);
+        registerDataConverter(Boolean.class, new BooleanAdapter(), false);
 
         interfaceConverters = new HashMap<>();
         registerInterfaceConverter(ItemStack.class, new ItemStackAdapter(), false);
