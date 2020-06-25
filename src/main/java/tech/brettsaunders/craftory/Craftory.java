@@ -21,8 +21,8 @@ import tech.brettsaunders.craftory.world.OrePopulator;
 public final class Craftory extends JavaPlugin {
 
   public static final String VERSION = "0.1.0";
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/4305987a904a41eb68d2eb618c0cf640b46d13b6.zip";
-  public static final String HASH = "4305987a904a41eb68d2eb618c0cf640b46d13b6";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/05d7f631b06ccb9eaff2e6ffb25b3559678f193e.zip";
+  public static final String HASH = "05d7f631b06ccb9eaff2e6ffb25b3559678f193e";
 
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;

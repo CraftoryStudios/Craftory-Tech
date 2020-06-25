@@ -24,8 +24,10 @@ import tech.brettsaunders.craftory.persistence.adapters.InteractableBlockAdapter
 import tech.brettsaunders.craftory.persistence.adapters.ItemStackAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.LocationAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.LongAdapter;
+import tech.brettsaunders.craftory.persistence.adapters.PowerGridAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.StringAdapter;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
+import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.ReflectionUtils;
 
@@ -51,6 +53,7 @@ public class PersistenceStorage {
         registerDataConverter(INTERACTABLEBLOCK.class, new InteractableBlockAdapter(), false);
         registerDataConverter(ArrayList.class, new ArrayListAdapter(), false);
         registerDataConverter(Boolean.class, new BooleanAdapter(), false);
+        registerDataConverter(PowerGrid.class, new PowerGridAdapter(), false);
 
         interfaceConverters = new HashMap<>();
         registerInterfaceConverter(ItemStack.class, new ItemStackAdapter(), false);

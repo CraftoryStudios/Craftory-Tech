@@ -16,12 +16,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
+import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 
 public class PoweredBlockEvents implements Listener {
   private final HashMap<UUID, ArrayList<Boolean>> configuratorData = new HashMap<>();
@@ -32,10 +34,10 @@ public class PoweredBlockEvents implements Listener {
       PoweredBlockUtils.updateAdjacentProviders(e.getLocation(),true);
     }
     if (e.getName().equals(Blocks.POWER_CONNECTOR)) {
-      //TODO PowerGrid
-//      PowerGridManager manager = new PowerGridManager(e.getLocation());
-//      getAdjacentPowerBlocks(e.getLocation(), manager);
-//      addPowerGridManager(e.getLocation(), manager);
+      PowerGrid powerGrid = new PowerGrid();
+      powerGrid.addPowerConnector(e.getLocation());
+      Craftory.powerGridManager.getAdjacentPowerBlocks(e.getLocation(), powerGrid);
+      Craftory.powerGridManager.addPowerGrid(e.getLocation(), powerGrid);
     }
   }
 
@@ -69,7 +71,6 @@ public class PoweredBlockEvents implements Listener {
       return;
     }
     e.setCancelled(true);
-
     //Show power levels
     if (PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) {
       PoweredBlock block = (PoweredBlock) e.getCustomBlock();
@@ -77,11 +78,6 @@ public class PoweredBlockEvents implements Listener {
           "Stored: " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
               + " RE");
     }
-    //TODO PowerGrid
-//    } else if (powerGrids.containsKey(e.getClickedBlock().getLocation())) {
-//      e.getPlayer().sendMessage(powerGrids.get(e.getClickedBlock().getLocation()).toString());
-//      e.getPlayer().sendMessage(powerGrids.values().toString());
-//    }
   }
 
   @EventHandler

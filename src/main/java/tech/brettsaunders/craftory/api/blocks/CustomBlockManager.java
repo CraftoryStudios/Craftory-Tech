@@ -18,6 +18,7 @@ import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.configuration.ConfigurationSection;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockManager {
 
@@ -70,6 +71,7 @@ public class CustomBlockManager {
     block.setBlockData(multipleFacing);
 
     CustomBlock customBlock = Craftory.customBlockFactory.create(customBlockItemName, block.getLocation());
+    Logger.info(customBlock.location.toString());
     putActiveCustomBlock(customBlock);
     return customBlock;
   }

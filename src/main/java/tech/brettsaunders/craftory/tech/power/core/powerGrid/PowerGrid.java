@@ -3,6 +3,7 @@ package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 import java.util.HashMap;
 import java.util.HashSet;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -20,10 +21,13 @@ public class PowerGrid extends BukkitRunnable {
   @Getter
   private final HashMap<Location, HashSet<Location>> blockConnections = new HashMap<>();
   @Getter
+  @Setter
   private HashSet<Location> cells = new HashSet<>();
   @Getter
+  @Setter
   private HashSet<Location> generators = new HashSet<>();
   @Getter
+  @Setter
   private HashSet<Location> machines = new HashSet<>();
   private int machinesNeedingEnergy = 0;
 

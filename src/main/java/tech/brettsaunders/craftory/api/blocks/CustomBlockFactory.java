@@ -10,8 +10,8 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockFactory {
   private HashMap<String, Class<? extends CustomBlock>> blockTypes = new HashMap<>();
-  private HashMap<Class<? extends CustomBlock>, Constructor<? extends CustomBlock>> createConstructor = new HashMap<>();
-  private HashMap<Class<? extends CustomBlock>, Constructor<? extends CustomBlock>> loadConstructor = new HashMap<>();
+  private HashMap<String, Constructor<? extends CustomBlock>> createConstructor = new HashMap<>();
+  private HashMap<String, Constructor<? extends CustomBlock>> loadConstructor = new HashMap<>();
   private String locationName;
 
   public CustomBlockFactory() {
@@ -24,9 +24,9 @@ public class CustomBlockFactory {
     Constructor[] constructors = block.getConstructors();
     for (Constructor constructor : constructors) {
       if (constructor.getParameterCount() == 0) {
-        createConstructor.put(block, constructor);
+        loadConstructor.put(nameID, constructor);
       } else if (constructor.getParameterCount() == 1 && constructor.getParameterTypes()[0].getName().equals(locationName)){
-        loadConstructor.put(block, constructor);
+        createConstructor.put(nameID, constructor);
       }
     }
   }
@@ -59,7 +59,7 @@ public class CustomBlockFactory {
       try {
         customBlock = (CustomBlock) constructor.newInstance();
         persistenceStorage.loadFields(customBlock,locationCompound);
-        customBlock.afterLoadUpdate(); //TODO Decide where to put
+        customBlock.afterLoadUpdate();
       } catch (Exception e) {
         e.printStackTrace();
       }

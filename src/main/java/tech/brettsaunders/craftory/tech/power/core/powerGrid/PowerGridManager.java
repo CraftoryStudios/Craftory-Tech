@@ -1,5 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
+import de.tr7zw.changeme.nbtapi.NBTFile;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,19 +11,31 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.event.server.PluginEnableEvent;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
+import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerGridManager implements Listener {
 
   @Getter
-  private final HashMap<Location, PowerGrid> powerGrids;
+  private HashMap<Location, PowerGrid> powerGrids;
+  private PersistenceStorage persistenceStorage;
+  private NBTFile nbtFile;
 
-  public PowerGridManager() {
+  public PowerGridManager()  {
+    persistenceStorage = new PersistenceStorage();
+    try {
+      nbtFile = new NBTFile(
+          new File(Craftory.plugin.getDataFolder() + File.separator + "data", "PowerGrids.nbt"));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     powerGrids = new HashMap<>();
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
@@ -51,6 +65,16 @@ public class PowerGridManager implements Listener {
     }
   }
 
+  @EventHandler
+  public void onDisable(PluginDisableEvent e) {
+    persistenceStorage.saveObject(powerGrids, nbtFile);
+  }
+
+  @EventHandler
+  public void onEnable(PluginEnableEvent e) {
+    persistenceStorage.loadObject(powerGrids, HashMap.class, nbtFile);
+  }
+
   /* Grid Splitting */
   public void mergeGrids(PowerGrid old, PowerGrid merged) {
     for (HashMap.Entry<Location, PowerGrid> entry : powerGrids.entrySet()) {
@@ -60,7 +84,7 @@ public class PowerGridManager implements Listener {
     }
   }
 
-  private void getAdjacentPowerBlocks(Location location, PowerGrid powerGrid) {
+  public void getAdjacentPowerBlocks(Location location, PowerGrid powerGrid) {
     Location blockLocation;
     for (BlockFace face : Utilities.faces) {
       blockLocation = location.getBlock().getRelative(face).getLocation();
@@ -77,12 +101,16 @@ public class PowerGridManager implements Listener {
     }
   }
 
-  private void addPowerGrid(Location location, PowerGrid manger) {
+  public void addPowerGrid(Location location, PowerGrid manger) {
     powerGrids.put(location, manger);
   }
 
   public PowerGrid getPowerGrid(Location location) {
     return powerGrids.get(location);
+  }
+
+  public Boolean isPowerGrid(Location location) {
+    return powerGrids.containsKey(location);
   }
 
   /**
