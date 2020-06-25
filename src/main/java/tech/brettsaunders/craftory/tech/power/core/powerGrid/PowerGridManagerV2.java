@@ -1,61 +1,18 @@
-package tech.brettsaunders.craftory.tech.power.core.manager;
-
-import static tech.brettsaunders.craftory.CoreHolder.HOPPER_INTERACT_FACES;
+package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Directional;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.world.WorldSaveEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.io.BukkitObjectInputStream;
-import org.bukkit.util.io.BukkitObjectOutputStream;
-import tech.brettsaunders.craftory.CoreHolder;
-import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
-import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
-import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
-import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
-import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
-import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
-import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
-import tech.brettsaunders.craftory.tech.power.core.block.cell.IronCell;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.DiamondElectricFurnace;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
-import tech.brettsaunders.craftory.tech.power.core.utils.PoweredBlockType;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerGridManagerV2 implements Listener {
 

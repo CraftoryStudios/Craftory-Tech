@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory.tech.power.core.manager;
+package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
 import java.util.ArrayList;
 import java.util.Arrays;

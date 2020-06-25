@@ -129,6 +129,7 @@ public class PoweredBlockUtils {
               (setTo) ? INTERACTABLEBLOCK.RECIEVER : INTERACTABLEBLOCK.NONE);
         } else if (setTo && Craftory.customBlockManager.getCustomBlockName(blockLocation)
             == CoreHolder.Blocks.POWER_CONNECTOR) { //TODO fix type part - seperate
+          //TODO PowerGrid
           if (isMachine(customBlock)) {
             powerGrids.get(location).addMachine(location, blockLocation);
           } else if (isGenerator(customBlock)) {

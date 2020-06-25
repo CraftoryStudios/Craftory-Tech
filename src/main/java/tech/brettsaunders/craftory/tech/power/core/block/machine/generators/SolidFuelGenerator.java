@@ -14,7 +14,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
-import tech.brettsaunders.craftory.tech.power.core.manager.SolidFuelManager;
 
 public class SolidFuelGenerator extends BaseGenerator {
 
