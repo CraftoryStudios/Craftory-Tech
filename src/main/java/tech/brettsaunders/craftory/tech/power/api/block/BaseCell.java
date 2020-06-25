@@ -19,16 +19,11 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
   public BaseCell(Location location, String blockName, byte level, int outputAmount) {
     super(location, blockName, level, outputAmount);
     energyStorage = new EnergyStorage(CAPACITY_BASE * CAPACITY_LEVEL[level]);
-    isReceiver = true;
-    isProvider = true;
-    setupGUI();
   }
 
   /* Saving, Setup and Loading */
   public BaseCell() {
     super();
-    isReceiver = true;
-    isProvider = true;
   }
 
   /* IEnergyReceiver */

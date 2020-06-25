@@ -12,6 +12,7 @@ import java.util.HashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -89,8 +90,8 @@ public class CustomBlockStorage {
         for (String locationKey : chunkCompound.getKeys()) {
           locationCompound = chunkCompound.getCompound(locationKey);
           location = keyToLoc(locationKey, world);
-          customBlock = new CustomBlock(location, locationCompound.getString("blockName"));
-          persistenceStorage.loadFields(customBlock,locationCompound);
+          customBlock = Craftory.customBlockFactory.createLoad(locationCompound, persistenceStorage);
+
           manager.putActiveCustomBlock(customBlock);
         }
       }

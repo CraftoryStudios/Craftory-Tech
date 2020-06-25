@@ -30,7 +30,6 @@ public abstract class BaseGenerator extends BaseProvider {
     super(location, blockName, level, outputAmount);
     energyStorage = new EnergyStorage((int) (CAPACITY_BASE * CAPACITY_LEVEL[level]));
     init();
-    setupGUI();
   }
 
   /* Saving, Setup and Loading */
@@ -45,7 +44,6 @@ public abstract class BaseGenerator extends BaseProvider {
   /* Common Load and Construction */
   private void init() {
     isActive = false;
-    isProvider = true;
     runningContainer = new VariableContainer<>(false);
   }
 

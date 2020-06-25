@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
+import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 
@@ -14,8 +14,6 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   /* Static Constants Protected */
   protected static final Boolean[] DEFAULT_SIDES_CONFIG = {false, false, false, false, false,
       false};  //NORTH, EAST, SOUTH, WEST, UP, DOWN
-  /* Static Constants Private */
-  private static final long serialVersionUID = 10008L;
   /* Per Object Variables Saved */
   @Persistent
   protected int maxOutput;
@@ -82,12 +80,12 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
   public int insertEnergyIntoAdjacentEnergyReceiver(int side, int energy, boolean simulate) {
     Location targetLocation = this.location.getBlock().getRelative(faces[side]).getLocation();
-    if (Craftory.getBlockPoweredManager().isReceiver(targetLocation)) {
-      if (Craftory.getBlockPoweredManager().isProvider(targetLocation)) {
-        return ((BaseCell) Craftory.getBlockPoweredManager().getPoweredBlock(targetLocation))
+    if (PoweredBlockUtils.isEnergyReceiver(targetLocation)) {
+      if (PoweredBlockUtils.isEnergyProvider(targetLocation)) {
+        return ((BaseCell) PoweredBlockUtils.getPoweredBlock(targetLocation))
             .receiveEnergy(energy, simulate);
       } else {
-        return ((BaseMachine) Craftory.getBlockPoweredManager().getPoweredBlock(targetLocation))
+        return ((BaseMachine) PoweredBlockUtils.getPoweredBlock(targetLocation))
             .receiveEnergy(energy, simulate);
       }
     } else {

@@ -34,6 +34,11 @@ public abstract class BlockGUI extends CustomBlock {
     return interactableSlots;
   }
 
+  @Override
+  public void afterLoadUpdate() {
+    setupGUI();
+  }
+
   public abstract void setupGUI();
 
   /*GUI Methods */

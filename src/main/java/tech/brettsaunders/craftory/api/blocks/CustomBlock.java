@@ -20,4 +20,6 @@ public class CustomBlock {
     this.blockName = blockName;
   }
 
+  public void afterLoadUpdate() { }
+
 }

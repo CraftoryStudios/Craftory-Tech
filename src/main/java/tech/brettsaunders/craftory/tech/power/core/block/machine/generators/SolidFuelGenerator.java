@@ -20,7 +20,6 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   protected static final int FUEL_SLOT = 22;
   /* Static Constants Private */
-  private static final long serialVersionUID = 10020L;
   private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 80;
   @Persistent

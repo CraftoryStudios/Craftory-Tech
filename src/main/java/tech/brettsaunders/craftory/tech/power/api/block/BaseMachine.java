@@ -10,11 +10,6 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver {
-
-  /* Static Constants Protected */
-
-  /* Static Constants Private */
-  private static final long serialVersionUID = 10007L;
   /* Per Object Variables Saved */
   @Persistent
   protected int maxReceive;
@@ -42,7 +37,6 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   /* Common Load and Construction */
   private void init() {
-    isReceiver = true;
     runningContainer = new VariableContainer<>(false);
     progressContainer = new VariableContainer<>(0d);
   }

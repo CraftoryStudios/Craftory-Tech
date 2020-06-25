@@ -20,17 +20,17 @@ public class CoreHolder {
   public static class Blocks {
 
     /* Power */
-    public static final String IRON_CELL = "iron_cell";
-    public static final String GOLD_CELL = "gold_cell";
-    public static final String DIAMOND_CELL = "diamond_cell";
-    public static final String EMERALD_CELL = "emerald_cell";
-    public static final String SOLID_FUEL_GENERATOR = "solid_fuel_generator";
+    public static final String IRON_CELL = "IronCell";
+    public static final String GOLD_CELL = "GoldCell";
+    public static final String DIAMOND_CELL = "DiamondCell";
+    public static final String EMERALD_CELL = "EmeraldCell";
+    public static final String SOLID_FUEL_GENERATOR = "SolidFuelGenerator";
     public static final String POWER_CONNECTOR = "power_connector";
-    public static final String IRON_ELECTRIC_FURNACE = "iron_electric_furnace";
-    public static final String GOLD_ELECTRIC_FURNACE = "gold_electric_furnace";
-    public static final String DIAMOND_ELECTRIC_FURNACE = "diamond_electric_furnace";
-    public static final String EMERALD_ELECTRIC_FURNACE = "emerald_electric_furnace";
-    public static final String IRON_FOUNDRY = "iron_foundry";
+    public static final String IRON_ELECTRIC_FURNACE = "IronElectricFurnace";
+    public static final String GOLD_ELECTRIC_FURNACE = "GoldElectricFurnace";
+    public static final String DIAMOND_ELECTRIC_FURNACE = "DiamondElectricFurnace";
+    public static final String EMERALD_ELECTRIC_FURNACE = "EmeraldElectricFurnace";
+    public static final String IRON_FOUNDRY = "IronFoundry";
   }
 
   /* Item Names */

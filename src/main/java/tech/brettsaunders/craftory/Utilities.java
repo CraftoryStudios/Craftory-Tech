@@ -10,10 +10,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
@@ -28,6 +31,8 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.Soli
 
 public class Utilities {
 
+  public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
+      BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   public final static String DATA_FOLDER;
   public static FileConfiguration config;
   public static FileConfiguration data;
@@ -98,6 +103,20 @@ public class Utilities {
 
   static void registerEvents() {
 
+  }
+
+  static void registerCustomBlocks() {
+    CustomBlockFactory customBlockFactory = Craftory.customBlockFactory;
+    customBlockFactory.registerCustomBlock(Blocks.IRON_CELL, IronCell.class);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_CELL, GoldCell.class);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_CELL, DiamondCell.class);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_CELL, EmeraldCell.class);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FURNACE, IronElectricFurnace.class);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FURNACE, GoldElectricFurnace.class);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FURNACE, DiamondElectricFurnace.class);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FURNACE, EmeraldElectricFurnace.class);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
+    customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class);
   }
 
   static void registerBlocks() {

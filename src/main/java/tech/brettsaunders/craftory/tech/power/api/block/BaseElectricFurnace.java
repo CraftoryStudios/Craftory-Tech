@@ -61,7 +61,6 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
     outputSlots.add(null);
     inputLocations.add(INPUT_LOCATION);
     outputLocations.add(OUTPUT_LOCATION);
-    setupGUI();
   }
 
   /* Saving, Setup and Loading */

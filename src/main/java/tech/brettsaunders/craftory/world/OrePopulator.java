@@ -37,7 +37,7 @@ public class OrePopulator extends BlockPopulator {
         y = minHeight + r.nextInt(maxHeight - minHeight);
         block = chunk.getBlock(x, y, z);
         if (valid = validBlock(block)) {
-          Craftory.customBlockManager.getCustomBlock(ore, block);
+          Craftory.customBlockManager.getCustomBlockOfItem(ore, block);
           for (int j = 0; j < maxVeinSize; j++) {
             if (j >= minVeinSize && r.nextInt(100) < 33) {
               break;
@@ -79,7 +79,7 @@ public class OrePopulator extends BlockPopulator {
             }
             if (valid) {
               Logger.info("Spawned " + j + " block in vein");
-              Craftory.customBlockManager.getCustomBlock(ore, block);
+              Craftory.customBlockManager.getCustomBlockOfItem(ore, block);
             } else {
               Logger.info("Failed to find any locations " + j);
               break;

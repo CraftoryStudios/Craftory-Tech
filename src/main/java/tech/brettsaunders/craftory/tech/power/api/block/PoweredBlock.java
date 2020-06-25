@@ -1,10 +1,15 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import static tech.brettsaunders.craftory.CoreHolder.HOPPER_INTERACT_FACES;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Hopper;
+import org.bukkit.block.data.Directional;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
@@ -16,6 +21,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
 /**
@@ -43,16 +49,13 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   @Persistent
   protected ArrayList<Integer> outputLocations = new ArrayList<>(); //The inventory locations of outputs
   /* Per Object Variables Not-Saved */
-  protected transient boolean isReceiver;
-  protected transient boolean isProvider;
   protected transient Inventory inventoryInterface;
 
   /* Construction */
   public PoweredBlock(Location location, String blockName, byte level) {
     super(location, blockName);
+    cacheSides();
     this.energyStorage = new EnergyStorage(0);
-    isReceiver = false;
-    isProvider = false;
     this.level = level;
     cachedSides = new HashMap<>();
     Craftory.plugin.getServer().getPluginManager()
@@ -191,19 +194,28 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     return energyStorage.getEnergyStored() >= energy;
   }
 
+  private void cacheSides() {
+    Block b;
+    BlockFace facing;
+    for (BlockFace face : HOPPER_INTERACT_FACES) {
+      b = location.getBlock().getRelative(face);
+      if (b.getType().equals(Material.HOPPER)) {
+        facing = ((Directional) b.getBlockData()).getFacing();
+        if (facing.equals(face.getOppositeFace())) {
+          this.setSideCache(face, INTERACTABLEBLOCK.HOPPER_IN);
+        }
+        if (face.equals(BlockFace.DOWN)) {
+          this.setSideCache(face, INTERACTABLEBLOCK.HOPPER_OUT);
+        }
+      } else if (b.getLocation() instanceof IEnergyReceiver) {
+        this.setSideCache(face, INTERACTABLEBLOCK.RECIEVER);
+      }
+    }
+  }
+
   public int getEnergySpace() {
     return energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored();
   }
-
-  /* Block Type */
-  public boolean isProvider() {
-    return isProvider;
-  }
-
-  public boolean isReceiver() {
-    return isReceiver;
-  }
-
   /* IEnergyInfo */
   @Override
   public int getInfoEnergyPerTick() {

@@ -64,7 +64,6 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     inputLocations.add(INPUT_LOCATION1);
     inputLocations.add(INPUT_LOCATION2);
     outputLocations.add(OUTPUT_LOCATION);
-    setupGUI();
   }
 
   /* Saving, Setup and Loading */

@@ -9,27 +9,18 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Synchronized;
 import org.bukkit.scheduler.BukkitRunnable;
-import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.tech.power.api.block.BlockGUI;
-import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
 
+@NoArgsConstructor
 public class CustomBlockTickManager extends BukkitRunnable {
 
   //Custom Block in future
-  private HashMap<Class<? extends BlockGUI>, HashMap<Method, Integer>> classCache = new HashMap<>();
-  private HashSet<PoweredBlock> trackedBlocks = new HashSet<>();
+  private HashMap<Class<? extends CustomBlock>, HashMap<Method, Integer>> classCache = new HashMap<>();
+  private HashSet<CustomBlock> trackedBlocks = new HashSet<>();
   private long tick = 0;
-  private CustomBlockManager customBlockManager;
-  private PoweredBlockManager poweredBlockManager;
-
-  public CustomBlockTickManager() {
-    customBlockManager = Craftory.customBlockManager;
-    poweredBlockManager = Craftory.getBlockPoweredManager();
-  }
 
   public static Collection<Method> getMethodsRecursively(@NonNull Class<?> startClass,
       @NonNull Class<?> exclusiveParent) {
@@ -46,12 +37,12 @@ public class CustomBlockTickManager extends BukkitRunnable {
   @Override
   public void run() {
     tick++;
-    for (PoweredBlock poweredBlock : trackedBlocks) {
-      HashMap<Method, Integer> tickMap = classCache.get(poweredBlock.getClass());
+    for (CustomBlock customBlock : trackedBlocks) {
+      HashMap<Method, Integer> tickMap = classCache.get(customBlock.getClass());
       tickMap.forEach(((method, current) -> {
         if (tick % current == 0) {
           try {
-            method.invoke(poweredBlock);
+            method.invoke(customBlock);
           } catch (Exception e) {
             e.printStackTrace();
           }
@@ -61,19 +52,19 @@ public class CustomBlockTickManager extends BukkitRunnable {
   }
 
   @Synchronized
-  public void addTickingBlock(@NonNull PoweredBlock block) {
+  public void addTickingBlock(@NonNull CustomBlock block) {
     if (classCache.containsKey(block.getClass())) {
       trackedBlocks.add(block);
     }
   }
 
   @Synchronized
-  public void removeTickingBlock(@NonNull PoweredBlock block) {
+  public void removeTickingBlock(@NonNull CustomBlock block) {
     trackedBlocks.remove(block);
   }
 
   @Synchronized
-  public void registerCustomBlockClass(@NonNull Class<? extends PoweredBlock> clazz) {
+  public void registerCustomBlockClass(@NonNull Class<? extends CustomBlock> clazz) {
     if (!classCache.containsKey(clazz)) {
       Collection<Method> methods = getMethodsRecursively(clazz, Object.class);
       HashMap<Method, Integer> tickingMethods = new HashMap<>();
