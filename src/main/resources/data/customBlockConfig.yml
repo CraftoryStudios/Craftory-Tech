@@ -127,5 +127,5 @@ blocks:
     SOUTH: true
     WEST: true
     itemID: 16
-    itemModel: stone
+    itemModel: gold_ore
     displayName: Copper Ore
