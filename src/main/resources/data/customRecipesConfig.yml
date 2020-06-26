@@ -170,3 +170,7 @@ recipes:
     result:
       item: magnetised_iron
       amount: 1
+furnace_recipes:
+  copper_ingot:
+    input: copper_ore
+    result: copper_ingot

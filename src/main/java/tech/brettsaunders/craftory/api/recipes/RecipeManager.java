@@ -7,6 +7,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -17,6 +18,7 @@ import tech.brettsaunders.craftory.utils.Logger;
 public class RecipeManager implements Listener {
 
   private HashMap<String, String> customRecipes;
+  private HashMap<String, String> customFurnaceRecipes; //Map of Source to Result
 
   public RecipeManager() {
     customRecipes = new HashMap<>();
@@ -76,6 +78,16 @@ public class RecipeManager implements Listener {
       Bukkit.getServer().addRecipe(shapedRecipe);
       customRecipes.put(recipe, customItemsInSlots);
     }
+    //Furnace Recipes
+    ConfigurationSection furnaceRecipes = Craftory.customRecipeConfig.getConfigurationSection("furnace_recipes");
+    if (furnaceRecipes == null) {
+      Logger.warn("No Furnace Recipes found!");
+      return;
+    }
+    customFurnaceRecipes = new HashMap<>();
+    for(String recipe: furnaceRecipes.getKeys(false)){
+      customFurnaceRecipes.put(furnaceRecipes.getString(recipe+".input"),furnaceRecipes.getString(recipe+".result"));
+    }
   }
 
   @EventHandler
@@ -111,6 +123,14 @@ public class RecipeManager implements Listener {
       e.getInventory().setResult(new ItemStack(Material.AIR));
     }
 
+  }
+
+  @EventHandler
+  public void FurnaceSmelt(FurnaceSmeltEvent event) {
+    if(!CustomItemManager.isCustomItem(event.getSource(),true)) return;
+    String source = CustomItemManager.getCustomItemName(event.getSource());
+    if(customFurnaceRecipes.containsKey(source))
+    event.setResult(CustomItemManager.getCustomItem(customFurnaceRecipes.get(source)));
   }
 
 }
