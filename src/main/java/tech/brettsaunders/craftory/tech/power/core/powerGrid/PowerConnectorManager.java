@@ -1,8 +1,9 @@
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -119,7 +120,7 @@ public class PowerConnectorManager implements Listener {
   }
 
   private void generatorPowerBeams() {
-    for (PowerGrid powerGrid : Craftory.powerGridManager.getPowerGrids().values()) {
+    for (PowerGrid powerGrid : new HashSet<>(Craftory.powerGridManager.getPowerGrids().values())) {
       powerGrid.getPowerConnectors().forEach((from, value) -> value.forEach((to) -> {
         formBeam(from, to);
       }));
@@ -167,7 +168,7 @@ public class PowerConnectorManager implements Listener {
       temp.add(beam);
       activeBeams.put(location, temp);
     } else {
-      activeBeams.put(location, new ArrayList<>(Arrays.asList(beam)));
+      activeBeams.put(location, new ArrayList<>(Collections.singletonList(beam)));
     }
   }
 

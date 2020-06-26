@@ -58,11 +58,9 @@ public class PowerGrid extends BukkitRunnable {
     machinesNeedingEnergy = 0;
     int amount = 0;
     int e;
-    HashSet<Location> toRemove = new HashSet<>();
     for (Location loc : machines) {
       BaseMachine machine = (BaseMachine) PoweredBlockUtils.getPoweredBlock(loc);
-      if (machine == null) { //TODO Could just be unloaded
-        toRemove.add(loc);
+      if (machine == null) {
         continue;
       }
       e = machine.getEnergySpace();
@@ -71,22 +69,18 @@ public class PowerGrid extends BukkitRunnable {
         machinesNeedingEnergy += 1;
       }
     }
-    machines.removeAll(toRemove);
     return amount;
   }
 
   private int calculateGridStorageSpace() {
     int amount = 0;
-    HashSet<Location> toRemove = new HashSet<>();
     for (Location loc : cells) {
       BaseCell cell = (BaseCell) PoweredBlockUtils.getPoweredBlock(loc);
       if (cell == null) {
-        toRemove.add(loc);
         continue;
       }
       amount += cell.getEnergySpace();
     }
-    cells.removeAll(toRemove);
     return amount;
   }
 
@@ -94,11 +88,9 @@ public class PowerGrid extends BukkitRunnable {
   private int calculateGridEnergyProduced(int limit) {
     int amount = 0;
     int e;
-    HashSet<Location> toRemove = new HashSet<>();
     for (Location loc : generators) {
       BaseGenerator generator = (BaseGenerator) PoweredBlockUtils.getPoweredBlock(loc);
       if (generator == null) {
-        toRemove.add(loc);
         continue;
       }
       e = generator.getEnergyAvailable();
@@ -111,7 +103,6 @@ public class PowerGrid extends BukkitRunnable {
         break;
       }
     }
-    generators.removeAll(toRemove);
     return amount;
   }
 
@@ -203,6 +194,18 @@ public class PowerGrid extends BukkitRunnable {
         }
       }
     }
+  }
+
+  public boolean removeCell(Location location) {
+    return cells.remove(location);
+  }
+
+  public boolean removeMachine(Location location) {
+    return machines.remove(location);
+  }
+
+  public boolean removeGenerator(Location location) {
+    return generators.remove(location);
   }
 
   /* Getters & Setters */

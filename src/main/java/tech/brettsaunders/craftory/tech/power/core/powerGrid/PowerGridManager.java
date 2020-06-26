@@ -18,17 +18,20 @@ import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerGridManager implements Listener {
 
   @Getter
-  private HashMap<Location, PowerGrid> powerGrids;
-  private PersistenceStorage persistenceStorage;
+  private final HashMap<Location, PowerGrid> powerGrids;
+  private final PersistenceStorage persistenceStorage;
   private NBTFile nbtFile;
 
-  public PowerGridManager()  {
+  public PowerGridManager() {
     persistenceStorage = new PersistenceStorage();
     try {
       nbtFile = new NBTFile(
@@ -62,6 +65,26 @@ public class PowerGridManager implements Listener {
     }
     if (PoweredBlockUtils.isPoweredBlock(location)) {
       Craftory.powerConnectorManager.destroyBeams(location); //Destroy any beams
+      PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock(location);
+      if (poweredBlock instanceof BaseMachine) {
+        for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
+          if (grid.removeMachine(location)) {
+            break;
+          }
+        }
+      } else if (poweredBlock instanceof BaseCell) {
+        for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
+          if (grid.removeCell(location)) {
+            break;
+          }
+        }
+      } else if (poweredBlock instanceof BaseGenerator) {
+        for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
+          if (grid.removeGenerator(location)) {
+            break;
+          }
+        }
+      }
     }
   }
 
@@ -126,10 +149,7 @@ public class PowerGridManager implements Listener {
     HashSet<Location> neighbours = powerGrid.getPowerConnectors().remove(breakPoint);
     Logger.info("connector had: " + neighbours.size());
     HashSet<Location> closedSet = new HashSet<>();
-    for (Location location : neighbours) { //Loop through all the neighbours of broken connector
-
-    }
-    neighbours.forEach(location -> {
+    neighbours.forEach(location -> { //Loop through all the neighbours of broken connector
       if (!closedSet.contains(location)) {
         closedSet.add(location);
         Logger.info("making new grid");
