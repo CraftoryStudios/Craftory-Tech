@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.api.recipes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,11 +15,13 @@ import org.bukkit.inventory.ShapedRecipe;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.RecipeUtils;
+import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 
 public class RecipeManager implements Listener {
 
   private HashMap<String, String> customRecipes;
-  private HashMap<String, String> customFurnaceRecipes; //Map of Source to Result
+  private HashMap<String, ItemStack> customFurnaceRecipes; //Map of Source to Result
 
   public RecipeManager() {
     customRecipes = new HashMap<>();
@@ -86,7 +89,22 @@ public class RecipeManager implements Listener {
     }
     customFurnaceRecipes = new HashMap<>();
     for(String recipe: furnaceRecipes.getKeys(false)){
-      customFurnaceRecipes.put(furnaceRecipes.getString(recipe+".input"),furnaceRecipes.getString(recipe+".result"));
+      ItemStack result = CustomItemManager.getCustomItem(furnaceRecipes.getString(recipe+".result.name"));
+      result.setAmount(furnaceRecipes.getInt(recipe+".result.amount"));
+      customFurnaceRecipes.put(furnaceRecipes.getString(recipe+".input.name"),result);
+      HashMap<String, Integer> ingredients = new HashMap<>();
+      ingredients.put(furnaceRecipes.getString(recipe+".input.name"),1);
+      ArrayList<ItemStack> products = new ArrayList<>();
+      String resultName = furnaceRecipes.getString(recipe+".result.name");
+      ItemStack stack;
+      if(CustomItemManager.isCustomItemName(resultName)){
+        stack = CustomItemManager.getCustomItem(resultName);
+      } else {
+        stack = new ItemStack(Material.valueOf(resultName));
+      }
+      stack.setAmount(furnaceRecipes.getInt(recipe+".result.amount"));
+      products.add(stack);
+      RecipeUtils.addFurnaceRecipe(new CustomMachineRecipe(ingredients,products));
     }
   }
 
@@ -130,7 +148,7 @@ public class RecipeManager implements Listener {
     if(!CustomItemManager.isCustomItem(event.getSource(),true)) return;
     String source = CustomItemManager.getCustomItemName(event.getSource());
     if(customFurnaceRecipes.containsKey(source))
-    event.setResult(CustomItemManager.getCustomItem(customFurnaceRecipes.get(source)));
+    event.setResult(customFurnaceRecipes.get(source).clone());
   }
 
 }

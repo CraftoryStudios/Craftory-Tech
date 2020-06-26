@@ -7,10 +7,8 @@ import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
@@ -18,6 +16,7 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
+import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class BaseElectricFurnace extends BaseMachine implements IHopperInteract {
@@ -49,7 +48,7 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
 
   /* Per Object Variables Not-Saved */
 
-  private transient FurnaceRecipe currentRecipe = null;
+  private transient CustomMachineRecipe currentRecipe = null;
 
 
   /* Construction */
@@ -98,9 +97,9 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
   protected void processComplete() {
     inputSlots.get(0).setAmount(inputSlots.get(0).getAmount() - 1);
     if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
-      outputSlots.set(0, currentRecipe.getResult());
+      outputSlots.set(0, currentRecipe.getProducts().get(0));
     } else {
-      outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + currentRecipe.getResult().getAmount());
+      outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + currentRecipe.getProducts().get(0).getAmount());
     }
     inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots.get(0));
   }
@@ -120,27 +119,26 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
     }
     String inputType = CustomItemManager.getCustomItemName(inputSlots.get(0));
     //If the recipe is unchanged there is no need to find the recipe.
-    if (currentRecipe != null && currentRecipe.getInput().getType().toString().equals(inputType)) {
+    if (currentRecipe != null && currentRecipe.getIngredients().keySet().iterator().next().equals(inputType)) {
       if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
         return true;
       }
-      if (outputSlots.get(0).getType().toString().equals(currentRecipe.getResult().getType().toString())
-          && outputSlots.get(0).getAmount() < outputSlots.get(0).getMaxStackSize()) {
+      if (outputSlots.get(0).getType().toString().equals(CustomItemManager.getCustomItemName(currentRecipe.getProducts().get(0)))
+          && outputSlots.get(0).getAmount() <= outputSlots.get(0).getMaxStackSize() - currentRecipe.getProducts().get(0).getAmount()) {
         return true;
       }
     }
-    FurnaceRecipe furnaceRecipe;
-    for (Recipe recipe : RecipeUtils.getFurnaceRecipes()) {
-      furnaceRecipe = (FurnaceRecipe) recipe;
-      if (!furnaceRecipe.getInput().getType().toString().equals(inputType)) {
+    for (CustomMachineRecipe recipe : RecipeUtils.getFurnaceRecipes()) {
+      //Logger.info(recipe.getIngredients().keySet().iterator().next());
+      if (!recipe.getIngredients().keySet().iterator().next().equals(inputType)) {
         continue;
       }
-      currentRecipe = furnaceRecipe;
+      currentRecipe = recipe;
       if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
         return true;
       }
       if (CustomItemManager.getCustomItemName(outputSlots.get(0))
-          .equals(recipe.getResult().getType().toString())
+          .equals(CustomItemManager.getCustomItemName(recipe.getProducts().get(0)))
           && outputSlots.get(0).getAmount() < outputSlots.get(0).getMaxStackSize()) {
         return true;
       }

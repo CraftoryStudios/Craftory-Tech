@@ -84,6 +84,9 @@ public class CustomItemManager implements Listener {
     return new ItemStack(Material.AIR);
   }
 
+  public static boolean isCustomItemName(String name) {
+    return itemIDCache.containsKey(name);
+  }
   public static boolean isCustomItem(ItemStack itemStack, boolean includeBlockItems) {
     NBTItem nbtItem = new NBTItem(itemStack);
     if (nbtItem.hasNBTData()) {

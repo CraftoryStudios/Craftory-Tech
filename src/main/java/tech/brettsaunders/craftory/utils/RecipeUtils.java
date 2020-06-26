@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.utils;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,12 +10,14 @@ import org.bukkit.Material;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.CampfireRecipe;
 import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.SmokingRecipe;
 import org.bukkit.inventory.StonecuttingRecipe;
 import tech.brettsaunders.craftory.CoreHolder;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class RecipeUtils {
 
@@ -22,7 +25,7 @@ public class RecipeUtils {
   private static final HashSet<Recipe> shapedRecipes = new HashSet<>();
   private static final HashSet<Recipe> shapelessRecipes = new HashSet<>();
   private static final HashSet<Recipe> stonecuttingRecipes = new HashSet<>();
-  private static final HashSet<Recipe> furnaceRecipes = new HashSet<>();
+  private static final HashSet<CustomMachineRecipe> furnaceRecipes = new HashSet<>();
   private static final HashSet<Recipe> blastingRecipes = new HashSet<>();
   private static final HashSet<Recipe> smokingRecipeRecipes = new HashSet<>();
   private static final HashSet<Recipe> campfireRecipes = new HashSet<>();
@@ -42,7 +45,11 @@ public class RecipeUtils {
       } else if (recipe instanceof StonecuttingRecipe) {
         stonecuttingRecipes.add(recipe);
       } else if (recipe instanceof FurnaceRecipe) {
-        furnaceRecipes.add(recipe);
+        HashMap<String, Integer> ingredients = new HashMap<>();
+        ingredients.put(((FurnaceRecipe) recipe).getInput().getType().toString(),((FurnaceRecipe) recipe).getInput().getAmount());
+        ArrayList<ItemStack> products = new ArrayList<>();
+        products.add(recipe.getResult().clone());
+        furnaceRecipes.add(new CustomMachineRecipe(ingredients,products));
       } else if (recipe instanceof BlastingRecipe) {
         blastingRecipes.add(recipe);
       } else if (recipe instanceof SmokingRecipe) {
@@ -55,8 +62,8 @@ public class RecipeUtils {
     HashMap<String, Integer> ingredients = new HashMap<>();
     ingredients.put(Material.COAL.toString(), 1);
     ingredients.put(Material.IRON_INGOT.toString(), 1);
-    HashMap<String, Integer> products = new HashMap<>();
-    products.put(CoreHolder.Items.STEEL_INGOT, 1);
+    ArrayList<ItemStack> products = new ArrayList<>();
+    products.add(CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT));
     twoToOneRecipes.add(new CustomMachineRecipe(ingredients, products));
     Logger.debug("All: " + allRecipes.size());
     Logger.debug("Shaped: " + shapedRecipes.size());
@@ -81,8 +88,12 @@ public class RecipeUtils {
     return shapedRecipes;
   }
 
-  public static HashSet<Recipe> getFurnaceRecipes() {
+  public static HashSet<CustomMachineRecipe> getFurnaceRecipes() {
     return furnaceRecipes;
+  }
+
+  public static void addFurnaceRecipe(CustomMachineRecipe recipe) {
+    furnaceRecipes.add(recipe);
   }
 
   public static HashSet<Recipe> getSmokingRecipeRecipes() {
@@ -113,15 +124,16 @@ public class RecipeUtils {
 
     HashMap<String, Integer> getIngredients();
 
-    HashMap<String, Integer> getProducts();
+    ArrayList<ItemStack> getProducts();
   }
 
   public static class CustomMachineRecipe implements ICustomRecipe {
 
     final HashMap<String, Integer> ingredients;
-    final HashMap<String, Integer> products;
+    final ArrayList<ItemStack> products;
 
-    CustomMachineRecipe(HashMap<String, Integer> ingredients, HashMap<String, Integer> products) {
+    public CustomMachineRecipe(HashMap<String, Integer> ingredients,
+        ArrayList<ItemStack> products) {
       this.ingredients = ingredients;
       this.products = products;
     }
@@ -132,8 +144,9 @@ public class RecipeUtils {
     }
 
     @Override
-    public HashMap<String, Integer> getProducts() {
+    public ArrayList<ItemStack> getProducts() {
       return products;
     }
   }
+
 }
