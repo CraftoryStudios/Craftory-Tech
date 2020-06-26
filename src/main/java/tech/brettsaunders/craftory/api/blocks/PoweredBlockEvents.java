@@ -28,6 +28,10 @@ import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 public class PoweredBlockEvents implements Listener {
   private final HashMap<UUID, ArrayList<Boolean>> configuratorData = new HashMap<>();
 
+  public PoweredBlockEvents() {
+    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+  }
+
   @EventHandler
   public void onPoweredBlockPlace(CustomBlockPlaceEvent e) {
     if (PoweredBlockUtils.isEnergyReceiver(e.getCustomBlock())) {

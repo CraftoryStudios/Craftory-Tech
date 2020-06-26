@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -56,9 +58,9 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
     init();
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
     inputSlots = new ArrayList<>();
-    inputSlots.add(null);
+    inputSlots.add(new ItemStack(Material.AIR));
     outputSlots = new ArrayList<>();
-    outputSlots.add(null);
+    outputSlots.add(new ItemStack(Material.AIR));
     inputLocations.add(INPUT_LOCATION);
     outputLocations.add(OUTPUT_LOCATION);
   }
@@ -95,7 +97,7 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
   @Override
   protected void processComplete() {
     inputSlots.get(0).setAmount(inputSlots.get(0).getAmount() - 1);
-    if (outputSlots.get(0) == null) {
+    if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
       outputSlots.set(0, currentRecipe.getResult());
     } else {
       outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + currentRecipe.getResult().getAmount());
@@ -113,13 +115,13 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
 
   @Override
   protected boolean validateContentes() {
-    if (inputSlots.get(0) == null) {
+    if (inputSlots.get(0) == null || inputSlots.get(0).getType() == Material.AIR) {
       return false;
     }
     String inputType = CustomItemManager.getCustomItemName(inputSlots.get(0));
     //If the recipe is unchanged there is no need to find the recipe.
     if (currentRecipe != null && currentRecipe.getInput().getType().toString().equals(inputType)) {
-      if (outputSlots.get(0) == null) {
+      if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
         return true;
       }
       if (outputSlots.get(0).getType().toString().equals(currentRecipe.getResult().getType().toString())
@@ -134,7 +136,7 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
         continue;
       }
       currentRecipe = furnaceRecipe;
-      if (outputSlots.get(0) == null) {
+      if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
         return true;
       }
       if (CustomItemManager.getCustomItemName(outputSlots.get(0))

@@ -67,6 +67,7 @@ public class CustomBlockManagerEvents implements Listener {
       CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
           e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
       Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
+      Craftory.tickManager.addTickingBlock(customBlock);
     }
   }
 
@@ -97,6 +98,7 @@ public class CustomBlockManagerEvents implements Listener {
         customBlockBreakEvent.setCancelled(true);
       } else {
         customBlockManager.removeCustomBlock(customBlock);
+        Craftory.tickManager.removeTickingBlock(customBlock);
         if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
           location.getWorld()
               .dropItemNaturally(location, CustomItemManager.getCustomItem(blockName));
@@ -169,7 +171,7 @@ public class CustomBlockManagerEvents implements Listener {
             customBlock);
         Bukkit.getServer().getPluginManager().callEvent(customBlockInteractEvent);
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) {
-          e.setCancelled(true); //eeeeee
+          e.setCancelled(true);
         }
       }
     }

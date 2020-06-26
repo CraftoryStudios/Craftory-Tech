@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
+import tech.brettsaunders.craftory.api.blocks.PoweredBlockEvents;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
@@ -65,6 +66,7 @@ public final class Craftory extends JavaPlugin {
     customBlockManager = new CustomBlockManager();
     customBlockManager.onEnable();
     new RecipeManager();
+    new PoweredBlockEvents();
     powerGridManager = new PowerGridManager();
     powerConnectorManager = new PowerConnectorManager();
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);

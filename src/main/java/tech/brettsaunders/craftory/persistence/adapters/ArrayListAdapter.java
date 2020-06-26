@@ -11,25 +11,29 @@ public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
 
     @Override
     public void store(@NonNull final PersistenceStorage persistenceStorage, @NonNull final ArrayList<?> value, @NonNull final NBTCompound nbtCompound) {
-        value.forEach(entryValue -> {
-            NBTCompound container = nbtCompound.addCompound("" + entryValue.hashCode());
-            NBTCompound data = container.addCompound("data");
-            container.setString("dataclass", persistenceStorage.saveObject(entryValue, data).getName());
-        });
+        if (value.size() == 0) {
+            return;
+        }
+        nbtCompound.setString("dataclass",value.get(0).getClass().getName());
+        for (int i = 0; i < value.size(); i++) {
+            NBTCompound container = nbtCompound.addCompound(""+i);
+            persistenceStorage.saveObject(value.get(i), container);
+        }
     }
 
     @Override
     public ArrayList<Object> parse(PersistenceStorage persistenceStorage, Object parentObject, NBTCompound nbtCompound) {
-        ArrayList<Object> map = new ArrayList<>();
-        for (String key : nbtCompound.getKeys()) {
-            NBTCompound container = nbtCompound.getCompound(key);
-            NBTCompound data = container.addCompound("data");
-            try {
-                map.add(persistenceStorage.loadObject(parentObject, Class.forName(container.getString("dataclass")), data));
-            } catch (ClassNotFoundException ex) {
-                ex.printStackTrace();
+        Class dataClass;
+        ArrayList<Object> arrayList = new ArrayList<>();
+        try {
+            dataClass = Class.forName(nbtCompound.getString("dataclass"));
+            for (String key : nbtCompound.getKeys()) {
+                NBTCompound container = nbtCompound.getCompound(key);
+                arrayList.set(Integer.parseInt(key), persistenceStorage.loadObject(parentObject, dataClass, container));
             }
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
         }
-        return map;
+        return arrayList;
     }
 }

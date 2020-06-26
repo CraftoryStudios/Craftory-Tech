@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
@@ -35,7 +36,7 @@ public class SolidFuelGenerator extends BaseGenerator {
     super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT);
     inputLocations.add(FUEL_SLOT);
     inputSlots = new ArrayList<>();
-    inputSlots.add(null);
+    inputSlots.add(new ItemStack(Material.AIR));
     interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
   }
 
