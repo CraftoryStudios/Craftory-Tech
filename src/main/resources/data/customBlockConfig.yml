@@ -9,7 +9,7 @@ blocks:
     itemID: 6
     itemModel: stone
     displayName: Iron Energy-Cell
-  IronCell:
+  GoldCell:
     UP: true
     DOWN: false
     NORTH: false

@@ -11,7 +11,7 @@ recipes:
       item: IronCell
       amount: 1
 
-  IronCell:
+  GoldCell:
     pattern:
       - SSS
       - SCS
@@ -20,7 +20,7 @@ recipes:
       C: gold_core
       S: steel_ingot
     result:
-      item: IronCell
+      item: GoldCell
       amount: 1
 
   DiamondCell:
