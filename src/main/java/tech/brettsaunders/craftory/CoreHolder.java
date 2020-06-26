@@ -31,6 +31,9 @@ public class CoreHolder {
     public static final String DIAMOND_ELECTRIC_FURNACE = "DiamondElectricFurnace";
     public static final String EMERALD_ELECTRIC_FURNACE = "EmeraldElectricFurnace";
     public static final String IRON_FOUNDRY = "IronFoundry";
+
+    /* Ores */
+    public static final String COPPER_ORE = "copper_ore";
   }
 
   /* Item Names */

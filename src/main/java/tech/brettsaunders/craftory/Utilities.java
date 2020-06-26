@@ -17,6 +17,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
+import tech.brettsaunders.craftory.api.blocks.basicBlocks.CopperOre;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
@@ -117,6 +118,7 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FURNACE, EmeraldElectricFurnace.class);
     customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
     customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class);
+    customBlockFactory.registerCustomBlock(Blocks.COPPER_ORE, CopperOre.class);
   }
 
   static void registerBlocks() {
