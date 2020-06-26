@@ -3,6 +3,7 @@ package tech.brettsaunders.craftory.api.blocks;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.persistence.Persistent;
 
@@ -12,6 +13,7 @@ public class CustomBlock {
 
   @Persistent
   protected String blockName;
+  @Setter
   @Persistent
   protected Location location;
 

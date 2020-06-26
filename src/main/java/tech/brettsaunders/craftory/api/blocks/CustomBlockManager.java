@@ -77,6 +77,10 @@ public class CustomBlockManager {
   }
 
   public void putActiveCustomBlock(CustomBlock customBlock) {
+    if (customBlock == null) {
+      Logger.warn("Custom Block is null");
+      return;
+    }
     String chunkID = getChunkID(customBlock.location.getChunk());
     HashSet<CustomBlock> chunkData;
     if (activeChunks.containsKey(chunkID)) {

@@ -51,14 +51,16 @@ public class CustomBlockFactory {
     return "";
   }
 
-  public CustomBlock createLoad(NBTCompound locationCompound, PersistenceStorage persistenceStorage) {
+  public CustomBlock createLoad(NBTCompound locationCompound, PersistenceStorage persistenceStorage, Location location) {
     CustomBlock customBlock = null;
-    String nameID = locationCompound.getString("blockName");
+    NBTCompound nameCompound = locationCompound.getCompound("blockName");
+    String nameID = nameCompound.getString("data");
     if (loadConstructor.containsKey(nameID)) {
       Constructor constructor = loadConstructor.get(nameID);
       try {
         customBlock = (CustomBlock) constructor.newInstance();
         persistenceStorage.loadFields(customBlock,locationCompound);
+        customBlock.setLocation(location);
         customBlock.afterLoadUpdate();
       } catch (Exception e) {
         e.printStackTrace();

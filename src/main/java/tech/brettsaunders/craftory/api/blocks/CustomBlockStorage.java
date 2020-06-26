@@ -90,7 +90,7 @@ public class CustomBlockStorage {
         for (String locationKey : chunkCompound.getKeys()) {
           locationCompound = chunkCompound.getCompound(locationKey);
           location = keyToLoc(locationKey, world);
-          customBlock = Craftory.customBlockFactory.createLoad(locationCompound, persistenceStorage);
+          customBlock = Craftory.customBlockFactory.createLoad(locationCompound, persistenceStorage, location);
 
           manager.putActiveCustomBlock(customBlock);
         }
