@@ -11,7 +11,7 @@ public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
 
     @Override
     public void store(@NonNull final PersistenceStorage persistenceStorage, @NonNull final ArrayList<?> value, @NonNull final NBTCompound nbtCompound) {
-        if (value.size() == 0) {
+        if (value.size() == 0 || value.get(0) == null) {
             return;
         }
         nbtCompound.setString("dataclass",value.get(0).getClass().getName());
