@@ -3,15 +3,12 @@ package tech.brettsaunders.craftory.api.blocks;
 import static tech.brettsaunders.craftory.Utilities.getChunkID;
 import static tech.brettsaunders.craftory.Utilities.getLocationID;
 import static tech.brettsaunders.craftory.Utilities.getRegionID;
-
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,32 +16,17 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.event.world.WorldSaveEvent;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
-import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
-import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
-import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.utils.Logger;
 
-public class CustomBlockManager implements Listener {
+public class CustomBlockManager {
 
   private final static String DATA_FOLDER =
       Craftory.plugin.getDataFolder() + File.separator + "data";
 
   private PersistenceStorage persistenceStorage;
+  private CustomBlockManagerEvents customBlockManagerEvents;
 
   private final HashMap<Location, CustomBlock> currentCustomBlocks;
   private final HashMap<String, HashSet<CustomBlock>> activeChunks;
@@ -59,32 +41,20 @@ public class CustomBlockManager implements Listener {
     activeChunks = new HashMap<>();
     inactiveChunks = new HashMap<>();
     loadCustomBlockData();
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    customBlockManagerEvents = new CustomBlockManagerEvents(persistenceStorage,
+        currentCustomBlocks,
+        activeChunks,
+        inactiveChunks,
+        customBlockDataHashMap,
+        DATA_FOLDER,
+        this);
   }
 
-  @EventHandler
-  public void onPlace(BlockPlaceEvent e) {
-    if (!CustomItemManager.isCustomBlockItem(e.getItemInHand())) {
-      return;
-    }
-    final String customBlockItemName = CustomItemManager.getCustomItemName(e.getItemInHand());
-    if (!customBlockDataHashMap.containsKey(customBlockItemName)) {
-      return;
-    }
-    CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
-        e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced());
-    if (e.isCancelled()) {
-      customBlockPlaceEvent.setCancelled(true);
-    } else {
-
-      Block block = e.getBlockPlaced();
-      getCustomBlock(customBlockItemName, block);
-
-    }
-    Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
+  public CustomBlock getCustomBlock(Location location) {
+    return currentCustomBlocks.get(location);
   }
 
-  public Block getCustomBlock(String customBlockItemName, Block block) {
+  public CustomBlock getCustomBlockOfItem(String customBlockItemName, Block block) {
     CustomBlockData data = customBlockDataHashMap.get(customBlockItemName);
     block.setType(Material.BROWN_MUSHROOM_BLOCK);
 
@@ -100,11 +70,16 @@ public class CustomBlockManager implements Listener {
     multipleFacing.setFace(BlockFace.WEST, data.WEST);
     block.setBlockData(multipleFacing);
 
-    putActiveCustomBlock(new CustomBlock(block.getLocation(), customBlockItemName));
-    return block;
+    CustomBlock customBlock = Craftory.customBlockFactory.create(customBlockItemName, block.getLocation());
+    putActiveCustomBlock(customBlock);
+    return customBlock;
   }
 
   public void putActiveCustomBlock(CustomBlock customBlock) {
+    if (customBlock == null) {
+      Logger.warn("Custom Block is null");
+      return;
+    }
     String chunkID = getChunkID(customBlock.location.getChunk());
     HashSet<CustomBlock> chunkData;
     if (activeChunks.containsKey(chunkID)) {
@@ -118,15 +93,6 @@ public class CustomBlockManager implements Listener {
     currentCustomBlocks.put(customBlock.location, customBlock);
   }
 
-  @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-  public void onMushroomPhysics(BlockPhysicsEvent event) {
-    if ((event.getChangedType() == Material.BROWN_MUSHROOM_BLOCK)) {
-      event.setCancelled(true);
-      event.getBlock().getState().update(true, false);
-    }
-  }
-
-
   public void onEnable() {
     CustomBlockStorage.loadAllSavedRegions(DATA_FOLDER, this, persistenceStorage);
   }
@@ -135,104 +101,7 @@ public class CustomBlockManager implements Listener {
     CustomBlockStorage.saveAllCustomChunks(DATA_FOLDER, persistenceStorage, activeChunks, inactiveChunks);
   }
 
-  @EventHandler
-  public void onWorldSave(WorldSaveEvent e) {
-    CustomBlockStorage.saveAllCustomChunks(DATA_FOLDER, persistenceStorage, activeChunks, inactiveChunks);
-  }
 
-  @EventHandler
-  public void onBlockBreak(BlockBreakEvent e) {
-    final Location location = e.getBlock().getLocation();
-    if (currentCustomBlocks.containsKey(location)) {
-      //Return custom item
-      final String blockName = currentCustomBlocks.get(
-          location).blockName;
-      CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(
-          location, blockName);
-      if (e.isCancelled()) {
-        customBlockBreakEvent.setCancelled(true);
-      } else {
-        removeCustomBlock(currentCustomBlocks.get(location));
-//        removeIfLastActiveChunk(location);
-        if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-          location.getWorld()
-              .dropItemNaturally(location, CustomItemManager.getCustomItem(blockName));
-        }
-//        activeCustomBlocks.remove(location);
-      }
-      Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
-      e.getBlock().setType(Material.AIR);
-    }
-  }
-
-  @EventHandler
-  public void onChunkLoad(ChunkLoadEvent e) {
-    if (inactiveChunks.containsKey(getChunkID(e.getChunk()))) {
-      HashSet<CustomBlock> customBlocks = inactiveChunks.get(getChunkID(e.getChunk()));
-      customBlocks.forEach(block -> {
-        currentCustomBlocks.put(block.location, block);
-        if (Craftory.getBlockPoweredManager().isPoweredBlock(block.location)) {
-          Craftory.tickManager
-              .addTickingBlock(Craftory.getBlockPoweredManager().getPoweredBlock(block.location));
-        }
-      });
-      inactiveChunks.remove(getChunkID(e.getChunk()));
-    }
-  }
-
-  @EventHandler
-  public void onChunkUnLoad(ChunkUnloadEvent e) {
-    final String chunkID = getChunkID(e.getChunk());
-    if (activeChunks.containsKey(chunkID)) {
-      HashSet<CustomBlock> customBlocks = activeChunks.get(chunkID);
-      for (CustomBlock customBlock : customBlocks) {
-        if (currentCustomBlocks.containsKey(customBlock.location)) {
-          currentCustomBlocks.remove(customBlock.location);
-          if (Craftory.getBlockPoweredManager().isPoweredBlock(customBlock.location)) {
-            Craftory.tickManager
-                .removeTickingBlock(Craftory.getBlockPoweredManager().getPoweredBlock(customBlock.location));
-          }
-        }
-      }
-      inactiveChunks.put(chunkID, customBlocks);
-      activeChunks.remove(chunkID);
-    }
-  }
-
-  @EventHandler
-  public void onPistonExtend(BlockPistonExtendEvent e) {
-    e.getBlocks().forEach((block -> {
-      if (currentCustomBlocks.containsKey(block.getLocation())) {
-        e.setCancelled(true);
-        return;
-      }
-    }));
-  }
-
-  @EventHandler
-  public void onPistonRetract(BlockPistonRetractEvent e) {
-    e.getBlocks().forEach(block -> {
-      if (currentCustomBlocks.containsKey(block.getLocation())) {
-        e.setCancelled(true);
-        return;
-      }
-    });
-  }
-
-  @EventHandler
-  public void onCustomBlockInteract(PlayerInteractEvent e) {
-    if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-      if (currentCustomBlocks.containsKey(e.getClickedBlock().getLocation())) {
-        CustomBlockInteractEvent customBlockInteractEvent = new CustomBlockInteractEvent(
-            e.getAction(), e.getClickedBlock(), e.getBlockFace(), e.getItem(), e.getPlayer());
-        Bukkit.getServer().getPluginManager().callEvent(customBlockInteractEvent);
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) {
-          e.setCancelled(true); //eeeeee
-        }
-      }
-    }
-    return;
-  }
 
   /* API */
   //Only works in active chunk
@@ -256,7 +125,7 @@ public class CustomBlockManager implements Listener {
 
   /* Internal Methods */
 
-  private void removeCustomBlock(CustomBlock block) {
+  public void removeCustomBlock(CustomBlock block) {
     removeIfLastActiveChunk(block, false);
     currentCustomBlocks.remove(block.location);
     try {

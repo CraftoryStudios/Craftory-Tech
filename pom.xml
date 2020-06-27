@@ -3,6 +3,8 @@
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>Craftory</artifactId>
+  <url>brettsaunders.tech</url>
+  <version>0.1.0</version>
 
   <build>
     <defaultGoal>clean package</defaultGoal>
@@ -74,7 +76,7 @@
       <artifactId>spigot-api</artifactId>
       <groupId>org.spigotmc</groupId>
       <scope>provided</scope>
-      <version>1.15.2-R0.1-SNAPSHOT</version>
+      <version>1.16.1-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <artifactId>bstats-bukkit</artifactId>
@@ -112,9 +114,5 @@
       <url>https://repo.codemc.io/repository/maven-public/</url>
     </repository>
   </repositories>
-
-  <url>brettsaunders.tech</url>
-
-  <version>0.1.0</version>
 
 </project>

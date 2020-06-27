@@ -1,28 +1,29 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.generators;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
+import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
-import tech.brettsaunders.craftory.tech.power.core.manager.SolidFuelManager;
 
 public class SolidFuelGenerator extends BaseGenerator {
 
   protected static final int FUEL_SLOT = 22;
   /* Static Constants Private */
-  private static final long serialVersionUID = 10020L;
   private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 80;
-  private transient ItemStack fuelItem;
+  @Persistent
+  private ItemStack fuelItem;
 
   /* Construction */
   public SolidFuelGenerator() {
@@ -32,10 +33,12 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   /* Saving, Setup and Loading */
   public SolidFuelGenerator(Location location) {
-    super(location, C_LEVEL, C_OUTPUT_AMOUNT);
+    super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT);
     inputLocations.add(FUEL_SLOT);
-    inputSlots = new ItemStack[]{null};
+    inputSlots = new ArrayList<>();
+    inputSlots.add(new ItemStack(Material.AIR));
     interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
+    inputLocations.add(FUEL_SLOT);
   }
 
 
@@ -56,17 +59,9 @@ public class SolidFuelGenerator extends BaseGenerator {
     consumeFuel();
   }
 
-  @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    super.writeExternal(out);
-    ItemStack fuelItem = getFuelItem();
-    out.writeObject(fuelItem);
-  }
-
-  @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    super.readExternal(in);
-    fuelItem = (ItemStack) in.readObject();
+  @Ticking(ticks = 8)
+  public void updateFuelSlot() {
+    fuelItem = getFuelItem();
   }
 
   protected ItemStack getFuelItem() {
@@ -92,7 +87,6 @@ public class SolidFuelGenerator extends BaseGenerator {
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43, true));
     addGUIComponent(new GIndicator(inventory, runningContainer, 31));
-    inputLocations.add(FUEL_SLOT);
     if (fuelItem != null) {
       getInventory().setItem(FUEL_SLOT, fuelItem);
     }

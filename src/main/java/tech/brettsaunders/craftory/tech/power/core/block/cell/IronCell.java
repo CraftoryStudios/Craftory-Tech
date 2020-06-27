@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.cell;
 
 import org.bukkit.Location;
+import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 
 /**
@@ -11,13 +12,12 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 public class IronCell extends BaseCell {
 
   /* Static Constants Private */
-  private static final long serialVersionUID = 10015L;
   private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 200;
 
   /* Construction */
   public IronCell(Location location) {
-    super(location, C_LEVEL, C_OUTPUT_AMOUNT);
+    super(location, Blocks.IRON_CELL, C_LEVEL, C_OUTPUT_AMOUNT);
   }
 
   /* Saving, Setup and Loading */

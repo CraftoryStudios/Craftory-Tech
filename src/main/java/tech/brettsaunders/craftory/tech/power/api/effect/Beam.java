@@ -164,7 +164,7 @@ public class Beam {
     Packets.sendPacket(p, teamAddPacket);
   }
 
-  private boolean isCloseEnough(Location location, Player player) { //TODO FIx UP
+  private boolean isCloseEnough(Location location, Player player) {
     if (CustomItemManager
         .matchCustomItemName(player.getInventory().getItemInMainHand(), CoreHolder.Items.WRENCH) ||
         CustomItemManager.matchCustomItemName(player.getInventory().getItemInMainHand(),

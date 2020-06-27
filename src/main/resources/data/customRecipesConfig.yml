@@ -1,5 +1,5 @@
 recipes:
-  iron_cell:
+  IronCell:
     pattern:
       - SSS
       - SCS
@@ -8,10 +8,10 @@ recipes:
       C: iron_core
       S: steel_ingot
     result:
-      item: iron_cell
+      item: IronCell
       amount: 1
 
-  gold_cell:
+  GoldCell:
     pattern:
       - SSS
       - SCS
@@ -20,10 +20,10 @@ recipes:
       C: gold_core
       S: steel_ingot
     result:
-      item: gold_cell
+      item: GoldCell
       amount: 1
 
-  diamond_cell:
+  DiamondCell:
     pattern:
       - SSS
       - SCS
@@ -32,10 +32,10 @@ recipes:
       C: diamond_core
       S: steel_ingot
     result:
-      item: diamond_cell
+      item: DiamondCell
       amount: 1
 
-  emerald_cell:
+  EmeraldCell:
     pattern:
       - SSS
       - SCS
@@ -44,10 +44,10 @@ recipes:
       C: emerald_core
       S: steel_ingot
     result:
-      item: emerald_cell
+      item: EmeraldCell
       amount: 1
 
-  iron_electric_furnace:
+  IronElectricFurnace:
     pattern:
       - SSS
       - SCS
@@ -57,10 +57,10 @@ recipes:
       S: steel_ingot
       F: FURNACE
     result:
-      item: iron_electric_furnace
+      item: IronElectricFurnace
       amount: 1
 
-  gold_electric_furnace:
+  GoldElectricFurnace:
     pattern:
       - SSS
       - SCS
@@ -70,10 +70,10 @@ recipes:
       S: steel_ingot
       F: FURNACE
     result:
-      item: gold_electric_furnace
+      item: GoldElectricFurnace
       amount: 1
 
-  diamond_electric_furnace:
+  DiamondElectricFurnace:
     pattern:
       - SSS
       - SCS
@@ -83,10 +83,10 @@ recipes:
       S: steel_ingot
       F: FURNACE
     result:
-      item: diamond_electric_furnace
+      item: DiamondElectricFurnace
       amount: 1
 
-  emerald_electric_furnace:
+  EmeraldElectricFurnace:
     pattern:
       - SSS
       - SCS
@@ -96,7 +96,7 @@ recipes:
       S: steel_ingot
       F: FURNACE
     result:
-      item: emerald_electric_furnace
+      item: EmeraldElectricFurnace
       amount: 1
 
   iron_core:
@@ -169,4 +169,11 @@ recipes:
       I: IRON_INGOT
     result:
       item: magnetised_iron
+      amount: 1
+furnace_recipes:
+  copper_ingot:
+    input:
+      name: copper_ore
+    result:
+      name: copper_ingot
       amount: 1

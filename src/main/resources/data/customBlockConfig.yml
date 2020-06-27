@@ -1,5 +1,5 @@
 blocks:
-  iron_cell:
+  IronCell:
     UP: true
     DOWN: false
     NORTH: true
@@ -9,7 +9,7 @@ blocks:
     itemID: 6
     itemModel: stone
     displayName: Iron Energy-Cell
-  gold_cell:
+  GoldCell:
     UP: true
     DOWN: false
     NORTH: false
@@ -19,7 +19,7 @@ blocks:
     itemID: 10
     itemModel: stone
     displayName: Gold Energy-Cell
-  diamond_cell:
+  DiamondCell:
     UP: true
     DOWN: false
     NORTH: false
@@ -29,7 +29,7 @@ blocks:
     itemID: 14
     itemModel: stone
     displayName: Diamond Energy-Cell
-  emerald_cell:
+  EmeraldCell:
     UP: false
     DOWN: false
     NORTH: false
@@ -39,7 +39,7 @@ blocks:
     itemID: 12
     itemModel: stone
     displayName: Emerald Energy-Cell
-  solid_fuel_generator:
+  SolidFuelGenerator:
     UP: true
     DOWN: false
     NORTH: true
@@ -59,7 +59,7 @@ blocks:
     itemID: 9
     itemModel: stone
     displayName: Redstone Energy Connector
-  iron_electric_furnace:
+  IronElectricFurnace:
     UP: true
     DOWN: false
     NORTH: false
@@ -69,7 +69,7 @@ blocks:
     itemID: 8
     itemModel: stone
     displayName: Iron Electric Furnace
-  gold_electric_furnace:
+  GoldElectricFurnace:
     UP: true
     DOWN: false
     NORTH: false
@@ -79,7 +79,7 @@ blocks:
     itemID: 11
     itemModel: stone
     displayName: Gold Electric Furnace
-  diamond_electric_furnace:
+  DiamondElectricFurnace:
     UP: false
     DOWN: false
     NORTH: true
@@ -89,7 +89,7 @@ blocks:
     itemID: 15
     itemModel: stone
     displayName: Diamond Electric Furnace
-  emerald_electric_furnace:
+  EmeraldElectricFurnace:
     UP: false
     DOWN: false
     NORTH: true
@@ -99,7 +99,7 @@ blocks:
     itemID: 13
     itemModel: stone
     displayName: Emerald Electric Furnace
-  iron_foundry:
+  IronFoundry:
     UP: false
     DOWN: false
     NORTH: false
@@ -127,5 +127,5 @@ blocks:
     SOUTH: true
     WEST: true
     itemID: 16
-    itemModel: stone
+    itemModel: gold_ore
     displayName: Copper Ore

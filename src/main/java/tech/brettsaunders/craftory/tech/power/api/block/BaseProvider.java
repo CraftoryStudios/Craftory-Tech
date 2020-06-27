@@ -1,35 +1,31 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
+import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
+import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 
-public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider,
-    Externalizable {
+public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider {
 
   /* Static Constants Protected */
   protected static final Boolean[] DEFAULT_SIDES_CONFIG = {false, false, false, false, false,
       false};  //NORTH, EAST, SOUTH, WEST, UP, DOWN
-  /* Static Constants Private */
-  private static final long serialVersionUID = 10008L;
   /* Per Object Variables Saved */
+  @Persistent
   protected int maxOutput;
+  @Persistent
   protected ArrayList<Boolean> sidesConfig;
 
   /* Per Object Variables Not-Saved */
 
 
   /* Construction */
-  public BaseProvider(Location location, byte level, int maxOutput) {
-    super(location, level);
+  public BaseProvider(Location location, String blockName, byte level, int maxOutput) {
+    super(location, blockName, level);
     this.maxOutput = maxOutput;
     init();
     Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
@@ -44,21 +40,6 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   /* Common Load and Construction */
   private void init() {
     sidesConfig = new ArrayList<>(6);
-  }
-
-  @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    super.writeExternal(out);
-    out.writeObject(sidesConfig);
-    out.writeInt(maxOutput);
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    super.readExternal(in);
-    sidesConfig = (ArrayList<Boolean>) in.readObject();
-    maxOutput = in.readInt();
   }
 
   /* Update Loop */
@@ -86,7 +67,6 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     transferEnergy();
   }
 
-  //TODO compare to energyStorage.extractEnergy
   public int retrieveEnergy(int energy) {
     int energyExtracted = Math.min(getEnergyStored(), Math.min(energy, maxOutput));
     energyStorage.modifyEnergyStored(-energyExtracted);
@@ -99,12 +79,12 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
   public int insertEnergyIntoAdjacentEnergyReceiver(int side, int energy, boolean simulate) {
     Location targetLocation = this.location.getBlock().getRelative(faces[side]).getLocation();
-    if (Craftory.getBlockPoweredManager().isReceiver(targetLocation)) {
-      if (Craftory.getBlockPoweredManager().isProvider(targetLocation)) {
-        return ((BaseCell) Craftory.getBlockPoweredManager().getPoweredBlock(targetLocation))
+    if (PoweredBlockUtils.isEnergyReceiver(targetLocation)) {
+      if (PoweredBlockUtils.isEnergyProvider(targetLocation)) {
+        return ((BaseCell) PoweredBlockUtils.getPoweredBlock(targetLocation))
             .receiveEnergy(energy, simulate);
       } else {
-        return ((BaseMachine) Craftory.getBlockPoweredManager().getPoweredBlock(targetLocation))
+        return ((BaseMachine) PoweredBlockUtils.getPoweredBlock(targetLocation))
             .receiveEnergy(energy, simulate);
       }
     } else {

@@ -1,14 +1,12 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -22,14 +20,13 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 
-public class BaseFoundry extends BaseMachine implements Externalizable, IHopperInteract {
+public class BaseFoundry extends BaseMachine implements IHopperInteract {
 
   /* Static Constants Protected */
   protected static final int[] PROCESSING_TIME_LEVEL = {400, 300, 200, 100}; //MC 200 ticks
   protected static final int[] ENERGY_CONSUMPTION_LEVEL = {20, 30, 50, 100};
   protected static final int[] CAPACITY_LEVEL = {5000, 10000, 25000, 50000};
   /* Static Constants Private */
-  private static final long serialVersionUID = 10023L;
   private static final int INPUT_LOCATION1 = 12;
   private static final int INPUT_LOCATION2 = 30;
   private static final int OUTPUT_LOCATION = 25;
@@ -56,16 +53,18 @@ public class BaseFoundry extends BaseMachine implements Externalizable, IHopperI
 
 
   /* Construction */
-  public BaseFoundry(Location location, byte level) {
-    super(location, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
+  public BaseFoundry(Location location, String blockName, byte level) {
+    super(location,blockName, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
     init();
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
-    inputSlots = new ItemStack[]{null, null};
-    outputSlots = new ItemStack[]{null};
+    inputSlots = new ArrayList<>();
+    inputSlots.add(new ItemStack(Material.AIR));
+    inputSlots.add(new ItemStack(Material.AIR));
+    outputSlots = new ArrayList<>();
+    outputSlots.add(new ItemStack(Material.AIR));
     inputLocations.add(INPUT_LOCATION1);
     inputLocations.add(INPUT_LOCATION2);
     outputLocations.add(OUTPUT_LOCATION);
-    setupGUI();
   }
 
   /* Saving, Setup and Loading */
@@ -83,20 +82,6 @@ public class BaseFoundry extends BaseMachine implements Externalizable, IHopperI
   }
 
   @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    super.writeExternal(out);
-    updateSlots();
-    out.writeObject(energyStorage);
-
-  }
-
-  @Override
-  public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-    super.readExternal(in);
-    energyStorage = (EnergyStorage) in.readObject();
-  }
-
-  @Override
   public void setupGUI() {
     Inventory inventory = setInterfaceTitle("Foundry", Font.FOUNDRY_GUI.label + "");
     addGUIComponent(
@@ -104,51 +89,54 @@ public class BaseFoundry extends BaseMachine implements Externalizable, IHopperI
             OUTPUT_LOCATION));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer, 21));
-    inventory.setItem(INPUT_LOCATION1, inputSlots[0]);
-    inventory.setItem(INPUT_LOCATION2, inputSlots[1]);
-    inventory.setItem(OUTPUT_LOCATION, outputSlots[0]);
+    if (inputSlots.size() == 0) inputSlots.add(0, new ItemStack(Material.AIR));
+    if (inputSlots.size() == 0) inputSlots.add(1, new ItemStack(Material.AIR));
+    if (outputSlots.size() == 0) outputSlots.add(0, new ItemStack(Material.AIR));
+    inventory.setItem(INPUT_LOCATION1, inputSlots.get(0));
+    inventory.setItem(INPUT_LOCATION2, inputSlots.get(1));
+    inventory.setItem(OUTPUT_LOCATION, outputSlots.get(0));
     this.inventoryInterface = inventory;
   }
 
 
   @Override
   protected void processComplete() {
-    inputSlots[0].setAmount(inputSlots[0].getAmount() - 1);
-    inputSlots[1].setAmount(inputSlots[1].getAmount() - 1);
-    if (outputSlots[0] == null) {
-      outputSlots[0] = CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT);
+    inputSlots.get(0).setAmount(inputSlots.get(0).getAmount() - 1);
+    inputSlots.get(1).setAmount(inputSlots.get(1).getAmount() - 1);
+    if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
+      outputSlots.set(0, CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT));
     } else {
-      outputSlots[0].setAmount(outputSlots[0].getAmount() + 1);
+      outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + 1);
     }
-    inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots[0]);
+    inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots.get(0));
   }
 
   /* Internal Helper Functions */
   @Override
   protected void updateSlots() {
-    inputSlots[0] = inventoryInterface.getItem(INPUT_LOCATION1);
-    inputSlots[1] = inventoryInterface.getItem(INPUT_LOCATION2);
-    outputSlots[0] = inventoryInterface.getItem(OUTPUT_LOCATION);
+    inputSlots.set(0, inventoryInterface.getItem(INPUT_LOCATION1));
+    inputSlots.set(1, inventoryInterface.getItem(INPUT_LOCATION2));
+    outputSlots.set(0, inventoryInterface.getItem(OUTPUT_LOCATION));
   }
 
 
   @Override
   protected boolean validateContentes() {
-    if (inputSlots[0] == null || inputSlots[1] == null) {
+    if (inputSlots.get(0) == null || inputSlots.get(1) == null || inputSlots.get(0).getType() == Material.AIR || inputSlots.get(1).getType() == Material.AIR) {
       return false;
     }
-    String inputType1 = CustomItemManager.getCustomItemName(inputSlots[0]);
-    String inputType2 = CustomItemManager.getCustomItemName(inputSlots[1]);
-    int inputAmount1 = inputSlots[0].getAmount();
-    int inputAmount2 = inputSlots[1].getAmount();
+    String inputType1 = CustomItemManager.getCustomItemName(inputSlots.get(0));
+    String inputType2 = CustomItemManager.getCustomItemName(inputSlots.get(1));
+    int inputAmount1 = inputSlots.get(0).getAmount();
+    int inputAmount2 = inputSlots.get(1).getAmount();
     String outputType = null;
-    if (outputSlots[0] != null) {
-      outputType = CustomItemManager.getCustomItemName(outputSlots[0]);
+    if (outputSlots.get(0) != null && outputSlots.get(0).getType() != Material.AIR) {
+      outputType = CustomItemManager.getCustomItemName(outputSlots.get(0));
     }
     //If the recipe is unchanged there is no need to find the recipe.
-
+    boolean valid;
     if (currentRecipe != null) {
-      boolean valid = true;
+       valid = true;
       for (Map.Entry<String, Integer> entry : currentRecipe.getIngredients().entrySet()) {
         String item = entry.getKey();
         int number = entry.getValue();
@@ -158,16 +146,17 @@ public class BaseFoundry extends BaseMachine implements Externalizable, IHopperI
           break;
         }
       }
-      if (valid && outputSlots[0] != null) {
-        if (currentRecipe.getProducts().containsKey(outputType)
-            && (outputSlots[0].getAmount() + currentRecipe.getProducts().get(outputType))
-            <= outputSlots[0].getMaxStackSize()) {
-          return true;
+      if (valid && outputSlots.get(0) != null && outputSlots.get(0).getType() != Material.AIR) {
+        for(ItemStack stack: currentRecipe.getProducts()){
+          if(outputType.equals(CustomItemManager.getCustomItemName(stack)) &&
+              (outputSlots.get(0).getAmount() + stack.getAmount()) <= outputSlots.get(0).getMaxStackSize()) {
+            return true;
+          }
         }
       }
     }
     for (CustomMachineRecipe recipe : RecipeUtils.getTwoToOneRecipes()) {
-      boolean valid = true;
+      valid = true;
       for (Map.Entry<String, Integer> entry : recipe.getIngredients().entrySet()) {
         String item = entry.getKey();
         int number = entry.getValue();
@@ -179,10 +168,12 @@ public class BaseFoundry extends BaseMachine implements Externalizable, IHopperI
       }
       if (valid) {
         currentRecipe = recipe;
-        if (outputSlots[0] == null || (currentRecipe.getProducts().containsKey(outputType)
-            && (outputSlots[0].getAmount() + currentRecipe.getProducts().get(outputType))
-            <= outputSlots[0].getMaxStackSize())) {
-          return true;
+        if (outputSlots.get(0) == null || outputSlots.get(0).getType().equals(Material.AIR)) return true;
+        for(ItemStack stack: currentRecipe.getProducts()){
+          if(outputType.equals(CustomItemManager.getCustomItemName(stack)) &&
+              (outputSlots.get(0).getAmount() + stack.getAmount()) <= outputSlots.get(0).getMaxStackSize()) {
+            return true;
+          }
         }
       }
     }

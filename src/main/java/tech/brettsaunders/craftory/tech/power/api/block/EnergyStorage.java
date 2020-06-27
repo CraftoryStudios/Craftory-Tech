@@ -1,18 +1,13 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyStorage;
 
 /**
  * Implementation of {@link IEnergyStorage}
  */
-public class EnergyStorage implements IEnergyStorage, Externalizable {
+public class EnergyStorage implements IEnergyStorage {
 
   /* Static Constants Private */
-  private static final long serialVersionUID = 10010L;
 
   /* Static Constants Protected */
 
@@ -40,26 +35,13 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
     this.maxExtract = maxExtract;
   }
 
-  /* Saving, Setup and Loading */
-  public EnergyStorage() {
-    super();
+  public EnergyStorage(int energy, int capacity, int maxReceive, int maxExtract) {
+    this.energy = energy;
+    this.capacity = capacity;
+    this.maxReceive = maxReceive;
+    this.maxExtract = maxExtract;
   }
 
-  @Override
-  public void writeExternal(ObjectOutput out) throws IOException {
-    out.writeInt(energy);
-    out.writeInt(capacity);
-    out.writeInt(maxReceive);
-    out.writeInt(maxExtract);
-  }
-
-  @Override
-  public void readExternal(ObjectInput in) throws IOException {
-    energy = in.readInt();
-    capacity = in.readInt();
-    maxReceive = in.readInt();
-    maxExtract = in.readInt();
-  }
 
   /* Common Methods */
   public EnergyStorage setCapacity(int capacity) {
@@ -80,17 +62,14 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
   }
 
   public int getMaxReceive() {
-
     return maxReceive;
   }
 
   public void setMaxReceive(int maxReceive) {
-
     this.maxReceive = maxReceive;
   }
 
   public int getMaxExtract() {
-
     return maxExtract;
   }
 
@@ -136,7 +115,6 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
 
   @Override
   public int getEnergyStored() {
-
     return energy;
   }
 
@@ -153,7 +131,6 @@ public class EnergyStorage implements IEnergyStorage, Externalizable {
 
   @Override
   public int getMaxEnergyStored() {
-
     return capacity;
   }
 }

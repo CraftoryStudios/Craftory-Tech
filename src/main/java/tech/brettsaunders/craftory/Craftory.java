@@ -6,12 +6,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
+import tech.brettsaunders.craftory.api.blocks.PoweredBlockEvents;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
-import tech.brettsaunders.craftory.tech.power.core.manager.PowerConnectorManager;
-import tech.brettsaunders.craftory.tech.power.core.manager.PoweredBlockManager;
+import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
+import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.OrePopulator;
@@ -19,33 +21,36 @@ import tech.brettsaunders.craftory.world.OrePopulator;
 
 public final class Craftory extends JavaPlugin {
 
-  public static final String VERSION = "0.1.0";
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/4305987a904a41eb68d2eb618c0cf640b46d13b6.zip";
-  public static final String HASH = "4305987a904a41eb68d2eb618c0cf640b46d13b6";
+  public static String VERSION;
+  public static final int SPIGOT_ID = 12345;
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/05d7f631b06ccb9eaff2e6ffb25b3559678f193e.zip";
+  public static final String HASH = "05d7f631b06ccb9eaff2e6ffb25b3559678f193e";
 
-  public static PowerConnectorManager powerConnectorManager = null;
+  public static PowerConnectorManager powerConnectorManager;
+  public static CustomBlockFactory customBlockFactory;
   public static Craftory plugin = null;
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
   public static FileConfiguration customBlocksConfig;
   public static FileConfiguration customRecipeConfig;
   public static CustomBlockTickManager tickManager;
+  public static PowerGridManager powerGridManager;
+
   private static File customItemConfigFile;
   private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
-  private static PoweredBlockManager blockPoweredManager = null;
   private static OrePopulator orePopulator;
-
-  public static PoweredBlockManager getBlockPoweredManager() {
-    return blockPoweredManager;
-  }
 
   @Override
   public void onEnable() {
+    Craftory.VERSION = this.getDescription().getVersion();
     Craftory.plugin = this;
+    customBlockFactory = new CustomBlockFactory();
     Utilities.pluginBanner();
+    Utilities.checkVersion();
     Utilities.createDataPath();
     Utilities.createConfigs();
+    Utilities.registerCustomBlocks();
     Utilities.registerCommandsAndCompletions();
     Utilities.registerEvents();
     new ResourcePackEvents();
@@ -64,10 +69,10 @@ public final class Craftory extends JavaPlugin {
     customBlockManager = new CustomBlockManager();
     customBlockManager.onEnable();
     new RecipeManager();
-    blockPoweredManager = new PoweredBlockManager();
+    new PoweredBlockEvents();
+    powerGridManager = new PowerGridManager();
     powerConnectorManager = new PowerConnectorManager();
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
-    blockPoweredManager.onEnable();
     Utilities.startMetrics();
     Utilities.done();
     orePopulator = new OrePopulator();
@@ -84,7 +89,6 @@ public final class Craftory extends JavaPlugin {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    blockPoweredManager.onDisable();
     customBlockManager.onDisable();
     Utilities.reloadConfigFile();
     Utilities.saveConfigFile();

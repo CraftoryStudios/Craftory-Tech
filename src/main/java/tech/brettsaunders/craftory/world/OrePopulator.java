@@ -1,5 +1,7 @@
 package tech.brettsaunders.craftory.world;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -7,13 +9,12 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class OrePopulator extends BlockPopulator {
 
   @Override
   public void populate(World world, Random random, Chunk chunk) {
-    spawnOre(random, chunk, "copper_ore", 10, 60, 3, 6, 10, 60);
+    spawnOre(random, chunk, "copper_ore", 8, 60, 3, 6, 10, 60);
   }
 
   private void spawnCommonOre(Random r, Chunk chunk, String ore) {
@@ -27,26 +28,29 @@ public class OrePopulator extends BlockPopulator {
   private void spawnOre(Random r, Chunk chunk, String ore, int attempts, int chance,
       int minVeinSize, int maxVeinSize, int minHeight, int maxHeight) {
     int x, y, z;
-    int xx, yy, zz;
     Block block;
     boolean valid;
+    ArrayList<Integer> options;
     for (int i = 0; i < attempts; i++) {
       if (r.nextInt(100) < chance) {
         x = r.nextInt(16);
         z = r.nextInt(16);
         y = minHeight + r.nextInt(maxHeight - minHeight);
         block = chunk.getBlock(x, y, z);
-        if (valid = validBlock(block)) {
-          Craftory.customBlockManager.getCustomBlock(ore, block);
+        if (validBlock(block)) {
+          Craftory.customBlockManager.getCustomBlockOfItem(ore, block);
           for (int j = 0; j < maxVeinSize; j++) {
-            if (j >= minVeinSize && r.nextInt(100) < 33) {
+            if (j >= minVeinSize && r.nextInt(100) < 40) {
               break;
             }
-            for (int k = 0; k < 12; k++) {
+            int xx, yy, zz;
+            options = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4, 5));
+            valid = false;
+            while (options.size() > 0) {
               xx = x;
               yy = y;
               zz = z;
-              switch (r.nextInt(6)) {  // The direction chooser
+              switch (options.remove(r.nextInt(options.size()))) {
                 case 0:
                   x++;
                   break;
@@ -66,26 +70,21 @@ public class OrePopulator extends BlockPopulator {
                   z--;
                   break;
               }
-              if (x < 0 || x > 15 || y < 0 || y > 15 || z < 0 || z > 15 || (!validBlock(
-                  block = chunk.getBlock(x, y, z)))) {
+              if (x < 0 || x > 15 || y < minHeight || y > maxHeight || z < 0 || z > 15 || (!validBlock(block = chunk.getBlock(x, y, z)))) {
                 x = xx;
                 y = yy;
                 z = zz;
-                valid = false;
               } else {
                 valid = true;
                 break;
               }
             }
             if (valid) {
-              Logger.info("Spawned " + j + " block in vein");
-              Craftory.customBlockManager.getCustomBlock(ore, block);
+              Craftory.customBlockManager.getCustomBlockOfItem(ore, block);
             } else {
-              Logger.info("Failed to find any locations " + j);
               break;
             }
           }
-
         }
       }
     }

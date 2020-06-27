@@ -1,21 +1,28 @@
 package tech.brettsaunders.craftory.api.blocks.events;
 
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 
 public class CustomBlockBreakEvent extends Event implements Cancellable {
 
   private static final HandlerList HANDLERS = new HandlerList();
+  @Getter
   private final Location location;
+  @Getter
   private final String name;
   private boolean isCancelled;
+  @Getter
+  private CustomBlock customBlock;
 
-  public CustomBlockBreakEvent(Location location, String name) {
+  public CustomBlockBreakEvent(Location location, String name, CustomBlock customBlock) {
     this.location = location;
     this.name = name;
     this.isCancelled = false;
+    this.customBlock = customBlock;
   }
 
   public static HandlerList getHandlerList() {
@@ -25,14 +32,6 @@ public class CustomBlockBreakEvent extends Event implements Cancellable {
   @Override
   public HandlerList getHandlers() {
     return HANDLERS;
-  }
-
-  public Location getLocation() {
-    return location;
-  }
-
-  public String getName() {
-    return name;
   }
 
   @Override
