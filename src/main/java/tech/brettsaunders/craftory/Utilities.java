@@ -29,6 +29,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class Utilities {
 
@@ -61,6 +62,16 @@ public class Utilities {
     drawBanner("&2                                      __/ |");
     drawBanner("&2                                     |___/ ");
     drawBanner("&2-------------------------------------------");
+  }
+
+  static void checkVersion() {
+    new UpdateChecker(Craftory.plugin, Craftory.SPIGOT_ID).getVersion(version -> {
+      if (Craftory.VERSION.equalsIgnoreCase(version)) {
+        Logger.info("Plugin is update to date!");
+      } else {
+        Logger.info("There is a new update available!");
+      }
+    });
   }
 
   static void createConfigs() {

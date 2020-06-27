@@ -53,14 +53,16 @@ public class PoweredBlockEvents implements Listener {
     }
     //Drop Inventory
     if(PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) {
-      PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock(e.getLocation());
+      PoweredBlock poweredBlock = (PoweredBlock) e.getCustomBlock();
       World world = e.getLocation().getWorld();
       Inventory inventory = poweredBlock.getInventory();
-      ItemStack item;
-      for (Integer i : poweredBlock.getInteractableSlots()) {
-        item = inventory.getItem(i);
-        if (item != null) {
-          world.dropItemNaturally(e.getLocation(), item);
+      if (inventory != null) {
+        ItemStack item;
+        for (Integer i : poweredBlock.getInteractableSlots()) {
+          item = inventory.getItem(i);
+          if (item != null) {
+            world.dropItemNaturally(e.getLocation(), item);
+          }
         }
       }
     }

@@ -3,6 +3,8 @@
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>Craftory</artifactId>
+  <url>brettsaunders.tech</url>
+  <version>0.1.0</version>
 
   <build>
     <defaultGoal>clean package</defaultGoal>
@@ -112,9 +114,5 @@
       <url>https://repo.codemc.io/repository/maven-public/</url>
     </repository>
   </repositories>
-
-  <url>brettsaunders.tech</url>
-
-  <version>0.1.0</version>
 
 </project>

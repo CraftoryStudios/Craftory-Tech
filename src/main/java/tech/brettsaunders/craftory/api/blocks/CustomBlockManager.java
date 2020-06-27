@@ -71,7 +71,6 @@ public class CustomBlockManager {
     block.setBlockData(multipleFacing);
 
     CustomBlock customBlock = Craftory.customBlockFactory.create(customBlockItemName, block.getLocation());
-    Logger.info(customBlock.location.toString());
     putActiveCustomBlock(customBlock);
     return customBlock;
   }
