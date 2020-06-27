@@ -19,9 +19,9 @@ import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
+import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
-import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
 /**
@@ -207,7 +207,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         if (face.equals(BlockFace.DOWN)) {
           this.setSideCache(face, INTERACTABLEBLOCK.HOPPER_OUT);
         }
-      } else if (b.getLocation() instanceof IEnergyReceiver) {
+      } else if (PoweredBlockUtils.isEnergyReceiver(b.getLocation())) {
         this.setSideCache(face, INTERACTABLEBLOCK.RECIEVER);
       }
     }

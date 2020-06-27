@@ -43,6 +43,7 @@ public class PersistenceStorage {
 
         // Register default converters
         registerDataConverter(String.class, new StringAdapter(), false);
+        registerDataConverter(int.class, new IntegerAdapter(), false);
         registerDataConverter(Integer.class, new IntegerAdapter(), false);
         registerDataConverter(Long.class, new LongAdapter(), false);
         registerDataConverter(HashMap.class, new HashMapAdapter(), false);
