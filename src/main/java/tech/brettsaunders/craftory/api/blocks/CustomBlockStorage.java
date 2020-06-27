@@ -91,7 +91,7 @@ public class CustomBlockStorage {
           locationCompound = chunkCompound.getCompound(locationKey);
           location = keyToLoc(locationKey, world);
           customBlock = Craftory.customBlockFactory.createLoad(locationCompound, persistenceStorage, location);
-
+          Craftory.tickManager.addTickingBlock(customBlock);
           manager.putActiveCustomBlock(customBlock);
         }
       }

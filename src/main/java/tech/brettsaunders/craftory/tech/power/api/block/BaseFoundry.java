@@ -89,6 +89,9 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
             OUTPUT_LOCATION));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer, 21));
+    if (inputSlots.size() == 0) inputSlots.add(0, new ItemStack(Material.AIR));
+    if (inputSlots.size() == 0) inputSlots.add(1, new ItemStack(Material.AIR));
+    if (outputSlots.size() == 0) outputSlots.add(0, new ItemStack(Material.AIR));
     inventory.setItem(INPUT_LOCATION1, inputSlots.get(0));
     inventory.setItem(INPUT_LOCATION2, inputSlots.get(1));
     inventory.setItem(OUTPUT_LOCATION, outputSlots.get(0));

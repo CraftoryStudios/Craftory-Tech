@@ -8,7 +8,7 @@ public class EnergyStorageAdapter implements DataAdapter<EnergyStorage> {
 
     @Override
     public void store(PersistenceStorage persistenceStorage, EnergyStorage value, NBTCompound nbtCompound) {
-        if (value != null) {
+        if (value == null) {
             return;
         }
         nbtCompound.setInteger("energy", value.getEnergyStored());

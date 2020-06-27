@@ -10,7 +10,7 @@ public class LocationAdapter implements DataAdapter<Location> {
 
     @Override
     public void store(PersistenceStorage persistenceStorage, Location value, NBTCompound nbtCompound) {
-        if (value != null) {
+        if (value == null) {
             return;
         }
         nbtCompound.setString("world", value.getWorld().getName());

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.utils.Logger;
 
 @NoArgsConstructor
 public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
@@ -25,13 +26,16 @@ public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
     public ArrayList<Object> parse(PersistenceStorage persistenceStorage, Object parentObject, NBTCompound nbtCompound) {
         Class dataClass;
         ArrayList<Object> arrayList = new ArrayList<>();
+        if (nbtCompound.getKeys().size() == 0) return arrayList;
         try {
             dataClass = Class.forName(nbtCompound.getString("dataclass"));
             for (String key : nbtCompound.getKeys()) {
+                if (key.equals("dataclass")) continue;
                 NBTCompound container = nbtCompound.getCompound(key);
-                arrayList.set(Integer.parseInt(key), persistenceStorage.loadObject(parentObject, dataClass, container));
+                arrayList.add(persistenceStorage.loadObject(parentObject, dataClass, container));
             }
         } catch (ClassNotFoundException ex) {
+            Logger.error(nbtCompound.getString("dataclass"));
             ex.printStackTrace();
         }
         return arrayList;

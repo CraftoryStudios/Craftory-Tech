@@ -20,10 +20,12 @@ public abstract class BaseGenerator extends BaseProvider {
 
   /* Per Object Variables Not-Saved */
   protected transient VariableContainer<Boolean> runningContainer;
-  protected transient int maxFuelRE;
-  protected transient int lastEnergy;
-  protected transient boolean isActive;
-  protected transient boolean wasActive;
+  @Persistent
+  protected int maxFuelRE;
+  @Persistent
+  protected int lastEnergy;
+  protected boolean isActive;
+  protected boolean wasActive;
 
   /* Construction */
   public BaseGenerator(Location location, String blockName, byte level, int outputAmount) {
@@ -35,10 +37,9 @@ public abstract class BaseGenerator extends BaseProvider {
   /* Saving, Setup and Loading */
   public BaseGenerator() {
     super();
-    init();
+    isActive = true;
     wasActive = false;
-    lastEnergy = 0;
-    maxFuelRE = 0;
+    init();
   }
 
   /* Common Load and Construction */
