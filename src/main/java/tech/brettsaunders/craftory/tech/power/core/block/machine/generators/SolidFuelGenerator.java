@@ -38,6 +38,7 @@ public class SolidFuelGenerator extends BaseGenerator {
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
     interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
+    inputLocations.add(FUEL_SLOT);
   }
 
 
@@ -86,7 +87,6 @@ public class SolidFuelGenerator extends BaseGenerator {
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43, true));
     addGUIComponent(new GIndicator(inventory, runningContainer, 31));
-    inputLocations.add(FUEL_SLOT);
     if (fuelItem != null) {
       getInventory().setItem(FUEL_SLOT, fuelItem);
     }

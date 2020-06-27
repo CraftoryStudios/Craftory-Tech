@@ -37,8 +37,8 @@ public abstract class BaseGenerator extends BaseProvider {
   /* Saving, Setup and Loading */
   public BaseGenerator() {
     super();
-    isActive = true;
-    wasActive = false;
+    isActive = false;
+    wasActive = true;
     init();
   }
 
