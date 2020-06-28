@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.CampfireRecipe;
@@ -17,6 +16,7 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.SmokingRecipe;
 import org.bukkit.inventory.StonecuttingRecipe;
 import tech.brettsaunders.craftory.CoreHolder;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class RecipeUtils {
@@ -33,8 +33,9 @@ public class RecipeUtils {
   private static final HashSet<CustomMachineRecipe> twoToOneRecipes = new HashSet<>();
 
   static {
-    Logger.debug("Extracting Bukkit Recipes");
-    Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
+    Logger.debug("Extracting Recipes");
+    Iterator<Recipe> recipeIterator;
+    recipeIterator = Craftory.plugin.getServer().recipeIterator();
     while (recipeIterator.hasNext()) {
       Recipe recipe = recipeIterator.next();
       allRecipes.add(recipe);
@@ -58,6 +59,18 @@ public class RecipeUtils {
         campfireRecipes.add(recipe);
       }
     }
+    /*for(Material material: Material.values()) {
+      List<Recipe> recipes =  Craftory.plugin.getServer().getRecipesFor(new ItemStack(material));
+      for(Recipe recipe: recipes) {
+        if(recipe instanceof FurnaceRecipe) {
+          HashMap<String, Integer> ingredients = new HashMap<>();
+          ingredients.put(((FurnaceRecipe) recipe).getInput().getType().toString(),((FurnaceRecipe) recipe).getInput().getAmount());
+          ArrayList<ItemStack> products = new ArrayList<>();
+          products.add(recipe.getResult().clone());
+          furnaceRecipes.add(new CustomMachineRecipe(ingredients,products));
+        }
+      }
+    } */
     //Add foundry iron + coal -> steel recipe
     HashMap<String, Integer> ingredients = new HashMap<>();
     ingredients.put(Material.COAL.toString(), 1);

@@ -8,13 +8,14 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
+import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 
 public class OrePopulator extends BlockPopulator {
 
   @Override
   public void populate(World world, Random random, Chunk chunk) {
-    spawnOre(random, chunk, "copper_ore", 8, 60, 3, 6, 10, 60);
+    spawnOre(random, chunk, Blocks.COPPER_ORE, 8, 60, 3, 6, 10, 60);
   }
 
   private void spawnCommonOre(Random r, Chunk chunk, String ore) {
