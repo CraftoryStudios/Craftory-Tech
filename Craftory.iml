@@ -27,7 +27,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
-    <orderEntry type="library" name="CrazyAdvancementsAPI" level="project" />
     <orderEntry type="module-library">
       <library name="Maven: eu.endercentral.crazy_advancements:CrazyAdvancementsAPI:1.13.8">
         <CLASSES>
@@ -47,5 +46,6 @@
     <orderEntry type="library" name="Maven: org.bstats:bstats-bukkit:1.7" level="project" />
     <orderEntry type="library" name="Maven: de.tr7zw:item-nbt-api:2.4.1" level="project" />
     <orderEntry type="library" name="Maven: de.tr7zw:functional-annotations:0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="CrazyAdvancementsAPI" level="project" />
   </component>
 </module>

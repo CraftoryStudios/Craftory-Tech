@@ -139,3 +139,33 @@ blocks:
     itemID: 17
     itemModel: stone
     displayName: Iron Foundry
+  GoldElectricFoundry:
+    UP: true
+    DOWN: false
+    NORTH: true
+    EAST: false
+    SOUTH: true
+    WEST: true
+    itemID: 18
+    itemModel: stone
+    displayName: Gold Electric Foundry
+  DiamondElectricFoundry:
+    UP: false
+    DOWN: false
+    NORTH: false
+    EAST: true
+    SOUTH: false
+    WEST: false
+    itemID: 19
+    itemModel: stone
+    displayName: Diamond Electric Foundry
+  EmeraldElectricFoundry:
+    UP: false
+    DOWN: false
+    NORTH: false
+    EAST: true
+    SOUTH: false
+    WEST: true
+    itemID: 20
+    itemModel: stone
+    displayName: Emerald Electric Foundry
