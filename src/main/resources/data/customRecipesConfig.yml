@@ -282,7 +282,7 @@ recipes:
 furnace_recipes:
   copper_ingot:
     input:
-      name: copper_ore
+      name: CopperOre
     result:
       name: copper_ingot
       amount: 1
