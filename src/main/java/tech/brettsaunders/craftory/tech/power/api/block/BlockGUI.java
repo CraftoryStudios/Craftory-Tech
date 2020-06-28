@@ -52,9 +52,6 @@ public abstract class BlockGUI extends CustomBlock {
   }
 
   public Inventory getInventory() {
-    if (inventoryInterface == null) {
-      return null;
-    }
     return inventoryInterface;
   }
 

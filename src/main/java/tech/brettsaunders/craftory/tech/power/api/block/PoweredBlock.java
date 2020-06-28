@@ -54,10 +54,10 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   /* Construction */
   public PoweredBlock(Location location, String blockName, byte level) {
     super(location, blockName);
-    cacheSides();
+    cachedSides = new HashMap<>();
     this.energyStorage = new EnergyStorage(0);
     this.level = level;
-    cachedSides = new HashMap<>();
+    cacheSides();
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
   }
@@ -207,7 +207,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         if (face.equals(BlockFace.DOWN)) {
           this.setSideCache(face, INTERACTABLEBLOCK.HOPPER_OUT);
         }
-      } else if (PoweredBlockUtils.isEnergyReceiver(b.getLocation())) {
+      } else if (PoweredBlockUtils.isPoweredBlock(b.getLocation()) && PoweredBlockUtils.isEnergyReceiver(b.getLocation())) {
         this.setSideCache(face, INTERACTABLEBLOCK.RECIEVER);
       }
     }

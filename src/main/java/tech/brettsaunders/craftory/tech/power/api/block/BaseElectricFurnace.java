@@ -55,6 +55,8 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
   public BaseElectricFurnace(Location location, String blockName, byte level) {
     super(location, blockName, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
     init();
+    processTime = COOKING_TIME_LEVEL[level];
+    energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
@@ -72,11 +74,16 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
 
   /* Common Load and Construction */
   public void init() {
-    processTime = COOKING_TIME_LEVEL[level];
-    energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
     runningContainer = new VariableContainer<>(false);
     progressContainer = new VariableContainer<>(0d);
     interactableSlots = new HashSet<>(Arrays.asList(INPUT_LOCATION, OUTPUT_LOCATION));
+  }
+
+  @Override
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
+    processTime = COOKING_TIME_LEVEL[level];
+    energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
   }
 
   @Override

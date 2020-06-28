@@ -1,6 +1,7 @@
 ![Pre-Release](https://github.com/brettsaunders21/Craftory/workflows/Pre-Release/badge.svg) ![TaggedRelease](https://github.com/brettsaunders21/Craftory/workflows/TaggedRelease/badge.svg) ![sentryRelease](https://github.com/brettsaunders21/Craftory/workflows/sentryRelease/badge.svg)
 
-# Craftory Lite - ALPHA
+
+<div style="text-align:center"><img src="https://www.dropbox.com/s/ndlh5ctbhxnx1g2/title.gif?raw=1" /></div>
 
 ![Description](https://www.dropbox.com/s/cs66rvebp67vhmb/bannerBarDescription.png?raw=1)
 Craftory sets out to extend and push the boundaries of vanilla Minecraft, offering features only thought possible before with Modded Minecraft. After installing the plugin, you players can join without having to install or do anything and experience all the amazing features Craftory has to offer.
