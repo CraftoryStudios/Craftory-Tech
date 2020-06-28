@@ -49,18 +49,26 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
       return;
     }
     updateSlots();
-    if (validateContentes() && energyStorage.getEnergyStored() >= energyConsumption) {
+    if (validateContentes() && hasSufficientEnergy()) {
       runningContainer.setT(true);
-      energyStorage.modifyEnergyStored(-energyConsumption);
       tickCount += 1;
-      if (tickCount == processTime) {
+      if (tickCount >= processTime) {
         tickCount = 0;
         processComplete();
       }
     } else {
       runningContainer.setT(false);
+      tickCount = 0;
     }
     progressContainer.setT(((double) tickCount) / processTime);
+  }
+
+  protected boolean hasSufficientEnergy() {
+    if(energyStorage.getEnergyStored() >= energyConsumption){
+      energyStorage.modifyEnergyStored(-energyConsumption);
+      return true;
+    }
+    return false;
   }
 
   protected abstract void processComplete();

@@ -27,6 +27,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
 import tech.brettsaunders.craftory.utils.Logger;
@@ -127,9 +128,10 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FURNACE, GoldElectricFurnace.class);
     customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FURNACE, DiamondElectricFurnace.class);
     customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FURNACE, EmeraldElectricFurnace.class);
-    customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FOUNDRY, IronElectricFoundry.class);
     customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class);
     customBlockFactory.registerCustomBlock(Blocks.COPPER_ORE, CopperOre.class);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
   }
 
   static void registerBlocks() {
@@ -141,8 +143,9 @@ public class Utilities {
     Craftory.tickManager.registerCustomBlockClass(EmeraldElectricFurnace.class);
     Craftory.tickManager.registerCustomBlockClass(GoldElectricFurnace.class);
     Craftory.tickManager.registerCustomBlockClass(IronElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(IronFoundry.class);
+    Craftory.tickManager.registerCustomBlockClass(IronElectricFoundry.class);
     Craftory.tickManager.registerCustomBlockClass(SolidFuelGenerator.class);
+    Craftory.tickManager.registerCustomBlockClass(IronFoundry.class);
   }
 
   static void done() {

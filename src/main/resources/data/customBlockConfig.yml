@@ -99,7 +99,7 @@ blocks:
     itemID: 13
     itemModel: stone
     displayName: Emerald Electric Furnace
-  IronFoundry:
+  IronElectricFoundry:
     UP: false
     DOWN: false
     NORTH: false
@@ -108,7 +108,7 @@ blocks:
     WEST: true
     itemID: 7
     itemModel: stone
-    displayName: Iron Foundry
+    displayName: Iron Electric Foundry
   crystal:
     UP: false
     DOWN: false
@@ -129,3 +129,13 @@ blocks:
     itemID: 16
     itemModel: gold_ore
     displayName: Copper Ore
+  IronFoundry:
+    UP: true
+    DOWN: false
+    NORTH: true
+    EAST: false
+    SOUTH: true
+    WEST: true
+    itemID: 17
+    itemModel: stone
+    displayName: Iron Electric Foundry
