@@ -55,6 +55,8 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   /* Construction */
   public BaseFoundry(Location location, String blockName, byte level) {
     super(location,blockName, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
+    processTime = PROCESSING_TIME_LEVEL[level];
+    energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
     init();
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
     inputSlots = new ArrayList<>();
@@ -73,10 +75,15 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     init();
   }
 
-  /* Common Load and Construction */
-  public void init() {
+  @Override
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
     processTime = PROCESSING_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
+  }
+
+  /* Common Load and Construction */
+  public void init() {
     interactableSlots = new HashSet<>(
         Arrays.asList(INPUT_LOCATION1, INPUT_LOCATION2, OUTPUT_LOCATION));
   }
