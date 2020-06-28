@@ -44,7 +44,10 @@ public class RecipeManager implements Listener {
       try {
         shapedRecipe = new ShapedRecipe(namespacedKey, result);
       } catch (Exception e) {
-        Logger.info("THIS IS BROKE: " + recipe + "  " + result.getType().toString());
+        Logger.error("THIS IS BROKE: " + recipe + "  " + result.getType().toString());
+        Logger.error(result + "");
+        Logger.error(recipes.getString(recipe + ".result.item"));
+        Logger.error("Amount: " + recipes.getInt(recipe + ".result.amount"));
       }
 
       ConfigurationSection sectionIn = recipes.getConfigurationSection(recipe + ".ingredients");
