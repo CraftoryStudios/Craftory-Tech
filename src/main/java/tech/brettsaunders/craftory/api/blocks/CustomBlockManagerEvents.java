@@ -81,7 +81,7 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onWorldSave(WorldSaveEvent e) {
-    CustomBlockStorage.saveAllCustomChunks(dataFolder, persistenceStorage, activeChunks, inactiveChunks);
+    //CustomBlockStorage.saveAllCustomChunks(dataFolder, persistenceStorage, activeChunks, inactiveChunks);
   }
 
   @EventHandler
