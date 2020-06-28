@@ -78,7 +78,7 @@ public final class Craftory extends JavaPlugin {
     orePopulator = new OrePopulator();
     Bukkit.getWorlds().get(0).getPopulators().add(orePopulator);
     tickManager.runTaskTimer(this, 20L, 1L);
-
+    Utilities.setupAdvancements();
   }
 
   @Override
