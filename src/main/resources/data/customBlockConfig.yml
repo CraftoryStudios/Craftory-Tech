@@ -135,7 +135,7 @@ blocks:
     NORTH: true
     EAST: false
     SOUTH: true
-    WEST: true
+    WEST: false
     itemID: 17
     itemModel: stone
-    displayName: Iron Electric Foundry
+    displayName: Iron Foundry

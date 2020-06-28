@@ -1,24 +1,15 @@
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
-public class GTwoToOneMachine implements IGUIComponent, Listener {
+public class GTwoToOneMachine implements IGUIComponent {
 
-  private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
-      .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
-          InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
+
   private final int arrowSlot;
   private final VariableContainer<Double> progress;
   private final Inventory inventory;
@@ -34,8 +25,6 @@ public class GTwoToOneMachine implements IGUIComponent, Listener {
     this.inputSlot1 = inputSlot1;
     this.inputSlot2 = inputSlot2;
     this.outputSlot = outputSlot;
-    Craftory.plugin.getServer().getPluginManager()
-        .registerEvents(this, Craftory.plugin);
   }
 
   public GTwoToOneMachine(Inventory inventory,
@@ -48,27 +37,7 @@ public class GTwoToOneMachine implements IGUIComponent, Listener {
     this.arrowSlot = 24;
   }
 
-  @EventHandler
-  public void onInventoryInteract(final InventoryClickEvent event) {
-    if (event.getInventory() != inventory) {
-      return;
-    }
-    //Stop moving items from any slot put intractable
-    if (event.getRawSlot() != inputSlot1 && event.getRawSlot() != inputSlot2
-        && event.getRawSlot() != outputSlot
-        && event.getRawSlot() < 54) {
-      event.setCancelled(true);
-    }
 
-    //TODO Need to add shift click
-    //Stop inserting items into output slot
-    if (event.getRawSlot() == outputSlot) {
-      if (outputDisabledActions.contains(event.getAction())) {
-        event.setCancelled(true);
-      }
-    }
-
-  }
 
   @Override
   public void update() {

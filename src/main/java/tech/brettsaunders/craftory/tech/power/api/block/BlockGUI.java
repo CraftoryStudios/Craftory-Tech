@@ -1,29 +1,34 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.NegativeSpaceFont;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
-public abstract class BlockGUI extends CustomBlock {
+public abstract class BlockGUI extends CustomBlock implements Listener {
 
   /* Static Constants */
   private final ArrayList<IGUIComponent> components = new ArrayList<>();
   protected HashSet<Integer> interactableSlots = new HashSet<>();
+
+  private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
+      .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
+          InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
   /* Per Object Variables */
   private Inventory inventoryInterface;
 
   /* Saving, Setup and Loading */
-  public BlockGUI(Location location, String blockName) {
-    super(location, blockName);
-  }
+  public BlockGUI(Location location, String blockName) { super(location, blockName); }
 
   public BlockGUI() {
     super();
