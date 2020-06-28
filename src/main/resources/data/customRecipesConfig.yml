@@ -149,6 +149,84 @@ recipes:
       item: emerald_core
       amount: 1
 
+  IronFoundry:
+    pattern:
+      - III
+      - FCF
+      - III
+    ingredients:
+      I: IRON_INGOT
+      F: FURNACE
+      C: COAL_BLOCK
+    result:
+      item: IronFoundry
+      amount: 1
+
+  IronElectricFoundry:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+      F: IronFoundry
+    result:
+      item: IronElectricFoundry
+      amount: 1
+
+  GoldElectricFoundry:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: gold_core
+      S: steel_ingot
+      F: IronFoundry
+    result:
+      item: GoldElectricFoundry
+      amount: 1
+
+  DiamondElectricFoundry:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: diamond_core
+      S: steel_ingot
+      F: IronFoundry
+    result:
+      item: DiamondElectricFoundry
+      amount: 1
+
+  EmeraldElectricFoundry:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: emerald_core
+      S: steel_ingot
+      F: IronFoundry
+    result:
+      item: EmeraldElectricFoundry
+      amount: 1
+
+  SolidFuelGenerator:
+    pattern:
+      - SCS
+      - CMS
+      - SCS
+    ingredients:
+      C: copper_ingot
+      M: iron_core
+      S: steel_ingot
+    result:
+      item: SolidFuelGenerator
+      amount: 1
+
   wrench:
     pattern:
       - SXS

@@ -27,6 +27,9 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.DiamondElectricFoundry;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.EmeraldElectricFoundry;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.GoldElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
@@ -129,6 +132,9 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FURNACE, DiamondElectricFurnace.class);
     customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FURNACE, EmeraldElectricFurnace.class);
     customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FOUNDRY, IronElectricFoundry.class);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FOUNDRY, GoldElectricFoundry.class);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FOUNDRY, DiamondElectricFoundry.class);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FOUNDRY, EmeraldElectricFoundry.class);
     customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class);
     customBlockFactory.registerCustomBlock(Blocks.COPPER_ORE, CopperOre.class);
     customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
@@ -139,11 +145,14 @@ public class Utilities {
     Craftory.tickManager.registerCustomBlockClass(EmeraldCell.class);
     Craftory.tickManager.registerCustomBlockClass(GoldCell.class);
     Craftory.tickManager.registerCustomBlockClass(IronCell.class);
+    Craftory.tickManager.registerCustomBlockClass(IronElectricFurnace.class);
+    Craftory.tickManager.registerCustomBlockClass(GoldElectricFurnace.class);
     Craftory.tickManager.registerCustomBlockClass(DiamondElectricFurnace.class);
     Craftory.tickManager.registerCustomBlockClass(EmeraldElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(GoldElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(IronElectricFurnace.class);
     Craftory.tickManager.registerCustomBlockClass(IronElectricFoundry.class);
+    Craftory.tickManager.registerCustomBlockClass(GoldElectricFoundry.class);
+    Craftory.tickManager.registerCustomBlockClass(DiamondElectricFoundry.class);
+    Craftory.tickManager.registerCustomBlockClass(EmeraldElectricFoundry.class);
     Craftory.tickManager.registerCustomBlockClass(SolidFuelGenerator.class);
     Craftory.tickManager.registerCustomBlockClass(IronFoundry.class);
   }
