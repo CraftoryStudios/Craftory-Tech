@@ -14,6 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder;
@@ -162,6 +163,10 @@ public class PoweredBlockEvents implements Listener {
     }
   }
 
-
+  @EventHandler
+  public void onPlayerAdvancementDone(PlayerAdvancementDoneEvent event) {
+    Logger.info(event.getAdvancement().toString());
+    Logger.info(event.getAdvancement().getCriteria().toString());
+  }
 
 }
