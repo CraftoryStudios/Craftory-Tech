@@ -218,11 +218,12 @@ recipes:
     pattern:
       - SCS
       - CMS
-      - SCS
+      - SOS
     ingredients:
       C: copper_ingot
-      M: iron_core
+      M: magnetised_iron
       S: steel_ingot
+      O: iron_core
     result:
       item: SolidFuelGenerator
       amount: 1
