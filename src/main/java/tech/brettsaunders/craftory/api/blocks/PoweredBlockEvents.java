@@ -3,6 +3,7 @@ package tech.brettsaunders.craftory.api.blocks;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -12,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder;
@@ -24,6 +26,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredBlockEvents implements Listener {
   private final HashMap<UUID, ArrayList<Boolean>> configuratorData = new HashMap<>();
@@ -114,6 +117,17 @@ public class PoweredBlockEvents implements Listener {
     }
   }
 
+
+  public void onInventoryInteract(final InventoryClickEvent event) {
+    Logger.info("event triggered e");
+    Location location = event.getClickedInventory().getLocation(); //Doestn work
+    Logger.info(location.toString());
+    if(PoweredBlockUtils.isPoweredBlock(location)) {
+      Logger.info("called event on block");
+      //PoweredBlockUtils.getPoweredBlock(location).onInventoryInteract(event);
+    }
+
+  }
   @EventHandler
   public void onGUIBlockClick(CustomBlockInteractEvent e) {
     if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {

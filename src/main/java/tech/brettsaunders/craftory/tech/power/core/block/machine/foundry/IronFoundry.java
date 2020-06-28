@@ -27,12 +27,14 @@ public class IronFoundry extends BaseFoundry {
   public IronFoundry(Location location) {
     super(location, Blocks.IRON_ELECTRIC_FOUNDRY, C_LEVEL);
     interactableSlots.add(FUEL_SLOT);
+    inputLocations.add(FUEL_SLOT);
   }
 
   /* Saving, Setup and Loading */
   public IronFoundry() {
     super();
     interactableSlots.add(FUEL_SLOT);
+    inputLocations.add(FUEL_SLOT);
   }
 
   @Override
@@ -41,7 +43,7 @@ public class IronFoundry extends BaseFoundry {
       fuel -=1;
       return true;
     } else if(fuelItem!=null) {
-      int value = (int) (SolidFuelManager.getFuelEnergy(fuelItem.getType().name())/1.5f);
+      int value = (SolidFuelManager.getFuelEnergy(fuelItem.getType().name())/15);
       if(value > 0){
         fuel += value-1;
         fuelItem.setAmount(fuelItem.getAmount()-1);
@@ -61,7 +63,7 @@ public class IronFoundry extends BaseFoundry {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle("Foundry", Font.FOUNDRY_GUI.label + "");
+    Inventory inventory = setInterfaceTitle("Foundry", Font.IRON_FOUNDRY_GUI.label + "");
     addGUIComponent(
         new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
             OUTPUT_LOCATION));

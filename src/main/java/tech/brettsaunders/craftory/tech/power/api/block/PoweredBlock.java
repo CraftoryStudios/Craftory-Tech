@@ -3,7 +3,9 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 import static tech.brettsaunders.craftory.CoreHolder.HOPPER_INTERACT_FACES;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -32,6 +34,9 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   /* Static Constants Protected */
   protected static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
+  private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
+      .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
+          InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
   /* Per Object Variables Saved */
   @Persistent
   protected EnergyStorage energyStorage;
@@ -132,53 +137,44 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (event.getInventory() != getInventory()) {
       return;
     }
-
-    //Stop moving items from any slot but intractable ones
-    if ((!inputLocations.contains(event.getRawSlot())) && (!outputLocations
-        .contains(event.getRawSlot()))
-        && event.getRawSlot() < 54) {
-      event.setCancelled(true);
-    }
-
-    //Handle Shift Clicking Items
-    if (event.isShiftClick() && event.getRawSlot() > 53) {
-      event.setCancelled(true);
-      ItemStack sourceItemStack = event.getCurrentItem();
-      int amount = sourceItemStack.getAmount();
-      for (Integer inputSlot : inputLocations) {
-        ItemStack destinationItemStack = getInventory().getItem(inputSlot);
-        if (destinationItemStack == null) {
-          ItemStack itemStack1 = sourceItemStack.clone();
-          itemStack1.setAmount(amount);
-          getInventory().setItem(inputSlot, itemStack1);
-          amount = 0;
-          break;
+    if(event.getRawSlot() > 53){
+      //Handle Shift Clicking Items
+      if (event.isShiftClick()) {
+        event.setCancelled(true);
+        ItemStack sourceItemStack = event.getCurrentItem();
+        int amount = sourceItemStack.getAmount();
+        for (Integer inputSlot : inputLocations) {
+          ItemStack destinationItemStack = getInventory().getItem(inputSlot);
+          if (destinationItemStack == null) {
+            ItemStack itemStack1 = sourceItemStack.clone();
+            itemStack1.setAmount(amount);
+            getInventory().setItem(inputSlot, itemStack1);
+            amount = 0;
+            break;
+          }
+          if (destinationItemStack.getAmount() == destinationItemStack.getMaxStackSize()) {
+            continue;
+          }
+          if (destinationItemStack.getType().equals(sourceItemStack.getType())) {
+            int amountGive = Math
+                .min(destinationItemStack.getMaxStackSize() - destinationItemStack.getAmount(),
+                    amount);
+            destinationItemStack.setAmount(destinationItemStack.getAmount() + amountGive);
+            getInventory().setItem(inputSlot, destinationItemStack);
+            amount = amount - amountGive;
+          }
         }
-        if (destinationItemStack.getAmount() == destinationItemStack.getMaxStackSize()) {
-          continue;
-        }
-        if (destinationItemStack.getType().equals(sourceItemStack.getType())) {
-          int amountGive = Math
-              .min(destinationItemStack.getMaxStackSize() - destinationItemStack.getAmount(),
-                  amount);
-          destinationItemStack.setAmount(destinationItemStack.getAmount() + amountGive);
-          getInventory().setItem(inputSlot, destinationItemStack);
-          amount = amount - amountGive;
-        }
+        sourceItemStack.setAmount(amount);
+        event.getView().getBottomInventory().setItem(event.getSlot(), sourceItemStack);
       }
-      sourceItemStack.setAmount(amount);
-      event.getView().getBottomInventory().setItem(event.getSlot(), sourceItemStack);
-    }
-
-    if (event.getAction() == InventoryAction.PLACE_ALL
-        || event.getAction() == InventoryAction.PLACE_SOME
-        || event.getAction() == InventoryAction.PLACE_ONE) {
-      if (outputLocations.contains(event.getRawSlot())) {
+    } else {
+      //Stop moving items from any slot but intractable ones
+      if (!interactableSlots.contains(event.getRawSlot())) {
+        event.setCancelled(true);
+      } else if (outputDisabledActions.contains(event.getAction()) && outputLocations.contains(event.getRawSlot())) {
         event.setCancelled(true);
       }
     }
-
-
   }
 
   public void setSideCache(BlockFace face, INTERACTABLEBLOCK type) {
