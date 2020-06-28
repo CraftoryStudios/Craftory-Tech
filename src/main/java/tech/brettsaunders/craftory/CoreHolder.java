@@ -53,5 +53,6 @@ public class CoreHolder {
     public static final String DIAMOND_CORE = "diamond_core";
     public static final String GOLD_CORE = "gold_core";
     public static final String IRON_CORE = "iron_core";
+    public static final String MAGNETISED_IRON = "magnetised_iron";
   }
 }
