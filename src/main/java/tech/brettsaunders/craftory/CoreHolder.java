@@ -37,7 +37,7 @@ public class CoreHolder {
     public static final String IRON_FOUNDRY = "IronFoundry";
 
     /* Ores */
-    public static final String COPPER_ORE = "copper_ore";
+    public static final String COPPER_ORE = "CopperOre";
   }
 
   /* Item Names */

@@ -119,7 +119,7 @@ blocks:
     itemID: 15
     itemModel: stone
     displayName: Crystals
-  copper_ore:
+  CopperOre:
     UP: false
     DOWN: false
     NORTH: true
