@@ -101,50 +101,54 @@ recipes:
 
   iron_core:
     pattern:
-      - III
+      - SIS
       - IRI
-      - III
+      - SIS
     ingredients:
       I: IRON_INGOT
       R: REDSTONE
+      S: steel_ingot
     result:
       item: iron_core
       amount: 1
 
   gold_core:
     pattern:
-      - GGG
+      - SGS
       - GRG
-      - GGG
+      - SGS
     ingredients:
       G: GOLD_INGOT
       R: REDSTONE_BLOCK
+      S: steel_ingot
     result:
       item: gold_core
       amount: 1
 
   diamond_core:
     pattern:
-      - DRD
+      - SRS
       - DGD
-      - DRD
+      - SRS
     ingredients:
       G: gold_core
       D: DIAMOND
       R: REDSTONE_BLOCK
+      S: steel_ingot
     result:
       item: diamond_core
       amount: 1
 
   emerald_core:
     pattern:
-      - ERE
+      - SRS
       - EDE
-      - ERE
+      - SRS
     ingredients:
       E: EMERALD
       D: diamond_core
       R: REDSTONE_BLOCK
+      S: steel_ingot
     result:
       item: emerald_core
       amount: 1
@@ -216,9 +220,9 @@ recipes:
 
   SolidFuelGenerator:
     pattern:
-      - SCS
-      - CMS
-      - SOS
+      - SMS
+      - COC
+      - SMS
     ingredients:
       C: copper_ingot
       M: magnetised_iron
@@ -239,6 +243,31 @@ recipes:
       item: wrench
       amount: 1
 
+  configurator:
+    pattern:
+      - SOS
+      - OCO
+      - SOS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+      O: copper_ingot
+    result:
+      item: configurator
+      amount: 1
+
+  power_connector:
+    pattern:
+      - SMS
+      - XSX
+      - XSX
+    ingredients:
+      S: steel_ingot
+      M: magnetised_iron
+    result:
+      item: power_connector
+      amount: 1
+
   magnetised_iron:
     pattern:
       - IXX
@@ -249,6 +278,7 @@ recipes:
     result:
       item: magnetised_iron
       amount: 1
+
 furnace_recipes:
   copper_ingot:
     input:

@@ -1,8 +1,11 @@
 package tech.brettsaunders.craftory;
 
+import eu.endercentral.crazy_advancements.CrazyAdvancements;
+import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
 import org.bstats.bukkit.Metrics;
@@ -19,6 +22,7 @@ import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.basicBlocks.CopperOre;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
+import tech.brettsaunders.craftory.external.Advancements;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
@@ -46,6 +50,8 @@ public class Utilities {
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
   private static String UNIT = "Re";
   private static DecimalFormat df = new DecimalFormat("###.###");
+
+  public static Optional<AdvancementManager> advancementManager = Optional.empty();
 
   static {
     config = YamlConfiguration
@@ -76,6 +82,14 @@ public class Utilities {
         Logger.info("There is a new update available!");
       }
     });
+  }
+
+  static void setupAdvancements() {
+    if (Bukkit.getPluginManager().isPluginEnabled("CrazyAdvancementsAPI")) {
+      advancementManager = Optional.ofNullable(CrazyAdvancements.getNewAdvancementManager());
+      new Advancements();
+      Logger.info("Advancements are Enabled");
+    }
   }
 
   static void createConfigs() {
