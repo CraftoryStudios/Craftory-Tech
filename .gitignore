@@ -107,7 +107,7 @@ fabric.properties
 
 # Package Files #
 *.jar
-!ItemsAdder.jar
+!CrazyAdvancementsAPI.jar
 *.war
 *.nar
 *.ear
