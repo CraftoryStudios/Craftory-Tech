@@ -8,6 +8,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 
@@ -27,9 +28,11 @@ public class CustomBlockInteractEvent extends Event implements Cancellable {
   private boolean isCancelled;
   @Getter
   private final CustomBlock customBlock;
+  @Getter
+  private final PlayerInteractEvent baseEvent;
 
   public CustomBlockInteractEvent(Action action, Block blockClicked, BlockFace blockFace,
-      ItemStack itemStack, Player player, CustomBlock customBlock) {
+      ItemStack itemStack, Player player, CustomBlock customBlock, PlayerInteractEvent baseEvent) {
     this.action = action;
     this.blockClicked = blockClicked;
     this.blockFace = blockFace;
@@ -37,6 +40,7 @@ public class CustomBlockInteractEvent extends Event implements Cancellable {
     this.player = player;
     this.isCancelled = false;
     this.customBlock = customBlock;
+    this.baseEvent = baseEvent;
   }
 
   public static HandlerList getHandlerList() {

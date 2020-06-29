@@ -134,7 +134,7 @@ public class PoweredBlockEvents implements Listener {
       return;
     }
     if ((e.getPlayer().isSneaking() || CustomItemManager
-        .matchCustomItemName(e.getItemStack(), CoreHolder.Items.CONFIGURATOR))|| !(e.getCustomBlock() instanceof PoweredBlock)) {
+        .matchCustomItemName(e.getItemStack(), CoreHolder.Items.CONFIGURATOR))) {
       return;
     }
 
@@ -142,7 +142,7 @@ public class PoweredBlockEvents implements Listener {
       PoweredBlock poweredBlock = (PoweredBlock) e.getCustomBlock();
       //Open GUI of Powered Block
       poweredBlock.openGUI(e.getPlayer());
-      e.setCancelled(true);
+      e.getBaseEvent().setCancelled(true);
     }
   }
 

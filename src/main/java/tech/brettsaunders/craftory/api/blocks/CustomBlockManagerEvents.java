@@ -168,11 +168,12 @@ public class CustomBlockManagerEvents implements Listener {
             e.getBlockFace(),
             e.getItem(),
             e.getPlayer(),
-            customBlock);
+            customBlock,
+            e);
         Bukkit.getServer().getPluginManager().callEvent(customBlockInteractEvent);
-        if (e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) {
-          e.setCancelled(true);
-        }
+        //if (e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) {
+          //e.setCancelled(true);
+        //}
       }
     }
     return;
