@@ -133,8 +133,8 @@ public class PoweredBlockEvents implements Listener {
     if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
       return;
     }
-    if (e.getPlayer().isSneaking() || CustomItemManager
-        .matchCustomItemName(e.getItemStack(), CoreHolder.Items.CONFIGURATOR)) {
+    if ((e.getPlayer().isSneaking() || CustomItemManager
+        .matchCustomItemName(e.getItemStack(), CoreHolder.Items.CONFIGURATOR))|| !(e.getCustomBlock() instanceof PoweredBlock)) {
       return;
     }
 
