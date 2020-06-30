@@ -21,6 +21,8 @@ import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.basicBlocks.CopperOre;
+import tech.brettsaunders.craftory.api.blocks.basicBlocks.CrystalOre;
+import tech.brettsaunders.craftory.api.blocks.basicBlocks.PowerConnector;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
 import tech.brettsaunders.craftory.external.Advancements;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
@@ -152,6 +154,8 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class);
     customBlockFactory.registerCustomBlock(Blocks.COPPER_ORE, CopperOre.class);
     customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
+    customBlockFactory.registerCustomBlock(Blocks.POWER_CONNECTOR, PowerConnector.class);
+    customBlockFactory.registerCustomBlock(Blocks.CRYSTAL_ORE, CrystalOre.class);
   }
 
   static void registerBlocks() {

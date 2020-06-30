@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import lombok.Synchronized;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -19,6 +20,7 @@ import tech.brettsaunders.craftory.utils.Logger;
 public class CustomBlockStorage {
 
   /* Saving */
+  @Synchronized
   public static void saveAllCustomChunks(String dataFolder, PersistenceStorage persistenceStorage,HashMap<String, HashSet<CustomBlock>> active, HashMap<String, HashSet<CustomBlock>> inactive) {
     Logger.info("Saving Custom Block Data");
     active.forEach((chunk, customBlocks) -> {
@@ -30,6 +32,7 @@ public class CustomBlockStorage {
     Logger.info("Saved Custom Block Data");
   }
 
+  @Synchronized
   public static void saveCustomChunk(String chunkID, HashSet<CustomBlock> customBlocks, String dataFolder, PersistenceStorage persistenceStorage) {
     try {
       Location firstBlock = customBlocks.stream().findFirst().get().location;
@@ -54,6 +57,7 @@ public class CustomBlockStorage {
   }
 
   /** Loading */
+  @Synchronized
   public static void loadAllSavedRegions(String dataFolder, CustomBlockManager manager, PersistenceStorage persistenceStorage) {
     int regions = 0;
     for (World world : Bukkit.getWorlds()) {
@@ -69,6 +73,7 @@ public class CustomBlockStorage {
     Logger.info("Loaded " + regions + " region data files!");
   }
 
+  @Synchronized
   public static void loadSavedRegion(World world, String regionID, String dataFolder, CustomBlockManager manager, PersistenceStorage persistenceStorage) {
     try {
       NBTCompound chunkCompound;
@@ -100,6 +105,7 @@ public class CustomBlockStorage {
       }
   }
 
+  @Synchronized
   private static Location keyToLoc(String key, World world) {
     String[] locationData = key.split(",");
     return new Location(world, Double.parseDouble(locationData[0]),

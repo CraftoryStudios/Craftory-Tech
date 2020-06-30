@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import tech.brettsaunders.craftory.Craftory;
@@ -32,7 +31,7 @@ public class PowerGrid extends BukkitRunnable {
   private int machinesNeedingEnergy = 0;
 
   public PowerGrid() {
-    Bukkit.getScheduler().runTaskTimer(Craftory.plugin, this, 10, 1);
+    this.runTaskTimer(Craftory.plugin, 5, 1);
   }
 
   @Override

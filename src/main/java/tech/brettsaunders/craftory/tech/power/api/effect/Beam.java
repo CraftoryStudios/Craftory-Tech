@@ -33,6 +33,9 @@ public class Beam {
   private Location start;
   private Location end;
   private BukkitRunnable run;
+  private static final int version = Integer.parseInt(
+      Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]
+          .substring(1).split("_")[1]);
 
   /**
    * Create a Beam instance
@@ -45,7 +48,11 @@ public class Beam {
   public Beam(Location start, Location end, int duration, int distance)
       throws ReflectiveOperationException {
     this.start = start;
-    this.end = end;
+    if (version >= 1.16) {
+      this.end = end.add(0,-0.6,0);
+    } else {
+      this.end = end;
+    }
     this.duration = duration;
     distanceSquared = distance * distance;
 
@@ -226,10 +233,16 @@ public class Beam {
           watcherName3 = "bD";
           squidID = 73;
           guardianID = 30;
-        } else if (version > 14) {
+        } else if (version == 15) {
           watcherName1 = "T";
           watcherName2 = "b";
           watcherName3 = "bA";
+          squidID = 74;
+          guardianID = 31;
+        } else if (version >= 16) {
+          watcherName1 = "T";
+          watcherName2 = "b";
+          watcherName3 = "d";
           squidID = 74;
           guardianID = 31;
         }

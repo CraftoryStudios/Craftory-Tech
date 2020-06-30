@@ -38,6 +38,7 @@ public class CoreHolder {
 
     /* Ores */
     public static final String COPPER_ORE = "CopperOre";
+    public static final String CRYSTAL_ORE = "crystal";
   }
 
   /* Item Names */

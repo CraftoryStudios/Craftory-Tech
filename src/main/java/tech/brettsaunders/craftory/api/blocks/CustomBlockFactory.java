@@ -51,6 +51,7 @@ public class CustomBlockFactory {
     return "";
   }
 
+  @Synchronized
   public CustomBlock createLoad(NBTCompound locationCompound, PersistenceStorage persistenceStorage, Location location) {
     CustomBlock customBlock = null;
     NBTCompound nameCompound = locationCompound.getCompound("blockName");
@@ -71,6 +72,7 @@ public class CustomBlockFactory {
     return customBlock;
   }
 
+  @Synchronized
   public CustomBlock create(String nameID, Location location) {
     CustomBlock customBlock = null;
     if (createConstructor.containsKey(nameID)) {

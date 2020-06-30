@@ -50,7 +50,7 @@ blocks:
     itemModel: stone
     displayName: Iron Solid-Fuel Generator
   power_connector:
-    WEST: false
+    WEST: true
     UP: false
     SOUTH: false
     NORTH: false
