@@ -23,8 +23,8 @@ public final class Craftory extends JavaPlugin {
 
   public static String VERSION;
   public static final int SPIGOT_ID = 12345;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/452ebc2f6f0cb66583f1f338c87059c8963ab84f.zip";
-  public static final String HASH = "452ebc2f6f0cb66583f1f338c87059c8963ab84f";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/ef74d3f034dcf08c7960c4a4919d6ac7f991f262.zip";
+  public static final String HASH = "ef74d3f034dcf08c7960c4a4919d6ac7f991f262";
 
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;

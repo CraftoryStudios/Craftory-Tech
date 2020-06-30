@@ -35,10 +35,6 @@ items:
     itemID: 1
     itemModel: lime_dye
     displayName: Steel Ingot
-  life_gem:
-    itemID: 66
-    itemModel: paper
-    displayName: Life Gem
 
   light_off:
     itemID: 63
