@@ -1,171 +1,171 @@
 blocks:
   IronCell:
-    UP: true
-    DOWN: false
-    NORTH: true
-    EAST: false
-    SOUTH: false
     WEST: false
+    UP: false
+    SOUTH: false
+    NORTH: true
+    EAST: true
+    DOWN: false
     itemID: 101
     itemModel: stone
     displayName: Iron Energy-Cell
   GoldCell:
+    WEST: true
     UP: true
-    DOWN: false
-    NORTH: false
-    EAST: false
     SOUTH: false
-    WEST: false
+    NORTH: false
+    EAST: true
+    DOWN: false
     itemID: 102
     itemModel: stone
     displayName: Gold Energy-Cell
   DiamondCell:
-    UP: true
-    DOWN: false
+    WEST: false
+    UP: false
+    SOUTH: true
     NORTH: false
-    EAST: false
-    SOUTH: false
-    WEST: true
+    EAST: true
+    DOWN: false
     itemID: 103
     itemModel: stone
     displayName: Diamond Energy-Cell
   EmeraldCell:
+    WEST: false
     UP: false
-    DOWN: false
+    SOUTH: true
     NORTH: false
     EAST: false
-    SOUTH: true
-    WEST: false
+    DOWN: false
     itemID: 104
     itemModel: stone
     displayName: Emerald Energy-Cell
   SolidFuelGenerator:
-    UP: true
-    DOWN: false
-    NORTH: true
-    EAST: false
-    SOUTH: false
     WEST: true
+    UP: false
+    SOUTH: false
+    NORTH: true
+    EAST: true
+    DOWN: false
     itemID: 201
     itemModel: stone
     displayName: Iron Solid-Fuel Generator
   power_connector:
-    UP: true
-    DOWN: false
-    NORTH: true
-    EAST: false
-    SOUTH: false
     WEST: false
+    UP: false
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: false
     itemID: 301
     itemModel: stone
     displayName: Redstone Energy Connector
   IronElectricFurnace:
-    UP: true
-    DOWN: false
-    NORTH: false
-    EAST: false
+    WEST: true
+    UP: false
     SOUTH: true
-    WEST: false
+    NORTH: false
+    EAST: true
+    DOWN: false
     itemID: 401
     itemModel: stone
     displayName: Iron Electric Furnace
   GoldElectricFurnace:
-    UP: true
-    DOWN: false
-    NORTH: false
-    EAST: false
-    SOUTH: true
     WEST: true
+    UP: true
+    SOUTH: true
+    NORTH: false
+    EAST: true
+    DOWN: false
     itemID: 402
     itemModel: stone
     displayName: Gold Electric Furnace
   DiamondElectricFurnace:
+    WEST: false
     UP: false
-    DOWN: false
+    SOUTH: false
     NORTH: true
     EAST: false
-    SOUTH: false
-    WEST: false
+    DOWN: false
     itemID: 403
     itemModel: stone
     displayName: Diamond Electric Furnace
   EmeraldElectricFurnace:
+    WEST: true
     UP: false
-    DOWN: false
+    SOUTH: false
     NORTH: true
     EAST: false
-    SOUTH: false
-    WEST: true
+    DOWN: false
     itemID: 404
     itemModel: stone
     displayName: Emerald Electric Furnace
   IronFoundry:
+    WEST: false
     UP: true
-    DOWN: false
+    SOUTH: true
     NORTH: true
     EAST: false
-    SOUTH: true
-    WEST: false
+    DOWN: false
     itemID: 501
     itemModel: stone
     displayName: Iron Foundry
   IronElectricFoundry:
+    WEST: true
     UP: false
-    DOWN: false
+    SOUTH: true
     NORTH: false
     EAST: false
-    SOUTH: true
-    WEST: true
+    DOWN: false
     itemID: 502
     itemModel: stone
     displayName: Iron Electric Foundry
   GoldElectricFoundry:
+    WEST: true
     UP: true
-    DOWN: false
+    SOUTH: true
     NORTH: true
     EAST: false
-    SOUTH: true
-    WEST: true
+    DOWN: false
     itemID: 503
     itemModel: stone
     displayName: Gold Electric Foundry
   DiamondElectricFoundry:
+    WEST: false
     UP: false
-    DOWN: false
+    SOUTH: false
     NORTH: false
     EAST: true
-    SOUTH: false
-    WEST: false
+    DOWN: false
     itemID: 504
     itemModel: stone
     displayName: Diamond Electric Foundry
   EmeraldElectricFoundry:
+    WEST: true
     UP: false
-    DOWN: false
+    SOUTH: false
     NORTH: false
     EAST: true
-    SOUTH: false
-    WEST: true
+    DOWN: false
     itemID: 505
     itemModel: stone
     displayName: Emerald Electric Foundry
   crystal:
+    WEST: false
     UP: false
-    DOWN: false
+    SOUTH: true
     NORTH: true
     EAST: false
-    SOUTH: true
-    WEST: false
+    DOWN: false
     itemID: 601
     itemModel: stone
     displayName: Crystals
   CopperOre:
+    WEST: true
     UP: false
-    DOWN: false
+    SOUTH: true
     NORTH: true
     EAST: false
-    SOUTH: true
-    WEST: true
+    DOWN: false
     itemID: 602
     itemModel: gold_ore
     displayName: Copper Ore
