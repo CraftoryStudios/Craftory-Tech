@@ -2,6 +2,7 @@ package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
 import de.tr7zw.changeme.nbtapi.NBTFile;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,13 +12,12 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.event.server.PluginEnableEvent;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
@@ -27,7 +27,8 @@ import tech.brettsaunders.craftory.utils.Logger;
 public class PowerGridManager implements Listener {
 
   @Getter
-  private final HashMap<Location, PowerGrid> powerGrids;
+  @Persistent
+  private HashMap<Location, PowerGrid> powerGrids;
   private final PersistenceStorage persistenceStorage;
   private NBTFile nbtFile;
 
@@ -42,6 +43,16 @@ public class PowerGridManager implements Listener {
     powerGrids = new HashMap<>();
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
+  }
+
+  private void generatorPowerBeams() {
+    powerGrids.forEach(((location, powerGrid) -> {
+      powerGrid.getPowerConnectors().forEach((from, value) -> {
+        value.forEach((to) -> {
+          Craftory.powerConnectorManager.formBeam(from, to);
+        });
+      });
+    }));
   }
 
   /* Events */
@@ -88,14 +99,18 @@ public class PowerGridManager implements Listener {
     }
   }
 
-  @EventHandler
-  public void onDisable(PluginDisableEvent e) {
-    persistenceStorage.saveObject(powerGrids, nbtFile);
+  public void onDisable() {
+    persistenceStorage.saveFields(powerGrids, nbtFile);
+    try {
+      nbtFile.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
-  @EventHandler
-  public void onEnable(PluginEnableEvent e) {
-    persistenceStorage.loadObject(powerGrids, HashMap.class, nbtFile);
+  public void onEnable() {
+    persistenceStorage.loadFields(powerGrids, nbtFile);
+    generatorPowerBeams();
   }
 
   /* Grid Splitting */

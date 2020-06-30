@@ -70,8 +70,9 @@ public final class Craftory extends JavaPlugin {
     customBlockManager.onEnable();
     new RecipeManager();
     new PoweredBlockEvents();
-    powerGridManager = new PowerGridManager();
     powerConnectorManager = new PowerConnectorManager();
+    powerGridManager = new PowerGridManager();
+    powerGridManager.onEnable();
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     Utilities.startMetrics();
     Utilities.done();
@@ -90,6 +91,7 @@ public final class Craftory extends JavaPlugin {
       e.printStackTrace();
     }
     customBlockManager.onDisable();
+    powerGridManager.onDisable();
     Utilities.reloadConfigFile();
     Utilities.saveConfigFile();
     plugin = null;

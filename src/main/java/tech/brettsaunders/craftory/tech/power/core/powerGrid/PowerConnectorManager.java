@@ -3,7 +3,6 @@ package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -30,7 +29,6 @@ public class PowerConnectorManager implements Listener {
   public PowerConnectorManager() {
     formingConnection = new HashMap<>();
     activeBeams = new HashMap<>();
-    generatorPowerBeams();
   }
 
   @EventHandler
@@ -119,15 +117,7 @@ public class PowerConnectorManager implements Listener {
     }
   }
 
-  private void generatorPowerBeams() {
-    for (PowerGrid powerGrid : new HashSet<>(Craftory.powerGridManager.getPowerGrids().values())) {
-      powerGrid.getPowerConnectors().forEach((from, value) -> value.forEach((to) -> {
-        formBeam(from, to);
-      }));
-    }
-  }
-
-  private void formBeam(Location fromLoc, Location toLoc) {
+  public void formBeam(Location fromLoc, Location toLoc) {
     /*
     THIS SHOULDN'T WORK OR BE NEEDED
      */
