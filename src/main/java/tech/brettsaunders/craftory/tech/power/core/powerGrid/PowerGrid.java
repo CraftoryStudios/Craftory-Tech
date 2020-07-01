@@ -38,10 +38,12 @@ public class PowerGrid extends BukkitRunnable {
 
   public PowerGrid() {
     this.runTaskTimer(Craftory.plugin, 5, 1);
+    Logger.info("grid made");
   }
 
   @Override
   public void run() {
+    Logger.info("grid run " + generators.size() + " " + machines.size() + " " + cells.size());//rr
     int needed = calculateGridEnergyRequirement();
     int cellCapacity = calculateGridStorageSpace();
     int produced = calculateGridEnergyProduced(needed + cellCapacity);

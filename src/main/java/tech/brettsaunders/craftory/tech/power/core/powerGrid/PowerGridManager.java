@@ -58,21 +58,30 @@ public class PowerGridManager implements Listener {
   /* Events */
   @EventHandler
   public void onPoweredBlockBreak(CustomBlockBreakEvent event) {
+    Logger.info("block break");
     Location location = event.getLocation();
     if (powerGrids.containsKey(location)) { //GRID / Power connector stuff
+      Logger.info("its a connector");
       Craftory.powerConnectorManager.destroyBeams(location);
-      if (powerGrids.get(location).getGridSize() > 1) {
-        List<PowerGrid> newGrids = splitGrids(location,  powerGrids.get(location));
-        for (Location l : powerGrids.get(location).getPowerConnectors().keySet()) {
-          powerGrids.remove(l);
+      PowerGrid grid = powerGrids.remove(location);
+      grid.cancel();
+      Logger.info("stopped grid");
+      if (grid.getGridSize() > 1) {
+        List<PowerGrid> newGrids = splitGrids(location,  grid);
+        for (Location l : grid.getPowerConnectors().keySet()) {
+          PowerGrid g = powerGrids.remove(l);
+          if(!g.isCancelled()){
+            g.cancel(); //Stop runable
+            Logger.info("stopped grid");
+          }
         }
-        for (PowerGrid grid : newGrids) {
-          for (Location loc : grid.getPowerConnectors().keySet()) {
-            powerGrids.put(loc, grid);
+        for (PowerGrid newGrid : newGrids) {
+          for (Location loc : newGrid.getPowerConnectors().keySet()) {
+            powerGrids.put(loc, newGrid);
           }
         }
       }
-      powerGrids.remove(location);
+
     }
     if (PoweredBlockUtils.isPoweredBlock(location)) {
       Craftory.powerConnectorManager.destroyBeams(location); //Destroy any beams
@@ -100,7 +109,7 @@ public class PowerGridManager implements Listener {
   }
 
   public void onDisable() {
-    persistenceStorage.saveFields(powerGrids, nbtFile);
+    persistenceStorage.saveFields(this, nbtFile);
     try {
       nbtFile.save();
     } catch (IOException e) {
@@ -109,7 +118,7 @@ public class PowerGridManager implements Listener {
   }
 
   public void onEnable() {
-    persistenceStorage.loadFields(powerGrids, nbtFile);
+    persistenceStorage.loadFields(this, nbtFile);
     generatorPowerBeams();
   }
 
@@ -159,6 +168,7 @@ public class PowerGridManager implements Listener {
    * @return A list of the individual grids (could just be one)
    */
   public ArrayList<PowerGrid> splitGrids(Location breakPoint, PowerGrid powerGrid) {
+    Logger.info("splitting grid");
     ArrayList<PowerGrid> managers = new ArrayList<>();
     powerGrid.getBlockConnections().remove(breakPoint);
     HashSet<Location> neighbours = powerGrid.getPowerConnectors().remove(breakPoint);
