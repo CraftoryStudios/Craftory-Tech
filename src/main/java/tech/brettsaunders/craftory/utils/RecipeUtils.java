@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.CampfireRecipe;
@@ -25,7 +26,7 @@ public class RecipeUtils {
   private static final HashSet<Recipe> shapedRecipes = new HashSet<>();
   private static final HashSet<Recipe> shapelessRecipes = new HashSet<>();
   private static final HashSet<Recipe> stonecuttingRecipes = new HashSet<>();
-  private static final HashSet<CustomMachineRecipe> furnaceRecipes = new HashSet<>();
+  private static final HashMap<String, String> furnaceRecipes = new HashMap<>();
   private static final HashSet<Recipe> blastingRecipes = new HashSet<>();
   private static final HashSet<Recipe> smokingRecipeRecipes = new HashSet<>();
   private static final HashSet<Recipe> campfireRecipes = new HashSet<>();
@@ -46,11 +47,7 @@ public class RecipeUtils {
       } else if (recipe instanceof StonecuttingRecipe) {
         stonecuttingRecipes.add(recipe);
       } else if (recipe instanceof FurnaceRecipe) {
-        HashMap<String, Integer> ingredients = new HashMap<>();
-        ingredients.put(((FurnaceRecipe) recipe).getInput().getType().toString(),((FurnaceRecipe) recipe).getInput().getAmount());
-        ArrayList<ItemStack> products = new ArrayList<>();
-        products.add(recipe.getResult().clone());
-        furnaceRecipes.add(new CustomMachineRecipe(ingredients,products));
+        furnaceRecipes.put(((FurnaceRecipe) recipe).getInput().getType().toString(),recipe.getResult().getType().toString());
       } else if (recipe instanceof BlastingRecipe) {
         blastingRecipes.add(recipe);
       } else if (recipe instanceof SmokingRecipe) {
@@ -101,12 +98,16 @@ public class RecipeUtils {
     return shapedRecipes;
   }
 
-  public static HashSet<CustomMachineRecipe> getFurnaceRecipes() {
+  public static HashMap<String, String> getFurnaceRecipes() {
     return furnaceRecipes;
   }
 
-  public static void addFurnaceRecipe(CustomMachineRecipe recipe) {
-    furnaceRecipes.add(recipe);
+  public static void addFurnaceRecipe(String source, String result) {
+    furnaceRecipes.put(source, result);
+  }
+
+  public static void addAllFurnaceRecipes(HashMap<String, String> recipes) {
+    furnaceRecipes.putAll(recipes);
   }
 
   public static HashSet<Recipe> getSmokingRecipeRecipes() {
@@ -161,5 +162,19 @@ public class RecipeUtils {
       return products;
     }
   }
+
+  public static class BinaryRecipe {
+    @Getter
+    final String ingredient;
+    @Getter
+    final ItemStack product;
+
+    public BinaryRecipe(String ingredient, ItemStack product) {
+      this.ingredient = ingredient;
+      this.product = product;
+    }
+  }
+
+
 
 }

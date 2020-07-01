@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.api.recipes;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,7 +15,6 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
-import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 
 public class RecipeManager implements Listener {
 
@@ -91,24 +89,14 @@ public class RecipeManager implements Listener {
       return;
     }
     customFurnaceRecipes = new HashMap<>();
+    HashMap<String, String> toAdd = new HashMap<>();
     for(String recipe: furnaceRecipes.getKeys(false)){
       ItemStack result = CustomItemManager.getCustomItem(furnaceRecipes.getString(recipe+".result.name"));
       result.setAmount(furnaceRecipes.getInt(recipe+".result.amount"));
       customFurnaceRecipes.put(furnaceRecipes.getString(recipe+".input.name"),result);
-      HashMap<String, Integer> ingredients = new HashMap<>();
-      ingredients.put(furnaceRecipes.getString(recipe+".input.name"),1);
-      ArrayList<ItemStack> products = new ArrayList<>();
-      String resultName = furnaceRecipes.getString(recipe+".result.name");
-      ItemStack stack;
-      if(CustomItemManager.isCustomItemName(resultName)){
-        stack = CustomItemManager.getCustomItem(resultName);
-      } else {
-        stack = new ItemStack(Material.valueOf(resultName));
-      }
-      stack.setAmount(furnaceRecipes.getInt(recipe+".result.amount"));
-      products.add(stack);
-      RecipeUtils.addFurnaceRecipe(new CustomMachineRecipe(ingredients,products));
+      toAdd.put(furnaceRecipes.getString(recipe+".input.name"), furnaceRecipes.getString(recipe+".result.name"));
     }
+    RecipeUtils.addAllFurnaceRecipes(toAdd);
   }
 
   @EventHandler

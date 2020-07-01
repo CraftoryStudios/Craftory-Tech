@@ -15,8 +15,8 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
+import tech.brettsaunders.craftory.utils.Pair;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
-import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class BaseElectricFurnace extends BaseMachine implements IHopperInteract {
@@ -48,7 +48,8 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
 
   /* Per Object Variables Not-Saved */
 
-  private transient CustomMachineRecipe currentRecipe = null;
+  private transient Pair<String, String> currentRecipe = null;
+  private transient ItemStack currentProduct = null;
 
 
   /* Construction */
@@ -106,9 +107,9 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
   protected void processComplete() {
     inputSlots.get(0).setAmount(inputSlots.get(0).getAmount() - 1);
     if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
-      outputSlots.set(0, currentRecipe.getProducts().get(0));
+      outputSlots.set(0, currentProduct);
     } else {
-      outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + currentRecipe.getProducts().get(0).getAmount());
+      outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + 1);
     }
     inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots.get(0));
   }
@@ -126,33 +127,33 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
     if (inputSlots.get(0) == null || inputSlots.get(0).getType() == Material.AIR) {
       return false;
     }
+    ItemStack outputSlot = outputSlots.get(0);
     String inputType = CustomItemManager.getCustomItemName(inputSlots.get(0));
+    String outputType = (outputSlot==null) ? null : CustomItemManager.getCustomItemName(outputSlots.get(0));
     //If the recipe is unchanged there is no need to find the recipe.
-    if (currentRecipe != null && currentRecipe.getIngredients().keySet().iterator().next().equals(inputType)) {
-      if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
+    if (currentRecipe != null && currentRecipe.getX().equals(inputType)) {
+      if (outputSlot == null || outputSlot.getType() == Material.AIR) {
         return true;
       }
-      if (outputSlots.get(0).getType().toString().equals(CustomItemManager.getCustomItemName(currentRecipe.getProducts().get(0)))
-          && outputSlots.get(0).getAmount() <= outputSlots.get(0).getMaxStackSize() - currentRecipe.getProducts().get(0).getAmount()) {
+      if (outputType.equals(currentRecipe.getY()) && outputSlot.getAmount() <= outputSlot.getMaxStackSize() - 1) {
         return true;
       }
     }
-    for (CustomMachineRecipe recipe : RecipeUtils.getFurnaceRecipes()) {
-      //Logger.info(recipe.getIngredients().keySet().iterator().next());
-      if (!recipe.getIngredients().keySet().iterator().next().equals(inputType)) {
-        continue;
-      }
-      currentRecipe = recipe;
-      if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
-        return true;
-      }
-      if (CustomItemManager.getCustomItemName(outputSlots.get(0))
-          .equals(CustomItemManager.getCustomItemName(recipe.getProducts().get(0)))
-          && outputSlots.get(0).getAmount() < outputSlots.get(0).getMaxStackSize()) {
+    if(RecipeUtils.getFurnaceRecipes().containsKey(inputType)) {
+      String product;
+      product = RecipeUtils.getFurnaceRecipes().get(inputType);
+      if((outputSlot==null) || outputSlot.getType().equals(Material.AIR) || (outputType.equals(product) && outputSlot.getAmount() < outputSlot.getMaxStackSize())){
+        currentRecipe = new Pair<>(inputType, product);
+        if(CustomItemManager.isCustomItemName(product)) {
+          currentProduct = CustomItemManager.getCustomItem(product);
+        } else {
+          currentProduct = new ItemStack(Material.valueOf(product));
+        }
         return true;
       }
     }
     currentRecipe = null;
+    currentProduct = null;
     return false;
   }
 
