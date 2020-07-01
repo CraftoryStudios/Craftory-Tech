@@ -1,19 +1,23 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import java.util.HashMap;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
-public abstract class BaseGenerator extends BaseProvider {
+public abstract class BaseGenerator extends BaseProvider implements IHopperInteract {
 
   /* Static Constants Protected */
   protected static final int CAPACITY_BASE = 40000;
   protected static final double[] CAPACITY_LEVEL = {1, 1.5, 2, 3};
+  protected static final int FUEL_SLOT = 22;
   /* Per Object Variables Saved */
   @Persistent
   protected int fuelRE;
@@ -26,6 +30,18 @@ public abstract class BaseGenerator extends BaseProvider {
   protected int lastEnergy;
   protected boolean isActive;
   protected boolean wasActive;
+
+  private static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
+    {
+      put(BlockFace.NORTH, FUEL_SLOT);
+      put(BlockFace.EAST, FUEL_SLOT);
+      put(BlockFace.SOUTH, FUEL_SLOT);
+      put(BlockFace.WEST, FUEL_SLOT);
+      put(BlockFace.UP, FUEL_SLOT);
+    }
+  };
+
+  private static final HashMap<BlockFace, Integer> outputFaces = new HashMap<>();
 
   /* Construction */
   public BaseGenerator(Location location, String blockName, byte level, int outputAmount) {
@@ -137,6 +153,16 @@ public abstract class BaseGenerator extends BaseProvider {
     Inventory inventory = setInterfaceTitle("Generator", Font.GENERATOR_GUI.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig));
+  }
+
+  @Override
+  public HashMap<BlockFace, Integer> getInputFaces() {
+    return inputFaces;
+  }
+
+  @Override
+  public HashMap<BlockFace, Integer> getOutputFaces() {
+    return outputFaces;
   }
 
 }

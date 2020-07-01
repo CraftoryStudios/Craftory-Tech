@@ -67,7 +67,6 @@ public class CustomBlockManagerEvents implements Listener {
       CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
           e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
       Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
-      Craftory.tickManager.addTickingBlock(customBlock);
     }
   }
 

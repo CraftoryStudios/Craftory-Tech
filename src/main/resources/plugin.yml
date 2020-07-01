@@ -13,6 +13,8 @@ commands:
     description: Craftory commands.
   cr:
     description: Cratory commands.
+  crtesting:
+    description: Testing
 
 permissions:
   craftory:

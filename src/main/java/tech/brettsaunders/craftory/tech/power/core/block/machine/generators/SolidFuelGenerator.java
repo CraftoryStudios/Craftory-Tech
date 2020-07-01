@@ -17,8 +17,6 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 
 public class SolidFuelGenerator extends BaseGenerator {
-
-  protected static final int FUEL_SLOT = 22;
   /* Static Constants Private */
   private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 80;

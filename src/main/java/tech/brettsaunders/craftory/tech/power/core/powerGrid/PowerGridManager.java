@@ -61,7 +61,6 @@ public class PowerGridManager implements Listener {
   /* Events */
   @EventHandler
   public void onPoweredBlockBreak(CustomBlockBreakEvent event) {
-    Logger.info("block break");
     Location location = event.getLocation();
     if (powerGrids.containsKey(location)) { //GRID / Power connector stuff
       Logger.info("its a connector");

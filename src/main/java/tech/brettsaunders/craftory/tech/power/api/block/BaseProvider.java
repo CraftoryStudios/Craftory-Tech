@@ -74,19 +74,22 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     return energyExtracted;
   }
 
+  public void setSideConfigSide(int side,  boolean result) {
+    sidesConfig.set(side, result);
+  }
+
 
   /* Internal Helper Functions */
 
 
   public int insertEnergyIntoAdjacentEnergyReceiver(int side, int energy, boolean simulate) {
     Location targetLocation = this.location.getBlock().getRelative(faces[side]).getLocation();
-    if (PoweredBlockUtils.isEnergyReceiver(targetLocation)) {
-      if (PoweredBlockUtils.isEnergyProvider(targetLocation)) {
-        return ((BaseCell) PoweredBlockUtils.getPoweredBlock(targetLocation))
-            .receiveEnergy(energy, simulate);
+    PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock(targetLocation);
+    if (PoweredBlockUtils.isEnergyReceiver(poweredBlock)) {
+      if (PoweredBlockUtils.isEnergyProvider(poweredBlock)) {
+        return ((BaseCell) poweredBlock).receiveEnergy(energy, simulate);
       } else {
-        return ((BaseMachine) PoweredBlockUtils.getPoweredBlock(targetLocation))
-            .receiveEnergy(energy, simulate);
+        return ((BaseMachine) poweredBlock).receiveEnergy(energy, simulate);
       }
     } else {
       //sidesCache.set(side, false);

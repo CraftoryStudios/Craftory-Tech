@@ -14,6 +14,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
+import tech.brettsaunders.craftory.testing.TestingCommand;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.OrePopulator;
@@ -80,6 +81,10 @@ public final class Craftory extends JavaPlugin {
     Bukkit.getWorlds().get(0).getPopulators().add(orePopulator);
     tickManager.runTaskTimer(this, 20L, 1L);
     Utilities.setupAdvancements();
+
+
+    //Testing
+    this.getCommand("crtesting").setExecutor(new TestingCommand());
   }
 
   @Override

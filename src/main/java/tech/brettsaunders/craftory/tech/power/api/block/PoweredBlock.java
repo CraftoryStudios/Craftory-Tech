@@ -14,6 +14,7 @@ import org.bukkit.block.Hopper;
 import org.bukkit.block.data.Directional;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -55,6 +56,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   protected ArrayList<Integer> outputLocations = new ArrayList<>(); //The inventory locations of outputs
   /* Per Object Variables Not-Saved */
   protected transient Inventory inventoryInterface;
+  private transient boolean powered = false;
 
   /* Construction */
   public PoweredBlock(Location location, String blockName, byte level) {
@@ -86,6 +88,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     HashMap<BlockFace, Integer> inputFaces = ((IHopperInteract) this).getInputFaces();
     HashMap<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
     inputFaces.forEach((face, slot) -> {
+
       if (cachedSides.containsKey(face) && cachedSides.get(face)
           .equals(INTERACTABLEBLOCK.HOPPER_IN)) {
         ItemStack stack = inventoryInterface.getItem(slot);
@@ -180,12 +183,23 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     }
   }
 
+  @EventHandler
+  public void onPoweredStateUpdate(BlockRedstoneEvent e) {
+    if (e.getBlock().getLocation() == location) {
+      if (e.getNewCurrent() > 0) {
+        powered = true;
+      } else {
+        powered = false;
+      }
+    }
+  }
+
   public void setSideCache(BlockFace face, INTERACTABLEBLOCK type) {
     cachedSides.put(face, type);
   }
 
   protected boolean isBlockPowered() {
-    return location.getBlock().isBlockPowered() || location.getBlock().isBlockIndirectlyPowered();
+    return powered;
   }
 
   /* Info Methods */

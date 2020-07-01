@@ -114,7 +114,7 @@ public class CustomItemManager implements Listener {
 
   public static String getCustomItemName(ItemStack itemStack) {
     NBTItem nbtItem = new NBTItem(itemStack);
-    if (nbtItem.hasNBTData() && nbtItem.hasKey("NAME")) {
+    if (nbtItem.hasKey("NAME")) {
       return nbtItem.getString("NAME");
     }
     return itemStack.getType().toString();

@@ -72,6 +72,7 @@ public class CustomBlockManager {
 
     CustomBlock customBlock = Craftory.customBlockFactory.create(customBlockItemName, block.getLocation());
     putActiveCustomBlock(customBlock);
+    Craftory.tickManager.addTickingBlock(customBlock);
     return customBlock;
   }
 
