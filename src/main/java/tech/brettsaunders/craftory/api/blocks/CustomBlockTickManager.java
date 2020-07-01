@@ -8,19 +8,23 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import lombok.NoArgsConstructor;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.NonNull;
 import lombok.Synchronized;
 import org.bukkit.scheduler.BukkitRunnable;
 
-@NoArgsConstructor
 public class CustomBlockTickManager extends BukkitRunnable {
 
   //Custom Block in future
   private HashMap<Class<? extends CustomBlock>, HashMap<Method, Integer>> classCache = new HashMap<>();
-  private HashSet<CustomBlock> trackedBlocks = new HashSet<>();
+  private Set<CustomBlock> trackedBlocks;
   private long tick = 0;
+
+  public CustomBlockTickManager() {
+    ConcurrentHashMap trackedBlocksMap = new ConcurrentHashMap<>();
+    trackedBlocks = trackedBlocksMap.newKeySet();
+  }
 
   public static Collection<Method> getMethodsRecursively(@NonNull Class<?> startClass,
       @NonNull Class<?> exclusiveParent) {
@@ -35,7 +39,6 @@ public class CustomBlockTickManager extends BukkitRunnable {
   }
 
   @Override
-  @Synchronized
   public void run() {
     tick++;
     for (CustomBlock customBlock : trackedBlocks) {
