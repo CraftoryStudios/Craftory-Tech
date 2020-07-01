@@ -45,7 +45,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   /* Update Loop */
   @Ticking(ticks = 1)
   public void updateMachine() {
-    if (inventoryInterface == null) {
+    if (inventoryInterface == null || isBlockPowered()) {
       return;
     }
     updateSlots();

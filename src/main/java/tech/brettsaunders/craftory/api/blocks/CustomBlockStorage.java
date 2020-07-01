@@ -2,6 +2,7 @@ package tech.brettsaunders.craftory.api.blocks;
 
 import static tech.brettsaunders.craftory.Utilities.getLocationID;
 import static tech.brettsaunders.craftory.Utilities.getRegionID;
+import static tech.brettsaunders.craftory.Utilities.keyToLoc;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
@@ -103,13 +104,6 @@ public class CustomBlockStorage {
     } catch (IOException e) {
         e.printStackTrace();
       }
-  }
-
-  @Synchronized
-  private static Location keyToLoc(String key, World world) {
-    String[] locationData = key.split(",");
-    return new Location(world, Double.parseDouble(locationData[0]),
-        Double.parseDouble(locationData[1]), Double.parseDouble(locationData[2]));
   }
 
 }

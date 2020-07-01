@@ -51,6 +51,7 @@ public abstract class BaseGenerator extends BaseProvider {
   /* Update Loop */
   @Ticking(ticks = 1)
   public void updateGenerator() {
+    if (isBlockPowered()) return;
     if (isActive) {
       processTick();
       if (canFinish()) {

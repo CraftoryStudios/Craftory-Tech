@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
+import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +9,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -109,7 +112,11 @@ public class PowerGridManager implements Listener {
   }
 
   public void onDisable() {
-    persistenceStorage.saveFields(this, nbtFile);
+    powerGrids.forEach(((location, powerGrid) -> {
+      NBTCompound locationCompound = nbtFile.addCompound(Utilities.getLocationID(location));
+      locationCompound.setString("world", location.getWorld().getName());
+      persistenceStorage.saveFields(powerGrid, locationCompound);
+    }));
     try {
       nbtFile.save();
     } catch (IOException e) {
@@ -118,7 +125,13 @@ public class PowerGridManager implements Listener {
   }
 
   public void onEnable() {
-    persistenceStorage.loadFields(this, nbtFile);
+    nbtFile.getKeys().forEach((locationKey) -> {
+      NBTCompound locationCompound = nbtFile.getCompound(locationKey);
+      PowerGrid powerGrid = new PowerGrid();
+      persistenceStorage.loadFields(powerGrid, locationCompound);
+      World world = Bukkit.getWorld(locationCompound.getString("world"));
+      powerGrids.put(Utilities.keyToLoc(locationKey, world), powerGrid); //TODO Allow any world
+    });
     generatorPowerBeams();
   }
 

@@ -89,25 +89,28 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       if (cachedSides.containsKey(face) && cachedSides.get(face)
           .equals(INTERACTABLEBLOCK.HOPPER_IN)) {
         ItemStack stack = inventoryInterface.getItem(slot);
-        ItemStack[] hopperItems = ((Hopper) location.getBlock().getRelative(face).getState())
-            .getInventory().getContents();
-        for (ItemStack item : hopperItems) {
-          if (item == null) {
-            continue;
+        final Block relative = location.getBlock().getRelative(face);
+        if (!relative.isBlockPowered() && !relative.isBlockIndirectlyPowered()) {
+          ItemStack[] hopperItems = ((Hopper) relative.getState())
+              .getInventory().getContents();
+          for (ItemStack item : hopperItems) {
+            if (item == null) {
+              continue;
+            }
+            if (stack == null) {
+              stack = item.clone();
+              stack.setAmount(1);
+              item.setAmount(item.getAmount() - 1);
+              break;
+            } else if (stack.getType().toString().equals(item.getType().toString())
+                && stack.getAmount() < stack.getMaxStackSize()) {
+              stack.setAmount(stack.getAmount() + 1);
+              item.setAmount(item.getAmount() - 1);
+              break;
+            }
           }
-          if (stack == null) {
-            stack = item.clone();
-            stack.setAmount(1);
-            item.setAmount(item.getAmount() - 1);
-            break;
-          } else if (stack.getType().toString().equals(item.getType().toString())
-              && stack.getAmount() < stack.getMaxStackSize()) {
-            stack.setAmount(stack.getAmount() + 1);
-            item.setAmount(item.getAmount() - 1);
-            break;
-          }
+          inventoryInterface.setItem(slot, stack);
         }
-        inventoryInterface.setItem(slot, stack);
       }
     });
 
@@ -179,6 +182,10 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
 
   public void setSideCache(BlockFace face, INTERACTABLEBLOCK type) {
     cachedSides.put(face, type);
+  }
+
+  protected boolean isBlockPowered() {
+    return location.getBlock().isBlockPowered() || location.getBlock().isBlockIndirectlyPowered();
   }
 
   /* Info Methods */

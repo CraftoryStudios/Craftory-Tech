@@ -18,10 +18,10 @@ import tech.brettsaunders.craftory.utils.Logger;
 public class PowerGrid extends BukkitRunnable {
   @Getter
   @Persistent
-  private final HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
+  private HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
   @Getter
   @Persistent
-  private final HashMap<Location, HashSet<Location>> blockConnections = new HashMap<>();
+  private HashMap<Location, HashSet<Location>> blockConnections = new HashMap<>();
   @Getter
   @Setter
   @Persistent
@@ -43,7 +43,7 @@ public class PowerGrid extends BukkitRunnable {
 
   @Override
   public void run() {
-    Logger.info("grid run " + generators.size() + " " + machines.size() + " " + cells.size());//rr
+    //Logger.debug("grid run " + generators.size() + " " + machines.size() + " " + cells.size());//rr
     int needed = calculateGridEnergyRequirement();
     int cellCapacity = calculateGridStorageSpace();
     int produced = calculateGridEnergyProduced(needed + cellCapacity);

@@ -8,11 +8,13 @@ import java.text.DecimalFormat;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
+import lombok.Synchronized;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -248,6 +250,13 @@ public class Utilities {
 
   public static String getLocationID(Location location) {
     return location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ();
+  }
+
+  @Synchronized
+  public static Location keyToLoc(String key, World world) {
+    String[] locationData = key.split(",");
+    return new Location(world, Double.parseDouble(locationData[0]),
+        Double.parseDouble(locationData[1]), Double.parseDouble(locationData[2]));
   }
 
   public static String rawToPrefixed(Integer energy) {

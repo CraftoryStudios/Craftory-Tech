@@ -64,6 +64,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
   @Ticking(ticks = 1)
   public void updateProvider() {
+    if (isBlockPowered()) return;
     transferEnergy();
   }
 
