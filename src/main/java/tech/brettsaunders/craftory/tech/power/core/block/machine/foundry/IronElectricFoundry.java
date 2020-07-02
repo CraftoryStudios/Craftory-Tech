@@ -19,4 +19,9 @@ public class IronElectricFoundry extends BaseFoundry {
     super();
   }
 
+  @Override
+  public void setupGUI() {
+  super.setupGUI();
+  }
+
 }

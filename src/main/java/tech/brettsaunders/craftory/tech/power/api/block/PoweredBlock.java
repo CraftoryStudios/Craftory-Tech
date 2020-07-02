@@ -75,6 +75,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   /* Saving, Setup and Loading */
   public PoweredBlock() {
     super();
+    cachedSides = new HashMap<>();
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
   }
