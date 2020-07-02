@@ -61,17 +61,17 @@ public class GOutputConfig implements IGUIComponent, Listener {
 
     int rawSlot = event.getRawSlot();
     if (rawSlot == NORTH_SLOT) {
-      config.put(BlockFace.NORTH, !config.get(0));
+      config.put(BlockFace.NORTH, !config.get(BlockFace.NORTH));
     } else if (rawSlot == EAST_SLOT) {
-      config.put(BlockFace.EAST, !config.get(2));
+      config.put(BlockFace.EAST, !config.get(BlockFace.EAST));
     } else if (rawSlot == SOUTH_SLOT) {
-      config.put(BlockFace.SOUTH, !config.get(1));
+      config.put(BlockFace.SOUTH, !config.get(BlockFace.SOUTH));
     } else if (rawSlot == WEST_SLOT) {
-      config.put(BlockFace.WEST, !config.get(3));
+      config.put(BlockFace.WEST, !config.get(BlockFace.WEST));
     } else if (rawSlot == UP_SLOT) {
-      config.put(BlockFace.UP, !config.get(4));
+      config.put(BlockFace.UP, !config.get(BlockFace.UP));
     } else if (rawSlot == DOWN_SLOT) {
-      config.put(BlockFace.DOWN, !config.get(5));
+      config.put(BlockFace.DOWN, !config.get(BlockFace.DOWN));
     }
   }
 

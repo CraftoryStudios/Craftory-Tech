@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -51,20 +52,20 @@ public class GBattery implements IGUIComponent {
     String topTexture = "bar_" + top + "_t";
     ItemStack topItem = CustomItemManager.getCustomItem(topTexture);
     ItemMeta topMeta = topItem.getItemMeta();
-    topMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
+    topMeta.setDisplayName(ChatColor.RESET +"Energy Stored: " + storage.getEnergyStored());
     topItem.setItemMeta(topMeta);
 
     //Get Bottom Battery Icon and set Display Name
     String bottomTexture = "bar_" + bottom + "_b";
     ItemStack bottomItem = CustomItemManager.getCustomItem(bottomTexture);
     ItemMeta bottomMeta = bottomItem.getItemMeta();
-    bottomMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
+    bottomMeta.setDisplayName(ChatColor.RESET +"Energy Stored: " + storage.getEnergyStored());
     bottomItem.setItemMeta(bottomMeta);
 
     //Fill other battery slots
     ItemStack batteryIndicator = CustomItemManager.getCustomItem("invisible");
     ItemMeta batteryIndicatorMeta = batteryIndicator.getItemMeta();
-    batteryIndicatorMeta.setDisplayName("Energy Stored: " + storage.getEnergyStored());
+    batteryIndicatorMeta.setDisplayName(ChatColor.RESET +"Energy Stored: " + storage.getEnergyStored());
     batteryIndicator.setItemMeta(batteryIndicatorMeta);
 
     //Display in Inventory

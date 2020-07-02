@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,7 +37,7 @@ public class GIndicator implements IGUIComponent {
       name = "Machine Off";
     }
     ItemMeta meta = light.getItemMeta();
-    meta.setDisplayName(name);
+    meta.setDisplayName(ChatColor.RESET +name);
     light.setItemMeta(meta);
     inventory.setItem(slot, light);
   }

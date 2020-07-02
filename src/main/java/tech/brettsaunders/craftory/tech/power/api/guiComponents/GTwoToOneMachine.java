@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -44,7 +45,7 @@ public class GTwoToOneMachine implements IGUIComponent {
     int x = (int) Math.floor(progress.getT() * 10);
     ItemStack arrow = CustomItemManager.getCustomItem("arrow_" + x);
     ItemMeta meta = arrow.getItemMeta();
-    meta.setDisplayName("");
+    meta.setDisplayName(ChatColor.RESET +"");
     arrow.setItemMeta(meta);
     inventory.setItem(arrowSlot, arrow);
   }
