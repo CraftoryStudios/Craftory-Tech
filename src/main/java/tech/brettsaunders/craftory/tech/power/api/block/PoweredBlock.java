@@ -21,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.persistence.Persistent;
@@ -44,7 +45,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   @Persistent
   protected int level;
   @Persistent
-  protected HashMap<BlockFace, INTERACTABLEBLOCK> cachedSides;
+  protected HashMap<BlockFace, INTERACTABLEBLOCK> cachedSidesConfig;
+  protected HashMap<BlockFace, CustomBlock> cachedSides;
   /* Hopper control variables */
   @Persistent
   protected ArrayList<ItemStack> inputSlots = new ArrayList<>(); //The ItemStacks of the inputs
@@ -61,6 +63,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   /* Construction */
   public PoweredBlock(Location location, String blockName, byte level) {
     super(location, blockName);
+    cachedSidesConfig = new HashMap<>();
     cachedSides = new HashMap<>();
     this.energyStorage = new EnergyStorage(0);
     this.level = level;
@@ -76,6 +79,15 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         .registerEvents(this, Craftory.plugin);
   }
 
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
+    cachedSidesConfig.forEach(((blockFace, interactableblock) -> {
+      if (interactableblock.equals(INTERACTABLEBLOCK.RECEIVER)) {
+        cachedSides.put(blockFace, Craftory.customBlockManager.getCustomBlock(this.location.getBlock().getRelative(blockFace).getLocation()));
+      }
+    }));
+  }
+
   /* Update Loop */
   @Ticking(ticks = 8)
   public void processHoppers() {
@@ -87,9 +99,10 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     }
     HashMap<BlockFace, Integer> inputFaces = ((IHopperInteract) this).getInputFaces();
     HashMap<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
-    inputFaces.forEach((face, slot) -> {
 
-      if (cachedSides.containsKey(face) && cachedSides.get(face)
+    //Hopper Input
+    inputFaces.forEach((face, slot) -> {
+      if (cachedSidesConfig.containsKey(face) && cachedSidesConfig.get(face)
           .equals(INTERACTABLEBLOCK.HOPPER_IN)) {
         ItemStack stack = inventoryInterface.getItem(slot);
         final Block relative = location.getBlock().getRelative(face);
@@ -117,8 +130,9 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       }
     });
 
+    //Hopper Output
     outputFaces.forEach((face, slot) -> {
-      if (cachedSides.containsKey(face) && cachedSides.get(face)
+      if (cachedSidesConfig.containsKey(face) && cachedSidesConfig.get(face)
           .equals(INTERACTABLEBLOCK.HOPPER_OUT)) {
         ItemStack stack = inventoryInterface.getItem(slot);
         if (stack != null) {
@@ -194,8 +208,13 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     }
   }
 
+  public void setSideCache(BlockFace face, INTERACTABLEBLOCK type, CustomBlock customBlock) {
+    cachedSidesConfig.put(face, type);
+    cachedSides.put(face, customBlock);
+  }
+
   public void setSideCache(BlockFace face, INTERACTABLEBLOCK type) {
-    cachedSides.put(face, type);
+    cachedSidesConfig.put(face, type);
   }
 
   protected boolean isBlockPowered() {
@@ -224,8 +243,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         if (face.equals(BlockFace.DOWN)) {
           this.setSideCache(face, INTERACTABLEBLOCK.HOPPER_OUT);
         }
-      } else if (PoweredBlockUtils.isPoweredBlock(b.getLocation()) && PoweredBlockUtils.isEnergyReceiver(b.getLocation())) {
-        this.setSideCache(face, INTERACTABLEBLOCK.RECIEVER);
+      } else if (PoweredBlockUtils.isEnergyReceiver(b.getLocation())) {
+        this.setSideCache(face, INTERACTABLEBLOCK.RECEIVER, PoweredBlockUtils.getPoweredBlock(b.getLocation()));
       }
     }
   }

@@ -1,34 +1,30 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import org.bukkit.Location;
-import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
+import org.bukkit.block.BlockFace;
+import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
-import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 
 public abstract class BaseProvider extends PoweredBlock implements IEnergyProvider {
 
-  /* Static Constants Protected */
-  protected static final Boolean[] DEFAULT_SIDES_CONFIG = {false, false, false, false, false,
-      false};  //NORTH, EAST, SOUTH, WEST, UP, DOWN
   /* Per Object Variables Saved */
   @Persistent
   protected int maxOutput;
   @Persistent
-  protected ArrayList<Boolean> sidesConfig;
-
-  /* Per Object Variables Not-Saved */
-
+  protected HashMap<BlockFace, Boolean> sidesConfig;
 
   /* Construction */
   public BaseProvider(Location location, String blockName, byte level, int maxOutput) {
     super(location, blockName, level);
     this.maxOutput = maxOutput;
     init();
-    Collections.addAll(sidesConfig, DEFAULT_SIDES_CONFIG);
+    for (BlockFace face : Utilities.faces) {
+      sidesConfig.put(face,false);
+    }
   }
 
   /* Saving, Setup and Loading */
@@ -39,33 +35,18 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
   /* Common Load and Construction */
   private void init() {
-    sidesConfig = new ArrayList<>(6);
+    sidesConfig = new HashMap<>(6);
   }
 
   /* Update Loop */
-  protected void transferEnergy() {
-    int amountTransferred = 0;
-    for (int i = 0; i < sidesConfig.size(); i++) {
-      if (sidesConfig.get(i)) {
-        /*if (sidesCache.get(i)) {
-          amountTransferred += energyStorage
-              .modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
-                  Math.min(maxOutput, energyStorage.getEnergyStored()), false));
-        }*/
-        if (cachedSides.containsKey(faces[i]) && cachedSides.get(faces[i])
-            .equals(INTERACTABLEBLOCK.RECIEVER)) {
-          amountTransferred += energyStorage
-              .modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(i,
-                  Math.min(maxOutput, energyStorage.getEnergyStored()), false));
-        }
-      }
-    }
-  }
-
   @Ticking(ticks = 1)
-  public void updateProvider() {
+  public void transferEnergy() {
     if (isBlockPowered()) return;
-    transferEnergy();
+    cachedSides.forEach(((blockFace, customBlock) -> {
+      if (sidesConfig.get(blockFace)) {
+        energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(Math.min(maxOutput, energyStorage.getEnergyStored()), false, customBlock));
+      }
+    }));
   }
 
   public int retrieveEnergy(int energy) {
@@ -74,37 +55,31 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     return energyExtracted;
   }
 
-  public void setSideConfigSide(int side,  boolean result) {
-    sidesConfig.set(side, result);
+  public void setSideConfigSide(BlockFace side,  boolean result) {
+    sidesConfig.put(side, result);
   }
 
 
   /* Internal Helper Functions */
 
 
-  public int insertEnergyIntoAdjacentEnergyReceiver(int side, int energy, boolean simulate) {
-    Location targetLocation = this.location.getBlock().getRelative(faces[side]).getLocation();
-    PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock(targetLocation);
-    if (PoweredBlockUtils.isEnergyReceiver(poweredBlock)) {
-      if (PoweredBlockUtils.isEnergyProvider(poweredBlock)) {
-        return ((BaseCell) poweredBlock).receiveEnergy(energy, simulate);
-      } else {
-        return ((BaseMachine) poweredBlock).receiveEnergy(energy, simulate);
-      }
-    } else {
-      //sidesCache.set(side, false);
+  public int insertEnergyIntoAdjacentEnergyReceiver(int energy, boolean simulate, CustomBlock customBlock) {
+    if (customBlock instanceof BaseMachine) {
+      return ((BaseMachine) customBlock).receiveEnergy(energy, simulate);
+    } else if (customBlock instanceof BaseCell) {
+      return ((BaseCell) customBlock).receiveEnergy(energy, simulate);
     }
     return 0;
   }
 
 
-  public ArrayList<Boolean> getSideConfig() {
+  public HashMap<BlockFace, Boolean> getSideConfig() {
     return sidesConfig;
   }
 
-  public void setSidesConfig(ArrayList<Boolean> config) {
+  public void setSidesConfig(HashMap<BlockFace, Boolean> config) {
     sidesConfig.clear();
-    sidesConfig.addAll(config);
+    sidesConfig.putAll(config);
   }
 
   /* IEnergyHandler */

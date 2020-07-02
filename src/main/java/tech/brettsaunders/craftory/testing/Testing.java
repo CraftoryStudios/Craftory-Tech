@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Hopper;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
@@ -72,8 +73,8 @@ public class Testing {
     BaseProvider energyCellBlock = (BaseProvider) placeBlock(energyCellName, baseLocation.clone().add(0,1,2));
     BaseProvider generatorBlock = (BaseProvider) placeBlock(generatorName, baseLocation.clone().add(0,1,3));
     PoweredBlock machineBlock = (PoweredBlock) placeBlock(mainMachineName, baseLocation.clone().add(0,1,1));
-    energyCellBlock.setSideConfigSide(0,true);
-    generatorBlock.setSideConfigSide(0, true);
+    energyCellBlock.setSideConfigSide(BlockFace.NORTH,true);
+    generatorBlock.setSideConfigSide(BlockFace.NORTH, true);
   }
 
   private static CustomBlock placeBlock(String blockName, Location location) {

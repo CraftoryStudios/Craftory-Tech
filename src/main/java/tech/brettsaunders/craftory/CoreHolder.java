@@ -11,7 +11,7 @@ public class CoreHolder {
 
   public enum INTERACTABLEBLOCK {
     NONE,
-    RECIEVER,
+    RECEIVER,
     HOPPER_IN,
     HOPPER_OUT
   }

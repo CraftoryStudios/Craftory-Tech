@@ -1,12 +1,12 @@
 package tech.brettsaunders.craftory.api.blocks;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,7 +29,7 @@ import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredBlockEvents implements Listener {
-  private final HashMap<UUID, ArrayList<Boolean>> configuratorData = new HashMap<>();
+  private final HashMap<UUID, HashMap<BlockFace,Boolean>> configuratorData = new HashMap<>();
 
   public PoweredBlockEvents() {
     Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
@@ -38,7 +38,7 @@ public class PoweredBlockEvents implements Listener {
   @EventHandler
   public void onPoweredBlockPlace(CustomBlockPlaceEvent e) {
     if (PoweredBlockUtils.isEnergyReceiver(e.getCustomBlock())) {
-      PoweredBlockUtils.updateAdjacentProviders(e.getLocation(),true);
+      PoweredBlockUtils.updateAdjacentProviders(e.getLocation(),true, e.getCustomBlock());
     }
     if (e.getName().equals(Blocks.POWER_CONNECTOR)) {
       PowerGrid powerGrid = new PowerGrid();
@@ -52,7 +52,7 @@ public class PoweredBlockEvents implements Listener {
   public void onPoweredBlockBreak(CustomBlockBreakEvent e) {
     //Update Providers
     if (PoweredBlockUtils.isEnergyReceiver(e.getCustomBlock())) {
-      PoweredBlockUtils.updateAdjacentProviders(e.getLocation(), false);
+      PoweredBlockUtils.updateAdjacentProviders(e.getLocation(), false, e.getCustomBlock());
     }
     //Drop Inventory
     if(PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) {
