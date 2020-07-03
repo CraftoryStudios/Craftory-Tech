@@ -25,7 +25,7 @@ public class IronFoundry extends BaseFoundry {
 
   /* Construction */
   public IronFoundry(Location location) {
-    super(location, Blocks.IRON_ELECTRIC_FOUNDRY, C_LEVEL);
+    super(location, Blocks.IRON_FOUNDRY, C_LEVEL);
     interactableSlots.add(FUEL_SLOT);
     inputLocations.add(FUEL_SLOT);
   }
