@@ -66,14 +66,14 @@ public class PowerGridManager implements Listener {
       Logger.info("its a connector");
       Craftory.powerConnectorManager.destroyBeams(location);
       PowerGrid grid = powerGrids.remove(location);
-      grid.cancel();
+      grid.cancelTask();
       Logger.info("stopped grid");
       if (grid.getGridSize() > 1) {
         List<PowerGrid> newGrids = splitGrids(location,  grid);
         for (Location l : grid.getPowerConnectors().keySet()) {
           PowerGrid g = powerGrids.remove(l);
           if(!g.isCancelled()){
-            g.cancel(); //Stop runable
+            g.cancelTask(); //Stop runable
             Logger.info("stopped grid");
           }
         }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.persistence.Persistent;
@@ -35,10 +36,16 @@ public class PowerGrid extends BukkitRunnable {
   @Persistent
   private HashSet<Location> machines = new HashSet<>();
   private int machinesNeedingEnergy = 0;
+  private BukkitTask taskID;
 
   public PowerGrid() {
-    this.runTaskTimer(Craftory.plugin, 5, 1);
+    taskID = this.runTaskTimer(Craftory.plugin, 5, 1);
     Logger.info("grid made");
+  }
+
+  public void cancelTask() {
+    this.cancel();
+    taskID.cancel();
   }
 
   @Override
