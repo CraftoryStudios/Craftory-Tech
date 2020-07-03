@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.utils;
 
 import java.math.BigInteger;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -32,17 +33,20 @@ public class ResourcePackEvents implements Listener {
   public void onResourcePackStatus(PlayerResourcePackStatusEvent e) {
     switch (e.getStatus()) {
       case ACCEPTED:
-        e.getPlayer().sendMessage("Craftory: Downloading texture pack!");
+        //e.getPlayer().sendMessage("Craftory: Downloading texture pack!");
+        e.getPlayer().setInvulnerable(true);
         break;
       case DECLINED:
         e.getPlayer()
-            .sendMessage("Craftory: You will not be able to see custom blocks, items and GUI's!!");
+            .sendMessage(ChatColor.DARK_BLUE + "[Craftory]"+ChatColor.RESET+" You will not be able to see custom blocks, items and GUI's!!");
         break;
       case FAILED_DOWNLOAD:
-        e.getPlayer().sendMessage("Craftory: Texture pack download failed... re-trying");
+        e.getPlayer().sendMessage(ChatColor.DARK_BLUE + "[Craftory]"+ChatColor.RESET+" Texture pack download failed... re-trying");
+        e.getPlayer().setInvulnerable(false);
         break;
       case SUCCESSFULLY_LOADED:
-        e.getPlayer().sendMessage("Craftory: Custom textures now enabled!");
+        e.getPlayer().sendMessage(ChatColor.DARK_BLUE + "[Craftory]"+ChatColor.RESET+" Custom textures now enabled!");
+        e.getPlayer().setInvulnerable(false);
     }
   }
 }
