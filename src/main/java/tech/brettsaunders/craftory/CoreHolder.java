@@ -4,8 +4,6 @@ import org.bukkit.block.BlockFace;
 
 public class CoreHolder {
 
-  public static final int TICK = 1;
-  public static final int FOUR_TICKS = 4;
   public static final BlockFace[] HOPPER_INTERACT_FACES = {BlockFace.NORTH, BlockFace.EAST,
       BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
 

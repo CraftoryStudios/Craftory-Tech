@@ -38,7 +38,7 @@ public class ResourcePackEvents implements Listener {
         break;
       case DECLINED:
         e.getPlayer()
-            .sendMessage(ChatColor.DARK_BLUE + "[Craftory]"+ChatColor.RESET+" You will not be able to see custom blocks, items and GUI's!!");
+            .sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+" You will not be able to see custom blocks, items and GUI's!!");
         break;
       case FAILED_DOWNLOAD:
         e.getPlayer().sendMessage(ChatColor.DARK_BLUE + "[Craftory]"+ChatColor.RESET+" Texture pack download failed... re-trying");
