@@ -14,7 +14,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredBlockUtils {
 
@@ -149,7 +148,6 @@ public class PoweredBlockUtils {
       poweredBlock.setSideCache(facingDirection.getOppositeFace(),
           (hopperIsPresent) ? INTERACTABLEBLOCK.HOPPER_IN
               : INTERACTABLEBLOCK.NONE);
-      Logger.info("Set block facing to");
     }
     poweredBlock = PoweredBlockUtils.getPoweredBlock(block.getRelative(BlockFace.UP).getLocation());
     if (poweredBlock != null) {

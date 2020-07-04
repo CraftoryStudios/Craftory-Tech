@@ -63,18 +63,15 @@ public class PowerGridManager implements Listener {
   public void onPoweredBlockBreak(CustomBlockBreakEvent event) {
     Location location = event.getLocation();
     if (powerGrids.containsKey(location)) { //GRID / Power connector stuff
-      Logger.info("its a connector");
       Craftory.powerConnectorManager.destroyBeams(location);
       PowerGrid grid = powerGrids.remove(location);
       grid.cancelTask();
-      Logger.info("stopped grid");
       if (grid.getGridSize() > 1) {
         List<PowerGrid> newGrids = splitGrids(location,  grid);
         for (Location l : grid.getPowerConnectors().keySet()) {
           PowerGrid g = powerGrids.remove(l);
           if(!g.isCancelled()){
             g.cancelTask(); //Stop runable
-            Logger.info("stopped grid");
           }
         }
         for (PowerGrid newGrid : newGrids) {
@@ -180,16 +177,14 @@ public class PowerGridManager implements Listener {
    * @return A list of the individual grids (could just be one)
    */
   public ArrayList<PowerGrid> splitGrids(Location breakPoint, PowerGrid powerGrid) {
-    Logger.info("splitting grid");
     ArrayList<PowerGrid> managers = new ArrayList<>();
     powerGrid.getBlockConnections().remove(breakPoint);
     HashSet<Location> neighbours = powerGrid.getPowerConnectors().remove(breakPoint);
-    Logger.info("connector had: " + neighbours.size());
+    Logger.debug("Connector had: " + neighbours.size());
     HashSet<Location> closedSet = new HashSet<>();
     neighbours.forEach(location -> { //Loop through all the neighbours of broken connector
       if (!closedSet.contains(location)) {
         closedSet.add(location);
-        Logger.info("making new grid");
         PowerGrid grid = new PowerGrid();
         HashSet<Location> connections = powerGrid.getPowerConnectors().get(location);
         if (connections != null) {

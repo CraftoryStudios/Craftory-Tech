@@ -40,7 +40,6 @@ public class PowerGrid extends BukkitRunnable {
 
   public PowerGrid() {
     taskID = this.runTaskTimer(Craftory.plugin, 5, 1);
-    Logger.info("grid made");
   }
 
   public void cancelTask() {
@@ -187,7 +186,7 @@ public class PowerGrid extends BukkitRunnable {
     generators = new HashSet<>();
     machines = new HashSet<>();
     PoweredBlock block;
-    Logger.info("grid has " + blockConnections.size() + " machine connections");
+    Logger.debug("grid has " + blockConnections.size() + " machine connections");
     for (HashSet<Location> set : blockConnections.values()) {
       if (set == null) {
         continue;
@@ -204,7 +203,7 @@ public class PowerGrid extends BukkitRunnable {
         } else if (block instanceof BaseMachine) {
           machines.add(location);
         } else {
-          Logger.info("Machine is not one of known types");
+          Logger.warn("Machine is not one of known types "+ block.toString());
         }
       }
     }

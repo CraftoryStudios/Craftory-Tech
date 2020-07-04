@@ -41,11 +41,11 @@ public class ResourcePackEvents implements Listener {
             .sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+" You will not be able to see custom blocks, items and GUI's!!");
         break;
       case FAILED_DOWNLOAD:
-        e.getPlayer().sendMessage(ChatColor.DARK_BLUE + "[Craftory]"+ChatColor.RESET+" Texture pack download failed... re-trying");
+        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+" Texture pack download failed... re-trying");
         e.getPlayer().setInvulnerable(false);
         break;
       case SUCCESSFULLY_LOADED:
-        e.getPlayer().sendMessage(ChatColor.DARK_BLUE + "[Craftory]"+ChatColor.RESET+" Custom textures now enabled!");
+        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+" Custom textures now enabled!");
         e.getPlayer().setInvulnerable(false);
     }
   }

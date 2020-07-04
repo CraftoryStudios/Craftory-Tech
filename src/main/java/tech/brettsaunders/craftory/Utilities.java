@@ -5,11 +5,15 @@ import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
 import lombok.Synchronized;
 import org.bstats.bukkit.Metrics;
+import org.bstats.bukkit.Metrics.AdvancedPie;
+import org.bstats.bukkit.Metrics.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -54,6 +58,7 @@ public class Utilities {
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
   private static String UNIT = "Re";
   private static DecimalFormat df = new DecimalFormat("###.###");
+  public static Metrics metrics;
 
   public static Optional<AdvancementManager> advancementManager = Optional.empty();
 
@@ -121,11 +126,24 @@ public class Utilities {
   }
 
   static void startMetrics() {
-    Metrics metrics = new Metrics(Craftory.plugin, 7804);
+    metrics = new Metrics(Craftory.plugin, 7804);
     metrics.addCustomChart(
-        new Metrics.SimplePie("debugEnabled", () -> config.getString("general.debug")));
+        new Metrics.SimplePie("debug_enabled", () -> config.getString("general.debug")));
     metrics.addCustomChart(
-        new Metrics.SimplePie("techEnabled", () -> config.getString("general.techEnabled")));
+        new Metrics.SimplePie("tech_enabled", () -> config.getString("general.techEnabled")));
+    metrics.addCustomChart(new AdvancedPie("types_of_machines",
+        () -> {
+          Map<String, Integer> valueMap = new HashMap<>();
+          //valueMap.put("totalCustomBlocks",Craftory.customBlockManager.statsContainer.getTotalCustomBlocks());
+          //valueMap.put("totalPoweredBlocks",Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks());
+          valueMap.put("totalCells",Craftory.customBlockManager.statsContainer.getTotalCells());
+          valueMap.put("totalGenerators",Craftory.customBlockManager.statsContainer.getTotalGenerators());
+          valueMap.put("totalPowerConnectors",Craftory.customBlockManager.statsContainer.getTotalPowerConnectors());
+          valueMap.put("totalMachines",Craftory.customBlockManager.statsContainer.getTotalMachines());
+          return valueMap;
+        }));
+    metrics.addCustomChart(new SingleLineChart("total_custom_blocks", () -> Craftory.customBlockManager.statsContainer.getTotalCustomBlocks()));
+    metrics.addCustomChart(new SingleLineChart("total_powered_blocks", () -> Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks()));
   }
 
   static void registerCommandsAndCompletions() {

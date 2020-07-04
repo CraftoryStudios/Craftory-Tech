@@ -34,7 +34,10 @@ public class CustomBlockManager {
 
   private final HashMap<String, CustomBlockData> customBlockDataHashMap;
 
+  public StatsContainer statsContainer;
+
   public CustomBlockManager() {
+    statsContainer = new StatsContainer();
     persistenceStorage = new PersistenceStorage();
     currentCustomBlocks = new HashMap<>();
     customBlockDataHashMap = new HashMap<>();
@@ -46,8 +49,7 @@ public class CustomBlockManager {
         activeChunks,
         inactiveChunks,
         customBlockDataHashMap,
-        DATA_FOLDER,
-        this);
+        statsContainer);
   }
 
   public CustomBlock getCustomBlock(Location location) {

@@ -23,11 +23,16 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.blocks.basicBlocks.PowerConnector;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
+import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 
 public class CustomBlockManagerEvents implements Listener {
 
@@ -36,20 +41,20 @@ public class CustomBlockManagerEvents implements Listener {
   private HashMap<String, HashSet<CustomBlock>> activeChunks;
   private HashMap<String, HashSet<CustomBlock>> inactiveChunks;
   private HashMap<String, CustomBlockData> customBlockDataHashMap;
-  private String dataFolder;
+  private StatsContainer statsContainer;
 
   public CustomBlockManagerEvents(PersistenceStorage persistenceStorage,
       HashMap<Location, CustomBlock> currentCustomBlocks,
       HashMap<String, HashSet<CustomBlock>> activeChunks,
       HashMap<String, HashSet<CustomBlock>> inactiveChunks,
       HashMap<String, CustomBlockData> customBlockDataHashMap,
-      String dataFolder, CustomBlockManager customBlockManager) {
+      StatsContainer statsContainer) {
     this.persistenceStorage = persistenceStorage;
     this.currentCustomBlocks = currentCustomBlocks;
     this.activeChunks = activeChunks;
     this.inactiveChunks = inactiveChunks;
     this.customBlockDataHashMap = customBlockDataHashMap;
-    this.dataFolder = dataFolder;
+    this.statsContainer = statsContainer;
     Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
   }
 
@@ -67,6 +72,22 @@ public class CustomBlockManagerEvents implements Listener {
       CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
           e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
       Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
+    }
+  }
+
+  private void calculateStatsDecrease(CustomBlock customBlock) {
+    statsContainer.decreaseTotalCustomBlocks();
+    if (customBlock instanceof PoweredBlock) {
+      statsContainer.decreaseTotalPoweredBlocks();
+      if (customBlock instanceof BaseMachine) {
+        statsContainer.decreaseTotalMachines();
+      } else if (customBlock instanceof BaseCell) {
+        statsContainer.decreaseTotalCells();
+      } else if (customBlock instanceof BaseGenerator) {
+        statsContainer.decreaseTotalGenerators();
+      } else if (customBlock instanceof PowerConnector) {
+        statsContainer.decreaseTotalPowerConnectors();
+      }
     }
   }
 
@@ -105,6 +126,7 @@ public class CustomBlockManagerEvents implements Listener {
       }
       Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
       e.getBlock().setType(Material.AIR);
+      calculateStatsDecrease(customBlock);
     }
   }
 

@@ -68,6 +68,7 @@ public final class Craftory extends JavaPlugin {
     tickManager = new CustomBlockTickManager();
     Utilities.registerBlocks();
     customBlockManager = new CustomBlockManager();
+    customBlockFactory.registerStats();
     customBlockManager.onEnable();
     new RecipeManager();
     new PoweredBlockEvents();
@@ -80,6 +81,7 @@ public final class Craftory extends JavaPlugin {
     orePopulator = new OrePopulator();
     Bukkit.getWorlds().get(0).getPopulators().add(orePopulator);
     tickManager.runTaskTimer(this, 20L, 1L);
+
     Utilities.setupAdvancements();
 
 

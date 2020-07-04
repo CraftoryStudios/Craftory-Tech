@@ -37,10 +37,10 @@ public class GOutputConfig implements IGUIComponent, Listener {
       boolean alt) {
     this.inventory = inventory;
     this.config = config;
-    SOUTH_SLOT = middleSlot - 1;
+    EAST_SLOT = middleSlot - 1;
     UP_SLOT = middleSlot - 9;
     DOWN_SLOT = middleSlot + 9;
-    EAST_SLOT = middleSlot + 8;
+    SOUTH_SLOT = middleSlot + 8;
     WEST_SLOT = middleSlot + 1;
     NORTH_SLOT = middleSlot;
     ALT = alt;
