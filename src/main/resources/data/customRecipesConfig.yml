@@ -243,7 +243,7 @@ recipes:
       item: wrench
       amount: 1
 
-  configurator:
+  power_connector:
     pattern:
       - SOS
       - OCO
@@ -253,10 +253,10 @@ recipes:
       S: steel_ingot
       O: copper_ingot
     result:
-      item: configurator
+      item: power_connector
       amount: 1
 
-  power_connector:
+  configurator:
     pattern:
       - SMS
       - XSX
@@ -265,7 +265,7 @@ recipes:
       S: steel_ingot
       M: magnetised_iron
     result:
-      item: power_connector
+      item: configurator
       amount: 1
 
   magnetised_iron:
