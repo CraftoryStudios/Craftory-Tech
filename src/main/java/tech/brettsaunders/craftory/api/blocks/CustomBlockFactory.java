@@ -117,7 +117,6 @@ public class CustomBlockFactory {
         statsContainer.increaseTotalPowerConnectors();
       }
     }
-    Logger.info(statsContainer.getTotalCustomBlocks()+"");
   }
 
 }

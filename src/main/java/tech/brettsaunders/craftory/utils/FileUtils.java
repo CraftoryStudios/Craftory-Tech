@@ -76,7 +76,7 @@ public class FileUtils {
     return true;
   }
 
-  public static void copyResourcesRecursively( //
+  public static void copyResourcesRecursively(
       final URL originUrl, final File destination) {
     try {
       final URLConnection urlConnection = originUrl.openConnection();
