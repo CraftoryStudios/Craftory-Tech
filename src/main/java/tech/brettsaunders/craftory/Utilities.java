@@ -3,11 +3,13 @@ package tech.brettsaunders.craftory;
 import eu.endercentral.crazy_advancements.CrazyAdvancements;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 import lombok.Synchronized;
@@ -56,13 +58,13 @@ public class Utilities {
   public final static String LANG_FOLDER;
   public static FileConfiguration config;
   public static FileConfiguration data;
-  public static FileConfiguration langConfig;
-  public static FileConfiguration defaultLang;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
   private static String UNIT = "Re";
   private static DecimalFormat df = new DecimalFormat("###.###");
   public static Metrics metrics;
+
+  public static Properties langProperties;
 
   public static Optional<AdvancementManager> advancementManager = Optional.empty();
 
@@ -126,18 +128,15 @@ public class Utilities {
 
   static void getTranslations() {
     String locale = config.getString("language.locale");
-    File langFile = new File(LANG_FOLDER, locale+".yml");
-    File defaultFile = new File(LANG_FOLDER, "en_GB.yaml");
-    if (!defaultFile.exists()) {
-      Logger.error("Missing default lang file en_GB");
-      Craftory.plugin.getPluginLoader().disablePlugin(Craftory.plugin);
+    Properties defaultLang = new Properties();
+    try {
+      defaultLang.load(new FileInputStream(new File(Craftory.plugin.getDataFolder(),
+          "lang/default_lang.properties")));
+      langProperties = new Properties(defaultLang);
+      langProperties.load(new FileInputStream(new File(LANG_FOLDER, locale+".properties")));
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    if (langFile.exists()) {
-      langConfig = YamlConfiguration.loadConfiguration(langFile);
-    } else {
-      langConfig = YamlConfiguration.loadConfiguration(defaultFile);
-    }
-    defaultLang = YamlConfiguration.loadConfiguration(defaultFile);
   }
 
   static void createDataPath() {
@@ -152,7 +151,7 @@ public class Utilities {
     file = new File(LANG_FOLDER);
     if (!file.exists()) {
       file.mkdirs();
-      FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/langs"), file);
+      FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/lang"), file);
     }
   }
 
