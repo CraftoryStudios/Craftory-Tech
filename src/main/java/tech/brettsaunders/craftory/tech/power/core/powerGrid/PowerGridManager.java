@@ -82,26 +82,24 @@ public class PowerGridManager implements Listener {
       }
 
     }
-    if (PoweredBlockUtils.isPoweredBlock(location)) {
-      Craftory.powerConnectorManager.destroyBeams(location); //Destroy any beams
-      PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock(location);
-      if (poweredBlock instanceof BaseMachine) {
-        for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
-          if (grid.removeMachine(location)) {
-            break;
-          }
+    //Destroy any beams
+    Craftory.powerConnectorManager.destroyBeams(location);
+    if (event.getCustomBlock() instanceof BaseMachine) {
+      for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
+        if (grid.removeMachine(location)) {
+          break;
         }
-      } else if (poweredBlock instanceof BaseCell) {
-        for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
-          if (grid.removeCell(location)) {
-            break;
-          }
+      }
+    } else if (event.getCustomBlock() instanceof BaseCell) {
+      for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
+        if (grid.removeCell(location)) {
+          break;
         }
-      } else if (poweredBlock instanceof BaseGenerator) {
-        for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
-          if (grid.removeGenerator(location)) {
-            break;
-          }
+      }
+    } else if (event.getCustomBlock() instanceof BaseGenerator) {
+      for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
+        if (grid.removeGenerator(location)) {
+          break;
         }
       }
     }

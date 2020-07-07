@@ -196,7 +196,9 @@ public class PowerGrid extends BukkitRunnable {
           continue;
         }
         block = PoweredBlockUtils.getPoweredBlock(location);
-        if (block instanceof BaseCell) {
+        if(block==null){ //Shouldn't be
+          Logger.debug("block in new grid gave null pointer");
+        } else if (block instanceof BaseCell) {
           cells.add(location);
         } else if (block instanceof BaseGenerator) {
           generators.add(location);
