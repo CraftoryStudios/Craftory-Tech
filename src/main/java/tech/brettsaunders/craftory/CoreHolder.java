@@ -33,6 +33,7 @@ public class CoreHolder {
     public static final String DIAMOND_ELECTRIC_FOUNDRY = "DiamondElectricFoundry";
     public static final String EMERALD_ELECTRIC_FOUNDRY = "EmeraldElectricFoundry";
     public static final String IRON_FOUNDRY = "IronFoundry";
+    public static final String ARROW_TURRET = "ArrowTurret";
 
     /* Ores */
     public static final String COPPER_ORE = "CopperOre";
@@ -53,5 +54,7 @@ public class CoreHolder {
     public static final String GOLD_CORE = "gold_core";
     public static final String IRON_CORE = "iron_core";
     public static final String MAGNETISED_IRON = "magnetised_iron";
+
+    public static final String ARROW_TURRET_HEAD = "ArrowTurretHead";
   }
 }

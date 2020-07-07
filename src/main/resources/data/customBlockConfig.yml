@@ -143,6 +143,17 @@ blocks:
     DOWN: false
     itemID: 16
     itemModel: stone
+  ArrowTurret:
+    WEST: false
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: false
+    DOWN: false
+    itemID: 16
+    itemModel: stone
+
+
   CopperOre:
     WEST: true
     UP: false
