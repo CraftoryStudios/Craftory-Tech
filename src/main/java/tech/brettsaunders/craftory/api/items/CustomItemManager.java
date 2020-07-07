@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomItemManager implements Listener {
@@ -32,9 +33,15 @@ public class CustomItemManager implements Listener {
               .getString("items." + key + ".itemModel").toUpperCase());
         } else {
           int itemID = customItemConfig.getInt("items." + key + ".itemID");
-          if (customItemConfig.contains("items." + key + ".displayName")) {
-            displayName = customItemConfig.getString("items." + key + ".displayName");
+          //Get Display Name
+          if (Utilities.langConfig.contains(key)) {
+            displayName = Utilities.langConfig.getString(key);
+          } else if (Utilities.defaultLang.contains(key)) {
+            displayName = Utilities.defaultLang.getString(key);
+          } else {
+            displayName = "UNKNOWN";
           }
+
           CustomItem customItem = new CustomItem(itemID, material, key, displayName);
           itemIDCache.put(key, customItem);
           if (!(customItemConfig.contains("items." + key + ".hideItem") && customItemConfig

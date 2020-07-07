@@ -15,7 +15,6 @@ import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.testing.TestingCommand;
-import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.OrePopulator;
 
@@ -23,7 +22,7 @@ import tech.brettsaunders.craftory.world.OrePopulator;
 public final class Craftory extends JavaPlugin {
 
   public static String VERSION;
-  public static final int SPIGOT_ID = 12345;
+  public static final int SPIGOT_ID = 81151;
   public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/096cac50626fc99d8673cf43065b095e163576d0.zip";
   public static final String HASH = "096cac50626fc99d8673cf43065b095e163576d0";
 
@@ -46,18 +45,16 @@ public final class Craftory extends JavaPlugin {
   public void onEnable() {
     Craftory.VERSION = this.getDescription().getVersion();
     Craftory.plugin = this;
+    Utilities.createConfigs();
+    Utilities.createDataPath();
+    Utilities.getTranslations();
     customBlockFactory = new CustomBlockFactory();
     Utilities.pluginBanner();
     Utilities.checkVersion();
-    Utilities.createDataPath();
-    Utilities.createConfigs();
     Utilities.registerCustomBlocks();
     Utilities.registerCommandsAndCompletions();
     Utilities.registerEvents();
     new ResourcePackEvents();
-    /* Needs sorting */
-    FileUtils.copyResourcesRecursively(getClass().getResource("/data"),
-        new File(getDataFolder(), "/data"));
     customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
     customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
     customRecipeConfigFile = new File(getDataFolder(), "data/customRecipesConfig.yml");

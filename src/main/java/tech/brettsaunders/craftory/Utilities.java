@@ -45,6 +45,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.GoldEle
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
+import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class Utilities {
@@ -52,8 +53,11 @@ public class Utilities {
   public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   public final static String DATA_FOLDER;
+  public final static String LANG_FOLDER;
   public static FileConfiguration config;
   public static FileConfiguration data;
+  public static FileConfiguration langConfig;
+  public static FileConfiguration defaultLang;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
   private static String UNIT = "Re";
@@ -68,6 +72,7 @@ public class Utilities {
     data = YamlConfiguration
         .loadConfiguration(new File(Craftory.plugin.getDataFolder(), "data.yml"));
     DATA_FOLDER = Craftory.plugin.getDataFolder().getPath() + File.separator + "data";
+    LANG_FOLDER = Craftory.plugin.getDataFolder().getPath() + File.separator + "lang";
   }
 
   static void pluginBanner() {
@@ -105,6 +110,7 @@ public class Utilities {
     config.options().header("Craftory");
     config.addDefault("general.debug", false);
     config.addDefault("general.techEnabled", true);
+    config.addDefault("language.locale", "en-GB");
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -118,10 +124,35 @@ public class Utilities {
     reloadDataFile();
   }
 
+  static void getTranslations() {
+    String locale = config.getString("language.locale");
+    File langFile = new File(LANG_FOLDER, locale+".yml");
+    File defaultFile = new File(LANG_FOLDER, "en_GB.yaml");
+    if (!defaultFile.exists()) {
+      Logger.error("Missing default lang file en_GB");
+      Craftory.plugin.getPluginLoader().disablePlugin(Craftory.plugin);
+    }
+    if (langFile.exists()) {
+      langConfig = YamlConfiguration.loadConfiguration(langFile);
+    } else {
+      langConfig = YamlConfiguration.loadConfiguration(defaultFile);
+    }
+    defaultLang = YamlConfiguration.loadConfiguration(defaultFile);
+  }
+
   static void createDataPath() {
     File file = new File(DATA_FOLDER);
     if (!file.exists()) {
       file.mkdirs();
+    }
+
+    FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/data"),
+        new File(Craftory.plugin.getDataFolder(), "/data"));
+
+    file = new File(LANG_FOLDER);
+    if (!file.exists()) {
+      file.mkdirs();
+      FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/langs"), file);
     }
   }
 
