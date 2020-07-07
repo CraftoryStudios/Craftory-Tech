@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomItemManager implements Listener {
@@ -24,7 +25,6 @@ public class CustomItemManager implements Listener {
     String displayName = "";
     if (items != null) {
       for (String key : items.getKeys(false)) {
-        displayName = key;
         Material material = Material
             .getMaterial(customItemConfig.getString("items." + key + ".itemModel").toUpperCase());
         if (material == null) {
@@ -32,9 +32,13 @@ public class CustomItemManager implements Listener {
               .getString("items." + key + ".itemModel").toUpperCase());
         } else {
           int itemID = customItemConfig.getInt("items." + key + ".itemID");
-          if (customItemConfig.contains("items." + key + ".displayName")) {
-            displayName = customItemConfig.getString("items." + key + ".displayName");
+          //Get Display Name
+          if (Utilities.langProperties.containsKey(key)) {
+            displayName = Utilities.langProperties.getProperty(key);
+          } else {
+            displayName = "UNKNOWN";
           }
+
           CustomItem customItem = new CustomItem(itemID, material, key, displayName);
           itemIDCache.put(key, customItem);
           if (!(customItemConfig.contains("items." + key + ".hideItem") && customItemConfig
@@ -48,7 +52,6 @@ public class CustomItemManager implements Listener {
     ConfigurationSection blocks = customBlocksConfig.getConfigurationSection("blocks");
     if (blocks != null) {
       for (String key : blocks.getKeys(false)) {
-        displayName = key;
         ConfigurationSection block = customBlocksConfig.getConfigurationSection("blocks." + key);
         if (block != null) {
           if (!block.contains("itemModel")) {
@@ -60,8 +63,11 @@ public class CustomItemManager implements Listener {
                 key + " Material doesn't exist :" + block.getString("itemModel").toUpperCase());
           } else {
             int itemID = block.getInt("itemID");
-            if (block.contains("displayName")) {
-              displayName = block.getString("displayName");
+            //Set Display Name
+            if (Utilities.langProperties.containsKey(key)) {
+              displayName = Utilities.langProperties.getProperty(key);
+            } else {
+              displayName = "UNKNOWN";
             }
             CustomItem customItem = new CustomItem(itemID, material, key, displayName);
             itemIDCache.put(key, customItem);

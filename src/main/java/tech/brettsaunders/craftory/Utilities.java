@@ -3,11 +3,13 @@ package tech.brettsaunders.craftory;
 import eu.endercentral.crazy_advancements.CrazyAdvancements;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 import lombok.Synchronized;
@@ -45,6 +47,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.GoldEle
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
+import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class Utilities {
@@ -52,6 +55,7 @@ public class Utilities {
   public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   public final static String DATA_FOLDER;
+  public final static String LANG_FOLDER;
   public static FileConfiguration config;
   public static FileConfiguration data;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
@@ -59,6 +63,8 @@ public class Utilities {
   private static String UNIT = "Re";
   private static DecimalFormat df = new DecimalFormat("###.###");
   public static Metrics metrics;
+
+  public static Properties langProperties;
 
   public static Optional<AdvancementManager> advancementManager = Optional.empty();
 
@@ -68,6 +74,7 @@ public class Utilities {
     data = YamlConfiguration
         .loadConfiguration(new File(Craftory.plugin.getDataFolder(), "data.yml"));
     DATA_FOLDER = Craftory.plugin.getDataFolder().getPath() + File.separator + "data";
+    LANG_FOLDER = Craftory.plugin.getDataFolder().getPath() + File.separator + "lang";
   }
 
   static void pluginBanner() {
@@ -105,6 +112,7 @@ public class Utilities {
     config.options().header("Craftory");
     config.addDefault("general.debug", false);
     config.addDefault("general.techEnabled", true);
+    config.addDefault("language.locale", "en-GB");
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -118,10 +126,32 @@ public class Utilities {
     reloadDataFile();
   }
 
+  static void getTranslations() {
+    String locale = config.getString("language.locale");
+    Properties defaultLang = new Properties();
+    try {
+      defaultLang.load(new FileInputStream(new File(Craftory.plugin.getDataFolder(),
+          "lang/default_lang.properties")));
+      langProperties = new Properties(defaultLang);
+      langProperties.load(new FileInputStream(new File(LANG_FOLDER, locale+".properties")));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   static void createDataPath() {
     File file = new File(DATA_FOLDER);
     if (!file.exists()) {
       file.mkdirs();
+    }
+
+    FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/data"),
+        new File(Craftory.plugin.getDataFolder(), "/data"));
+
+    file = new File(LANG_FOLDER);
+    if (!file.exists()) {
+      file.mkdirs();
+      FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/lang"), file);
     }
   }
 
