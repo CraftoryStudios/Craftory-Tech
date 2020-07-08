@@ -70,7 +70,7 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
   }
 
   protected Inventory setInterfaceTitle(String title, String guiImage) {
-    String titleSpaced = ChatColor.DARK_GRAY + title.replaceAll("Electric","").replaceAll("(.)([A-Z])", "$1 $2");
+    String titleSpaced = ChatColor.DARK_GRAY + title;
     String titleBuilder = ChatColor.WHITE + "" + NegativeSpaceFont.MINUS_16.label + guiImage
         + NegativeSpaceFont.MINUS_128.label + NegativeSpaceFont.MINUS_16.label + NegativeSpaceFont.MINUS_16.label + NegativeSpaceFont.MINUS_8.label + centerTitle(titleSpaced);
     inventoryInterface = Bukkit.createInventory(null, 54, titleBuilder);

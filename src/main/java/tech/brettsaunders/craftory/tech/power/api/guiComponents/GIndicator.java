@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 import tech.brettsaunders.craftory.utils.VariableContainer;
@@ -31,10 +32,10 @@ public class GIndicator implements IGUIComponent {
 
     if (state.getT()) {
       light = CustomItemManager.getCustomItem("light_on");
-      name = "Machine Running";
+      name = Utilities.langProperties.getProperty("light_on");
     } else {
       light = CustomItemManager.getCustomItem("light_off");
-      name = "Machine Off";
+      name = Utilities.langProperties.getProperty("light_off");
     }
     ItemMeta meta = light.getItemMeta();
     meta.setDisplayName(ChatColor.RESET +name);
