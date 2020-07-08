@@ -130,6 +130,7 @@ public class Utilities {
 
   static void getTranslations() {
     String locale = config.getString("language.locale");
+    Logger.info("Using "+locale + " locale" );
     Properties defaultLang = new Properties();
     try {
       defaultLang.load(new InputStreamReader(new FileInputStream(new File(Craftory.plugin.getDataFolder(),
