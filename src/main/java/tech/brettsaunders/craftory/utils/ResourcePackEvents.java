@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.Utilities;
 
 public class ResourcePackEvents implements Listener {
 
@@ -38,14 +39,14 @@ public class ResourcePackEvents implements Listener {
         break;
       case DECLINED:
         e.getPlayer()
-            .sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+" You will not be able to see custom blocks, items and GUI's!!");
+            .sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+ Utilities.langProperties.getProperty("ResourcePackDeclined"));
         break;
       case FAILED_DOWNLOAD:
-        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+" Texture pack download failed... re-trying");
+        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+Utilities.langProperties.getProperty("ResourcePackFailed"));
         e.getPlayer().setInvulnerable(false);
         break;
       case SUCCESSFULLY_LOADED:
-        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+" Custom textures now enabled!");
+        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+Utilities.langProperties.getProperty("ResourcePackEnabled"));
         e.getPlayer().setInvulnerable(false);
     }
   }

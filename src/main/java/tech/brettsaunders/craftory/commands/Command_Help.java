@@ -13,11 +13,9 @@ public class Command_Help implements CommandExecutor, TabCompleter {
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
     if (args.length == 1) {
-      Utilities.msg(sender, "&8/&acr help  &7-&f  Shows this list");
-      Utilities.msg(sender, "&8/&acr toggleDebug  &7-&f  Toggles showing debug messages (OP Only)");
-      Utilities.msg(sender, "&8/&acr give  &7-&f  Give player a custom item");
-    } else {
-      Utilities.msg(sender, "Usage");
+      Utilities.msg(sender, Utilities.langProperties.getProperty("HelpCommandLineOne"));
+      Utilities.msg(sender, Utilities.langProperties.getProperty("HelpCommandLineTwo"));
+      Utilities.msg(sender, Utilities.langProperties.getProperty("HelpCommandLineThree"));
     }
     return true;
   }

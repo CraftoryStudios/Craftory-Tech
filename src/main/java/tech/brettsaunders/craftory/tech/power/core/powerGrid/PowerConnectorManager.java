@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
@@ -47,7 +48,7 @@ public class PowerConnectorManager implements Listener {
           }
           formingConnection
               .put(event.getPlayer().getUniqueId(), location);
-          event.getPlayer().sendMessage("Click Second Power Connector To Form Connection");
+          event.getPlayer().sendMessage(Utilities.langProperties.getProperty("PowerConnectorSecond"));
         } else {
           //Locations
           Location toLoc = location;
@@ -78,10 +79,10 @@ public class PowerConnectorManager implements Listener {
             }
             formBeam(fromLoc, toLoc);
             formBeam(toLoc, fromLoc);
-            event.getPlayer().sendMessage("Connection formed");
+            event.getPlayer().sendMessage(Utilities.langProperties.getProperty("PowerConnectorFormed"));
           } else {
             formingConnection.remove(event.getPlayer().getUniqueId());
-            Logger.info("Failed to make connection");
+            event.getPlayer().sendMessage(Utilities.langProperties.getProperty("PowerConnectorFailed"));
             Logger.debug((powerGridFrom == null) + "");
             Logger.debug((powerGridTo == null) + "");
             Logger.debug((fromLoc == toLoc) + "");
@@ -103,13 +104,13 @@ public class PowerConnectorManager implements Listener {
         } else if (block instanceof BaseCell) {
           gridManager.addPowerCell(fromLoc, toLoc);
         } else {
-          event.getPlayer().sendMessage("block didnt match type");
+          event.getPlayer().sendMessage(Utilities.langProperties.getProperty("PowerConnectorBlockMismatch"));
           formingConnection.remove(event.getPlayer().getUniqueId());
           return;
         }
         formBeam(fromLoc, toLoc); //ee
         formBeam(toLoc, fromLoc);
-        event.getPlayer().sendMessage("Machine Connected");
+        event.getPlayer().sendMessage(Utilities.langProperties.getProperty("PowerConnectorMachine"));
         formingConnection.remove(event.getPlayer().getUniqueId());
       }
 
