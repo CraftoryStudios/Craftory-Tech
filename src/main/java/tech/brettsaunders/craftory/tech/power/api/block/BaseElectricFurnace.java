@@ -89,7 +89,7 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle(blockName,
+    Inventory inventory = setInterfaceTitle(displayName,
         Font.FURNACE_GUI.label + "");
     addGUIComponent(
         new GOneToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));

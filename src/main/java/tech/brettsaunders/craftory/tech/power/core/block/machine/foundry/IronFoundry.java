@@ -63,7 +63,7 @@ public class IronFoundry extends BaseFoundry {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle(blockName, Font.IRON_FOUNDRY_GUI.label + "");
+    Inventory inventory = setInterfaceTitle(displayName, Font.IRON_FOUNDRY_GUI.label + "");
     addGUIComponent(
         new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
             OUTPUT_LOCATION));

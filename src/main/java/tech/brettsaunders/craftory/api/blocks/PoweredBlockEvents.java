@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
@@ -81,7 +82,7 @@ public class PoweredBlockEvents implements Listener {
     if (PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) {
       PoweredBlock block = (PoweredBlock) e.getCustomBlock();
       e.getPlayer().sendMessage(
-          "Stored: " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
+          Utilities.langProperties.getProperty("EnergyStored")+": " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
               + " RE");
     }
   }
@@ -96,19 +97,19 @@ public class PoweredBlockEvents implements Listener {
     final Player player = e.getPlayer();
     if (e.getAction() == Action.RIGHT_CLICK_AIR && player.isSneaking()) {
       configuratorData.remove(player.getUniqueId());
-      player.sendMessage("Removed Sides Config Copy Data");
+      player.sendMessage(Utilities.langProperties.getProperty("SideConfigClear"));
     }
     if (PoweredBlockUtils.isEnergyProvider(e.getCustomBlock())) {
       BaseProvider provider = (BaseProvider) e.getCustomBlock();
       if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
         configuratorData.put(player.getUniqueId(), provider.getSideConfig());
-        player.sendMessage("Copied Sides Config");
+        player.sendMessage(Utilities.langProperties.getProperty("SideConfigCopied"));
       } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
         if (configuratorData.containsKey(player.getUniqueId())) {
           provider.setSidesConfig(configuratorData.get(player.getUniqueId()));
-          player.sendMessage("Pasted Sides Config");
+          player.sendMessage(Utilities.langProperties.getProperty("SideConfigPasted"));
         } else {
-          player.sendMessage("No Sides Config Data Found, Please Copy First");
+          player.sendMessage(Utilities.langProperties.getProperty("SideConfigNoData"));
         }
       }
     }

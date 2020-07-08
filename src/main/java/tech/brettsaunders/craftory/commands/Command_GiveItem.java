@@ -27,14 +27,14 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
       try {
         amount = Integer.parseInt(args[3]);
       } catch (NumberFormatException ignored) {
-        Utilities.msg(sender, "Couldn't give block, amount not recognised");
+        Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandErrorAmount"));
       }
       if (amount > 64) {
         amount = 64;
       }
       giveCustomItem(amount, args[1], args[2], sender);
     } else {
-      Utilities.msg(sender, "Usage: /cr give [Player] [ItemName] <[amount]>");
+      Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandUsage"));
     }
     return true;
   }
@@ -76,18 +76,18 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
           int slot = player.getInventory().firstEmpty();
           if (slot == -1) {
             player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
-            Utilities.msg(sender, "Gave " + playerName + " x" + amount + " " + itemName);
+            Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandGave") + " " + playerName + " x" + amount + " " + itemName);
             return true;
           } else {
             player.getInventory().setItem(slot, itemStack);
-            Utilities.msg(sender, "Gave " + playerName + " x" + amount + " " + itemName);
+            Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandGave") +" " + playerName + " x" + amount + " " + itemName);
             return true;
           }
         } else {
-          Utilities.msg(sender, "Couldn't give item, player doesn't exist");
+          Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandErrorPlayer"));
         }
       } else {
-        Utilities.msg(sender, "Couldn't give item, item isn't a Custom Item");
+        Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandErrorNotItem"));
       }
     }
     return false;
