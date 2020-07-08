@@ -5,6 +5,8 @@ import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -130,10 +132,10 @@ public class Utilities {
     String locale = config.getString("language.locale");
     Properties defaultLang = new Properties();
     try {
-      defaultLang.load(new FileInputStream(new File(Craftory.plugin.getDataFolder(),
-          "lang/default_lang.properties")));
+      defaultLang.load(new InputStreamReader(new FileInputStream(new File(Craftory.plugin.getDataFolder(),
+          "lang/default_lang.properties")), Charset.forName("UTF-8")));
       langProperties = new Properties(defaultLang);
-      langProperties.load(new FileInputStream(new File(LANG_FOLDER, locale+".properties")));
+      langProperties.load(new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale+".properties")), Charset.forName("UTF-8")));
     } catch (IOException e) {
       e.printStackTrace();
     }
