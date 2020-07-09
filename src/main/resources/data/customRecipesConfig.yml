@@ -279,6 +279,58 @@ recipes:
       item: magnetised_iron
       amount: 1
 
+  iron_macerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: iron_core
+    result:
+      item: iron_macerator
+      amount: 1
+
+  gold_macerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: gold_core
+    result:
+      item: gold_macerator
+      amount: 1
+
+  diamond_macerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: diamond_core
+    result:
+      item: diamond_macerator
+      amount: 1
+
+  emerald_macerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: emerald_core
+    result:
+      item: emerald_macerator
+      amount: 1
+
 furnace_recipes:
   copper_ingot:
     input:
