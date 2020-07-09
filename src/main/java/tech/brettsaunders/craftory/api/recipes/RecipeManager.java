@@ -97,6 +97,19 @@ public class RecipeManager implements Listener {
       toAdd.put(furnaceRecipes.getString(recipe+".input.name"), furnaceRecipes.getString(recipe+".result.name"));
     }
     RecipeUtils.addAllFurnaceRecipes(toAdd);
+
+    //Macerator Recipes
+    ConfigurationSection maceratorRecipes = Craftory.customRecipeConfig.getConfigurationSection("macerator_recipes");
+    if (maceratorRecipes == null) {
+      Logger.warn("No Macerator Recipes found!");
+      return;
+    }
+    toAdd = new HashMap<>();
+    for(String recipe: maceratorRecipes.getKeys(false)){
+      toAdd.put(maceratorRecipes.getString(recipe+".input.name"), maceratorRecipes.getString(recipe+".result.name"));
+    }
+    Logger.info(maceratorRecipes.toString());
+    RecipeUtils.addAllMaceratorRecipes(toAdd);
   }
 
   @EventHandler
@@ -114,6 +127,12 @@ public class RecipeManager implements Listener {
 
     String pattern = customRecipes.get(resultName);
     if (pattern == null) {
+      for(ItemStack item: e.getInventory().getMatrix()){
+        if(CustomItemManager.isCustomItem(item, true)){
+          e.getInventory().setResult(new ItemStack(Material.AIR));
+          return;
+        }
+      }
       return;
     }
 

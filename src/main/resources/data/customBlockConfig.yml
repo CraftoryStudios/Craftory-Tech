@@ -152,3 +152,39 @@ blocks:
     DOWN: false
     itemID: 602
     itemModel: gold_ore
+  IronMacerator:
+    WEST: true
+    UP: true
+    SOUTH: false
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemID: 17
+    itemModel: stone
+  GoldMacerator:
+    WEST: false
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemID: 18
+    itemModel: stone
+  DiamondMacerator:
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemID: 19
+    itemModel: stone
+  EmeraldMacerator:
+    WEST: false
+    UP: true
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemID: 20
+    itemModel: stone
