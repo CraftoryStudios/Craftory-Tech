@@ -97,8 +97,6 @@ public class BaseElectricFurnace extends BaseMachine implements IHopperInteract 
     addGUIComponent(new GIndicator(inventory, runningContainer, 30));
     if (inputSlots.size() == 0) inputSlots.add(0, new ItemStack(Material.AIR));
     if (outputSlots.size() == 0) outputSlots.add(0, new ItemStack(Material.AIR));
-    inventory.setItem(INPUT_LOCATION, inputSlots.get(0));
-    inventory.setItem(OUTPUT_LOCATION, outputSlots.get(0));
     this.inventoryInterface = inventory;
   }
 

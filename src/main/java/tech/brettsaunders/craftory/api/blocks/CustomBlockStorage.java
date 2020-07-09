@@ -87,20 +87,35 @@ public class CustomBlockStorage {
       if (nbtFile == null) {
         return;
       }
+      String lastChunk = "";
       for (String chunkKey : nbtFile.getKeys()) {
 
         chunkCompound = nbtFile.getCompound(chunkKey);
         if (chunkCompound == null || chunkCompound.getKeys().size() == 0) {
           continue;
         }
+        HashSet<String> toDelete = new HashSet<>();
         for (String locationKey : chunkCompound.getKeys()) {
           locationCompound = chunkCompound.getCompound(locationKey);
+          //TODO Remove exception later version
+          if (locationCompound.getCompound("blockName").getString("data").equalsIgnoreCase("CopperOre")) {
+            toDelete.add(locationKey);
+            continue;
+          }
           location = keyToLoc(locationKey, world);
           customBlock = Craftory.customBlockFactory.createLoad(locationCompound, persistenceStorage, location);
           Craftory.tickManager.addTickingBlock(customBlock);
           manager.putActiveCustomBlock(customBlock);
         }
+        for (String key : toDelete) {
+          chunkCompound.removeKey(key);
+        }
+        lastChunk = chunkKey;
       }
+      if (!lastChunk.isEmpty() && nbtFile.getCompound(lastChunk).getKeys().size() == 0) {
+        nbtFile.removeKey(lastChunk);
+      }
+      nbtFile.save();
     } catch (IOException e) {
         e.printStackTrace();
       }
