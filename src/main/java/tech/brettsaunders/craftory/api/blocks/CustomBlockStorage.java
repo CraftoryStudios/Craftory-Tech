@@ -87,7 +87,6 @@ public class CustomBlockStorage {
       if (nbtFile == null) {
         return;
       }
-      String lastChunk = "";
       for (String chunkKey : nbtFile.getKeys()) {
 
         chunkCompound = nbtFile.getCompound(chunkKey);
@@ -102,6 +101,9 @@ public class CustomBlockStorage {
             toDelete.add(locationKey);
             continue;
           }
+          Logger.info(locationKey);
+          Logger.info(chunkKey);
+          Logger.info(locationCompound.getCompound("blockName").getString("data"));
           location = keyToLoc(locationKey, world);
           customBlock = Craftory.customBlockFactory.createLoad(locationCompound, persistenceStorage, location);
           Craftory.tickManager.addTickingBlock(customBlock);
@@ -110,10 +112,6 @@ public class CustomBlockStorage {
         for (String key : toDelete) {
           chunkCompound.removeKey(key);
         }
-        lastChunk = chunkKey;
-      }
-      if (!lastChunk.isEmpty() && nbtFile.getCompound(lastChunk).getKeys().size() == 0) {
-        nbtFile.removeKey(lastChunk);
       }
       nbtFile.save();
     } catch (IOException e) {

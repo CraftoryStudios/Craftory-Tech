@@ -104,7 +104,7 @@ public class PersistenceStorage {
             if (nbtCompound.hasKey(field.getName())) {
                 try {
                     Object obj = loadObject(parent, field.getType(), nbtCompound.getCompound(field.getName()));
-                    if (obj != null && !(field.getType() == int.class || field.getType() == float.class || field.getType() == double.class)) {
+                    if (obj != null || !(field.getType() == int.class || field.getType() == float.class || field.getType() == double.class)) {
                         field.set(object, obj);
                     }
                 } catch (IllegalAccessException e) {
