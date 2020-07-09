@@ -49,6 +49,10 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.GoldEle
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.DiamondMacerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.EmeraldMacerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.GoldMacerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.IronMacerator;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -209,6 +213,10 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
     customBlockFactory.registerCustomBlock(Blocks.POWER_CONNECTOR, PowerConnector.class);
     customBlockFactory.registerCustomBlock(Blocks.CRYSTAL_ORE, CrystalOre.class);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_MACERATOR, IronMacerator.class);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_MACERATOR, GoldMacerator.class);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_MACERATOR, EmeraldMacerator.class);
   }
 
   static void registerBlocks() {
@@ -226,6 +234,10 @@ public class Utilities {
     Craftory.tickManager.registerCustomBlockClass(EmeraldElectricFoundry.class);
     Craftory.tickManager.registerCustomBlockClass(SolidFuelGenerator.class);
     Craftory.tickManager.registerCustomBlockClass(IronFoundry.class);
+    Craftory.tickManager.registerCustomBlockClass(IronMacerator.class);
+    Craftory.tickManager.registerCustomBlockClass(GoldMacerator.class);
+    Craftory.tickManager.registerCustomBlockClass(DiamondMacerator.class);
+    Craftory.tickManager.registerCustomBlockClass(EmeraldMacerator.class);
   }
 
   static void done() {

@@ -279,6 +279,58 @@ recipes:
       item: magnetised_iron
       amount: 1
 
+  iron_macerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: iron_core
+    result:
+      item: iron_macerator
+      amount: 1
+
+  gold_macerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: gold_core
+    result:
+      item: gold_macerator
+      amount: 1
+
+  diamond_macerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: diamond_core
+    result:
+      item: diamond_macerator
+      amount: 1
+
+  emerald_macerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: emerald_core
+    result:
+      item: emerald_macerator
+      amount: 1
+
 furnace_recipes:
   copper_ingot:
     input:
@@ -286,3 +338,88 @@ furnace_recipes:
     result:
       name: copper_ingot
       amount: 1
+  copper_ingot_dust:
+    input:
+      name: copper_dust
+    result:
+      name: copper_ingot
+      amount: 1
+  steel_ingot:
+    input:
+      name: steel_dust
+    result:
+      name: steel_ingot
+      amount: 1
+  iron_ingot:
+    input:
+      name: iron_dust
+    result:
+      name: IRON_INGOT
+      amount: 1
+  gold_ingot:
+    input:
+      name: gold_dust
+    result:
+      name: GOLD_INGOT
+      amount: 1
+macerator_recipes:
+  coal_dust:
+    input:
+      name: COAL
+    result:
+      name: coal_dust
+  diamond_dust:
+    input:
+      name: DIAMOND
+    result:
+      name: diamond_dust
+  diamond_dust_ore:
+    input:
+      name: DIAMOND_ORE
+    result:
+      name: diamond_dust
+  gold_dust:
+    input:
+      name: GOLD_INGOT
+    result:
+      name: gold_dust
+  gold_dust_ore:
+    input:
+      name: GOLD_ORE
+    result:
+      name: gold_dust
+  iron_dust:
+    input:
+      name: IRON_INGOT
+    result:
+      name: iron_dust
+  iron_dust_ore:
+    input:
+      name: IRON_ORE
+    result:
+      name: iron_dust
+  copper_dust:
+    input:
+      name: copper_ingot
+    result:
+      name: copper_dust
+  copper_dust_ore:
+    input:
+      name: CopperOre
+    result:
+      name: emerald_dust
+  emerald_dust:
+    input:
+      name: EMERALD
+    result:
+      name: emerald_dust
+  emerald_dust_ore:
+    input:
+      name: EMERALD_ORE
+    result:
+      name: emerald_dust
+  steel_dust:
+    input:
+      name: steel_ingot
+    result:
+      name: steel_dust

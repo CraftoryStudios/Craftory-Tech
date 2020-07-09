@@ -32,6 +32,11 @@ public class CoreHolder {
     public static final String GOLD_ELECTRIC_FOUNDRY = "GoldElectricFoundry";
     public static final String DIAMOND_ELECTRIC_FOUNDRY = "DiamondElectricFoundry";
     public static final String EMERALD_ELECTRIC_FOUNDRY = "EmeraldElectricFoundry";
+    public static final String IRON_FOUNDRY = "IronMacerator";
+    public static final String IRON_MACERATOR = "IronMacerator";
+    public static final String GOLD_MACERATOR = "GoldMacerator";
+    public static final String DIAMOND_MACERATOR = "DiamondMacerator";
+    public static final String EMERALD_MACERATOR = "EmeraldMacerator";
     public static final String IRON_FOUNDRY = "IronFoundry";
     public static final String TURRET_PLATFORM = "TurretPlatform";
 
@@ -54,6 +59,14 @@ public class CoreHolder {
     public static final String GOLD_CORE = "gold_core";
     public static final String IRON_CORE = "iron_core";
     public static final String MAGNETISED_IRON = "magnetised_iron";
+    public static final String COAL_DUST = "coal_dust";
+    public static final String COPPER_DUST = "copper_dust";
+    public static final String STEEL_DUST = "steel_dust";
+    public static final String IRON_DUST = "iron_dust";
+    public static final String GOLD_DUST = "gold_dust";
+    public static final String DIAMOND_DUST = "diamond_dust";
+    public static final String EMERALD_DUST = "emerald_dust";
+
 
     public static final String ARROW_TURRET_HEAD = "ArrowTurretHead";
   }

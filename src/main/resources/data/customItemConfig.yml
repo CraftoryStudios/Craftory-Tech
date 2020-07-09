@@ -35,6 +35,29 @@ items:
     itemID: 1
     itemModel: lime_dye
     displayName: Steel Ingot
+  coal_dust:
+    itemID: 1
+    itemModel: black_dye
+    displayName: Coal Dust
+  steel_dust:
+    itemID: 1
+    itemModel: gray_dye
+    displayName: Steel Dust
+  iron_dust:
+    itemID: 1
+    itemModel: white_dye
+  gold_dust:
+    itemID: 1
+    itemModel: yellow_dye
+  diamond_dust:
+    itemID: 1
+    itemModel: light_blue_dye
+  emerald_dust:
+    itemID: 1
+    itemModel: cyan_dye
+  copper_dust:
+    itemID: 1
+    itemModel: orange_dye
 
   light_off:
     itemID: 63

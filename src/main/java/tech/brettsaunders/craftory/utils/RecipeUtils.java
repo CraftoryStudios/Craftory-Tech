@@ -17,21 +17,33 @@ import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.SmokingRecipe;
 import org.bukkit.inventory.StonecuttingRecipe;
 import tech.brettsaunders.craftory.CoreHolder;
+import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class RecipeUtils {
-
+  @Getter
   private static final HashSet<Recipe> allRecipes = new HashSet<>();
+  @Getter
   private static final HashSet<Recipe> shapedRecipes = new HashSet<>();
+  @Getter
   private static final HashSet<Recipe> shapelessRecipes = new HashSet<>();
+  @Getter
   private static final HashSet<Recipe> stonecuttingRecipes = new HashSet<>();
+  @Getter
   private static final HashMap<String, String> furnaceRecipes = new HashMap<>();
+  @Getter
   private static final HashSet<Recipe> blastingRecipes = new HashSet<>();
+  @Getter
   private static final HashSet<Recipe> smokingRecipeRecipes = new HashSet<>();
+  @Getter
   private static final HashSet<Recipe> campfireRecipes = new HashSet<>();
+  @Getter
   private static final HashSet<ICustomRecipe> customRecipes = new HashSet<>();
+  @Getter
   private static final HashSet<CustomMachineRecipe> twoToOneRecipes = new HashSet<>();
+  @Getter
+  private static final HashMap<String,String > maceratorRecipes = new HashMap<>();
 
   static {
     Logger.debug("Extracting Recipes");
@@ -70,9 +82,15 @@ public class RecipeUtils {
     } */
     //Add foundry iron + coal -> steel recipe
     HashMap<String, Integer> ingredients = new HashMap<>();
-    ingredients.put(Material.COAL.toString(), 1);
+    ingredients.put(Material.CHARCOAL.toString(), 1);
     ingredients.put(Material.IRON_INGOT.toString(), 1);
     ArrayList<ItemStack> products = new ArrayList<>();
+    products.add(CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT));
+    twoToOneRecipes.add(new CustomMachineRecipe(ingredients, products));
+    ingredients = new HashMap<>();
+    ingredients.put(Items.COAL_DUST, 1);
+    ingredients.put(Material.IRON_INGOT.toString(), 1);
+    products = new ArrayList<>();
     products.add(CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT));
     twoToOneRecipes.add(new CustomMachineRecipe(ingredients, products));
     Logger.debug("All: " + allRecipes.size());
@@ -86,22 +104,6 @@ public class RecipeUtils {
     Logger.debug("Finished Extracting");
   }
 
-  public static HashSet<Recipe> getAllRecipes() {
-    return allRecipes;
-  }
-
-  public static HashSet<Recipe> getShapelessRecipes() {
-    return shapelessRecipes;
-  }
-
-  public static HashSet<Recipe> getShapedRecipes() {
-    return shapedRecipes;
-  }
-
-  public static HashMap<String, String> getFurnaceRecipes() {
-    return furnaceRecipes;
-  }
-
   public static void addFurnaceRecipe(String source, String result) {
     furnaceRecipes.put(source, result);
   }
@@ -110,28 +112,8 @@ public class RecipeUtils {
     furnaceRecipes.putAll(recipes);
   }
 
-  public static HashSet<Recipe> getSmokingRecipeRecipes() {
-    return smokingRecipeRecipes;
-  }
-
-  public static HashSet<Recipe> getBlastingRecipes() {
-    return blastingRecipes;
-  }
-
-  public static HashSet<Recipe> getCampfireRecipes() {
-    return campfireRecipes;
-  }
-
-  public static HashSet<Recipe> getStonecuttingRecipes() {
-    return stonecuttingRecipes;
-  }
-
-  public static HashSet<ICustomRecipe> getCustomRecipes() {
-    return customRecipes;
-  }
-
-  public static HashSet<CustomMachineRecipe> getTwoToOneRecipes() {
-    return twoToOneRecipes;
+  public static void addAllMaceratorRecipes(HashMap<String,String> recipes) {
+    maceratorRecipes.putAll(recipes);
   }
 
   public interface ICustomRecipe {
