@@ -2,50 +2,39 @@ items:
   iron_core:
     itemID: 1
     itemModel: green_dye
-    displayName: Iron Core
   gold_core:
     itemID: 1
     itemModel: red_dye
-    displayName: Gold Core
   diamond_core:
     itemID: 1
     itemModel: ink_sac
-    displayName: Diamond Core
   emerald_core:
     itemID: 1
     itemModel: lapis_lazuli
-    displayName: Emerald Core
   magnetised_iron:
     itemID: 1
     itemModel: iron_ingot
-    displayName: Magnetised Iron
   copper_ingot:
     itemID: 1
     itemModel: gold_ingot
-    displayName: Copper Ingot
   wrench:
     itemID: 61
     itemModel: paper
-    displayName: Wrench
   configurator:
     itemID: 62
     itemModel: paper
-    displayName: Configurator
   steel_ingot:
     itemID: 1
     itemModel: lime_dye
-    displayName: Steel Ingot
 
   light_off:
     itemID: 63
     itemModel: paper
     hideItem: true
-    displayName: Machine Off
   light_on:
     itemID: 65
     itemModel: paper
     hideItem: true
-    displayName: Machine On
   invisible:
     itemID: 5
     itemModel: paper
@@ -54,27 +43,23 @@ items:
     itemID: 6
     itemModel: paper
     hideItem: true
-    displayName: Output
   output_disabled:
     itemID: 7
     itemModel: paper
     hideItem: true
-    displayName: Output Disabled
   output_green:
     itemID: 8
     itemModel: paper
     hideItem: true
-    displayName: Output
   output_disabled_alt:
     itemID: 67
     itemModel: paper
     hideItem: true
-    displayName: Output Disabled
   output_green_alt:
     itemID: 68
     itemModel: paper
     hideItem: true
-    displayName: Output
+
 
   bar_0_b:
     itemID: 9
