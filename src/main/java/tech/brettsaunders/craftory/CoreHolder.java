@@ -33,7 +33,7 @@ public class CoreHolder {
     public static final String DIAMOND_ELECTRIC_FOUNDRY = "DiamondElectricFoundry";
     public static final String EMERALD_ELECTRIC_FOUNDRY = "EmeraldElectricFoundry";
     public static final String IRON_FOUNDRY = "IronFoundry";
-    public static final String ARROW_TURRET = "ArrowTurret";
+    public static final String TURRET_PLATFORM = "TurretPlatform";
 
     /* Ores */
     public static final String COPPER_ORE = "CopperOre";

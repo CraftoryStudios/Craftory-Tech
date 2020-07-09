@@ -143,14 +143,14 @@ blocks:
     DOWN: false
     itemID: 16
     itemModel: stone
-  ArrowTurret:
+  TurretPlatform:
     WEST: false
-    UP: false
-    SOUTH: true
+    UP: true
+    SOUTH: false
     NORTH: true
-    EAST: false
+    EAST: true
     DOWN: false
-    itemID: 16
+    itemID: 17
     itemModel: stone
 
 

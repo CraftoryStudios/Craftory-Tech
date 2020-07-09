@@ -70,11 +70,16 @@ items:
     itemModel: paper
     hideItem: true
     displayName: Output Disabled
-  output_green_alt:
+  output_green_alt:f
     itemID: 68
     itemModel: paper
     hideItem: true
     displayName: Output
+
+  turret:
+    itemID: 69
+    itemModel: paper
+    hideItem: true
 
   bar_0_b:
     itemID: 9
