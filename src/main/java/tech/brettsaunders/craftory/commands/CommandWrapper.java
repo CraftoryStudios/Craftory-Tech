@@ -76,19 +76,19 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
         if (sender.hasPermission("carftory.help")) {
           return HelpCommand.onCommand(sender, command, label, args);
         } else {
-          Utilities.msg(sender, "You Don't have Permissions for that");
+          Utilities.msg(sender, Utilities.langProperties.getProperty("NoPermissions"));
         }
       } else if (args[0].equalsIgnoreCase("toggleDebug")) {
         if (sender.hasPermission("craftory.debug")) {
           return DebugCommand.onCommand(sender, command, label, args);
         } else {
-          Utilities.msg(sender, "You Don't have Permissions for that");
+          Utilities.msg(sender, Utilities.langProperties.getProperty("NoPermissions"));
         }
       } else if (args[0].equalsIgnoreCase("give")) {
         if (sender.hasPermission("craftory.give")) {
           return GiveCommand.onCommand(sender, command, label, args);
         } else {
-          Utilities.msg(sender, "You Don't have Permissions for that");
+          Utilities.msg(sender, Utilities.langProperties.getProperty("NoPermissions"));
         }
       }
     }
