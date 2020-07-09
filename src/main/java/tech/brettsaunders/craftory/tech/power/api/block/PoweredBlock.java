@@ -34,8 +34,6 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, Listener {
 
   /* Static Constants Protected */
-  protected static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
-      BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
       .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
           InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
@@ -87,6 +85,31 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         cachedSides.put(blockFace, Craftory.customBlockManager.getCustomBlock(this.location.getBlock().getRelative(blockFace).getLocation()));
       }
     }));
+
+    //Load in items in machines
+    for (int i = 0; i < inputLocations.size(); i++) {
+      if (i >= inputSlots.size()) break;
+      inventoryInterface.setItem(inputLocations.get(i), inputSlots.get(i));
+    }
+
+    for (int i = 0; i < outputLocations.size(); i++) {
+      if (i >= outputSlots.size()) break;
+      inventoryInterface.setItem(outputLocations.get(i), outputSlots.get(i));
+    }
+  }
+
+  public void beforeSaveUpdate() {
+    super.beforeSaveUpdate();
+    inputSlots.clear();
+    for (int i = 0; i < inputLocations.size(); i++) {
+      inputSlots.add(i,inventoryInterface.getItem(inputLocations.get(i)));
+    }
+
+    outputSlots.clear();
+    for (int i = 0; i < outputLocations.size(); i++) {
+      outputSlots.add(i,inventoryInterface.getItem(outputLocations.get(i)));
+    }
+
   }
 
   /* Update Loop */

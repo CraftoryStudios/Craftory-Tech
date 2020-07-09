@@ -45,10 +45,10 @@ public class CustomBlockStorage {
               getRegionID(firstBlock.getChunk())));
       NBTCompound chunkCompound = nbtFile.addCompound(chunkID);
       customBlocks.forEach(customBlock -> {
+        customBlock.beforeSaveUpdate();
         NBTCompound locationNBTSection = chunkCompound
             .addCompound(getLocationID(customBlock.location));
         persistenceStorage.saveFields(customBlock, locationNBTSection);
-        //customBlock.writeDataFile(locationNBTSection);
       });
       nbtFile.save();
 

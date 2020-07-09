@@ -28,4 +28,6 @@ public class CustomBlock {
 
   public void afterLoadUpdate() { }
 
+  public void beforeSaveUpdate() {}
+
 }

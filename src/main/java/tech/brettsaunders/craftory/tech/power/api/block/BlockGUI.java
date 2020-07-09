@@ -69,7 +69,7 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
     player.openInventory(inventoryInterface);
   }
 
-  protected Inventory setInterfaceTitle(String title, String guiImage) {
+  protected Inventory createInterfaceInventory(String title, String guiImage) {
     String titleSpaced = ChatColor.DARK_GRAY + title;
     String titleBuilder = ChatColor.WHITE + "" + NegativeSpaceFont.MINUS_16.label + guiImage
         + NegativeSpaceFont.MINUS_128.label + NegativeSpaceFont.MINUS_16.label + NegativeSpaceFont.MINUS_16.label + NegativeSpaceFont.MINUS_8.label + centerTitle(titleSpaced);
