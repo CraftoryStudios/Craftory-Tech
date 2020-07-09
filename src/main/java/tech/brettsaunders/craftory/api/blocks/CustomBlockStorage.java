@@ -101,9 +101,6 @@ public class CustomBlockStorage {
             toDelete.add(locationKey);
             continue;
           }
-          Logger.info(locationKey);
-          Logger.info(chunkKey);
-          Logger.info(locationCompound.getCompound("blockName").getString("data"));
           location = keyToLoc(locationKey, world);
           customBlock = Craftory.customBlockFactory.createLoad(locationCompound, persistenceStorage, location);
           Craftory.tickManager.addTickingBlock(customBlock);

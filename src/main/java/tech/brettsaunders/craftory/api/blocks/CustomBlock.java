@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.api.blocks;
 
 
+import com.google.common.base.Strings;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +27,12 @@ public class CustomBlock {
     this.displayName = Utilities.langProperties.getProperty(blockName);
   }
 
-  public void afterLoadUpdate() { }
+  public void afterLoadUpdate() {
+    //TODO Remove in future version
+    if (Strings.isNullOrEmpty(displayName)) {
+      displayName = Utilities.langProperties.getProperty(blockName);
+    }
+  }
 
   public void beforeSaveUpdate() {}
 

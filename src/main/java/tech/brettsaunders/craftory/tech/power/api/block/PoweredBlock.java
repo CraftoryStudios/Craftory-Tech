@@ -56,8 +56,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   protected ArrayList<Integer> outputLocations = new ArrayList<>(); //The inventory locations of outputs
   /* Per Object Variables Not-Saved */
   protected transient Inventory inventoryInterface;
-  @Persistent
-  protected boolean powered = false;
+  private transient boolean powered = false;
 
   /* Construction */
   public PoweredBlock(Location location, String blockName, byte level) {
@@ -69,6 +68,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     cacheSides();
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
+    powered = false;
   }
 
   /* Saving, Setup and Loading */
@@ -85,6 +85,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       if (interactableblock.equals(INTERACTABLEBLOCK.RECEIVER)) {
         cachedSides.put(blockFace, Craftory.customBlockManager.getCustomBlock(this.location.getBlock().getRelative(blockFace).getLocation()));
       }
+      powered = location.getBlock().isBlockPowered();
     }));
 
     //Load in items in machines

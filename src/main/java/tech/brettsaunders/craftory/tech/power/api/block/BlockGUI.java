@@ -41,6 +41,7 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
 
   @Override
   public void afterLoadUpdate() {
+    super.afterLoadUpdate();
     setupGUI();
   }
 
