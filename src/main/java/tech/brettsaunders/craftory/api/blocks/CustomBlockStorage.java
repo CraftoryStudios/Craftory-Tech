@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
 import lombok.Synchronized;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -39,11 +40,11 @@ public class CustomBlockStorage {
   @Synchronized
   public static void saveCustomChunk(String chunkID, HashSet<CustomBlock> customBlocks, String dataFolder, PersistenceStorage persistenceStorage) {
     try {
-      CustomBlock customBlockFirst = customBlocks.stream().findFirst().get();
-      if (customBlockFirst == null) {
+      Optional<CustomBlock> customBlockFirst = Optional.of(customBlocks.stream().findFirst().get());
+      if (!customBlockFirst.isPresent()) {
         return;
       }
-      Location firstBlock = customBlockFirst.location;
+      Location firstBlock = customBlockFirst.get().location;
       NBTFile nbtFile = new NBTFile(
           new File(dataFolder + File.separator + firstBlock.getWorld().getName(),
               getRegionID(firstBlock.getChunk())));
