@@ -22,15 +22,20 @@ public class SolidFuelGenerator extends BaseGenerator {
   /* Construction */
   public SolidFuelGenerator() {
     super();
-    interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
+    init();
   }
 
   /* Saving, Setup and Loading */
   public SolidFuelGenerator(Location location) {
     super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT);
-    inputLocations.add(FUEL_SLOT);
+    init();
     inputSlots = new ArrayList<>();
-    inputSlots.add(new ItemStack(Material.AIR));
+    inputSlots.add(0,new ItemStack(Material.AIR));
+  }
+
+  private void init() {
+    inputLocations = new ArrayList<>();
+    inputLocations.add(0,FUEL_SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
   }
 

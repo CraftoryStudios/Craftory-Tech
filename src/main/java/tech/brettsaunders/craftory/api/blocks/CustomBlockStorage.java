@@ -6,6 +6,7 @@ import static tech.brettsaunders.craftory.Utilities.keyToLoc;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,8 +15,10 @@ import lombok.Synchronized;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockStorage {
@@ -93,7 +96,11 @@ public class CustomBlockStorage {
         if (chunkCompound == null || chunkCompound.getKeys().size() == 0) {
           continue;
         }
+
+        //TODO Remove later
         HashSet<String> toDelete = new HashSet<>();
+        HashSet<String> toDeleteFuelItem = new HashSet<>();
+
         for (String locationKey : chunkCompound.getKeys()) {
           locationCompound = chunkCompound.getCompound(locationKey);
           //TODO Remove exception later version
@@ -103,11 +110,23 @@ public class CustomBlockStorage {
           }
           location = keyToLoc(locationKey, world);
           customBlock = Craftory.customBlockFactory.createLoad(locationCompound, persistenceStorage, location);
+          //TODO Remove in later version
+          if (locationCompound.hasKey("fuelItem") && customBlock instanceof SolidFuelGenerator) {
+            ItemStack fuelItem = NBTItem.convertNBTtoItem(locationCompound.getCompound("fuelItem"));
+            ((SolidFuelGenerator) customBlock).setFuelItem(fuelItem);
+            toDeleteFuelItem.add(locationKey);
+          }
+
           Craftory.tickManager.addTickingBlock(customBlock);
           manager.putActiveCustomBlock(customBlock);
         }
+        //TODO Remove Later
         for (String key : toDelete) {
           chunkCompound.removeKey(key);
+        }
+
+        for (String key : toDeleteFuelItem) {
+          chunkCompound.getCompound(key).removeKey("fuelItem");
         }
       }
       nbtFile.save();

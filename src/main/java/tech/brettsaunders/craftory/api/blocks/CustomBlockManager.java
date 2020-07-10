@@ -3,6 +3,7 @@ package tech.brettsaunders.craftory.api.blocks;
 import static tech.brettsaunders.craftory.Utilities.getChunkID;
 import static tech.brettsaunders.craftory.Utilities.getLocationID;
 import static tech.brettsaunders.craftory.Utilities.getRegionID;
+
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
 import java.io.File;
@@ -18,6 +19,7 @@ import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.configuration.ConfigurationSection;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockManager {
@@ -105,6 +107,22 @@ public class CustomBlockManager {
 
   public void onEnable() {
     CustomBlockStorage.loadAllSavedRegions(DATA_FOLDER, this, persistenceStorage);
+    //Update Cache
+    activeChunks.values().forEach(customBlocks -> {
+      customBlocks.forEach(customBlock -> {
+        if (customBlock instanceof PoweredBlock) {
+          ((PoweredBlock) customBlock).refreshSideCache();
+        }
+      });
+    });
+    //Update Cache Unloaded
+    inactiveChunks.values().forEach(customBlocks -> {
+      customBlocks.forEach(customBlock -> {
+        if (customBlock instanceof PoweredBlock) {
+          ((PoweredBlock) customBlock).refreshSideCache();
+        }
+      });
+    });
   }
 
   public void onDisable() {

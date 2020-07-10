@@ -79,14 +79,17 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         .registerEvents(this, Craftory.plugin);
   }
 
-  public void afterLoadUpdate() {
-    super.afterLoadUpdate();
+  public void refreshSideCache() {
     cachedSidesConfig.forEach(((blockFace, interactableblock) -> {
       if (interactableblock.equals(INTERACTABLEBLOCK.RECEIVER)) {
         cachedSides.put(blockFace, Craftory.customBlockManager.getCustomBlock(this.location.getBlock().getRelative(blockFace).getLocation()));
       }
-      powered = location.getBlock().isBlockPowered();
     }));
+  }
+
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
+    powered = location.getBlock().isBlockPowered();
 
     //Load in items in machines
     for (int i = 0; i < inputLocations.size(); i++) {
