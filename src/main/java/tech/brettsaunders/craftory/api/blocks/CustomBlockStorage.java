@@ -39,10 +39,11 @@ public class CustomBlockStorage {
   @Synchronized
   public static void saveCustomChunk(String chunkID, HashSet<CustomBlock> customBlocks, String dataFolder, PersistenceStorage persistenceStorage) {
     try {
-      Location firstBlock = customBlocks.stream().findFirst().get().location;
-      if (firstBlock == null) {
+      CustomBlock customBlockFirst = customBlocks.stream().findFirst().get();
+      if (customBlockFirst == null) {
         return;
       }
+      Location firstBlock = customBlockFirst.location;
       NBTFile nbtFile = new NBTFile(
           new File(dataFolder + File.separator + firstBlock.getWorld().getName(),
               getRegionID(firstBlock.getChunk())));

@@ -1,8 +1,10 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.HashMap;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
@@ -43,6 +45,17 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   public void transferEnergy() {
     if (isBlockPowered()) return;
     cachedSides.forEach(((blockFace, customBlock) -> {
+      if (customBlock == null) {
+        Bukkit.getScheduler().runTaskLater(Craftory.plugin, new Runnable() {
+          @Override
+          public void run() {
+            CustomBlock sideBlock = Craftory.customBlockManager.getCustomBlock(location.getBlock().getRelative(blockFace).getLocation());
+            if (sideBlock != null) {
+              cachedSides.put(blockFace, sideBlock);
+            }
+          }
+        },4);
+      }
       if (sidesConfig.get(blockFace)) {
         energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(Math.min(maxOutput, energyStorage.getEnergyStored()), false, customBlock));
       }
