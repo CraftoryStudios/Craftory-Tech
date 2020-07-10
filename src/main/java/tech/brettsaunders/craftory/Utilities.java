@@ -214,7 +214,6 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class);
     customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
     customBlockFactory.registerCustomBlock(Blocks.POWER_CONNECTOR, PowerConnector.class);
-    customBlockFactory.registerCustomBlock(Blocks.CRYSTAL_ORE, CrystalOre.class);
     customBlockFactory.registerCustomBlock(Blocks.IRON_MACERATOR, IronMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.GOLD_MACERATOR, GoldMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class);
