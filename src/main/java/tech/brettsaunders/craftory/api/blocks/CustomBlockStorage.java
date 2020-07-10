@@ -101,6 +101,8 @@ public class CustomBlockStorage {
         HashSet<String> toDelete = new HashSet<>();
         HashSet<String> toDeleteFuelItem = new HashSet<>();
 
+        HashSet<CustomBlock> chunkData = new HashSet<>();
+
         for (String locationKey : chunkCompound.getKeys()) {
           locationCompound = chunkCompound.getCompound(locationKey);
           //TODO Remove exception later version
@@ -116,9 +118,7 @@ public class CustomBlockStorage {
             ((SolidFuelGenerator) customBlock).setFuelItem(fuelItem);
             toDeleteFuelItem.add(locationKey);
           }
-
-          Craftory.tickManager.addTickingBlock(customBlock);
-          manager.putActiveCustomBlock(customBlock);
+          chunkData.add(customBlock);
         }
         //TODO Remove Later
         for (String key : toDelete) {
@@ -128,6 +128,8 @@ public class CustomBlockStorage {
         for (String key : toDeleteFuelItem) {
           chunkCompound.getCompound(key).removeKey("fuelItem");
         }
+
+        manager.getInactiveChunks().put(chunkKey, chunkData);
       }
       nbtFile.save();
     } catch (IOException e) {

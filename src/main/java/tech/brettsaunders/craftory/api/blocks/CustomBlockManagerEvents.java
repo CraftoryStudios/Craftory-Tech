@@ -156,10 +156,17 @@ public class CustomBlockManagerEvents implements Listener {
     if (inactiveChunks.containsKey(getChunkID(e.getChunk()))) {
       HashSet<CustomBlock> customBlocks = inactiveChunks.get(getChunkID(e.getChunk()));
       customBlocks.forEach(block -> {
-        currentCustomBlocks.put(block.location, block);
+        customBlockManager.putActiveCustomBlock(block);
         Craftory.tickManager.addTickingBlock(block);
       });
       inactiveChunks.remove(getChunkID(e.getChunk()));
+
+      //Update Cache
+      customBlocks.forEach(customBlock -> {
+        if (customBlock instanceof PoweredBlock) {
+          ((PoweredBlock) customBlock).refreshSideCache();
+        }
+      });
     }
   }
 

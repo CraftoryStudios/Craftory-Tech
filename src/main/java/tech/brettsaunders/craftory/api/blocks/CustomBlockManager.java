@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,7 +20,6 @@ import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.configuration.ConfigurationSection;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
-import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockManager {
@@ -32,6 +32,7 @@ public class CustomBlockManager {
 
   private final HashMap<Location, CustomBlock> currentCustomBlocks;
   private final HashMap<String, HashSet<CustomBlock>> activeChunks;
+  @Getter
   private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
 
   private final HashMap<String, CustomBlockData> customBlockDataHashMap;
@@ -107,22 +108,6 @@ public class CustomBlockManager {
 
   public void onEnable() {
     CustomBlockStorage.loadAllSavedRegions(DATA_FOLDER, this, persistenceStorage);
-    //Update Cache
-    activeChunks.values().forEach(customBlocks -> {
-      customBlocks.forEach(customBlock -> {
-        if (customBlock instanceof PoweredBlock) {
-          ((PoweredBlock) customBlock).refreshSideCache();
-        }
-      });
-    });
-    //Update Cache Unloaded
-    inactiveChunks.values().forEach(customBlocks -> {
-      customBlocks.forEach(customBlock -> {
-        if (customBlock instanceof PoweredBlock) {
-          ((PoweredBlock) customBlock).refreshSideCache();
-        }
-      });
-    });
   }
 
   public void onDisable() {
