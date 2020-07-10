@@ -114,6 +114,12 @@ public class RecipeManager implements Listener {
 
     String pattern = customRecipes.get(resultName);
     if (pattern == null) {
+      for(ItemStack item: e.getInventory().getMatrix()){
+        if(item != null && CustomItemManager.isCustomItem(item, true)){
+          e.getInventory().setResult(new ItemStack(Material.AIR));
+          return;
+        }
+      }
       return;
     }
 
