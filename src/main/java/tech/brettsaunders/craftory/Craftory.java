@@ -51,6 +51,7 @@ public final class Craftory extends JavaPlugin {
     customBlockFactory = new CustomBlockFactory();
     Utilities.pluginBanner();
     Utilities.checkVersion();
+    Utilities.registerBasicBlocks();
     Utilities.registerCustomBlocks();
     Utilities.registerCommandsAndCompletions();
     Utilities.registerEvents();

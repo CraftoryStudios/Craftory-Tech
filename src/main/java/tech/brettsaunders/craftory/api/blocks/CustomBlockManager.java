@@ -3,12 +3,14 @@ package tech.brettsaunders.craftory.api.blocks;
 import static tech.brettsaunders.craftory.Utilities.getChunkID;
 import static tech.brettsaunders.craftory.Utilities.getLocationID;
 import static tech.brettsaunders.craftory.Utilities.getRegionID;
+
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,6 +32,7 @@ public class CustomBlockManager {
 
   private final HashMap<Location, CustomBlock> currentCustomBlocks;
   private final HashMap<String, HashSet<CustomBlock>> activeChunks;
+  @Getter
   private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
 
   private final HashMap<String, CustomBlockData> customBlockDataHashMap;
@@ -57,6 +60,18 @@ public class CustomBlockManager {
   }
 
   public CustomBlock getCustomBlockOfItem(String customBlockItemName, Block block) {
+    createCustomBlock(customBlockItemName, block);
+    CustomBlock customBlock = Craftory.customBlockFactory.create(customBlockItemName, block.getLocation());
+    putActiveCustomBlock(customBlock);
+    Craftory.tickManager.addTickingBlock(customBlock);
+    return customBlock;
+  }
+
+  public void getCustomBasicBlockOfItem(String customBlockItemName, Block block) {
+    createCustomBlock(customBlockItemName, block);
+  }
+
+  private void createCustomBlock(String customBlockItemName, Block block) {
     CustomBlockData data = customBlockDataHashMap.get(customBlockItemName);
     block.setType(Material.BROWN_MUSHROOM_BLOCK);
 
@@ -71,11 +86,6 @@ public class CustomBlockManager {
     multipleFacing.setFace(BlockFace.SOUTH, data.SOUTH);
     multipleFacing.setFace(BlockFace.WEST, data.WEST);
     block.setBlockData(multipleFacing);
-
-    CustomBlock customBlock = Craftory.customBlockFactory.create(customBlockItemName, block.getLocation());
-    putActiveCustomBlock(customBlock);
-    Craftory.tickManager.addTickingBlock(customBlock);
-    return customBlock;
   }
 
   public void putActiveCustomBlock(CustomBlock customBlock) {

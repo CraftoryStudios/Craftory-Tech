@@ -41,6 +41,7 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
 
   @Override
   public void afterLoadUpdate() {
+    super.afterLoadUpdate();
     setupGUI();
   }
 
@@ -69,7 +70,7 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
     player.openInventory(inventoryInterface);
   }
 
-  protected Inventory setInterfaceTitle(String title, String guiImage) {
+  protected Inventory createInterfaceInventory(String title, String guiImage) {
     String titleSpaced = ChatColor.DARK_GRAY + title;
     String titleBuilder = ChatColor.WHITE + "" + NegativeSpaceFont.MINUS_16.label + guiImage
         + NegativeSpaceFont.MINUS_128.label + NegativeSpaceFont.MINUS_16.label + NegativeSpaceFont.MINUS_16.label + NegativeSpaceFont.MINUS_8.label + centerTitle(titleSpaced);
@@ -80,21 +81,4 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
   public String centerTitle(String title) {
     return Strings.repeat(" ", 27 - ChatColor.stripColor(title).length()) + title;
   }
-
-//  //TODO Could cache
-//  private String negativeSpaceGenerator(int size) {
-//    String result = "";
-//    String[] conversion = (String.format("%10s", Integer.toBinaryString(size)).replace(' ', '0')).split("");
-//    result += conversion[0].equals("1") ? NegativeSpaceFont.MINUS_32.label : "";
-//    result += conversion[1].equals("1") ? NegativeSpaceFont.MINUS_16.label : "";
-//    result += conversion[2].equals("1") ? NegativeSpaceFont.MINUS_8.label : "";
-//    result += conversion[3].equals("1") ? NegativeSpaceFont.MINUS_7.label : "";
-//    result += conversion[4].equals("1") ? NegativeSpaceFont.MINUS_6.label : "";
-//    result += conversion[5].equals("1") ? NegativeSpaceFont.MINUS_5.label : "";
-//    result += conversion[6].equals("1") ? NegativeSpaceFont.MINUS_4.label : "";
-//    result += conversion[7].equals("1") ? NegativeSpaceFont.MINUS_3.label : "";
-//    result += conversion[8].equals("1") ? NegativeSpaceFont.MINUS_2.label : "";
-//    result += conversion[9].equals("1") ? NegativeSpaceFont.MINUS_1.label : "";
-//    return result;
-//  }
 }

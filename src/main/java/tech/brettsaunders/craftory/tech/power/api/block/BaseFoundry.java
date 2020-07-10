@@ -90,7 +90,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle(displayName, Font.ELECTRIC_FOUNDRY_GUI.label + "");
+    Inventory inventory = createInterfaceInventory(displayName, Font.ELECTRIC_FOUNDRY_GUI.label + "");
     addGUIComponent(
         new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
             OUTPUT_LOCATION));
@@ -99,9 +99,6 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     if (inputSlots.size() < 2) inputSlots.add(0, new ItemStack(Material.AIR));
     if (inputSlots.size() < 2) inputSlots.add(1, new ItemStack(Material.AIR));
     if (outputSlots.size() == 0) outputSlots.add(0, new ItemStack(Material.AIR));
-    inventory.setItem(INPUT_LOCATION1, inputSlots.get(0));
-    inventory.setItem(INPUT_LOCATION2, inputSlots.get(1));
-    inventory.setItem(OUTPUT_LOCATION, outputSlots.get(0));
     this.inventoryInterface = inventory;
   }
 
