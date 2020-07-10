@@ -279,7 +279,7 @@ recipes:
       item: magnetised_iron
       amount: 1
 
-  iron_macerator:
+  IronMacerator:
     pattern:
       - SDS
       - DCD
@@ -289,10 +289,10 @@ recipes:
       D: DIAMOND
       C: iron_core
     result:
-      item: iron_macerator
+      item: IronMacerator
       amount: 1
 
-  gold_macerator:
+  GoldMacerator:
     pattern:
       - SDS
       - DCD
@@ -302,10 +302,10 @@ recipes:
       D: DIAMOND
       C: gold_core
     result:
-      item: gold_macerator
+      item: GoldMacerator
       amount: 1
 
-  diamond_macerator:
+  DiamondMacerator:
     pattern:
       - SDS
       - DCD
@@ -315,10 +315,10 @@ recipes:
       D: DIAMOND
       C: diamond_core
     result:
-      item: diamond_macerator
+      item: DiamondMacerator
       amount: 1
 
-  emerald_macerator:
+  EmeraldMacerator:
     pattern:
       - SDS
       - DCD
@@ -328,7 +328,7 @@ recipes:
       D: DIAMOND
       C: emerald_core
     result:
-      item: emerald_macerator
+      item: EmeraldMacerator
       amount: 1
 
 furnace_recipes:
