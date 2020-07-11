@@ -414,6 +414,7 @@ furnace_recipes:
     result:
       name: GOLD_INGOT
       amount: 1
+
 macerator_recipes:
   coal_dust:
     input:
@@ -459,7 +460,7 @@ macerator_recipes:
     input:
       name: CopperOre
     result:
-      name: emerald_dust
+      name: copper_dust
   emerald_dust:
     input:
       name: EMERALD
