@@ -34,8 +34,6 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, Listener {
 
   /* Static Constants Protected */
-  protected static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
-      BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
   private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
       .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
           InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
@@ -70,23 +68,54 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     cacheSides();
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
+    powered = false;
   }
 
   /* Saving, Setup and Loading */
   public PoweredBlock() {
     super();
-    cachedSides = new HashMap<>();
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
   }
 
-  public void afterLoadUpdate() {
-    super.afterLoadUpdate();
+  public void refreshSideCache() {
+    if (cachedSides != null)  return;
+    cachedSides = new HashMap<>();
     cachedSidesConfig.forEach(((blockFace, interactableblock) -> {
       if (interactableblock.equals(INTERACTABLEBLOCK.RECEIVER)) {
         cachedSides.put(blockFace, Craftory.customBlockManager.getCustomBlock(this.location.getBlock().getRelative(blockFace).getLocation()));
       }
     }));
+  }
+
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
+    powered = location.getBlock().isBlockPowered();
+
+    //Load in items in machines
+    for (int i = 0; i < inputLocations.size(); i++) {
+      if (i >= inputSlots.size()) break;
+      inventoryInterface.setItem(inputLocations.get(i), inputSlots.get(i));
+    }
+
+    for (int i = 0; i < outputLocations.size(); i++) {
+      if (i >= outputSlots.size()) break;
+      inventoryInterface.setItem(outputLocations.get(i), outputSlots.get(i));
+    }
+  }
+
+  public void beforeSaveUpdate() {
+    super.beforeSaveUpdate();
+    inputSlots.clear();
+    for (int i = 0; i < inputLocations.size(); i++) {
+      inputSlots.add(i,inventoryInterface.getItem(inputLocations.get(i)));
+    }
+
+    outputSlots.clear();
+    for (int i = 0; i < outputLocations.size(); i++) {
+      outputSlots.add(i,inventoryInterface.getItem(outputLocations.get(i)));
+    }
+
   }
 
   /* Update Loop */

@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
+import lombok.Getter;
 import lombok.Synchronized;
 import org.bstats.bukkit.Metrics;
 import org.bstats.bukkit.Metrics.AdvancedPie;
@@ -30,9 +31,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
-import tech.brettsaunders.craftory.api.blocks.basicBlocks.CopperOre;
-import tech.brettsaunders.craftory.api.blocks.basicBlocks.CrystalOre;
-import tech.brettsaunders.craftory.api.blocks.basicBlocks.PowerConnector;
+import tech.brettsaunders.craftory.api.blocks.basicBlocks.BasicBlocks;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
 import tech.brettsaunders.craftory.external.Advancements;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
@@ -53,6 +52,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.Diamo
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.EmeraldMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.GoldMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.IronMacerator;
+import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -71,6 +71,8 @@ public class Utilities {
   public static Metrics metrics;
 
   public static Properties langProperties;
+  @Getter
+  private static HashMap<String, BasicBlocks> basicBlockRegistry;
 
   public static Optional<AdvancementManager> advancementManager = Optional.empty();
 
@@ -81,6 +83,7 @@ public class Utilities {
         .loadConfiguration(new File(Craftory.plugin.getDataFolder(), "data.yml"));
     DATA_FOLDER = Craftory.plugin.getDataFolder().getPath() + File.separator + "data";
     LANG_FOLDER = Craftory.plugin.getDataFolder().getPath() + File.separator + "lang";
+    basicBlockRegistry = new HashMap<>();
   }
 
   static void pluginBanner() {
@@ -209,14 +212,17 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FOUNDRY, DiamondElectricFoundry.class);
     customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FOUNDRY, EmeraldElectricFoundry.class);
     customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class);
-    customBlockFactory.registerCustomBlock(Blocks.COPPER_ORE, CopperOre.class);
     customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
     customBlockFactory.registerCustomBlock(Blocks.POWER_CONNECTOR, PowerConnector.class);
-    customBlockFactory.registerCustomBlock(Blocks.CRYSTAL_ORE, CrystalOre.class);
     customBlockFactory.registerCustomBlock(Blocks.IRON_MACERATOR, IronMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.GOLD_MACERATOR, GoldMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.EMERALD_MACERATOR, EmeraldMacerator.class);
+  }
+
+  static void registerBasicBlocks() {
+    basicBlockRegistry.put(Blocks.COPPER_ORE, BasicBlocks.COPPER_ORE);
+    basicBlockRegistry.put(Blocks.CRYSTAL_ORE, BasicBlocks.CRYSTAL_ORE);
   }
 
   static void registerBlocks() {

@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory.api.blocks.basicBlocks;
+package tech.brettsaunders.craftory.tech.power.core.block.powerGrid;
 
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;

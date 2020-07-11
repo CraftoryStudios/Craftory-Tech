@@ -8,9 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
-import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
-import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
@@ -20,23 +18,25 @@ public class SolidFuelGenerator extends BaseGenerator {
   /* Static Constants Private */
   private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 80;
-  @Persistent
-  private ItemStack fuelItem;
 
   /* Construction */
   public SolidFuelGenerator() {
     super();
-    interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
+    init();
   }
 
   /* Saving, Setup and Loading */
   public SolidFuelGenerator(Location location) {
     super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT);
-    inputLocations.add(FUEL_SLOT);
+    init();
     inputSlots = new ArrayList<>();
-    inputSlots.add(new ItemStack(Material.AIR));
+    inputSlots.add(0,new ItemStack(Material.AIR));
+  }
+
+  private void init() {
+    inputLocations = new ArrayList<>();
+    inputLocations.add(0,FUEL_SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
-    inputLocations.add(FUEL_SLOT);
   }
 
 
@@ -55,11 +55,6 @@ public class SolidFuelGenerator extends BaseGenerator {
     maxFuelRE = SolidFuelManager.getFuelEnergy(getFuelItem().getType().name());
     fuelRE += maxFuelRE;
     consumeFuel();
-  }
-
-  @Ticking(ticks = 8)
-  public void updateFuelSlot() {
-    fuelItem = getFuelItem();
   }
 
   protected ItemStack getFuelItem() {
@@ -81,13 +76,10 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle(displayName, Font.GENERATOR_GUI.label + "");
+    Inventory inventory = createInterfaceInventory(displayName, Font.GENERATOR_GUI.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43, true));
     addGUIComponent(new GIndicator(inventory, runningContainer, 31));
-    if (fuelItem != null) {
-      getInventory().setItem(FUEL_SLOT, fuelItem);
-    }
     this.inventoryInterface = inventory;
   }
 

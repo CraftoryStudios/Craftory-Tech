@@ -39,7 +39,7 @@ public class OrePopulator extends BlockPopulator {
         y = minHeight + r.nextInt(maxHeight - minHeight);
         block = chunk.getBlock(x, y, z);
         if (validBlock(block)) {
-          Craftory.customBlockManager.getCustomBlockOfItem(ore, block);
+          Craftory.customBlockManager.getCustomBasicBlockOfItem(ore, block);
           for (int j = 0; j < maxVeinSize; j++) {
             if (j >= minVeinSize && r.nextInt(100) < 40) {
               break;
@@ -81,7 +81,7 @@ public class OrePopulator extends BlockPopulator {
               }
             }
             if (valid) {
-              Craftory.customBlockManager.getCustomBlockOfItem(ore, block);
+              Craftory.customBlockManager.getCustomBasicBlockOfItem(ore, block);
             } else {
               break;
             }

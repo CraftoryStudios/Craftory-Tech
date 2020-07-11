@@ -1,9 +1,12 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.HashMap;
+import lombok.Setter;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
@@ -17,7 +20,7 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
   /* Static Constants Protected */
   protected static final int CAPACITY_BASE = 40000;
   protected static final double[] CAPACITY_LEVEL = {1, 1.5, 2, 3};
-  protected static final int FUEL_SLOT = 22;
+  public static final int FUEL_SLOT = 22;
   /* Per Object Variables Saved */
   @Persistent
   protected int fuelRE;
@@ -30,6 +33,11 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
   protected int lastEnergy;
   protected boolean isActive;
   protected boolean wasActive;
+
+  //TODO Remove in future
+  @Deprecated
+  @Setter
+  protected ItemStack fuelItem = new ItemStack(Material.AIR);
 
   private static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
     {
@@ -150,9 +158,18 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
 
   @Override
   public void setupGUI() {
-    Inventory inventory = setInterfaceTitle(displayName, Font.GENERATOR_GUI.label + "");
+    Inventory inventory = createInterfaceInventory(displayName, Font.GENERATOR_GUI.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig));
+  }
+
+  //TODO Remove in future version
+  @Override
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
+    if (fuelItem.getType() != Material.AIR && fuelItem != null) {
+      inventoryInterface.setItem(FUEL_SLOT, fuelItem);
+    }
   }
 
   @Override

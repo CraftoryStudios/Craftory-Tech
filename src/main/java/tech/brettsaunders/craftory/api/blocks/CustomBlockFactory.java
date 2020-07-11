@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import lombok.Synchronized;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.api.blocks.basicBlocks.PowerConnector;
+import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;

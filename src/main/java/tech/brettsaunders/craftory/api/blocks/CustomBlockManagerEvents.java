@@ -5,10 +5,14 @@ import static tech.brettsaunders.craftory.Utilities.getChunkID;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,9 +25,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.event.world.WorldSaveEvent;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.api.blocks.basicBlocks.PowerConnector;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
@@ -33,6 +36,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
+import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
 
 public class CustomBlockManagerEvents implements Listener {
 
@@ -68,10 +72,16 @@ public class CustomBlockManagerEvents implements Listener {
       return;
     }
     if (!e.isCancelled()) {
-      CustomBlock customBlock = customBlockManager.getCustomBlockOfItem(customBlockItemName, e.getBlockPlaced());
-      CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
-          e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
-      Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
+      //If Basic Block
+      if (Utilities.getBasicBlockRegistry().containsKey(customBlockItemName)) {
+        customBlockManager.getCustomBasicBlockOfItem(customBlockItemName, e.getBlockPlaced());
+      } else {
+        CustomBlock customBlock = customBlockManager
+            .getCustomBlockOfItem(customBlockItemName, e.getBlockPlaced());
+        CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
+            e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
+        Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
+      }
     }
   }
 
@@ -100,11 +110,6 @@ public class CustomBlockManagerEvents implements Listener {
   }
 
   @EventHandler
-  public void onWorldSave(WorldSaveEvent e) {
-    //CustomBlockStorage.saveAllCustomChunks(dataFolder, persistenceStorage, activeChunks, inactiveChunks);
-  }
-
-  @EventHandler
   public void onBlockBreak(BlockBreakEvent e) {
     final Location location = e.getBlock().getLocation();
     if (currentCustomBlocks.containsKey(location)) {
@@ -127,6 +132,22 @@ public class CustomBlockManagerEvents implements Listener {
       Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
       e.getBlock().setType(Material.AIR);
       calculateStatsDecrease(customBlock);
+      //If Basic Block
+    } else if (e.getBlock().getType() == Material.BROWN_MUSHROOM_BLOCK) {
+      BlockData blockData = e.getBlock().getBlockData();
+      MultipleFacing multipleFacing = (MultipleFacing) blockData;
+      Utilities.getBasicBlockRegistry().forEach((name,placement) -> {
+        Set<BlockFace> blockFaces = multipleFacing.getFaces();
+        Set<BlockFace> compareFaces = placement.getAllowedFaces();
+        if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces)) {
+          if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+            location.getWorld()
+                .dropItemNaturally(location, CustomItemManager.getCustomItem(name));
+          }
+          e.getBlock().setType(Material.AIR);
+          return;
+        }
+      });
     }
   }
 
@@ -135,10 +156,17 @@ public class CustomBlockManagerEvents implements Listener {
     if (inactiveChunks.containsKey(getChunkID(e.getChunk()))) {
       HashSet<CustomBlock> customBlocks = inactiveChunks.get(getChunkID(e.getChunk()));
       customBlocks.forEach(block -> {
-        currentCustomBlocks.put(block.location, block);
+        customBlockManager.putActiveCustomBlock(block);
         Craftory.tickManager.addTickingBlock(block);
       });
       inactiveChunks.remove(getChunkID(e.getChunk()));
+
+      //Update Cache
+      customBlocks.forEach(customBlock -> {
+        if (customBlock instanceof PoweredBlock) {
+          ((PoweredBlock) customBlock).refreshSideCache();
+        }
+      });
     }
   }
 
