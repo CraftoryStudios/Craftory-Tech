@@ -125,7 +125,7 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
     Inventory inventory = createInterfaceInventory(displayName, Font.GENERATOR_GUI.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer, 31));
-    addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43));
+    addGUIComponent(new GOutputConfig(inventory, sidesConfig, true));
     this.inventoryInterface = inventory;
   }
 
