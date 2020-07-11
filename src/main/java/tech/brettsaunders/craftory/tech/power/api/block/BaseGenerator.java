@@ -1,60 +1,34 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.HashMap;
-import lombok.Setter;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public abstract class BaseGenerator extends BaseProvider implements IHopperInteract {
 
-  /* Static Constants Protected */
-  protected static final int CAPACITY_BASE = 40000;
-  protected static final double[] CAPACITY_LEVEL = {1, 1.5, 2, 3};
-  public static final int FUEL_SLOT = 22;
-  /* Per Object Variables Saved */
-  @Persistent
-  protected int fuelRE;
 
+  /* Per Object Variables Saved */
+  protected static HashMap<BlockFace, Integer> inputFaces = new HashMap<>();
+  protected static HashMap<BlockFace, Integer> outputFaces = new HashMap<>();
   /* Per Object Variables Not-Saved */
   protected transient VariableContainer<Boolean> runningContainer;
   @Persistent
-  protected int maxFuelRE;
-  @Persistent
-  protected int lastEnergy;
+  protected int energyProduced;
   protected boolean isActive;
-  protected boolean wasActive;
-
-  //TODO Remove in future
-  @Deprecated
-  @Setter
-  protected ItemStack fuelItem = new ItemStack(Material.AIR);
-
-  private static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.NORTH, FUEL_SLOT);
-      put(BlockFace.EAST, FUEL_SLOT);
-      put(BlockFace.SOUTH, FUEL_SLOT);
-      put(BlockFace.WEST, FUEL_SLOT);
-      put(BlockFace.UP, FUEL_SLOT);
-    }
-  };
-
-  private static final HashMap<BlockFace, Integer> outputFaces = new HashMap<>();
 
   /* Construction */
-  public BaseGenerator(Location location, String blockName, byte level, int outputAmount) {
+  public BaseGenerator(Location location, String blockName, byte level, int outputAmount, int capacity) {
     super(location, blockName, level, outputAmount);
-    energyStorage = new EnergyStorage((int) (CAPACITY_BASE * CAPACITY_LEVEL[level]));
+    energyStorage = new EnergyStorage(capacity);
     init();
   }
 
@@ -62,7 +36,6 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
   public BaseGenerator() {
     super();
     isActive = false;
-    wasActive = true;
     init();
   }
 
@@ -75,7 +48,9 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
   /* Update Loop */
   @Ticking(ticks = 1)
   public void updateGenerator() {
-    if (isBlockPowered()) return;
+    if (isBlockPowered()) {
+      return;
+    }
     if (isActive) {
       processTick();
       if (canFinish()) {
@@ -86,18 +61,14 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
         }
       }
     } else {
-      if (timeCheck()) {
-        if (canStart()) {
-          processStart();
-          processTick();
-          isActive = true;
-        }
+      if (canStart()) {
+        processStart();
+        processTick();
+        isActive = true;
       }
     }
-    if (timeCheck()) {
-      if (!isActive) {
-        processIdle();
-      }
+    if (!isActive) {
+      processIdle();
     }
   }
 
@@ -111,9 +82,7 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
 
   protected abstract boolean canStart();
 
-  protected boolean canFinish() {
-    return fuelRE <= 0;
-  }
+  protected abstract boolean canFinish();
 
   protected void processStart() {
     runningContainer.setT(true);
@@ -127,15 +96,10 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
 
   protected void processOff() {
     isActive = false;
-    wasActive = true;
     runningContainer.setT(false);
   }
 
-  protected void processTick() {
-    lastEnergy = getMaxOutput();
-    energyStorage.modifyEnergyStored(lastEnergy);
-    fuelRE -= lastEnergy;
-  }
+  protected abstract void processTick();
 
   /* External Methods */
   public final void setEnergyStored(int quantity) {
@@ -148,7 +112,7 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
     if (!isActive) {
       return 0;
     }
-    return lastEnergy;
+    return energyProduced;
   }
 
   @Override
@@ -160,17 +124,11 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
   public void setupGUI() {
     Inventory inventory = createInterfaceInventory(displayName, Font.GENERATOR_GUI.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
-    addGUIComponent(new GOutputConfig(inventory, sidesConfig));
+    addGUIComponent(new GIndicator(inventory, runningContainer, 31));
+    addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43));
+    this.inventoryInterface = inventory;
   }
 
-  //TODO Remove in future version
-  @Override
-  public void afterLoadUpdate() {
-    super.afterLoadUpdate();
-    if (fuelItem.getType() != Material.AIR && fuelItem != null) {
-      inventoryInterface.setItem(FUEL_SLOT, fuelItem);
-    }
-  }
 
   @Override
   public HashMap<BlockFace, Integer> getInputFaces() {

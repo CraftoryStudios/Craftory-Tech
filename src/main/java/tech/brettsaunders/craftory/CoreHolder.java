@@ -37,6 +37,10 @@ public class CoreHolder {
     public static final String GOLD_MACERATOR = "GoldMacerator";
     public static final String DIAMOND_MACERATOR = "DiamondMacerator";
     public static final String EMERALD_MACERATOR = "EmeraldMacerator";
+    public static final String BASIC_SOLAR_PANEL = "BasicSolarPanel";
+    public static final String SOLAR_PANEL = "SolarPanel";
+    public static final String COMPACTED_SOLAR_PANEL = "CompactedSolarPanel";
+    public static final String SOLAR_ARRAY = "SolarArray";
     /* Ores */
     public static final String COPPER_ORE = "CopperOre";
     public static final String CRYSTAL_ORE = "crystal";

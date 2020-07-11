@@ -188,3 +188,39 @@ blocks:
     DOWN: false
     itemID: 20
     itemModel: stone
+  BasicSolarPanel:
+    WEST: true
+    UP: true
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemID: 21
+    itemModel: stone
+  SolarPanel:
+    WEST: false
+    UP: false
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemID: 22
+    itemModel: stone
+  CompactedSolarPanel:
+    WEST: true
+    UP: false
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemID: 23
+    itemModel: stone
+  SolarArray:
+    WEST: false
+    UP: true
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemID: 24
+    itemModel: stone

@@ -48,6 +48,10 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.GoldEle
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar.BasicSolarPanel;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar.CompactedSolarPanel;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar.SolarArray;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar.SolarPanel;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.DiamondMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.EmeraldMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.GoldMacerator;
@@ -218,6 +222,10 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.GOLD_MACERATOR, GoldMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.EMERALD_MACERATOR, EmeraldMacerator.class);
+    customBlockFactory.registerCustomBlock(Blocks.BASIC_SOLAR_PANEL, BasicSolarPanel.class);
+    customBlockFactory.registerCustomBlock(Blocks.SOLAR_PANEL, SolarPanel.class);
+    customBlockFactory.registerCustomBlock(Blocks.COMPACTED_SOLAR_PANEL, CompactedSolarPanel.class);
+    customBlockFactory.registerCustomBlock(Blocks.SOLAR_ARRAY, SolarArray.class);
   }
 
   static void registerBasicBlocks() {
@@ -244,6 +252,10 @@ public class Utilities {
     Craftory.tickManager.registerCustomBlockClass(GoldMacerator.class);
     Craftory.tickManager.registerCustomBlockClass(DiamondMacerator.class);
     Craftory.tickManager.registerCustomBlockClass(EmeraldMacerator.class);
+    Craftory.tickManager.registerCustomBlockClass(BasicSolarPanel.class);
+    Craftory.tickManager.registerCustomBlockClass(SolarPanel.class);
+    Craftory.tickManager.registerCustomBlockClass(CompactedSolarPanel.class);
+    Craftory.tickManager.registerCustomBlockClass(SolarArray.class);
   }
 
   static void done() {

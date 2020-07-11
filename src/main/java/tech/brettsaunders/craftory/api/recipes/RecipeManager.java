@@ -41,6 +41,37 @@ public class RecipeManager implements Listener {
       ShapedRecipe shapedRecipe = null;
       try {
         shapedRecipe = new ShapedRecipe(namespacedKey, result);
+        ConfigurationSection sectionIn = recipes.getConfigurationSection(recipe + ".ingredients");
+        String[] recipeShape = new String[3];
+        int i = 0;
+        for (String row : recipes.getStringList(recipe + ".pattern")) {
+          recipeShape[i] = row;
+          String[] rowSlots = row.split("");
+          for (String slot : rowSlots) {
+            if (slot.equalsIgnoreCase("X")) {
+              customItemsInSlots = customItemsInSlots + "X";
+            } else if (CustomItemManager.getCustomItem(sectionIn.getString(slot)).getType()
+                != Material.AIR) {
+              customItemsInSlots = customItemsInSlots + "C";
+            } else {
+              customItemsInSlots = customItemsInSlots + "N";
+            }
+          }
+          i++;
+        }
+        shapedRecipe.shape(recipeShape[0], recipeShape[1], recipeShape[2]);
+
+        for (String ingredient : sectionIn.getKeys(false)) {
+          char key = ingredient.charAt(0);
+          if (CustomItemManager.getCustomItem(sectionIn.getString(ingredient)).getType()
+              == Material.AIR) {
+            Material material = Material.getMaterial(sectionIn.getString(ingredient));
+            shapedRecipe.setIngredient(key, material);
+          } else {
+            ItemStack itemStack = CustomItemManager.getCustomItem(sectionIn.getString(ingredient));
+            shapedRecipe.setIngredient(key, itemStack.getType());
+          }
+        }
       } catch (Exception e) {
         Logger.error("THIS IS BROKE: " + recipe + "  " + result.getType().toString());
         Logger.error(result + "");
@@ -48,37 +79,6 @@ public class RecipeManager implements Listener {
         Logger.error("Amount: " + recipes.getInt(recipe + ".result.amount"));
       }
 
-      ConfigurationSection sectionIn = recipes.getConfigurationSection(recipe + ".ingredients");
-      String[] recipeShape = new String[3];
-      int i = 0;
-      for (String row : recipes.getStringList(recipe + ".pattern")) {
-        recipeShape[i] = row;
-        String[] rowSlots = row.split("");
-        for (String slot : rowSlots) {
-          if (slot.equalsIgnoreCase("X")) {
-            customItemsInSlots = customItemsInSlots + "X";
-          } else if (CustomItemManager.getCustomItem(sectionIn.getString(slot)).getType()
-              != Material.AIR) {
-            customItemsInSlots = customItemsInSlots + "C";
-          } else {
-            customItemsInSlots = customItemsInSlots + "N";
-          }
-        }
-        i++;
-      }
-      shapedRecipe.shape(recipeShape[0], recipeShape[1], recipeShape[2]);
-
-      for (String ingredient : sectionIn.getKeys(false)) {
-        char key = ingredient.charAt(0);
-        if (CustomItemManager.getCustomItem(sectionIn.getString(ingredient)).getType()
-            == Material.AIR) {
-          Material material = Material.getMaterial(sectionIn.getString(ingredient));
-          shapedRecipe.setIngredient(key, material);
-        } else {
-          ItemStack itemStack = CustomItemManager.getCustomItem(sectionIn.getString(ingredient));
-          shapedRecipe.setIngredient(key, itemStack.getType());
-        }
-      }
       Bukkit.getServer().addRecipe(shapedRecipe);
       customRecipes.put(recipe, customItemsInSlots);
     }
@@ -108,7 +108,6 @@ public class RecipeManager implements Listener {
     for(String recipe: maceratorRecipes.getKeys(false)){
       toAdd.put(maceratorRecipes.getString(recipe+".input.name"), maceratorRecipes.getString(recipe+".result.name"));
     }
-    Logger.info(maceratorRecipes.toString());
     RecipeUtils.addAllMaceratorRecipes(toAdd);
   }
 
