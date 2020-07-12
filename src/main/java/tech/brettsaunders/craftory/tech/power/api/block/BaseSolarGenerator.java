@@ -2,7 +2,6 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 
 import org.bukkit.Location;
-import org.bukkit.block.BlockFace;
 
 public class BaseSolarGenerator extends BaseGenerator{
 
@@ -16,7 +15,7 @@ public class BaseSolarGenerator extends BaseGenerator{
 
   @Override
   protected boolean canStart() {
-    return location.getBlock().getRelative(BlockFace.UP).getLightFromSky()==15;
+    return location.clone().add(0,1,1).getBlock().getLightFromSky()==15;
   }
 
   @Override
