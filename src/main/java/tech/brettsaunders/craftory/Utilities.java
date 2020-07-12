@@ -52,6 +52,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.Diamo
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.EmeraldMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.GoldMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.IronMacerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.turret.ArrowTurret;
 import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Logger;
@@ -218,6 +219,7 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.GOLD_MACERATOR, GoldMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.EMERALD_MACERATOR, EmeraldMacerator.class);
+    customBlockFactory.registerCustomBlock(Blocks.TURRET_PLATFORM, ArrowTurret.class);
   }
 
   static void registerBasicBlocks() {
@@ -244,6 +246,7 @@ public class Utilities {
     Craftory.tickManager.registerCustomBlockClass(GoldMacerator.class);
     Craftory.tickManager.registerCustomBlockClass(DiamondMacerator.class);
     Craftory.tickManager.registerCustomBlockClass(EmeraldMacerator.class);
+    Craftory.tickManager.registerCustomBlockClass(ArrowTurret.class);
   }
 
   static void done() {

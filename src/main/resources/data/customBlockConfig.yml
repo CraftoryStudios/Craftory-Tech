@@ -150,7 +150,7 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    itemID: 17
+    itemID: 25
     itemModel: stone
 
 

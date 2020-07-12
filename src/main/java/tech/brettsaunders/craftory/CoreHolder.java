@@ -37,7 +37,6 @@ public class CoreHolder {
     public static final String GOLD_MACERATOR = "GoldMacerator";
     public static final String DIAMOND_MACERATOR = "DiamondMacerator";
     public static final String EMERALD_MACERATOR = "EmeraldMacerator";
-    public static final String IRON_FOUNDRY = "IronFoundry";
     public static final String TURRET_PLATFORM = "TurretPlatform";
 
     /* Ores */
@@ -68,6 +67,6 @@ public class CoreHolder {
     public static final String EMERALD_DUST = "emerald_dust";
 
 
-    public static final String ARROW_TURRET_HEAD = "ArrowTurretHead";
+    public static final String TURRET_HEAD = "turret";
   }
 }

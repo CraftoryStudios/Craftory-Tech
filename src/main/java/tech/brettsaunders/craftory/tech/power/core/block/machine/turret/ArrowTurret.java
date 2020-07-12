@@ -15,26 +15,36 @@ public class ArrowTurret extends BaseMachine {
   private ArmorStand turretHead;
 
   public ArrowTurret(Location location) {
-    super(location, Blocks.ARROW_TURRET, C_LEVEL, MAX_RECEIVE);
-    createHead();
+    super(location, Blocks.TURRET_PLATFORM, C_LEVEL, MAX_RECEIVE);
   }
 
   public ArrowTurret() {
     super();
+  }
+
+  @Override
+  public void beforeSaveUpdate() {
+    super.beforeSaveUpdate();
+    turretHead.remove();
+  }
+
+  @Override
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
     createHead();
   }
 
   private void createHead() {
-    turretHead = (ArmorStand) location.getWorld().spawnEntity(location.clone().add(0,1,0), EntityType.ARMOR_STAND);
+    turretHead = (ArmorStand) location.getWorld().spawnEntity(location.clone().add(0.5,-0.7,0.7), EntityType.ARMOR_STAND);
     turretHead.setArms(false);
     turretHead.setBasePlate(false);
     turretHead.setVisible(false);
     turretHead.setOp(true);
     turretHead.setInvulnerable(true);
+    turretHead.setGravity(false);
 
     EntityEquipment entityEquipment = turretHead.getEquipment();
-    entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.ARROW_TURRET_HEAD));
-    entityEquipment.setHelmetDropChance(0);
+    entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.TURRET_HEAD));
   }
 
   @Override
