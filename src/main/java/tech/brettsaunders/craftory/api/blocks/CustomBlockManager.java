@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.api.blocks;
 
 import static tech.brettsaunders.craftory.Utilities.getChunkID;
+import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 import static tech.brettsaunders.craftory.Utilities.getLocationID;
 import static tech.brettsaunders.craftory.Utilities.getRegionID;
 
@@ -93,7 +94,7 @@ public class CustomBlockManager {
       Logger.warn("Custom Block is null");
       return;
     }
-    String chunkID = getChunkID(customBlock.location.getChunk());
+    String chunkID = getChunkWorldID(customBlock.location.getChunk());
     HashSet<CustomBlock> chunkData;
     if (activeChunks.containsKey(chunkID)) {
       chunkData = activeChunks.get(chunkID);
@@ -159,23 +160,24 @@ public class CustomBlockManager {
   }
 
   private void addActiveChunk(CustomBlock customBlock) {
+    String chunkID = getChunkWorldID(customBlock.location.getChunk());
     HashSet<CustomBlock> customBlocks = activeChunks
-        .getOrDefault(getChunkID(customBlock.location.getChunk()), new HashSet<>());
+        .getOrDefault(chunkID, new HashSet<>());
     customBlocks.add(customBlock);
-    activeChunks.put(getChunkID(customBlock.location.getChunk()), customBlocks);
+    activeChunks.put(chunkID, customBlocks);
   }
 
   private void removeIfLastActiveChunk(CustomBlock customBlock, Boolean addToActive) {
-    final String chunkID = getChunkID(customBlock.location.getChunk());
+    final String chunkID = getChunkWorldID(customBlock.location.getChunk());
     if (activeChunks.containsKey(chunkID)) {
       HashSet<CustomBlock> customBlocks = activeChunks.get(chunkID);
       if (customBlocks.contains(customBlock)) {
         if (customBlocks.size() == 1) {
-          activeChunks.remove(getChunkID(customBlock.location.getChunk()));
+          activeChunks.remove(chunkID);
         } else {
           customBlocks.remove(customBlock);
           if (addToActive) {
-            activeChunks.put(getChunkID(customBlock.location.getChunk()), customBlocks);
+            activeChunks.put(chunkID, customBlocks);
           }
         }
       }

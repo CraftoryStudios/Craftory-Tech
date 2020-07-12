@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.api.blocks;
 
+import static tech.brettsaunders.craftory.Utilities.convertWorldChunkIDToChunkID;
 import static tech.brettsaunders.craftory.Utilities.getLocationID;
 import static tech.brettsaunders.craftory.Utilities.getRegionID;
 import static tech.brettsaunders.craftory.Utilities.keyToLoc;
@@ -29,10 +30,10 @@ public class CustomBlockStorage {
   public static void saveAllCustomChunks(String dataFolder, PersistenceStorage persistenceStorage,HashMap<String, HashSet<CustomBlock>> active, HashMap<String, HashSet<CustomBlock>> inactive) {
     Logger.info("Saving Custom Block Data");
     active.forEach((chunk, customBlocks) -> {
-      saveCustomChunk(chunk, customBlocks, dataFolder, persistenceStorage);
+      saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder, persistenceStorage);
     });
     inactive.forEach(((chunk, customBlocks) -> {
-      saveCustomChunk(chunk, customBlocks, dataFolder, persistenceStorage);
+      saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder, persistenceStorage);
     }));
     Logger.info("Saved Custom Block Data");
   }

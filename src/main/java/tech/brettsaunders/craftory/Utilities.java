@@ -309,6 +309,14 @@ public class Utilities {
     return chunk.getX() + "," + chunk.getZ();
   }
 
+  public static String getChunkWorldID(Chunk chunk) {
+    return chunk.getWorld().getName() + "," + getChunkID(chunk);
+  }
+
+  public static String convertWorldChunkIDToChunkID(String worldChunkID) {
+    return worldChunkID.replaceFirst(".*,","");
+  }
+
   public static String getLocationID(Location location) {
     return location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ();
   }

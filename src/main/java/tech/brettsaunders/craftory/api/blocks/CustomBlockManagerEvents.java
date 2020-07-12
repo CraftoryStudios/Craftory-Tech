@@ -1,7 +1,7 @@
 package tech.brettsaunders.craftory.api.blocks;
 
 import static tech.brettsaunders.craftory.Craftory.customBlockManager;
-import static tech.brettsaunders.craftory.Utilities.getChunkID;
+import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -153,13 +153,14 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onChunkLoad(ChunkLoadEvent e) {
-    if (inactiveChunks.containsKey(getChunkID(e.getChunk()))) {
-      HashSet<CustomBlock> customBlocks = inactiveChunks.get(getChunkID(e.getChunk()));
+    String chunkID = getChunkWorldID(e.getChunk());
+    if (inactiveChunks.containsKey(chunkID)) {
+      HashSet<CustomBlock> customBlocks = inactiveChunks.get(chunkID);
       customBlocks.forEach(block -> {
         customBlockManager.putActiveCustomBlock(block);
         Craftory.tickManager.addTickingBlock(block);
       });
-      inactiveChunks.remove(getChunkID(e.getChunk()));
+      inactiveChunks.remove(chunkID);
 
       //Update Cache
       customBlocks.forEach(customBlock -> {
@@ -172,7 +173,7 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onChunkUnLoad(ChunkUnloadEvent e) {
-    final String chunkID = getChunkID(e.getChunk());
+    final String chunkID = getChunkWorldID(e.getChunk());
     if (activeChunks.containsKey(chunkID)) {
       HashSet<CustomBlock> customBlocks = activeChunks.get(chunkID);
       customBlocks.forEach(customBlock -> {
