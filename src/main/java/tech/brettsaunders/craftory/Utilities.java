@@ -115,9 +115,13 @@ public class Utilities {
 
   static void createConfigs() {
     config.options().header("Craftory");
+    config.options().header("Debug provides extra information about errors and in most cases shouldn't be used.");
     config.addDefault("general.debug", false);
     config.addDefault("general.techEnabled", true);
+    config.options().header("Sets the language for Craftory to use. See Lang folder or Plugin page for options");
     config.addDefault("language.locale", "en-GB");
+    config.options().header("The resource pack is required. But if you are self hosting it, you can disable this.");
+    config.addDefault("resourcePack.forcePack", true);
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();

@@ -55,7 +55,9 @@ public final class Craftory extends JavaPlugin {
     Utilities.registerCustomBlocks();
     Utilities.registerCommandsAndCompletions();
     Utilities.registerEvents();
-    new ResourcePackEvents();
+    if (Utilities.config.getBoolean("resourcePack.forcePack")) {
+      new ResourcePackEvents();
+    }
     customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
     customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
     customRecipeConfigFile = new File(getDataFolder(), "data/customRecipesConfig.yml");
