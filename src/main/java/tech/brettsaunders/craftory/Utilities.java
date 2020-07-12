@@ -126,6 +126,7 @@ public class Utilities {
     config.addDefault("general.debug", false);
     config.addDefault("general.techEnabled", true);
     config.addDefault("language.locale", "en-GB");
+    config.addDefault("generators.solarDuringStorms", true);
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();

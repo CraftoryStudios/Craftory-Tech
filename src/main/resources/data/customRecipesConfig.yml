@@ -421,6 +421,11 @@ macerator_recipes:
       name: COAL
     result:
       name: coal_dust
+  coal_dust_ore:
+    input:
+      name: COAL_ORE
+    result:
+      name: coal_dust
   diamond_dust:
     input:
       name: DIAMOND
