@@ -250,6 +250,7 @@ items:
     itemID: 50
     itemModel: paper
     hideItem: true
+
   arrow_0:
     itemID: 51
     itemModel: paper
@@ -288,5 +289,174 @@ items:
     hideItem: true
   arrow_9:
     itemID: 60
+    itemModel: paper
+    hideItem: true
+
+  lava_0_b:
+    itemID: 69
+    itemModel: paper
+    hideItem: true
+  lava_1_b:
+    itemID: 70
+    itemModel: paper
+    hideItem: true
+  lava_2_b:
+    itemID: 71
+    itemModel: paper
+    hideItem: true
+  lava_3_b:
+    itemID: 72
+    itemModel: paper
+    hideItem: true
+  lava_4_b:
+    itemID: 73
+    itemModel: paper
+    hideItem: true
+  lava_5_b:
+    itemID: 74
+    itemModel: paper
+    hideItem: true
+  lava_6_b:
+    itemID: 75
+    itemModel: paper
+    hideItem: true
+  lava_7_b:
+    itemID: 76
+    itemModel: paper
+    hideItem: true
+  lava_8_b:
+    itemID: 77
+    itemModel: paper
+    hideItem: true
+  lava_9_b:
+    itemID: 78
+    itemModel: paper
+    hideItem: true
+  lava_10_b:
+    itemID: 79
+    itemModel: paper
+    hideItem: true
+  lava_11_b:
+    itemID: 80
+    itemModel: paper
+    hideItem: true
+  lava_12_b:
+    itemID: 81
+    itemModel: paper
+    hideItem: true
+  lava_13_b:
+    itemID: 82
+    itemModel: paper
+    hideItem: true
+  lava_14_b:
+    itemID: 83
+    itemModel: paper
+    hideItem: true
+  lava_15_b:
+    itemID: 84
+    itemModel: paper
+    hideItem: true
+  lava_16_b:
+    itemID: 85
+    itemModel: paper
+    hideItem: true
+  lava_17_b:
+    itemID: 86
+    itemModel: paper
+    hideItem: true
+  lava_18_b:
+    itemID: 87
+    itemModel: paper
+    hideItem: true
+  lava_19_b:
+    itemID: 88
+    itemModel: paper
+    hideItem: true
+  lava_20_b:
+    itemID: 89
+    itemModel: paper
+    hideItem: true
+  lava_0_t:
+    itemID: 90
+    itemModel: paper
+    hideItem: true
+  lava_1_t:
+    itemID: 91
+    itemModel: paper
+    hideItem: true
+  lava_2_t:
+    itemID: 92
+    itemModel: paper
+    hideItem: true
+  lava_3_t:
+    itemID: 93
+    itemModel: paper
+    hideItem: true
+  lava_4_t:
+    itemID: 94
+    itemModel: paper
+    hideItem: true
+  lava_5_t:
+    itemID: 95
+    itemModel: paper
+    hideItem: true
+  lava_6_t:
+    itemID: 96
+    itemModel: paper
+    hideItem: true
+  lava_7_t:
+    itemID: 97
+    itemModel: paper
+    hideItem: true
+  lava_8_t:
+    itemID: 98
+    itemModel: paper
+    hideItem: true
+  lava_9_t:
+    itemID: 99
+    itemModel: paper
+    hideItem: true
+  lava_10_t:
+    itemID: 100
+    itemModel: paper
+    hideItem: true
+  lava_11_t:
+    itemID: 101
+    itemModel: paper
+    hideItem: true
+  lava_12_t:
+    itemID: 102
+    itemModel: paper
+    hideItem: true
+  lava_13_t:
+    itemID: 103
+    itemModel: paper
+    hideItem: true
+  lava_14_t:
+    itemID: 104
+    itemModel: paper
+    hideItem: true
+  lava_15_t:
+    itemID: 105
+    itemModel: paper
+    hideItem: true
+  lava_16_t:
+    itemID: 106
+    itemModel: paper
+    hideItem: true
+  lava_17_t:
+    itemID: 107
+    itemModel: paper
+    hideItem: true
+  lava_18_t:
+    itemID: 108
+    itemModel: paper
+    hideItem: true
+  lava_19_t:
+    itemID: 109
+    itemModel: paper
+    hideItem: true
+  lava_20_t:
+    itemID: 110
     itemModel: paper
     hideItem: true

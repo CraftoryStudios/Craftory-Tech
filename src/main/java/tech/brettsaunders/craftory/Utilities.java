@@ -341,14 +341,14 @@ public class Utilities {
         Double.parseDouble(locationData[1]), Double.parseDouble(locationData[2]));
   }
 
-  public static String rawToPrefixed(Integer energy) {
+  public static String rawEnergyToPrefixed(Integer energy) {
     String s = Integer.toString(energy);
     int length = s.length();
-    //if(length < 3) return s + " " + UNIT;
-    if (length < 7) {
+    if(length < 5) return s + " " + UNIT;
+    /*if (length < 7) {
       return s + " " + UNIT;
-    }
-    //if(length < 7) return df.format(energy/1000f) +" K" + UNIT;
+    }*/
+    if(length < 7) return df.format(energy/1000f) + " K" + UNIT;
     if (length < 10) {
       return df.format(energy / 1000000f) + " M" + UNIT;
     }

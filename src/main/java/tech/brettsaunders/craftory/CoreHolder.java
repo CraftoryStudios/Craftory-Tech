@@ -69,4 +69,19 @@ public class CoreHolder {
     public static final String EMERALD_DUST = "emerald_dust";
 
   }
+
+  public static enum FLUIDS {
+    LAVA ("lava"),
+    WATER ("water");
+
+    private final String name;
+
+    private FLUIDS(String s) {
+      name = s;
+    }
+
+    public String toString() {
+      return this.name;
+    }
+  }
 }
