@@ -1,0 +1,319 @@
+items:
+  iron_core:
+    customModelID: 1
+  gold_core:
+    customModelID: 1
+  diamond_core:
+    customModelID: 1
+  emerald_core:
+    customModelID: 1
+  magnetised_iron:
+    customModelID: 1
+  copper_ingot:
+    customModelID: 1
+  wrench:
+    customModelID: 61
+  configurator:
+    customModelID: 62
+  steel_ingot:
+    customModelID: 1
+
+  light_off:
+    customModelID: 63
+  light_on:
+    customModelID: 65
+  invisible:
+    customModelID: 5
+  output:
+    customModelID: 6
+  output_disabled:
+    customModelID: 7
+  output_green:
+    customModelID: 8
+  output_disabled_alt:
+    customModelID: 67
+  output_green_alt:
+    customModelID: 68
+
+
+  bar_0_b:
+    customModelID: 9
+  bar_1_b:
+    customModelID: 10
+  bar_2_b:
+    customModelID: 11
+  bar_3_b:
+    customModelID: 12
+  bar_4_b:
+    customModelID: 13
+  bar_5_b:
+    customModelID: 14
+  bar_6_b:
+    customModelID: 15
+  bar_7_b:
+    customModelID: 16
+  bar_8_b:
+    customModelID: 17
+  bar_9_b:
+    customModelID: 18
+  bar_10_b:
+    customModelID: 19
+  bar_11_b:
+    customModelID: 20
+  bar_12_b:
+    customModelID: 21
+  bar_13_b:
+    customModelID: 22
+  bar_14_b:
+    customModelID: 23
+  bar_15_b:
+    customModelID: 24
+  bar_16_b:
+    customModelID: 25
+  bar_17_b:
+    customModelID: 26
+  bar_18_b:
+    customModelID: 27
+  bar_19_b:
+    customModelID: 28
+  bar_20_b:
+    customModelID: 29
+  bar_0_t:
+    customModelID: 30
+  bar_1_t:
+    customModelID: 31
+  bar_2_t:
+    customModelID: 32
+  bar_3_t:
+    customModelID: 33
+  bar_4_t:
+    customModelID: 34
+  bar_5_t:
+    customModelID: 35
+  bar_6_t:
+    customModelID: 36
+  bar_7_t:
+    customModelID: 37
+  bar_8_t:
+    customModelID: 38
+  bar_9_t:
+    customModelID: 39
+  bar_10_t:
+    customModelID: 40
+  bar_11_t:
+    customModelID: 41
+  bar_12_t:
+    customModelID: 42
+  bar_13_t:
+    customModelID: 43
+  bar_14_t:
+    customModelID: 44
+  bar_15_t:
+    customModelID: 45
+  bar_16_t:
+    customModelID: 46
+  bar_17_t:
+    customModelID: 47
+  bar_18_t:
+    customModelID: 48
+  bar_19_t:
+    customModelID: 49
+  bar_20_t:
+    customModelID: 50
+  arrow_0:
+    customModelID: 51
+  arrow_1:
+    customModelID: 52
+  arrow_2:
+    customModelID: 53
+  arrow_3:
+    customModelID: 54
+  arrow_4:
+    customModelID: 55
+  arrow_5:
+    customModelID: 56
+  arrow_6:
+    customModelID: 57
+  arrow_7:
+    customModelID: 58
+  arrow_8:
+    customModelID: 59
+  arrow_9:
+    customModelID: 60
+    
+  IronCell:
+    customModelID: 1
+  GoldCell:
+    customModelID: 2
+  DiamondCell:
+    customModelID: 3
+  EmeraldCell:
+    customModelID: 4
+  SolidFuelGenerator:
+    customModelID: 13
+  power_connector:
+    customModelID: 14
+  IronElectricFurnace:
+    customModelID: 9
+  GoldElectricFurnace:
+    customModelID: 10
+  DiamondElectricFurnace:
+    customModelID: 11
+  EmeraldElectricFurnace:
+    customModelID: 12
+  IronFoundry:
+    customModelID: 15
+  IronElectricFoundry:
+    customModelID: 5
+  GoldElectricFoundry:
+    customModelID: 6
+  DiamondElectricFoundry:
+    customModelID: 7
+  EmeraldElectricFoundry:
+    customModelID: 8
+  crystal:
+    customModelID: 16
+  CopperOre:
+    customModelID: 602
+  IronMacerator:
+    itemID: 17
+  GoldMacerator:
+    itemID: 18
+  DiamondMacerator:
+    itemID: 19
+  EmeraldMacerator:
+    itemID: 20
+  BasicSolarPanel:
+    itemID: 21
+  SolarPanel:
+    itemID: 22
+  CompactedSolarPanel:
+    itemID: 23
+  SolarArray:
+    itemID: 24
+  GeothermalGenerator:
+    itemID: 26
+  lava_0_b:
+    itemID: 70
+
+
+  lava_1_b:
+    itemID: 71
+
+
+  lava_2_b:
+    itemID: 72
+
+
+  lava_3_b:
+    itemID: 73
+
+
+  lava_4_b:
+    itemID: 74
+
+
+  lava_5_b:
+    itemID: 75
+
+
+  lava_6_b:
+    itemID: 76
+
+
+  lava_7_b:
+    itemID: 77
+
+
+  lava_8_b:
+    itemID: 78
+
+
+  lava_9_b:
+    itemID: 79
+
+
+  lava_10_b:
+    itemID: 80
+
+
+  lava_11_b:
+    itemID: 81
+
+
+  lava_12_b:
+    itemID: 82
+
+
+  lava_13_b:
+    itemID: 83
+
+
+  lava_14_b:
+    itemID: 84
+
+
+  lava_15_b:
+    itemID: 85
+
+
+  lava_16_b:
+    itemID: 86
+
+
+  lava_17_b:
+    itemID: 87
+
+
+  lava_18_b:
+    itemID: 88
+
+
+  lava_19_b:
+    itemID: 89
+
+
+  lava_20_b:
+    itemID: 90
+  lava_0_t:
+    itemID: 91
+  lava_1_t:
+    itemID: 92
+  lava_2_t:
+    itemID: 93
+  lava_3_t:
+    itemID: 94
+  lava_4_t:
+    itemID: 95
+  lava_5_t:
+    itemID: 96
+  lava_6_t:
+    itemID: 97
+  lava_7_t:
+    itemID: 98
+  lava_8_t:
+    itemID: 99
+  lava_9_t:
+    itemID: 100
+  lava_10_t:
+    itemID: 101
+  lava_11_t:
+    itemID: 102
+  lava_12_t:
+    itemID: 103
+  lava_13_t:
+    itemID: 104
+  lava_14_t:
+    itemID: 105
+  lava_15_t:
+    itemID: 106
+  lava_16_t:
+    itemID: 107
+  lava_17_t:
+    itemID: 108
+  lava_18_t:
+    itemID: 109
+  lava_19_t:
+    itemID: 110
+  lava_20_t:
+    itemID: 111

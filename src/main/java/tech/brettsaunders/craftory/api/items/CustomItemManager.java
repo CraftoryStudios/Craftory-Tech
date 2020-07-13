@@ -20,7 +20,7 @@ public class CustomItemManager implements Listener {
 
 
   public static void setup(FileConfiguration customItemConfig,
-      FileConfiguration customBlocksConfig) {
+      FileConfiguration customBlocksConfig, FileConfiguration customModeData) {
     ConfigurationSection items = customItemConfig.getConfigurationSection("items");
     String displayName = "";
     if (items != null) {
@@ -31,7 +31,7 @@ public class CustomItemManager implements Listener {
           Logger.error(key + " Material doesn't exist :" + customItemConfig
               .getString("items." + key + ".itemModel").toUpperCase());
         } else {
-          int itemID = customItemConfig.getInt("items." + key + ".itemID");
+          int itemID = customModeData.getInt("items." + key + ".customModelID");
           //Get Display Name
           if (Utilities.langProperties.containsKey(key)) {
             displayName = Utilities.langProperties.getProperty(key);
@@ -62,7 +62,7 @@ public class CustomItemManager implements Listener {
             Logger.error(
                 key + " Material doesn't exist :" + block.getString("itemModel").toUpperCase());
           } else {
-            int itemID = block.getInt("itemID");
+            int itemID = customModeData.getInt("items." + key + ".customModelID");
             //Set Display Name
             if (Utilities.langProperties.containsKey(key)) {
               displayName = Utilities.langProperties.getProperty(key);

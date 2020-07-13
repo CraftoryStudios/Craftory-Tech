@@ -1,462 +1,462 @@
 items:
   iron_core:
-    itemID: 1
+    
     itemModel: green_dye
   gold_core:
-    itemID: 1
+    
     itemModel: red_dye
   diamond_core:
-    itemID: 1
+    
     itemModel: ink_sac
   emerald_core:
-    itemID: 1
+    
     itemModel: lapis_lazuli
   magnetised_iron:
-    itemID: 1
+    
     itemModel: iron_ingot
   copper_ingot:
-    itemID: 1
+    
     itemModel: gold_ingot
   wrench:
-    itemID: 61
+    
     itemModel: paper
   configurator:
-    itemID: 62
+    
     itemModel: paper
   steel_ingot:
-    itemID: 1
+    
     itemModel: lime_dye
   coal_dust:
-    itemID: 1
+
     itemModel: black_dye
   steel_dust:
-    itemID: 1
+
     itemModel: gray_dye
   iron_dust:
-    itemID: 1
+
     itemModel: white_dye
   gold_dust:
-    itemID: 1
+
     itemModel: yellow_dye
   diamond_dust:
-    itemID: 1
+
     itemModel: light_blue_dye
   emerald_dust:
-    itemID: 1
+
     itemModel: cyan_dye
   copper_dust:
-    itemID: 1
+
     itemModel: orange_dye
 
   light_off:
-    itemID: 63
+    
     itemModel: paper
     hideItem: true
   light_on:
-    itemID: 65
+    
     itemModel: paper
     hideItem: true
   invisible:
-    itemID: 5
+    
     itemModel: paper
     hideItem: true
   output:
-    itemID: 6
+    
     itemModel: paper
     hideItem: true
   output_disabled:
-    itemID: 7
+    
     itemModel: paper
     hideItem: true
   output_green:
-    itemID: 8
+    
     itemModel: paper
     hideItem: true
   output_disabled_alt:
-    itemID: 67
+    
     itemModel: paper
     hideItem: true
   output_green_alt:
-    itemID: 68
+    
     itemModel: paper
     hideItem: true
 
 
   bar_0_b:
-    itemID: 9
+    
     itemModel: paper
     hideItem: true
   bar_1_b:
-    itemID: 10
+    
     itemModel: paper
     hideItem: true
   bar_2_b:
-    itemID: 11
+    
     itemModel: paper
     hideItem: true
   bar_3_b:
-    itemID: 12
+    
     itemModel: paper
     hideItem: true
   bar_4_b:
-    itemID: 13
+    
     itemModel: paper
     hideItem: true
   bar_5_b:
-    itemID: 14
+    
     itemModel: paper
     hideItem: true
   bar_6_b:
-    itemID: 15
+    
     itemModel: paper
     hideItem: true
   bar_7_b:
-    itemID: 16
+    
     itemModel: paper
     hideItem: true
   bar_8_b:
-    itemID: 17
+    
     itemModel: paper
     hideItem: true
   bar_9_b:
-    itemID: 18
+    
     itemModel: paper
     hideItem: true
   bar_10_b:
-    itemID: 19
+    
     itemModel: paper
     hideItem: true
   bar_11_b:
-    itemID: 20
+    
     itemModel: paper
     hideItem: true
   bar_12_b:
-    itemID: 21
+    
     itemModel: paper
     hideItem: true
   bar_13_b:
-    itemID: 22
+    
     itemModel: paper
     hideItem: true
   bar_14_b:
-    itemID: 23
+    
     itemModel: paper
     hideItem: true
   bar_15_b:
-    itemID: 24
+    
     itemModel: paper
     hideItem: true
   bar_16_b:
-    itemID: 25
+    
     itemModel: paper
     hideItem: true
   bar_17_b:
-    itemID: 26
+    
     itemModel: paper
     hideItem: true
   bar_18_b:
-    itemID: 27
+    
     itemModel: paper
     hideItem: true
   bar_19_b:
-    itemID: 28
+    
     itemModel: paper
     hideItem: true
   bar_20_b:
-    itemID: 29
+    
     itemModel: paper
     hideItem: true
   bar_0_t:
-    itemID: 30
+    
     itemModel: paper
     hideItem: true
   bar_1_t:
-    itemID: 31
+    
     itemModel: paper
     hideItem: true
   bar_2_t:
-    itemID: 32
+    
     itemModel: paper
     hideItem: true
   bar_3_t:
-    itemID: 33
+    
     itemModel: paper
     hideItem: true
   bar_4_t:
-    itemID: 34
+    
     itemModel: paper
     hideItem: true
   bar_5_t:
-    itemID: 35
+    
     itemModel: paper
     hideItem: true
   bar_6_t:
-    itemID: 36
+    
     itemModel: paper
     hideItem: true
   bar_7_t:
-    itemID: 37
+    
     itemModel: paper
     hideItem: true
   bar_8_t:
-    itemID: 38
+    
     itemModel: paper
     hideItem: true
   bar_9_t:
-    itemID: 39
+    
     itemModel: paper
     hideItem: true
   bar_10_t:
-    itemID: 40
+    
     itemModel: paper
     hideItem: true
   bar_11_t:
-    itemID: 41
+    
     itemModel: paper
     hideItem: true
   bar_12_t:
-    itemID: 42
+    
     itemModel: paper
     hideItem: true
   bar_13_t:
-    itemID: 43
+    
     itemModel: paper
     hideItem: true
   bar_14_t:
-    itemID: 44
+    
     itemModel: paper
     hideItem: true
   bar_15_t:
-    itemID: 45
+    
     itemModel: paper
     hideItem: true
   bar_16_t:
-    itemID: 46
+    
     itemModel: paper
     hideItem: true
   bar_17_t:
-    itemID: 47
+    
     itemModel: paper
     hideItem: true
   bar_18_t:
-    itemID: 48
+    
     itemModel: paper
     hideItem: true
   bar_19_t:
-    itemID: 49
+    
     itemModel: paper
     hideItem: true
   bar_20_t:
-    itemID: 50
+    
     itemModel: paper
     hideItem: true
 
   arrow_0:
-    itemID: 51
+    
     itemModel: paper
     hideItem: true
   arrow_1:
-    itemID: 52
+    
     itemModel: paper
     hideItem: true
   arrow_2:
-    itemID: 53
+    
     itemModel: paper
     hideItem: true
   arrow_3:
-    itemID: 54
+    
     itemModel: paper
     hideItem: true
   arrow_4:
-    itemID: 55
+    
     itemModel: paper
     hideItem: true
   arrow_5:
-    itemID: 56
+    
     itemModel: paper
     hideItem: true
   arrow_6:
-    itemID: 57
+    
     itemModel: paper
     hideItem: true
   arrow_7:
-    itemID: 58
+    
     itemModel: paper
     hideItem: true
   arrow_8:
-    itemID: 59
+    
     itemModel: paper
     hideItem: true
   arrow_9:
-    itemID: 60
+    
     itemModel: paper
     hideItem: true
 
   lava_0_b:
-    itemID: 70
+
     itemModel: paper
     hideItem: true
   lava_1_b:
-    itemID: 71
+
     itemModel: paper
     hideItem: true
   lava_2_b:
-    itemID: 72
+
     itemModel: paper
     hideItem: true
   lava_3_b:
-    itemID: 73
+
     itemModel: paper
     hideItem: true
   lava_4_b:
-    itemID: 74
+
     itemModel: paper
     hideItem: true
   lava_5_b:
-    itemID: 75
+
     itemModel: paper
     hideItem: true
   lava_6_b:
-    itemID: 76
+
     itemModel: paper
     hideItem: true
   lava_7_b:
-    itemID: 77
+
     itemModel: paper
     hideItem: true
   lava_8_b:
-    itemID: 78
+
     itemModel: paper
     hideItem: true
   lava_9_b:
-    itemID: 79
+
     itemModel: paper
     hideItem: true
   lava_10_b:
-    itemID: 80
+
     itemModel: paper
     hideItem: true
   lava_11_b:
-    itemID: 81
+
     itemModel: paper
     hideItem: true
   lava_12_b:
-    itemID: 82
+
     itemModel: paper
     hideItem: true
   lava_13_b:
-    itemID: 83
+
     itemModel: paper
     hideItem: true
   lava_14_b:
-    itemID: 84
+
     itemModel: paper
     hideItem: true
   lava_15_b:
-    itemID: 85
+
     itemModel: paper
     hideItem: true
   lava_16_b:
-    itemID: 86
+
     itemModel: paper
     hideItem: true
   lava_17_b:
-    itemID: 87
+
     itemModel: paper
     hideItem: true
   lava_18_b:
-    itemID: 88
+
     itemModel: paper
     hideItem: true
   lava_19_b:
-    itemID: 89
+
     itemModel: paper
     hideItem: true
   lava_20_b:
-    itemID: 90
+
     itemModel: paper
     hideItem: true
   lava_0_t:
-    itemID: 91
+
     itemModel: paper
     hideItem: true
   lava_1_t:
-    itemID: 92
+
     itemModel: paper
     hideItem: true
   lava_2_t:
-    itemID: 93
+
     itemModel: paper
     hideItem: true
   lava_3_t:
-    itemID: 94
+
     itemModel: paper
     hideItem: true
   lava_4_t:
-    itemID: 95
+
     itemModel: paper
     hideItem: true
   lava_5_t:
-    itemID: 96
+
     itemModel: paper
     hideItem: true
   lava_6_t:
-    itemID: 97
+
     itemModel: paper
     hideItem: true
   lava_7_t:
-    itemID: 98
+
     itemModel: paper
     hideItem: true
   lava_8_t:
-    itemID: 99
+
     itemModel: paper
     hideItem: true
   lava_9_t:
-    itemID: 100
+
     itemModel: paper
     hideItem: true
   lava_10_t:
-    itemID: 101
+
     itemModel: paper
     hideItem: true
   lava_11_t:
-    itemID: 102
+
     itemModel: paper
     hideItem: true
   lava_12_t:
-    itemID: 103
+
     itemModel: paper
     hideItem: true
   lava_13_t:
-    itemID: 104
+
     itemModel: paper
     hideItem: true
   lava_14_t:
-    itemID: 105
+
     itemModel: paper
     hideItem: true
   lava_15_t:
-    itemID: 106
+
     itemModel: paper
     hideItem: true
   lava_16_t:
-    itemID: 107
+
     itemModel: paper
     hideItem: true
   lava_17_t:
-    itemID: 108
+
     itemModel: paper
     hideItem: true
   lava_18_t:
-    itemID: 109
+
     itemModel: paper
     hideItem: true
   lava_19_t:
-    itemID: 110
+
     itemModel: paper
     hideItem: true
   lava_20_t:
-    itemID: 111
+
     itemModel: paper
     hideItem: true
