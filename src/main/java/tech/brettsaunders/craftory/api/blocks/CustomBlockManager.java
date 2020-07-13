@@ -25,7 +25,7 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockManager {
 
-  private final static String DATA_FOLDER =
+  public final static String DATA_FOLDER =
       Craftory.plugin.getDataFolder() + File.separator + "data";
 
   private PersistenceStorage persistenceStorage;
@@ -105,10 +105,6 @@ public class CustomBlockManager {
     chunkData.add(customBlock);
     activeChunks.put(chunkID,chunkData);
     currentCustomBlocks.put(customBlock.location, customBlock);
-  }
-
-  public void onEnable() {
-    CustomBlockStorage.loadAllSavedRegions(DATA_FOLDER, this, persistenceStorage);
   }
 
   public void onDisable() {

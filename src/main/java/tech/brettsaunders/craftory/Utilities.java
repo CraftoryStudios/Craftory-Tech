@@ -155,6 +155,12 @@ public class Utilities {
       file.mkdirs();
     }
 
+    File modelData = new File(Craftory.plugin.getDataFolder(), "/config/customModelData.yml");
+    if (!modelData.exists()) {
+      FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/config"),
+          new File(Craftory.plugin.getDataFolder(), "/config"));
+    }
+
     FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/data"),
         new File(Craftory.plugin.getDataFolder(), "/data"));
 
@@ -314,7 +320,7 @@ public class Utilities {
   }
 
   public static String convertWorldChunkIDToChunkID(String worldChunkID) {
-    return worldChunkID.replaceFirst(".*,","");
+    return worldChunkID.replaceFirst(".*?,","");
   }
 
   public static String getLocationID(Location location) {

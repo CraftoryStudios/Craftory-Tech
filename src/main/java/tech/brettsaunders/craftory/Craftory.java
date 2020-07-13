@@ -30,6 +30,8 @@ public final class Craftory extends JavaPlugin {
   public static Craftory plugin = null;
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
+
+  public static FileConfiguration customModelDataConfig;
   public static FileConfiguration customBlocksConfig;
   public static FileConfiguration customRecipeConfig;
   public static CustomBlockTickManager tickManager;
@@ -38,6 +40,8 @@ public final class Craftory extends JavaPlugin {
   private static File customItemConfigFile;
   private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
+
+  private static File customModelDataFile;
 
   @Override
   public void onEnable() {
@@ -56,18 +60,19 @@ public final class Craftory extends JavaPlugin {
     if (Utilities.config.getBoolean("resourcePack.forcePack")) {
       new ResourcePackEvents();
     }
-    customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
-    customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
-    customRecipeConfigFile = new File(getDataFolder(), "data/customRecipesConfig.yml");
+    customBlockConfigFile = new File(Craftory.plugin.getDataFolder(), "data/customBlockConfig.yml");
+    customItemConfigFile = new File(Craftory.plugin.getDataFolder(),"data/customItemConfig.yml");
+    customRecipeConfigFile = new File(Craftory.plugin.getDataFolder(),"data/customRecipesConfig.yml");
+    customModelDataFile = new File(getDataFolder(), "config/customModelData.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
-    CustomItemManager.setup(customItemConfig, customBlocksConfig);
+    customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
+    CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
     tickManager = new CustomBlockTickManager();
     Utilities.registerBlocks();
     customBlockManager = new CustomBlockManager();
     customBlockFactory.registerStats();
-    customBlockManager.onEnable();
     new WorldGenHandler();
     new RecipeManager();
     new PoweredBlockEvents();

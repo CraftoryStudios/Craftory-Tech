@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,6 +26,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldInitEvent;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -60,6 +62,15 @@ public class CustomBlockManagerEvents implements Listener {
     this.customBlockDataHashMap = customBlockDataHashMap;
     this.statsContainer = statsContainer;
     Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+  }
+
+  @EventHandler
+  public void onWorldInit(WorldInitEvent e) {
+    CustomBlockStorage.loadAllSavedRegions(e.getWorld(), customBlockManager.DATA_FOLDER, customBlockManager, persistenceStorage);
+    //Load Custom Block Data into memory of pre-loaded chunks
+    for (Chunk chunk : e.getWorld().getLoadedChunks()) {
+      loadCustomBlocksChunk(chunk);
+    }
   }
 
   @EventHandler
@@ -153,7 +164,11 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onChunkLoad(ChunkLoadEvent e) {
-    String chunkID = getChunkWorldID(e.getChunk());
+    loadCustomBlocksChunk(e.getChunk());
+  }
+
+  private void loadCustomBlocksChunk(Chunk chunk) {
+    String chunkID = getChunkWorldID(chunk);
     if (inactiveChunks.containsKey(chunkID)) {
       HashSet<CustomBlock> customBlocks = inactiveChunks.get(chunkID);
       customBlocks.forEach(block -> {

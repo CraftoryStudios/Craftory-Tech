@@ -1,6 +1,7 @@
 package tech.brettsaunders.craftory.api.blocks;
 
 import static tech.brettsaunders.craftory.Utilities.convertWorldChunkIDToChunkID;
+import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 import static tech.brettsaunders.craftory.Utilities.getLocationID;
 import static tech.brettsaunders.craftory.Utilities.getRegionID;
 import static tech.brettsaunders.craftory.Utilities.keyToLoc;
@@ -14,7 +15,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import lombok.Synchronized;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
@@ -65,9 +65,8 @@ public class CustomBlockStorage {
 
   /** Loading */
   @Synchronized
-  public static void loadAllSavedRegions(String dataFolder, CustomBlockManager manager, PersistenceStorage persistenceStorage) {
+  public static void loadAllSavedRegions(World world, String dataFolder, CustomBlockManager manager, PersistenceStorage persistenceStorage) {
     int regions = 0;
-    for (World world : Bukkit.getWorlds()) {
       File directory = new File(dataFolder + File.separator + world.getName());
       if (directory.exists()) {
         File[] filesList = directory.listFiles();
@@ -76,8 +75,7 @@ public class CustomBlockStorage {
           regions++;
         }
       }
-    }
-    Logger.info("Loaded " + regions + " region data files!");
+    Logger.info("Loaded " + regions + " region data files for world "+world.getName() + "!");
   }
 
   @Synchronized
@@ -106,6 +104,7 @@ public class CustomBlockStorage {
 
         HashSet<CustomBlock> chunkData = new HashSet<>();
 
+        String chunkWorldKey = "";
         for (String locationKey : chunkCompound.getKeys()) {
           locationCompound = chunkCompound.getCompound(locationKey);
           //TODO Remove exception later version
@@ -115,6 +114,9 @@ public class CustomBlockStorage {
           }
           location = keyToLoc(locationKey, world);
           customBlock = Craftory.customBlockFactory.createLoad(locationCompound, persistenceStorage, location);
+          if (chunkWorldKey.isEmpty()) {
+            chunkWorldKey = getChunkWorldID(customBlock.location.getChunk());
+          }
           //TODO Remove in later version
           if (locationCompound.hasKey("fuelItem") && customBlock instanceof SolidFuelGenerator) {
             ItemStack fuelItem = NBTItem.convertNBTtoItem(locationCompound.getCompound("fuelItem"));
@@ -132,7 +134,7 @@ public class CustomBlockStorage {
           chunkCompound.getCompound(key).removeKey("fuelItem");
         }
 
-        manager.getInactiveChunks().put(chunkKey, chunkData);
+        manager.getInactiveChunks().put(chunkWorldKey, chunkData);
       }
       nbtFile.save();
     } catch (IOException e) {
