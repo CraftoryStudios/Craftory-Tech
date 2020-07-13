@@ -6,7 +6,7 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    itemID: 1
+    
     itemModel: stone
   GoldCell:
     WEST: true
@@ -15,7 +15,7 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    itemID: 2
+    
     itemModel: stone
   DiamondCell:
     WEST: false
@@ -24,7 +24,7 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    itemID: 3
+    
     itemModel: stone
   EmeraldCell:
     WEST: false
@@ -33,7 +33,7 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: false
-    itemID: 4
+    
     itemModel: stone
   SolidFuelGenerator:
     WEST: true
@@ -42,7 +42,7 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    itemID: 13
+    
     itemModel: stone
   power_connector:
     WEST: true
@@ -51,7 +51,7 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: false
-    itemID: 14
+    
     itemModel: stone
   IronElectricFurnace:
     WEST: true
@@ -60,7 +60,7 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    itemID: 9
+    
     itemModel: stone
   GoldElectricFurnace:
     WEST: true
@@ -69,7 +69,7 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    itemID: 10
+    
     itemModel: stone
   DiamondElectricFurnace:
     WEST: false
@@ -78,7 +78,7 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    itemID: 11
+    
     itemModel: stone
   EmeraldElectricFurnace:
     WEST: true
@@ -87,7 +87,7 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    itemID: 12
+    
     itemModel: stone
   IronFoundry:
     WEST: false
@@ -96,7 +96,7 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    itemID: 15
+    
     itemModel: stone
   IronElectricFoundry:
     WEST: true
@@ -105,7 +105,7 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: false
-    itemID: 5
+    
     itemModel: stone
   GoldElectricFoundry:
     WEST: true
@@ -114,7 +114,7 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    itemID: 6
+    
     itemModel: stone
   DiamondElectricFoundry:
     WEST: false
@@ -123,7 +123,7 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    itemID: 7
+    
     itemModel: stone
   EmeraldElectricFoundry:
     WEST: true
@@ -132,7 +132,6 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    itemID: 8
     itemModel: stone
   crystal:
     WEST: false
@@ -141,7 +140,6 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    itemID: 16
     itemModel: stone
   CopperOre:
     WEST: true
@@ -150,7 +148,6 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    itemID: 602
     itemModel: gold_ore
   IronMacerator:
     WEST: true
@@ -159,7 +156,6 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    itemID: 17
     itemModel: stone
   GoldMacerator:
     WEST: false
@@ -168,7 +164,6 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    itemID: 18
     itemModel: stone
   DiamondMacerator:
     WEST: true
@@ -177,7 +172,6 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    itemID: 19
     itemModel: stone
   EmeraldMacerator:
     WEST: false
@@ -186,7 +180,6 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    itemID: 20
     itemModel: stone
   BasicSolarPanel:
     WEST: true
@@ -195,7 +188,6 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    itemID: 21
     itemModel: stone
   SolarPanel:
     WEST: false
@@ -204,7 +196,6 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: true
-    itemID: 22
     itemModel: stone
   CompactedSolarPanel:
     WEST: true
@@ -213,7 +204,6 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: true
-    itemID: 23
     itemModel: stone
   SolarArray:
     WEST: false
@@ -222,7 +212,6 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: true
-    itemID: 24
     itemModel: stone
   GeothermalGenerator:
     WEST: true
@@ -231,5 +220,4 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: true
-    itemID: 26
     itemModel: stone

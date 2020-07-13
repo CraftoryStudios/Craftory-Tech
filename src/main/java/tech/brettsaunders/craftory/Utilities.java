@@ -125,10 +125,14 @@ public class Utilities {
 
   static void createConfigs() {
     config.options().header("Craftory");
+    config.options().header("Debug provides extra information about errors and in most cases shouldn't be used.");
     config.addDefault("general.debug", false);
     config.addDefault("general.techEnabled", true);
+    config.options().header("Sets the language for Craftory to use. See Lang folder or Plugin page for options");
     config.addDefault("language.locale", "en-GB");
     config.addDefault("generators.solarDuringStorms", true);
+    config.options().header("The resource pack is required. But if you are self hosting it, you can disable this.");
+    config.addDefault("resourcePack.forcePack", true);
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -160,6 +164,12 @@ public class Utilities {
     File file = new File(DATA_FOLDER);
     if (!file.exists()) {
       file.mkdirs();
+    }
+
+    File modelData = new File(Craftory.plugin.getDataFolder(), "/config/customModelData.yml");
+    if (!modelData.exists()) {
+      FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/config"),
+          new File(Craftory.plugin.getDataFolder(), "/config"));
     }
 
     FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/data"),
@@ -332,6 +342,14 @@ public class Utilities {
 
   public static String getChunkID(Chunk chunk) {
     return chunk.getX() + "," + chunk.getZ();
+  }
+
+  public static String getChunkWorldID(Chunk chunk) {
+    return chunk.getWorld().getName() + "," + getChunkID(chunk);
+  }
+
+  public static String convertWorldChunkIDToChunkID(String worldChunkID) {
+    return worldChunkID.replaceFirst(".*?,","");
   }
 
   public static String getLocationID(Location location) {
