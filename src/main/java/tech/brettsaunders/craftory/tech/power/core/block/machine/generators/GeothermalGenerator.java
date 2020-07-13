@@ -25,8 +25,8 @@ public class GeothermalGenerator extends BaseGenerator {
   private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 100;
 
-  public static final int FUEL_SLOT = 5;
-  public static final int OUT_SLOT = 23;
+  public static final int FUEL_SLOT = 14;
+  public static final int OUT_SLOT = 32;
   /* Static Constants Protected */
   protected static final int CAPACITY_BASE = 40000;
   protected static final double[] CAPACITY_LEVEL = {1, 1.5, 2, 3};
@@ -122,7 +122,7 @@ public class GeothermalGenerator extends BaseGenerator {
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GTank(inventory, fluidStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43, true));
-    addGUIComponent(new GIndicator(inventory, runningContainer, 32));
+    addGUIComponent(new GIndicator(inventory, runningContainer, 21));
     this.inventoryInterface = inventory;
   }
 }

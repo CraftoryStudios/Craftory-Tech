@@ -22,7 +22,7 @@ public class GTank extends G21PointBar{
 
   @Override
   String getDisplayName() {
-    return ChatColor.RESET + Utilities.langProperties.getProperty(fluid.toString()) + Utilities.langProperties.getProperty("Stored")+": " + storage.getFluidStored();
+    return ChatColor.RESET + Utilities.langProperties.getProperty(fluid.toString()) + Utilities.langProperties.getProperty("Stored")+": " + Utilities.rawFluidToPrefixed(storage.getFluidStored());
   }
 
   @Override

@@ -71,7 +71,8 @@ public class Utilities {
   public static FileConfiguration data;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
-  private static String UNIT = "Re";
+  private static String UNIT_ENERGY = "Re";
+  private static String UNIT_FLUID = "B";
   private static DecimalFormat df = new DecimalFormat("###.###");
   public static Metrics metrics;
 
@@ -347,27 +348,39 @@ public class Utilities {
   public static String rawEnergyToPrefixed(Integer energy) {
     String s = Integer.toString(energy);
     int length = s.length();
-    if(length < 5) return s + " " + UNIT;
+    if(length < 6) return s + " " + UNIT_ENERGY;
     /*if (length < 7) {
       return s + " " + UNIT;
     }*/
-    if(length < 7) return df.format(energy/1000f) + " K" + UNIT;
+    if(length < 7) return df.format(energy/1000f) + " K" + UNIT_ENERGY;
     if (length < 10) {
-      return df.format(energy / 1000000f) + " M" + UNIT;
+      return df.format(energy / 1000000f) + " M" + UNIT_ENERGY;
     }
     if (length < 13) {
-      return df.format(energy / 1000000000f) + " G" + UNIT;
+      return df.format(energy / 1000000000f) + " G" + UNIT_ENERGY;
     }
     if (length < 16) {
-      return df.format(energy / 1000000000000f) + " T" + UNIT;
+      return df.format(energy / 1000000000000f) + " T" + UNIT_ENERGY;
     }
     if (length < 19) {
-      return df.format(energy / 1000000000000000f) + " P" + UNIT;
+      return df.format(energy / 1000000000000000f) + " P" + UNIT_ENERGY;
     }
     if (length < 22) {
-      return df.format(energy / 1000000000000000000f) + " E" + UNIT;
+      return df.format(energy / 1000000000000000000f) + " E" + UNIT_ENERGY;
     }
     return "A bukkit load";
   }
 
+  public static String rawFluidToPrefixed(Integer amount) {
+    String s = Integer.toString(amount);
+    int length = s.length();
+    if(length < 6) return s + " m" + UNIT_FLUID;
+    if(length < 7) return s + " " + UNIT_FLUID;
+    if(length < 10) return df.format(amount / 1000000f) + " K" + UNIT_FLUID;
+    if(length < 13) return df.format(amount / 1000000000f) + " M" + UNIT_FLUID;
+    if(length < 16) return df.format(amount / 1000000f) + " G" + UNIT_FLUID;
+    if(length < 19) return df.format(amount / 1000000f) + " T" + UNIT_FLUID;
+    if(length < 22) return df.format(amount / 1000000f) + " P" + UNIT_FLUID;
+    return "A bukkit load";
+  }
 }
