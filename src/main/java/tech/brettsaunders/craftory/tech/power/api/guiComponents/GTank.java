@@ -17,7 +17,7 @@ public class GTank extends G21PointBar{
   }
 
   public GTank(Inventory inventory, FluidStorage storage) {
-    this(inventory, storage, 10);
+    this(inventory, storage, 12);
   }
 
   @Override
@@ -32,6 +32,7 @@ public class GTank extends G21PointBar{
 
   @Override
   String getItemName() {
-    return "lava";
+
+    return fluid.toString();
   }
 }

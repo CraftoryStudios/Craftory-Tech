@@ -47,6 +47,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.Emerald
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.GoldElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.GeothermalGenerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar.BasicSolarPanel;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar.CompactedSolarPanel;
@@ -227,6 +228,7 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.SOLAR_PANEL, SolarPanel.class);
     customBlockFactory.registerCustomBlock(Blocks.COMPACTED_SOLAR_PANEL, CompactedSolarPanel.class);
     customBlockFactory.registerCustomBlock(Blocks.SOLAR_ARRAY, SolarArray.class);
+    customBlockFactory.registerCustomBlock(Blocks.GEOTHERMAL_GENERATOR, GeothermalGenerator.class);
   }
 
   static void registerBasicBlocks() {
@@ -257,6 +259,7 @@ public class Utilities {
     Craftory.tickManager.registerCustomBlockClass(SolarPanel.class);
     Craftory.tickManager.registerCustomBlockClass(CompactedSolarPanel.class);
     Craftory.tickManager.registerCustomBlockClass(SolarArray.class);
+    Craftory.tickManager.registerCustomBlockClass(GeothermalGenerator.class);
   }
 
   static void done() {

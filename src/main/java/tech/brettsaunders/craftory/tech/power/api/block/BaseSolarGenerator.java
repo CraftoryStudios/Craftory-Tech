@@ -31,7 +31,7 @@ public class BaseSolarGenerator extends BaseGenerator{
 
   @Override
   protected void processTick() {
-    energyProduced = BASE_OUTPUT;
+    energyProduced = BASE_OUTPUT*MULTIPLIERS[level];
     energyStorage.modifyEnergyStored(energyProduced);
   }
 

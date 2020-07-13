@@ -224,3 +224,12 @@ blocks:
     DOWN: true
     itemID: 24
     itemModel: stone
+  GeothermalGenerator:
+    WEST: true
+    UP: true
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemID: 26
+    itemModel: stone

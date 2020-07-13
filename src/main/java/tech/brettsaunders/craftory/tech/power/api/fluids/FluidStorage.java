@@ -56,7 +56,24 @@ public class FluidStorage extends EnergyStorage {
     return super.modifyEnergyStored(amount);
   }
 
+  public void forceAdd(int amount) {
+    energy += amount;
+    if(energy > capacity) energy = capacity;
+  }
 
+  public int forceExtract(int amount) {
+    if(amount > energy){
+      amount = energy;
+      energy = 0;
+    } else {
+      energy -=amount;
+    }
+    return amount;
+  }
+
+  public int getSpace() {
+    return capacity - energy;
+  }
   public int receiveFluid(int maxReceive, boolean simulate) {
     return super.receiveEnergy(maxReceive, simulate);
   }
