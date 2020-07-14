@@ -273,3 +273,5 @@ items:
     customModelID: 110
   lava_20_t:
     customModelID: 111
+  turret:
+    itemID: 69
