@@ -17,7 +17,6 @@ items:
     customModelID: 62
   steel_ingot:
     customModelID: 1
-
   light_off:
     customModelID: 63
   light_on:
@@ -34,8 +33,6 @@ items:
     customModelID: 67
   output_green_alt:
     customModelID: 68
-
-
   bar_0_b:
     customModelID: 9
   bar_1_b:
@@ -140,7 +137,6 @@ items:
     customModelID: 59
   arrow_9:
     customModelID: 60
-    
   IronCell:
     customModelID: 1
   GoldCell:
@@ -195,84 +191,44 @@ items:
     itemID: 26
   lava_0_b:
     itemID: 70
-
-
   lava_1_b:
     itemID: 71
-
-
   lava_2_b:
     itemID: 72
-
-
   lava_3_b:
     itemID: 73
-
-
   lava_4_b:
     itemID: 74
-
-
   lava_5_b:
     itemID: 75
-
-
   lava_6_b:
     itemID: 76
-
-
   lava_7_b:
     itemID: 77
-
-
   lava_8_b:
     itemID: 78
-
-
   lava_9_b:
     itemID: 79
-
-
   lava_10_b:
     itemID: 80
-
-
   lava_11_b:
     itemID: 81
-
-
   lava_12_b:
     itemID: 82
-
-
   lava_13_b:
     itemID: 83
-
-
   lava_14_b:
     itemID: 84
-
-
   lava_15_b:
     itemID: 85
-
-
   lava_16_b:
     itemID: 86
-
-
   lava_17_b:
     itemID: 87
-
-
   lava_18_b:
     itemID: 88
-
-
   lava_19_b:
     itemID: 89
-
-
   lava_20_b:
     itemID: 90
   lava_0_t:

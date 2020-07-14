@@ -10,7 +10,6 @@ recipes:
     result:
       item: IronCell
       amount: 1
-
   GoldCell:
     pattern:
       - SSS
@@ -22,7 +21,6 @@ recipes:
     result:
       item: GoldCell
       amount: 1
-
   DiamondCell:
     pattern:
       - SSS
@@ -34,7 +32,6 @@ recipes:
     result:
       item: DiamondCell
       amount: 1
-
   EmeraldCell:
     pattern:
       - SSS
@@ -46,7 +43,6 @@ recipes:
     result:
       item: EmeraldCell
       amount: 1
-
   IronElectricFurnace:
     pattern:
       - SSS
@@ -59,7 +55,6 @@ recipes:
     result:
       item: IronElectricFurnace
       amount: 1
-
   GoldElectricFurnace:
     pattern:
       - SSS
@@ -72,7 +67,6 @@ recipes:
     result:
       item: GoldElectricFurnace
       amount: 1
-
   DiamondElectricFurnace:
     pattern:
       - SSS
@@ -85,7 +79,6 @@ recipes:
     result:
       item: DiamondElectricFurnace
       amount: 1
-
   EmeraldElectricFurnace:
     pattern:
       - SSS
@@ -98,7 +91,6 @@ recipes:
     result:
       item: EmeraldElectricFurnace
       amount: 1
-
   iron_core:
     pattern:
       - SIS
@@ -111,7 +103,6 @@ recipes:
     result:
       item: iron_core
       amount: 1
-
   gold_core:
     pattern:
       - SGS
@@ -124,7 +115,6 @@ recipes:
     result:
       item: gold_core
       amount: 1
-
   diamond_core:
     pattern:
       - SRS
@@ -138,7 +128,6 @@ recipes:
     result:
       item: diamond_core
       amount: 1
-
   emerald_core:
     pattern:
       - SRS
@@ -152,7 +141,6 @@ recipes:
     result:
       item: emerald_core
       amount: 1
-
   IronFoundry:
     pattern:
       - III
@@ -165,7 +153,6 @@ recipes:
     result:
       item: IronFoundry
       amount: 1
-
   IronElectricFoundry:
     pattern:
       - SSS
@@ -178,7 +165,6 @@ recipes:
     result:
       item: IronElectricFoundry
       amount: 1
-
   GoldElectricFoundry:
     pattern:
       - SSS
@@ -191,7 +177,6 @@ recipes:
     result:
       item: GoldElectricFoundry
       amount: 1
-
   DiamondElectricFoundry:
     pattern:
       - SSS
@@ -204,7 +189,6 @@ recipes:
     result:
       item: DiamondElectricFoundry
       amount: 1
-
   EmeraldElectricFoundry:
     pattern:
       - SSS
@@ -217,7 +201,6 @@ recipes:
     result:
       item: EmeraldElectricFoundry
       amount: 1
-
   SolidFuelGenerator:
     pattern:
       - SMS
@@ -231,7 +214,6 @@ recipes:
     result:
       item: SolidFuelGenerator
       amount: 1
-
   wrench:
     pattern:
       - SXS
@@ -242,7 +224,6 @@ recipes:
     result:
       item: wrench
       amount: 1
-
   power_connector:
     pattern:
       - SOS
@@ -255,7 +236,6 @@ recipes:
     result:
       item: power_connector
       amount: 1
-
   configurator:
     pattern:
       - SMS
@@ -267,7 +247,6 @@ recipes:
     result:
       item: configurator
       amount: 1
-
   magnetised_iron:
     pattern:
       - IXX
@@ -278,7 +257,6 @@ recipes:
     result:
       item: magnetised_iron
       amount: 1
-
   IronMacerator:
     pattern:
       - SDS
@@ -291,7 +269,6 @@ recipes:
     result:
       item: IronMacerator
       amount: 1
-
   GoldMacerator:
     pattern:
       - SDS
@@ -304,7 +281,6 @@ recipes:
     result:
       item: GoldMacerator
       amount: 1
-
   DiamondMacerator:
     pattern:
       - SDS
@@ -317,7 +293,6 @@ recipes:
     result:
       item: DiamondMacerator
       amount: 1
-
   EmeraldMacerator:
     pattern:
       - SDS
@@ -330,7 +305,6 @@ recipes:
     result:
       item: EmeraldMacerator
       amount: 1
-
   BasicSolarPanel:
     pattern:
       - SGS
@@ -345,7 +319,6 @@ recipes:
     result:
       item: BasicSolarPanel
       amount: 1
-
   SolarPanel:
     pattern:
       - SSS
@@ -357,7 +330,6 @@ recipes:
     result:
       item: SolarPanel
       amount: 1
-
   CompactedSolarPanel:
     pattern:
       - SSS
@@ -369,7 +341,6 @@ recipes:
     result:
       item: CompactedSolarPanel
       amount: 1
-
   SolarArray:
     pattern:
       - SSS
@@ -381,8 +352,6 @@ recipes:
     result:
       item: SolarArray
       amount: 1
-
-
 furnace_recipes:
   copper_ingot:
     input:
@@ -414,7 +383,6 @@ furnace_recipes:
     result:
       name: GOLD_INGOT
       amount: 1
-
 macerator_recipes:
   coal_dust:
     input:
