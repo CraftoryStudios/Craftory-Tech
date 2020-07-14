@@ -28,6 +28,7 @@ public class IronFoundry extends BaseFoundry {
     super(location, Blocks.IRON_FOUNDRY, C_LEVEL);
     interactableSlots.add(FUEL_SLOT);
     inputLocations.add(FUEL_SLOT);
+    energyStorage.setCapacity(0);
   }
 
   /* Saving, Setup and Loading */
@@ -35,6 +36,7 @@ public class IronFoundry extends BaseFoundry {
     super();
     interactableSlots.add(FUEL_SLOT);
     inputLocations.add(FUEL_SLOT);
+    energyStorage.setCapacity(0);
   }
 
   @Override
