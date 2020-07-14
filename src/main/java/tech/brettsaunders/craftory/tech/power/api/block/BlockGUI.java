@@ -79,6 +79,8 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
   }
 
   public String centerTitle(String title) {
-    return Strings.repeat(" ", 27 - ChatColor.stripColor(title).length()) + title;
+    int length = 27 - ChatColor.stripColor(title).length();
+    if (length < 0) length = 0;
+    return Strings.repeat(" ", length) + title;
   }
 }

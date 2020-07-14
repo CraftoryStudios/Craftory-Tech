@@ -26,11 +26,15 @@ public class GOutputConfig implements IGUIComponent, Listener {
   private final HashMap<BlockFace, Boolean> config;
 
   public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config) {
-    this(inventory, config, 34);
+    this(inventory, config, 43);
   }
 
   public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config, int middleSlot) {
     this(inventory, config, middleSlot, false);
+  }
+
+  public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config, boolean alt) {
+    this(inventory, config, 43, alt);
   }
 
   public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config, int middleSlot,

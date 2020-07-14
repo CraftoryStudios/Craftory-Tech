@@ -331,6 +331,58 @@ recipes:
       item: EmeraldMacerator
       amount: 1
 
+  BasicSolarPanel:
+    pattern:
+      - SGS
+      - UCU
+      - SMS
+    ingredients:
+      S: steel_ingot
+      G: GLASS
+      U: copper_ingot
+      C: iron_core
+      M: magnetised_iron
+    result:
+      item: BasicSolarPanel
+      amount: 1
+
+  SolarPanel:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      S: BasicSolarPanel
+      C: gold_core
+    result:
+      item: SolarPanel
+      amount: 1
+
+  CompactedSolarPanel:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      S: SolarPanel
+      C: diamond_core
+    result:
+      item: CompactedSolarPanel
+      amount: 1
+
+  SolarArray:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      S: CompactedSolarPanel
+      C: emerald_core
+    result:
+      item: SolarArray
+      amount: 1
+
+
 furnace_recipes:
   copper_ingot:
     input:
@@ -362,10 +414,16 @@ furnace_recipes:
     result:
       name: GOLD_INGOT
       amount: 1
+
 macerator_recipes:
   coal_dust:
     input:
       name: COAL
+    result:
+      name: coal_dust
+  coal_dust_ore:
+    input:
+      name: COAL_ORE
     result:
       name: coal_dust
   diamond_dust:
@@ -407,7 +465,7 @@ macerator_recipes:
     input:
       name: CopperOre
     result:
-      name: emerald_dust
+      name: copper_dust
   emerald_dust:
     input:
       name: EMERALD

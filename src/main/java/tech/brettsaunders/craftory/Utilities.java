@@ -47,7 +47,12 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.Emerald
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.GoldElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.GeothermalGenerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar.BasicSolarPanel;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar.CompactedSolarPanel;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar.SolarArray;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar.SolarPanel;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.DiamondMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.EmeraldMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.GoldMacerator;
@@ -67,7 +72,8 @@ public class Utilities {
   public static FileConfiguration data;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
-  private static String UNIT = "Re";
+  private static String UNIT_ENERGY = "Re";
+  private static String UNIT_FLUID = "B";
   private static DecimalFormat df = new DecimalFormat("###.###");
   public static Metrics metrics;
 
@@ -120,9 +126,14 @@ public class Utilities {
 
   static void createConfigs() {
     config.options().header("Craftory");
+    config.options().header("Debug provides extra information about errors and in most cases shouldn't be used.");
     config.addDefault("general.debug", false);
     config.addDefault("general.techEnabled", true);
+    config.options().header("Sets the language for Craftory to use. See Lang folder or Plugin page for options");
     config.addDefault("language.locale", "en-GB");
+    config.addDefault("generators.solarDuringStorms", true);
+    config.options().header("The resource pack is required. But if you are self hosting it, you can disable this.");
+    config.addDefault("resourcePack.forcePack", true);
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -154,6 +165,12 @@ public class Utilities {
     File file = new File(DATA_FOLDER);
     if (!file.exists()) {
       file.mkdirs();
+    }
+
+    File modelData = new File(Craftory.plugin.getDataFolder(), "/config/customModelData.yml");
+    if (!modelData.exists()) {
+      FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/config"),
+          new File(Craftory.plugin.getDataFolder(), "/config"));
     }
 
     FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/data"),
@@ -220,6 +237,11 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.EMERALD_MACERATOR, EmeraldMacerator.class);
     customBlockFactory.registerCustomBlock(Blocks.TURRET_PLATFORM, ArrowTurret.class);
+    customBlockFactory.registerCustomBlock(Blocks.BASIC_SOLAR_PANEL, BasicSolarPanel.class);
+    customBlockFactory.registerCustomBlock(Blocks.SOLAR_PANEL, SolarPanel.class);
+    customBlockFactory.registerCustomBlock(Blocks.COMPACTED_SOLAR_PANEL, CompactedSolarPanel.class);
+    customBlockFactory.registerCustomBlock(Blocks.SOLAR_ARRAY, SolarArray.class);
+    customBlockFactory.registerCustomBlock(Blocks.GEOTHERMAL_GENERATOR, GeothermalGenerator.class);
   }
 
   static void registerBasicBlocks() {
@@ -247,6 +269,11 @@ public class Utilities {
     Craftory.tickManager.registerCustomBlockClass(DiamondMacerator.class);
     Craftory.tickManager.registerCustomBlockClass(EmeraldMacerator.class);
     Craftory.tickManager.registerCustomBlockClass(ArrowTurret.class);
+    Craftory.tickManager.registerCustomBlockClass(BasicSolarPanel.class);
+    Craftory.tickManager.registerCustomBlockClass(SolarPanel.class);
+    Craftory.tickManager.registerCustomBlockClass(CompactedSolarPanel.class);
+    Craftory.tickManager.registerCustomBlockClass(SolarArray.class);
+    Craftory.tickManager.registerCustomBlockClass(GeothermalGenerator.class);
   }
 
   static void done() {
@@ -320,6 +347,14 @@ public class Utilities {
     return chunk.getX() + "," + chunk.getZ();
   }
 
+  public static String getChunkWorldID(Chunk chunk) {
+    return chunk.getWorld().getName() + "," + getChunkID(chunk);
+  }
+
+  public static String convertWorldChunkIDToChunkID(String worldChunkID) {
+    return worldChunkID.replaceFirst(".*?,","");
+  }
+
   public static String getLocationID(Location location) {
     return location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ();
   }
@@ -331,30 +366,42 @@ public class Utilities {
         Double.parseDouble(locationData[1]), Double.parseDouble(locationData[2]));
   }
 
-  public static String rawToPrefixed(Integer energy) {
+  public static String rawEnergyToPrefixed(Integer energy) {
     String s = Integer.toString(energy);
     int length = s.length();
-    //if(length < 3) return s + " " + UNIT;
-    if (length < 7) {
+    if(length < 6) return s + " " + UNIT_ENERGY;
+    /*if (length < 7) {
       return s + " " + UNIT;
-    }
-    //if(length < 7) return df.format(energy/1000f) +" K" + UNIT;
+    }*/
+    if(length < 7) return df.format(energy/1000f) + " K" + UNIT_ENERGY;
     if (length < 10) {
-      return df.format(energy / 1000000f) + " M" + UNIT;
+      return df.format(energy / 1000000f) + " M" + UNIT_ENERGY;
     }
     if (length < 13) {
-      return df.format(energy / 1000000000f) + " G" + UNIT;
+      return df.format(energy / 1000000000f) + " G" + UNIT_ENERGY;
     }
     if (length < 16) {
-      return df.format(energy / 1000000000000f) + " T" + UNIT;
+      return df.format(energy / 1000000000000f) + " T" + UNIT_ENERGY;
     }
     if (length < 19) {
-      return df.format(energy / 1000000000000000f) + " P" + UNIT;
+      return df.format(energy / 1000000000000000f) + " P" + UNIT_ENERGY;
     }
     if (length < 22) {
-      return df.format(energy / 1000000000000000000f) + " E" + UNIT;
+      return df.format(energy / 1000000000000000000f) + " E" + UNIT_ENERGY;
     }
     return "A bukkit load";
   }
 
+  public static String rawFluidToPrefixed(Integer amount) {
+    String s = Integer.toString(amount);
+    int length = s.length();
+    if(length < 6) return s + " m" + UNIT_FLUID;
+    if(length < 7) return s + " " + UNIT_FLUID;
+    if(length < 10) return df.format(amount / 1000000f) + " K" + UNIT_FLUID;
+    if(length < 13) return df.format(amount / 1000000000f) + " M" + UNIT_FLUID;
+    if(length < 16) return df.format(amount / 1000000f) + " G" + UNIT_FLUID;
+    if(length < 19) return df.format(amount / 1000000f) + " T" + UNIT_FLUID;
+    if(length < 22) return df.format(amount / 1000000f) + " P" + UNIT_FLUID;
+    return "A bukkit load";
+  }
 }

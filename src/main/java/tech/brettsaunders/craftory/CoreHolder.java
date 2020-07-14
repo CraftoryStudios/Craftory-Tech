@@ -39,6 +39,11 @@ public class CoreHolder {
     public static final String EMERALD_MACERATOR = "EmeraldMacerator";
     public static final String TURRET_PLATFORM = "TurretPlatform";
 
+    public static final String BASIC_SOLAR_PANEL = "BasicSolarPanel";
+    public static final String SOLAR_PANEL = "SolarPanel";
+    public static final String COMPACTED_SOLAR_PANEL = "CompactedSolarPanel";
+    public static final String SOLAR_ARRAY = "SolarArray";
+    public static final String GEOTHERMAL_GENERATOR = "GeothermalGenerator";
     /* Ores */
     public static final String COPPER_ORE = "CopperOre";
     public static final String CRYSTAL_ORE = "crystal";
@@ -68,5 +73,20 @@ public class CoreHolder {
 
 
     public static final String TURRET_HEAD = "turret";
+  }
+
+  public static enum FLUIDS {
+    LAVA ("lava"),
+    WATER ("water");
+
+    private final String name;
+
+    private FLUIDS(String s) {
+      name = s;
+    }
+
+    public String toString() {
+      return this.name;
+    }
   }
 }

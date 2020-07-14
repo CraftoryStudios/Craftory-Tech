@@ -1,12 +1,13 @@
 package tech.brettsaunders.craftory.api.blocks;
 
 import static tech.brettsaunders.craftory.Craftory.customBlockManager;
-import static tech.brettsaunders.craftory.Utilities.getChunkID;
+import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,6 +26,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldInitEvent;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -60,6 +62,15 @@ public class CustomBlockManagerEvents implements Listener {
     this.customBlockDataHashMap = customBlockDataHashMap;
     this.statsContainer = statsContainer;
     Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+  }
+
+  @EventHandler
+  public void onWorldInit(WorldInitEvent e) {
+    CustomBlockStorage.loadAllSavedRegions(e.getWorld(), customBlockManager.DATA_FOLDER, customBlockManager, persistenceStorage);
+    //Load Custom Block Data into memory of pre-loaded chunks
+    for (Chunk chunk : e.getWorld().getLoadedChunks()) {
+      loadCustomBlocksChunk(chunk);
+    }
   }
 
   @EventHandler
@@ -153,13 +164,18 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onChunkLoad(ChunkLoadEvent e) {
-    if (inactiveChunks.containsKey(getChunkID(e.getChunk()))) {
-      HashSet<CustomBlock> customBlocks = inactiveChunks.get(getChunkID(e.getChunk()));
+    loadCustomBlocksChunk(e.getChunk());
+  }
+
+  private void loadCustomBlocksChunk(Chunk chunk) {
+    String chunkID = getChunkWorldID(chunk);
+    if (inactiveChunks.containsKey(chunkID)) {
+      HashSet<CustomBlock> customBlocks = inactiveChunks.get(chunkID);
       customBlocks.forEach(block -> {
         customBlockManager.putActiveCustomBlock(block);
         Craftory.tickManager.addTickingBlock(block);
       });
-      inactiveChunks.remove(getChunkID(e.getChunk()));
+      inactiveChunks.remove(chunkID);
 
       //Update Cache
       customBlocks.forEach(customBlock -> {
@@ -172,7 +188,7 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onChunkUnLoad(ChunkUnloadEvent e) {
-    final String chunkID = getChunkID(e.getChunk());
+    final String chunkID = getChunkWorldID(e.getChunk());
     if (activeChunks.containsKey(chunkID)) {
       HashSet<CustomBlock> customBlocks = activeChunks.get(chunkID);
       customBlocks.forEach(customBlock -> {

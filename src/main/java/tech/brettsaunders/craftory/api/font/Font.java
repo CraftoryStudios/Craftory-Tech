@@ -5,8 +5,8 @@ public enum Font {
   CELL_GUI('\ue000'),
   FURNACE_GUI('\ue009'),
   IRON_FOUNDRY_GUI('\uF801'),
-  GENERATOR_GUI('\ue008');
-
+  GENERATOR_GUI('\ue008'),
+  GEOTHERMAL_GUI('\uF802');
   public final char label;
 
   Font(char c) {
