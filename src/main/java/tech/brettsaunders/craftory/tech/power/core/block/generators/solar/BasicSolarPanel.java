@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory.tech.power.core.block.machine.generators.solar;
+package tech.brettsaunders.craftory.tech.power.core.block.generators.solar;
 
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;

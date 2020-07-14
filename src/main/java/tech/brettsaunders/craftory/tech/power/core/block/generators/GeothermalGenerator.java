@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory.tech.power.core.block.machine.generators;
+package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +46,7 @@ public class GeothermalGenerator extends BaseGenerator {
 
   /* Saving, Setup and Loading */
   public GeothermalGenerator(Location location) {
-    super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
+    super(location, Blocks.GEOTHERMAL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
     init();
     fluidStorage = new FluidStorage((int) (LAVA_CAPACITY_BASE * CAPACITY_LEVEL[C_LEVEL]));
     inputSlots = new ArrayList<>();

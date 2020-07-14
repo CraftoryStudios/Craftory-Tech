@@ -10,7 +10,7 @@ import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseFoundry;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelManager;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.SolidFuelManager;
 
 public class IronFoundry extends BaseFoundry {
   /* Static Constants Private */
