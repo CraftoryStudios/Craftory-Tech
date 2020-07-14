@@ -122,7 +122,7 @@ public class GeothermalGenerator extends BaseGenerator {
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GTank(inventory, fluidStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 42, true));
-    addGUIComponent(new GIndicator(inventory, runningContainer, 25));
+    addGUIComponent(new GIndicator(inventory, runningContainer, 15));
     this.inventoryInterface = inventory;
   }
 }
