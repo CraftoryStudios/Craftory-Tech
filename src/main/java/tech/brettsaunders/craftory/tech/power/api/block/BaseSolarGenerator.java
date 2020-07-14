@@ -8,11 +8,12 @@ import tech.brettsaunders.craftory.Utilities;
 public class BaseSolarGenerator extends BaseGenerator{
 
   private static final int BASE_CAPACITY = 50000;
-  private static final int BASE_OUTPUT = 20;
+  private static final int NOON_OUTPUT = 20;
+
   private static final int[] MULTIPLIERS = {1,4,16,32};
   static final boolean solarDuringStorm = Utilities.config.getBoolean("generators.solarDuringStorms");
   public BaseSolarGenerator(Location location, String blockName, byte level) {
-    super(location,blockName,level,BASE_OUTPUT*MULTIPLIERS[level],BASE_CAPACITY*MULTIPLIERS[level]);
+    super(location,blockName,level, NOON_OUTPUT *MULTIPLIERS[level],BASE_CAPACITY*MULTIPLIERS[level]);
   }
   public BaseSolarGenerator() {super();}
 
@@ -31,8 +32,15 @@ public class BaseSolarGenerator extends BaseGenerator{
 
   @Override
   protected void processTick() {
-    energyProduced = BASE_OUTPUT*MULTIPLIERS[level];
+    energyProduced = calculateAmountProduced() *MULTIPLIERS[level];
     energyStorage.modifyEnergyStored(energyProduced);
+  }
+
+  protected int calculateAmountProduced() {
+    long time = location.getWorld().getTime();
+    double diff = Math.abs(time-6000)/1000d; //might be too complex
+    int amount =  ((int) Math.round((-0.555*(diff*diff))))+ NOON_OUTPUT; //same for this
+    return amount;
   }
 
 }
