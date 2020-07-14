@@ -7,6 +7,7 @@ import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
@@ -95,6 +96,7 @@ public class GeothermalGenerator extends BaseGenerator {
       }
     }
     super.updateGenerator();
+    inventoryInterface.getViewers().forEach(player -> {((Player) player).updateInventory();});
   }
 
   @Override
