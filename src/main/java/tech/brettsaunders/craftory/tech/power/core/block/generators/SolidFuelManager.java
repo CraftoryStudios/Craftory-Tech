@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory.tech.power.core.block.machine.generators;
+package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
 import java.util.HashMap;
 

@@ -10,7 +10,7 @@ import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseFoundry;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelManager;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.SolidFuelManager;
 
 public class IronFoundry extends BaseFoundry {
   /* Static Constants Private */
@@ -28,6 +28,7 @@ public class IronFoundry extends BaseFoundry {
     super(location, Blocks.IRON_FOUNDRY, C_LEVEL);
     interactableSlots.add(FUEL_SLOT);
     inputLocations.add(FUEL_SLOT);
+    energyStorage.setCapacity(0);
   }
 
   /* Saving, Setup and Loading */
@@ -35,6 +36,7 @@ public class IronFoundry extends BaseFoundry {
     super();
     interactableSlots.add(FUEL_SLOT);
     inputLocations.add(FUEL_SLOT);
+    energyStorage.setCapacity(0);
   }
 
   @Override

@@ -1,4 +1,4 @@
-package tech.brettsaunders.craftory.tech.power.core.block.machine.generators;
+package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +7,7 @@ import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
@@ -26,7 +27,7 @@ public class GeothermalGenerator extends BaseGenerator {
   private static final int C_OUTPUT_AMOUNT = 100;
 
   public static final int FUEL_SLOT = 14;
-  public static final int OUT_SLOT = 32;
+  public static final int OUT_SLOT = 16;
   /* Static Constants Protected */
   protected static final int CAPACITY_BASE = 40000;
   protected static final double[] CAPACITY_LEVEL = {1, 1.5, 2, 3};
@@ -46,7 +47,7 @@ public class GeothermalGenerator extends BaseGenerator {
 
   /* Saving, Setup and Loading */
   public GeothermalGenerator(Location location) {
-    super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
+    super(location, Blocks.GEOTHERMAL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
     init();
     fluidStorage = new FluidStorage((int) (LAVA_CAPACITY_BASE * CAPACITY_LEVEL[C_LEVEL]));
     inputSlots = new ArrayList<>();
@@ -95,6 +96,7 @@ public class GeothermalGenerator extends BaseGenerator {
       }
     }
     super.updateGenerator();
+    inventoryInterface.getViewers().forEach(player -> {((Player) player).updateInventory();});
   }
 
   @Override
@@ -121,8 +123,8 @@ public class GeothermalGenerator extends BaseGenerator {
     Inventory inventory = createInterfaceInventory(displayName, Font.GEOTHERMAL_GUI.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GTank(inventory, fluidStorage));
-    addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43, true));
-    addGUIComponent(new GIndicator(inventory, runningContainer, 21));
+    addGUIComponent(new GOutputConfig(inventory, sidesConfig, 42, true));
+    addGUIComponent(new GIndicator(inventory, runningContainer, 15));
     this.inventoryInterface = inventory;
   }
 }

@@ -76,6 +76,7 @@ public class CustomItemManager implements Listener {
         }
       }
     }
+    Logger.debug("Loaded Items");
   }
 
   public static ArrayList<String> getItemNames() {

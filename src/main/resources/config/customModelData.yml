@@ -17,7 +17,6 @@ items:
     customModelID: 62
   steel_ingot:
     customModelID: 1
-
   light_off:
     customModelID: 63
   light_on:
@@ -34,8 +33,6 @@ items:
     customModelID: 67
   output_green_alt:
     customModelID: 68
-
-
   bar_0_b:
     customModelID: 9
   bar_1_b:
@@ -140,7 +137,6 @@ items:
     customModelID: 59
   arrow_9:
     customModelID: 60
-    
   IronCell:
     customModelID: 1
   GoldCell:
@@ -176,144 +172,104 @@ items:
   CopperOre:
     customModelID: 602
   IronMacerator:
-    itemID: 17
+    customModelID: 17
   GoldMacerator:
-    itemID: 18
+    customModelID: 18
   DiamondMacerator:
-    itemID: 19
+    customModelID: 19
   EmeraldMacerator:
-    itemID: 20
+    customModelID: 20
   BasicSolarPanel:
-    itemID: 21
+    customModelID: 21
   SolarPanel:
-    itemID: 22
+    customModelID: 22
   CompactedSolarPanel:
-    itemID: 23
+    customModelID: 23
   SolarArray:
-    itemID: 24
+    customModelID: 24
   GeothermalGenerator:
-    itemID: 26
+    customModelID: 26
   lava_0_b:
-    itemID: 70
-
-
+    customModelID: 70
   lava_1_b:
-    itemID: 71
-
-
+    customModelID: 71
   lava_2_b:
-    itemID: 72
-
-
+    customModelID: 72
   lava_3_b:
-    itemID: 73
-
-
+    customModelID: 73
   lava_4_b:
-    itemID: 74
-
-
+    customModelID: 74
   lava_5_b:
-    itemID: 75
-
-
+    customModelID: 75
   lava_6_b:
-    itemID: 76
-
-
+    customModelID: 76
   lava_7_b:
-    itemID: 77
-
-
+    customModelID: 77
   lava_8_b:
-    itemID: 78
-
-
+    customModelID: 78
   lava_9_b:
-    itemID: 79
-
-
+    customModelID: 79
   lava_10_b:
-    itemID: 80
-
-
+    customModelID: 80
   lava_11_b:
-    itemID: 81
-
-
+    customModelID: 81
   lava_12_b:
-    itemID: 82
-
-
+    customModelID: 82
   lava_13_b:
-    itemID: 83
-
-
+    customModelID: 83
   lava_14_b:
-    itemID: 84
-
-
+    customModelID: 84
   lava_15_b:
-    itemID: 85
-
-
+    customModelID: 85
   lava_16_b:
-    itemID: 86
-
-
+    customModelID: 86
   lava_17_b:
-    itemID: 87
-
-
+    customModelID: 87
   lava_18_b:
-    itemID: 88
-
-
+    customModelID: 88
   lava_19_b:
-    itemID: 89
-
-
+    customModelID: 89
   lava_20_b:
-    itemID: 90
+    customModelID: 90
   lava_0_t:
-    itemID: 91
+    customModelID: 91
   lava_1_t:
-    itemID: 92
+    customModelID: 92
   lava_2_t:
-    itemID: 93
+    customModelID: 93
   lava_3_t:
-    itemID: 94
+    customModelID: 94
   lava_4_t:
-    itemID: 95
+    customModelID: 95
   lava_5_t:
-    itemID: 96
+    customModelID: 96
   lava_6_t:
-    itemID: 97
+    customModelID: 97
   lava_7_t:
-    itemID: 98
+    customModelID: 98
   lava_8_t:
-    itemID: 99
+    customModelID: 99
   lava_9_t:
-    itemID: 100
+    customModelID: 100
   lava_10_t:
-    itemID: 101
+    customModelID: 101
   lava_11_t:
-    itemID: 102
+    customModelID: 102
   lava_12_t:
-    itemID: 103
+    customModelID: 103
   lava_13_t:
-    itemID: 104
+    customModelID: 104
   lava_14_t:
-    itemID: 105
+    customModelID: 105
   lava_15_t:
-    itemID: 106
+    customModelID: 106
   lava_16_t:
-    itemID: 107
+    customModelID: 107
   lava_17_t:
-    itemID: 108
+    customModelID: 108
   lava_18_t:
-    itemID: 109
+    customModelID: 109
   lava_19_t:
-    itemID: 110
+    customModelID: 110
   lava_20_t:
-    itemID: 111
+    customModelID: 111

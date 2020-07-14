@@ -20,7 +20,7 @@ import org.bukkit.World;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.SolidFuelGenerator;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockStorage {
