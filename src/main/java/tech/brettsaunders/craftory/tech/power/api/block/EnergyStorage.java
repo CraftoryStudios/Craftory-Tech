@@ -129,6 +129,10 @@ public class EnergyStorage implements IEnergyStorage {
     }
   }
 
+  public boolean isFull() {
+    return energy>=capacity;
+  }
+
   @Override
   public int getMaxEnergyStored() {
     return capacity;
