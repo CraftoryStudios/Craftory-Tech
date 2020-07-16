@@ -22,6 +22,9 @@ public class GOutputConfig implements IGUIComponent, Listener {
   private final int DOWN_SLOT;
   private final boolean ALT;
 
+  private static ItemStack DISABLED = null;
+  private static ItemStack OUTPUT = null;
+
   private final Inventory inventory;
   private final HashMap<BlockFace, Boolean> config;
 
@@ -50,6 +53,11 @@ public class GOutputConfig implements IGUIComponent, Listener {
     ALT = alt;
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
+
+    DISABLED = CustomItemManager
+        .getCustomItem("output_disabled" + (ALT ? "_alt" : ""));
+    OUTPUT = CustomItemManager
+        .getCustomItem("output_green" + (ALT ? "_alt" : ""));
   }
 
   @EventHandler
@@ -81,11 +89,6 @@ public class GOutputConfig implements IGUIComponent, Listener {
 
   @Override
   public void update() {
-    final ItemStack DISABLED = CustomItemManager
-        .getCustomItem("output_disabled" + (ALT ? "_alt" : ""));
-    final ItemStack OUTPUT = CustomItemManager
-        .getCustomItem("output_green" + (ALT ? "_alt" : ""));
-
     //NORTH, EAST, SOUTH, WEST, UP, DOWN
     inventory.setItem(NORTH_SLOT, !config.get(BlockFace.NORTH) ? DISABLED.clone() : OUTPUT.clone());
     inventory.setItem(SOUTH_SLOT, !config.get(BlockFace.SOUTH) ? DISABLED.clone() : OUTPUT.clone());

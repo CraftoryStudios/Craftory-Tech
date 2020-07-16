@@ -73,6 +73,10 @@ public class CoreHolder {
 
 
     public static final String TURRET_HEAD = "turret";
+    public static final String UPGRADE_CARD_EMERALD = "upgrade_card_emerald";
+    public static final String UPGRADE_CARD_DIAMOND = "upgrade_card_diamond";
+    public static final String UPGRADE_CARD_GOLD = "upgrade_card_gold";
+    public static final String UPGRADE_CARD_IRON = "upgrade_card_iron";
   }
 
   public static enum FLUIDS {
