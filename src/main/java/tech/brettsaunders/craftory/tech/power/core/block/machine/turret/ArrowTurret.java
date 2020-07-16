@@ -127,8 +127,12 @@ public class ArrowTurret extends BaseMachine {
         direction = 0;
       } else {
         targetingCount--;
-        Vector toTarget = lastTargetedEntity.getLocation().toVector().subtract(location.toVector());
-        double angle = Math.toDegrees(vector.dot(toTarget));
+        //Vector toTarget = lastTargetedEntity.getLocation().toVector().subtract(location.toVector());
+        double dx = location.getX() - lastTargetedEntity.getLocation().getX();
+        double dz = location.getZ() - lastTargetedEntity.getLocation().getZ();
+        double angle = dx*vector.getX() + dz*vector.getZ();
+        //double angle = Math.toDegrees(vector.dot(lastTargetedEntity.getLocation().toVector()));
+
         direction = angle > 0 ? 2 : -2;
         Logger.info(angle+"");
       }
