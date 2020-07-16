@@ -38,25 +38,52 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
 
 
   @Override
+  public void beforeSaveUpdate() {
+    super.beforeSaveUpdate();
+    removeWheels();
+  }
+
+  protected abstract void  removeWheels();
+  protected abstract void placeWheels();
+
+  @Override
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
+    placeWheels();
+  }
+
+
+  @Override
   protected boolean canStart() {
     if(!wheelPlaced) return false;
     if(energyStorage.isFull()) return false;
     if(!wheelFree) return false;
-    updateAmountGenerated();
     return true;
+  }
+
+  @Override
+  protected void processStart(){
+    super.processStart();
+    updateEfficiency();
   }
 
   @Override
   protected boolean canFinish() { return !canStart(); }
 
+  protected abstract boolean placeWheel(Location loc);
+
   @Override
   protected void processTick() {
-    energyProduced = maxOutput*efficiencyMultiplier*MULTIPLIERS[level];
+    energyProduced = calculateAmountProduced()*MULTIPLIERS[level];
     energyStorage.modifyEnergyStored(energyProduced);
   }
 
-  @Ticking(ticks=100)
-  public abstract void updateAmountGenerated();
+  protected int calculateAmountProduced() {
+    return maxOutput*efficiencyMultiplier;
+  }
+
+  @Ticking(ticks=12000)
+  public abstract void updateEfficiency();
 
   protected boolean setFacing(BlockFace face) {
     if(validFaces.contains(face)){
@@ -81,13 +108,13 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
     return false;
   }
 
-  @Ticking(ticks=100)
+  @Ticking(ticks=12000)
   protected void checkWheel() {
     if(!wheelPlaced) return;
     wheelFree = wheelAreaFree(wheelLocation);
   }
 
-  @Ticking(ticks=100)
+
   protected boolean wheelAreaFree(Location centerLoc) {
     wheelFree = false;
     Location loc = centerLoc.clone();
