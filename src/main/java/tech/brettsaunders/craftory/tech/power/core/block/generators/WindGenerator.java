@@ -21,7 +21,6 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class WindGenerator extends BaseRenewableGenerator{
 
@@ -96,8 +95,7 @@ public class WindGenerator extends BaseRenewableGenerator{
 
   @Override
   protected boolean placeWheel(Location loc) {
-    Logger.info("placing wheel");
-    wheel = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(0.5,-0.70,0.5), EntityType.ARMOR_STAND);
+    wheel = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(0.5,-0.95,0.7), EntityType.ARMOR_STAND);
     wheel.setArms(false);
     wheel.setBasePlate(false);
     wheel.setVisible(false);
@@ -109,16 +107,16 @@ public class WindGenerator extends BaseRenewableGenerator{
     entityEquipment.setHelmet(CustomItemManager.getCustomItem("windmill"));
     switch (facing) {
       case NORTH:
-        wheel.setHeadPose(new EulerAngle(0, 0, 0));
+        wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
         break;
       case EAST:
-        wheel.setHeadPose(new EulerAngle(0, 90, 0));
+        wheel.setHeadPose(new EulerAngle(0, 0, 0));
         break;
       case SOUTH:
-        wheel.setHeadPose(new EulerAngle(0, 180, 0));
+        wheel.setHeadPose(new EulerAngle(0, 0, 0));
         break;
       case WEST:
-        wheel.setHeadPose(new EulerAngle(0, 270, 0));
+        wheel.setHeadPose(new EulerAngle(0, 0, 0));
         break;
     }
     return true;
@@ -153,7 +151,6 @@ public class WindGenerator extends BaseRenewableGenerator{
           clear = false;
           break;
         }
-        Logger.info(loc.toString());
       }
       if(!clear){
         maxClearPositive = i;
@@ -183,7 +180,6 @@ public class WindGenerator extends BaseRenewableGenerator{
       }
     }
     efficiencyMultiplier = Math.min(maxClearNegative,maxClearPositive)/12d;
-    Logger.info(efficiencyMultiplier+"");
   }
 
   @Override

@@ -70,7 +70,6 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
   protected void processStart(){
     super.processStart();
     updateEfficiency();
-    Logger.info("Starting");
   }
 
   @Override
