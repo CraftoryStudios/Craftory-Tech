@@ -273,8 +273,10 @@ items:
     customModelID: 110
   lava_20_t:
     customModelID: 111
-  turret:
-    customModelID: 69
+  base_turret:
+    customModelID: 129
+  gun_turret:
+    customModelID: 130
   turret_E:
     customModelID: 112
   turret_E_E:

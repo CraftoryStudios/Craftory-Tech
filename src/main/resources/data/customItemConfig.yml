@@ -63,7 +63,9 @@ items:
   output_green_alt:
     itemModel: paper
     hideItem: true
-  turret:
+  base_turret:
+    itemModel: paper
+  gun_turret:
     itemModel: paper
   bar_0_b:
     itemModel: paper
