@@ -42,6 +42,7 @@ public class CoreHolder {
     public static final String COMPACTED_SOLAR_PANEL = "CompactedSolarPanel";
     public static final String SOLAR_ARRAY = "SolarArray";
     public static final String GEOTHERMAL_GENERATOR = "GeothermalGenerator";
+    public static final String WIND_GENERATOR = "WindGenerator";
     /* Ores */
     public static final String COPPER_ORE = "CopperOre";
     public static final String CRYSTAL_ORE = "crystal";
@@ -69,6 +70,8 @@ public class CoreHolder {
     public static final String DIAMOND_DUST = "diamond_dust";
     public static final String EMERALD_DUST = "emerald_dust";
 
+    /* World Items */
+    public static final String WINDMILL = "windmill";
   }
 
   public static enum FLUIDS {

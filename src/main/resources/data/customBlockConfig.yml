@@ -207,3 +207,11 @@ blocks:
     EAST: false
     DOWN: true
     itemModel: stone
+  WindGenerator:
+    WEST: false
+    UP: false
+    SOUTH: true
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: stone

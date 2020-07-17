@@ -10,13 +10,23 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
+import tech.brettsaunders.craftory.CoreHolder.Items;
+import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class WindGenerator extends BaseRenewableGenerator{
+
   private static final byte C_LEVEL = 0;
-  private static final int SLOT = 23; //TODO set
+  private static final int SLOT = 22;
   protected ArmorStand wheel;
   public WindGenerator() {
     super();
@@ -25,7 +35,7 @@ public class WindGenerator extends BaseRenewableGenerator{
 
   /* Saving, Setup and Loading */
   public WindGenerator(Location location) {
-    super(location, "TODO", C_LEVEL); //TODO set name
+    super(location, Items.WINDMILL, C_LEVEL);
     init();
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
@@ -53,12 +63,41 @@ public class WindGenerator extends BaseRenewableGenerator{
   @Override
   public void updateGenerator() {
     if(!wheelPlaced && wheelFree && inventoryInterface.getItem(SLOT)!=null){
-     //TODO place it
+     ItemStack itemStack = inventoryInterface.getItem(SLOT);
+     if(CustomItemManager.isCustomItem(itemStack, false) && CustomItemManager.matchCustomItemName(itemStack,
+         Items.WINDMILL)) {
+       wheelPlaced =  placeWheel(wheelLocation);
+     }
     }
+    super.updateGenerator();
   }
+
   @Override
   protected void placeWheels() {
-    wheel = (ArmorStand) location.getWorld().spawnEntity(location.clone().add(0.5,-0.70,0.5), EntityType.ARMOR_STAND);
+    if(wheelPlaced){
+      wheelPlaced =  placeWheel(wheelLocation);
+    }
+  }
+
+  @Override
+  protected boolean canStart() {//e
+    ItemStack itemStack = inventoryInterface.getItem(SLOT);
+    if(itemStack!=null && CustomItemManager.isCustomItem(itemStack, false) && CustomItemManager.matchCustomItemName(itemStack,
+        Items.WINDMILL)) {
+      return super.canStart();
+    } else {
+      if(wheelPlaced){
+        wheel.remove();
+        wheelPlaced = false;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  protected boolean placeWheel(Location loc) {
+    Logger.info("placing wheel");
+    wheel = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(0.5,-0.70,0.5), EntityType.ARMOR_STAND);
     wheel.setArms(false);
     wheel.setBasePlate(false);
     wheel.setVisible(false);
@@ -67,18 +106,94 @@ public class WindGenerator extends BaseRenewableGenerator{
     wheel.setGravity(false);
 
     EntityEquipment entityEquipment = wheel.getEquipment();
-    entityEquipment.setHelmet(CustomItemManager.getCustomItem("windmill")); //TODO set
-    wheel.setHeadPose(new EulerAngle(0,0,0));
-    //TODO make it face the right direction
-  }
-
-  @Override
-  protected boolean placeWheel(Location loc) {
-    return false;
+    entityEquipment.setHelmet(CustomItemManager.getCustomItem("windmill"));
+    switch (facing) {
+      case NORTH:
+        wheel.setHeadPose(new EulerAngle(0, 0, 0));
+        break;
+      case EAST:
+        wheel.setHeadPose(new EulerAngle(0, 90, 0));
+        break;
+      case SOUTH:
+        wheel.setHeadPose(new EulerAngle(0, 180, 0));
+        break;
+      case WEST:
+        wheel.setHeadPose(new EulerAngle(0, 270, 0));
+        break;
+    }
+    return true;
   }
 
   @Override
   public void updateEfficiency() {
+    ArrayList<Location> locations = new ArrayList<>();
+    locations.addAll(wheelLocations);
+    locations.add(wheelLocation);
+    Vector v;
+    if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) {
+      v = new Vector(0,0,1);
+    } else {
+      v = new Vector(1,0,0);
+    }
+    int maxClearPositive = 12;
+    boolean clear = true;
+    for (int i = 1; i < 13; i++) {
+      for(Location loc: locations) {
+        if(!loc.add(v).getBlock().getType().equals(Material.AIR)){
+          Logger.info(i+"");
+          clear = false;
+          break;
+        }
+        Logger.info(loc.toString());
+      }
+      if(!clear){
+        maxClearPositive = i;
+        break;
+      }
+    }
+    locations = new ArrayList<>();
+    locations.addAll(wheelLocations);
+    locations.add(wheelLocation);
+    if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) {
+      v = new Vector(0,0,-1);
+    } else {
+      v = new Vector(-1,0,0);
+    }
+    int maxClearNegative = 12;
+    clear = true;
+    for (int i = 1; i < 13; i++) {
+      for(Location loc: locations) {
+        if(!loc.add(v).getBlock().getType().equals(Material.AIR)){
+          Logger.info(i+"");
+          clear = false;
+          break;
+        }
+      }
+      if(!clear){
+        maxClearNegative = i;
+        break;
+      }
+    }
+    efficiencyMultiplier = Math.min(maxClearNegative,maxClearPositive)/12d;
+    Logger.info(efficiencyMultiplier+"");
+  }
 
+  @Override
+  protected boolean wheelAreaFree(Location centerLoc) {
+    if(Craftory.customBlockManager.isCustomBlock(centerLoc)){
+      if(Craftory.customBlockManager.getCustomBlockName(centerLoc).equals(Items.WINDMILL)){
+        return super.wheelAreaFree(centerLoc);
+      }
+    } else if(centerLoc.getBlock().getType().equals(Material.AIR)) return super.wheelAreaFree(centerLoc);
+    return false;
+  }
+
+  @Override
+  public void setupGUI() {
+    Inventory inventory = createInterfaceInventory(displayName, Font.GENERATOR_GUI.label + "");
+    addGUIComponent(new GBattery(inventory, energyStorage));
+    addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43, true));
+    addGUIComponent(new GIndicator(inventory, runningContainer, 31));
+    this.inventoryInterface = inventory;
   }
 }

@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
@@ -21,10 +22,11 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
   protected boolean wheelPlaced;
   protected boolean wheelFree = false;
 
-  protected static final int maxOutput = 100;
+  protected static final int maxOutput = 75;
   protected static final int[] MULTIPLIERS = {1,2,3,4};
   protected static final int BASE_CAPACITY = 10000;
-  protected int efficiencyMultiplier = 1;
+  protected double efficiencyMultiplier = 1;
+  protected List<Location> wheelLocations = new ArrayList<>();
   @Persistent
   @Getter
   protected Location wheelLocation;
@@ -33,8 +35,11 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
 
   public BaseRenewableGenerator(Location location, String blockName, byte level) {
     super(location,blockName,level, maxOutput*MULTIPLIERS[level],BASE_CAPACITY*MULTIPLIERS[level]);
+    setFacing(BlockFace.NORTH);
+    checkWheel();
   }
   public BaseRenewableGenerator() {super();}
+
 
 
   @Override
@@ -65,6 +70,7 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
   protected void processStart(){
     super.processStart();
     updateEfficiency();
+    Logger.info("Starting");
   }
 
   @Override
@@ -76,13 +82,14 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
   protected void processTick() {
     energyProduced = calculateAmountProduced()*MULTIPLIERS[level];
     energyStorage.modifyEnergyStored(energyProduced);
+    Logger.info("energy made");//ee
   }
 
   protected int calculateAmountProduced() {
-    return maxOutput*efficiencyMultiplier;
+    return (int) Math.round(maxOutput*efficiencyMultiplier);
   }
 
-  @Ticking(ticks=12000)
+  @Ticking(ticks=600)
   public abstract void updateEfficiency();
 
   protected boolean setFacing(BlockFace face) {
@@ -103,37 +110,37 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
           wheelLocation = loc.add(-1,0,0);
           break;
       }
+      wheelLocations = getWheelLocations(wheelLocation);
       return true;
     }
     return false;
   }
 
-  @Ticking(ticks=12000)
-  protected void checkWheel() {
-    if(!wheelPlaced) return;
+  @Ticking(ticks=20)
+  public void checkWheel() {
     wheelFree = wheelAreaFree(wheelLocation);
   }
 
+  protected List<Location> getWheelLocations(Location centerLoc) {
+    ArrayList<Location> locations = new ArrayList<>();
+    locations.add(centerLoc.clone().add(0,1,0));
+    locations.add(centerLoc.clone().add(0,-1,0));
+    if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) { //Ignore z axis
+      locations.add(centerLoc.clone().add(1,0,0));
+      locations.add(centerLoc.clone().add(-1,0,0));
+    } else if(facing.equals(BlockFace.EAST) || facing.equals(BlockFace.WEST)) {
+      locations.add(centerLoc.clone().add(0,0,1));
+      locations.add(centerLoc.clone().add(0,0,-1));
+    } else {
+      Logger.warn("Renewable Generator set to invalid facing direction");
+    }
+    return locations;
+  }
 
   protected boolean wheelAreaFree(Location centerLoc) {
     wheelFree = false;
-    Location loc = centerLoc.clone();
-    if(!centerLoc.getBlock().getType().equals(Material.AIR)) return false; //TODO if it's the wheel block dont return false
-    if(!loc.add(0,1,0).getBlock().getType().equals(Material.AIR)) return false;
-    loc = centerLoc.clone();
-    if(!loc.add(0,-1,0).getBlock().getType().equals(Material.AIR)) return false;
-    if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) { //Ignore z axis
-      loc = centerLoc.clone();
-      if(!loc.add(1,0,0).getBlock().getType().equals(Material.AIR)) return false;
-      loc = centerLoc.clone();
-      if(!loc.add(-1,0,0).getBlock().getType().equals(Material.AIR)) return false;
-    } else if(facing.equals(BlockFace.EAST) || facing.equals(BlockFace.WEST)) {
-      loc = centerLoc.clone();
-      if(!loc.add(0,0,1).getBlock().getType().equals(Material.AIR)) return false;
-      loc = centerLoc.clone();
-      if(!loc.add(0,0,-1).getBlock().getType().equals(Material.AIR)) return false;
-    } else {
-      Logger.warn("Renewable Generator set to invalid facing direction");
+    for(Location loc: wheelLocations) {
+      if(!loc.getBlock().getType().equals(Material.AIR)) return false;
     }
     wheelFree = true;
     return true;

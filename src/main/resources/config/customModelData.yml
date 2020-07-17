@@ -273,3 +273,7 @@ items:
     customModelID: 110
   lava_20_t:
     customModelID: 111
+  windmill:
+    customModelID: 128
+  WindGenerator:
+    customModelID: 27
