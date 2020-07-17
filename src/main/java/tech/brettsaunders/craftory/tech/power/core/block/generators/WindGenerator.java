@@ -125,6 +125,16 @@ public class WindGenerator extends BaseRenewableGenerator{
   }
 
   @Override
+  protected void processTick() {
+    super.processTick();
+    if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)){
+      wheel.setHeadPose(wheel.getHeadPose().add(0,0,efficiencyMultiplier*0.1));
+    } else {
+      wheel.setHeadPose(wheel.getHeadPose().add(efficiencyMultiplier*0.1,0,0));
+    }
+  }
+
+  @Override
   public void updateEfficiency() {
     ArrayList<Location> locations = new ArrayList<>();
     locations.addAll(wheelLocations);
@@ -140,7 +150,6 @@ public class WindGenerator extends BaseRenewableGenerator{
     for (int i = 1; i < 13; i++) {
       for(Location loc: locations) {
         if(!loc.add(v).getBlock().getType().equals(Material.AIR)){
-          Logger.info(i+"");
           clear = false;
           break;
         }
@@ -161,10 +170,9 @@ public class WindGenerator extends BaseRenewableGenerator{
     }
     int maxClearNegative = 12;
     clear = true;
-    for (int i = 1; i < 13; i++) {
+    for (int i = 2; i < 13; i++) {
       for(Location loc: locations) {
         if(!loc.add(v).getBlock().getType().equals(Material.AIR)){
-          Logger.info(i+"");
           clear = false;
           break;
         }

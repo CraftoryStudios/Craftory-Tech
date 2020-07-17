@@ -24,7 +24,7 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
 
   protected static final int maxOutput = 75;
   protected static final int[] MULTIPLIERS = {1,2,3,4};
-  protected static final int BASE_CAPACITY = 10000;
+  protected static final int BASE_CAPACITY = 100000;
   protected double efficiencyMultiplier = 1;
   protected List<Location> wheelLocations = new ArrayList<>();
   @Persistent
@@ -34,7 +34,7 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
   protected static List<BlockFace> validFaces = Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
 
   public BaseRenewableGenerator(Location location, String blockName, byte level) {
-    super(location,blockName,level, maxOutput*MULTIPLIERS[level],BASE_CAPACITY*MULTIPLIERS[level]);
+    super(location,blockName,level, BASE_CAPACITY,BASE_CAPACITY*MULTIPLIERS[level]);
     setFacing(BlockFace.NORTH);
     checkWheel();
   }
@@ -82,7 +82,6 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
   protected void processTick() {
     energyProduced = calculateAmountProduced()*MULTIPLIERS[level];
     energyStorage.modifyEnergyStored(energyProduced);
-    Logger.info("energy made");//ee
   }
 
   protected int calculateAmountProduced() {
