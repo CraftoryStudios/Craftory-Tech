@@ -32,7 +32,9 @@ public class ArrowTurret extends BaseMachine {
   private Pair<Double, Double> arcAngle;
   private TurretState turretState;
 
-  private double direction = 0;
+  private double directionRotate = 0;
+
+  private double directionTilt = 0;
   private Location startPoint;
   private int targetingCount;
 
@@ -40,6 +42,8 @@ public class ArrowTurret extends BaseMachine {
 
   private LivingEntity lastTargetedEntity;
   private Random random;
+
+  private static final double TILT_LIMIT = 7;
 
 
   @Persistent
@@ -124,65 +128,81 @@ public class ArrowTurret extends BaseMachine {
   public void updateMachine() {
     if (arcAngle.getX() == 0 && arcAngle.getY()==0) return;
     if (turretState == TurretState.Searching) {
-      if (direction == 0)
-        direction = 1;
-
-      rotateTurret();
-
-      if (base_turret.getHeadPose().getY() > Math.toRadians(arcAngle.getY())) {
-        direction = -1;
-        counter = 10;
-      } else if (base_turret.getHeadPose().getY() < Math.toRadians(arcAngle.getX())) {
-        direction = 1;
-      }
-
-      //Ray
-      Vector vector = eulerToVector(base_turret.getHeadPose());
-
-      RayTraceResult rayTraceResult = location.getWorld().rayTraceEntities(startPoint, vector, 10,entity -> !(entity instanceof ArmorStand));
-      if (rayTraceResult != null && rayTraceResult.getHitEntity() != null && rayTraceResult.getHitEntity() instanceof LivingEntity) {
-        turretState = TurretState.Targeting;
-        counter = 0;
-        lastTargetedEntity = ((LivingEntity)rayTraceResult.getHitEntity());
-        targetingCount = 100;
-      }
+      searchingState();
     } else if (turretState == TurretState.Targeting) {
-      rotateTurret();
+      targetingState();
+    }
 
-      Vector vector = eulerToVector(base_turret.getHeadPose());
-      RayTraceResult rayTraceResult = location.getWorld().rayTraceEntities(startPoint, vector, 10,entity -> !(entity instanceof ArmorStand));
-      if (rayTraceResult != null && rayTraceResult.getHitEntity() != null && rayTraceResult.getHitEntity() instanceof LivingEntity) {
-        lastTargetedEntity = ((LivingEntity)rayTraceResult.getHitEntity());
-        onShoot(vector, rayTraceResult.getHitPosition());
-        targetingCount = 100;
-        direction = 0;
+  }
+
+  private void targetingState() {
+    rotateTurret();
+
+    Vector vector = eulerToVector(base_turret.getHeadPose());
+    RayTraceResult rayTraceResult = location.getWorld().rayTraceEntities(startPoint, vector, 10,entity -> !(entity instanceof ArmorStand));
+    if (rayTraceResult != null && rayTraceResult.getHitEntity() != null && rayTraceResult.getHitEntity() instanceof LivingEntity) {
+      lastTargetedEntity = ((LivingEntity)rayTraceResult.getHitEntity());
+      onShoot(vector, rayTraceResult.getHitPosition());
+      targetingCount = 100;
+      directionRotate = 0;
+    } else {
+      counter = 0;
+      targetingCount--;
+      double angle = (Math.atan2(location.getX() - lastTargetedEntity.getLocation().getX(), location.getZ() - lastTargetedEntity.getLocation().getZ()));
+      angle = (-(angle / Math.PI) * 360.0d) / 2.0d + 180.0d;
+      angle = (angle - Math.toDegrees(base_turret.getHeadPose().getY()));
+
+      if (angle > 0.5) {
+        directionRotate = 2;
+      } else if (angle < -0.5){
+        directionRotate = -2;
       } else {
-        counter = 0;
-        targetingCount--;
-        double angle = (Math.atan2(location.getX() - lastTargetedEntity.getLocation().getX(), location.getZ() - lastTargetedEntity.getLocation().getZ()));
-        angle = (-(angle / Math.PI) * 360.0d) / 2.0d + 180.0d;
-        angle = (angle - Math.toDegrees(base_turret.getHeadPose().getY()));
-
-        if (angle > 0.5) {
-          direction = 2;
-        } else if (angle < -0.5){
-          direction = -2;
-        } else {
-          direction = 0;
-        }
-      }
-
-      if (targetingCount <= 0 || lastTargetedEntity.getHealth() <=0) {
-        turretState = TurretState.Searching;
-      }
-
-      if (base_turret.getHeadPose().getY() > Math.toRadians(arcAngle.getY())) {
-        direction = 0;
-      } else if (base_turret.getHeadPose().getY() < Math.toRadians(arcAngle.getX())) {
-        direction = 0;
+        directionRotate = 0;
       }
     }
 
+    if (targetingCount <= 0 || lastTargetedEntity.getHealth() <=0) {
+      turretState = TurretState.Searching;
+    }
+
+    if (base_turret.getHeadPose().getY() > Math.toRadians(arcAngle.getY())) {
+      directionRotate = 0;
+    } else if (base_turret.getHeadPose().getY() < Math.toRadians(arcAngle.getX())) {
+      directionRotate = 0;
+    }
+  }
+
+  private void searchingState() {
+    if (directionRotate == 0)
+      directionRotate = 1;
+    if (directionTilt == 0)
+      directionTilt = 1;
+
+    rotateTurret();
+
+    if (base_turret.getHeadPose().getY() > Math.toRadians(arcAngle.getY())) {
+      directionRotate = -1;
+      counter = 10;
+    } else if (base_turret.getHeadPose().getY() < Math.toRadians(arcAngle.getX())) {
+      directionRotate = 1;
+    }
+
+    if (gun_turret.getHeadPose().getX() > Math.toRadians(TILT_LIMIT + 5)) {
+      directionTilt = -0.3;
+    } else if (gun_turret.getHeadPose().getX() < Math.toRadians(-TILT_LIMIT)) {
+      directionTilt = 0.3;
+    }
+
+    //Ray
+    Vector vector = eulerToVector(base_turret.getHeadPose());
+
+    RayTraceResult rayTraceResult = location.getWorld().rayTraceEntities(startPoint, vector, 10,entity -> !(entity instanceof ArmorStand));
+    if (rayTraceResult != null && rayTraceResult.getHitEntity() != null && rayTraceResult.getHitEntity() instanceof LivingEntity) {
+      turretState = TurretState.Targeting;
+      counter = 0;
+      lastTargetedEntity = ((LivingEntity)rayTraceResult.getHitEntity());
+      targetingCount = 100;
+    }
   }
 
   private void onShoot(Vector turretVector, Vector hitPoint) {
@@ -210,9 +230,11 @@ public class ArrowTurret extends BaseMachine {
   }
 
   private void rotateTurret() {
-    EulerAngle turnAngle = base_turret.getHeadPose().add(0, Math.toRadians(direction), 0);
+    EulerAngle turnAngle = base_turret.getHeadPose().add(0, Math.toRadians(directionRotate), 0);
     base_turret.setHeadPose(turnAngle);
-    gun_turret.setHeadPose(turnAngle);
+    //Math.toRadians(directionTilt)
+    EulerAngle tiltAngle = gun_turret.getHeadPose().add(0,Math.toRadians(directionRotate), 0);
+    gun_turret.setHeadPose(tiltAngle);
   }
 
   @Override
