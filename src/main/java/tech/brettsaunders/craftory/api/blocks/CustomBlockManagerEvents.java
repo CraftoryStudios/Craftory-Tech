@@ -125,6 +125,7 @@ public class CustomBlockManagerEvents implements Listener {
     final Location location = e.getBlock().getLocation();
     if (currentCustomBlocks.containsKey(location)) {
       CustomBlock customBlock = currentCustomBlocks.get(location);
+      customBlock.blockBreak();
       //Return custom item
       final String blockName = currentCustomBlocks.get(
           location).blockName;

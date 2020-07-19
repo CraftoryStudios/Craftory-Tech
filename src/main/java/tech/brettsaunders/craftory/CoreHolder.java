@@ -37,6 +37,8 @@ public class CoreHolder {
     public static final String GOLD_MACERATOR = "GoldMacerator";
     public static final String DIAMOND_MACERATOR = "DiamondMacerator";
     public static final String EMERALD_MACERATOR = "EmeraldMacerator";
+    public static final String TURRET_PLATFORM = "TurretPlatform";
+
     public static final String BASIC_SOLAR_PANEL = "BasicSolarPanel";
     public static final String SOLAR_PANEL = "SolarPanel";
     public static final String COMPACTED_SOLAR_PANEL = "CompactedSolarPanel";
@@ -72,6 +74,13 @@ public class CoreHolder {
     public static final String DIAMOND_DUST = "diamond_dust";
     public static final String EMERALD_DUST = "emerald_dust";
 
+
+    public static final String BASE_TURRET = "base_turret";
+    public static final String GUN_TURRET = "gun_turret";
+    public static final String UPGRADE_CARD_EMERALD = "upgrade_card_emerald";
+    public static final String UPGRADE_CARD_DIAMOND = "upgrade_card_diamond";
+    public static final String UPGRADE_CARD_GOLD = "upgrade_card_gold";
+    public static final String UPGRADE_CARD_IRON = "upgrade_card_iron";
     /* World Items */
     public static final String WINDMILL = "windmill";
   }

@@ -81,7 +81,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
 
   @Override
   public void setupGUI() {
-    Inventory inventory = createInterfaceInventory(blockName,
+    Inventory inventory = createInterfaceInventory(displayName,
         Font.FURNACE_GUI.label + "");
     addGUIComponent(
         new GOneToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));
