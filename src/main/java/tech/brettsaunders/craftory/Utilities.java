@@ -38,6 +38,8 @@ import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.IronCell;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.WindGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.Magnetiser;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.DiamondElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
@@ -58,6 +60,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.Emera
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.GoldMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.IronMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.turret.ArrowTurret;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.MagnetisingTable;
 import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Logger;
@@ -242,6 +245,9 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.COMPACTED_SOLAR_PANEL, CompactedSolarPanel.class);
     customBlockFactory.registerCustomBlock(Blocks.SOLAR_ARRAY, SolarArray.class);
     customBlockFactory.registerCustomBlock(Blocks.GEOTHERMAL_GENERATOR, GeothermalGenerator.class);
+    customBlockFactory.registerCustomBlock(Blocks.WIND_GENERATOR, WindGenerator.class);
+    customBlockFactory.registerCustomBlock(Blocks.MAGNETISER, Magnetiser.class);
+    customBlockFactory.registerCustomBlock(Blocks.MAGNETISING_TABLE, MagnetisingTable.class);
   }
 
   static void registerBasicBlocks() {
@@ -274,6 +280,8 @@ public class Utilities {
     Craftory.tickManager.registerCustomBlockClass(CompactedSolarPanel.class);
     Craftory.tickManager.registerCustomBlockClass(SolarArray.class);
     Craftory.tickManager.registerCustomBlockClass(GeothermalGenerator.class);
+    Craftory.tickManager.registerCustomBlockClass(WindGenerator.class);
+    Craftory.tickManager.registerCustomBlockClass(Magnetiser.class);
   }
 
   static void done() {

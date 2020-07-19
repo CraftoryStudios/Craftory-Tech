@@ -26,89 +26,100 @@ public class RecipeManager implements Listener {
     Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
     ConfigurationSection recipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
     if (recipes == null) {
-      Logger.warn("Not Recipes found!");
-      return;
-    }
-    for (String recipe : recipes.getKeys(false)) {
-      String customItemsInSlots = "";
-      //Result
-      ItemStack result = CustomItemManager
-          .getCustomItem(recipes.getString(recipe + ".result.item"));
-      result.setAmount(recipes.getInt(recipe + ".result.amount"));
+      Logger.warn("No Crafting Recipes found!");
+    } else {
+      for (String recipe : recipes.getKeys(false)) {
+        String customItemsInSlots = "";
+        //Result
+        ItemStack result = CustomItemManager
+            .getCustomItem(recipes.getString(recipe + ".result.item"));
+        result.setAmount(recipes.getInt(recipe + ".result.amount"));
 
-      //Add ShapedRecipe
-      NamespacedKey namespacedKey = new NamespacedKey(Craftory.plugin, recipe);
-      ShapedRecipe shapedRecipe = null;
-      try {
-        shapedRecipe = new ShapedRecipe(namespacedKey, result);
-        ConfigurationSection sectionIn = recipes.getConfigurationSection(recipe + ".ingredients");
-        String[] recipeShape = new String[3];
-        int i = 0;
-        for (String row : recipes.getStringList(recipe + ".pattern")) {
-          recipeShape[i] = row;
-          String[] rowSlots = row.split("");
-          for (String slot : rowSlots) {
-            if (slot.equalsIgnoreCase("X")) {
-              customItemsInSlots = customItemsInSlots + "X";
-            } else if (CustomItemManager.getCustomItem(sectionIn.getString(slot)).getType()
-                != Material.AIR) {
-              customItemsInSlots = customItemsInSlots + "C";
+        //Add ShapedRecipe
+        NamespacedKey namespacedKey = new NamespacedKey(Craftory.plugin, recipe);
+        ShapedRecipe shapedRecipe = null;
+        try {
+          shapedRecipe = new ShapedRecipe(namespacedKey, result);
+          ConfigurationSection sectionIn = recipes.getConfigurationSection(recipe + ".ingredients");
+          String[] recipeShape = new String[3];
+          int i = 0;
+          for (String row : recipes.getStringList(recipe + ".pattern")) {
+            recipeShape[i] = row;
+            String[] rowSlots = row.split("");
+            for (String slot : rowSlots) {
+              if (slot.equalsIgnoreCase("X")) {
+                customItemsInSlots = customItemsInSlots + "X";
+              } else if (CustomItemManager.getCustomItem(sectionIn.getString(slot)).getType()
+                  != Material.AIR) {
+                customItemsInSlots = customItemsInSlots + "C";
+              } else {
+                customItemsInSlots = customItemsInSlots + "N";
+              }
+            }
+            i++;
+          }
+          shapedRecipe.shape(recipeShape[0], recipeShape[1], recipeShape[2]);
+
+          for (String ingredient : sectionIn.getKeys(false)) {
+            char key = ingredient.charAt(0);
+            if (CustomItemManager.getCustomItem(sectionIn.getString(ingredient)).getType()
+                == Material.AIR) {
+              Material material = Material.getMaterial(sectionIn.getString(ingredient));
+              shapedRecipe.setIngredient(key, material);
             } else {
-              customItemsInSlots = customItemsInSlots + "N";
+              ItemStack itemStack = CustomItemManager.getCustomItem(sectionIn.getString(ingredient));
+              shapedRecipe.setIngredient(key, itemStack.getType());
             }
           }
-          i++;
+        } catch (Exception e) {
+          Logger.error("THIS IS BROKE: " + recipe + "  " + result.getType().toString());
+          Logger.error(result + "");
+          Logger.error(recipes.getString(recipe + ".result.item"));
+          Logger.error("Amount: " + recipes.getInt(recipe + ".result.amount"));
         }
-        shapedRecipe.shape(recipeShape[0], recipeShape[1], recipeShape[2]);
 
-        for (String ingredient : sectionIn.getKeys(false)) {
-          char key = ingredient.charAt(0);
-          if (CustomItemManager.getCustomItem(sectionIn.getString(ingredient)).getType()
-              == Material.AIR) {
-            Material material = Material.getMaterial(sectionIn.getString(ingredient));
-            shapedRecipe.setIngredient(key, material);
-          } else {
-            ItemStack itemStack = CustomItemManager.getCustomItem(sectionIn.getString(ingredient));
-            shapedRecipe.setIngredient(key, itemStack.getType());
-          }
-        }
-      } catch (Exception e) {
-        Logger.error("THIS IS BROKE: " + recipe + "  " + result.getType().toString());
-        Logger.error(result + "");
-        Logger.error(recipes.getString(recipe + ".result.item"));
-        Logger.error("Amount: " + recipes.getInt(recipe + ".result.amount"));
+        Bukkit.getServer().addRecipe(shapedRecipe);
+        customRecipes.put(recipe, customItemsInSlots);
       }
-
-      Bukkit.getServer().addRecipe(shapedRecipe);
-      customRecipes.put(recipe, customItemsInSlots);
     }
+    HashMap<String, String> toAdd = new HashMap<>();
     //Furnace Recipes
     ConfigurationSection furnaceRecipes = Craftory.customRecipeConfig.getConfigurationSection("furnace_recipes");
     if (furnaceRecipes == null) {
       Logger.warn("No Furnace Recipes found!");
-      return;
+    } else {
+      customFurnaceRecipes = new HashMap<>();
+      for(String recipe: furnaceRecipes.getKeys(false)){
+        ItemStack result = CustomItemManager.getCustomItem(furnaceRecipes.getString(recipe+".result.name"));
+        result.setAmount(furnaceRecipes.getInt(recipe+".result.amount"));
+        customFurnaceRecipes.put(furnaceRecipes.getString(recipe+".input.name"),result);
+        toAdd.put(furnaceRecipes.getString(recipe+".input.name"), furnaceRecipes.getString(recipe+".result.name"));
+      }
+      RecipeUtils.addAllFurnaceRecipes(toAdd);
     }
-    customFurnaceRecipes = new HashMap<>();
-    HashMap<String, String> toAdd = new HashMap<>();
-    for(String recipe: furnaceRecipes.getKeys(false)){
-      ItemStack result = CustomItemManager.getCustomItem(furnaceRecipes.getString(recipe+".result.name"));
-      result.setAmount(furnaceRecipes.getInt(recipe+".result.amount"));
-      customFurnaceRecipes.put(furnaceRecipes.getString(recipe+".input.name"),result);
-      toAdd.put(furnaceRecipes.getString(recipe+".input.name"), furnaceRecipes.getString(recipe+".result.name"));
-    }
-    RecipeUtils.addAllFurnaceRecipes(toAdd);
-
     //Macerator Recipes
     ConfigurationSection maceratorRecipes = Craftory.customRecipeConfig.getConfigurationSection("macerator_recipes");
     if (maceratorRecipes == null) {
       Logger.warn("No Macerator Recipes found!");
-      return;
+    } else {
+      toAdd = new HashMap<>();
+      for(String recipe: maceratorRecipes.getKeys(false)){
+        toAdd.put(maceratorRecipes.getString(recipe+".input.name"), maceratorRecipes.getString(recipe+".result.name"));
+      }
+      RecipeUtils.addAllMaceratorRecipes(toAdd);
     }
-    toAdd = new HashMap<>();
-    for(String recipe: maceratorRecipes.getKeys(false)){
-      toAdd.put(maceratorRecipes.getString(recipe+".input.name"), maceratorRecipes.getString(recipe+".result.name"));
+
+    //Magnetiser Recipes
+    ConfigurationSection magnetiserRecipes = Craftory.customRecipeConfig.getConfigurationSection("magnetiser_recipes");
+    if (magnetiserRecipes == null) {
+      Logger.warn("No Magnetiser Recipes found!");
+    } else {
+      toAdd = new HashMap<>();
+      for(String recipe: magnetiserRecipes.getKeys(false)){
+        toAdd.put(magnetiserRecipes.getString(recipe+".input.name"), magnetiserRecipes.getString(recipe+".result.name"));
+      }
+      RecipeUtils.addAllMagnetiserRecipes(toAdd);
     }
-    RecipeUtils.addAllMaceratorRecipes(toAdd);
   }
 
   @EventHandler

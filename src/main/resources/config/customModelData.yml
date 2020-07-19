@@ -189,6 +189,13 @@ items:
     customModelID: 24
   GeothermalGenerator:
     customModelID: 26
+  WindGenerator:
+    customModelID: 27
+  Magnetiser:
+    customModelID: 28
+  MagnetisingTable:
+    customModelID: 29
+
   lava_0_b:
     customModelID: 70
   lava_1_b:
@@ -273,6 +280,8 @@ items:
     customModelID: 110
   lava_20_t:
     customModelID: 111
+  windmill:
+    customModelID: 128
   base_turret:
     customModelID: 129
   gun_turret:

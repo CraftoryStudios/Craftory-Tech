@@ -193,6 +193,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       if (event.isShiftClick()) {
         event.setCancelled(true);
         ItemStack sourceItemStack = event.getCurrentItem();
+        if(sourceItemStack==null) return;
         int amount = sourceItemStack.getAmount();
         for (Integer inputSlot : inputLocations) {
           ItemStack destinationItemStack = getInventory().getItem(inputSlot);

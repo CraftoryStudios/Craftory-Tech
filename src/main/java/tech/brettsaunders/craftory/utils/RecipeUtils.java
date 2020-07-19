@@ -44,6 +44,8 @@ public class RecipeUtils {
   private static final HashSet<CustomMachineRecipe> twoToOneRecipes = new HashSet<>();
   @Getter
   private static final HashMap<String,String > maceratorRecipes = new HashMap<>();
+  @Getter
+  private static final HashMap<String,String> magnetiserRecipes = new HashMap<>();
 
   static {
     Logger.debug("Extracting Recipes");
@@ -114,6 +116,10 @@ public class RecipeUtils {
 
   public static void addAllMaceratorRecipes(HashMap<String,String> recipes) {
     maceratorRecipes.putAll(recipes);
+  }
+
+  public static void addAllMagnetiserRecipes(HashMap<String,String> recipes) {
+    magnetiserRecipes.putAll(recipes);
   }
 
   public interface ICustomRecipe {

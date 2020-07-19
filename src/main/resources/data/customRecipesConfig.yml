@@ -449,3 +449,10 @@ macerator_recipes:
       name: steel_ingot
     result:
       name: steel_dust
+
+magnetiser_recipes:
+  magnetised_iron:
+    input:
+      name: IRON_INGOT
+    result:
+      name: magnetised_iron
