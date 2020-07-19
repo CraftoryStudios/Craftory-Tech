@@ -62,6 +62,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.IronM
 import tech.brettsaunders.craftory.tech.power.core.block.machine.turret.ArrowTurret;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.MagnetisingTable;
 import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
+import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -215,7 +216,7 @@ public class Utilities {
   }
 
   static void registerEvents() {
-
+    new ToolManager();
   }
 
   static void registerCustomBlocks() {

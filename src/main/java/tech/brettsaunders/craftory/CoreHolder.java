@@ -81,6 +81,16 @@ public class CoreHolder {
     public static final String UPGRADE_CARD_DIAMOND = "upgrade_card_diamond";
     public static final String UPGRADE_CARD_GOLD = "upgrade_card_gold";
     public static final String UPGRADE_CARD_IRON = "upgrade_card_iron";
+
+    /* Tools */
+    public static final String SICKLE_WOOD = "sickle_wood";
+    public static final String SICKLE_STONE = "sickle_stone";
+    public static final String SICKLE_IRON = "sickle_iron";
+    public static final String SICKLE_GOLD = "sickle_gold";
+    public static final String SICKLE_STEEL = "sickle_steel";
+    public static final String SICKLE_COPPER = "sickle_copper";
+    public static final String SICKLE_DIAMOND = "sickle_diamond";
+
     /* World Items */
     public static final String WINDMILL = "windmill";
   }

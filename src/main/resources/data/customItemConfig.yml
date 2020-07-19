@@ -13,6 +13,20 @@ items:
     itemModel: gold_ingot
   wrench:
     itemModel: paper
+  sickle_wood:
+    itemModel: paper
+  sickle_stone:
+    itemModel: paper
+  sickle_iron:
+    itemModel: paper
+  sickle_steel:
+    itemModel: paper
+  sickle_copper:
+    itemModel: paper
+  sickle_gold:
+    itemModel: paper
+  sickle_diamond:
+    itemModel: paper
   configurator:
     itemModel: paper
   steel_ingot:
