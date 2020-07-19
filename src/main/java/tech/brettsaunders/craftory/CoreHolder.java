@@ -43,6 +43,8 @@ public class CoreHolder {
     public static final String SOLAR_ARRAY = "SolarArray";
     public static final String GEOTHERMAL_GENERATOR = "GeothermalGenerator";
     public static final String WIND_GENERATOR = "WindGenerator";
+    public static final String MAGNETISER = "Magnetiser";
+    public static final String MAGNETISING_TABLE = "MagnetisingTable";
     /* Ores */
     public static final String COPPER_ORE = "CopperOre";
     public static final String CRYSTAL_ORE = "crystal";

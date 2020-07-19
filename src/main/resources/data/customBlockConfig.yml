@@ -215,3 +215,19 @@ blocks:
     EAST: false
     DOWN: true
     itemModel: stone
+  Magnetiser:
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: stone
+  MagnetisingTable:
+    WEST: false
+    UP: true
+    SOUTH: true
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: stone
