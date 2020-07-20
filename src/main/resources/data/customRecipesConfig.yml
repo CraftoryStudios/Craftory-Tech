@@ -429,6 +429,28 @@ recipes:
     result:
       item: SolarArray
       amount: 1
+  MagnetisingTable:
+    pattern:
+      - III
+      - PXP
+      - PXP
+    ingredients:
+      I: IRON_BLOCK
+      P: OAK_PLANKS
+    result:
+      item: MagnetisingTable
+      amount: 1
+  engineers_hammer:
+    pattern:
+      -XSS
+      -XHS
+      -HXX
+    ingredients:
+      S: steel_ingot
+      H: STICK
+    result:
+      item: engineers_hammer
+      amount: 1
 furnace_recipes:
   copper_ingot:
     input:
@@ -460,6 +482,7 @@ furnace_recipes:
     result:
       name: GOLD_INGOT
       amount: 1
+
 macerator_recipes:
   coal_dust:
     input:
