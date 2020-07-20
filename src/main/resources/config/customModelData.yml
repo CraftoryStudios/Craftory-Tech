@@ -195,6 +195,20 @@ items:
     customModelID: 28
   MagnetisingTable:
     customModelID: 29
+  sickle_wood:
+    customModelID: 131
+  sickle_stone:
+    customModelID: 132
+  sickle_iron:
+    customModelID: 133
+  sickle_steel:
+    customModelID: 134
+  sickle_copper:
+    customModelID: 135
+  sickle_gold:
+    customModelID: 136
+  sickle_diamond:
+    customModelID: 137
 
   lava_0_b:
     customModelID: 70
@@ -282,3 +296,47 @@ items:
     customModelID: 111
   windmill:
     customModelID: 128
+  base_turret:
+    customModelID: 129
+  gun_turret:
+    customModelID: 130
+  turret_E:
+    customModelID: 112
+  turret_E_E:
+    customModelID: 113
+  turret_N:
+    customModelID: 114
+  turret_N_E:
+    customModelID: 115
+  turret_NE:
+    customModelID: 116
+  turret_NE_E:
+    customModelID: 117
+  turret_NW:
+    customModelID: 118
+  turret_NW_E:
+    customModelID: 119
+  turret_NS:
+    customModelID: 120
+  turret_S_E:
+    customModelID: 121
+  turret_SE:
+    customModelID: 122
+  turret_SE_E:
+    customModelID: 123
+  turret_SW:
+    customModelID: 124
+  turret_SW_E:
+    customModelID: 125
+  turret_W:
+    customModelID: 126
+  turret_W_E:
+    customModelID: 127
+  upgrade_card_iron:
+    customModelID: 1
+  upgrade_card_gold:
+    customModelID: 1
+  upgrade_card_diamond:
+    customModelID: 1
+  upgrade_card_emerald:
+    customModelID: 1

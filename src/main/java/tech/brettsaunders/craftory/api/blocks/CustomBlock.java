@@ -36,4 +36,6 @@ public class CustomBlock {
 
   public void beforeSaveUpdate() {}
 
+  public void blockBreak() {}
+
 }

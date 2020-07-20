@@ -247,6 +247,83 @@ recipes:
     result:
       item: configurator
       amount: 1
+  sickle_wood:
+    pattern:
+      - XWX
+      - XXW
+      - SWX
+    ingredients:
+      W: OAK_PLANKS
+      S: STICK
+    result:
+      item: sickle_wood
+      amount: 1
+  sickle_stone:
+    pattern:
+      - XTX
+      - XXT
+      - STX
+    ingredients:
+      T: STONE
+      S: STICK
+    result:
+      item: sickle_stone
+      amount: 1
+  sickle_iron:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: IRON_INGOT
+      S: STICK
+    result:
+      item: sickle_iron
+      amount: 1
+  sickle_steel:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: steel_ingot
+      S: STICK
+    result:
+      item: sickle_steel
+      amount: 1
+  sickle_copper:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: copper_ingot
+      S: STICK
+    result:
+      item: sickle_copper
+      amount: 1
+  sickle_gold:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: GOLD_INGOT
+      S: STICK
+    result:
+      item: sickle_gold
+      amount: 1
+  sickle_diamond:
+    pattern:
+      - XDX
+      - XXD
+      - SDX
+    ingredients:
+      I: DIAMOND
+      S: STICK
+    result:
+      item: sickle_diamond
+      amount: 1
   magnetised_iron:
     pattern:
       - IXX
