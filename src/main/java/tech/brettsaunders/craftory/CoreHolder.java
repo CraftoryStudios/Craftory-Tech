@@ -56,7 +56,7 @@ public class CoreHolder {
     /* Power */
     public static final String WRENCH = "wrench";
     public static final String CONFIGURATOR = "configurator";
-
+    public static final String ENGINEERS_HAMMER = "engineers_hammer";
     /* Components */
     public static final String STEEL_INGOT = "steel_ingot";
     public static final String EMERALD_CORE = "emerald_core";

@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -13,6 +14,7 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -33,13 +35,13 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   protected int progress;
   private static final HashMap<String,String> recipes = RecipeUtils.getMagnetiserRecipes();
   private static final int processTime = 10;
+
   /* Construction */
   public MagnetisingTable(Location location) {
     super(location, Blocks.MAGNETISING_TABLE);
     Craftory.plugin.getServer().getPluginManager().registerEvents(this,Craftory.plugin);
     progress = 0;
     framePlaced = false;
-    Logger.info(recipes.toString());
   }
 
   /* Saving, Setup and Loading */
@@ -53,13 +55,15 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
     if(framePlaced) {
-      frameLocation = location.clone().add(0,1,0);
+      frameLocation = location.clone().add(0.5,1.03125,0.5);
+      frameLocation.setPitch(-90);
       itemFrame = (ItemFrame) location.getBlock();
     }
   }
 
   private boolean spawnFrame() {
-    frameLocation = location.clone().add(0,1,0);
+    frameLocation = location.clone().add(0.5,1.03125,0.5);
+    frameLocation.setPitch(-90);
     if(!frameLocation.getBlock().getType().equals(Material.AIR)) return false;
     itemFrame = location.getWorld().spawn(frameLocation,ItemFrame.class);
     itemFrame.setVisible(false);
@@ -73,11 +77,9 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     if(recipes.containsKey(itemName)){
       progress +=1;
       //TODO make particle appear to show hit success
-      Logger.info("hit");
-      if(progress!=processTime) {
+      if(progress==processTime) {
         itemFrame.setItem(CustomItemManager.getCustomItem(recipes.get(itemName)));
         //TODO process finish particle
-        Logger.info("fin");
         progress = 0;
       }
       return true;
@@ -88,10 +90,12 @@ public class MagnetisingTable extends CustomBlock implements Listener {
 
   @EventHandler
   public void itemFrameHit(EntityDamageByEntityEvent event) {
-    Logger.info("frame hit start");
-    if(event.getEntityType().equals(EntityType.ITEM_FRAME)) return;
-    Logger.info("is frame");
-    Logger.info(frameLocation.toString());
+    if(frameLocation==null) return;
+    if(!event.getDamager().getType().equals(EntityType.PLAYER) || !CustomItemManager.getCustomItemName(((Player) event.getDamager()).getItemInHand()).equals(
+        Items.ENGINEERS_HAMMER) ){
+      return;
+    }
+    if(!event.getEntityType().equals(EntityType.ITEM_FRAME)) return;
     if(!event.getEntity().getLocation().equals(frameLocation)) return;
     boolean cancel = frameHit();
     Logger.info(cancel+"");
@@ -100,7 +104,10 @@ public class MagnetisingTable extends CustomBlock implements Listener {
 
   @EventHandler
   public void frameBreak(HangingBreakEvent event) {
-      
+    if(!framePlaced) return;
+    if (event.getEntity().getLocation().equals(frameLocation)) {
+      event.setCancelled(true);
+    }
   }
 
   @EventHandler
@@ -109,9 +116,9 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     if(event.getClickedBlock()==null) return;
     if(event.getItem()==null) return;
     if(!event.getClickedBlock().getLocation().equals(location)) return;
-    if(itemFrame!=null) return;
-    if(spawnFrame()){
-      ItemStack item = event.getItem();
+    if(!(itemFrame==null || itemFrame.getItem().getType().equals(Material.AIR))) return;
+    if(itemFrame!=null || spawnFrame()){
+      ItemStack item = event.getItem().clone();
       event.getItem().setAmount(item.getAmount()-1);
       item.setAmount(1);
       itemFrame.setItem(item);
