@@ -120,6 +120,17 @@ public class CustomBlockManagerEvents implements Listener {
     }
   }
 
+  /* Item Based Listener */
+  @EventHandler
+  public void onDurabilityItemUse(PlayerInteractEvent e) {
+    if (e.getItem() == null) return;
+    Material type = e.getItem().getType();
+    if (type != Material.STONE_HOE) return;
+    if (!CustomItemManager.isCustomItem(e.getItem(), false)) return;
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    e.setCancelled(true);
+  }
+
   @EventHandler
   public void onBlockBreak(BlockBreakEvent e) {
     final Location location = e.getBlock().getLocation();

@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.tech.power.core.tools;
 
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -7,6 +8,9 @@ import org.bukkit.Tag;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -29,28 +33,58 @@ public class ToolManager implements Listener {
 
   @EventHandler
   public void onSickleUse(BlockBreakEvent event) {
-    if (CustomItemManager.matchCustomItemName(event.getPlayer().getInventory().getItemInMainHand(),
+    ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
+    if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_WOOD)) {
-      getPlantsInRange(event.getBlock().getLocation(),2);
-    } else if (CustomItemManager.matchCustomItemName(event.getPlayer().getInventory().getItemInMainHand(),
+      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),2));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_STONE)) {
-      getPlantsInRange(event.getBlock().getLocation(),4);
-    } else if (CustomItemManager.matchCustomItemName(event.getPlayer().getInventory().getItemInMainHand(),
+      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),4));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_IRON)) {
-      getPlantsInRange(event.getBlock().getLocation(),6);
-    } else if (CustomItemManager.matchCustomItemName(event.getPlayer().getInventory().getItemInMainHand(),
+      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),6));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_GOLD)) {
-      getPlantsInRange(event.getBlock().getLocation(),12);
-    } else if (CustomItemManager.matchCustomItemName(event.getPlayer().getInventory().getItemInMainHand(),
+      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),12));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_STEEL)) {
-      getPlantsInRange(event.getBlock().getLocation(),8);
-    } else if (CustomItemManager.matchCustomItemName(event.getPlayer().getInventory().getItemInMainHand(),
+      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),8));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_COPPER)) {
-      getPlantsInRange(event.getBlock().getLocation(),6);
-    } else if (CustomItemManager.matchCustomItemName(event.getPlayer().getInventory().getItemInMainHand(),
+      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),6));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_DIAMOND)) {
-      getPlantsInRange(event.getBlock().getLocation(),10);
+      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),10));
     }
+  }
+
+  private void decreaseDurability(ItemStack itemStack, int amount) {
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    if (itemMeta instanceof Damageable) {
+      NBTItem nbtItem = new NBTItem(itemStack);
+      if (nbtItem.hasKey("custom_max_durability")) {
+        int currentDurability = nbtItem.getInteger("custom_durability") - amount;
+        int maxCustom = nbtItem.getInteger("custom_max_durability");
+        int max = itemStack.getType().getMaxDurability();
+
+        int newDurability = calculateNewDurability(currentDurability, maxCustom, max);
+        ((Damageable) itemMeta).setDamage(newDurability);
+        itemStack.setItemMeta(itemMeta);
+      }
+
+    }
+  }
+
+  private int calculateNewDurability(int current, int customMax, int max) {
+    double durability = ((double)current / (double)customMax) * (double)max;
+    durability = Math.ceil(durability);
+    if (durability == 0 && current != 0) {
+      durability = 1;
+    }
+    if (durability == max && current < customMax) {
+      durability--;
+    }
+    return (int) (max - durability);
   }
 
   private int getPlantsInRange(Location startPoint, int range) {

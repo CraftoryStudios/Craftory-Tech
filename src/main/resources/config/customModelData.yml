@@ -196,19 +196,19 @@ items:
   MagnetisingTable:
     customModelID: 29
   sickle_wood:
-    customModelID: 131
+    customModelID: 1
   sickle_stone:
-    customModelID: 132
+    customModelID: 2
   sickle_iron:
-    customModelID: 133
+    customModelID: 3
   sickle_steel:
-    customModelID: 134
+    customModelID: 4
   sickle_copper:
-    customModelID: 135
+    customModelID: 5
   sickle_gold:
-    customModelID: 136
+    customModelID: 6
   sickle_diamond:
-    customModelID: 137
+    customModelID: 7
 
   lava_0_b:
     customModelID: 70

@@ -14,19 +14,40 @@ items:
   wrench:
     itemModel: paper
   sickle_wood:
-    itemModel: paper
+    itemModel: stone_hoe
+    durability: 59
+    attack_speed: 1.4
+    attack_damage: 3.5
   sickle_stone:
-    itemModel: paper
+    itemModel: stone_hoe
+    durability: 131
+    attack_speed: 1.4
+    attack_damage: 4.5
   sickle_iron:
-    itemModel: paper
+    itemModel: stone_hoe
+    durability: 250
+    attack_speed: 1.4
+    attack_damage: 5.5
   sickle_steel:
-    itemModel: paper
+    itemModel: stone_hoe
+    durability: 320
+    attack_speed: 1.4
+    attack_damage: 6
   sickle_copper:
-    itemModel: paper
+    itemModel: stone_hoe
+    durability: 200
+    attack_speed: 1.4
+    attack_damage: 4.5
   sickle_gold:
-    itemModel: paper
+    itemModel: stone_hoe
+    durability: 32
+    attack_speed: 1.4
+    attack_damage: 3.5
   sickle_diamond:
-    itemModel: paper
+    itemModel: stone_hoe
+    durability: 1561
+    attack_speed: 1.4
+    attack_damage: 6.5
   configurator:
     itemModel: paper
   steel_ingot:
@@ -81,8 +102,10 @@ items:
     hideItem: true
   base_turret:
     itemModel: paper
+    hideItem: true
   gun_turret:
     itemModel: paper
+    hideItem: true
   bar_0_b:
     itemModel: paper
     hideItem: true
