@@ -16,6 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -24,6 +25,7 @@ import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.WindGenerator;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 
 public class PoweredBlockEvents implements Listener {
@@ -113,6 +115,21 @@ public class PoweredBlockEvents implements Listener {
         }
       }
     }
+  }
+
+  @EventHandler
+  public void onRenewableClick(CustomBlockInteractEvent e) {
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+      return;
+    }
+    if (!CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WINDMILL) || !(e.getCustomBlock() instanceof WindGenerator)) {
+      return;
+    }
+    WindGenerator generator = (WindGenerator) e.getCustomBlock();
+    if(generator.isWheelPlaced()) return;
+    generator.setFacing(e.getBlockFace());
+    generator.placeItemIn(e.getItemStack().clone());
+    e.getItemStack().setAmount(e.getItemStack().getAmount()-1);
   }
 
   @EventHandler
