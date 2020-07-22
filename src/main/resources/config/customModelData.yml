@@ -17,6 +17,17 @@ items:
     customModelID: 62
   steel_ingot:
     customModelID: 1
+  iron_dust:
+    customModelID: 1
+  gold_dust:
+    customModelID: 1
+  diamond_dust:
+    customModelID: 1
+  emerald_dust:
+    customModelID: 1
+  copper_dust:
+    customModelID: 1
+
   light_off:
     customModelID: 63
   light_on:
@@ -340,3 +351,11 @@ items:
     customModelID: 1
   upgrade_card_emerald:
     customModelID: 1
+  BlockBreaker:
+    customModelID: 31
+  BlockBreaker_SOUTH:
+    customModelID: 33
+  BlockBreaker_WEST:
+    customModelID: 34
+  BlockBreaker_EAST:
+    customModelID: 32

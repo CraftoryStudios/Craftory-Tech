@@ -84,7 +84,9 @@ public class CustomItemManager {
             }
             CustomItem customItem = new CustomItem(itemID, material, key, displayName);
             itemIDCache.put(key, customItem);
-            itemNames.add(key);
+            if (!(block.contains("hideItem") && block.getBoolean("hideItem"))) {
+              itemNames.add(key);
+            }
           }
         }
       }

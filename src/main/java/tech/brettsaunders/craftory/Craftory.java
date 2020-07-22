@@ -50,6 +50,7 @@ public final class Craftory extends JavaPlugin {
     Utilities.createConfigs();
     Utilities.createDataPath();
     Utilities.getTranslations();
+    tickManager = new CustomBlockTickManager();
     customBlockFactory = new CustomBlockFactory();
     Utilities.pluginBanner();
     Utilities.checkVersion();
@@ -69,8 +70,6 @@ public final class Craftory extends JavaPlugin {
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
     customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
     CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
-    tickManager = new CustomBlockTickManager();
-    Utilities.registerBlocks();
     customBlockManager = new CustomBlockManager();
     customBlockFactory.registerStats();
     new WorldGenHandler();

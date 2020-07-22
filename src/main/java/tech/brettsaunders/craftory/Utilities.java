@@ -59,6 +59,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.Diamo
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.EmeraldMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.GoldMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.IronMacerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockBreaker;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.turret.ArrowTurret;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.MagnetisingTable;
 import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
@@ -221,68 +222,40 @@ public class Utilities {
 
   static void registerCustomBlocks() {
     CustomBlockFactory customBlockFactory = Craftory.customBlockFactory;
-    customBlockFactory.registerCustomBlock(Blocks.IRON_CELL, IronCell.class);
-    customBlockFactory.registerCustomBlock(Blocks.GOLD_CELL, GoldCell.class);
-    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_CELL, DiamondCell.class);
-    customBlockFactory.registerCustomBlock(Blocks.EMERALD_CELL, EmeraldCell.class);
-    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FURNACE, IronElectricFurnace.class);
-    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FURNACE, GoldElectricFurnace.class);
-    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FURNACE, DiamondElectricFurnace.class);
-    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FURNACE, EmeraldElectricFurnace.class);
-    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FOUNDRY, IronElectricFoundry.class);
-    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FOUNDRY, GoldElectricFoundry.class);
-    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FOUNDRY, DiamondElectricFoundry.class);
-    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FOUNDRY, EmeraldElectricFoundry.class);
-    customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class);
-    customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
-    customBlockFactory.registerCustomBlock(Blocks.POWER_CONNECTOR, PowerConnector.class);
-    customBlockFactory.registerCustomBlock(Blocks.IRON_MACERATOR, IronMacerator.class);
-    customBlockFactory.registerCustomBlock(Blocks.GOLD_MACERATOR, GoldMacerator.class);
-    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class);
-    customBlockFactory.registerCustomBlock(Blocks.EMERALD_MACERATOR, EmeraldMacerator.class);
-    customBlockFactory.registerCustomBlock(Blocks.TURRET_PLATFORM, ArrowTurret.class);
-    customBlockFactory.registerCustomBlock(Blocks.BASIC_SOLAR_PANEL, BasicSolarPanel.class);
-    customBlockFactory.registerCustomBlock(Blocks.SOLAR_PANEL, SolarPanel.class);
-    customBlockFactory.registerCustomBlock(Blocks.COMPACTED_SOLAR_PANEL, CompactedSolarPanel.class);
-    customBlockFactory.registerCustomBlock(Blocks.SOLAR_ARRAY, SolarArray.class);
-    customBlockFactory.registerCustomBlock(Blocks.GEOTHERMAL_GENERATOR, GeothermalGenerator.class);
-    customBlockFactory.registerCustomBlock(Blocks.WIND_GENERATOR, WindGenerator.class);
-    customBlockFactory.registerCustomBlock(Blocks.MAGNETISER, Magnetiser.class);
-    customBlockFactory.registerCustomBlock(Blocks.MAGNETISING_TABLE, MagnetisingTable.class);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_CELL, IronCell.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_CELL, GoldCell.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_CELL, DiamondCell.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_CELL, EmeraldCell.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FURNACE, IronElectricFurnace.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FURNACE, GoldElectricFurnace.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FURNACE, DiamondElectricFurnace.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FURNACE, EmeraldElectricFurnace.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FOUNDRY, IronElectricFoundry.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FOUNDRY, GoldElectricFoundry.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FOUNDRY, DiamondElectricFoundry.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FOUNDRY, EmeraldElectricFoundry.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.POWER_CONNECTOR, PowerConnector.class, false, false);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_MACERATOR, IronMacerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_MACERATOR, GoldMacerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_MACERATOR, EmeraldMacerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.TURRET_PLATFORM, ArrowTurret.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.BASIC_SOLAR_PANEL, BasicSolarPanel.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.SOLAR_PANEL, SolarPanel.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.COMPACTED_SOLAR_PANEL, CompactedSolarPanel.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.SOLAR_ARRAY, SolarArray.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.GEOTHERMAL_GENERATOR, GeothermalGenerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.WIND_GENERATOR, WindGenerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.MAGNETISER, Magnetiser.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.MAGNETISING_TABLE, MagnetisingTable.class, false, false);
+    customBlockFactory.registerCustomBlock(Blocks.BLOCK_BREAKER, BlockBreaker.class, true, true);
   }
 
   static void registerBasicBlocks() {
     basicBlockRegistry.put(Blocks.COPPER_ORE, BasicBlocks.COPPER_ORE);
     basicBlockRegistry.put(Blocks.CRYSTAL_ORE, BasicBlocks.CRYSTAL_ORE);
-  }
-
-  static void registerBlocks() {
-    Craftory.tickManager.registerCustomBlockClass(DiamondCell.class);
-    Craftory.tickManager.registerCustomBlockClass(EmeraldCell.class);
-    Craftory.tickManager.registerCustomBlockClass(GoldCell.class);
-    Craftory.tickManager.registerCustomBlockClass(IronCell.class);
-    Craftory.tickManager.registerCustomBlockClass(IronElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(GoldElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(DiamondElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(EmeraldElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(IronElectricFoundry.class);
-    Craftory.tickManager.registerCustomBlockClass(GoldElectricFoundry.class);
-    Craftory.tickManager.registerCustomBlockClass(DiamondElectricFoundry.class);
-    Craftory.tickManager.registerCustomBlockClass(EmeraldElectricFoundry.class);
-    Craftory.tickManager.registerCustomBlockClass(SolidFuelGenerator.class);
-    Craftory.tickManager.registerCustomBlockClass(IronFoundry.class);
-    Craftory.tickManager.registerCustomBlockClass(IronMacerator.class);
-    Craftory.tickManager.registerCustomBlockClass(GoldMacerator.class);
-    Craftory.tickManager.registerCustomBlockClass(DiamondMacerator.class);
-    Craftory.tickManager.registerCustomBlockClass(EmeraldMacerator.class);
-    Craftory.tickManager.registerCustomBlockClass(ArrowTurret.class);
-    Craftory.tickManager.registerCustomBlockClass(BasicSolarPanel.class);
-    Craftory.tickManager.registerCustomBlockClass(SolarPanel.class);
-    Craftory.tickManager.registerCustomBlockClass(CompactedSolarPanel.class);
-    Craftory.tickManager.registerCustomBlockClass(SolarArray.class);
-    Craftory.tickManager.registerCustomBlockClass(GeothermalGenerator.class);
-    Craftory.tickManager.registerCustomBlockClass(WindGenerator.class);
-    Craftory.tickManager.registerCustomBlockClass(Magnetiser.class);
   }
 
   static void done() {

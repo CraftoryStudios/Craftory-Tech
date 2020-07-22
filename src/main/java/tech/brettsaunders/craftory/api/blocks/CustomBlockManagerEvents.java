@@ -85,10 +85,10 @@ public class CustomBlockManagerEvents implements Listener {
     if (!e.isCancelled()) {
       //If Basic Block
       if (Utilities.getBasicBlockRegistry().containsKey(customBlockItemName)) {
-        customBlockManager.getCustomBasicBlockOfItem(customBlockItemName, e.getBlockPlaced());
+        customBlockManager.placeBasicCustomBlock(customBlockItemName, e.getBlockPlaced());
       } else {
         CustomBlock customBlock = customBlockManager
-            .getCustomBlockOfItem(customBlockItemName, e.getBlockPlaced());
+            .placeCustomBlock(customBlockItemName, e.getBlockPlaced(), e.getPlayer().getFacing());
         CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
             e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
         Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
@@ -214,7 +214,7 @@ public class CustomBlockManagerEvents implements Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onPistonExtend(BlockPistonExtendEvent e) {
     e.getBlocks().forEach((block -> {
       if (currentCustomBlocks.containsKey(block.getLocation())) {
@@ -224,7 +224,7 @@ public class CustomBlockManagerEvents implements Listener {
     }));
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onPistonRetract(BlockPistonRetractEvent e) {
     e.getBlocks().forEach(block -> {
       if (currentCustomBlocks.containsKey(block.getLocation())) {

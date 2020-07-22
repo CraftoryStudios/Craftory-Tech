@@ -1,5 +1,6 @@
 package tech.brettsaunders.craftory.api.blocks;
 
+import static tech.brettsaunders.craftory.Craftory.customBlockManager;
 import static tech.brettsaunders.craftory.Utilities.getChunkID;
 import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 import static tech.brettsaunders.craftory.Utilities.getLocationID;
@@ -11,7 +12,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,7 +24,12 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.api.blocks.basicBlocks.BasicBlocks;
+import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -60,19 +70,22 @@ public class CustomBlockManager {
     return currentCustomBlocks.get(location);
   }
 
-  public CustomBlock getCustomBlockOfItem(String customBlockItemName, Block block) {
-    createCustomBlock(customBlockItemName, block);
-    CustomBlock customBlock = Craftory.customBlockFactory.create(customBlockItemName, block.getLocation());
+  public CustomBlock placeCustomBlock(String customBlockItemName, Block block, BlockFace direction) {
+    CustomBlock customBlock = Craftory.customBlockFactory.create(customBlockItemName, block.getLocation(), direction);
+    if (customBlock.getDirection() != BlockFace.NORTH) {
+      customBlockItemName = customBlockItemName + "_" + customBlock.getDirection().name();
+    }
+    generateCustomBlock(customBlockItemName, block);
     putActiveCustomBlock(customBlock);
     Craftory.tickManager.addTickingBlock(customBlock);
     return customBlock;
   }
 
-  public void getCustomBasicBlockOfItem(String customBlockItemName, Block block) {
-    createCustomBlock(customBlockItemName, block);
+  public void placeBasicCustomBlock(String customBlockItemName, Block block) {
+    generateCustomBlock(customBlockItemName, block);
   }
 
-  private void createCustomBlock(String customBlockItemName, Block block) {
+  private void generateCustomBlock(String customBlockItemName, Block block) {
     CustomBlockData data = customBlockDataHashMap.get(customBlockItemName);
     block.setType(Material.BROWN_MUSHROOM_BLOCK);
 
@@ -134,6 +147,38 @@ public class CustomBlockManager {
   }
 
   /* Internal Methods */
+
+  public Optional<ItemStack> breakCustomBlock(Location location) {
+    if (currentCustomBlocks.containsKey(location)) {
+      CustomBlock customBlock = currentCustomBlocks.get(location);
+      customBlock.blockBreak();
+      //Return custom item
+      final String blockName = currentCustomBlocks.get(
+          location).blockName;
+      CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(
+          location, blockName,customBlock );
+      customBlockManager.removeCustomBlock(customBlock);
+      Craftory.tickManager.removeTickingBlock(customBlock);
+      Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
+      location.getBlock().setType(Material.AIR);
+      return Optional.of(CustomItemManager.getCustomItem(blockName));
+      //If Basic Block
+    } else if (location.getBlock().getType() == Material.BROWN_MUSHROOM_BLOCK) {
+      BlockData blockData = location.getBlock().getBlockData();
+      MultipleFacing multipleFacing = (MultipleFacing) blockData;
+      for (Entry<String, BasicBlocks> entry : Utilities.getBasicBlockRegistry().entrySet()) {
+        String name = entry.getKey();
+        BasicBlocks placement = entry.getValue();
+        Set<BlockFace> blockFaces = multipleFacing.getFaces();
+        Set<BlockFace> compareFaces = placement.getAllowedFaces();
+        if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces)) {
+          location.getBlock().setType(Material.AIR);
+          return Optional.of(CustomItemManager.getCustomItem(name));
+        }
+      }
+    }
+    return Optional.empty();
+  }
 
   public void removeCustomBlock(CustomBlock block) {
     removeIfLastActiveChunk(block, false);

@@ -242,3 +242,38 @@ blocks:
     EAST: false
     DOWN: true
     itemModel: stone
+  BlockBreaker:
+    WEST: true
+    UP: true
+    SOUTH: true
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: stone
+  BlockBreaker_SOUTH:
+    WEST: false
+    UP: false
+    SOUTH: false
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true
+  BlockBreaker_WEST:
+    WEST: true
+    UP: false
+    SOUTH: false
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true
+  BlockBreaker_EAST:
+    WEST: false
+    UP: true
+    SOUTH: false
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true

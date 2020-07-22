@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.persistence.Persistent;
 
@@ -20,11 +21,15 @@ public class CustomBlock {
   @Setter
   @Persistent
   protected Location location;
+  @Persistent
+  @Setter
+  protected BlockFace direction;
 
   public CustomBlock(Location location, String blockName) {
     this.location = location;
     this.blockName = blockName;
     this.displayName = Utilities.langProperties.getProperty(blockName);
+    this.direction = BlockFace.NORTH;
   }
 
   public void afterLoadUpdate() {
@@ -32,6 +37,8 @@ public class CustomBlock {
     if (Strings.isNullOrEmpty(displayName)) {
       displayName = Utilities.langProperties.getProperty(blockName);
     }
+
+    if (direction == null) direction = BlockFace.NORTH;
   }
 
   public void beforeSaveUpdate() {}
