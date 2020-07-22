@@ -78,6 +78,11 @@ public class WindGenerator extends BaseRenewableGenerator{
     }
   }
 
+  public void placeItemIn(ItemStack itemStack) {
+    if(wheelPlaced) return;
+    itemStack.setAmount(1);
+    inventoryInterface.setItem(SLOT,itemStack);
+  }
   @Override
   protected boolean canStart() {//e
     ItemStack itemStack = inventoryInterface.getItem(SLOT);
@@ -95,7 +100,22 @@ public class WindGenerator extends BaseRenewableGenerator{
 
   @Override
   protected boolean placeWheel(Location loc) {
-    wheel = (ArmorStand) loc.getWorld().spawnEntity(loc.clone().add(0.5,-0.95,0.7), EntityType.ARMOR_STAND);
+    Location spawnLoc = loc.clone();
+    switch (facing) {
+      case NORTH:
+        spawnLoc.add(0.5,-0.95,0.7);
+        break;
+      case EAST:
+        spawnLoc.add(0.7,-0.95,0.5);
+        break;
+      case SOUTH:
+        spawnLoc.add(0.5,-0.95,0.7);
+        break;
+      case WEST:
+        spawnLoc.add(-0.7,-0.95,-0.5);
+        break;
+    }
+    wheel = (ArmorStand) loc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
     wheel.setArms(false);
     wheel.setBasePlate(false);
     wheel.setVisible(false);
@@ -110,13 +130,13 @@ public class WindGenerator extends BaseRenewableGenerator{
         wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
         break;
       case EAST:
-        wheel.setHeadPose(new EulerAngle(0, 0, 0));
+        wheel.setHeadPose(new EulerAngle(Math.toRadians(180), Math.toRadians(90), 0));
         break;
       case SOUTH:
-        wheel.setHeadPose(new EulerAngle(0, 0, 0));
+        wheel.setHeadPose(new EulerAngle(Math.toRadians(-90), Math.toRadians(-180), 0));
         break;
       case WEST:
-        wheel.setHeadPose(new EulerAngle(0, 0, 0));
+        wheel.setHeadPose(new EulerAngle(Math.toRadians(-180), Math.toRadians(-90), 0));
         break;
     }
     return true;

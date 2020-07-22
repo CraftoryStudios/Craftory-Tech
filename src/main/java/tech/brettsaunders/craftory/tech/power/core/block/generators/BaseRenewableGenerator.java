@@ -90,7 +90,7 @@ public abstract class BaseRenewableGenerator extends BaseGenerator {
   @Ticking(ticks=600)
   public abstract void updateEfficiency();
 
-  protected boolean setFacing(BlockFace face) {
+  public boolean setFacing(BlockFace face) {
     if(validFaces.contains(face)){
       facing = face;
       Location loc = location.clone();
