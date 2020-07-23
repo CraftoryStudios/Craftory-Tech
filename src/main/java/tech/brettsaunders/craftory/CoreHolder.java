@@ -106,6 +106,7 @@ public class CoreHolder {
 
     /* World Items */
     public static final String WINDMILL = "windmill";
+    public static final String WATER_WHEEL = "waterwheel";
   }
 
   public static enum FLUIDS {

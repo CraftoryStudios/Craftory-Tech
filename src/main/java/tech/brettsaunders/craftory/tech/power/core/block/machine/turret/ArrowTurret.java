@@ -32,6 +32,7 @@ import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTurretConfig;
+import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.Pair;
 
 public class ArrowTurret extends BaseMachine {
@@ -149,22 +150,35 @@ public class ArrowTurret extends BaseMachine {
     rotateTurret();
 
     Vector vector = eulerToVector(base_turret.getHeadPose());
-    RayTraceResult rayTraceResult = location.getWorld().rayTraceEntities(startPoint, vector, 10,entity -> !(entity instanceof ArmorStand));
-    if (rayTraceResult != null && rayTraceResult.getHitEntity() != null && rayTraceResult.getHitEntity() instanceof LivingEntity) {
-      lastTargetedEntity = ((LivingEntity)rayTraceResult.getHitEntity());
-      onShoot(vector, rayTraceResult.getHitPosition());
-      targetingCount = 100;
-      directionRotate = 0;
-    } else {
+    RayTraceResult rayTraceResult = location.getWorld().rayTraceEntities(startPoint, vector, 10,entity -> !(entity instanceof ArmorStand) && entity instanceof LivingEntity);
+    RayTraceResult rayTraceResultUp = location.getWorld().rayTraceEntities(startPoint, vector.clone(), 10,entity -> !(entity instanceof ArmorStand) && entity instanceof LivingEntity);
+    RayTraceResult rayTraceResultDown = location.getWorld().rayTraceEntities(startPoint, vector, 10,entity -> !(entity instanceof ArmorStand) && entity instanceof LivingEntity);
+      if (rayTraceResult != null && rayTraceResult.getHitEntity() != null) {
+        lastTargetedEntity = ((LivingEntity) rayTraceResult.getHitEntity());
+        onShoot(vector, rayTraceResult.getHitPosition());
+        targetingCount = 100;
+        directionRotate = 0;
+      } else if (rayTraceResultUp != null && rayTraceResultUp.getHitEntity() != null) {
+        lastTargetedEntity = ((LivingEntity) rayTraceResultUp.getHitEntity());
+        onShoot(vector, rayTraceResultUp.getHitPosition());
+        targetingCount = 100;
+        directionRotate = 0;
+      } else if (rayTraceResultDown != null && rayTraceResultDown.getHitEntity() != null) {
+        lastTargetedEntity = ((LivingEntity) rayTraceResultDown.getHitEntity());
+        onShoot(vector, rayTraceResultDown.getHitPosition());
+        targetingCount = 100;
+        directionRotate = 0;
+      } else {
       counter = 0;
       targetingCount--;
       double angle = (Math.atan2(location.getX() - lastTargetedEntity.getLocation().getX(), location.getZ() - lastTargetedEntity.getLocation().getZ()));
       angle = (-(angle / Math.PI) * 360.0d) / 2.0d + 180.0d;
-      angle = (angle - Math.toDegrees(base_turret.getHeadPose().getY()));
 
-      if (angle > 0.5) {
+      Logger.info(angle+"");
+
+      if (angle > 0.5 && angle <= 180) {
         directionRotate = 2;
-      } else if (angle < -0.5){
+      } else if (angle < 359.5 && angle > 180){
         directionRotate = -2;
       } else {
         directionRotate = 0;
@@ -175,9 +189,9 @@ public class ArrowTurret extends BaseMachine {
       turretState = TurretState.Searching;
     }
 
-    if (base_turret.getHeadPose().getY() > Math.toRadians(arcAngle.getY())) {
+    if (base_turret.getHeadPose().getY() > Math.toRadians(arcAngle.getY()) && directionRotate != -2) {
       directionRotate = 0;
-    } else if (base_turret.getHeadPose().getY() < Math.toRadians(arcAngle.getX())) {
+    } else if (base_turret.getHeadPose().getY() < Math.toRadians(arcAngle.getX()) && directionRotate != 2) {
       directionRotate = 0;
     }
   }

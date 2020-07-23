@@ -76,6 +76,8 @@ items:
     itemModel: orange_dye
   windmill:
     itemModel: paper
+  waterwheel:
+    itemModel: paper
   light_off:
     itemModel: paper
     hideItem: true

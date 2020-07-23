@@ -311,6 +311,8 @@ items:
     customModelID: 129
   gun_turret:
     customModelID: 130
+  waterwheel:
+    customModelID: 131
   turret_E:
     customModelID: 112
   turret_E_E:
