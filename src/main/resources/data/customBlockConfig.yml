@@ -277,3 +277,38 @@ blocks:
     DOWN: true
     itemModel: stone
     hideItem: true
+  BlockPlacer:
+    WEST: true
+    UP: true
+    SOUTH: false
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+  BlockPlacer_SOUTH:
+    WEST: false
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true
+  BlockPlacer_WEST:
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true
+  BlockPlacer_EAST:
+    WEST: false
+    UP: true
+    SOUTH: true
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true

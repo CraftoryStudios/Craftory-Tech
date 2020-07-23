@@ -359,3 +359,11 @@ items:
     customModelID: 34
   BlockBreaker_EAST:
     customModelID: 32
+  BlockPlacer:
+    customModelID: 35
+  BlockPlacer_SOUTH:
+    customModelID: 37
+  BlockPlacer_WEST:
+    customModelID: 38
+  BlockPlacer_EAST:
+    customModelID: 36

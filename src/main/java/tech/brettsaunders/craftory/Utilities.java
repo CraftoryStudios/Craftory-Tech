@@ -70,6 +70,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.Emera
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.GoldMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.IronMacerator;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockBreaker;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockPlacer;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.turret.ArrowTurret;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.MagnetisingTable;
 import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
@@ -261,6 +262,7 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.MAGNETISER, Magnetiser.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.MAGNETISING_TABLE, MagnetisingTable.class, false, false);
     customBlockFactory.registerCustomBlock(Blocks.BLOCK_BREAKER, BlockBreaker.class, true, true);
+    customBlockFactory.registerCustomBlock(Blocks.BLOCK_PLACER, BlockPlacer.class, true, true);
   }
 
   static void registerBasicBlocks() {

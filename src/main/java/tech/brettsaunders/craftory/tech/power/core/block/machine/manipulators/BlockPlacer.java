@@ -14,60 +14,51 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Optional;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
-public class BlockBreaker extends BaseMachine {
+public class BlockPlacer extends BaseMachine implements IHopperInteract {
   private static final byte C_LEVEL = 0;
   private static final byte MAX_RECEIVE = 120;
   private static final int SLOT = 22;
 
   private static final int ENERGY_REQUIRED = 100;
-  private Location breakLoc;
-  private Location opposite;
+  private Location placeLoc;
   private int lastRedstoneStrength = 0;
 
-  private Optional<Inventory> outputInventory;
-
-  public BlockBreaker(Location location) {
-    super(location, Blocks.BLOCK_BREAKER, C_LEVEL, MAX_RECEIVE);
+  public BlockPlacer(Location location) {
+    super(location, Blocks.BLOCK_PLACER, C_LEVEL, MAX_RECEIVE);
+    inputSlots = new ArrayList<>();
+    inputSlots.add(new ItemStack(Material.AIR));
     init();
     energyStorage = new EnergyStorage(40000);
-    outputInventory = Optional.empty();
   }
 
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
-    breakLoc = location.getBlock().getRelative(direction).getLocation();
-    opposite = location.getBlock().getRelative(direction.getOppositeFace()).getLocation();
-    setOutputInventory(opposite.getBlock());
+    placeLoc = location.getBlock().getRelative(direction).getLocation();
   }
 
-  public BlockBreaker() {
+  public BlockPlacer() {
     super();
     init();
-    outputInventory = Optional.empty();
   }
 
   private void init() {
-    outputLocations = new ArrayList<>();
-    outputLocations.add(0,SLOT);
+    inputLocations = new ArrayList<>();
+    inputLocations.add(0,SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
   }
 
@@ -78,31 +69,9 @@ public class BlockBreaker extends BaseMachine {
 
   @Override
   public void setupGUI() {
-    Inventory inventory = createInterfaceInventory(displayName, Font.BLANK.label + "");
+    Inventory inventory = createInterfaceInventory(displayName, Font.PLACER.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
     this.inventoryInterface = inventory;
-  }
-  @EventHandler
-  public void onChestPlace(BlockPlaceEvent e) {
-    final Block blockPlaced = e.getBlockPlaced();
-    if (!blockPlaced.getLocation().equals(opposite)) return;
-    setOutputInventory(blockPlaced);
-  }
-
-  private void setOutputInventory(Block block) {
-    if(block.getState() instanceof InventoryHolder) {
-      InventoryHolder ih = (InventoryHolder) block.getState();
-      outputInventory = Optional.of(ih.getInventory());
-    }
-  }
-
-  @EventHandler
-  public void onChestRemove(BlockBreakEvent e) {
-    final Block block = e.getBlock();
-    if (!block.getLocation().equals(opposite)) return;
-    if (outputInventory.isPresent()) {
-      outputInventory= Optional.empty();
-    }
   }
 
   @EventHandler
@@ -112,32 +81,16 @@ public class BlockBreaker extends BaseMachine {
       lastRedstoneStrength = e.getBlock().getBlockPower();
       return;
     } else if (e.getBlock().getBlockPower() > 0 && checkPowerRequirement()) {
-      if (breakLoc.getBlock().isEmpty()) {
+      final ItemStack item = inventoryInterface.getItem(SLOT);
+      if (item.getType() != Material.AIR) {
         energyStorage.modifyEnergyStored(-ENERGY_REQUIRED / 10);
       } else {
-        Block block = breakLoc.getBlock();
-        if (Craftory.customBlockManager.isCustomBlock(breakLoc)) {
-          Optional<ItemStack> itemStack = Craftory.customBlockManager.breakCustomBlock(breakLoc);
-          itemStack.ifPresent(itemStack1 -> dropItem(itemStack1));
-        } else {
-          block.getDrops().forEach(this::dropItem);
-          block.setType(Material.AIR);
-        }
+        placeLoc.getBlock().setType(item.getType());
+        item.setAmount(item.getAmount() - 1);
         energyStorage.modifyEnergyStored(-ENERGY_REQUIRED);
       }
     }
     lastRedstoneStrength = e.getBlock().getBlockPower();
-  }
-
-  private void dropItem(ItemStack itemStack) {
-    if (outputInventory.isPresent()) {
-      HashMap<Integer,ItemStack> result = outputInventory.get().addItem(itemStack);
-      if (result.size() > 0) {
-        result.forEach((i,item) -> location.getWorld().dropItemNaturally(opposite,item));
-      }
-    } else {
-      location.getWorld().dropItem(opposite, itemStack);
-    }
   }
 
   private boolean checkPowerRequirement() {
@@ -160,5 +113,31 @@ public class BlockBreaker extends BaseMachine {
   @Override
   protected void updateSlots() {
 
+  }
+
+  protected static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
+    {
+      put(BlockFace.NORTH, SLOT);
+      put(BlockFace.EAST, SLOT);
+      put(BlockFace.SOUTH, SLOT);
+      put(BlockFace.WEST, SLOT);
+      put(BlockFace.UP, SLOT);
+    }
+  };
+
+  protected static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
+    {
+      put(BlockFace.DOWN, SLOT);
+    }
+  };
+
+  @Override
+  public HashMap<BlockFace, Integer> getInputFaces() {
+    return inputFaces;
+  }
+
+  @Override
+  public HashMap<BlockFace, Integer> getOutputFaces() {
+    return outputFaces;
   }
 }

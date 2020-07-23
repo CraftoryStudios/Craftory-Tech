@@ -59,6 +59,7 @@ public class CoreHolder {
     public static final String MAGNETISING_TABLE = "MagnetisingTable";
 
     public static final String BLOCK_BREAKER = "BlockBreaker";
+    public static final String BLOCK_PLACER = "BlockPlacer";
     /* Ores */
     public static final String COPPER_ORE = "CopperOre";
     public static final String CRYSTAL_ORE = "crystal";
