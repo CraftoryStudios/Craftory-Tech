@@ -127,16 +127,6 @@ blocks:
     EAST: false
     DOWN: false
     itemModel: stone
-  TurretPlatform:
-    WEST: false
-    UP: true
-    SOUTH: false
-    NORTH: true
-    EAST: true
-    DOWN: false
-    itemID: 25
-    itemModel: stone
-
 
   CopperOre:
     WEST: true

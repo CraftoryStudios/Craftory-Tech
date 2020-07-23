@@ -102,12 +102,6 @@ items:
   output_green_alt:
     itemModel: paper
     hideItem: true
-  base_turret:
-    itemModel: paper
-    hideItem: true
-  gun_turret:
-    itemModel: paper
-    hideItem: true
   bar_0_b:
     itemModel: paper
     hideItem: true
@@ -388,54 +382,5 @@ items:
     itemModel: paper
     hideItem: true
   lava_20_t:
-    itemModel: paper
-    hideItem: true
-
-  turret_E:
-    itemModel: paper
-    hideItem: true
-  turret_E_E:
-    itemModel: paper
-    hideItem: true
-  turret_N:
-    itemModel: paper
-    hideItem: true
-  turret_N_E:
-    itemModel: paper
-    hideItem: true
-  turret_NE:
-    itemModel: paper
-    hideItem: true
-  turret_NE_E:
-    itemModel: paper
-    hideItem: true
-  turret_NW:
-    itemModel: paper
-    hideItem: true
-  turret_NW_E:
-    itemModel: paper
-    hideItem: true
-  turret_NS:
-    itemModel: paper
-    hideItem: true
-  turret_S_E:
-    itemModel: paper
-    hideItem: true
-  turret_SE:
-    itemModel: paper
-    hideItem: true
-  turret_SE_E:
-    itemModel: paper
-    hideItem: true
-  turret_SW:
-    itemModel: paper
-    hideItem: true
-  turret_SW_E:
-    itemModel: paper
-    hideItem: true
-  turret_W:
-    itemModel: paper
-    hideItem: true
-  turret_W_E:
     itemModel: paper
     hideItem: true
