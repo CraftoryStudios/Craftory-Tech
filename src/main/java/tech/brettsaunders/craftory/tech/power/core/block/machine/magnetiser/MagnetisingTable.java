@@ -13,6 +13,7 @@ package tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser;
 import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -86,10 +87,10 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     String itemName = CustomItemManager.getCustomItemName(itemFrame.getItem());
     if(recipes.containsKey(itemName)){
       progress +=1;
-      //TODO make particle appear to show hit success
+      frameLocation.getWorld().spawnParticle(Particle.CRIT_MAGIC, frameLocation, 1);
       if(progress==processTime) {
         itemFrame.setItem(CustomItemManager.getCustomItem(recipes.get(itemName)));
-        //TODO process finish particle
+        frameLocation.getWorld().spawnParticle(Particle.SMOKE_NORMAL, frameLocation, 1);
         progress = 0;
       }
       return true;
@@ -101,10 +102,10 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   @EventHandler
   public void itemFrameHit(EntityDamageByEntityEvent event) {
     if(frameLocation==null) return;
-    if(!event.getDamager().getType().equals(EntityType.PLAYER) || !CustomItemManager.getCustomItemName(((Player) event.getDamager()).getItemInHand()).equals(
-        Items.ENGINEERS_HAMMER) ){
-      return;
-    }
+    if(!(event.getDamager().getType().equals(EntityType.PLAYER))) return;
+    ItemStack itemStack = ((Player)event.getDamager()).getInventory().getItemInMainHand();
+    if(itemStack == null || itemStack.getType() == Material.AIR) return;
+    if(!CustomItemManager.getCustomItemName(itemStack).equals(Items.ENGINEERS_HAMMER)) return;
     if(!event.getEntityType().equals(EntityType.ITEM_FRAME)) return;
     if(!event.getEntity().getLocation().equals(frameLocation)) return;
     boolean cancel = frameHit();
