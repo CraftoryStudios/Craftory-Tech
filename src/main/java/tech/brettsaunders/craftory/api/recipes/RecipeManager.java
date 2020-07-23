@@ -81,6 +81,9 @@ public class RecipeManager implements Listener {
               shapedRecipe.setIngredient(key, itemStack.getType());
             }
           }
+
+          Bukkit.getServer().addRecipe(shapedRecipe);
+          customRecipes.put(recipe, customItemsInSlots);
         } catch (Exception e) {
           Logger.error("THIS IS BROKE: " + recipe + "  " + result.getType().toString());
           Logger.error(result + "");
@@ -88,8 +91,7 @@ public class RecipeManager implements Listener {
           Logger.error("Amount: " + recipes.getInt(recipe + ".result.amount"));
         }
 
-        Bukkit.getServer().addRecipe(shapedRecipe);
-        customRecipes.put(recipe, customItemsInSlots);
+
       }
     }
     HashMap<String, String> toAdd = new HashMap<>();

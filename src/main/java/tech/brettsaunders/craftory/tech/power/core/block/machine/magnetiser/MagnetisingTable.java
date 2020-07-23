@@ -29,6 +29,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.Persistent;
+import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
@@ -95,21 +96,27 @@ public class MagnetisingTable extends CustomBlock implements Listener {
       return true;
     }
     Logger.info(itemName);
+    Logger.info(recipes.toString());
     return false;
   }
 
   @EventHandler
   public void itemFrameHit(EntityDamageByEntityEvent event) {
     if(frameLocation==null) return;
-    if(!event.getDamager().getType().equals(EntityType.PLAYER) || !CustomItemManager.getCustomItemName(((Player) event.getDamager()).getItemInHand()).equals(
+    ItemStack hand = ((Player) event.getDamager()).getItemInHand();
+    if(hand==null||hand.getType().equals(Material.AIR)) return;
+    if(!event.getDamager().getType().equals(EntityType.PLAYER) || !CustomItemManager.getCustomItemName(hand).equals(
         Items.ENGINEERS_HAMMER) ){
       return;
     }
     if(!event.getEntityType().equals(EntityType.ITEM_FRAME)) return;
     if(!event.getEntity().getLocation().equals(frameLocation)) return;
-    boolean cancel = frameHit();
-    Logger.info(cancel+"");
-    event.setCancelled(cancel);
+    boolean hit = frameHit();
+    if(hit){
+      event.setCancelled(true);
+      ToolManager.decreaseDurability(hand,1);
+    }
+
   }
 
   @EventHandler

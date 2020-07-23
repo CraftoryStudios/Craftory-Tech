@@ -68,7 +68,7 @@ public class ToolManager implements Listener {
     }
   }
 
-  private void decreaseDurability(ItemStack itemStack, int amount) {
+  public static void decreaseDurability(ItemStack itemStack, int amount) {
     ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemMeta instanceof Damageable) {
       NBTItem nbtItem = new NBTItem(itemStack);
@@ -85,7 +85,7 @@ public class ToolManager implements Listener {
     }
   }
 
-  private int calculateNewDurability(int current, int customMax, int max) {
+  private static int calculateNewDurability(int current, int customMax, int max) {
     double durability = ((double)current / (double)customMax) * (double)max;
     durability = Math.ceil(durability);
     if (durability == 0 && current != 0) {

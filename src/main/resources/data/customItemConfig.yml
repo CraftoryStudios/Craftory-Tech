@@ -48,6 +48,12 @@ items:
     durability: 1561
     attack_speed: 1.4
     attack_damage: 6.5
+  engineers_hammer:
+    itemModel: stone_hoe
+    durability: 320
+    attack_speed: 1
+    attack_damage: 5
+
   configurator:
     itemModel: paper
   steel_ingot:
