@@ -23,10 +23,8 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
-import org.bukkit.util.Vector;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.CoreHolder.Items;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
@@ -95,7 +93,7 @@ public class WaterGenerator extends BaseRenewableGenerator{
     inventoryInterface.setItem(SLOT,itemStack);
   }
   @Override
-  protected boolean canStart() {//e
+  protected boolean canStart() {
     ItemStack itemStack = inventoryInterface.getItem(SLOT);
     if(itemStack!=null && CustomItemManager.isCustomItem(itemStack, false) && CustomItemManager.matchCustomItemName(itemStack,
         Items.WATER_WHEEL)) {
@@ -133,7 +131,6 @@ public class WaterGenerator extends BaseRenewableGenerator{
     wheel.setOp(true);
     wheel.setInvulnerable(true);
     wheel.setGravity(false);
-
     EntityEquipment entityEquipment = wheel.getEquipment();
     entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WATER_WHEEL));
     switch (facing) {
@@ -165,62 +162,23 @@ public class WaterGenerator extends BaseRenewableGenerator{
 
   @Override
   public void updateEfficiency() {
-    ArrayList<Location> locations = new ArrayList<>();
-    locations.addAll(wheelLocations);
-    locations.add(wheelLocation);
-    Vector v;
-    if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) {
-      v = new Vector(0,0,1);
-    } else {
-      v = new Vector(1,0,0);
-    }
-    int maxClearPositive = 12;
-    boolean clear = true;
-    for (int i = 1; i < 13; i++) {
-      for(Location loc: locations) {
-        if(!loc.add(v).getBlock().getType().equals(Material.AIR)){
-          clear = false;
-          break;
-        }
-      }
-      if(!clear){
-        maxClearPositive = i;
-        break;
-      }
-    }
-    locations = new ArrayList<>();
-    locations.addAll(wheelLocations);
-    locations.add(wheelLocation);
-    if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) {
-      v = new Vector(0,0,-1);
-    } else {
-      v = new Vector(-1,0,0);
-    }
-    int maxClearNegative = 12;
-    clear = true;
-    for (int i = 2; i < 13; i++) {
-      for(Location loc: locations) {
-        if(!loc.add(v).getBlock().getType().equals(Material.AIR)){
-          clear = false;
-          break;
-        }
-      }
-      if(!clear){
-        maxClearNegative = i;
-        break;
-      }
-    }
-    efficiencyMultiplier = Math.min(maxClearNegative,maxClearPositive)/12d;
+    efficiencyMultiplier = 0.5;
   }
 
   @Override
   protected boolean wheelAreaFree(Location centerLoc) {
-    if(Craftory.customBlockManager.isCustomBlock(centerLoc)){
-      if(Craftory.customBlockManager.getCustomBlockName(centerLoc).equals(Items.WINDMILL)){
-        return super.wheelAreaFree(centerLoc);
+    wheelFree = false;
+    if(!centerLoc.getBlock().getType().equals(Material.AIR)) return false;
+    int waterCount = 0;
+    for(Location loc: wheelLocations) {
+      if(!loc.getBlock().getType().equals(Material.AIR)){
+        if(loc.getBlock().getType().equals(Material.WATER)) waterCount +=1;
+        else return false;
       }
-    } else if(centerLoc.getBlock().getType().equals(Material.AIR)) return super.wheelAreaFree(centerLoc);
-    return false;
+    }
+    if(waterCount > 5) return false;
+    wheelFree = true;
+    return true;
   }
 
   @Override
