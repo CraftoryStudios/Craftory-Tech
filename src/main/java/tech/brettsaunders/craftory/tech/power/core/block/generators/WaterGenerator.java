@@ -33,20 +33,19 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 
-public class WindGenerator extends BaseRenewableGenerator{
+public class WaterGenerator extends BaseRenewableGenerator{
 
   private static final byte C_LEVEL = 0;
   private static final int SLOT = 22;
   protected ArmorStand wheel;
-
-  public WindGenerator() {
+  public WaterGenerator() {
     super();
     init();
   }
 
   /* Saving, Setup and Loading */
-  public WindGenerator(Location location) {
-    super(location, Blocks.WIND_GENERATOR, C_LEVEL);
+  public WaterGenerator(Location location) {
+    super(location, Blocks.WATER_GENERATOR, C_LEVEL);
     init();
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
@@ -67,15 +66,8 @@ public class WindGenerator extends BaseRenewableGenerator{
     };
   }
   @Override
-  public void blockBreak() {
-    super.blockBreak();
-    removeWheels();
-  }
-
-  @Override
   protected void removeWheels() {
-    if (wheel != null)
-      wheel.remove();
+    wheel.remove();
   }
 
   @Override
@@ -83,7 +75,7 @@ public class WindGenerator extends BaseRenewableGenerator{
     if(!wheelPlaced && wheelFree && inventoryInterface.getItem(SLOT)!=null){
      ItemStack itemStack = inventoryInterface.getItem(SLOT);
      if(CustomItemManager.isCustomItem(itemStack, false) && CustomItemManager.matchCustomItemName(itemStack,
-         Items.WINDMILL)) {
+         Items.WATER_WHEEL)) {
        wheelPlaced =  placeWheel(wheelLocation);
      }
     }
@@ -106,7 +98,7 @@ public class WindGenerator extends BaseRenewableGenerator{
   protected boolean canStart() {//e
     ItemStack itemStack = inventoryInterface.getItem(SLOT);
     if(itemStack!=null && CustomItemManager.isCustomItem(itemStack, false) && CustomItemManager.matchCustomItemName(itemStack,
-        Items.WINDMILL)) {
+        Items.WATER_WHEEL)) {
       return super.canStart();
     } else {
       if(wheelPlaced){
@@ -123,45 +115,52 @@ public class WindGenerator extends BaseRenewableGenerator{
     switch (facing) {
       case NORTH:
         spawnLoc.add(0.5,-0.95,0.7);
-        spawnArmourStand(spawnLoc);
         break;
       case EAST:
-        spawnLoc.add(0.3,-0.95,0.5);
-        spawnArmourStand(spawnLoc);
-        wheel.setRotation(90,0);
+        spawnLoc.add(0.7,-0.95,0.5);
         break;
       case SOUTH:
-        spawnLoc.add(0.5,-0.95,0.3);
-        spawnArmourStand(spawnLoc);
-        wheel.setRotation(180,0);
+        spawnLoc.add(0.5,-0.95,0.7);
         break;
       case WEST:
-        spawnLoc.add(0.7,-0.95,0.5);
-        spawnArmourStand(spawnLoc);
-        wheel.setRotation(270,0);
+        spawnLoc.add(-0.7,-0.95,-0.5);
+        break;
+    }
+    wheel = (ArmorStand) loc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
+    wheel.setArms(false);
+    wheel.setBasePlate(false);
+    wheel.setVisible(false);
+    wheel.setOp(true);
+    wheel.setInvulnerable(true);
+    wheel.setGravity(false);
+
+    EntityEquipment entityEquipment = wheel.getEquipment();
+    entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WATER_WHEEL));
+    switch (facing) {
+      case NORTH:
+        wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
+        break;
+      case EAST:
+        wheel.setHeadPose(new EulerAngle(Math.toRadians(180), Math.toRadians(90), 0));
+        break;
+      case SOUTH:
+        wheel.setHeadPose(new EulerAngle(Math.toRadians(-90), Math.toRadians(-180), 0));
+        break;
+      case WEST:
+        wheel.setHeadPose(new EulerAngle(Math.toRadians(-180), Math.toRadians(-90), 0));
         break;
     }
     return true;
   }
 
-  private void spawnArmourStand(Location spawnLoc) {
-    wheel = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
-    wheel.setArms(false);
-    wheel.setBasePlate(false);
-    wheel.setVisible(false);
-    wheel.setInvulnerable(true);
-    wheel.setGravity(false);
-    wheel.setAI(false);
-    wheel.setMarker(true);
-    wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
-    EntityEquipment entityEquipment = wheel.getEquipment();
-    entityEquipment.setHelmet(CustomItemManager.getCustomItem("windmill"));
-  }
-
   @Override
   protected void processTick() {
     super.processTick();
-    wheel.setHeadPose(wheel.getHeadPose().add(0,0,efficiencyMultiplier*0.1));
+    if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)){
+      wheel.setHeadPose(wheel.getHeadPose().add(0,0,efficiencyMultiplier*0.1));
+    } else {
+      wheel.setHeadPose(wheel.getHeadPose().add(efficiencyMultiplier*0.1,0,0));
+    }
   }
 
   @Override
