@@ -319,7 +319,7 @@ recipes:
       - XXD
       - SDX
     ingredients:
-      I: DIAMOND
+      D: DIAMOND
       S: STICK
     result:
       item: sickle_diamond
@@ -442,9 +442,9 @@ recipes:
       amount: 1
   engineers_hammer:
     pattern:
-      -XSS
-      -XHS
-      -HXX
+      - XSS
+      - XHS
+      - HXX
     ingredients:
       S: steel_ingot
       H: STICK

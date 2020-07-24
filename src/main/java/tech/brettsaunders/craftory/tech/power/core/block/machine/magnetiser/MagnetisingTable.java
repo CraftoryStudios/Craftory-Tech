@@ -88,10 +88,10 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     String itemName = CustomItemManager.getCustomItemName(itemFrame.getItem());
     if(recipes.containsKey(itemName)){
       progress +=1;
-      frameLocation.getWorld().spawnParticle(Particle.CRIT_MAGIC, frameLocation, 1);
+      frameLocation.getWorld().spawnParticle(Particle.SPELL_INSTANT, frameLocation, 5);
       if(progress==processTime) {
         itemFrame.setItem(CustomItemManager.getCustomItem(recipes.get(itemName)));
-        frameLocation.getWorld().spawnParticle(Particle.SMOKE_NORMAL, frameLocation, 1);
+        frameLocation.getWorld().spawnParticle(Particle.SMOKE_LARGE, frameLocation, 10);
         progress = 0;
       }
       return true;
