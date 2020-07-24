@@ -122,25 +122,25 @@ public class WindGenerator extends BaseRenewableGenerator{
     switch (facing) {
       case NORTH:
         spawnLoc.add(0.5,-0.95,0.7);
-        spawnArmourStand(spawnLoc, 0);
+        spawnArmourStand(spawnLoc);
         break;
       case EAST:
-        spawnLoc.add(0.3,-0.95,0.5);
-        spawnArmourStand(spawnLoc, 90);
+        spawnLoc.add(0.3,-0.95,0.5).setYaw(90);
+        spawnArmourStand(spawnLoc);
         break;
       case SOUTH:
-        spawnLoc.add(0.5,-0.95,0.3);
-        spawnArmourStand(spawnLoc, 180);
+        spawnLoc.add(0.5,-0.95,0.3).setYaw(180);
+        spawnArmourStand(spawnLoc);
         break;
       case WEST:
-        spawnLoc.add(0.7,-0.95,0.5);
-        spawnArmourStand(spawnLoc, 270);
+        spawnLoc.add(0.7,-0.95,0.5).setYaw(270);
+        spawnArmourStand(spawnLoc);
         break;
     }
     return true;
   }
 
-  private void spawnArmourStand(Location spawnLoc, int rotation) {
+  private void spawnArmourStand(Location spawnLoc) {
     wheel = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
     wheel.setArms(false);
     wheel.setBasePlate(false);
@@ -152,7 +152,6 @@ public class WindGenerator extends BaseRenewableGenerator{
     wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
     EntityEquipment entityEquipment = wheel.getEquipment();
     entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WINDMILL));
-    wheel.setRotation(rotation,0);
   }
 
   @Override
