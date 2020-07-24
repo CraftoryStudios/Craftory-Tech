@@ -27,6 +27,8 @@ items:
     customModelID: 1
   copper_dust:
     customModelID: 1
+  coal_dust:
+    customModelID: 1
 
   light_off:
     customModelID: 63
