@@ -26,7 +26,6 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.CoreHolder.Items;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
@@ -219,16 +218,6 @@ public class WindGenerator extends BaseRenewableGenerator{
       }
     }
     efficiencyMultiplier = Math.min(maxClearNegative,maxClearPositive)/12d;
-  }
-
-  @Override
-  protected boolean wheelAreaFree(Location centerLoc) {
-    if(Craftory.customBlockManager.isCustomBlock(centerLoc)){
-      if(Craftory.customBlockManager.getCustomBlockName(centerLoc).equals(Items.WINDMILL)){
-        return super.wheelAreaFree(centerLoc);
-      }
-    } else if(centerLoc.getBlock().getType().equals(Material.AIR)) return super.wheelAreaFree(centerLoc);
-    return false;
   }
 
   @Override
