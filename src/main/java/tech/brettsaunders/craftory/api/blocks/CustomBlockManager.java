@@ -55,7 +55,7 @@ public class CustomBlockManager {
   private final HashMap<String, HashSet<CustomBlock>> activeChunks;
   @Getter
   private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
-
+  @Getter
   private final HashMap<String, CustomBlockData> customBlockDataHashMap;
 
   public StatsContainer statsContainer;
