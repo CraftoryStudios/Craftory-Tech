@@ -121,52 +121,45 @@ public class WindGenerator extends BaseRenewableGenerator{
     switch (facing) {
       case NORTH:
         spawnLoc.add(0.5,-0.95,0.7);
+        spawnArmourStand(spawnLoc);
         break;
       case EAST:
-        spawnLoc.add(0.7,-0.95,0.5);
+        spawnLoc.add(0.3,-0.95,0.5);
+        spawnArmourStand(spawnLoc);
+        wheel.setRotation(90,0);
         break;
       case SOUTH:
         spawnLoc.add(0.5,-0.95,0.3);
+        spawnArmourStand(spawnLoc);
+        wheel.setRotation(180,0);
         break;
       case WEST:
-        spawnLoc.add(-0.7,-0.95,-0.5);
-        break;
-    }
-    wheel = (ArmorStand) loc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
-    wheel.setArms(false);
-    wheel.setBasePlate(false);
-    wheel.setVisible(false);
-    wheel.setOp(true);
-    wheel.setInvulnerable(true);
-    wheel.setGravity(false);
-
-    EntityEquipment entityEquipment = wheel.getEquipment();
-    entityEquipment.setHelmet(CustomItemManager.getCustomItem("windmill"));
-    switch (facing) {
-      case NORTH:
-        wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
-        break;
-      case EAST:
-        wheel.setHeadPose(new EulerAngle(Math.toRadians(180), Math.toRadians(90), 0));
-        break;
-      case SOUTH:
-        wheel.setHeadPose(new EulerAngle(Math.toRadians(-90), Math.toRadians(-180), 0));
-        break;
-      case WEST:
-        wheel.setHeadPose(new EulerAngle(Math.toRadians(-90), Math.toRadians(-90), 0));
+        spawnLoc.add(0.7,-0.95,0.5);
+        spawnArmourStand(spawnLoc);
+        wheel.setRotation(270,0);
         break;
     }
     return true;
   }
 
+  private void spawnArmourStand(Location spawnLoc) {
+    wheel = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
+    wheel.setArms(false);
+    wheel.setBasePlate(false);
+    wheel.setVisible(false);
+    wheel.setInvulnerable(true);
+    wheel.setGravity(false);
+    wheel.setAI(false);
+    wheel.setMarker(true);
+    wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
+    EntityEquipment entityEquipment = wheel.getEquipment();
+    entityEquipment.setHelmet(CustomItemManager.getCustomItem("windmill"));
+  }
+
   @Override
   protected void processTick() {
     super.processTick();
-    if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)){
-      wheel.setHeadPose(wheel.getHeadPose().add(0,0,efficiencyMultiplier*0.1));
-    } else {
-      wheel.setHeadPose(wheel.getHeadPose().add(efficiencyMultiplier*0.1,0,0));
-    }
+    wheel.setHeadPose(wheel.getHeadPose().add(0,0,efficiencyMultiplier*0.1));
   }
 
   @Override
