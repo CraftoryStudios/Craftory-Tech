@@ -155,7 +155,7 @@ public class WindGenerator extends BaseRenewableGenerator{
     wheel.setMarker(true);
     wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
     EntityEquipment entityEquipment = wheel.getEquipment();
-    entityEquipment.setHelmet(CustomItemManager.getCustomItem("windmill"));
+    entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WINDMILL));
   }
 
   @Override
