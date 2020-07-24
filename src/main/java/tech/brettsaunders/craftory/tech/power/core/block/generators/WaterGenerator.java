@@ -33,20 +33,19 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 
-public class WindGenerator extends BaseRenewableGenerator{
+public class WaterGenerator extends BaseRenewableGenerator{
 
   private static final byte C_LEVEL = 0;
   private static final int SLOT = 22;
   protected ArmorStand wheel;
-
-  public WindGenerator() {
+  public WaterGenerator() {
     super();
     init();
   }
 
   /* Saving, Setup and Loading */
-  public WindGenerator(Location location) {
-    super(location, Blocks.WIND_GENERATOR, C_LEVEL);
+  public WaterGenerator(Location location) {
+    super(location, Blocks.WATER_GENERATOR, C_LEVEL);
     init();
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
@@ -76,7 +75,7 @@ public class WindGenerator extends BaseRenewableGenerator{
     if(!wheelPlaced && wheelFree && inventoryInterface.getItem(SLOT)!=null){
      ItemStack itemStack = inventoryInterface.getItem(SLOT);
      if(CustomItemManager.isCustomItem(itemStack, false) && CustomItemManager.matchCustomItemName(itemStack,
-         Items.WINDMILL)) {
+         Items.WATER_WHEEL)) {
        wheelPlaced =  placeWheel(wheelLocation);
      }
     }
@@ -99,7 +98,7 @@ public class WindGenerator extends BaseRenewableGenerator{
   protected boolean canStart() {//e
     ItemStack itemStack = inventoryInterface.getItem(SLOT);
     if(itemStack!=null && CustomItemManager.isCustomItem(itemStack, false) && CustomItemManager.matchCustomItemName(itemStack,
-        Items.WINDMILL)) {
+        Items.WATER_WHEEL)) {
       return super.canStart();
     } else {
       if(wheelPlaced){
@@ -136,7 +135,7 @@ public class WindGenerator extends BaseRenewableGenerator{
     wheel.setGravity(false);
 
     EntityEquipment entityEquipment = wheel.getEquipment();
-    entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WINDMILL));
+    entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WATER_WHEEL));
     switch (facing) {
       case NORTH:
         wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
