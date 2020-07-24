@@ -27,6 +27,8 @@ items:
     customModelID: 1
   copper_dust:
     customModelID: 1
+  coal_dust:
+    customModelID: 1
 
   light_off:
     customModelID: 63
@@ -221,7 +223,7 @@ items:
   sickle_diamond:
     customModelID: 7
   engineers_hammer:
-    cusstomModelID: 8
+    customModelID: 8
 
   lava_0_b:
     customModelID: 70

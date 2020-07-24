@@ -146,7 +146,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
           .equals(INTERACTABLEBLOCK.HOPPER_IN)) {
         ItemStack stack = inventoryInterface.getItem(slot);
         final Block relative = location.getBlock().getRelative(face);
-        if (!relative.isBlockPowered() && !relative.isBlockIndirectlyPowered()) {
+        if (!relative.isBlockPowered()) {
           ItemStack[] hopperItems = ((Hopper) relative.getState())
               .getInventory().getContents();
           for (ItemStack item : hopperItems) {

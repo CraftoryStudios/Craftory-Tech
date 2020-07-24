@@ -23,6 +23,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.api.font.Font;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
@@ -77,15 +78,24 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   @EventHandler
   public void onRedstonePower(BlockPhysicsEvent e) {
     if (!e.getBlock().getLocation().equals(location)) return;
+    if (placeLoc.getBlock().getType() != Material.AIR) return;
     if (lastRedstoneStrength != 0) {
       lastRedstoneStrength = e.getBlock().getBlockPower();
       return;
-    } else if (e.getBlock().getBlockPower() > 0 && checkPowerRequirement()) {
+    } else if (e.getBlock().getBlockPower() > 0 && checkPowerRequirement() && inventoryInterface != null) {
       final ItemStack item = inventoryInterface.getItem(SLOT);
-      if (item.getType() != Material.AIR) {
+      if (item == null) {
+        lastRedstoneStrength = e.getBlock().getBlockPower();
+        return;
+      }
+      if (item.getType() == Material.AIR || !item.getType().isBlock()) {
         energyStorage.modifyEnergyStored(-ENERGY_REQUIRED / 10);
       } else {
-        placeLoc.getBlock().setType(item.getType());
+        if (CustomItemManager.isCustomItem(item, true)) {
+          //No Custom Block Placing
+        } else {
+          placeLoc.getBlock().setType(item.getType());
+        }
         item.setAmount(item.getAmount() - 1);
         energyStorage.modifyEnergyStored(-ENERGY_REQUIRED);
       }

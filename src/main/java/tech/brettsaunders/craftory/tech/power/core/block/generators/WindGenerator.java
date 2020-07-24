@@ -67,8 +67,15 @@ public class WindGenerator extends BaseRenewableGenerator{
     };
   }
   @Override
+  public void blockBreak() {
+    super.blockBreak();
+    removeWheels();
+  }
+
+  @Override
   protected void removeWheels() {
-    wheel.remove();
+    if (wheel != null)
+      wheel.remove();
   }
 
   @Override
@@ -121,7 +128,7 @@ public class WindGenerator extends BaseRenewableGenerator{
         spawnLoc.add(0.7,-0.95,0.5);
         break;
       case SOUTH:
-        spawnLoc.add(0.5,-0.95,0.7);
+        spawnLoc.add(0.5,-0.95,0.3);
         break;
       case WEST:
         spawnLoc.add(-0.7,-0.95,-0.5);
@@ -148,7 +155,7 @@ public class WindGenerator extends BaseRenewableGenerator{
         wheel.setHeadPose(new EulerAngle(Math.toRadians(-90), Math.toRadians(-180), 0));
         break;
       case WEST:
-        wheel.setHeadPose(new EulerAngle(Math.toRadians(-180), Math.toRadians(-90), 0));
+        wheel.setHeadPose(new EulerAngle(Math.toRadians(-90), Math.toRadians(-90), 0));
         break;
     }
     return true;
