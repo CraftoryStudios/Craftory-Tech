@@ -182,7 +182,7 @@ public class Utilities {
       file.mkdirs();
     }
 
-    File modelData = new File(Craftory.plugin.getDataFolder(), "/config/customModelData.yml");
+    File modelData = new File(Craftory.plugin.getDataFolder(), "/config/customModelDataV2.yml");
     if (!modelData.exists()) {
       FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/config"),
           new File(Craftory.plugin.getDataFolder(), "/config"));

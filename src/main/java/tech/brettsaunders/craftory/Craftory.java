@@ -32,8 +32,8 @@ public final class Craftory extends JavaPlugin {
 
   public static String VERSION;
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "http://download.mc-packs.net/pack/57d6f8cd0c0672cbd12570f54c043701917d2363.zip";
-  public static final String HASH = "57d6f8cd0c0672cbd12570f54c043701917d2363";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/0ec6d87aba215138bd5770a945efe02002f9b10c.zip";
+  public static final String HASH = "0ec6d87aba215138bd5770a945efe02002f9b10c";
 
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
@@ -71,10 +71,10 @@ public final class Craftory extends JavaPlugin {
     if (Utilities.config.getBoolean("resourcePack.forcePack")) {
       new ResourcePackEvents();
     }
-    customBlockConfigFile = new File(Craftory.plugin.getDataFolder(), "data/customBlockConfig.yml");
-    customItemConfigFile = new File(Craftory.plugin.getDataFolder(),"data/customItemConfig.yml");
-    customRecipeConfigFile = new File(Craftory.plugin.getDataFolder(),"data/customRecipesConfig.yml");
-    customModelDataFile = new File(getDataFolder(), "config/customModelData.yml");
+    customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
+    customItemConfigFile = new File(getDataFolder(),"data/customItemConfig.yml");
+    customRecipeConfigFile = new File(getDataFolder(),"data/customRecipesConfig.yml");
+    customModelDataFile = new File(getDataFolder(), "config/customModelDataV2.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
