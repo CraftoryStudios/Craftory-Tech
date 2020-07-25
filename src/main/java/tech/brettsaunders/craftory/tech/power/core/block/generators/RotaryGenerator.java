@@ -37,7 +37,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class RotaryGenerator extends BaseGenerator {
 
@@ -58,6 +57,7 @@ public class RotaryGenerator extends BaseGenerator {
   protected static final int BASE_CAPACITY = 100000;
   protected double efficiencyMultiplier = 1;
   protected List<Location> wheelLocations = new ArrayList<>();
+  protected List<Location> wheelFootprint = new ArrayList<>();
   @Persistent
   @Getter
   protected Location wheelLocation;
@@ -150,10 +150,20 @@ public class RotaryGenerator extends BaseGenerator {
     super.updateGenerator();
   }
 
-  public void placeItemIn(ItemStack itemStack) {
-    if(wheelPlaced) return;
-    itemStack.setAmount(1);
-    inventoryInterface.setItem(SLOT,itemStack);
+  public boolean placeItemIn(ItemStack itemStack) {
+    if(wheelPlaced) return false;
+    if(inventoryInterface.getItem(SLOT)==null || inventoryInterface.getItem(SLOT).getType().equals(Material.AIR)){
+      itemStack.setAmount(1);
+      inventoryInterface.setItem(SLOT,itemStack);
+      return true;
+    }
+    if(CustomItemManager.getCustomItemName(itemStack).equals(CustomItemManager.getCustomItemName(inventoryInterface.getItem(SLOT)))){
+      ItemStack slot = inventoryInterface.getItem(SLOT);
+      if(slot.getAmount() + 1 >= slot.getMaxStackSize()) return false;
+      slot.setAmount(slot.getAmount()+1);
+      return true;
+    }
+    return false;
   }
 
   @Override
@@ -189,25 +199,25 @@ public class RotaryGenerator extends BaseGenerator {
     switch (facing) {
       case NORTH:
         spawnLoc.add(0.5,-0.95,0.7);
-        spawnArmourStand(spawnLoc, 0);
+        spawnArmourStand(spawnLoc);
         break;
       case EAST:
-        spawnLoc.add(0.3,-0.95,0.5);
-        spawnArmourStand(spawnLoc, 90);
+        spawnLoc.add(0.3,-0.95,0.5).setYaw(90);
+        spawnArmourStand(spawnLoc);
         break;
       case SOUTH:
-        spawnLoc.add(0.5,-0.95,0.3);
-        spawnArmourStand(spawnLoc, 180);
+        spawnLoc.add(0.5,-0.95,0.3).setYaw(180);
+        spawnArmourStand(spawnLoc);
         break;
       case WEST:
-        spawnLoc.add(0.7,-0.95,0.5);
-        spawnArmourStand(spawnLoc, 270);
+        spawnLoc.add(0.7,-0.95,0.5).setYaw(270);
+        spawnArmourStand(spawnLoc);
         break;
     }
     return true;
   }
 
-  private void spawnArmourStand(Location spawnLoc, int rotation) {
+  private void spawnArmourStand(Location spawnLoc) {
     wheel = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
     wheel.setArms(false);
     wheel.setBasePlate(false);
@@ -220,7 +230,6 @@ public class RotaryGenerator extends BaseGenerator {
     EntityEquipment entityEquipment = wheel.getEquipment();
     if(mode.equals(WheelMode.WIND)) entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WINDMILL));
     else entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WATER_WHEEL));
-    wheel.setRotation(rotation,0);
   }
 
   @Override
@@ -239,14 +248,13 @@ public class RotaryGenerator extends BaseGenerator {
     if(mode.equals(WheelMode.WIND)){
       updateWindEfficiency();
     } else {
-      efficiencyMultiplier = 0.5;
+      efficiencyMultiplier = 0.25;
     }
   }
 
   private void updateWindEfficiency() {
     final ArrayList<Location> locations = new ArrayList<>();
-    locations.add(wheelLocation);
-    wheelLocations.forEach(loc -> {
+    wheelFootprint.forEach(loc -> {
       locations.add(loc.clone());
     });
     Vector v;
@@ -255,23 +263,17 @@ public class RotaryGenerator extends BaseGenerator {
     } else {
       v = new Vector(1,0,0);
     }
-    int maxClearPositive = 12;
-    boolean clear = true;
-    for (int i = 1; i < 13; i++) {
-      for(Location loc: locations) {
+    int clearBlocks = 0;
+    for(Location loc: locations) {
+      for (int i = 0; i < 11; i++) {
         if(!loc.add(v).getBlock().getType().equals(Material.AIR)){
-          clear = false;
           break;
         }
-      }
-      if(!clear){
-        maxClearPositive = i;
-        break;
+        clearBlocks +=1;
       }
     }
     locations.clear();
-    locations.add(wheelLocation);
-    wheelLocations.forEach(loc -> {
+    wheelFootprint.forEach(loc -> {
       locations.add(loc.clone());
     });
     if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) {
@@ -279,21 +281,17 @@ public class RotaryGenerator extends BaseGenerator {
     } else {
       v = new Vector(-1,0,0);
     }
-    int maxClearNegative = 12;
-    clear = true;
-    for (int i = 2; i < 13; i++) {
-      for(Location loc: locations) {
+    for(Location loc: locations) {
+      for (int i = 0; i < 11; i++) {
         if(!loc.add(v).getBlock().getType().equals(Material.AIR)){
-          clear = false;
           break;
         }
-      }
-      if(!clear){
-        maxClearNegative = i;
-        break;
+        clearBlocks +=1;
       }
     }
-    efficiencyMultiplier = Math.min(maxClearNegative,maxClearPositive)/12d;
+    clearBlocks -= 300;
+    if(clearBlocks < 1) clearBlocks = 1;
+    efficiencyMultiplier = Math.min(1d,clearBlocks/(1034d-300));
   }
 
   public boolean setFacing(BlockFace face) {
@@ -315,8 +313,9 @@ public class RotaryGenerator extends BaseGenerator {
           break;
       }
       wheelLocations = getWheelLocations(wheelLocation);
+      wheelFootprint = getWheelFootprint(wheelLocation);
       checkWheel();
-      return true;
+      return wheelFree;
     }
     return false;
   }
@@ -334,33 +333,56 @@ public class RotaryGenerator extends BaseGenerator {
   }
 
   protected List<Location> getWheelLocations(Location centerLoc) {
+    return getLocations(centerLoc, 2,3);
+  }
+
+  private List<Location> getLocations(Location centerLoc, int thick, int rad){
     ArrayList<Location> locations = new ArrayList<>();
-    locations.add(centerLoc.clone().add(0,1,0));
-    locations.add(centerLoc.clone().add(0,-1,0));
-    if(facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) { //Ignore z axis
-      locations.add(centerLoc.clone().add(1,0,0));
-      locations.add(centerLoc.clone().add(-1,0,0));
-      locations.add(centerLoc.clone().add(1,1,0));
-      locations.add(centerLoc.clone().add(-1,1,0));
-      locations.add(centerLoc.clone().add(1,-1,0));
-      locations.add(centerLoc.clone().add(-1,-1,0));
-    } else if(facing.equals(BlockFace.EAST) || facing.equals(BlockFace.WEST)) {
-      locations.add(centerLoc.clone().add(0,0,1));
-      locations.add(centerLoc.clone().add(0,0,-1));
-      locations.add(centerLoc.clone().add(0,1,1));
-      locations.add(centerLoc.clone().add(0,1,-1));
-      locations.add(centerLoc.clone().add(0,-1,1));
-      locations.add(centerLoc.clone().add(0,-1,-1));
-    } else {
-      Logger.warn("Renewable Generator set to invalid facing direction");
+    if(facing.equals(BlockFace.NORTH)){
+      for(int x = -rad; x <= rad; x++){
+        for(int y = -rad; y <= rad; y++){
+          for(int z = -thick+1; z <= 0; z++){
+            locations.add(centerLoc.clone().add(x,y,z));
+          }
+        }
+      }
+    } else if (facing.equals(BlockFace.SOUTH)) {
+      for(int x = -rad; x <= rad; x++){
+        for(int y = -rad; y <= rad; y++){
+          for(int z = 0; z < thick; z++){
+            locations.add(centerLoc.clone().add(x,y,z));
+          }
+        }
+      }
+    } else if (facing.equals(BlockFace.EAST)){
+      for(int x = 0; x < thick; x++){
+        for(int y = -rad; y <= rad; y++){
+          for(int z = -rad; z <= rad; z++){
+            locations.add(centerLoc.clone().add(x,y,z));
+          }
+        }
+      }
+    } else if (facing.equals(BlockFace.WEST)){
+      for(int x = -thick+1; x <= 0; x++){
+        for(int y = -rad; y <= rad; y++){
+          for(int z = -rad; z <= rad; z++){
+            locations.add(centerLoc.clone().add(x,y,z));
+          }
+        }
+      }
     }
     return locations;
+  }
+  protected List<Location> getWheelFootprint(Location centerLoc) {
+    return getLocations(centerLoc, 1,3);
   }
 
   protected boolean windWheelAreaFree(Location centerLoc) {
     wheelFree = false;
     for(Location loc: wheelLocations) {
-      if(!loc.getBlock().getType().equals(Material.AIR)) return false;
+      if(!loc.getBlock().getType().equals(Material.AIR)) {
+        return false;
+      }
     }
     wheelFree = true;
     return true;
@@ -373,10 +395,14 @@ public class RotaryGenerator extends BaseGenerator {
     for(Location loc: wheelLocations) {
       if(!loc.getBlock().getType().equals(Material.AIR)){
         if(loc.getBlock().getType().equals(Material.WATER)) waterCount +=1;
-        else return false;
+        else {
+          return false;
+        }
       }
     }
-    if(waterCount > 5 || waterCount < 3) return false;
+    if(waterCount > 5000 || waterCount < 14) {
+      return false;
+    }
     wheelFree = true;
     return true;
   }

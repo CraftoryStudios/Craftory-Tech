@@ -14,6 +14,7 @@ import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -62,6 +63,11 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     Craftory.plugin.getServer().getPluginManager().registerEvents(this,Craftory.plugin);
   }
 
+  @Override
+  public void blockBreak() {
+    super.blockBreak();
+    itemFrame.remove();
+  }
 
   @Override
   public void afterLoadUpdate() {
@@ -83,7 +89,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     return true;
   }
 
-  private boolean frameHit() {
+  private boolean frameHit(Player player) {
     if(itemFrame.getItem().getType().equals(Material.AIR)) return true;
     String itemName = CustomItemManager.getCustomItemName(itemFrame.getItem());
     if(recipes.containsKey(itemName)){
@@ -93,6 +99,9 @@ public class MagnetisingTable extends CustomBlock implements Listener {
         itemFrame.setItem(CustomItemManager.getCustomItem(recipes.get(itemName)));
         frameLocation.getWorld().spawnParticle(Particle.SMOKE_LARGE, frameLocation, 10);
         progress = 0;
+        player.playSound(frameLocation, Sound.BLOCK_ANVIL_USE, 1, 1);
+      } else {
+        player.playSound(frameLocation, Sound.BLOCK_ANVIL_LAND,1,1);
       }
       return true;
     }
@@ -110,7 +119,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     if(!CustomItemManager.getCustomItemName(itemStack).equals(Items.ENGINEERS_HAMMER)) return;
     if(!event.getEntityType().equals(EntityType.ITEM_FRAME)) return;
     if(!event.getEntity().getLocation().equals(frameLocation)) return;
-    boolean hit = frameHit();
+    boolean hit = frameHit(((Player) event.getDamager()));
     if(hit){
       event.setCancelled(true);
       ToolManager.decreaseDurability(itemStack,1);
