@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory.api.blocks;
 
 import java.util.HashMap;
 import java.util.UUID;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -135,9 +136,13 @@ public class PoweredBlockEvents implements Listener {
     if ((e.getCustomBlock() instanceof RotaryGenerator) && (CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WINDMILL) || CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WATER_WHEEL))) {
       RotaryGenerator generator = (RotaryGenerator) e.getCustomBlock();
       if(generator.isWheelPlaced()) return;
-      generator.setFacing(e.getBlockFace());
-      generator.placeItemIn(e.getItemStack().clone());
-      e.getItemStack().setAmount(e.getItemStack().getAmount()-1);
+      if(!generator.setFacing(e.getBlockFace())){
+        e.getPlayer().sendMessage(ChatColor.RED + "WaterWheels/WindMills require 7x7 clearance two blocks in front of them"); //TODO Brett make lang
+      }
+      if(generator.placeItemIn(e.getItemStack().clone())){
+        e.getItemStack().setAmount(e.getItemStack().getAmount()-1);
+      }
+
     }
   }
 
