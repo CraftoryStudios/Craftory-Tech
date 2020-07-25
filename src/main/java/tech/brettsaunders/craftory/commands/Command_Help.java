@@ -23,9 +23,9 @@ public class Command_Help implements CommandExecutor, TabCompleter {
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
     if (args.length == 1) {
-      Utilities.msg(sender, Utilities.langProperties.getProperty("HelpCommandLineOne"));
-      Utilities.msg(sender, Utilities.langProperties.getProperty("HelpCommandLineTwo"));
-      Utilities.msg(sender, Utilities.langProperties.getProperty("HelpCommandLineThree"));
+      Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineOne"));
+      Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineTwo"));
+      Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineThree"));
     }
     return true;
   }

@@ -23,8 +23,8 @@ public class Command_Main implements CommandExecutor, TabCompleter {
 
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
-    Utilities.msg(sender, Utilities.langProperties.getProperty("MainCommandLineOne") + Craftory.VERSION);
-    Utilities.msg(sender, Utilities.langProperties.getProperty("MainCommandLineTwo") + " ©");
+    Utilities.msg(sender, Utilities.getTranslation("MainCommandLineOne") + Craftory.VERSION);
+    Utilities.msg(sender, Utilities.getTranslation("MainCommandLineTwo") + " ©");
     return true;
   }
 

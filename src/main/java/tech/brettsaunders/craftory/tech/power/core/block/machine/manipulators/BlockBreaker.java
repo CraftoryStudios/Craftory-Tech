@@ -79,7 +79,7 @@ public class BlockBreaker extends BaseMachine {
   @Override
   public void setupGUI() {
     Inventory inventory = createInterfaceInventory(displayName, Font.BLANK.label + "");
-    addGUIComponent(new GBattery(inventory, energyStorage));
+    addGUIComponent(new GBattery(inventory, energyStorage, 13));
     this.inventoryInterface = inventory;
   }
   @EventHandler

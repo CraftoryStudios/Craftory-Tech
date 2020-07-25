@@ -94,7 +94,7 @@ public class PoweredBlockEvents implements Listener {
     if (PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) {
       PoweredBlock block = (PoweredBlock) e.getCustomBlock();
       e.getPlayer().sendMessage(
-          Utilities.langProperties.getProperty("EnergyStored")+": " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
+          Utilities.getTranslation("EnergyStored")+": " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
               + " RE");
     }
   }
@@ -109,19 +109,19 @@ public class PoweredBlockEvents implements Listener {
     final Player player = e.getPlayer();
     if (e.getAction() == Action.RIGHT_CLICK_AIR && player.isSneaking()) {
       configuratorData.remove(player.getUniqueId());
-      player.sendMessage(Utilities.langProperties.getProperty("SideConfigClear"));
+      player.sendMessage(Utilities.getTranslation("SideConfigClear"));
     }
     if (PoweredBlockUtils.isEnergyProvider(e.getCustomBlock())) {
       BaseProvider provider = (BaseProvider) e.getCustomBlock();
       if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
         configuratorData.put(player.getUniqueId(), provider.getSideConfig());
-        player.sendMessage(Utilities.langProperties.getProperty("SideConfigCopied"));
+        player.sendMessage(Utilities.getTranslation("SideConfigCopied"));
       } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
         if (configuratorData.containsKey(player.getUniqueId())) {
           provider.setSidesConfig(configuratorData.get(player.getUniqueId()));
-          player.sendMessage(Utilities.langProperties.getProperty("SideConfigPasted"));
+          player.sendMessage(Utilities.getTranslation("SideConfigPasted"));
         } else {
-          player.sendMessage(Utilities.langProperties.getProperty("SideConfigNoData"));
+          player.sendMessage(Utilities.getTranslation("SideConfigNoData"));
         }
       }
     }

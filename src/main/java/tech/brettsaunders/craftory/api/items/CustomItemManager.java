@@ -42,11 +42,7 @@ public class CustomItemManager {
         } else {
           int itemID = customModeData.getInt("items." + key + ".customModelID");
           //Get Display Name
-          if (Utilities.langProperties.containsKey(key)) {
-            displayName = Utilities.langProperties.getProperty(key);
-          } else {
-            displayName = "UNKNOWN";
-          }
+          displayName = Utilities.getTranslation(key);
 
           CustomItem customItem = new CustomItem(itemID, material, key, displayName);
 
@@ -87,12 +83,9 @@ public class CustomItemManager {
           } else {
             int itemID = customModeData.getInt("items." + key + ".customModelID");
             //Set Display Name
-            if (Utilities.langProperties.containsKey(key)) {
-              displayName = Utilities.langProperties.getProperty(key);
-            } else {
-              displayName = "UNKNOWN";
-            }
-            CustomItem customItem = new CustomItem(itemID, material, key, displayName);
+            String nameKey = key.replace("_WEST","").replace("_EAST","").replace("_SOUTH", "");
+            displayName = Utilities.getTranslation(nameKey);
+            CustomItem customItem = new CustomItem(itemID, material, nameKey, displayName);
             itemIDCache.put(key, customItem);
             if (!(block.contains("hideItem") && block.getBoolean("hideItem"))) {
               itemNames.add(key);

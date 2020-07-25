@@ -38,14 +38,14 @@ public class CustomBlock {
   public CustomBlock(Location location, String blockName) {
     this.location = location;
     this.blockName = blockName;
-    this.displayName = Utilities.langProperties.getProperty(blockName);
+    this.displayName = Utilities.getTranslation(blockName);
     this.direction = BlockFace.NORTH;
   }
 
   public void afterLoadUpdate() {
     //TODO Remove in future version
     if (Strings.isNullOrEmpty(displayName)) {
-      displayName = Utilities.langProperties.getProperty(blockName);
+      displayName = Utilities.getTranslation(blockName);
     }
 
     if (direction == null) direction = BlockFace.NORTH;
