@@ -43,11 +43,13 @@ public class RotaryGenerator extends BaseGenerator {
   @Persistent
   protected BlockFace facing;
   @Persistent
+  protected String modeSaved;
+
   protected WheelMode mode;
 
   @Persistent
   @Getter
-  protected boolean wheelPlaced;
+  protected boolean wheelPlaced = false;
   protected boolean wheelFree = false;
   private static final byte C_LEVEL = 0;
   private static final int SLOT = 22;
@@ -96,6 +98,14 @@ public class RotaryGenerator extends BaseGenerator {
   public void beforeSaveUpdate() {
     super.beforeSaveUpdate();
     removeWheels();
+    modeSaved = mode.toString();
+  }
+
+  @Override
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
+    placeWheels();
+    mode = WheelMode.valueOf(modeSaved);
   }
 
   protected void removeWheels() {
@@ -117,11 +127,7 @@ public class RotaryGenerator extends BaseGenerator {
     removeWheels();
   }
 
-  @Override
-  public void afterLoadUpdate() {
-    super.afterLoadUpdate();
-    placeWheels();
-  }
+
 
   @Override
   public void updateGenerator() {
