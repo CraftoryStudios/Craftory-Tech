@@ -83,7 +83,7 @@ public class CustomBlockManager {
   public CustomBlock placeCustomBlock(String customBlockItemName, Block block, BlockFace direction) {
     CustomBlock customBlock = Craftory.customBlockFactory.create(customBlockItemName, block.getLocation(), direction);
     if (customBlock.getDirection() != BlockFace.NORTH) {
-      customBlockItemName = customBlockItemName + "_" + customBlock.getDirection().name();
+      customBlockItemName = customBlockItemName + "_" + customBlock.getDirection().name().toLowerCase();
     }
     generateCustomBlock(customBlockItemName, block);
     putActiveCustomBlock(customBlock);
