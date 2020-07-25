@@ -105,7 +105,7 @@ public class RotaryGenerator extends BaseGenerator {
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
     placeWheels();
-    mode = WheelMode.valueOf(modeSaved);
+    if(modeSaved != null) mode = WheelMode.valueOf(modeSaved);
   }
 
   protected void removeWheels() {
