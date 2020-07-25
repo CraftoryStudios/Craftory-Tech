@@ -26,7 +26,7 @@ public class Command_Debug implements CommandExecutor, TabCompleter {
       boolean debugMode = Utilities.config.getBoolean("general.debug");
       Utilities.config.set("general.debug", !debugMode);
       Utilities.saveConfigFile();
-      Utilities.msg(sender, Utilities.langProperties.getProperty("DebugCommandToggled") + !debugMode);
+      Utilities.msg(sender, Utilities.getTranslation("DebugCommandToggled") + !debugMode);
     } else {
       Utilities.msg(sender, "Usage");
     }

@@ -49,14 +49,14 @@ public class ResourcePackEvents implements Listener {
         break;
       case DECLINED:
         e.getPlayer()
-            .sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+ Utilities.langProperties.getProperty("ResourcePackDeclined"));
+            .sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+ Utilities.getTranslation("ResourcePackDeclined"));
         break;
       case FAILED_DOWNLOAD:
-        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+Utilities.langProperties.getProperty("ResourcePackFailed"));
+        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+Utilities.getTranslation("ResourcePackFailed"));
         e.getPlayer().setInvulnerable(false);
         break;
       case SUCCESSFULLY_LOADED:
-        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+Utilities.langProperties.getProperty("ResourcePackEnabled"));
+        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]"+ChatColor.RESET+Utilities.getTranslation("ResourcePackEnabled"));
         e.getPlayer().setInvulnerable(false);
     }
   }

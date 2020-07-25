@@ -31,7 +31,7 @@ public class GBattery extends G21PointBar {
 
   @Override
   String getDisplayName() {
-    return ChatColor.RESET + Utilities.langProperties.getProperty("EnergyStored")+": " + Utilities.rawEnergyToPrefixed(storage.getEnergyStored());
+    return ChatColor.RESET + Utilities.getTranslation("EnergyStored")+": " + Utilities.rawEnergyToPrefixed(storage.getEnergyStored());
   }
 
   @Override

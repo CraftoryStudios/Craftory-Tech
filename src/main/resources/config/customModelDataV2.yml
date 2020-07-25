@@ -17,6 +17,8 @@ items:
     customModelID: 62
   steel_ingot:
     customModelID: 1
+  steel_dust
+    customModelID: 1
   iron_dust:
     customModelID: 1
   gold_dust:

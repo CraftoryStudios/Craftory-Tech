@@ -168,7 +168,7 @@ public class Utilities {
     Properties defaultLang = new Properties();
     try {
       defaultLang.load(new InputStreamReader(new FileInputStream(new File(Craftory.plugin.getDataFolder(),
-          "lang/default_lang.properties")), Charset.forName("UTF-8")));
+          "data/default_lang.properties")), Charset.forName("UTF-8")));
       langProperties = new Properties(defaultLang);
       langProperties.load(new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale+".properties")), Charset.forName("UTF-8")));
     } catch (IOException e) {
@@ -297,6 +297,15 @@ public class Utilities {
       data.save(dataFile);
     } catch (IOException ex) {
       Bukkit.getLogger().log(Level.SEVERE, "Could not save " + dataFile, ex);
+    }
+  }
+
+  public static String getTranslation(String key) {
+    String result = langProperties.getProperty(key);
+    if (result == null) {
+      return "Unknown";
+    } else {
+      return result;
     }
   }
 

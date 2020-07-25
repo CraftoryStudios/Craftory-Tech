@@ -38,14 +38,14 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
       try {
         amount = Integer.parseInt(args[3]);
       } catch (NumberFormatException ignored) {
-        Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandErrorAmount"));
+        Utilities.msg(sender, Utilities.getTranslation("GiveCommandErrorAmount"));
       }
       if (amount > 64) {
         amount = 64;
       }
       giveCustomItem(amount, args[1], args[2], sender);
     } else {
-      Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandUsage"));
+      Utilities.msg(sender, Utilities.getTranslation("GiveCommandUsage"));
     }
     return true;
   }
@@ -88,13 +88,13 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
           if (result.size() > 0) {
             result.forEach((i, item) ->player.getWorld().dropItemNaturally(player.getLocation(), item));
           }
-          Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandGave") + " " + playerName + " x" + amount + " " + itemName);
+          Utilities.msg(sender, Utilities.getTranslation("GiveCommandGave") + " " + playerName + " x" + amount + " " + itemName);
           return true;
         } else {
-          Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandErrorPlayer"));
+          Utilities.msg(sender, Utilities.getTranslation("GiveCommandErrorPlayer"));
         }
       } else {
-        Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandErrorNotItem"));
+        Utilities.msg(sender, Utilities.getTranslation("GiveCommandErrorNotItem"));
       }
     }
     return false;
