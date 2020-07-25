@@ -208,7 +208,7 @@ blocks:
     EAST: false
     DOWN: true
     itemModel: stone
-  WindGenerator:
+  RotaryGenerator:
     WEST: false
     UP: false
     SOUTH: true

@@ -49,8 +49,8 @@ import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.IronCell;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.GeothermalGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.RotaryGenerator;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.SolidFuelGenerator;
-import tech.brettsaunders.craftory.tech.power.core.block.generators.WindGenerator;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.BasicSolarPanel;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.CompactedSolarPanel;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.SolarArray;
@@ -256,7 +256,7 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.COMPACTED_SOLAR_PANEL, CompactedSolarPanel.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.SOLAR_ARRAY, SolarArray.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.GEOTHERMAL_GENERATOR, GeothermalGenerator.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.WIND_GENERATOR, WindGenerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.ROTARY_GENERATOR, RotaryGenerator.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.MAGNETISER, Magnetiser.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.MAGNETISING_TABLE, MagnetisingTable.class, false, false);
     customBlockFactory.registerCustomBlock(Blocks.BLOCK_BREAKER, BlockBreaker.class, true, true);

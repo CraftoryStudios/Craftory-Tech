@@ -35,8 +35,7 @@ import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.core.block.generators.WaterGenerator;
-import tech.brettsaunders.craftory.tech.power.core.block.generators.WindGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.RotaryGenerator;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 
 public class PoweredBlockEvents implements Listener {
@@ -133,14 +132,8 @@ public class PoweredBlockEvents implements Listener {
     if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
       return;
     }
-    if ((e.getCustomBlock() instanceof WindGenerator) && CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WINDMILL)) {
-      WindGenerator generator = (WindGenerator) e.getCustomBlock();
-      if(generator.isWheelPlaced()) return;
-      generator.setFacing(e.getBlockFace());
-      generator.placeItemIn(e.getItemStack().clone());
-      e.getItemStack().setAmount(e.getItemStack().getAmount()-1);
-    } else if((e.getCustomBlock() instanceof WaterGenerator) && CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WATER_WHEEL) ){
-      WaterGenerator generator = (WaterGenerator) e.getCustomBlock();
+    if ((e.getCustomBlock() instanceof RotaryGenerator) && (CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WINDMILL) || CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WATER_WHEEL))) {
+      RotaryGenerator generator = (RotaryGenerator) e.getCustomBlock();
       if(generator.isWheelPlaced()) return;
       generator.setFacing(e.getBlockFace());
       generator.placeItemIn(e.getItemStack().clone());
