@@ -135,7 +135,7 @@ public class PoweredBlockEvents implements Listener {
     }
     if ((e.getCustomBlock() instanceof RotaryGenerator) && (CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WINDMILL) || CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WATER_WHEEL))) {
       RotaryGenerator generator = (RotaryGenerator) e.getCustomBlock();
-      if(generator.isWheelPlaced()) return;
+      if(generator.getWheelPlaced()) return;
       if(!generator.setFacing(e.getBlockFace())){
         e.getPlayer().sendMessage(ChatColor.RED + "WaterWheels/WindMills require 7x7 clearance two blocks in front of them"); //TODO Brett make lang
       }
