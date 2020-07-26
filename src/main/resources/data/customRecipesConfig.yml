@@ -451,6 +451,94 @@ recipes:
     result:
       item: engineers_hammer
       amount: 1
+  RotaryGenerator:
+    pattern:
+      - SCS
+      - MOM
+      - SCS
+    ingredients:
+      C: copper_ingot
+      M: magnetised_iron
+      S: steel_ingot
+      O: iron_core
+    result:
+      item: RotaryGenerator
+      amount: 1
+  GeothermalGenerator:
+    pattern:
+      - SLS
+      - COM
+      - SLS
+    ingredients:
+      C: copper_ingot
+      M: magnetised_iron
+      S: steel_ingot
+      O: iron_core
+      L: LAVA_BUCKET
+    result:
+      item: GeothermalGenerator
+      amount: 1
+  windmill:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: WHITE_WOOL
+      S: STICK
+    result:
+      item: windmill
+      amount: 1
+  waterwheel:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: OAK_PLANKS
+      S: STICK
+    result:
+      item: waterwheel
+      amount: 1
+  Magnetiser:
+    pattern:
+      - SSS
+      - UCU
+      - SSS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+      U: copper_ingot
+    result:
+      item: Magnetiser
+      amount: 1
+  BlockPlacer:
+    pattern:
+      - SSS
+      - PCR
+      - SSS
+    ingredients:
+      R: REDSTONE_BLOCK
+      C: iron_core
+      S: steel_ingot
+      P: PISTON
+    result:
+      item: BlockPlacer
+      amount: 1
+  BlockBreaker:
+    pattern:
+      - SSS
+      - PCR
+      - SSS
+    ingredients:
+      R: REDSTONE_BLOCK
+      C: iron_core
+      S: steel_ingot
+      P: DIAMOND_PICKAXE
+    result:
+      item: BlockBreaker
+      amount: 1
+
 furnace_recipes:
   copper_ingot:
     input:
