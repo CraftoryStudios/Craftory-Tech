@@ -38,7 +38,7 @@ import tech.brettsaunders.craftory.utils.RecipeUtils;
 public class MagnetisingTable extends CustomBlock implements Listener {
 
   @Persistent
-  protected boolean framePlaced;
+  protected Boolean framePlaced;
 
   protected ItemFrame itemFrame;
 
