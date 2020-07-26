@@ -11,10 +11,10 @@
 package tech.brettsaunders.craftory.api.font;
 
 public enum Font {
-  ELECTRIC_FOUNDRY_GUI('\ue00d'),
+  ELECTRIC_FOUNDRY_GUI('\ue00D'),
   CELL_GUI('\ue000'),
   FURNACE_GUI('\ue009'),
-  IRON_FOUNDRY_GUI('\ue009'),
+  IRON_FOUNDRY_GUI('\ue00E'),
   GENERATOR_GUI('\ue008'),
   GEOTHERMAL_GUI('\ue00A'),
   BLANK('\ue00C'),

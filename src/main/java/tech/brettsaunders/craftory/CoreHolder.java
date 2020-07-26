@@ -42,7 +42,7 @@ public class CoreHolder {
     public static final String GOLD_ELECTRIC_FOUNDRY = "GoldElectricFoundry";
     public static final String DIAMOND_ELECTRIC_FOUNDRY = "DiamondElectricFoundry";
     public static final String EMERALD_ELECTRIC_FOUNDRY = "EmeraldElectricFoundry";
-    public static final String IRON_FOUNDRY = "IronMacerator";
+    public static final String IRON_FOUNDRY = "IronFoundry";
     public static final String IRON_MACERATOR = "IronMacerator";
     public static final String GOLD_MACERATOR = "GoldMacerator";
     public static final String DIAMOND_MACERATOR = "DiamondMacerator";
