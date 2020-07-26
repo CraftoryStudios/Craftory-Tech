@@ -75,8 +75,11 @@ public class RotaryGenerator extends BaseGenerator {
     inputSlots.add(new ItemStack(Material.AIR));
     mode = WheelMode.WATER;
   }
-  public RotaryGenerator() {super();
-    init();}
+
+  public RotaryGenerator() {
+    super();
+    init();
+  }
 
   private void init() {
     inputLocations = new ArrayList<>();
@@ -106,6 +109,7 @@ public class RotaryGenerator extends BaseGenerator {
     super.afterLoadUpdate();
     placeWheels();
     if(modeSaved != null) mode = WheelMode.valueOf(modeSaved);
+    setFacing(facing);
   }
 
   protected void removeWheels() {
@@ -246,7 +250,8 @@ public class RotaryGenerator extends BaseGenerator {
   }
 
   protected int calculateAmountProduced() {
-    return (int) Math.round(maxOutput*efficiencyMultiplier);
+    int temp = (int) Math.round(maxOutput*efficiencyMultiplier);
+    return temp;
   }
 
   @Ticking(ticks=600)
