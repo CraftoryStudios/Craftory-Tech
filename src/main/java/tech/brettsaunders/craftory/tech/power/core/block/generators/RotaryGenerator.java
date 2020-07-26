@@ -49,7 +49,7 @@ public class RotaryGenerator extends BaseGenerator {
 
   @Persistent
   @Getter
-  protected boolean wheelPlaced = false;
+  protected Boolean wheelPlaced = false;
   protected boolean wheelFree = false;
   private static final byte C_LEVEL = 0;
   private static final int SLOT = 22;
