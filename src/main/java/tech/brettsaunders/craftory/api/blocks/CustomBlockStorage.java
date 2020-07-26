@@ -92,7 +92,7 @@ public class CustomBlockStorage {
   public static void loadSavedRegion(World world, String regionID, String dataFolder, CustomBlockManager manager, PersistenceStorage persistenceStorage) {
     try {
       NBTCompound chunkCompound;
-      NBTCompound locationCompound;
+      NBTCompound locationCompound = null;
       Location location;
       CustomBlock customBlock;
 
@@ -116,24 +116,34 @@ public class CustomBlockStorage {
 
         String chunkWorldKey = "";
         for (String locationKey : chunkCompound.getKeys()) {
-          locationCompound = chunkCompound.getCompound(locationKey);
-          //TODO Remove exception later version
-          if (locationCompound.getCompound("blockName").getString("data").equalsIgnoreCase("CopperOre")) {
-            toDelete.add(locationKey);
-            continue;
+          try {
+            locationCompound = chunkCompound.getCompound(locationKey);
+            //TODO Remove exception later version
+            if (locationCompound.getCompound("blockName").getString("data")
+                .equalsIgnoreCase("CopperOre")) {
+              toDelete.add(locationKey);
+              continue;
+            }
+            location = keyToLoc(locationKey, world);
+            customBlock = Craftory.customBlockFactory
+                .createLoad(locationCompound, persistenceStorage, location);
+            if (chunkWorldKey.isEmpty()) {
+              chunkWorldKey = getChunkWorldID(customBlock.location.getChunk());
+            }
+            //TODO Remove in later version
+            if (locationCompound.hasKey("fuelItem") && customBlock instanceof SolidFuelGenerator) {
+              ItemStack fuelItem = NBTItem
+                  .convertNBTtoItem(locationCompound.getCompound("fuelItem"));
+              ((SolidFuelGenerator) customBlock).setFuelItem(fuelItem);
+              toDeleteFuelItem.add(locationKey);
+            }
+            chunkData.add(customBlock);
+          } catch (Exception e) {
+            Logger.info(e.getMessage());
+            Logger.info(e.getStackTrace().toString());
+            Logger.debug("Location Key: " + locationKey);
+            Logger.debug(locationCompound != null ? locationCompound.toString() : "NO Location Compound");
           }
-          location = keyToLoc(locationKey, world);
-          customBlock = Craftory.customBlockFactory.createLoad(locationCompound, persistenceStorage, location);
-          if (chunkWorldKey.isEmpty()) {
-            chunkWorldKey = getChunkWorldID(customBlock.location.getChunk());
-          }
-          //TODO Remove in later version
-          if (locationCompound.hasKey("fuelItem") && customBlock instanceof SolidFuelGenerator) {
-            ItemStack fuelItem = NBTItem.convertNBTtoItem(locationCompound.getCompound("fuelItem"));
-            ((SolidFuelGenerator) customBlock).setFuelItem(fuelItem);
-            toDeleteFuelItem.add(locationKey);
-          }
-          chunkData.add(customBlock);
         }
         //TODO Remove Later
         for (String key : toDelete) {
