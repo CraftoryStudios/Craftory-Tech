@@ -32,7 +32,6 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
-import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
 public class MagnetisingTable extends CustomBlock implements Listener {
@@ -66,7 +65,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   @Override
   public void blockBreak() {
     super.blockBreak();
-    itemFrame.remove();
+    if(itemFrame!=null) itemFrame.remove();
   }
 
   @Override
@@ -105,14 +104,12 @@ public class MagnetisingTable extends CustomBlock implements Listener {
       }
       return true;
     }
-    Logger.info(itemName);
-    Logger.info(recipes.toString());
     return false;
   }
 
   @EventHandler
   public void itemFrameHit(EntityDamageByEntityEvent event) {
-    if(frameLocation==null) return;
+    if(frameLocation==null || itemFrame==null) return;
     if(!(event.getDamager().getType().equals(EntityType.PLAYER))) return;
     ItemStack itemStack = ((Player)event.getDamager()).getInventory().getItemInMainHand();
     if(itemStack == null || itemStack.getType() == Material.AIR) return;
