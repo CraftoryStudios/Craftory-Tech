@@ -34,10 +34,10 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 
 public class BlockBreaker extends BaseMachine {
   private static final byte C_LEVEL = 0;
-  private static final byte MAX_RECEIVE = 120;
+  private static final int MAX_RECEIVE = 10000;
   private static final int SLOT = 22;
 
-  private static final int ENERGY_REQUIRED = 100;
+  private static final int ENERGY_REQUIRED = 1200;
   private Location breakLoc;
   private Location opposite;
   private int lastRedstoneStrength = 0;
