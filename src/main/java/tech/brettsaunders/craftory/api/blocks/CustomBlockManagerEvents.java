@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.api.blocks;
 
 import static tech.brettsaunders.craftory.Craftory.customBlockManager;
@@ -85,10 +95,10 @@ public class CustomBlockManagerEvents implements Listener {
     if (!e.isCancelled()) {
       //If Basic Block
       if (Utilities.getBasicBlockRegistry().containsKey(customBlockItemName)) {
-        customBlockManager.getCustomBasicBlockOfItem(customBlockItemName, e.getBlockPlaced());
+        customBlockManager.placeBasicCustomBlock(customBlockItemName, e.getBlockPlaced());
       } else {
         CustomBlock customBlock = customBlockManager
-            .getCustomBlockOfItem(customBlockItemName, e.getBlockPlaced());
+            .placeCustomBlock(customBlockItemName, e.getBlockPlaced(), e.getPlayer().getFacing());
         CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
             e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
         Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
@@ -120,11 +130,23 @@ public class CustomBlockManagerEvents implements Listener {
     }
   }
 
+  /* Item Based Listener */
+  @EventHandler
+  public void onDurabilityItemUse(PlayerInteractEvent e) {
+    if (e.getItem() == null) return;
+    Material type = e.getItem().getType();
+    if (type != Material.STONE_HOE) return;
+    if (!CustomItemManager.isCustomItem(e.getItem(), false)) return;
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    e.setCancelled(true);
+  }
+
   @EventHandler
   public void onBlockBreak(BlockBreakEvent e) {
     final Location location = e.getBlock().getLocation();
     if (currentCustomBlocks.containsKey(location)) {
       CustomBlock customBlock = currentCustomBlocks.get(location);
+      customBlock.blockBreak();
       //Return custom item
       final String blockName = currentCustomBlocks.get(
           location).blockName;
@@ -202,7 +224,7 @@ public class CustomBlockManagerEvents implements Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onPistonExtend(BlockPistonExtendEvent e) {
     e.getBlocks().forEach((block -> {
       if (currentCustomBlocks.containsKey(block.getLocation())) {
@@ -212,7 +234,7 @@ public class CustomBlockManagerEvents implements Listener {
     }));
   }
 
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onPistonRetract(BlockPistonRetractEvent e) {
     e.getBlocks().forEach(block -> {
       if (currentCustomBlocks.containsKey(block.getLocation())) {

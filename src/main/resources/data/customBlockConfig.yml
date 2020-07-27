@@ -6,7 +6,6 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    
     itemModel: stone
   GoldCell:
     WEST: true
@@ -15,7 +14,6 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    
     itemModel: stone
   DiamondCell:
     WEST: false
@@ -24,7 +22,6 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    
     itemModel: stone
   EmeraldCell:
     WEST: false
@@ -33,7 +30,6 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: false
-    
     itemModel: stone
   SolidFuelGenerator:
     WEST: true
@@ -42,7 +38,6 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    
     itemModel: stone
   power_connector:
     WEST: true
@@ -51,7 +46,6 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: false
-    
     itemModel: stone
   IronElectricFurnace:
     WEST: true
@@ -60,7 +54,6 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    
     itemModel: stone
   GoldElectricFurnace:
     WEST: true
@@ -69,7 +62,6 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    
     itemModel: stone
   DiamondElectricFurnace:
     WEST: false
@@ -78,7 +70,6 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    
     itemModel: stone
   EmeraldElectricFurnace:
     WEST: true
@@ -87,7 +78,6 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    
     itemModel: stone
   IronFoundry:
     WEST: false
@@ -96,7 +86,6 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    
     itemModel: stone
   IronElectricFoundry:
     WEST: true
@@ -105,7 +94,6 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: false
-    
     itemModel: stone
   GoldElectricFoundry:
     WEST: true
@@ -114,7 +102,6 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    
     itemModel: stone
   DiamondElectricFoundry:
     WEST: false
@@ -123,7 +110,6 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    
     itemModel: stone
   EmeraldElectricFoundry:
     WEST: true
@@ -132,7 +118,6 @@ blocks:
     NORTH: false
     EAST: true
     DOWN: false
-    
     itemModel: stone
   crystal:
     WEST: false
@@ -141,8 +126,8 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    
     itemModel: stone
+
   CopperOre:
     WEST: true
     UP: false
@@ -150,5 +135,170 @@ blocks:
     NORTH: true
     EAST: false
     DOWN: false
-    
     itemModel: gold_ore
+  IronMacerator:
+    WEST: true
+    UP: true
+    SOUTH: false
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemModel: stone
+  GoldMacerator:
+    WEST: false
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemModel: stone
+  DiamondMacerator:
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemModel: stone
+  EmeraldMacerator:
+    WEST: false
+    UP: true
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemModel: stone
+  BasicSolarPanel:
+    WEST: true
+    UP: true
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemModel: iron_block
+  SolarPanel:
+    WEST: false
+    UP: false
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: gold_block
+  CompactedSolarPanel:
+    WEST: true
+    UP: false
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: diamond_block
+  SolarArray:
+    WEST: false
+    UP: true
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: stone
+  GeothermalGenerator:
+    WEST: true
+    UP: true
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: stone
+  RotaryGenerator:
+    WEST: false
+    UP: false
+    SOUTH: true
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: stone
+  Magnetiser:
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: stone
+  MagnetisingTable:
+    WEST: false
+    UP: true
+    SOUTH: true
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: stone
+  BlockBreaker:
+    WEST: true
+    UP: true
+    SOUTH: true
+    NORTH: false
+    EAST: false
+    DOWN: true
+    itemModel: stone
+  BlockBreaker_SOUTH:
+    WEST: false
+    UP: false
+    SOUTH: false
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true
+  BlockBreaker_WEST:
+    WEST: true
+    UP: false
+    SOUTH: false
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true
+  BlockBreaker_EAST:
+    WEST: false
+    UP: true
+    SOUTH: false
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true
+  BlockPlacer:
+    WEST: true
+    UP: true
+    SOUTH: false
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+  BlockPlacer_SOUTH:
+    WEST: false
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true
+  BlockPlacer_WEST:
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true
+  BlockPlacer_EAST:
+    WEST: false
+    UP: true
+    SOUTH: true
+    NORTH: true
+    EAST: false
+    DOWN: true
+    itemModel: stone
+    hideItem: true

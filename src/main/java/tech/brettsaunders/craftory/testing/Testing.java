@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.testing;
 
 import org.bukkit.Bukkit;
@@ -78,7 +88,7 @@ public class Testing {
   }
 
   private static CustomBlock placeBlock(String blockName, Location location) {
-    CustomBlock customBlock = Craftory.customBlockManager.getCustomBlockOfItem(blockName, location.getBlock());
+    CustomBlock customBlock = Craftory.customBlockManager.placeCustomBlock(blockName, location.getBlock(), BlockFace.NORTH);
     CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
         location, blockName, location.getBlock(), customBlock);
     Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);

@@ -1,7 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
@@ -27,14 +38,14 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
       try {
         amount = Integer.parseInt(args[3]);
       } catch (NumberFormatException ignored) {
-        Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandErrorAmount"));
+        Utilities.msg(sender, Utilities.getTranslation("GiveCommandErrorAmount"));
       }
       if (amount > 64) {
         amount = 64;
       }
       giveCustomItem(amount, args[1], args[2], sender);
     } else {
-      Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandUsage"));
+      Utilities.msg(sender, Utilities.getTranslation("GiveCommandUsage"));
     }
     return true;
   }
@@ -73,21 +84,17 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
         itemStack.setAmount(amount);
         Player player = Craftory.plugin.getServer().getPlayer(playerName);
         if (player != null) {
-          int slot = player.getInventory().firstEmpty();
-          if (slot == -1) {
-            player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
-            Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandGave") + " " + playerName + " x" + amount + " " + itemName);
-            return true;
-          } else {
-            player.getInventory().setItem(slot, itemStack);
-            Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandGave") +" " + playerName + " x" + amount + " " + itemName);
-            return true;
+          HashMap<Integer,ItemStack> result = player.getInventory().addItem(itemStack);
+          if (result.size() > 0) {
+            result.forEach((i, item) ->player.getWorld().dropItemNaturally(player.getLocation(), item));
           }
+          Utilities.msg(sender, Utilities.getTranslation("GiveCommandGave") + " " + playerName + " x" + amount + " " + itemName);
+          return true;
         } else {
-          Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandErrorPlayer"));
+          Utilities.msg(sender, Utilities.getTranslation("GiveCommandErrorPlayer"));
         }
       } else {
-        Utilities.msg(sender, Utilities.langProperties.getProperty("GiveCommandErrorNotItem"));
+        Utilities.msg(sender, Utilities.getTranslation("GiveCommandErrorNotItem"));
       }
     }
     return false;

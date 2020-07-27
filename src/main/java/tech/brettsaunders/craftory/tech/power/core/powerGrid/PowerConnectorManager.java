@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
 import java.util.ArrayList;
@@ -48,7 +58,7 @@ public class PowerConnectorManager implements Listener {
           }
           formingConnection
               .put(event.getPlayer().getUniqueId(), location);
-          event.getPlayer().sendMessage(Utilities.langProperties.getProperty("PowerConnectorSecond"));
+          event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorSecond"));
         } else {
           //Locations
           Location toLoc = location;
@@ -79,10 +89,10 @@ public class PowerConnectorManager implements Listener {
             }
             formBeam(fromLoc, toLoc);
             formBeam(toLoc, fromLoc);
-            event.getPlayer().sendMessage(Utilities.langProperties.getProperty("PowerConnectorFormed"));
+            event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorFormed"));
           } else {
             formingConnection.remove(event.getPlayer().getUniqueId());
-            event.getPlayer().sendMessage(Utilities.langProperties.getProperty("PowerConnectorFailed"));
+            event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorFailed"));
             Logger.debug((powerGridFrom == null) + "");
             Logger.debug((powerGridTo == null) + "");
             Logger.debug((fromLoc == toLoc) + "");
@@ -104,13 +114,13 @@ public class PowerConnectorManager implements Listener {
         } else if (block instanceof BaseCell) {
           gridManager.addPowerCell(fromLoc, toLoc);
         } else {
-          event.getPlayer().sendMessage(Utilities.langProperties.getProperty("PowerConnectorBlockMismatch"));
+          event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorBlockMismatch"));
           formingConnection.remove(event.getPlayer().getUniqueId());
           return;
         }
         formBeam(fromLoc, toLoc); //ee
         formBeam(toLoc, fromLoc);
-        event.getPlayer().sendMessage(Utilities.langProperties.getProperty("PowerConnectorMachine"));
+        event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorMachine"));
         formingConnection.remove(event.getPlayer().getUniqueId());
       }
 

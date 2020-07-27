@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
 import java.util.HashMap;
@@ -22,15 +32,22 @@ public class GOutputConfig implements IGUIComponent, Listener {
   private final int DOWN_SLOT;
   private final boolean ALT;
 
+  private static ItemStack DISABLED = null;
+  private static ItemStack OUTPUT = null;
+
   private final Inventory inventory;
   private final HashMap<BlockFace, Boolean> config;
 
   public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config) {
-    this(inventory, config, 34);
+    this(inventory, config, 43);
   }
 
   public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config, int middleSlot) {
     this(inventory, config, middleSlot, false);
+  }
+
+  public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config, boolean alt) {
+    this(inventory, config, 43, alt);
   }
 
   public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config, int middleSlot,
@@ -46,6 +63,11 @@ public class GOutputConfig implements IGUIComponent, Listener {
     ALT = alt;
     Craftory.plugin.getServer().getPluginManager()
         .registerEvents(this, Craftory.plugin);
+
+    DISABLED = CustomItemManager
+        .getCustomItem("output_disabled" + (ALT ? "_alt" : ""));
+    OUTPUT = CustomItemManager
+        .getCustomItem("output_green" + (ALT ? "_alt" : ""));
   }
 
   @EventHandler
@@ -77,11 +99,6 @@ public class GOutputConfig implements IGUIComponent, Listener {
 
   @Override
   public void update() {
-    final ItemStack DISABLED = CustomItemManager
-        .getCustomItem("output_disabled" + (ALT ? "_alt" : ""));
-    final ItemStack OUTPUT = CustomItemManager
-        .getCustomItem("output_green" + (ALT ? "_alt" : ""));
-
     //NORTH, EAST, SOUTH, WEST, UP, DOWN
     inventory.setItem(NORTH_SLOT, !config.get(BlockFace.NORTH) ? DISABLED.clone() : OUTPUT.clone());
     inventory.setItem(SOUTH_SLOT, !config.get(BlockFace.SOUTH) ? DISABLED.clone() : OUTPUT.clone());

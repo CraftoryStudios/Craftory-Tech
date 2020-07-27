@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
 import org.bukkit.ChatColor;
@@ -32,10 +42,10 @@ public class GIndicator implements IGUIComponent {
 
     if (state.getT()) {
       light = CustomItemManager.getCustomItem("light_on");
-      name = Utilities.langProperties.getProperty("light_on");
+      name = Utilities.getTranslation("light_on");
     } else {
       light = CustomItemManager.getCustomItem("light_off");
-      name = Utilities.langProperties.getProperty("light_off");
+      name = Utilities.getTranslation("light_off");
     }
     ItemMeta meta = light.getItemMeta();
     meta.setDisplayName(ChatColor.RESET +name);

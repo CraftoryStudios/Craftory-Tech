@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory;
 
 import java.io.File;
@@ -22,8 +32,8 @@ public final class Craftory extends JavaPlugin {
 
   public static String VERSION;
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/096cac50626fc99d8673cf43065b095e163576d0.zip";
-  public static final String HASH = "096cac50626fc99d8673cf43065b095e163576d0";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/bf80cabe308f6918b16c4392deb52e4652c3dc5b.zip";
+  public static final String HASH = "bf80cabe308f6918b16c4392deb52e4652c3dc5b";
 
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
@@ -50,6 +60,7 @@ public final class Craftory extends JavaPlugin {
     Utilities.createConfigs();
     Utilities.createDataPath();
     Utilities.getTranslations();
+    tickManager = new CustomBlockTickManager();
     customBlockFactory = new CustomBlockFactory();
     Utilities.pluginBanner();
     Utilities.checkVersion();
@@ -60,17 +71,15 @@ public final class Craftory extends JavaPlugin {
     if (Utilities.config.getBoolean("resourcePack.forcePack")) {
       new ResourcePackEvents();
     }
-    customBlockConfigFile = new File(Craftory.plugin.getDataFolder(), "data/customBlockConfig.yml");
-    customItemConfigFile = new File(Craftory.plugin.getDataFolder(),"data/customItemConfig.yml");
-    customRecipeConfigFile = new File(Craftory.plugin.getDataFolder(),"data/customRecipesConfig.yml");
-    customModelDataFile = new File(getDataFolder(), "config/customModelData.yml");
+    customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
+    customItemConfigFile = new File(getDataFolder(),"data/customItemConfig.yml");
+    customRecipeConfigFile = new File(getDataFolder(),"data/customRecipesConfig.yml");
+    customModelDataFile = new File(getDataFolder(), "config/customModelDataV2.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
     customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
     CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
-    tickManager = new CustomBlockTickManager();
-    Utilities.registerBlocks();
     customBlockManager = new CustomBlockManager();
     customBlockFactory.registerStats();
     new WorldGenHandler();

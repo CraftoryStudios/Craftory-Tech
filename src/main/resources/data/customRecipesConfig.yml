@@ -10,7 +10,6 @@ recipes:
     result:
       item: IronCell
       amount: 1
-
   GoldCell:
     pattern:
       - SSS
@@ -22,7 +21,6 @@ recipes:
     result:
       item: GoldCell
       amount: 1
-
   DiamondCell:
     pattern:
       - SSS
@@ -34,7 +32,6 @@ recipes:
     result:
       item: DiamondCell
       amount: 1
-
   EmeraldCell:
     pattern:
       - SSS
@@ -46,7 +43,6 @@ recipes:
     result:
       item: EmeraldCell
       amount: 1
-
   IronElectricFurnace:
     pattern:
       - SSS
@@ -59,7 +55,6 @@ recipes:
     result:
       item: IronElectricFurnace
       amount: 1
-
   GoldElectricFurnace:
     pattern:
       - SSS
@@ -72,7 +67,6 @@ recipes:
     result:
       item: GoldElectricFurnace
       amount: 1
-
   DiamondElectricFurnace:
     pattern:
       - SSS
@@ -85,7 +79,6 @@ recipes:
     result:
       item: DiamondElectricFurnace
       amount: 1
-
   EmeraldElectricFurnace:
     pattern:
       - SSS
@@ -98,7 +91,6 @@ recipes:
     result:
       item: EmeraldElectricFurnace
       amount: 1
-
   iron_core:
     pattern:
       - SIS
@@ -111,7 +103,6 @@ recipes:
     result:
       item: iron_core
       amount: 1
-
   gold_core:
     pattern:
       - SGS
@@ -124,7 +115,6 @@ recipes:
     result:
       item: gold_core
       amount: 1
-
   diamond_core:
     pattern:
       - SRS
@@ -138,7 +128,6 @@ recipes:
     result:
       item: diamond_core
       amount: 1
-
   emerald_core:
     pattern:
       - SRS
@@ -152,7 +141,6 @@ recipes:
     result:
       item: emerald_core
       amount: 1
-
   IronFoundry:
     pattern:
       - III
@@ -165,7 +153,6 @@ recipes:
     result:
       item: IronFoundry
       amount: 1
-
   IronElectricFoundry:
     pattern:
       - SSS
@@ -178,7 +165,6 @@ recipes:
     result:
       item: IronElectricFoundry
       amount: 1
-
   GoldElectricFoundry:
     pattern:
       - SSS
@@ -191,7 +177,6 @@ recipes:
     result:
       item: GoldElectricFoundry
       amount: 1
-
   DiamondElectricFoundry:
     pattern:
       - SSS
@@ -204,7 +189,6 @@ recipes:
     result:
       item: DiamondElectricFoundry
       amount: 1
-
   EmeraldElectricFoundry:
     pattern:
       - SSS
@@ -217,7 +201,6 @@ recipes:
     result:
       item: EmeraldElectricFoundry
       amount: 1
-
   SolidFuelGenerator:
     pattern:
       - SMS
@@ -231,7 +214,6 @@ recipes:
     result:
       item: SolidFuelGenerator
       amount: 1
-
   wrench:
     pattern:
       - SXS
@@ -242,7 +224,6 @@ recipes:
     result:
       item: wrench
       amount: 1
-
   power_connector:
     pattern:
       - SOS
@@ -255,7 +236,6 @@ recipes:
     result:
       item: power_connector
       amount: 1
-
   configurator:
     pattern:
       - SMS
@@ -267,7 +247,83 @@ recipes:
     result:
       item: configurator
       amount: 1
-
+  sickle_wood:
+    pattern:
+      - XWX
+      - XXW
+      - SWX
+    ingredients:
+      W: OAK_PLANKS
+      S: STICK
+    result:
+      item: sickle_wood
+      amount: 1
+  sickle_stone:
+    pattern:
+      - XTX
+      - XXT
+      - STX
+    ingredients:
+      T: STONE
+      S: STICK
+    result:
+      item: sickle_stone
+      amount: 1
+  sickle_iron:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: IRON_INGOT
+      S: STICK
+    result:
+      item: sickle_iron
+      amount: 1
+  sickle_steel:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: steel_ingot
+      S: STICK
+    result:
+      item: sickle_steel
+      amount: 1
+  sickle_copper:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: copper_ingot
+      S: STICK
+    result:
+      item: sickle_copper
+      amount: 1
+  sickle_gold:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: GOLD_INGOT
+      S: STICK
+    result:
+      item: sickle_gold
+      amount: 1
+  sickle_diamond:
+    pattern:
+      - XDX
+      - XXD
+      - SDX
+    ingredients:
+      D: DIAMOND
+      S: STICK
+    result:
+      item: sickle_diamond
+      amount: 1
   magnetised_iron:
     pattern:
       - IXX
@@ -278,6 +334,210 @@ recipes:
     result:
       item: magnetised_iron
       amount: 1
+  IronMacerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: iron_core
+    result:
+      item: IronMacerator
+      amount: 1
+  GoldMacerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: gold_core
+    result:
+      item: GoldMacerator
+      amount: 1
+  DiamondMacerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: diamond_core
+    result:
+      item: DiamondMacerator
+      amount: 1
+  EmeraldMacerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: emerald_core
+    result:
+      item: EmeraldMacerator
+      amount: 1
+  BasicSolarPanel:
+    pattern:
+      - SGS
+      - UCU
+      - SMS
+    ingredients:
+      S: steel_ingot
+      G: GLASS
+      U: copper_ingot
+      C: iron_core
+      M: magnetised_iron
+    result:
+      item: BasicSolarPanel
+      amount: 1
+  SolarPanel:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      S: BasicSolarPanel
+      C: gold_core
+    result:
+      item: SolarPanel
+      amount: 1
+  CompactedSolarPanel:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      S: SolarPanel
+      C: diamond_core
+    result:
+      item: CompactedSolarPanel
+      amount: 1
+  SolarArray:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      S: CompactedSolarPanel
+      C: emerald_core
+    result:
+      item: SolarArray
+      amount: 1
+  MagnetisingTable:
+    pattern:
+      - III
+      - PXP
+      - PXP
+    ingredients:
+      I: IRON_BLOCK
+      P: OAK_PLANKS
+    result:
+      item: MagnetisingTable
+      amount: 1
+  engineers_hammer:
+    pattern:
+      - XSS
+      - XHS
+      - HXX
+    ingredients:
+      S: steel_ingot
+      H: STICK
+    result:
+      item: engineers_hammer
+      amount: 1
+  RotaryGenerator:
+    pattern:
+      - SCS
+      - MOM
+      - SCS
+    ingredients:
+      C: copper_ingot
+      M: magnetised_iron
+      S: steel_ingot
+      O: iron_core
+    result:
+      item: RotaryGenerator
+      amount: 1
+  GeothermalGenerator:
+    pattern:
+      - SLS
+      - COM
+      - SLS
+    ingredients:
+      C: copper_ingot
+      M: magnetised_iron
+      S: steel_ingot
+      O: iron_core
+      L: LAVA_BUCKET
+    result:
+      item: GeothermalGenerator
+      amount: 1
+  windmill:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: WHITE_WOOL
+      S: STICK
+    result:
+      item: windmill
+      amount: 1
+  waterwheel:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: OAK_PLANKS
+      S: STICK
+    result:
+      item: waterwheel
+      amount: 1
+  Magnetiser:
+    pattern:
+      - SSS
+      - UCU
+      - SSS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+      U: copper_ingot
+    result:
+      item: Magnetiser
+      amount: 1
+  BlockPlacer:
+    pattern:
+      - SSS
+      - PCR
+      - SSS
+    ingredients:
+      R: REDSTONE_BLOCK
+      C: iron_core
+      S: steel_ingot
+      P: PISTON
+    result:
+      item: BlockPlacer
+      amount: 1
+  BlockBreaker:
+    pattern:
+      - SSS
+      - PCR
+      - SSS
+    ingredients:
+      R: REDSTONE_BLOCK
+      C: iron_core
+      S: steel_ingot
+      P: DIAMOND_PICKAXE
+    result:
+      item: BlockBreaker
+      amount: 1
 
 furnace_recipes:
   copper_ingot:
@@ -286,3 +546,101 @@ furnace_recipes:
     result:
       name: copper_ingot
       amount: 1
+  copper_ingot_dust:
+    input:
+      name: copper_dust
+    result:
+      name: copper_ingot
+      amount: 1
+  steel_ingot:
+    input:
+      name: steel_dust
+    result:
+      name: steel_ingot
+      amount: 1
+  iron_ingot:
+    input:
+      name: iron_dust
+    result:
+      name: IRON_INGOT
+      amount: 1
+  gold_ingot:
+    input:
+      name: gold_dust
+    result:
+      name: GOLD_INGOT
+      amount: 1
+
+macerator_recipes:
+  coal_dust:
+    input:
+      name: COAL
+    result:
+      name: coal_dust
+  coal_dust_ore:
+    input:
+      name: COAL_ORE
+    result:
+      name: coal_dust
+  diamond_dust:
+    input:
+      name: DIAMOND
+    result:
+      name: diamond_dust
+  diamond_dust_ore:
+    input:
+      name: DIAMOND_ORE
+    result:
+      name: diamond_dust
+  gold_dust:
+    input:
+      name: GOLD_INGOT
+    result:
+      name: gold_dust
+  gold_dust_ore:
+    input:
+      name: GOLD_ORE
+    result:
+      name: gold_dust
+  iron_dust:
+    input:
+      name: IRON_INGOT
+    result:
+      name: iron_dust
+  iron_dust_ore:
+    input:
+      name: IRON_ORE
+    result:
+      name: iron_dust
+  copper_dust:
+    input:
+      name: copper_ingot
+    result:
+      name: copper_dust
+  copper_dust_ore:
+    input:
+      name: CopperOre
+    result:
+      name: copper_dust
+  emerald_dust:
+    input:
+      name: EMERALD
+    result:
+      name: emerald_dust
+  emerald_dust_ore:
+    input:
+      name: EMERALD_ORE
+    result:
+      name: emerald_dust
+  steel_dust:
+    input:
+      name: steel_ingot
+    result:
+      name: steel_dust
+
+magnetiser_recipes:
+  magnetised_iron:
+    input:
+      name: IRON_INGOT
+    result:
+      name: magnetised_iron

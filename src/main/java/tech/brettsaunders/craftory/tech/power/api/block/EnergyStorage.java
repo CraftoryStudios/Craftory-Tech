@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyStorage;
@@ -127,6 +137,10 @@ public class EnergyStorage implements IEnergyStorage {
     } else if (this.energy < 0) {
       this.energy = 0;
     }
+  }
+
+  public boolean isFull() {
+    return energy>=capacity;
   }
 
   @Override

@@ -1,24 +1,37 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.api.blocks;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import lombok.Synchronized;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
+import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockFactory {
   private HashMap<String, Class<? extends CustomBlock>> blockTypes = new HashMap<>();
   private HashMap<String, Constructor<? extends CustomBlock>> createConstructor = new HashMap<>();
   private HashMap<String, Constructor<? extends CustomBlock>> loadConstructor = new HashMap<>();
+  private HashSet<String> directional = new HashSet<>();
   private String locationName;
   private StatsContainer statsContainer;
 
@@ -27,7 +40,7 @@ public class CustomBlockFactory {
   }
 
   @Synchronized
-  public void registerCustomBlock(String nameID, Class<? extends CustomBlock> block) {
+  public void registerCustomBlock(String nameID, Class<? extends CustomBlock> block, boolean registerTickable, boolean directional) {
     blockTypes.put(nameID, block);
     Constructor[] constructors = block.getConstructors();
     for (Constructor constructor : constructors) {
@@ -36,6 +49,12 @@ public class CustomBlockFactory {
       } else if (constructor.getParameterCount() == 1 && constructor.getParameterTypes()[0].getName().equals(locationName)){
         createConstructor.put(nameID, constructor);
       }
+    }
+    if (registerTickable) {
+      Craftory.tickManager.registerCustomBlockClass(block);
+    }
+    if (directional) {
+      this.directional.add(nameID);
     }
   }
 
@@ -82,12 +101,17 @@ public class CustomBlockFactory {
   }
 
   @Synchronized
-  public CustomBlock create(String nameID, Location location) {
+  public CustomBlock create(String nameID, Location location, BlockFace direction) {
     CustomBlock customBlock = null;
     if (createConstructor.containsKey(nameID)) {
       Constructor constructor = createConstructor.get(nameID);
       try {
         customBlock = (CustomBlock) constructor.newInstance(location);
+        if (directional.contains(nameID)) {
+          customBlock.setDirection(direction);
+        } else {
+          customBlock.setDirection(BlockFace.NORTH);
+        }
         customBlock.afterLoadUpdate();
         calculateStatsIncrease(customBlock);
       } catch (Exception e) {

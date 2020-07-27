@@ -1,7 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.api.blocks;
 
 import java.util.HashMap;
 import java.util.UUID;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -16,6 +27,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -24,6 +36,7 @@ import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.RotaryGenerator;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 
 public class PoweredBlockEvents implements Listener {
@@ -82,7 +95,7 @@ public class PoweredBlockEvents implements Listener {
     if (PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) {
       PoweredBlock block = (PoweredBlock) e.getCustomBlock();
       e.getPlayer().sendMessage(
-          Utilities.langProperties.getProperty("EnergyStored")+": " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
+          Utilities.getTranslation("EnergyStored")+": " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
               + " RE");
     }
   }
@@ -97,21 +110,39 @@ public class PoweredBlockEvents implements Listener {
     final Player player = e.getPlayer();
     if (e.getAction() == Action.RIGHT_CLICK_AIR && player.isSneaking()) {
       configuratorData.remove(player.getUniqueId());
-      player.sendMessage(Utilities.langProperties.getProperty("SideConfigClear"));
+      player.sendMessage(Utilities.getTranslation("SideConfigClear"));
     }
     if (PoweredBlockUtils.isEnergyProvider(e.getCustomBlock())) {
       BaseProvider provider = (BaseProvider) e.getCustomBlock();
       if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
         configuratorData.put(player.getUniqueId(), provider.getSideConfig());
-        player.sendMessage(Utilities.langProperties.getProperty("SideConfigCopied"));
+        player.sendMessage(Utilities.getTranslation("SideConfigCopied"));
       } else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
         if (configuratorData.containsKey(player.getUniqueId())) {
           provider.setSidesConfig(configuratorData.get(player.getUniqueId()));
-          player.sendMessage(Utilities.langProperties.getProperty("SideConfigPasted"));
+          player.sendMessage(Utilities.getTranslation("SideConfigPasted"));
         } else {
-          player.sendMessage(Utilities.langProperties.getProperty("SideConfigNoData"));
+          player.sendMessage(Utilities.getTranslation("SideConfigNoData"));
         }
       }
+    }
+  }
+
+  @EventHandler
+  public void onRenewableClick(CustomBlockInteractEvent e) {
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+      return;
+    }
+    if ((e.getCustomBlock() instanceof RotaryGenerator) && (CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WINDMILL) || CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WATER_WHEEL))) {
+      RotaryGenerator generator = (RotaryGenerator) e.getCustomBlock();
+      if(generator.getWheelPlaced()) return;
+      if(!generator.setFacing(e.getBlockFace())){
+        e.getPlayer().sendMessage(ChatColor.RED + "WaterWheels/WindMills require 7x7 clearance two blocks in front of them"); //TODO Brett make lang
+      }
+      if(generator.placeItemIn(e.getItemStack().clone())){
+        e.getItemStack().setAmount(e.getItemStack().getAmount()-1);
+      }
+
     }
   }
 

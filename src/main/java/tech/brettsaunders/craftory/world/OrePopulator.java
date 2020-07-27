@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.world;
 
 import java.util.ArrayList;
@@ -39,7 +49,7 @@ public class OrePopulator extends BlockPopulator {
         y = minHeight + r.nextInt(maxHeight - minHeight);
         block = chunk.getBlock(x, y, z);
         if (validBlock(block)) {
-          Craftory.customBlockManager.getCustomBasicBlockOfItem(ore, block);
+          Craftory.customBlockManager.placeBasicCustomBlock(ore, block);
           for (int j = 0; j < maxVeinSize; j++) {
             if (j >= minVeinSize && r.nextInt(100) < 40) {
               break;
@@ -81,7 +91,7 @@ public class OrePopulator extends BlockPopulator {
               }
             }
             if (valid) {
-              Craftory.customBlockManager.getCustomBasicBlockOfItem(ore, block);
+              Craftory.customBlockManager.placeBasicCustomBlock(ore, block);
             } else {
               break;
             }

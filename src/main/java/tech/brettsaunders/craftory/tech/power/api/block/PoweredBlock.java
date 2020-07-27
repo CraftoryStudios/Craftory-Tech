@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import static tech.brettsaunders.craftory.CoreHolder.HOPPER_INTERACT_FACES;
@@ -136,7 +146,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
           .equals(INTERACTABLEBLOCK.HOPPER_IN)) {
         ItemStack stack = inventoryInterface.getItem(slot);
         final Block relative = location.getBlock().getRelative(face);
-        if (!relative.isBlockPowered() && !relative.isBlockIndirectlyPowered()) {
+        if (!relative.isBlockPowered()) {
           ItemStack[] hopperItems = ((Hopper) relative.getState())
               .getInventory().getContents();
           for (ItemStack item : hopperItems) {
@@ -187,11 +197,13 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (event.getInventory() != getInventory()) {
       return;
     }
+    if(event.getCurrentItem()==null||event.getCurrentItem().getType().equals(Material.AIR)||event.getCurrentItem().getAmount()==0) return;
     if(event.getRawSlot() > 53){
       //Handle Shift Clicking Items
       if (event.isShiftClick()) {
         event.setCancelled(true);
         ItemStack sourceItemStack = event.getCurrentItem();
+        if(sourceItemStack==null) return;
         int amount = sourceItemStack.getAmount();
         for (Integer inputSlot : inputLocations) {
           ItemStack destinationItemStack = getInventory().getItem(inputSlot);

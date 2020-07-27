@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory;
 
 import eu.endercentral.crazy_advancements.CrazyAdvancements;
@@ -38,6 +48,13 @@ import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.IronCell;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.GeothermalGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.RotaryGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.SolidFuelGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.BasicSolarPanel;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.CompactedSolarPanel;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.SolarArray;
+import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.SolarPanel;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.DiamondElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
@@ -47,8 +64,16 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.Emerald
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.GoldElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.IronFoundry;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.generators.SolidFuelGenerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.DiamondMacerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.EmeraldMacerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.GoldMacerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.macerator.IronMacerator;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.Magnetiser;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.MagnetisingTable;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockBreaker;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockPlacer;
 import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
+import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -62,7 +87,8 @@ public class Utilities {
   public static FileConfiguration data;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
-  private static String UNIT = "Re";
+  private static String UNIT_ENERGY = "Re";
+  private static String UNIT_FLUID = "B";
   private static DecimalFormat df = new DecimalFormat("###.###");
   public static Metrics metrics;
 
@@ -120,6 +146,7 @@ public class Utilities {
     config.addDefault("general.techEnabled", true);
     config.options().header("Sets the language for Craftory to use. See Lang folder or Plugin page for options");
     config.addDefault("language.locale", "en-GB");
+    config.addDefault("generators.solarDuringStorms", true);
     config.options().header("The resource pack is required. But if you are self hosting it, you can disable this.");
     config.addDefault("resourcePack.forcePack", true);
     config.options().copyHeader(true);
@@ -141,7 +168,7 @@ public class Utilities {
     Properties defaultLang = new Properties();
     try {
       defaultLang.load(new InputStreamReader(new FileInputStream(new File(Craftory.plugin.getDataFolder(),
-          "lang/default_lang.properties")), Charset.forName("UTF-8")));
+          "data/default_lang.properties")), Charset.forName("UTF-8")));
       langProperties = new Properties(defaultLang);
       langProperties.load(new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale+".properties")), Charset.forName("UTF-8")));
     } catch (IOException e) {
@@ -155,7 +182,7 @@ public class Utilities {
       file.mkdirs();
     }
 
-    File modelData = new File(Craftory.plugin.getDataFolder(), "/config/customModelData.yml");
+    File modelData = new File(Craftory.plugin.getDataFolder(), "/config/customModelDataV2.yml");
     if (!modelData.exists()) {
       FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/config"),
           new File(Craftory.plugin.getDataFolder(), "/config"));
@@ -200,48 +227,45 @@ public class Utilities {
   }
 
   static void registerEvents() {
-
+    new ToolManager();
   }
 
   static void registerCustomBlocks() {
     CustomBlockFactory customBlockFactory = Craftory.customBlockFactory;
-    customBlockFactory.registerCustomBlock(Blocks.IRON_CELL, IronCell.class);
-    customBlockFactory.registerCustomBlock(Blocks.GOLD_CELL, GoldCell.class);
-    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_CELL, DiamondCell.class);
-    customBlockFactory.registerCustomBlock(Blocks.EMERALD_CELL, EmeraldCell.class);
-    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FURNACE, IronElectricFurnace.class);
-    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FURNACE, GoldElectricFurnace.class);
-    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FURNACE, DiamondElectricFurnace.class);
-    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FURNACE, EmeraldElectricFurnace.class);
-    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FOUNDRY, IronElectricFoundry.class);
-    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FOUNDRY, GoldElectricFoundry.class);
-    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FOUNDRY, DiamondElectricFoundry.class);
-    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FOUNDRY, EmeraldElectricFoundry.class);
-    customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class);
-    customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class);
-    customBlockFactory.registerCustomBlock(Blocks.POWER_CONNECTOR, PowerConnector.class);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_CELL, IronCell.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_CELL, GoldCell.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_CELL, DiamondCell.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_CELL, EmeraldCell.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FURNACE, IronElectricFurnace.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FURNACE, GoldElectricFurnace.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FURNACE, DiamondElectricFurnace.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FURNACE, EmeraldElectricFurnace.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FOUNDRY, IronElectricFoundry.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FOUNDRY, GoldElectricFoundry.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FOUNDRY, DiamondElectricFoundry.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FOUNDRY, EmeraldElectricFoundry.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.POWER_CONNECTOR, PowerConnector.class, false, false);
+    customBlockFactory.registerCustomBlock(Blocks.IRON_MACERATOR, IronMacerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.GOLD_MACERATOR, GoldMacerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.EMERALD_MACERATOR, EmeraldMacerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.BASIC_SOLAR_PANEL, BasicSolarPanel.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.SOLAR_PANEL, SolarPanel.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.COMPACTED_SOLAR_PANEL, CompactedSolarPanel.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.SOLAR_ARRAY, SolarArray.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.GEOTHERMAL_GENERATOR, GeothermalGenerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.ROTARY_GENERATOR, RotaryGenerator.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.MAGNETISER, Magnetiser.class, true, false);
+    customBlockFactory.registerCustomBlock(Blocks.MAGNETISING_TABLE, MagnetisingTable.class, false, false);
+    customBlockFactory.registerCustomBlock(Blocks.BLOCK_BREAKER, BlockBreaker.class, true, true);
+    customBlockFactory.registerCustomBlock(Blocks.BLOCK_PLACER, BlockPlacer.class, true, true);
   }
 
   static void registerBasicBlocks() {
     basicBlockRegistry.put(Blocks.COPPER_ORE, BasicBlocks.COPPER_ORE);
     basicBlockRegistry.put(Blocks.CRYSTAL_ORE, BasicBlocks.CRYSTAL_ORE);
-  }
-
-  static void registerBlocks() {
-    Craftory.tickManager.registerCustomBlockClass(DiamondCell.class);
-    Craftory.tickManager.registerCustomBlockClass(EmeraldCell.class);
-    Craftory.tickManager.registerCustomBlockClass(GoldCell.class);
-    Craftory.tickManager.registerCustomBlockClass(IronCell.class);
-    Craftory.tickManager.registerCustomBlockClass(IronElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(GoldElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(DiamondElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(EmeraldElectricFurnace.class);
-    Craftory.tickManager.registerCustomBlockClass(IronElectricFoundry.class);
-    Craftory.tickManager.registerCustomBlockClass(GoldElectricFoundry.class);
-    Craftory.tickManager.registerCustomBlockClass(DiamondElectricFoundry.class);
-    Craftory.tickManager.registerCustomBlockClass(EmeraldElectricFoundry.class);
-    Craftory.tickManager.registerCustomBlockClass(SolidFuelGenerator.class);
-    Craftory.tickManager.registerCustomBlockClass(IronFoundry.class);
   }
 
   static void done() {
@@ -273,6 +297,15 @@ public class Utilities {
       data.save(dataFile);
     } catch (IOException ex) {
       Bukkit.getLogger().log(Level.SEVERE, "Could not save " + dataFile, ex);
+    }
+  }
+
+  public static String getTranslation(String key) {
+    String result = langProperties.getProperty(key);
+    if (result == null) {
+      return "Unknown";
+    } else {
+      return result;
     }
   }
 
@@ -334,30 +367,42 @@ public class Utilities {
         Double.parseDouble(locationData[1]), Double.parseDouble(locationData[2]));
   }
 
-  public static String rawToPrefixed(Integer energy) {
+  public static String rawEnergyToPrefixed(Integer energy) {
     String s = Integer.toString(energy);
     int length = s.length();
-    //if(length < 3) return s + " " + UNIT;
-    if (length < 7) {
+    if(length < 6) return s + " " + UNIT_ENERGY;
+    /*if (length < 7) {
       return s + " " + UNIT;
-    }
-    //if(length < 7) return df.format(energy/1000f) +" K" + UNIT;
+    }*/
+    if(length < 7) return df.format(energy/1000f) + " K" + UNIT_ENERGY;
     if (length < 10) {
-      return df.format(energy / 1000000f) + " M" + UNIT;
+      return df.format(energy / 1000000f) + " M" + UNIT_ENERGY;
     }
     if (length < 13) {
-      return df.format(energy / 1000000000f) + " G" + UNIT;
+      return df.format(energy / 1000000000f) + " G" + UNIT_ENERGY;
     }
     if (length < 16) {
-      return df.format(energy / 1000000000000f) + " T" + UNIT;
+      return df.format(energy / 1000000000000f) + " T" + UNIT_ENERGY;
     }
     if (length < 19) {
-      return df.format(energy / 1000000000000000f) + " P" + UNIT;
+      return df.format(energy / 1000000000000000f) + " P" + UNIT_ENERGY;
     }
     if (length < 22) {
-      return df.format(energy / 1000000000000000000f) + " E" + UNIT;
+      return df.format(energy / 1000000000000000000f) + " E" + UNIT_ENERGY;
     }
     return "A bukkit load";
   }
 
+  public static String rawFluidToPrefixed(Integer amount) {
+    String s = Integer.toString(amount);
+    int length = s.length();
+    if(length < 6) return s + " m" + UNIT_FLUID;
+    if(length < 7) return s + " " + UNIT_FLUID;
+    if(length < 10) return df.format(amount / 1000000f) + " K" + UNIT_FLUID;
+    if(length < 13) return df.format(amount / 1000000000f) + " M" + UNIT_FLUID;
+    if(length < 16) return df.format(amount / 1000000f) + " G" + UNIT_FLUID;
+    if(length < 19) return df.format(amount / 1000000f) + " T" + UNIT_FLUID;
+    if(length < 22) return df.format(amount / 1000000f) + " P" + UNIT_FLUID;
+    return "A bukkit load";
+  }
 }

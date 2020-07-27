@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2020. BrettSaunders & Craftory Team - All Rights Reserved
+ *
+ * This file is part of Craftory.
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential
+ *
+ * File Author: Brett Saunders
+ ******************************************************************************/
+
 package tech.brettsaunders.craftory.api.items;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -6,12 +16,11 @@ import java.util.HashMap;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.utils.Logger;
 
-public class CustomItemManager implements Listener {
+public class CustomItemManager {
 
   public static final String CUSTOM_ITEM = "CUSTOM_ITEM";
   public static final String CUSTOM_BLOCK_ITEM = "CUSTOM_BLOCK_ITEM";
@@ -25,21 +34,31 @@ public class CustomItemManager implements Listener {
     String displayName = "";
     if (items != null) {
       for (String key : items.getKeys(false)) {
+        ConfigurationSection itemSection = items.getConfigurationSection(key);
         Material material = Material
-            .getMaterial(customItemConfig.getString("items." + key + ".itemModel").toUpperCase());
+            .getMaterial(itemSection.getString("itemModel").toUpperCase());
         if (material == null) {
-          Logger.error(key + " Material doesn't exist :" + customItemConfig
-              .getString("items." + key + ".itemModel").toUpperCase());
+          Logger.error(key + " Material doesn't exist :" + itemSection.getString("itemModel").toUpperCase());
         } else {
           int itemID = customModeData.getInt("items." + key + ".customModelID");
           //Get Display Name
-          if (Utilities.langProperties.containsKey(key)) {
-            displayName = Utilities.langProperties.getProperty(key);
-          } else {
-            displayName = "UNKNOWN";
-          }
+          displayName = Utilities.getTranslation(key);
 
           CustomItem customItem = new CustomItem(itemID, material, key, displayName);
+
+          /* Add extra data */
+          if (itemSection.contains("durability")) {
+            customItem.setMaxDurability(itemSection.getInt("durability"));
+          }
+
+          if (itemSection.contains("attack_speed")) {
+            customItem.setAttackSpeed(itemSection.getInt("attack_speed"));
+          }
+
+          if (itemSection.contains("attack_damage")) {
+            customItem.setAttackDamage(itemSection.getInt("attack_damage"));
+          }
+
           itemIDCache.put(key, customItem);
           if (!(customItemConfig.contains("items." + key + ".hideItem") && customItemConfig
               .getBoolean("items." + key + ".hideItem"))) {
@@ -64,18 +83,18 @@ public class CustomItemManager implements Listener {
           } else {
             int itemID = customModeData.getInt("items." + key + ".customModelID");
             //Set Display Name
-            if (Utilities.langProperties.containsKey(key)) {
-              displayName = Utilities.langProperties.getProperty(key);
-            } else {
-              displayName = "UNKNOWN";
-            }
-            CustomItem customItem = new CustomItem(itemID, material, key, displayName);
+            String nameKey = key.replace("_WEST","").replace("_EAST","").replace("_SOUTH", "");
+            displayName = Utilities.getTranslation(nameKey);
+            CustomItem customItem = new CustomItem(itemID, material, nameKey, displayName);
             itemIDCache.put(key, customItem);
-            itemNames.add(key);
+            if (!(block.contains("hideItem") && block.getBoolean("hideItem"))) {
+              itemNames.add(key);
+            }
           }
         }
       }
     }
+    Logger.debug("Loaded Items");
   }
 
   public static ArrayList<String> getItemNames() {
