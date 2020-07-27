@@ -175,7 +175,7 @@ blocks:
     NORTH: true
     EAST: true
     DOWN: false
-    itemModel: stone
+    itemModel: iron_block
   SolarPanel:
     WEST: false
     UP: false
@@ -183,7 +183,7 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: true
-    itemModel: stone
+    itemModel: gold_block
   CompactedSolarPanel:
     WEST: true
     UP: false
@@ -191,7 +191,7 @@ blocks:
     NORTH: false
     EAST: false
     DOWN: true
-    itemModel: stone
+    itemModel: diamond_block
   SolarArray:
     WEST: false
     UP: true

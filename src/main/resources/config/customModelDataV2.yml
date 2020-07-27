@@ -195,11 +195,11 @@ items:
   EmeraldMacerator:
     customModelID: 20
   BasicSolarPanel:
-    customModelID: 21
+    customModelID: 1
   SolarPanel:
-    customModelID: 22
+    customModelID: 1
   CompactedSolarPanel:
-    customModelID: 23
+    customModelID: 1
   SolarArray:
     customModelID: 24
   GeothermalGenerator:
