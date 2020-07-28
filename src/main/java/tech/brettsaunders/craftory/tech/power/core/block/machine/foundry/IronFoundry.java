@@ -18,6 +18,7 @@ import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseFoundry;
+import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.SolidFuelManager;
@@ -46,7 +47,7 @@ public class IronFoundry extends BaseFoundry {
     super();
     interactableSlots.add(FUEL_SLOT);
     inputLocations.add(FUEL_SLOT);
-    energyStorage.setCapacity(0);
+    energyStorage = new EnergyStorage(0);
   }
 
   @Override

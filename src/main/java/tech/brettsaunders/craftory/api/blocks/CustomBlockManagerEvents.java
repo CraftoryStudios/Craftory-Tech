@@ -124,7 +124,7 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
   public void onMushroomPhysics(BlockPhysicsEvent event) {
-    if ((event.getChangedType() == Material.BROWN_MUSHROOM_BLOCK)) {
+    if ((event.getChangedType() == Material.MUSHROOM_STEM)) {
       event.setCancelled(true);
       event.getBlock().getState().update(true, false);
     }
@@ -166,7 +166,7 @@ public class CustomBlockManagerEvents implements Listener {
       e.getBlock().setType(Material.AIR);
       calculateStatsDecrease(customBlock);
       //If Basic Block
-    } else if (e.getBlock().getType() == Material.BROWN_MUSHROOM_BLOCK) {
+    } else if (e.getBlock().getType() == Material.MUSHROOM_STEM) {
       BlockData blockData = e.getBlock().getBlockData();
       MultipleFacing multipleFacing = (MultipleFacing) blockData;
       Utilities.getBasicBlockRegistry().forEach((name,placement) -> {

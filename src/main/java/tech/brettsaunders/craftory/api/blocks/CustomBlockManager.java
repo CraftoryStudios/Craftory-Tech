@@ -97,7 +97,7 @@ public class CustomBlockManager {
 
   private void generateCustomBlock(String customBlockItemName, Block block) {
     CustomBlockData data = customBlockDataHashMap.get(customBlockItemName);
-    block.setType(Material.BROWN_MUSHROOM_BLOCK);
+    block.setType(Material.MUSHROOM_STEM);
 
     BlockData blockData = block.getBlockData();
     MultipleFacing multipleFacing = (MultipleFacing) blockData;
@@ -173,7 +173,7 @@ public class CustomBlockManager {
       location.getBlock().setType(Material.AIR);
       return Optional.of(CustomItemManager.getCustomItem(blockName));
       //If Basic Block
-    } else if (location.getBlock().getType() == Material.BROWN_MUSHROOM_BLOCK) {
+    } else if (location.getBlock().getType() == Material.MUSHROOM_STEM) {
       BlockData blockData = location.getBlock().getBlockData();
       MultipleFacing multipleFacing = (MultipleFacing) blockData;
       for (Entry<String, BasicBlocks> entry : Utilities.getBasicBlockRegistry().entrySet()) {

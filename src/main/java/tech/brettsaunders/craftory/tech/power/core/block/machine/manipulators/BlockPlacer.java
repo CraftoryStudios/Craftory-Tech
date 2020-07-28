@@ -31,10 +31,10 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
 public class BlockPlacer extends BaseMachine implements IHopperInteract {
   private static final byte C_LEVEL = 0;
-  private static final byte MAX_RECEIVE = 120;
+  private static final int MAX_RECEIVE = 10000;
   private static final int SLOT = 22;
 
-  private static final int ENERGY_REQUIRED = 100;
+  private static final int ENERGY_REQUIRED = 1000;
   private Location placeLoc;
   private int lastRedstoneStrength = 0;
 

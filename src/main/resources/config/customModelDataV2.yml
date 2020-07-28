@@ -1,341 +1,341 @@
 items:
   iron_core:
-    customModelID: 1
+    customModelID: 1001
   gold_core:
-    customModelID: 1
+    customModelID: 1001
   diamond_core:
-    customModelID: 1
+    customModelID: 1001
   emerald_core:
-    customModelID: 1
+    customModelID: 1001
   magnetised_iron:
-    customModelID: 1
+    customModelID: 1001
   copper_ingot:
-    customModelID: 1
+    customModelID: 1001
   wrench:
-    customModelID: 61
+    customModelID: 10061
   configurator:
-    customModelID: 62
+    customModelID: 10062
   steel_ingot:
-    customModelID: 1
+    customModelID: 1001
   steel_dust:
-    customModelID: 1
+    customModelID: 1001
   iron_dust:
-    customModelID: 1
+    customModelID: 1001
   gold_dust:
-    customModelID: 1
+    customModelID: 1001
   diamond_dust:
-    customModelID: 1
+    customModelID: 1001
   emerald_dust:
-    customModelID: 1
+    customModelID: 1001
   copper_dust:
-    customModelID: 1
+    customModelID: 1001
   coal_dust:
-    customModelID: 1
+    customModelID: 1001
 
   light_off:
-    customModelID: 63
+    customModelID: 10063
   light_on:
-    customModelID: 65
+    customModelID: 10065
   invisible:
-    customModelID: 5
+    customModelID: 1005
   output:
-    customModelID: 6
+    customModelID: 1006
   output_disabled:
-    customModelID: 7
+    customModelID: 1007
   output_green:
-    customModelID: 8
+    customModelID: 1008
   output_disabled_alt:
-    customModelID: 67
+    customModelID: 10067
   output_green_alt:
-    customModelID: 68
+    customModelID: 10068
   bar_0_b:
-    customModelID: 9
+    customModelID: 1009
   bar_1_b:
-    customModelID: 10
+    customModelID: 10010
   bar_2_b:
-    customModelID: 11
+    customModelID: 10011
   bar_3_b:
-    customModelID: 12
+    customModelID: 10012
   bar_4_b:
-    customModelID: 13
+    customModelID: 10013
   bar_5_b:
-    customModelID: 14
+    customModelID: 10014
   bar_6_b:
-    customModelID: 15
+    customModelID: 10015
   bar_7_b:
-    customModelID: 16
+    customModelID: 10016
   bar_8_b:
-    customModelID: 17
+    customModelID: 10017
   bar_9_b:
-    customModelID: 18
+    customModelID: 10018
   bar_10_b:
-    customModelID: 19
+    customModelID: 10019
   bar_11_b:
-    customModelID: 20
+    customModelID: 10020
   bar_12_b:
-    customModelID: 21
+    customModelID: 10021
   bar_13_b:
-    customModelID: 22
+    customModelID: 10022
   bar_14_b:
-    customModelID: 23
+    customModelID: 10023
   bar_15_b:
-    customModelID: 24
+    customModelID: 10024
   bar_16_b:
-    customModelID: 25
+    customModelID: 10025
   bar_17_b:
-    customModelID: 26
+    customModelID: 10026
   bar_18_b:
-    customModelID: 27
+    customModelID: 10027
   bar_19_b:
-    customModelID: 28
+    customModelID: 10028
   bar_20_b:
-    customModelID: 29
+    customModelID: 10029
   bar_0_t:
-    customModelID: 30
+    customModelID: 10030
   bar_1_t:
-    customModelID: 31
+    customModelID: 10031
   bar_2_t:
-    customModelID: 32
+    customModelID: 10032
   bar_3_t:
-    customModelID: 33
+    customModelID: 10033
   bar_4_t:
-    customModelID: 34
+    customModelID: 10034
   bar_5_t:
-    customModelID: 35
+    customModelID: 10035
   bar_6_t:
-    customModelID: 36
+    customModelID: 10036
   bar_7_t:
-    customModelID: 37
+    customModelID: 10037
   bar_8_t:
-    customModelID: 38
+    customModelID: 10038
   bar_9_t:
-    customModelID: 39
+    customModelID: 10039
   bar_10_t:
-    customModelID: 40
+    customModelID: 10040
   bar_11_t:
-    customModelID: 41
+    customModelID: 10041
   bar_12_t:
-    customModelID: 42
+    customModelID: 10042
   bar_13_t:
-    customModelID: 43
+    customModelID: 10043
   bar_14_t:
-    customModelID: 44
+    customModelID: 10044
   bar_15_t:
-    customModelID: 45
+    customModelID: 10045
   bar_16_t:
-    customModelID: 46
+    customModelID: 10046
   bar_17_t:
-    customModelID: 47
+    customModelID: 10047
   bar_18_t:
-    customModelID: 48
+    customModelID: 10048
   bar_19_t:
-    customModelID: 49
+    customModelID: 10049
   bar_20_t:
-    customModelID: 50
+    customModelID: 10050
   arrow_0:
-    customModelID: 51
+    customModelID: 10051
   arrow_1:
-    customModelID: 52
+    customModelID: 10052
   arrow_2:
-    customModelID: 53
+    customModelID: 10053
   arrow_3:
-    customModelID: 54
+    customModelID: 10054
   arrow_4:
-    customModelID: 55
+    customModelID: 10055
   arrow_5:
-    customModelID: 56
+    customModelID: 10056
   arrow_6:
-    customModelID: 57
+    customModelID: 10057
   arrow_7:
-    customModelID: 58
+    customModelID: 10058
   arrow_8:
-    customModelID: 59
+    customModelID: 10059
   arrow_9:
-    customModelID: 60
+    customModelID: 10060
   IronCell:
-    customModelID: 1
+    customModelID: 1001
   GoldCell:
-    customModelID: 2
+    customModelID: 1002
   DiamondCell:
-    customModelID: 3
+    customModelID: 1003
   EmeraldCell:
-    customModelID: 4
+    customModelID: 1004
   SolidFuelGenerator:
-    customModelID: 13
+    customModelID: 10013
   power_connector:
-    customModelID: 14
+    customModelID: 10014
   IronElectricFurnace:
-    customModelID: 9
+    customModelID: 1009
   GoldElectricFurnace:
-    customModelID: 10
+    customModelID: 10010
   DiamondElectricFurnace:
-    customModelID: 11
+    customModelID: 10011
   EmeraldElectricFurnace:
-    customModelID: 12
+    customModelID: 10012
   IronFoundry:
-    customModelID: 15
+    customModelID: 10015
   IronElectricFoundry:
-    customModelID: 5
+    customModelID: 1005
   GoldElectricFoundry:
-    customModelID: 6
+    customModelID: 1006
   DiamondElectricFoundry:
-    customModelID: 7
+    customModelID: 1007
   EmeraldElectricFoundry:
-    customModelID: 8
+    customModelID: 1008
   crystal:
-    customModelID: 16
+    customModelID: 10016
   CopperOre:
-    customModelID: 602
+    customModelID: 100602
   IronMacerator:
-    customModelID: 17
+    customModelID: 10017
   GoldMacerator:
-    customModelID: 18
+    customModelID: 10018
   DiamondMacerator:
-    customModelID: 19
+    customModelID: 10019
   EmeraldMacerator:
-    customModelID: 20
+    customModelID: 10020
   BasicSolarPanel:
-    customModelID: 1
+    customModelID: 1001
   SolarPanel:
-    customModelID: 1
+    customModelID: 1001
   CompactedSolarPanel:
-    customModelID: 1
+    customModelID: 1001
   SolarArray:
-    customModelID: 24
+    customModelID: 10024
   GeothermalGenerator:
-    customModelID: 26
+    customModelID: 10026
   RotaryGenerator:
-    customModelID: 27
+    customModelID: 10027
   Magnetiser:
-    customModelID: 28
+    customModelID: 10028
   MagnetisingTable:
-    customModelID: 29
+    customModelID: 10029
   sickle_wood:
-    customModelID: 1
+    customModelID: 1001
   sickle_stone:
-    customModelID: 2
+    customModelID: 1002
   sickle_iron:
-    customModelID: 3
+    customModelID: 1003
   sickle_steel:
-    customModelID: 4
+    customModelID: 1004
   sickle_copper:
-    customModelID: 5
+    customModelID: 1005
   sickle_gold:
-    customModelID: 6
+    customModelID: 1006
   sickle_diamond:
-    customModelID: 7
+    customModelID: 1007
   engineers_hammer:
-    customModelID: 8
+    customModelID: 1008
 
   lava_0_b:
-    customModelID: 70
+    customModelID: 10070
   lava_1_b:
-    customModelID: 71
+    customModelID: 10071
   lava_2_b:
-    customModelID: 72
+    customModelID: 10072
   lava_3_b:
-    customModelID: 73
+    customModelID: 10073
   lava_4_b:
-    customModelID: 74
+    customModelID: 10074
   lava_5_b:
-    customModelID: 75
+    customModelID: 10075
   lava_6_b:
-    customModelID: 76
+    customModelID: 10076
   lava_7_b:
-    customModelID: 77
+    customModelID: 10077
   lava_8_b:
-    customModelID: 78
+    customModelID: 10078
   lava_9_b:
-    customModelID: 79
+    customModelID: 10079
   lava_10_b:
-    customModelID: 80
+    customModelID: 10080
   lava_11_b:
-    customModelID: 81
+    customModelID: 10081
   lava_12_b:
-    customModelID: 82
+    customModelID: 10082
   lava_13_b:
-    customModelID: 83
+    customModelID: 10083
   lava_14_b:
-    customModelID: 84
+    customModelID: 10084
   lava_15_b:
-    customModelID: 85
+    customModelID: 10085
   lava_16_b:
-    customModelID: 86
+    customModelID: 10086
   lava_17_b:
-    customModelID: 87
+    customModelID: 10087
   lava_18_b:
-    customModelID: 88
+    customModelID: 10088
   lava_19_b:
-    customModelID: 89
+    customModelID: 10089
   lava_20_b:
-    customModelID: 90
+    customModelID: 10090
   lava_0_t:
-    customModelID: 91
+    customModelID: 10091
   lava_1_t:
-    customModelID: 92
+    customModelID: 10092
   lava_2_t:
-    customModelID: 93
+    customModelID: 10093
   lava_3_t:
-    customModelID: 94
+    customModelID: 10094
   lava_4_t:
-    customModelID: 95
+    customModelID: 10095
   lava_5_t:
-    customModelID: 96
+    customModelID: 10096
   lava_6_t:
-    customModelID: 97
+    customModelID: 10097
   lava_7_t:
-    customModelID: 98
+    customModelID: 10098
   lava_8_t:
-    customModelID: 99
+    customModelID: 10099
   lava_9_t:
-    customModelID: 100
+    customModelID: 100100
   lava_10_t:
-    customModelID: 101
+    customModelID: 100101
   lava_11_t:
-    customModelID: 102
+    customModelID: 100102
   lava_12_t:
-    customModelID: 103
+    customModelID: 100103
   lava_13_t:
-    customModelID: 104
+    customModelID: 100104
   lava_14_t:
-    customModelID: 105
+    customModelID: 100105
   lava_15_t:
-    customModelID: 106
+    customModelID: 100106
   lava_16_t:
-    customModelID: 107
+    customModelID: 100107
   lava_17_t:
-    customModelID: 108
+    customModelID: 100108
   lava_18_t:
-    customModelID: 109
+    customModelID: 100109
   lava_19_t:
-    customModelID: 110
+    customModelID: 100110
   lava_20_t:
-    customModelID: 111
+    customModelID: 100111
   windmill:
-    customModelID: 128
+    customModelID: 100128
   waterwheel:
-    customModelID: 131
+    customModelID: 100131
   upgrade_card_iron:
-    customModelID: 1
+    customModelID: 1001
   upgrade_card_gold:
-    customModelID: 1
+    customModelID: 1001
   upgrade_card_diamond:
-    customModelID: 1
+    customModelID: 1001
   upgrade_card_emerald:
-    customModelID: 1
+    customModelID: 1001
   BlockBreaker:
-    customModelID: 31
+    customModelID: 10031
   BlockBreaker_SOUTH:
-    customModelID: 33
+    customModelID: 10033
   BlockBreaker_WEST:
-    customModelID: 34
+    customModelID: 10034
   BlockBreaker_EAST:
-    customModelID: 32
+    customModelID: 10032
   BlockPlacer:
-    customModelID: 35
+    customModelID: 10035
   BlockPlacer_SOUTH:
-    customModelID: 37
+    customModelID: 10037
   BlockPlacer_WEST:
-    customModelID: 38
+    customModelID: 10038
   BlockPlacer_EAST:
-    customModelID: 36
+    customModelID: 10036
