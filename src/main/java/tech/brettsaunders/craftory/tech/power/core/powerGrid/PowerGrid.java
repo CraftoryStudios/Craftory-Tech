@@ -202,7 +202,7 @@ public class PowerGrid extends BukkitRunnable {
         continue;
       }
       for (Location location : set) {
-        if (location == null) {
+        if (location == null || !PoweredBlockUtils.isPoweredBlock(location)) {
           continue;
         }
         block = PoweredBlockUtils.getPoweredBlock(location);
