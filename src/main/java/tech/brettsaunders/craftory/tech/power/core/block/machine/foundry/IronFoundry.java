@@ -81,9 +81,9 @@ public class IronFoundry extends BaseFoundry {
         new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
             OUTPUT_LOCATION));
     addGUIComponent(new GIndicator(inventory, runningContainer, 21));
-    if (inputSlots.size() == 0) inputSlots.add(0, new ItemStack(Material.AIR));
-    if (inputSlots.size() == 0) inputSlots.add(1, new ItemStack(Material.AIR));
-    if (outputSlots.size() == 0) outputSlots.add(0, new ItemStack(Material.AIR));
+    if (inputSlots.get(0) == null) inputSlots.add(0, new ItemStack(Material.AIR));
+    if (inputSlots.get(1) == null) inputSlots.add(1, new ItemStack(Material.AIR));
+    if (outputSlots.get(0) == null) outputSlots.add(0, new ItemStack(Material.AIR));
     inventory.setItem(INPUT_LOCATION1, inputSlots.get(0));
     inventory.setItem(INPUT_LOCATION2, inputSlots.get(1));
     inventory.setItem(OUTPUT_LOCATION, outputSlots.get(0));
