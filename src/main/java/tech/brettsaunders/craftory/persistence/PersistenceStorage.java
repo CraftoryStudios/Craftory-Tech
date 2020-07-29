@@ -27,6 +27,7 @@ import tech.brettsaunders.craftory.persistence.adapters.BlockFaceAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.BooleanAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.DataAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.EnergyStorageAdapter;
+import tech.brettsaunders.craftory.persistence.adapters.FluidStorageAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.HashMapAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.HashSetAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.IntegerAdapter;
@@ -37,6 +38,7 @@ import tech.brettsaunders.craftory.persistence.adapters.LongAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.PowerGridAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.StringAdapter;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
+import tech.brettsaunders.craftory.tech.power.api.fluids.FluidStorage;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.ReflectionUtils;
@@ -65,6 +67,7 @@ public class PersistenceStorage {
         registerDataConverter(ArrayList.class, new ArrayListAdapter(), false);
         registerDataConverter(Boolean.class, new BooleanAdapter(), false);
         registerDataConverter(PowerGrid.class, new PowerGridAdapter(), false);
+        registerDataConverter(FluidStorage.class, new FluidStorageAdapter(), false);
 
         interfaceConverters = new HashMap<>();
         registerInterfaceConverter(ItemStack.class, new ItemStackAdapter(), false);
