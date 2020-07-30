@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
@@ -28,7 +31,7 @@ import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
 
-public final class Craftory extends JavaPlugin {
+public final class Craftory extends JavaPlugin implements Listener {
 
   public static String VERSION;
   public static final int SPIGOT_ID = 81151;
@@ -83,7 +86,6 @@ public final class Craftory extends JavaPlugin {
     customBlockManager = new CustomBlockManager();
     customBlockFactory.registerStats();
     new WorldGenHandler();
-    new RecipeManager();
     new PoweredBlockEvents();
     powerConnectorManager = new PowerConnectorManager();
     powerGridManager = new PowerGridManager();
@@ -96,7 +98,14 @@ public final class Craftory extends JavaPlugin {
     Utilities.setupAdvancements();
     //Testing
     this.getCommand("crtesting").setExecutor(new TestingCommand());
+    this.getServer().getPluginManager().registerEvents(this, this);
   }
+
+  @EventHandler
+  public void onServerLoaded(ServerLoadEvent e) {
+    new RecipeManager();
+  }
+
 
   @Override
   public void onDisable() {
