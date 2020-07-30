@@ -65,7 +65,10 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   @Override
   public void blockBreak() {
     super.blockBreak();
-    if(itemFrame!=null) itemFrame.remove();
+    if(itemFrame!=null) {
+      itemFrame.getLocation().getWorld().dropItemNaturally(itemFrame.getLocation(), itemFrame.getItem());
+      itemFrame.remove();
+    }
   }
 
   @Override
@@ -137,10 +140,13 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     if(event.getClickedBlock()==null) return;
     if(event.getItem()==null) return;
     if(!event.getClickedBlock().getLocation().equals(location)) return;
-    if(!(itemFrame==null || itemFrame.getItem().getType().equals(Material.AIR))) return;
-    if(itemFrame!=null || spawnFrame()){
+    if(itemFrame==null) {
+      spawnFrame();
+    }
+    if (itemFrame != null) {
+      if (!(itemFrame.getItem().getType().equals(Material.AIR))) return;
       ItemStack item = event.getItem().clone();
-      event.getItem().setAmount(item.getAmount()-1);
+      event.getItem().setAmount(item.getAmount() - 1);
       item.setAmount(1);
       itemFrame.setItem(item);
     }
