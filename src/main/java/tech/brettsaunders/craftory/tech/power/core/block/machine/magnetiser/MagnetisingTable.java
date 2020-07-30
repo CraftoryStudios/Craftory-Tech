@@ -19,6 +19,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -66,6 +67,9 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   public void blockBreak() {
     super.blockBreak();
       itemFrame.getLocation().getWorld().dropItemNaturally(itemFrame.getLocation(), itemFrame.getItem());
+      itemFrame.remove();
+    }
+    HandlerList.unregisterAll(this);
   }
 
   @Override
