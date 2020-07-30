@@ -72,23 +72,23 @@ public class RecipeManager implements Listener {
 
           for (String ingredient : sectionIn.getKeys(false)) {
             char key = ingredient.charAt(0);
-            if (CustomItemManager.getCustomItem(sectionIn.getString(ingredient)).getType()
-                == Material.AIR) {
+            if (CustomItemManager.getCustomItem(sectionIn.getString(ingredient)).getType() == Material.AIR) {
               Material material = Material.getMaterial(sectionIn.getString(ingredient));
               shapedRecipe.setIngredient(key, material);
             } else {
-              ItemStack itemStack = CustomItemManager.getCustomItem(sectionIn.getString(ingredient));
+              String ingredientName = sectionIn.getString(ingredient);
+              ItemStack itemStack = CustomItemManager.getCustomItem(ingredientName);
               shapedRecipe.setIngredient(key, itemStack.getType());
             }
           }
-
           Bukkit.getServer().addRecipe(shapedRecipe);
           customRecipes.put(recipe, customItemsInSlots);
         } catch (Exception e) {
-          Logger.error("THIS IS BROKE: " + recipe + "  " + result.getType().toString());
-          Logger.error(result + "");
+          Logger.error("RECIPE BROKEN: " + recipe + "  " + result.getType().toString());
+          Logger.debug(result + "");
           Logger.error(recipes.getString(recipe + ".result.item"));
           Logger.error("Amount: " + recipes.getInt(recipe + ".result.amount"));
+          e.printStackTrace();
         }
 
 
