@@ -66,6 +66,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   @Override
   public void blockBreak() {
     super.blockBreak();
+    if(itemFrame!=null) {
       itemFrame.getLocation().getWorld().dropItemNaturally(itemFrame.getLocation(), itemFrame.getItem());
       itemFrame.remove();
     }

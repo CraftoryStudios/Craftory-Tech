@@ -211,7 +211,7 @@ public class PowerGridManager implements Listener {
             if (powerGrid.getBlockConnections().containsKey(connection)) {
               grid.getBlockConnections().put(connection, powerGrid.getBlockConnections().get(connection));
             }
-            HashSet<Location> connectionConnections = powerGrid.getBlockConnections().get(connection);
+            HashSet<Location> connectionConnections = powerGrid.getPowerConnectors().get(connection);
             if (connectionConnections == null) {
               continue;
             }
