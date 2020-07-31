@@ -30,7 +30,7 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
 
   /* Static Constants */
   private final ArrayList<IGUIComponent> components = new ArrayList<>();
-  protected HashSet<Integer> interactableSlots = new HashSet<>();
+  protected static HashSet<Integer> interactableSlots = new HashSet<>();
 
   private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
       .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,

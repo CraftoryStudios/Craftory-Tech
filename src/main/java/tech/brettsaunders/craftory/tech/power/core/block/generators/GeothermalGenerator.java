@@ -49,24 +49,7 @@ public class GeothermalGenerator extends BaseGenerator {
   @Persistent
   private FluidStorage fluidStorage;
 
-  /* Construction */
-  public GeothermalGenerator() {
-    super();
-    init();
-  }
-
-  /* Saving, Setup and Loading */
-  public GeothermalGenerator(Location location) {
-    super(location, Blocks.GEOTHERMAL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
-    init();
-    fluidStorage = new FluidStorage((int) (LAVA_CAPACITY_BASE * CAPACITY_LEVEL[C_LEVEL]));
-    inputSlots = new ArrayList<>();
-    inputSlots.add(0,new ItemStack(Material.AIR));
-    outputSlots = new ArrayList<>();
-    outputSlots.add(new ItemStack(Material.AIR));
-  }
-
-  private void init() {
+  static {
     interactableSlots = new HashSet<>(Arrays.asList(FUEL_SLOT,OUT_SLOT));
     inputLocations = new ArrayList<>();
     inputLocations.add(0,FUEL_SLOT);
@@ -87,6 +70,21 @@ public class GeothermalGenerator extends BaseGenerator {
       }
     };
   }
+  /* Construction */
+  public GeothermalGenerator() {
+    super();
+  }
+
+  /* Saving, Setup and Loading */
+  public GeothermalGenerator(Location location) {
+    super(location, Blocks.GEOTHERMAL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
+    fluidStorage = new FluidStorage((int) (LAVA_CAPACITY_BASE * CAPACITY_LEVEL[C_LEVEL]));
+    inputSlots = new ArrayList<>();
+    inputSlots.add(0,new ItemStack(Material.AIR));
+    outputSlots = new ArrayList<>();
+    outputSlots.add(new ItemStack(Material.AIR));
+  }
+
 
   @Override
   public void updateGenerator(){

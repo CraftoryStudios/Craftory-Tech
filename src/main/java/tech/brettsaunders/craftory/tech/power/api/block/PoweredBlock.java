@@ -58,12 +58,12 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   /* Hopper control variables */
   @Persistent
   protected ArrayList<ItemStack> inputSlots = new ArrayList<>(); //The ItemStacks of the inputs
-  @Persistent
-  protected ArrayList<Integer> inputLocations = new ArrayList<>();  //The inventory locations of inputs
+
+  protected static ArrayList<Integer> inputLocations = new ArrayList<>();  //The inventory locations of inputs
   @Persistent
   protected ArrayList<ItemStack> outputSlots = new ArrayList<>(); //The ItemStacks of the outputs
-  @Persistent
-  protected ArrayList<Integer> outputLocations = new ArrayList<>(); //The inventory locations of outputs
+
+  protected static ArrayList<Integer> outputLocations = new ArrayList<>(); //The inventory locations of outputs
   /* Per Object Variables Not-Saved */
   protected transient Inventory inventoryInterface;
   private transient boolean powered = false;
