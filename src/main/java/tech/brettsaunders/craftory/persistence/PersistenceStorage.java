@@ -94,6 +94,7 @@ public class PersistenceStorage {
     public void saveFields(Object object, NBTCompound nbtCompound) {
         if (object == null || nbtCompound == null) {
             Logger.error("Couldn't save object! Null");
+            return;
         }
         ReflectionUtils.getFieldsRecursively(object.getClass(), Object.class).stream()
                 .filter(field -> field.getAnnotation(Persistent.class) != null).forEach(field -> {
@@ -132,7 +133,11 @@ public class PersistenceStorage {
     }
 
     @SuppressWarnings("unchecked")
-    public Class<?> saveObject(@NonNull Object data, @NonNull NBTCompound nbtCompound) {
+    public Class<?> saveObject(Object data, NBTCompound nbtCompound) {
+        if (data == null || nbtCompound == null) {
+            Logger.error("Error Saving Object. Null");
+            return null;
+        }
         Class<?> clazz = data.getClass();
 
         // Check custom converters
