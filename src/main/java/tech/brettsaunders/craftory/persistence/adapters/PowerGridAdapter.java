@@ -11,6 +11,7 @@
 package tech.brettsaunders.craftory.persistence.adapters;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
+import java.util.HashMap;
 import java.util.HashSet;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -28,6 +29,10 @@ public class PowerGridAdapter implements DataAdapter<PowerGrid> {
         persistenceStorage.saveObject(value.getMachines(), machinesCompound);
         NBTCompound generatorsCompound = nbtCompound.addCompound("generators");
         persistenceStorage.saveObject(value.getGenerators(), generatorsCompound);
+        NBTCompound blockConnectionsCompound = nbtCompound.addCompound("blockConnections");
+        persistenceStorage.saveObject(value.getBlockConnections(), blockConnectionsCompound);
+        NBTCompound powerConnectorsCompound = nbtCompound.addCompound("powerConnectors");
+        persistenceStorage.saveObject(value.getPowerConnectors(), powerConnectorsCompound);
     }
 
     @Override
@@ -35,11 +40,15 @@ public class PowerGridAdapter implements DataAdapter<PowerGrid> {
         NBTCompound cellsCompound = nbtCompound.addCompound("cells");
         NBTCompound machinesCompound = nbtCompound.addCompound("machines");
         NBTCompound generatorsCompound = nbtCompound.addCompound("generators");
+        NBTCompound blockConnectionsCompound = nbtCompound.addCompound("blockConnections");
+        NBTCompound powerConnectorsCompound = nbtCompound.addCompound("powerConnectors");
 
         PowerGrid powerGrid = new PowerGrid();
         powerGrid.setCells(persistenceStorage.loadObject(parentObject, HashSet.class, cellsCompound));
         powerGrid.setMachines(persistenceStorage.loadObject(parentObject, HashSet.class, machinesCompound));
         powerGrid.setGenerators(persistenceStorage.loadObject(parentObject, HashSet.class, generatorsCompound));
+        powerGrid.setBlockConnections(persistenceStorage.loadObject(parentObject, HashMap.class, blockConnectionsCompound));
+        powerGrid.setPowerConnectors(persistenceStorage.loadObject(parentObject, HashMap.class, powerConnectorsCompound));
 
         return powerGrid;
     }

@@ -19,7 +19,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
-import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
@@ -28,22 +27,19 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerGrid extends BukkitRunnable {
   @Getter
-  @Persistent
+  @Setter
   private HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
   @Getter
-  @Persistent
+  @Setter
   private HashMap<Location, HashSet<Location>> blockConnections = new HashMap<>();
   @Getter
   @Setter
-  @Persistent
   private HashSet<Location> cells = new HashSet<>();
   @Getter
   @Setter
-  @Persistent
   private HashSet<Location> generators = new HashSet<>();
   @Getter
   @Setter
-  @Persistent
   private HashSet<Location> machines = new HashSet<>();
   private int machinesNeedingEnergy = 0;
   private BukkitTask taskID;
