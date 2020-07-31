@@ -91,7 +91,10 @@ public class PersistenceStorage {
         }
     }
 
-    public void saveFields(@NonNull Object object, @NonNull NBTCompound nbtCompound) {
+    public void saveFields(Object object, NBTCompound nbtCompound) {
+        if (object == null || nbtCompound == null) {
+            Logger.error("Couldn't save object! Null");
+        }
         ReflectionUtils.getFieldsRecursively(object.getClass(), Object.class).stream()
                 .filter(field -> field.getAnnotation(Persistent.class) != null).forEach(field -> {
             field.setAccessible(true);
