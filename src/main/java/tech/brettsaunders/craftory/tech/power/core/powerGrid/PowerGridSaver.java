@@ -8,10 +8,19 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.api.interfaces;
+package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
-public interface IGUIComponent {
+import java.util.HashMap;
+import java.util.HashSet;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.bukkit.Location;
+import tech.brettsaunders.craftory.persistence.Persistent;
 
-  void update();
+@AllArgsConstructor
+@NoArgsConstructor
+public class PowerGridSaver {
+  @Persistent
+  protected HashMap<PowerGrid, HashSet<Location>> data = new HashMap<>();
 
 }

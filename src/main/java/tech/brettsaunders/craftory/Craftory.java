@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory;
@@ -60,6 +60,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   public void onEnable() {
     Craftory.VERSION = this.getDescription().getVersion();
     Craftory.plugin = this;
+    this.getServer().getPluginManager().registerEvents(this, this);
     Utilities.createConfigs();
     Utilities.createDataPath();
     Utilities.getTranslations();
@@ -87,10 +88,6 @@ public final class Craftory extends JavaPlugin implements Listener {
     customBlockFactory.registerStats();
     new WorldGenHandler();
     new PoweredBlockEvents();
-    powerConnectorManager = new PowerConnectorManager();
-    powerGridManager = new PowerGridManager();
-    powerGridManager.onEnable();
-    getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     Utilities.startMetrics();
     Utilities.done();
     tickManager.runTaskTimer(this, 20L, 1L);
@@ -98,11 +95,14 @@ public final class Craftory extends JavaPlugin implements Listener {
     Utilities.setupAdvancements();
     //Testing
     this.getCommand("crtesting").setExecutor(new TestingCommand());
-    this.getServer().getPluginManager().registerEvents(this, this);
   }
 
   @EventHandler
   public void onServerLoaded(ServerLoadEvent e) {
+    powerConnectorManager = new PowerConnectorManager();
+    powerGridManager = new PowerGridManager();
+    powerGridManager.onEnable();
+    getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     new RecipeManager();
   }
 

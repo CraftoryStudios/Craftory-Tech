@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.persistence.adapters;
@@ -30,16 +30,17 @@ public class HashSetAdapter implements DataAdapter<HashSet<?>> {
 
     @Override
     public HashSet<Object> parse(PersistenceStorage persistenceStorage, Object parentObject, NBTCompound nbtCompound) {
-        HashSet<Object> map = new HashSet<>();
+        HashSet<Object> set = new HashSet<>();
+        if(nbtCompound.getKeys().size() == 0) return set;
         for (String key : nbtCompound.getKeys()) {
             NBTCompound container = nbtCompound.getCompound(key);
-            NBTCompound data = container.addCompound("data");
+            NBTCompound data = container.getCompound("data");
             try {
-                map.add(persistenceStorage.loadObject(parentObject, Class.forName(container.getString("dataclass")), data));
+                set.add(persistenceStorage.loadObject(parentObject, Class.forName(container.getString("dataclass")), data));
             } catch (ClassNotFoundException ex) {
                 ex.printStackTrace();
             }
         }
-        return map;
+        return set;
     }
 }
