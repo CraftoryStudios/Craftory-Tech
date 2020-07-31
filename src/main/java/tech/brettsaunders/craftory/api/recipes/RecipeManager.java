@@ -14,12 +14,14 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -72,11 +74,18 @@ public class RecipeManager implements Listener {
 
           for (String ingredient : sectionIn.getKeys(false)) {
             char key = ingredient.charAt(0);
-            if (CustomItemManager.getCustomItem(sectionIn.getString(ingredient)).getType() == Material.AIR) {
-              Material material = Material.getMaterial(sectionIn.getString(ingredient));
+            final String ingridentMaterial = sectionIn.getString(ingredient);
+            if (ingridentMaterial.startsWith("TAG-")) {
+              if (ingridentMaterial.replaceFirst("TAG-","").equalsIgnoreCase("PLANKS")) {
+                shapedRecipe.setIngredient(key, new MaterialChoice(Tag.PLANKS));
+              } else {
+                shapedRecipe.setIngredient(key, Material.AIR);
+              }
+            }else if (CustomItemManager.getCustomItem(ingridentMaterial).getType() == Material.AIR) {
+              Material material = Material.getMaterial(ingridentMaterial);
               shapedRecipe.setIngredient(key, material);
             } else {
-              String ingredientName = sectionIn.getString(ingredient);
+              String ingredientName = ingridentMaterial;
               ItemStack itemStack = CustomItemManager.getCustomItem(ingredientName);
               shapedRecipe.setIngredient(key, itemStack.getType());
             }
