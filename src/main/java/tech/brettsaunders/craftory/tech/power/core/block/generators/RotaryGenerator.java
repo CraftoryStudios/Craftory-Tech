@@ -67,9 +67,6 @@ public class RotaryGenerator extends BaseGenerator {
   protected static List<BlockFace> validFaces = Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
 
   static {
-    inputLocations = new ArrayList<>();
-    inputLocations.add(0,SLOT);
-    interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
     inputFaces = new HashMap<BlockFace, Integer>() {
       {
         put(BlockFace.NORTH, SLOT);
@@ -87,13 +84,19 @@ public class RotaryGenerator extends BaseGenerator {
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
     mode = WheelMode.WATER;
+    init();
   }
 
   public RotaryGenerator() {
     super();
+    init();
   }
 
-
+  private void init() {
+    inputLocations = new ArrayList<>();
+    inputLocations.add(0,SLOT);
+    interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
+  }
 
   @Override
   public void beforeSaveUpdate() {

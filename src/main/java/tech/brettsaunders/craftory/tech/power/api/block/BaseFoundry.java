@@ -67,16 +67,13 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     super(location,blockName, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
     processTime = PROCESSING_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
-    init();
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
     inputSlots.add(new ItemStack(Material.AIR));
     outputSlots = new ArrayList<>();
     outputSlots.add(new ItemStack(Material.AIR));
-    inputLocations.add(INPUT_LOCATION1);
-    inputLocations.add(INPUT_LOCATION2);
-    outputLocations.add(OUTPUT_LOCATION);
+    init();
   }
 
   /* Saving, Setup and Loading */
@@ -92,12 +89,16 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
   }
 
-  /* Common Load and Construction */
-  public void init() {
+
+  private void init() {
+    inputLocations = new ArrayList<>();
+    outputLocations = new ArrayList<>();
+    inputLocations.add(INPUT_LOCATION1);
+    inputLocations.add(INPUT_LOCATION2);
+    outputLocations.add(OUTPUT_LOCATION);
     interactableSlots = new HashSet<>(
         Arrays.asList(INPUT_LOCATION1, INPUT_LOCATION2, OUTPUT_LOCATION));
   }
-
   @Override
   public void setupGUI() {
     Inventory inventory = createInterfaceInventory(displayName, Font.ELECTRIC_FOUNDRY_GUI.label + "");

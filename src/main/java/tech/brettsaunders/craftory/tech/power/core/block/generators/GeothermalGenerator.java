@@ -50,9 +50,6 @@ public class GeothermalGenerator extends BaseGenerator {
   private FluidStorage fluidStorage;
 
   static {
-    interactableSlots = new HashSet<>(Arrays.asList(FUEL_SLOT,OUT_SLOT));
-    inputLocations = new ArrayList<>();
-    inputLocations.add(0,FUEL_SLOT);
     inputFaces = new HashMap<BlockFace, Integer>() {
       {
         put(BlockFace.NORTH, FUEL_SLOT);
@@ -62,17 +59,25 @@ public class GeothermalGenerator extends BaseGenerator {
         put(BlockFace.UP, FUEL_SLOT);
       }
     };
-    outputLocations = new ArrayList<>();
-    outputLocations.add(OUT_SLOT);
     outputFaces = new HashMap<BlockFace, Integer>() {
       {
         put(BlockFace.DOWN, OUT_SLOT);
       }
     };
   }
+
+  private void init() {
+    inputLocations = new ArrayList<>();
+    inputLocations.add(0,FUEL_SLOT);
+    outputLocations = new ArrayList<>();
+    outputLocations.add(OUT_SLOT);
+    interactableSlots = new HashSet<>(Arrays.asList(FUEL_SLOT,OUT_SLOT));
+  }
+
   /* Construction */
   public GeothermalGenerator() {
     super();
+    init();
   }
 
   /* Saving, Setup and Loading */
@@ -83,6 +88,7 @@ public class GeothermalGenerator extends BaseGenerator {
     inputSlots.add(0,new ItemStack(Material.AIR));
     outputSlots = new ArrayList<>();
     outputSlots.add(new ItemStack(Material.AIR));
+    init();
   }
 
 

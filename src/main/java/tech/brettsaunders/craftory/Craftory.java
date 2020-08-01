@@ -35,8 +35,8 @@ public final class Craftory extends JavaPlugin implements Listener {
 
   public static String VERSION;
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/bf80cabe308f6918b16c4392deb52e4652c3dc5b.zip";
-  public static final String HASH = "bf80cabe308f6918b16c4392deb52e4652c3dc5b";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/773feeb5b06ddda9bf461e4f4ca9f664d547801f.zip";
+  public static final String HASH = "773feeb5b06ddda9bf461e4f4ca9f664d547801f";
 
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
