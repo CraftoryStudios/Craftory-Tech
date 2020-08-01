@@ -38,7 +38,6 @@ import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.utils.Logger;
 
 /**
  * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
@@ -248,7 +247,6 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     }
     event.getRawSlots().forEach(slot -> {
       //Stop moving items from any slot but intractable ones
-      Logger.info(slot+"");
       if (slot <= 53 && !interactableSlots.contains(slot)) {
         event.setCancelled(true);
       }
