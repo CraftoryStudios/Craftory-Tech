@@ -197,9 +197,9 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (event.getInventory() != getInventory()) {
       return;
     }
-    if(event.getCurrentItem()==null||event.getCurrentItem().getType().equals(Material.AIR)||event.getCurrentItem().getAmount()==0) return;
     if(event.getRawSlot() > 53){
       //Handle Shift Clicking Items
+      if(event.getCurrentItem()==null||event.getCurrentItem().getType().equals(Material.AIR)||event.getCurrentItem().getAmount()==0) return;
       if (event.isShiftClick()) {
         event.setCancelled(true);
         ItemStack sourceItemStack = event.getCurrentItem();
