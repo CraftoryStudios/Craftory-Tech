@@ -27,6 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
@@ -37,6 +38,7 @@ import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
+import tech.brettsaunders.craftory.utils.Logger;
 
 /**
  * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
@@ -237,6 +239,20 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         event.setCancelled(true);
       }
     }
+  }
+
+  @EventHandler
+  public void onInventoryInteract(final InventoryDragEvent event) {
+    if (event.getInventory() != getInventory()) {
+      return;
+    }
+    event.getRawSlots().forEach(slot -> {
+      //Stop moving items from any slot but intractable ones
+      Logger.info(slot+"");
+      if (slot <= 53 && !interactableSlots.contains(slot)) {
+        event.setCancelled(true);
+      }
+    });
   }
 
   @EventHandler
