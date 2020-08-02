@@ -47,14 +47,15 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static FileConfiguration customModelDataConfig;
   public static FileConfiguration customBlocksConfig;
   public static FileConfiguration customRecipeConfig;
+  public static FileConfiguration serverDataConfig;
   public static CustomBlockTickManager tickManager;
   public static PowerGridManager powerGridManager;
 
   private static File customItemConfigFile;
   private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
-
   private static File customModelDataFile;
+  private static File serverDataFile;
 
   @Override
   public void onEnable() {
@@ -79,10 +80,13 @@ public final class Craftory extends JavaPlugin implements Listener {
     customItemConfigFile = new File(getDataFolder(),"data/customItemConfig.yml");
     customRecipeConfigFile = new File(getDataFolder(),"data/customRecipesConfig.yml");
     customModelDataFile = new File(getDataFolder(), "config/customModelDataV2.yml");
+    serverDataFile = new File(getDataFolder(), "data/serverData.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
     customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
+    serverDataConfig = YamlConfiguration.loadConfiguration(serverDataFile);
+    serverDataConfig.set("lastVersion",Integer.parseInt(VERSION.replaceAll("[^0-9]","")));
     CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
     customBlockManager = new CustomBlockManager();
     customBlockFactory.registerStats();
