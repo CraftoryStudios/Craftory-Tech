@@ -266,7 +266,11 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
 
   public void setSideCache(BlockFace face, INTERACTABLEBLOCK type, CustomBlock customBlock) {
     cachedSidesConfig.put(face, type);
-    cachedSides.put(face, customBlock);
+    if(type == INTERACTABLEBLOCK.NONE) {
+      cachedSides.remove(face);
+    } else {
+      cachedSides.put(face,customBlock);
+    }
   }
 
   public void setSideCache(BlockFace face, INTERACTABLEBLOCK type) {

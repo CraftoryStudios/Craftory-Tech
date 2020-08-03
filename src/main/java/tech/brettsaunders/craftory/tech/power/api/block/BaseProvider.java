@@ -56,13 +56,10 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     if (isBlockPowered()) return;
     cachedSides.forEach(((blockFace, customBlock) -> {
       if (customBlock == null) {
-        Bukkit.getScheduler().runTaskLater(Craftory.plugin, new Runnable() {
-          @Override
-          public void run() {
-            CustomBlock sideBlock = Craftory.customBlockManager.getCustomBlock(location.getBlock().getRelative(blockFace).getLocation());
-            if (sideBlock != null) {
-              cachedSides.put(blockFace, sideBlock);
-            }
+        Bukkit.getScheduler().runTaskLater(Craftory.plugin, () -> {
+          CustomBlock sideBlock = Craftory.customBlockManager.getCustomBlock(location.getBlock().getRelative(blockFace).getLocation());
+          if (sideBlock != null) {
+            cachedSides.put(blockFace, sideBlock);
           }
         },4);
       }

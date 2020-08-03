@@ -124,7 +124,7 @@ public class PoweredBlockUtils {
     return Craftory.customBlockManager.getCustomBlock(location) instanceof IEnergyReceiver;
   }
 
-  public static void updateAdjacentProviders(Location location, Boolean setTo, CustomBlock originBlock) {
+  public static void updateAdjacentProviders(Location location, Boolean blockPlaced, CustomBlock originBlock) {
     Block block;
     Location blockLocation;
     for (BlockFace face : Utilities.faces) {
@@ -135,8 +135,8 @@ public class PoweredBlockUtils {
         if (isEnergyProvider(customBlock)) {
           PoweredBlock poweredBlock = (PoweredBlock) customBlock;
           poweredBlock.setSideCache(face.getOppositeFace(),
-              (setTo) ? INTERACTABLEBLOCK.RECEIVER : INTERACTABLEBLOCK.NONE, originBlock);
-        } else if (setTo && Craftory.customBlockManager.getCustomBlockName(blockLocation)
+              (blockPlaced) ? INTERACTABLEBLOCK.RECEIVER : INTERACTABLEBLOCK.NONE, originBlock);
+        } else if (blockPlaced && Craftory.customBlockManager.getCustomBlockName(blockLocation)
             == CoreHolder.Blocks.POWER_CONNECTOR) {
           if (isMachine(customBlock)) {
             Craftory.powerGridManager.getPowerGrids().get(location).addMachine(location, blockLocation);
