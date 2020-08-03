@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory.api.items;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.UUID;
+import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class CustomItem {
 
+  @Getter
   private int itemID;
   private ItemStack itemStack;
   private String itemName;

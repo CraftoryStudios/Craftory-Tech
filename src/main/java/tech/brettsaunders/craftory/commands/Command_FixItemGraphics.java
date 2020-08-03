@@ -16,24 +16,27 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import tech.brettsaunders.craftory.Craftory;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
-public class Command_Main implements CommandExecutor, TabCompleter {
+public class Command_FixItemGraphics implements CommandExecutor, TabCompleter {
 
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
-    Utilities.msg(sender, Utilities.getTranslation("MainCommandLineOne") + Craftory.VERSION);
-    Utilities.msg(sender, Utilities.getTranslation("MainCommandLineTwo") + " ©");
+    if (args.length == 1) {
+      if (sender instanceof Player) {
+        Player player = (Player) sender;
+        CustomItemManager.updateInventoryItemGraphics(player.getInventory());
+        CustomItemManager.updateInventoryItemGraphics(player.getEnderChest());
+        Utilities.msg(sender, "Update graphics of custom items in inventory.");
+      }
+    }
     return true;
   }
 
   public List<String> onTabComplete(CommandSender s, Command c, String label, String[] args) {
     ArrayList<String> tabs = new ArrayList<>();
-    tabs.add("help");
-    tabs.add("toggleDebug");
-    tabs.add("give");
-    tabs.add("fixGraphics");
     return CommandWrapper.filterTabs(tabs, args);
   }
 }

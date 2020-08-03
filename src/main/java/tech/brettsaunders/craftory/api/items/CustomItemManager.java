@@ -16,7 +16,9 @@ import java.util.HashMap;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -143,6 +145,23 @@ public class CustomItemManager {
       return nbtItem.getString("NAME");
     }
     return itemStack.getType().toString();
+  }
+
+  public static void updateItemGraphics(ItemStack itemStack) {
+    if (itemStack == null || itemStack.getType() == Material.AIR) return;
+    if (!isCustomItem(itemStack, true)) return;
+    String customItemName = getCustomItemName(itemStack);
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    if (itemIDCache.containsKey(customItemName)) {
+      itemMeta.setCustomModelData(itemIDCache.get(customItemName).getItemID());
+      itemStack.setItemMeta(itemMeta);
+    }
+  }
+
+  public static void updateInventoryItemGraphics(Inventory inventory) {
+    for (ItemStack itemStack : inventory.getContents()) {
+      updateItemGraphics(itemStack);
+    }
   }
 
 }

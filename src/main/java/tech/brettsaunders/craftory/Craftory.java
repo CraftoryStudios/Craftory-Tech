@@ -29,7 +29,6 @@ import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.testing.TestingCommand;
-import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
@@ -38,8 +37,8 @@ public final class Craftory extends JavaPlugin implements Listener {
 
   public static String VERSION;
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/773feeb5b06ddda9bf461e4f4ca9f664d547801f.zip";
-  public static final String HASH = "773feeb5b06ddda9bf461e4f4ca9f664d547801f";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/101b808e72fe433a6abe480f50ca15512289fcf6.zip";
+  public static final String HASH = "101b808e72fe433a6abe480f50ca15512289fcf6";
 
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
@@ -62,6 +61,7 @@ public final class Craftory extends JavaPlugin implements Listener {
 
   public static int lastVersionCode = 0;
   public static int thisVersionCode;
+  public static boolean folderExists = false;
 
   @SneakyThrows
   @Override
@@ -70,8 +70,9 @@ public final class Craftory extends JavaPlugin implements Listener {
     thisVersionCode = generateVersionCode();
     Craftory.plugin = this;
     this.getServer().getPluginManager().registerEvents(this, this);
-    Utilities.createConfigs();
+
     Utilities.createDataPath();
+    Utilities.createConfigs();
     Utilities.getTranslations();
     tickManager = new CustomBlockTickManager();
     customBlockFactory = new CustomBlockFactory();
@@ -143,7 +144,6 @@ public final class Craftory extends JavaPlugin implements Listener {
     String resultString = "";
     for (String subVersion : subVersions) {
       resultString += StringUtils.leftPad(subVersion, 5, "0");
-      Logger.info(resultString);
     }
     int result = Integer.parseInt(resultString);
     return result;

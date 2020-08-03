@@ -37,7 +37,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -103,6 +102,8 @@ public class Utilities {
 
   public static Optional<AdvancementManager> advancementManager = Optional.empty();
 
+  public static boolean updateItemGraphics = false;
+
   static {
     config = YamlConfiguration
         .loadConfiguration(new File(Craftory.plugin.getDataFolder(), "config.yml"));
@@ -146,14 +147,12 @@ public class Utilities {
 
   static void createConfigs() {
     config.options().header("Craftory");
-    config.options().header("Debug provides extra information about errors and in most cases shouldn't be used.");
     config.addDefault("general.debug", false);
     config.addDefault("general.techEnabled", true);
-    config.options().header("Sets the language for Craftory to use. See Lang folder or Plugin page for options");
     config.addDefault("language.locale", "en-GB");
     config.addDefault("generators.solarDuringStorms", true);
-    config.options().header("The resource pack is required. But if you are self hosting it, you can disable this.");
     config.addDefault("resourcePack.forcePack", true);
+    config.addDefault("fixItemGraphics",false);
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -171,24 +170,37 @@ public class Utilities {
     if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
       //Version 0.2.0 or before
       if (Craftory.lastVersionCode == 0) {
+        config.set("fixItemGraphics", true);
         //Convert all mushrooms to Stem
         Craftory.customBlockManager.getInactiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
-              convertMushroomType(customBlock);
+              Craftory.plugin.getServer().getScheduler().runTaskLater(Craftory.plugin,
+                  () -> convertMushroomType(customBlock),2L);
             }));
         Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
-              convertMushroomType(customBlock);
+              Craftory.plugin.getServer().getScheduler().runTaskLater(Craftory.plugin,
+                  () -> convertMushroomType(customBlock),2L);
             }));
       }
     }
+    updateItemGraphics = config.getBoolean("fixItemGraphics");
   }
 
   private static void convertMushroomType(CustomBlock customBlock) {
     Block block = customBlock.getLocation().getBlock();
-    BlockData blockData = block.getBlockData();
-    MultipleFacing multipleFacing = (MultipleFacing) blockData;
+    MultipleFacing multipleFacingOG = (MultipleFacing) block.getBlockData().clone();
+
     block.setType(Material.MUSHROOM_STEM);
+    MultipleFacing multipleFacing = (MultipleFacing) block.getBlockData();
+
+    multipleFacing.setFace(
+        BlockFace.UP, multipleFacingOG.hasFace(BlockFace.UP));
+    multipleFacing.setFace(BlockFace.DOWN, multipleFacingOG.hasFace(BlockFace.DOWN));
+    multipleFacing.setFace(BlockFace.NORTH, multipleFacingOG.hasFace(BlockFace.NORTH));
+    multipleFacing.setFace(BlockFace.EAST, multipleFacingOG.hasFace(BlockFace.EAST));
+    multipleFacing.setFace(BlockFace.SOUTH, multipleFacingOG.hasFace(BlockFace.SOUTH));
+    multipleFacing.setFace(BlockFace.WEST, multipleFacingOG.hasFace(BlockFace.WEST));
     block.setBlockData(multipleFacing);
   }
 
@@ -210,10 +222,12 @@ public class Utilities {
     File file = new File(DATA_FOLDER);
     if (!file.exists()) {
       file.mkdirs();
+    } else {
+      Craftory.folderExists = true;
     }
 
     File modelData = new File(Craftory.plugin.getDataFolder(), "/config/customModelDataV2.yml");
-    if (!modelData.exists()) {
+    if (!modelData.exists() || Craftory.lastVersionCode == 0) {
       FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/config"),
           new File(Craftory.plugin.getDataFolder(), "/config"));
     }

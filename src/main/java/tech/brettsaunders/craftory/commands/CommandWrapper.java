@@ -26,12 +26,14 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
   private final CommandExecutor HelpCommand;
   private final CommandExecutor DebugCommand;
   private final CommandExecutor GiveCommand;
+  private final CommandExecutor FixCommand;
 
   /* Tab Complete */
   private final TabCompleter MainTab;
   private final TabCompleter HelpTab;
   private final TabCompleter DebugTab;
   private final TabCompleter GiveTab;
+  private final TabCompleter FixTab;
 
   public CommandWrapper() {
     /* Commands */
@@ -39,12 +41,14 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
     HelpCommand = new Command_Help();
     DebugCommand = new Command_Debug();
     GiveCommand = new Command_GiveItem();
+    FixCommand = new Command_FixItemGraphics();
 
     /* Tab Complete */
     MainTab = new Command_Main();
     HelpTab = new Command_Help();
     DebugTab = new Command_Debug();
     GiveTab = new Command_GiveItem();
+    FixTab = new Command_FixItemGraphics();
   }
 
   public static ArrayList<String> filterTabs(ArrayList<String> list, String[] origArgs) {
@@ -88,6 +92,12 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
         } else {
           Utilities.msg(sender, Utilities.getTranslation("NoPermissions"));
         }
+      } else if (args[0].equalsIgnoreCase("fixGraphics")) {
+        if (sender.hasPermission("carftory.fixGraphics")) {
+          return FixCommand.onCommand(sender, command, label, args);
+        } else {
+          Utilities.msg(sender, Utilities.getTranslation("NoPermissions"));
+        }
       } else if (args[0].equalsIgnoreCase("toggleDebug")) {
         if (sender.hasPermission("craftory.debug")) {
           return DebugCommand.onCommand(sender, command, label, args);
@@ -125,6 +135,10 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
       } else if (args[0].equalsIgnoreCase("give")) {
         if (sender.hasPermission("craftory.give")) {
           return GiveTab.onTabComplete(sender, command, label, args);
+        }
+      } else if (args[0].equalsIgnoreCase("fixGraphics")) {
+        if (sender.hasPermission("craftory.fixGraphics")) {
+          return FixTab.onTabComplete(sender, command, label, args);
         }
       }
     }
