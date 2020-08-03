@@ -210,7 +210,9 @@ public class PowerGridManager implements Listener {
         if (connections != null) {
           connections.remove(breakPoint);
           grid.getPowerConnectors().put(location, connections);
-          grid.getBlockConnections().put(location, powerGrid.getBlockConnections().get(location));
+          if(powerGrid.getBlockConnections().containsKey(location)) {
+            grid.getBlockConnections().put(location, powerGrid.getBlockConnections().get(location));
+          }
           ArrayList<Location> openList = new ArrayList<>(connections);
           Location connection;
           while (openList.size() > 0) { //Add all its connections to the grid

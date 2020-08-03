@@ -20,7 +20,6 @@ public class BaseMagnetiser extends BaseOneToOneMachine{
   /* Construction */
   public BaseMagnetiser(Location location, String blockName, byte level) {
     super(location, blockName, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
-
   }
 
   /* Saving, Setup and Loading */
