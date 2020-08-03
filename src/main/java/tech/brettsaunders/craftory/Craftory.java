@@ -12,6 +12,8 @@ package tech.brettsaunders.craftory;
 
 import java.io.File;
 import java.io.IOException;
+import lombok.SneakyThrows;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -27,6 +29,7 @@ import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.testing.TestingCommand;
+import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
@@ -57,9 +60,14 @@ public final class Craftory extends JavaPlugin implements Listener {
   private static File customModelDataFile;
   private static File serverDataFile;
 
+  public static int lastVersionCode = 0;
+  public static int thisVersionCode;
+
+  @SneakyThrows
   @Override
   public void onEnable() {
     Craftory.VERSION = this.getDescription().getVersion();
+    thisVersionCode = generateVersionCode();
     Craftory.plugin = this;
     this.getServer().getPluginManager().registerEvents(this, this);
     Utilities.createConfigs();
@@ -86,7 +94,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
     customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
     serverDataConfig = YamlConfiguration.loadConfiguration(serverDataFile);
-    serverDataConfig.set("lastVersion",Integer.parseInt(VERSION.replaceAll("[^0-9]","")));
+    lastVersionCode = serverDataConfig.getInt("lastVersion");
     CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
     customBlockManager = new CustomBlockManager();
     customBlockFactory.registerStats();
@@ -101,6 +109,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     this.getCommand("crtesting").setExecutor(new TestingCommand());
   }
 
+  @SneakyThrows
   @EventHandler
   public void onServerLoaded(ServerLoadEvent e) {
     powerConnectorManager = new PowerConnectorManager();
@@ -108,6 +117,9 @@ public final class Craftory extends JavaPlugin implements Listener {
     powerGridManager.onEnable();
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     new RecipeManager();
+    Utilities.compatibilityUpdater();
+    serverDataConfig.set("lastVersion",thisVersionCode);
+    serverDataConfig.save(serverDataFile);
   }
 
 
@@ -124,5 +136,16 @@ public final class Craftory extends JavaPlugin implements Listener {
     Utilities.reloadConfigFile();
     Utilities.saveConfigFile();
     plugin = null;
+  }
+
+  private static int generateVersionCode() {
+    String[] subVersions = VERSION.split("\\.");
+    String resultString = "";
+    for (String subVersion : subVersions) {
+      resultString += StringUtils.leftPad(subVersion, 5, "0");
+      Logger.info(resultString);
+    }
+    int result = Integer.parseInt(resultString);
+    return result;
   }
 }

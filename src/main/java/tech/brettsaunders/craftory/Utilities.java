@@ -33,13 +33,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.basicBlocks.BasicBlocks;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
@@ -160,6 +165,31 @@ public class Utilities {
     data.options().copyDefaults(true);
     saveDataFile();
     reloadDataFile();
+  }
+
+  static void compatibilityUpdater() {
+    if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
+      //Version 0.2.0 or before
+      if (Craftory.lastVersionCode == 0) {
+        //Convert all mushrooms to Stem
+        Craftory.customBlockManager.getInactiveChunks().forEach((s, customBlocks) ->
+            customBlocks.forEach(customBlock -> {
+              convertMushroomType(customBlock);
+            }));
+        Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
+            customBlocks.forEach(customBlock -> {
+              convertMushroomType(customBlock);
+            }));
+      }
+    }
+  }
+
+  private static void convertMushroomType(CustomBlock customBlock) {
+    Block block = customBlock.getLocation().getBlock();
+    BlockData blockData = block.getBlockData();
+    MultipleFacing multipleFacing = (MultipleFacing) blockData;
+    block.setType(Material.MUSHROOM_STEM);
+    block.setBlockData(multipleFacing);
   }
 
   static void getTranslations() {

@@ -52,6 +52,7 @@ public class CustomBlockManager {
   private CustomBlockManagerEvents customBlockManagerEvents;
 
   private final HashMap<Location, CustomBlock> currentCustomBlocks;
+  @Getter
   private final HashMap<String, HashSet<CustomBlock>> activeChunks;
   @Getter
   private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
