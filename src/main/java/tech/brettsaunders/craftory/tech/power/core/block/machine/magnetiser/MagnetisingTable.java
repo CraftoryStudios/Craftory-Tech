@@ -15,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -39,7 +40,8 @@ public class MagnetisingTable extends CustomBlock implements Listener {
 
   @Persistent
   protected Boolean framePlaced;
-
+  @Persistent
+  protected ItemStack frameItem; //Only used for saving
   protected ItemFrame itemFrame;
 
   protected Location frameLocation;
@@ -67,8 +69,9 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   public void blockBreak() {
     super.blockBreak();
     if(itemFrame!=null) {
-      itemFrame.getLocation().getWorld().dropItemNaturally(itemFrame.getLocation(), itemFrame.getItem());
       itemFrame.remove();
+      if(itemFrame.getItem().getType()!=Material.AIR)
+        itemFrame.getLocation().getWorld().dropItemNaturally(itemFrame.getLocation(), itemFrame.getItem());
     }
     HandlerList.unregisterAll(this);
   }
@@ -79,7 +82,22 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     if(framePlaced) {
       frameLocation = location.clone().add(0.5,1.03125,0.5);
       frameLocation.setPitch(-90);
-      itemFrame = (ItemFrame) location.getBlock();
+      if(spawnFrame()){
+        if(frameItem!=null)
+        itemFrame.setItem(frameItem);
+      } else {
+        framePlaced = false;
+      }
+    }
+  }
+
+  @Override
+  public void beforeSaveUpdate() {
+    super.beforeSaveUpdate();
+    if(framePlaced){
+      frameItem = itemFrame.getItem();
+      itemFrame.setItem(new ItemStack(Material.AIR));
+      itemFrame.remove();
     }
   }
 
@@ -88,6 +106,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     frameLocation.setPitch(-90);
     if(!frameLocation.getBlock().getType().equals(Material.AIR)) return false;
     itemFrame = location.getWorld().spawn(frameLocation,ItemFrame.class);
+    itemFrame.setFacingDirection(BlockFace.UP);
     itemFrame.setVisible(false);
     framePlaced = true;
     return true;
@@ -103,9 +122,9 @@ public class MagnetisingTable extends CustomBlock implements Listener {
         itemFrame.setItem(CustomItemManager.getCustomItem(recipes.get(itemName)));
         frameLocation.getWorld().spawnParticle(Particle.SMOKE_LARGE, frameLocation, 10);
         progress = 0;
-        player.playSound(frameLocation, Sound.BLOCK_ANVIL_USE, 1, 1);
+        player.playSound(frameLocation, Sound.BLOCK_ANVIL_USE, 1f, 1f);
       } else {
-        player.playSound(frameLocation, Sound.BLOCK_ANVIL_LAND,1,1);
+        player.playSound(frameLocation, Sound.BLOCK_ANVIL_LAND,1f, 1f);
       }
       return true;
     }
@@ -139,10 +158,12 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   @EventHandler
   public void blockRightClicked(PlayerInteractEvent event) {
     if(!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+    if(event.getPlayer().isSneaking()) return;
     if(event.getClickedBlock()==null) return;
     if(event.getItem()==null) return;
     if(!event.getClickedBlock().getLocation().equals(location)) return;
-    if(itemFrame==null) {
+    event.setCancelled(true);
+    if(!framePlaced) {
       spawnFrame();
     }
     if (itemFrame != null) {
