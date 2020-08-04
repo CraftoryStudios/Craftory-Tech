@@ -60,10 +60,10 @@ public class BaseSolarGenerator extends BaseGenerator{
 
   @Override
   public void setupGUI() {
-    Inventory inventory = createInterfaceInventory(displayName, Font.BLANK.label + "");
+    Inventory inventory = createInterfaceInventory(displayName, Font.CELL_GUI.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
-    addGUIComponent(new GIndicator(inventory, runningContainer, 31));
-    addGUIComponent(new GOutputConfig(inventory, sidesConfig, true));
+    addGUIComponent(new GIndicator(inventory, runningContainer, 12));
+    addGUIComponent(new GOutputConfig(inventory, sidesConfig,23, true));
     this.inventoryInterface = inventory;
   }
 

@@ -33,13 +33,10 @@ public class PowerGrid extends BukkitRunnable {
   @Setter
   private HashMap<Location, HashSet<Location>> blockConnections = new HashMap<>();
   @Getter
-  @Setter
   private HashSet<Location> cells = new HashSet<>();
   @Getter
-  @Setter
   private HashSet<Location> generators = new HashSet<>();
   @Getter
-  @Setter
   private HashSet<Location> machines = new HashSet<>();
   private int machinesNeedingEnergy = 0;
   private BukkitTask taskID;

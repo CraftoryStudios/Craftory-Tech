@@ -39,12 +39,15 @@ public class PowerGridManager implements Listener {
   private HashMap<Location, PowerGrid> powerGrids;
   private final PersistenceStorage persistenceStorage;
   private NBTFile nbtFile;
+  private NBTFile nbtFileBackup;
 
   public PowerGridManager() {
     persistenceStorage = new PersistenceStorage();
     try {
       nbtFile = new NBTFile(
           new File(Craftory.plugin.getDataFolder() + File.separator + "data", "PoweredGrids.nbt"));
+      nbtFileBackup = new NBTFile(
+          new File(Craftory.plugin.getDataFolder() + File.separator + "data", "PoweredGridsBackup.nbt"));
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -117,7 +120,15 @@ public class PowerGridManager implements Listener {
   }
 
   public void onDisable() {
+    nbtFileBackup.getKeys().forEach(key -> nbtFileBackup.removeKey(key));
+    nbtFileBackup.mergeCompound(nbtFile);
+    try {
+      nbtFileBackup.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     PowerGridSaver container = new PowerGridSaver(groupPowerGrids());
+    nbtFile.getKeys().forEach(key -> nbtFile.removeKey(key));
     persistenceStorage.saveFields(container, nbtFile);
     try {
       nbtFile.save();
@@ -129,6 +140,11 @@ public class PowerGridManager implements Listener {
   public void onEnable() {
     PowerGridSaver container = new PowerGridSaver();
     persistenceStorage.loadFields(container, nbtFile);
+    try {
+      nbtFile.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     ungroupPowerGrids(container.data);
     generatorPowerBeams();
   }

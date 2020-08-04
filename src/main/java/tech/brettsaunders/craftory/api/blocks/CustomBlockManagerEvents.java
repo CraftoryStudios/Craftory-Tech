@@ -298,7 +298,7 @@ public class CustomBlockManagerEvents implements Listener {
     if (Utilities.updateItemGraphics) {
       CustomItemManager.updateInventoryItemGraphics(e.getPlayer().getInventory());
     }
-    if (lastVersionCode == 0) {
+    if (lastVersionCode == 0 && Craftory.folderExists) {
       if (e.getPlayer().isOp() || e.getPlayer().hasPermission("craftory.give") || e.getPlayer().hasPermission("craftory.debug")) {
         Utilities.msg(e.getPlayer(),"It looks like you are updating from V0.2.0 or lower.");
         Utilities.msg(e.getPlayer(),"Due to changes all Items and Blocks may lose their textures.");
