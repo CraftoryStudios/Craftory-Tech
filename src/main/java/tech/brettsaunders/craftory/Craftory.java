@@ -110,7 +110,6 @@ public final class Craftory extends JavaPlugin implements Listener {
     this.getCommand("crtesting").setExecutor(new TestingCommand());
   }
 
-  @SneakyThrows
   @EventHandler
   public void onServerLoaded(ServerLoadEvent e) {
     powerConnectorManager = new PowerConnectorManager();
@@ -119,14 +118,14 @@ public final class Craftory extends JavaPlugin implements Listener {
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     new RecipeManager();
     Utilities.compatibilityUpdater();
-    serverDataConfig.set("lastVersion",thisVersionCode);
-    serverDataConfig.save(serverDataFile);
   }
 
 
   @Override
   public void onDisable() {
     try {
+      serverDataConfig.set("lastVersion",thisVersionCode);
+      serverDataConfig.save(serverDataFile);
       customItemConfig.save(customItemConfigFile);
       customBlocksConfig.save(customBlockConfigFile);
     } catch (IOException e) {

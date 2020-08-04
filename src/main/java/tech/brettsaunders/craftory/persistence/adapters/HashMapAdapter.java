@@ -21,7 +21,7 @@ public class HashMapAdapter implements DataAdapter<HashMap<?, ?>> {
 
     @Override
     public void store(@NonNull final PersistenceStorage persistenceStorage, @NonNull final HashMap<?, ?> value, @NonNull final NBTCompound nbtCompound) {
-        nbtCompound.getKeys().forEach(key -> nbtCompound.removeKey(key));
+        nbtCompound.getKeys().forEach(key -> {if (nbtCompound.hasKey(key)) nbtCompound.removeKey(key);});
         value.forEach((entryKey, entryValue) -> {
             NBTCompound container = nbtCompound.addCompound("" + entryKey.hashCode());
             NBTCompound keyData = container.addCompound("key");
