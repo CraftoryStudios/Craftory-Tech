@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.tech.power.core.block.generators;
@@ -66,14 +66,25 @@ public class RotaryGenerator extends BaseGenerator {
 
   protected static List<BlockFace> validFaces = Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
 
+  static {
+    inputFaces = new HashMap<BlockFace, Integer>() {
+      {
+        put(BlockFace.NORTH, SLOT);
+        put(BlockFace.EAST, SLOT);
+        put(BlockFace.SOUTH, SLOT);
+        put(BlockFace.WEST, SLOT);
+        put(BlockFace.UP, SLOT);
+      }
+    };
+  }
   public RotaryGenerator(Location location) {
     super(location, Blocks.ROTARY_GENERATOR,C_LEVEL, BASE_CAPACITY,BASE_CAPACITY*MULTIPLIERS[C_LEVEL]);
     setFacing(BlockFace.NORTH);
     checkWheel();
-    init();
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
     mode = WheelMode.WATER;
+    init();
   }
 
   public RotaryGenerator() {
@@ -85,17 +96,7 @@ public class RotaryGenerator extends BaseGenerator {
     inputLocations = new ArrayList<>();
     inputLocations.add(0,SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
-    inputFaces = new HashMap<BlockFace, Integer>() {
-      {
-        put(BlockFace.NORTH, SLOT);
-        put(BlockFace.EAST, SLOT);
-        put(BlockFace.SOUTH, SLOT);
-        put(BlockFace.WEST, SLOT);
-        put(BlockFace.UP, SLOT);
-      }
-    };
   }
-
 
   @Override
   public void beforeSaveUpdate() {

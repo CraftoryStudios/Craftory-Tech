@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.tech.power.core.block.generators;
@@ -47,24 +47,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   @Persistent
   protected int fuelRE;
 
-  /* Construction */
-  public SolidFuelGenerator() {
-    super();
-    init();
-  }
-
-  /* Saving, Setup and Loading */
-  public SolidFuelGenerator(Location location) {
-    super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
-    init();
-    inputSlots = new ArrayList<>();
-    inputSlots.add(0,new ItemStack(Material.AIR));
-  }
-
-  private void init() {
-    inputLocations = new ArrayList<>();
-    inputLocations.add(0,FUEL_SLOT);
-    interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
+  static {
     inputFaces = new HashMap<BlockFace, Integer>() {
       {
         put(BlockFace.NORTH, FUEL_SLOT);
@@ -74,6 +57,25 @@ public class SolidFuelGenerator extends BaseGenerator {
         put(BlockFace.UP, FUEL_SLOT);
       }
     };
+  }
+  /* Construction */
+  public SolidFuelGenerator() {
+    super();
+    init();
+  }
+
+  /* Saving, Setup and Loading */
+  public SolidFuelGenerator(Location location) {
+    super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
+    inputSlots = new ArrayList<>();
+    inputSlots.add(0,new ItemStack(Material.AIR));
+    init();
+  }
+
+  private void init() {
+    inputLocations = new ArrayList<>();
+    inputLocations.add(0,FUEL_SLOT);
+    interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
   }
 
   protected boolean canFinish() {

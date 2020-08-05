@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.persistence.adapters;
@@ -21,6 +21,11 @@ public class HashMapAdapter implements DataAdapter<HashMap<?, ?>> {
 
     @Override
     public void store(@NonNull final PersistenceStorage persistenceStorage, @NonNull final HashMap<?, ?> value, @NonNull final NBTCompound nbtCompound) {
+        NBTCompound parent = nbtCompound.getParent();
+        String name = nbtCompound.getName();
+        nbtCompound.getParent().removeKey(name);
+        parent.addCompound(name);
+
         value.forEach((entryKey, entryValue) -> {
             NBTCompound container = nbtCompound.addCompound("" + entryKey.hashCode());
             NBTCompound keyData = container.addCompound("key");

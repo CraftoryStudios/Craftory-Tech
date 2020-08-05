@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.tech.power.api.block;
@@ -20,7 +20,6 @@ public class BaseMagnetiser extends BaseOneToOneMachine{
   /* Construction */
   public BaseMagnetiser(Location location, String blockName, byte level) {
     super(location, blockName, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
-
   }
 
   /* Saving, Setup and Loading */

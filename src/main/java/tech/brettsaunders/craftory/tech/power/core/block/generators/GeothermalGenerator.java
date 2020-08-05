@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.tech.power.core.block.generators;
@@ -49,27 +49,7 @@ public class GeothermalGenerator extends BaseGenerator {
   @Persistent
   private FluidStorage fluidStorage;
 
-  /* Construction */
-  public GeothermalGenerator() {
-    super();
-    init();
-  }
-
-  /* Saving, Setup and Loading */
-  public GeothermalGenerator(Location location) {
-    super(location, Blocks.GEOTHERMAL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
-    init();
-    fluidStorage = new FluidStorage((int) (LAVA_CAPACITY_BASE * CAPACITY_LEVEL[C_LEVEL]));
-    inputSlots = new ArrayList<>();
-    inputSlots.add(0,new ItemStack(Material.AIR));
-    outputSlots = new ArrayList<>();
-    outputSlots.add(new ItemStack(Material.AIR));
-  }
-
-  private void init() {
-    interactableSlots = new HashSet<>(Arrays.asList(FUEL_SLOT,OUT_SLOT));
-    inputLocations = new ArrayList<>();
-    inputLocations.add(0,FUEL_SLOT);
+  static {
     inputFaces = new HashMap<BlockFace, Integer>() {
       {
         put(BlockFace.NORTH, FUEL_SLOT);
@@ -79,14 +59,38 @@ public class GeothermalGenerator extends BaseGenerator {
         put(BlockFace.UP, FUEL_SLOT);
       }
     };
-    outputLocations = new ArrayList<>();
-    outputLocations.add(OUT_SLOT);
     outputFaces = new HashMap<BlockFace, Integer>() {
       {
         put(BlockFace.DOWN, OUT_SLOT);
       }
     };
   }
+
+  private void init() {
+    inputLocations = new ArrayList<>();
+    inputLocations.add(0,FUEL_SLOT);
+    outputLocations = new ArrayList<>();
+    outputLocations.add(OUT_SLOT);
+    interactableSlots = new HashSet<>(Arrays.asList(FUEL_SLOT,OUT_SLOT));
+  }
+
+  /* Construction */
+  public GeothermalGenerator() {
+    super();
+    init();
+  }
+
+  /* Saving, Setup and Loading */
+  public GeothermalGenerator(Location location) {
+    super(location, Blocks.GEOTHERMAL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
+    fluidStorage = new FluidStorage((int) (LAVA_CAPACITY_BASE * CAPACITY_LEVEL[C_LEVEL]));
+    inputSlots = new ArrayList<>();
+    inputSlots.add(0,new ItemStack(Material.AIR));
+    outputSlots = new ArrayList<>();
+    outputSlots.add(new ItemStack(Material.AIR));
+    init();
+  }
+
 
   @Override
   public void updateGenerator(){

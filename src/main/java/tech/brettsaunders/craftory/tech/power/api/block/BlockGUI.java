@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.tech.power.api.block;
@@ -21,9 +21,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.Inventory;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.NegativeSpaceFont;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
 public abstract class BlockGUI extends CustomBlock implements Listener {
@@ -77,6 +79,9 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
   }
 
   public void openGUI(Player player) {
+    if (Utilities.updateItemGraphics) {
+      CustomItemManager.updateInventoryItemGraphics(inventoryInterface);
+    }
     player.openInventory(inventoryInterface);
   }
 

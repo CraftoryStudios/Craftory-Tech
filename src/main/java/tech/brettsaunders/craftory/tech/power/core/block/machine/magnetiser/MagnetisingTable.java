@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser;
@@ -15,10 +15,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -38,7 +40,8 @@ public class MagnetisingTable extends CustomBlock implements Listener {
 
   @Persistent
   protected Boolean framePlaced;
-
+  @Persistent
+  protected ItemStack frameItem; //Only used for saving
   protected ItemFrame itemFrame;
 
   protected Location frameLocation;
@@ -65,7 +68,12 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   @Override
   public void blockBreak() {
     super.blockBreak();
-    if(itemFrame!=null) itemFrame.remove();
+    if(itemFrame!=null) {
+      itemFrame.remove();
+      if(itemFrame.getItem().getType()!=Material.AIR)
+        itemFrame.getLocation().getWorld().dropItemNaturally(itemFrame.getLocation(), itemFrame.getItem());
+    }
+    HandlerList.unregisterAll(this);
   }
 
   @Override
@@ -74,7 +82,22 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     if(framePlaced) {
       frameLocation = location.clone().add(0.5,1.03125,0.5);
       frameLocation.setPitch(-90);
-      itemFrame = (ItemFrame) location.getBlock();
+      if(spawnFrame()){
+        if(frameItem!=null)
+        itemFrame.setItem(frameItem);
+      } else {
+        framePlaced = false;
+      }
+    }
+  }
+
+  @Override
+  public void beforeSaveUpdate() {
+    super.beforeSaveUpdate();
+    if(framePlaced){
+      frameItem = itemFrame.getItem();
+      itemFrame.setItem(new ItemStack(Material.AIR));
+      itemFrame.remove();
     }
   }
 
@@ -83,6 +106,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     frameLocation.setPitch(-90);
     if(!frameLocation.getBlock().getType().equals(Material.AIR)) return false;
     itemFrame = location.getWorld().spawn(frameLocation,ItemFrame.class);
+    itemFrame.setFacingDirection(BlockFace.UP);
     itemFrame.setVisible(false);
     framePlaced = true;
     return true;
@@ -98,9 +122,9 @@ public class MagnetisingTable extends CustomBlock implements Listener {
         itemFrame.setItem(CustomItemManager.getCustomItem(recipes.get(itemName)));
         frameLocation.getWorld().spawnParticle(Particle.SMOKE_LARGE, frameLocation, 10);
         progress = 0;
-        player.playSound(frameLocation, Sound.BLOCK_ANVIL_USE, 1, 1);
+        player.playSound(frameLocation, Sound.BLOCK_ANVIL_USE, 1f, 1f);
       } else {
-        player.playSound(frameLocation, Sound.BLOCK_ANVIL_LAND,1,1);
+        player.playSound(frameLocation, Sound.BLOCK_ANVIL_LAND,1f, 1f);
       }
       return true;
     }
@@ -134,13 +158,18 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   @EventHandler
   public void blockRightClicked(PlayerInteractEvent event) {
     if(!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+    if(event.getPlayer().isSneaking()) return;
     if(event.getClickedBlock()==null) return;
     if(event.getItem()==null) return;
     if(!event.getClickedBlock().getLocation().equals(location)) return;
-    if(!(itemFrame==null || itemFrame.getItem().getType().equals(Material.AIR))) return;
-    if(itemFrame!=null || spawnFrame()){
+    event.setCancelled(true);
+    if(!framePlaced) {
+      spawnFrame();
+    }
+    if (itemFrame != null) {
+      if (!(itemFrame.getItem().getType().equals(Material.AIR))) return;
       ItemStack item = event.getItem().clone();
-      event.getItem().setAmount(item.getAmount()-1);
+      event.getItem().setAmount(item.getAmount() - 1);
       item.setAmount(1);
       itemFrame.setItem(item);
     }

@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.persistence;
@@ -27,6 +27,7 @@ import tech.brettsaunders.craftory.persistence.adapters.BlockFaceAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.BooleanAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.DataAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.EnergyStorageAdapter;
+import tech.brettsaunders.craftory.persistence.adapters.FluidStorageAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.HashMapAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.HashSetAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.IntegerAdapter;
@@ -37,6 +38,7 @@ import tech.brettsaunders.craftory.persistence.adapters.LongAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.PowerGridAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.StringAdapter;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
+import tech.brettsaunders.craftory.tech.power.api.fluids.FluidStorage;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.ReflectionUtils;
@@ -65,6 +67,7 @@ public class PersistenceStorage {
         registerDataConverter(ArrayList.class, new ArrayListAdapter(), false);
         registerDataConverter(Boolean.class, new BooleanAdapter(), false);
         registerDataConverter(PowerGrid.class, new PowerGridAdapter(), false);
+        registerDataConverter(FluidStorage.class, new FluidStorageAdapter(), false);
 
         interfaceConverters = new HashMap<>();
         registerInterfaceConverter(ItemStack.class, new ItemStackAdapter(), false);
@@ -88,7 +91,11 @@ public class PersistenceStorage {
         }
     }
 
-    public void saveFields(@NonNull Object object, @NonNull NBTCompound nbtCompound) {
+    public void saveFields(Object object, NBTCompound nbtCompound) {
+        if (object == null || nbtCompound == null) {
+            Logger.error("Couldn't save object! Null");
+            return;
+        }
         ReflectionUtils.getFieldsRecursively(object.getClass(), Object.class).stream()
                 .filter(field -> field.getAnnotation(Persistent.class) != null).forEach(field -> {
             field.setAccessible(true);
@@ -126,7 +133,11 @@ public class PersistenceStorage {
     }
 
     @SuppressWarnings("unchecked")
-    public Class<?> saveObject(@NonNull Object data, @NonNull NBTCompound nbtCompound) {
+    public Class<?> saveObject(Object data, NBTCompound nbtCompound) {
+        if (data == null || nbtCompound == null) {
+            Logger.error("Error Saving Object. Null");
+            return null;
+        }
         Class<?> clazz = data.getClass();
 
         // Check custom converters

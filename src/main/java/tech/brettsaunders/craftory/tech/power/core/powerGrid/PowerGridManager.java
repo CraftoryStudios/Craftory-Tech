@@ -5,12 +5,11 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
-import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,7 +27,6 @@ import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
-import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
@@ -40,16 +36,18 @@ import tech.brettsaunders.craftory.utils.Logger;
 public class PowerGridManager implements Listener {
 
   @Getter
-  @Persistent
   private HashMap<Location, PowerGrid> powerGrids;
   private final PersistenceStorage persistenceStorage;
   private NBTFile nbtFile;
+  private NBTFile nbtFileBackup;
 
   public PowerGridManager() {
     persistenceStorage = new PersistenceStorage();
     try {
       nbtFile = new NBTFile(
-          new File(Craftory.plugin.getDataFolder() + File.separator + "data", "PowerGrids.nbt"));
+          new File(Craftory.plugin.getDataFolder() + File.separator + "data", "PoweredGrids.nbt"));
+      nbtFileBackup = new NBTFile(
+          new File(Craftory.plugin.getDataFolder() + File.separator + "data", "PoweredGridsBackup.nbt"));
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -61,6 +59,12 @@ public class PowerGridManager implements Listener {
   private void generatorPowerBeams() {
     powerGrids.forEach(((location, powerGrid) -> {
       powerGrid.getPowerConnectors().forEach((from, value) -> {
+        value.forEach((to) -> {
+          Craftory.powerConnectorManager.formBeam(from, to);
+        });
+      });
+
+      powerGrid.getBlockConnections().forEach((from, value) -> {
         value.forEach((to) -> {
           Craftory.powerConnectorManager.formBeam(from, to);
         });
@@ -116,11 +120,16 @@ public class PowerGridManager implements Listener {
   }
 
   public void onDisable() {
-    powerGrids.forEach(((location, powerGrid) -> {
-      NBTCompound locationCompound = nbtFile.addCompound(Utilities.getLocationID(location));
-      locationCompound.setString("world", location.getWorld().getName());
-      persistenceStorage.saveFields(powerGrid, locationCompound);
-    }));
+    nbtFileBackup.getKeys().forEach(key -> nbtFileBackup.removeKey(key));
+    nbtFileBackup.mergeCompound(nbtFile);
+    try {
+      nbtFileBackup.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    PowerGridSaver container = new PowerGridSaver(groupPowerGrids());
+    nbtFile.getKeys().forEach(key -> nbtFile.removeKey(key));
+    persistenceStorage.saveFields(container, nbtFile);
     try {
       nbtFile.save();
     } catch (IOException e) {
@@ -129,14 +138,33 @@ public class PowerGridManager implements Listener {
   }
 
   public void onEnable() {
-    nbtFile.getKeys().forEach((locationKey) -> {
-      NBTCompound locationCompound = nbtFile.getCompound(locationKey);
-      PowerGrid powerGrid = new PowerGrid();
-      persistenceStorage.loadFields(powerGrid, locationCompound);
-      World world = Bukkit.getWorld(locationCompound.getString("world"));
-      powerGrids.put(Utilities.keyToLoc(locationKey, world), powerGrid); //TODO Allow any world
-    });
+    PowerGridSaver container = new PowerGridSaver();
+    persistenceStorage.loadFields(container, nbtFile);
+    try {
+      nbtFile.save();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    ungroupPowerGrids(container.data);
     generatorPowerBeams();
+  }
+
+  private HashMap<PowerGrid, HashSet<Location>> groupPowerGrids() {
+    HashMap<PowerGrid, HashSet<Location>> grouped = new HashMap<>();
+    powerGrids.forEach(((location, powerGrid) -> {
+      if (grouped.containsKey(powerGrid)) {
+        grouped.get(powerGrid).add(location);
+      } else {
+        HashSet<Location> locationHashSet = new HashSet<>();
+        locationHashSet.add(location);
+        grouped.put(powerGrid, locationHashSet);
+      }
+    }));
+    return grouped;
+  }
+
+  private void ungroupPowerGrids(HashMap<PowerGrid, HashSet<Location>> data) {
+    data.forEach((powerGrid, locations) -> locations.forEach(location -> powerGrids.put(location,powerGrid)));
   }
 
   /* Grid Splitting */
@@ -198,7 +226,9 @@ public class PowerGridManager implements Listener {
         if (connections != null) {
           connections.remove(breakPoint);
           grid.getPowerConnectors().put(location, connections);
-          grid.getBlockConnections().put(location, powerGrid.getBlockConnections().get(location));
+          if(powerGrid.getBlockConnections().containsKey(location)) {
+            grid.getBlockConnections().put(location, powerGrid.getBlockConnections().get(location));
+          }
           ArrayList<Location> openList = new ArrayList<>(connections);
           Location connection;
           while (openList.size() > 0) { //Add all its connections to the grid
@@ -211,7 +241,7 @@ public class PowerGridManager implements Listener {
             if (powerGrid.getBlockConnections().containsKey(connection)) {
               grid.getBlockConnections().put(connection, powerGrid.getBlockConnections().get(connection));
             }
-            HashSet<Location> connectionConnections = powerGrid.getBlockConnections().get(connection);
+            HashSet<Location> connectionConnections = powerGrid.getPowerConnectors().get(connection);
             if (connectionConnections == null) {
               continue;
             }

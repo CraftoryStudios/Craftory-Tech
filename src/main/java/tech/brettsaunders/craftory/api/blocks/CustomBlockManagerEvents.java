@@ -5,12 +5,13 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.api.blocks;
 
 import static tech.brettsaunders.craftory.Craftory.customBlockManager;
+import static tech.brettsaunders.craftory.Craftory.lastVersionCode;
 import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 
 import java.util.HashMap;
@@ -33,10 +34,13 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldInitEvent;
+import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -181,6 +185,22 @@ public class CustomBlockManagerEvents implements Listener {
           return;
         }
       });
+    } else if (e.getBlock().getType() == Material.BROWN_MUSHROOM_BLOCK) {
+      BlockData blockData = e.getBlock().getBlockData();
+      MultipleFacing multipleFacing = (MultipleFacing) blockData;
+      Utilities.getBasicBlockRegistry().forEach((name,placement) -> {
+        Set<BlockFace> blockFaces = multipleFacing.getFaces();
+        Set<BlockFace> compareFaces = placement.getAllowedFaces();
+        if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces) && name.equalsIgnoreCase(
+            Blocks.COPPER_ORE)) {
+          if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+            location.getWorld()
+                .dropItemNaturally(location, CustomItemManager.getCustomItem(name));
+          }
+          e.getBlock().setType(Material.AIR);
+          return;
+        }
+      });
     }
   }
 
@@ -264,5 +284,28 @@ public class CustomBlockManagerEvents implements Listener {
       }
     }
     return;
+  }
+
+  @EventHandler
+  public void onInventoryOpen(InventoryOpenEvent e) {
+    if (Utilities.updateItemGraphics) {
+      CustomItemManager.updateInventoryItemGraphics(e.getInventory());
+    }
+  }
+
+  @EventHandler
+  public void onPlayerJoin(PlayerJoinEvent e) {
+    if (Utilities.updateItemGraphics) {
+      CustomItemManager.updateInventoryItemGraphics(e.getPlayer().getInventory());
+    }
+    if (lastVersionCode == 0 && Craftory.folderExists) {
+      if (e.getPlayer().isOp() || e.getPlayer().hasPermission("craftory.give") || e.getPlayer().hasPermission("craftory.debug")) {
+        Utilities.msg(e.getPlayer(),"It looks like you are updating from V0.2.0 or lower.");
+        Utilities.msg(e.getPlayer(),"Due to changes all Items and Blocks may lose their textures.");
+        Utilities.msg(e.getPlayer(),"To deal with this your server should have converted all blocks to the new format.");
+        Utilities.msg(e.getPlayer(),"All items will be convert when the player opens an inventory with them in, until you turn off the config option Fix Item Graphics.");
+        Utilities.msg(e.getPlayer(), "Once turned off you can still convert items with /fixGraphics command!");
+      }
+    }
   }
 }

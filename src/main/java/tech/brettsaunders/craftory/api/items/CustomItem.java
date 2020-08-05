@@ -5,13 +5,14 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.api.items;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.UUID;
+import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class CustomItem {
 
+  @Getter
   private int itemID;
   private ItemStack itemStack;
   private String itemName;
@@ -44,7 +46,7 @@ public class CustomItem {
     itemStack = new ItemStack(material);
     ItemMeta itemMeta = itemStack.getItemMeta();
     itemMeta.setCustomModelData(itemID);
-    itemMeta.setDisplayName(ChatColor.RESET + displayName);
+    itemMeta.setDisplayName(getDisplayNameColour() + displayName);
     itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     itemStack.setItemMeta(itemMeta);
 
@@ -80,6 +82,21 @@ public class CustomItem {
     AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attack_damage", attackDamage, Operation.ADD_NUMBER, EquipmentSlot.HAND);
     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
     itemStack.setItemMeta(meta);
+  }
+
+  private ChatColor getDisplayNameColour() {
+    String displayNameChecker = displayName.toLowerCase();
+    if (displayNameChecker.contains("Iron")) {
+      return ChatColor.GRAY;
+    } else if (displayNameChecker.contains("Gold")) {
+      return ChatColor.GOLD;
+    } else if (displayNameChecker.contains("Diamond")) {
+      return ChatColor.BLUE;
+    } else if (displayNameChecker.contains("Emerald")) {
+      return ChatColor.GREEN;
+    } else {
+      return ChatColor.RESET;
+    }
   }
 
 }

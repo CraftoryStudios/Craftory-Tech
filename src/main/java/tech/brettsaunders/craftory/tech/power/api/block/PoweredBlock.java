@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.tech.power.api.block;
@@ -27,6 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
@@ -58,11 +59,11 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   /* Hopper control variables */
   @Persistent
   protected ArrayList<ItemStack> inputSlots = new ArrayList<>(); //The ItemStacks of the inputs
-  @Persistent
+
   protected ArrayList<Integer> inputLocations = new ArrayList<>();  //The inventory locations of inputs
   @Persistent
   protected ArrayList<ItemStack> outputSlots = new ArrayList<>(); //The ItemStacks of the outputs
-  @Persistent
+
   protected ArrayList<Integer> outputLocations = new ArrayList<>(); //The inventory locations of outputs
   /* Per Object Variables Not-Saved */
   protected transient Inventory inventoryInterface;
@@ -197,9 +198,9 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (event.getInventory() != getInventory()) {
       return;
     }
-    if(event.getCurrentItem()==null||event.getCurrentItem().getType().equals(Material.AIR)||event.getCurrentItem().getAmount()==0) return;
     if(event.getRawSlot() > 53){
       //Handle Shift Clicking Items
+      if(event.getCurrentItem()==null||event.getCurrentItem().getType().equals(Material.AIR)||event.getCurrentItem().getAmount()==0) return;
       if (event.isShiftClick()) {
         event.setCancelled(true);
         ItemStack sourceItemStack = event.getCurrentItem();
@@ -240,6 +241,19 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   }
 
   @EventHandler
+  public void onInventoryInteract(final InventoryDragEvent event) {
+    if (event.getInventory() != getInventory()) {
+      return;
+    }
+    event.getRawSlots().forEach(slot -> {
+      //Stop moving items from any slot but intractable ones
+      if (slot <= 53 && !interactableSlots.contains(slot)) {
+        event.setCancelled(true);
+      }
+    });
+  }
+
+  @EventHandler
   public void onPoweredStateUpdate(BlockRedstoneEvent e) {
     if (e.getBlock().getLocation() == location) {
       if (e.getNewCurrent() > 0) {
@@ -252,7 +266,11 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
 
   public void setSideCache(BlockFace face, INTERACTABLEBLOCK type, CustomBlock customBlock) {
     cachedSidesConfig.put(face, type);
-    cachedSides.put(face, customBlock);
+    if(type == INTERACTABLEBLOCK.NONE) {
+      cachedSides.remove(face);
+    } else {
+      cachedSides.put(face,customBlock);
+    }
   }
 
   public void setSideCache(BlockFace face, INTERACTABLEBLOCK type) {

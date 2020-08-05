@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.api.blocks;
@@ -52,6 +52,7 @@ public class CustomBlockManager {
   private CustomBlockManagerEvents customBlockManagerEvents;
 
   private final HashMap<Location, CustomBlock> currentCustomBlocks;
+  @Getter
   private final HashMap<String, HashSet<CustomBlock>> activeChunks;
   @Getter
   private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;

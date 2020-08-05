@@ -253,7 +253,7 @@ recipes:
       - XXW
       - SWX
     ingredients:
-      W: OAK_PLANKS
+      W: TAG-PLANKS
       S: STICK
     result:
       item: sickle_wood
@@ -323,16 +323,6 @@ recipes:
       S: STICK
     result:
       item: sickle_diamond
-      amount: 1
-  magnetised_iron:
-    pattern:
-      - IXX
-      - IXX
-      - XXX
-    ingredients:
-      I: IRON_INGOT
-    result:
-      item: magnetised_iron
       amount: 1
   IronMacerator:
     pattern:
@@ -436,7 +426,7 @@ recipes:
       - PXP
     ingredients:
       I: IRON_BLOCK
-      P: OAK_PLANKS
+      P: TAG-PLANKS
     result:
       item: MagnetisingTable
       amount: 1
@@ -495,7 +485,7 @@ recipes:
       - SSS
       - PSP
     ingredients:
-      P: OAK_PLANKS
+      P: TAG-PLANKS
       S: STICK
     result:
       item: waterwheel

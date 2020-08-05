@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.commands;
@@ -26,6 +26,7 @@ public class Command_Help implements CommandExecutor, TabCompleter {
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineOne"));
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineTwo"));
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineThree"));
+      Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineFour"));
     }
     return true;
   }

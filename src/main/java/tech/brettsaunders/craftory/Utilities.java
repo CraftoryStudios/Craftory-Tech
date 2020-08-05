@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory;
@@ -33,13 +33,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.basicBlocks.BasicBlocks;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
@@ -98,6 +102,8 @@ public class Utilities {
 
   public static Optional<AdvancementManager> advancementManager = Optional.empty();
 
+  public static boolean updateItemGraphics = false;
+
   static {
     config = YamlConfiguration
         .loadConfiguration(new File(Craftory.plugin.getDataFolder(), "config.yml"));
@@ -141,14 +147,12 @@ public class Utilities {
 
   static void createConfigs() {
     config.options().header("Craftory");
-    config.options().header("Debug provides extra information about errors and in most cases shouldn't be used.");
     config.addDefault("general.debug", false);
     config.addDefault("general.techEnabled", true);
-    config.options().header("Sets the language for Craftory to use. See Lang folder or Plugin page for options");
     config.addDefault("language.locale", "en-GB");
     config.addDefault("generators.solarDuringStorms", true);
-    config.options().header("The resource pack is required. But if you are self hosting it, you can disable this.");
     config.addDefault("resourcePack.forcePack", true);
+    config.addDefault("fixItemGraphics",false);
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -156,10 +160,51 @@ public class Utilities {
 
     data.options().header("Do Not Touch");
     data.addDefault("reporting.serverUUID", UUID.randomUUID().toString());
+    data.addDefault("lastVersion", 0);
     data.options().copyHeader(true);
     data.options().copyDefaults(true);
     saveDataFile();
     reloadDataFile();
+
+    Craftory.lastVersionCode = data.getInt("lastVersion");
+  }
+
+  static void compatibilityUpdater() {
+    if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
+      //Version 0.2.0 or before
+      if (Craftory.lastVersionCode == 0) {
+        config.set("fixItemGraphics", true);
+        //Convert all mushrooms to Stem
+        Craftory.customBlockManager.getInactiveChunks().forEach((s, customBlocks) ->
+            customBlocks.forEach(customBlock -> {
+              Craftory.plugin.getServer().getScheduler().runTaskLater(Craftory.plugin,
+                  () -> convertMushroomType(customBlock),2L);
+            }));
+        Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
+            customBlocks.forEach(customBlock -> {
+              Craftory.plugin.getServer().getScheduler().runTaskLater(Craftory.plugin,
+                  () -> convertMushroomType(customBlock),2L);
+            }));
+      }
+    }
+    updateItemGraphics = config.getBoolean("fixItemGraphics");
+  }
+
+  private static void convertMushroomType(CustomBlock customBlock) {
+    Block block = customBlock.getLocation().getBlock();
+    MultipleFacing multipleFacingOG = (MultipleFacing) block.getBlockData().clone();
+
+    block.setType(Material.MUSHROOM_STEM);
+    MultipleFacing multipleFacing = (MultipleFacing) block.getBlockData();
+
+    multipleFacing.setFace(
+        BlockFace.UP, multipleFacingOG.hasFace(BlockFace.UP));
+    multipleFacing.setFace(BlockFace.DOWN, multipleFacingOG.hasFace(BlockFace.DOWN));
+    multipleFacing.setFace(BlockFace.NORTH, multipleFacingOG.hasFace(BlockFace.NORTH));
+    multipleFacing.setFace(BlockFace.EAST, multipleFacingOG.hasFace(BlockFace.EAST));
+    multipleFacing.setFace(BlockFace.SOUTH, multipleFacingOG.hasFace(BlockFace.SOUTH));
+    multipleFacing.setFace(BlockFace.WEST, multipleFacingOG.hasFace(BlockFace.WEST));
+    block.setBlockData(multipleFacing);
   }
 
   static void getTranslations() {
@@ -180,10 +225,12 @@ public class Utilities {
     File file = new File(DATA_FOLDER);
     if (!file.exists()) {
       file.mkdirs();
+    } else {
+      Craftory.folderExists = true;
     }
 
     File modelData = new File(Craftory.plugin.getDataFolder(), "/config/customModelDataV2.yml");
-    if (!modelData.exists()) {
+    if (!modelData.exists() || Craftory.lastVersionCode == 0) {
       FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/config"),
           new File(Craftory.plugin.getDataFolder(), "/config"));
     }

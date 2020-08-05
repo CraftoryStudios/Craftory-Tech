@@ -5,7 +5,7 @@
  * Unauthorized copying of this file, via any medium is strictly prohibited.
  * Proprietary and confidential
  *
- * File Author: Brett Saunders
+ * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
 package tech.brettsaunders.craftory.tech.power.api.block;
@@ -27,7 +27,6 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.Pair;
-import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract {
 
@@ -57,16 +56,14 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
 
   public BaseOneToOneMachine(Location location, String blockName, byte level, int maxRecieve) {
     super(location, blockName, level, maxRecieve);
-    init();
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
     outputSlots = new ArrayList<>();
     outputSlots.add(new ItemStack(Material.AIR));
-    inputLocations.add(INPUT_LOCATION);
-    outputLocations.add(OUTPUT_LOCATION);
     processTime = PROCESS_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
+    init();
   }
 
   public BaseOneToOneMachine(){
@@ -74,6 +71,13 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     init();
   }
 
+  private void init() {
+    inputLocations = new ArrayList<>();
+    outputLocations = new ArrayList<>();
+    inputLocations.add(INPUT_LOCATION);
+    outputLocations.add(OUTPUT_LOCATION);
+    interactableSlots = new HashSet<>(Arrays.asList(INPUT_LOCATION, OUTPUT_LOCATION));
+  }
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
@@ -82,12 +86,6 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   }
 
 
-  /* Common Load and Construction */
-  public void init() {
-    runningContainer = new VariableContainer<>(false);
-    progressContainer = new VariableContainer<>(0d);
-    interactableSlots = new HashSet<>(Arrays.asList(INPUT_LOCATION, OUTPUT_LOCATION));
-  }
 
   @Override
   public void setupGUI() {
