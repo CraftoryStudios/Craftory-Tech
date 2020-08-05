@@ -35,11 +35,11 @@ public class CustomBlockInteractEvent extends Event implements Cancellable {
   private final ItemStack itemStack;
   @Getter
   private final Player player;
-  private boolean isCancelled;
   @Getter
   private final CustomBlock customBlock;
   @Getter
   private final PlayerInteractEvent baseEvent;
+  private boolean isCancelled;
 
   public CustomBlockInteractEvent(Action action, Block blockClicked, BlockFace blockFace,
       ItemStack itemStack, Player player, CustomBlock customBlock, PlayerInteractEvent baseEvent) {

@@ -24,6 +24,8 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
 public class GOutputConfig implements IGUIComponent, Listener {
 
+  private static ItemStack DISABLED = null;
+  private static ItemStack OUTPUT = null;
   private final int NORTH_SLOT;
   private final int EAST_SLOT;
   private final int SOUTH_SLOT;
@@ -31,10 +33,6 @@ public class GOutputConfig implements IGUIComponent, Listener {
   private final int UP_SLOT;
   private final int DOWN_SLOT;
   private final boolean ALT;
-
-  private static ItemStack DISABLED = null;
-  private static ItemStack OUTPUT = null;
-
   private final Inventory inventory;
   private final HashMap<BlockFace, Boolean> config;
 

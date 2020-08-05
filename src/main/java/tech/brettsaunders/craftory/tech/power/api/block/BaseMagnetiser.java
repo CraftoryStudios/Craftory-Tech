@@ -14,7 +14,7 @@ import java.util.HashMap;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
-public class BaseMagnetiser extends BaseOneToOneMachine{
+public class BaseMagnetiser extends BaseOneToOneMachine {
 
 
   /* Construction */
@@ -28,7 +28,7 @@ public class BaseMagnetiser extends BaseOneToOneMachine{
   }
 
   @Override
-  protected HashMap<String,String> getRecipes(){
+  protected HashMap<String, String> getRecipes() {
     return RecipeUtils.getMagnetiserRecipes();
   }
 

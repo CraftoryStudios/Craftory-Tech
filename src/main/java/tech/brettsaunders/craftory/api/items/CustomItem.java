@@ -26,10 +26,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class CustomItem {
 
   @Getter
-  private int itemID;
+  private final int itemID;
   private ItemStack itemStack;
-  private String itemName;
-  private String displayName;
+  private final String itemName;
+  private final String displayName;
 
   public CustomItem(int itemID, Material itemMaterial, String itemName, String displayName) {
     this.itemID = itemID;
@@ -72,14 +72,16 @@ public class CustomItem {
 
   public void setAttackSpeed(int attackSpeed) {
     ItemMeta meta = itemStack.getItemMeta();
-    AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", attackSpeed, Operation.ADD_NUMBER, EquipmentSlot.HAND);
+    AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed",
+        attackSpeed, Operation.ADD_NUMBER, EquipmentSlot.HAND);
     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier);
     itemStack.setItemMeta(meta);
   }
 
   public void setAttackDamage(int attackDamage) {
     ItemMeta meta = itemStack.getItemMeta();
-    AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attack_damage", attackDamage, Operation.ADD_NUMBER, EquipmentSlot.HAND);
+    AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.attack_damage",
+        attackDamage, Operation.ADD_NUMBER, EquipmentSlot.HAND);
     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier);
     itemStack.setItemMeta(meta);
   }

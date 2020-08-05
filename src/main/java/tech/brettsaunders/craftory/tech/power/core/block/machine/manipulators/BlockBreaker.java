@@ -33,6 +33,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 
 public class BlockBreaker extends BaseMachine {
+
   private static final byte C_LEVEL = 0;
   private static final int MAX_RECEIVE = 10000;
   private static final int SLOT = 22;
@@ -51,6 +52,12 @@ public class BlockBreaker extends BaseMachine {
     outputInventory = Optional.empty();
   }
 
+  public BlockBreaker() {
+    super();
+    init();
+    outputInventory = Optional.empty();
+  }
+
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
@@ -59,15 +66,9 @@ public class BlockBreaker extends BaseMachine {
     setOutputInventory(opposite.getBlock());
   }
 
-  public BlockBreaker() {
-    super();
-    init();
-    outputInventory = Optional.empty();
-  }
-
   private void init() {
     outputLocations = new ArrayList<>();
-    outputLocations.add(0,SLOT);
+    outputLocations.add(0, SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
   }
 
@@ -82,15 +83,18 @@ public class BlockBreaker extends BaseMachine {
     addGUIComponent(new GBattery(inventory, energyStorage, 13));
     this.inventoryInterface = inventory;
   }
+
   @EventHandler
   public void onChestPlace(BlockPlaceEvent e) {
     final Block blockPlaced = e.getBlockPlaced();
-    if (!blockPlaced.getLocation().equals(opposite)) return;
+    if (!blockPlaced.getLocation().equals(opposite)) {
+      return;
+    }
     setOutputInventory(blockPlaced);
   }
 
   private void setOutputInventory(Block block) {
-    if(block.getState() instanceof InventoryHolder) {
+    if (block.getState() instanceof InventoryHolder) {
       InventoryHolder ih = (InventoryHolder) block.getState();
       outputInventory = Optional.of(ih.getInventory());
     }
@@ -99,15 +103,19 @@ public class BlockBreaker extends BaseMachine {
   @EventHandler
   public void onChestRemove(BlockBreakEvent e) {
     final Block block = e.getBlock();
-    if (!block.getLocation().equals(opposite)) return;
+    if (!block.getLocation().equals(opposite)) {
+      return;
+    }
     if (outputInventory.isPresent()) {
-      outputInventory= Optional.empty();
+      outputInventory = Optional.empty();
     }
   }
 
   @EventHandler
   public void onRedstonePower(BlockPhysicsEvent e) {
-    if (!e.getBlock().getLocation().equals(location)) return;
+    if (!e.getBlock().getLocation().equals(location)) {
+      return;
+    }
     if (lastRedstoneStrength != 0) {
       lastRedstoneStrength = e.getBlock().getBlockPower();
       return;
@@ -131,9 +139,9 @@ public class BlockBreaker extends BaseMachine {
 
   private void dropItem(ItemStack itemStack) {
     if (outputInventory.isPresent()) {
-      HashMap<Integer,ItemStack> result = outputInventory.get().addItem(itemStack);
+      HashMap<Integer, ItemStack> result = outputInventory.get().addItem(itemStack);
       if (result.size() > 0) {
-        result.forEach((i,item) -> location.getWorld().dropItemNaturally(opposite,item));
+        result.forEach((i, item) -> location.getWorld().dropItemNaturally(opposite, item));
       }
     } else {
       location.getWorld().dropItem(opposite, itemStack);
@@ -141,10 +149,7 @@ public class BlockBreaker extends BaseMachine {
   }
 
   private boolean checkPowerRequirement() {
-    if(energyStorage.getEnergyStored() > ENERGY_REQUIRED) {
-      return true;
-    }
-    return false;
+    return energyStorage.getEnergyStored() > ENERGY_REQUIRED;
   }
 
   @Override

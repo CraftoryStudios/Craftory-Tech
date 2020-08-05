@@ -81,7 +81,8 @@ public class OrePopulator extends BlockPopulator {
                   z--;
                   break;
               }
-              if (x < 0 || x > 15 || y < minHeight || y > maxHeight || z < 0 || z > 15 || (!validBlock(block = chunk.getBlock(x, y, z)))) {
+              if (x < 0 || x > 15 || y < minHeight || y > maxHeight || z < 0 || z > 15
+                  || (!validBlock(block = chunk.getBlock(x, y, z)))) {
                 x = xx;
                 y = yy;
                 z = zz;

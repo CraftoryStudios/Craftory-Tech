@@ -40,7 +40,8 @@ public class CustomItemManager {
         Material material = Material
             .getMaterial(itemSection.getString("itemModel").toUpperCase());
         if (material == null) {
-          Logger.error(key + " Material doesn't exist :" + itemSection.getString("itemModel").toUpperCase());
+          Logger.error(
+              key + " Material doesn't exist :" + itemSection.getString("itemModel").toUpperCase());
         } else {
           int itemID = customModeData.getInt("items." + key + ".customModelID");
           //Get Display Name
@@ -85,7 +86,7 @@ public class CustomItemManager {
           } else {
             int itemID = customModeData.getInt("items." + key + ".customModelID");
             //Set Display Name
-            String nameKey = key.replace("_WEST","").replace("_EAST","").replace("_SOUTH", "");
+            String nameKey = key.replace("_WEST", "").replace("_EAST", "").replace("_SOUTH", "");
             displayName = Utilities.getTranslation(nameKey);
             CustomItem customItem = new CustomItem(itemID, material, nameKey, displayName);
             itemIDCache.put(key, customItem);
@@ -114,6 +115,7 @@ public class CustomItemManager {
   public static boolean isCustomItemName(String name) {
     return itemIDCache.containsKey(name);
   }
+
   public static boolean isCustomItem(ItemStack itemStack, boolean includeBlockItems) {
     NBTItem nbtItem = new NBTItem(itemStack);
     if (nbtItem.hasNBTData()) {
@@ -148,8 +150,12 @@ public class CustomItemManager {
   }
 
   public static void updateItemGraphics(ItemStack itemStack) {
-    if (itemStack == null || itemStack.getType() == Material.AIR) return;
-    if (!isCustomItem(itemStack, true)) return;
+    if (itemStack == null || itemStack.getType() == Material.AIR) {
+      return;
+    }
+    if (!isCustomItem(itemStack, true)) {
+      return;
+    }
     String customItemName = getCustomItemName(itemStack);
     ItemMeta itemMeta = itemStack.getItemMeta();
     if (itemIDCache.containsKey(customItemName)) {

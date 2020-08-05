@@ -20,6 +20,7 @@ import tech.brettsaunders.craftory.persistence.Persistent;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PowerGridSaver {
+
   @Persistent
   protected HashMap<PowerGrid, HashSet<Location>> data = new HashMap<>();
 

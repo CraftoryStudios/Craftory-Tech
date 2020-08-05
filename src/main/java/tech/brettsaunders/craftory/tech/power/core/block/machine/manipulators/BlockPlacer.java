@@ -30,10 +30,24 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
 public class BlockPlacer extends BaseMachine implements IHopperInteract {
+
   private static final byte C_LEVEL = 0;
   private static final int MAX_RECEIVE = 10000;
   private static final int SLOT = 22;
-
+  protected static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
+    {
+      put(BlockFace.NORTH, SLOT);
+      put(BlockFace.EAST, SLOT);
+      put(BlockFace.SOUTH, SLOT);
+      put(BlockFace.WEST, SLOT);
+      put(BlockFace.UP, SLOT);
+    }
+  };
+  protected static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
+    {
+      put(BlockFace.DOWN, SLOT);
+    }
+  };
   private static final int ENERGY_REQUIRED = 1000;
   private Location placeLoc;
   private int lastRedstoneStrength = 0;
@@ -46,20 +60,20 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
     energyStorage = new EnergyStorage(40000);
   }
 
+  public BlockPlacer() {
+    super();
+    init();
+  }
+
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
     placeLoc = location.getBlock().getRelative(direction).getLocation();
   }
 
-  public BlockPlacer() {
-    super();
-    init();
-  }
-
   private void init() {
     inputLocations = new ArrayList<>();
-    inputLocations.add(0,SLOT);
+    inputLocations.add(0, SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
   }
 
@@ -77,12 +91,17 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
 
   @EventHandler
   public void onRedstonePower(BlockPhysicsEvent e) {
-    if (!e.getBlock().getLocation().equals(location)) return;
-    if (placeLoc.getBlock().getType() != Material.AIR) return;
+    if (!e.getBlock().getLocation().equals(location)) {
+      return;
+    }
+    if (placeLoc.getBlock().getType() != Material.AIR) {
+      return;
+    }
     if (lastRedstoneStrength != 0) {
       lastRedstoneStrength = e.getBlock().getBlockPower();
       return;
-    } else if (e.getBlock().getBlockPower() > 0 && checkPowerRequirement() && inventoryInterface != null) {
+    } else if (e.getBlock().getBlockPower() > 0 && checkPowerRequirement()
+        && inventoryInterface != null) {
       final ItemStack item = inventoryInterface.getItem(SLOT);
       if (item == null) {
         lastRedstoneStrength = e.getBlock().getBlockPower();
@@ -104,10 +123,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   }
 
   private boolean checkPowerRequirement() {
-    if(energyStorage.getEnergyStored() > ENERGY_REQUIRED) {
-      return true;
-    }
-    return false;
+    return energyStorage.getEnergyStored() > ENERGY_REQUIRED;
   }
 
   @Override
@@ -124,22 +140,6 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   protected void updateSlots() {
 
   }
-
-  protected static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.NORTH, SLOT);
-      put(BlockFace.EAST, SLOT);
-      put(BlockFace.SOUTH, SLOT);
-      put(BlockFace.WEST, SLOT);
-      put(BlockFace.UP, SLOT);
-    }
-  };
-
-  protected static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.DOWN, SLOT);
-    }
-  };
 
   @Override
   public HashMap<BlockFace, Integer> getInputFaces() {

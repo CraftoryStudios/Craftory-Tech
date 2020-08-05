@@ -30,9 +30,10 @@ public class CustomBlockPlaceEvent extends Event implements Cancellable {
   private final Block blockPlaced;
   private boolean isCancelled;
   @Getter
-  private CustomBlock customBlock;
+  private final CustomBlock customBlock;
 
-  public CustomBlockPlaceEvent(Location location, String name, Block block, CustomBlock customBlock) {
+  public CustomBlockPlaceEvent(Location location, String name, Block block,
+      CustomBlock customBlock) {
     this.location = location;
     this.name = name;
     this.isCancelled = false;

@@ -29,23 +29,14 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 
 public class SolidFuelGenerator extends BaseGenerator {
-  /* Static Constants Private */
-  private static final byte C_LEVEL = 0;
-  private static final int C_OUTPUT_AMOUNT = 80;
 
   public static final int FUEL_SLOT = 22;
   /* Static Constants Protected */
   protected static final int CAPACITY_BASE = 40000;
   protected static final double[] CAPACITY_LEVEL = {1, 1.5, 2, 3};
-
-  //TODO Remove in future
-  @Deprecated
-  @Setter
-  protected ItemStack fuelItem = new ItemStack(Material.AIR);
-  @Persistent
-  protected int maxFuelRE;
-  @Persistent
-  protected int fuelRE;
+  /* Static Constants Private */
+  private static final byte C_LEVEL = 0;
+  private static final int C_OUTPUT_AMOUNT = 80;
 
   static {
     inputFaces = new HashMap<BlockFace, Integer>() {
@@ -58,6 +49,16 @@ public class SolidFuelGenerator extends BaseGenerator {
       }
     };
   }
+
+  //TODO Remove in future
+  @Deprecated
+  @Setter
+  protected ItemStack fuelItem = new ItemStack(Material.AIR);
+  @Persistent
+  protected int maxFuelRE;
+  @Persistent
+  protected int fuelRE;
+
   /* Construction */
   public SolidFuelGenerator() {
     super();
@@ -66,15 +67,16 @@ public class SolidFuelGenerator extends BaseGenerator {
 
   /* Saving, Setup and Loading */
   public SolidFuelGenerator(Location location) {
-    super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
+    super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,
+        (int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
     inputSlots = new ArrayList<>();
-    inputSlots.add(0,new ItemStack(Material.AIR));
+    inputSlots.add(0, new ItemStack(Material.AIR));
     init();
   }
 
   private void init() {
     inputLocations = new ArrayList<>();
-    inputLocations.add(0,FUEL_SLOT);
+    inputLocations.add(0, FUEL_SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
   }
 

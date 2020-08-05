@@ -17,13 +17,15 @@ import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 
 public class ItemStackAdapter implements DataAdapter<ItemStack> {
 
-    @Override
-    public void store(PersistenceStorage persistenceStorage, ItemStack value, NBTCompound nbtCompound) {
-        nbtCompound.mergeCompound(NBTItem.convertItemtoNBT(value));
-    }
+  @Override
+  public void store(PersistenceStorage persistenceStorage, ItemStack value,
+      NBTCompound nbtCompound) {
+    nbtCompound.mergeCompound(NBTItem.convertItemtoNBT(value));
+  }
 
-    @Override
-    public ItemStack parse(PersistenceStorage persistenceStorage, Object parentObject, NBTCompound nbtCompound) {
-        return NBTItem.convertNBTtoItem(nbtCompound);
-    }
+  @Override
+  public ItemStack parse(PersistenceStorage persistenceStorage, Object parentObject,
+      NBTCompound nbtCompound) {
+    return NBTItem.convertNBTtoItem(nbtCompound);
+  }
 }

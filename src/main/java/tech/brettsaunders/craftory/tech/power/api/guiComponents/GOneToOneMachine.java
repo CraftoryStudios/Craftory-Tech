@@ -49,7 +49,7 @@ public class GOneToOneMachine implements IGUIComponent {
     int x = (int) Math.floor(progress.getT() * 10);
     ItemStack arrow = CustomItemManager.getCustomItem("arrow_" + x);
     ItemMeta meta = arrow.getItemMeta();
-    meta.setDisplayName(ChatColor.RESET +"");
+    meta.setDisplayName(ChatColor.RESET + "");
     arrow.setItemMeta(meta);
     inventory.setItem(slot, arrow);
   }

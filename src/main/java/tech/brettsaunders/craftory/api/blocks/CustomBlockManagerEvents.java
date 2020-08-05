@@ -56,12 +56,12 @@ import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnecto
 
 public class CustomBlockManagerEvents implements Listener {
 
-  private PersistenceStorage persistenceStorage;
-  private HashMap<Location, CustomBlock> currentCustomBlocks;
-  private HashMap<String, HashSet<CustomBlock>> activeChunks;
-  private HashMap<String, HashSet<CustomBlock>> inactiveChunks;
-  private HashMap<String, CustomBlockData> customBlockDataHashMap;
-  private StatsContainer statsContainer;
+  private final PersistenceStorage persistenceStorage;
+  private final HashMap<Location, CustomBlock> currentCustomBlocks;
+  private final HashMap<String, HashSet<CustomBlock>> activeChunks;
+  private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
+  private final HashMap<String, CustomBlockData> customBlockDataHashMap;
+  private final StatsContainer statsContainer;
 
   public CustomBlockManagerEvents(PersistenceStorage persistenceStorage,
       HashMap<Location, CustomBlock> currentCustomBlocks,
@@ -80,7 +80,9 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onWorldInit(WorldInitEvent e) {
-    CustomBlockStorage.loadAllSavedRegions(e.getWorld(), customBlockManager.DATA_FOLDER, customBlockManager, persistenceStorage);
+    CustomBlockStorage
+        .loadAllSavedRegions(e.getWorld(), CustomBlockManager.DATA_FOLDER, customBlockManager,
+            persistenceStorage);
     //Load Custom Block Data into memory of pre-loaded chunks
     for (Chunk chunk : e.getWorld().getLoadedChunks()) {
       loadCustomBlocksChunk(chunk);
@@ -137,11 +139,19 @@ public class CustomBlockManagerEvents implements Listener {
   /* Item Based Listener */
   @EventHandler
   public void onDurabilityItemUse(PlayerInteractEvent e) {
-    if (e.getItem() == null) return;
+    if (e.getItem() == null) {
+      return;
+    }
     Material type = e.getItem().getType();
-    if (type != Material.STONE_HOE) return;
-    if (!CustomItemManager.isCustomItem(e.getItem(), false)) return;
-    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    if (type != Material.STONE_HOE) {
+      return;
+    }
+    if (!CustomItemManager.isCustomItem(e.getItem(), false)) {
+      return;
+    }
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+      return;
+    }
     e.setCancelled(true);
   }
 
@@ -155,7 +165,7 @@ public class CustomBlockManagerEvents implements Listener {
       final String blockName = currentCustomBlocks.get(
           location).blockName;
       CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(
-          location, blockName,customBlock );
+          location, blockName, customBlock);
       if (e.isCancelled()) {
         customBlockBreakEvent.setCancelled(true);
       } else {
@@ -173,7 +183,7 @@ public class CustomBlockManagerEvents implements Listener {
     } else if (e.getBlock().getType() == Material.MUSHROOM_STEM) {
       BlockData blockData = e.getBlock().getBlockData();
       MultipleFacing multipleFacing = (MultipleFacing) blockData;
-      Utilities.getBasicBlockRegistry().forEach((name,placement) -> {
+      Utilities.getBasicBlockRegistry().forEach((name, placement) -> {
         Set<BlockFace> blockFaces = multipleFacing.getFaces();
         Set<BlockFace> compareFaces = placement.getAllowedFaces();
         if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces)) {
@@ -188,11 +198,12 @@ public class CustomBlockManagerEvents implements Listener {
     } else if (e.getBlock().getType() == Material.BROWN_MUSHROOM_BLOCK) {
       BlockData blockData = e.getBlock().getBlockData();
       MultipleFacing multipleFacing = (MultipleFacing) blockData;
-      Utilities.getBasicBlockRegistry().forEach((name,placement) -> {
+      Utilities.getBasicBlockRegistry().forEach((name, placement) -> {
         Set<BlockFace> blockFaces = multipleFacing.getFaces();
         Set<BlockFace> compareFaces = placement.getAllowedFaces();
-        if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces) && name.equalsIgnoreCase(
-            Blocks.COPPER_ORE)) {
+        if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces) && name
+            .equalsIgnoreCase(
+                Blocks.COPPER_ORE)) {
           if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
             location.getWorld()
                 .dropItemNaturally(location, CustomItemManager.getCustomItem(name));
@@ -268,7 +279,8 @@ public class CustomBlockManagerEvents implements Listener {
   public void onCustomBlockInteract(PlayerInteractEvent e) {
     if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
       if (currentCustomBlocks.containsKey(e.getClickedBlock().getLocation())) {
-        CustomBlock customBlock = customBlockManager.getCustomBlock(e.getClickedBlock().getLocation());
+        CustomBlock customBlock = customBlockManager
+            .getCustomBlock(e.getClickedBlock().getLocation());
         CustomBlockInteractEvent customBlockInteractEvent = new CustomBlockInteractEvent(
             e.getAction(),
             e.getClickedBlock(),
@@ -279,7 +291,7 @@ public class CustomBlockManagerEvents implements Listener {
             e);
         Bukkit.getServer().getPluginManager().callEvent(customBlockInteractEvent);
         //if (e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) {
-          //e.setCancelled(true);
+        //e.setCancelled(true);
         //}
       }
     }
@@ -299,12 +311,17 @@ public class CustomBlockManagerEvents implements Listener {
       CustomItemManager.updateInventoryItemGraphics(e.getPlayer().getInventory());
     }
     if (lastVersionCode == 0 && Craftory.folderExists) {
-      if (e.getPlayer().isOp() || e.getPlayer().hasPermission("craftory.give") || e.getPlayer().hasPermission("craftory.debug")) {
-        Utilities.msg(e.getPlayer(),"It looks like you are updating from V0.2.0 or lower.");
-        Utilities.msg(e.getPlayer(),"Due to changes all Items and Blocks may lose their textures.");
-        Utilities.msg(e.getPlayer(),"To deal with this your server should have converted all blocks to the new format.");
-        Utilities.msg(e.getPlayer(),"All items will be convert when the player opens an inventory with them in, until you turn off the config option Fix Item Graphics.");
-        Utilities.msg(e.getPlayer(), "Once turned off you can still convert items with /fixGraphics command!");
+      if (e.getPlayer().isOp() || e.getPlayer().hasPermission("craftory.give") || e.getPlayer()
+          .hasPermission("craftory.debug")) {
+        Utilities.msg(e.getPlayer(), "It looks like you are updating from V0.2.0 or lower.");
+        Utilities
+            .msg(e.getPlayer(), "Due to changes all Items and Blocks may lose their textures.");
+        Utilities.msg(e.getPlayer(),
+            "To deal with this your server should have converted all blocks to the new format.");
+        Utilities.msg(e.getPlayer(),
+            "All items will be convert when the player opens an inventory with them in, until you turn off the config option Fix Item Graphics.");
+        Utilities.msg(e.getPlayer(),
+            "Once turned off you can still convert items with /fixGraphics command!");
       }
     }
   }

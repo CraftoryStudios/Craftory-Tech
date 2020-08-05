@@ -90,11 +90,14 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   }
 
   public void refreshSideCache() {
-    if (cachedSides != null)  return;
+    if (cachedSides != null) {
+      return;
+    }
     cachedSides = new HashMap<>();
     cachedSidesConfig.forEach(((blockFace, interactableblock) -> {
       if (interactableblock.equals(INTERACTABLEBLOCK.RECEIVER)) {
-        cachedSides.put(blockFace, Craftory.customBlockManager.getCustomBlock(this.location.getBlock().getRelative(blockFace).getLocation()));
+        cachedSides.put(blockFace, Craftory.customBlockManager
+            .getCustomBlock(this.location.getBlock().getRelative(blockFace).getLocation()));
       }
     }));
   }
@@ -105,12 +108,16 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
 
     //Load in items in machines
     for (int i = 0; i < inputLocations.size(); i++) {
-      if (i >= inputSlots.size()) break;
+      if (i >= inputSlots.size()) {
+        break;
+      }
       inventoryInterface.setItem(inputLocations.get(i), inputSlots.get(i));
     }
 
     for (int i = 0; i < outputLocations.size(); i++) {
-      if (i >= outputSlots.size()) break;
+      if (i >= outputSlots.size()) {
+        break;
+      }
       inventoryInterface.setItem(outputLocations.get(i), outputSlots.get(i));
     }
   }
@@ -119,12 +126,12 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     super.beforeSaveUpdate();
     inputSlots.clear();
     for (int i = 0; i < inputLocations.size(); i++) {
-      inputSlots.add(i,inventoryInterface.getItem(inputLocations.get(i)));
+      inputSlots.add(i, inventoryInterface.getItem(inputLocations.get(i)));
     }
 
     outputSlots.clear();
     for (int i = 0; i < outputLocations.size(); i++) {
-      outputSlots.add(i,inventoryInterface.getItem(outputLocations.get(i)));
+      outputSlots.add(i, inventoryInterface.getItem(outputLocations.get(i)));
     }
 
   }
@@ -198,13 +205,18 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (event.getInventory() != getInventory()) {
       return;
     }
-    if(event.getRawSlot() > 53){
+    if (event.getRawSlot() > 53) {
       //Handle Shift Clicking Items
-      if(event.getCurrentItem()==null||event.getCurrentItem().getType().equals(Material.AIR)||event.getCurrentItem().getAmount()==0) return;
+      if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)
+          || event.getCurrentItem().getAmount() == 0) {
+        return;
+      }
       if (event.isShiftClick()) {
         event.setCancelled(true);
         ItemStack sourceItemStack = event.getCurrentItem();
-        if(sourceItemStack==null) return;
+        if (sourceItemStack == null) {
+          return;
+        }
         int amount = sourceItemStack.getAmount();
         for (Integer inputSlot : inputLocations) {
           ItemStack destinationItemStack = getInventory().getItem(inputSlot);
@@ -234,7 +246,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       //Stop moving items from any slot but intractable ones
       if (!interactableSlots.contains(event.getRawSlot())) {
         event.setCancelled(true);
-      } else if (outputDisabledActions.contains(event.getAction()) && outputLocations.contains(event.getRawSlot())) {
+      } else if (outputDisabledActions.contains(event.getAction()) && outputLocations
+          .contains(event.getRawSlot())) {
         event.setCancelled(true);
       }
     }
@@ -256,20 +269,16 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   @EventHandler
   public void onPoweredStateUpdate(BlockRedstoneEvent e) {
     if (e.getBlock().getLocation() == location) {
-      if (e.getNewCurrent() > 0) {
-        powered = true;
-      } else {
-        powered = false;
-      }
+      powered = e.getNewCurrent() > 0;
     }
   }
 
   public void setSideCache(BlockFace face, INTERACTABLEBLOCK type, CustomBlock customBlock) {
     cachedSidesConfig.put(face, type);
-    if(type == INTERACTABLEBLOCK.NONE) {
+    if (type == INTERACTABLEBLOCK.NONE) {
       cachedSides.remove(face);
     } else {
-      cachedSides.put(face,customBlock);
+      cachedSides.put(face, customBlock);
     }
   }
 
@@ -304,7 +313,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
           this.setSideCache(face, INTERACTABLEBLOCK.HOPPER_OUT);
         }
       } else if (PoweredBlockUtils.isEnergyReceiver(b.getLocation())) {
-        this.setSideCache(face, INTERACTABLEBLOCK.RECEIVER, PoweredBlockUtils.getPoweredBlock(b.getLocation()));
+        this.setSideCache(face, INTERACTABLEBLOCK.RECEIVER,
+            PoweredBlockUtils.getPoweredBlock(b.getLocation()));
       }
     }
   }
@@ -312,6 +322,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   public int getEnergySpace() {
     return energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored();
   }
+
   /* IEnergyInfo */
   @Override
   public int getInfoEnergyPerTick() {

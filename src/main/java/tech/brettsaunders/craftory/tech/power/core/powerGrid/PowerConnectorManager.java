@@ -176,7 +176,9 @@ public class PowerConnectorManager implements Listener {
   public void destroyBeams(Location loc) {
     if (activeBeams.containsKey(loc)) {
       activeBeams.get(loc).forEach(beam -> {
-        if(activeBeams.containsKey(beam.getEnd())) activeBeams.get(beam.getEnd()).forEach(Beam::stop);
+        if (activeBeams.containsKey(beam.getEnd())) {
+          activeBeams.get(beam.getEnd()).forEach(Beam::stop);
+        }
         beam.stop();
       });
       activeBeams.remove(loc);

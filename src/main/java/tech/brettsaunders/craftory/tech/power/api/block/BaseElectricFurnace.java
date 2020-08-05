@@ -14,7 +14,7 @@ import java.util.HashMap;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
-public class BaseElectricFurnace extends BaseOneToOneMachine{
+public class BaseElectricFurnace extends BaseOneToOneMachine {
 
 
   /* Construction */
@@ -29,7 +29,7 @@ public class BaseElectricFurnace extends BaseOneToOneMachine{
   }
 
   @Override
-  protected HashMap<String,String> getRecipes(){
+  protected HashMap<String, String> getRecipes() {
     return RecipeUtils.getFurnaceRecipes();
   }
 

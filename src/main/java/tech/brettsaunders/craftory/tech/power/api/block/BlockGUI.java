@@ -30,18 +30,19 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
 public abstract class BlockGUI extends CustomBlock implements Listener {
 
-  /* Static Constants */
-  private final ArrayList<IGUIComponent> components = new ArrayList<>();
-  protected HashSet<Integer> interactableSlots = new HashSet<>();
-
   private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
       .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
           InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
+  /* Static Constants */
+  private final ArrayList<IGUIComponent> components = new ArrayList<>();
+  protected HashSet<Integer> interactableSlots = new HashSet<>();
   /* Per Object Variables */
   private Inventory inventoryInterface;
 
   /* Saving, Setup and Loading */
-  public BlockGUI(Location location, String blockName) { super(location, blockName); }
+  public BlockGUI(Location location, String blockName) {
+    super(location, blockName);
+  }
 
   public BlockGUI() {
     super();
@@ -88,14 +89,18 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
   protected Inventory createInterfaceInventory(String title, String guiImage) {
     String titleSpaced = ChatColor.DARK_GRAY + title;
     String titleBuilder = ChatColor.WHITE + "" + NegativeSpaceFont.MINUS_16.label + guiImage
-        + NegativeSpaceFont.MINUS_128.label + NegativeSpaceFont.MINUS_16.label + NegativeSpaceFont.MINUS_16.label + NegativeSpaceFont.MINUS_8.label + centerTitle(titleSpaced);
+        + NegativeSpaceFont.MINUS_128.label + NegativeSpaceFont.MINUS_16.label
+        + NegativeSpaceFont.MINUS_16.label + NegativeSpaceFont.MINUS_8.label + centerTitle(
+        titleSpaced);
     inventoryInterface = Bukkit.createInventory(null, 54, titleBuilder);
     return inventoryInterface;
   }
 
   public String centerTitle(String title) {
     int length = 27 - ChatColor.stripColor(title).length();
-    if (length < 0) length = 0;
+    if (length < 0) {
+      length = 0;
+    }
     return Strings.repeat(" ", length) + title;
   }
 }

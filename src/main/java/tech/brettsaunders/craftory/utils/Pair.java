@@ -16,6 +16,7 @@ import lombok.Setter;
 
 @AllArgsConstructor
 public class Pair<X, Y> {
+
   @Getter
   @Setter
   private X x;

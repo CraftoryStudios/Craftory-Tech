@@ -20,28 +20,38 @@ import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 @NoArgsConstructor
 public class PowerGridAdapter implements DataAdapter<PowerGrid> {
 
-    @Override
-    public void store(@NonNull final PersistenceStorage persistenceStorage, @NonNull final PowerGrid value, @NonNull final NBTCompound nbtCompound) {
-        NBTCompound blockConnectionsCompound = nbtCompound.addCompound("blockConnections");
-        persistenceStorage.saveObject(value.getBlockConnections(), blockConnectionsCompound);
-        NBTCompound powerConnectorsCompound = nbtCompound.addCompound("powerConnectors");
-        persistenceStorage.saveObject(value.getPowerConnectors(), powerConnectorsCompound);
-    }
+  @Override
+  public void store(@NonNull final PersistenceStorage persistenceStorage,
+      @NonNull final PowerGrid value, @NonNull final NBTCompound nbtCompound) {
+    NBTCompound blockConnectionsCompound = nbtCompound.addCompound("blockConnections");
+    persistenceStorage.saveObject(value.getBlockConnections(), blockConnectionsCompound);
+    NBTCompound powerConnectorsCompound = nbtCompound.addCompound("powerConnectors");
+    persistenceStorage.saveObject(value.getPowerConnectors(), powerConnectorsCompound);
+  }
 
-    @Override
-    public PowerGrid parse(PersistenceStorage persistenceStorage, Object parentObject, NBTCompound nbtCompound) {
-        NBTCompound blockConnectionsCompound = nbtCompound.addCompound("blockConnections");
-        NBTCompound powerConnectorsCompound = nbtCompound.addCompound("powerConnectors");
+  @Override
+  public PowerGrid parse(PersistenceStorage persistenceStorage, Object parentObject,
+      NBTCompound nbtCompound) {
+    NBTCompound blockConnectionsCompound = nbtCompound.addCompound("blockConnections");
+    NBTCompound powerConnectorsCompound = nbtCompound.addCompound("powerConnectors");
 
-        //TODO Remove in future
-        if (nbtCompound.hasKey("cells")) nbtCompound.removeKey("cells");
-        if (nbtCompound.hasKey("generators")) nbtCompound.removeKey("generators");
-        if (nbtCompound.hasKey("machines")) nbtCompound.removeKey("machines");
+    //TODO Remove in future
+      if (nbtCompound.hasKey("cells")) {
+          nbtCompound.removeKey("cells");
+      }
+      if (nbtCompound.hasKey("generators")) {
+          nbtCompound.removeKey("generators");
+      }
+      if (nbtCompound.hasKey("machines")) {
+          nbtCompound.removeKey("machines");
+      }
 
-        PowerGrid powerGrid = new PowerGrid();
-        powerGrid.setBlockConnections(persistenceStorage.loadObject(parentObject, HashMap.class, blockConnectionsCompound));
-        powerGrid.setPowerConnectors(persistenceStorage.loadObject(parentObject, HashMap.class, powerConnectorsCompound));
-        powerGrid.findPoweredBlocks();
-        return powerGrid;
-    }
+    PowerGrid powerGrid = new PowerGrid();
+    powerGrid.setBlockConnections(
+        persistenceStorage.loadObject(parentObject, HashMap.class, blockConnectionsCompound));
+    powerGrid.setPowerConnectors(
+        persistenceStorage.loadObject(parentObject, HashMap.class, powerConnectorsCompound));
+    powerGrid.findPoweredBlocks();
+    return powerGrid;
+  }
 }

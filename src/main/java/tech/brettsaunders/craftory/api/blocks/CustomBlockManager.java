@@ -47,10 +47,6 @@ public class CustomBlockManager {
 
   public final static String DATA_FOLDER =
       Craftory.plugin.getDataFolder() + File.separator + "data";
-
-  private PersistenceStorage persistenceStorage;
-  private CustomBlockManagerEvents customBlockManagerEvents;
-
   private final HashMap<Location, CustomBlock> currentCustomBlocks;
   @Getter
   private final HashMap<String, HashSet<CustomBlock>> activeChunks;
@@ -58,8 +54,9 @@ public class CustomBlockManager {
   private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
   @Getter
   private final HashMap<String, CustomBlockData> customBlockDataHashMap;
-
   public StatsContainer statsContainer;
+  private final PersistenceStorage persistenceStorage;
+  private final CustomBlockManagerEvents customBlockManagerEvents;
 
   public CustomBlockManager() {
     statsContainer = new StatsContainer();
@@ -81,8 +78,10 @@ public class CustomBlockManager {
     return currentCustomBlocks.get(location);
   }
 
-  public CustomBlock placeCustomBlock(String customBlockItemName, Block block, BlockFace direction) {
-    CustomBlock customBlock = Craftory.customBlockFactory.create(customBlockItemName, block.getLocation(), direction);
+  public CustomBlock placeCustomBlock(String customBlockItemName, Block block,
+      BlockFace direction) {
+    CustomBlock customBlock = Craftory.customBlockFactory
+        .create(customBlockItemName, block.getLocation(), direction);
     if (customBlock.getDirection() != BlockFace.NORTH) {
       customBlockItemName = customBlockItemName + "_" + customBlock.getDirection().name();
     }
@@ -127,14 +126,14 @@ public class CustomBlockManager {
       addActiveChunk(customBlock);
     }
     chunkData.add(customBlock);
-    activeChunks.put(chunkID,chunkData);
+    activeChunks.put(chunkID, chunkData);
     currentCustomBlocks.put(customBlock.location, customBlock);
   }
 
   public void onDisable() {
-    CustomBlockStorage.saveAllCustomChunks(DATA_FOLDER, persistenceStorage, activeChunks, inactiveChunks);
+    CustomBlockStorage
+        .saveAllCustomChunks(DATA_FOLDER, persistenceStorage, activeChunks, inactiveChunks);
   }
-
 
 
   /* API */
@@ -167,7 +166,7 @@ public class CustomBlockManager {
       final String blockName = currentCustomBlocks.get(
           location).blockName;
       CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(
-          location, blockName,customBlock );
+          location, blockName, customBlock);
       customBlockManager.removeCustomBlock(customBlock);
       Craftory.tickManager.removeTickingBlock(customBlock);
       Bukkit.getPluginManager().callEvent(customBlockBreakEvent);

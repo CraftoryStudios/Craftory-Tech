@@ -26,7 +26,7 @@ public class CustomBlockBreakEvent extends Event implements Cancellable {
   private final String name;
   private boolean isCancelled;
   @Getter
-  private CustomBlock customBlock;
+  private final CustomBlock customBlock;
 
   public CustomBlockBreakEvent(Location location, String name, CustomBlock customBlock) {
     this.location = location;

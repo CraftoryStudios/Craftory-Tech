@@ -28,6 +28,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 public class ToolManager implements Listener {
 
   private static final HashSet<Material> plants = new HashSet<>();
+
   static {
     plants.addAll(Tag.CROPS.getValues());
     plants.addAll(Tag.FLOWERS.getValues());
@@ -38,34 +39,7 @@ public class ToolManager implements Listener {
   }
 
   public ToolManager() {
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this,Craftory.plugin);
-  }
-
-  @EventHandler
-  public void onSickleUse(BlockBreakEvent event) {
-    ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
-    if (CustomItemManager.matchCustomItemName(itemStack,
-        Items.SICKLE_WOOD)) {
-      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),2));
-    } else if (CustomItemManager.matchCustomItemName(itemStack,
-        Items.SICKLE_STONE)) {
-      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),4));
-    } else if (CustomItemManager.matchCustomItemName(itemStack,
-        Items.SICKLE_IRON)) {
-      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),6));
-    } else if (CustomItemManager.matchCustomItemName(itemStack,
-        Items.SICKLE_GOLD)) {
-      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),12));
-    } else if (CustomItemManager.matchCustomItemName(itemStack,
-        Items.SICKLE_STEEL)) {
-      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),8));
-    } else if (CustomItemManager.matchCustomItemName(itemStack,
-        Items.SICKLE_COPPER)) {
-      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),6));
-    } else if (CustomItemManager.matchCustomItemName(itemStack,
-        Items.SICKLE_DIAMOND)) {
-      decreaseDurability(itemStack,getPlantsInRange(event.getBlock().getLocation(),10));
-    }
+    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
   }
 
   public static void decreaseDurability(ItemStack itemStack, int amount) {
@@ -86,7 +60,7 @@ public class ToolManager implements Listener {
   }
 
   private static int calculateNewDurability(int current, int customMax, int max) {
-    double durability = ((double)current / (double)customMax) * (double)max;
+    double durability = ((double) current / (double) customMax) * (double) max;
     durability = Math.ceil(durability);
     if (durability == 0 && current != 0) {
       durability = 1;
@@ -95,6 +69,33 @@ public class ToolManager implements Listener {
       durability--;
     }
     return (int) (max - durability);
+  }
+
+  @EventHandler
+  public void onSickleUse(BlockBreakEvent event) {
+    ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
+    if (CustomItemManager.matchCustomItemName(itemStack,
+        Items.SICKLE_WOOD)) {
+      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 2));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
+        Items.SICKLE_STONE)) {
+      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 4));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
+        Items.SICKLE_IRON)) {
+      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 6));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
+        Items.SICKLE_GOLD)) {
+      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 12));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
+        Items.SICKLE_STEEL)) {
+      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 8));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
+        Items.SICKLE_COPPER)) {
+      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 6));
+    } else if (CustomItemManager.matchCustomItemName(itemStack,
+        Items.SICKLE_DIAMOND)) {
+      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 10));
+    }
   }
 
   private int getPlantsInRange(Location startPoint, int range) {

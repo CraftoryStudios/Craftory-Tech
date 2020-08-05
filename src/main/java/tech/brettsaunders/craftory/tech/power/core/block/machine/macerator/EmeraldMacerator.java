@@ -15,6 +15,7 @@ import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMacerator;
 
 public class EmeraldMacerator extends BaseMacerator {
+
   /* Static Constants Private */
   private static final byte C_LEVEL = 0;
 

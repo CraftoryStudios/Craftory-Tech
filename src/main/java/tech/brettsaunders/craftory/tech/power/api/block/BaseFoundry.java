@@ -64,7 +64,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
 
   /* Construction */
   public BaseFoundry(Location location, String blockName, byte level) {
-    super(location,blockName, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
+    super(location, blockName, level, ENERGY_CONSUMPTION_LEVEL[level] * 5);
     processTime = PROCESSING_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
@@ -99,17 +99,25 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     interactableSlots = new HashSet<>(
         Arrays.asList(INPUT_LOCATION1, INPUT_LOCATION2, OUTPUT_LOCATION));
   }
+
   @Override
   public void setupGUI() {
-    Inventory inventory = createInterfaceInventory(displayName, Font.ELECTRIC_FOUNDRY_GUI.label + "");
+    Inventory inventory = createInterfaceInventory(displayName,
+        Font.ELECTRIC_FOUNDRY_GUI.label + "");
     addGUIComponent(
         new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
             OUTPUT_LOCATION));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer, 21));
-    if (inputSlots.size() < 2) inputSlots.add(0, new ItemStack(Material.AIR));
-    if (inputSlots.size() < 2) inputSlots.add(1, new ItemStack(Material.AIR));
-    if (outputSlots.size() == 0) outputSlots.add(0, new ItemStack(Material.AIR));
+    if (inputSlots.size() < 2) {
+      inputSlots.add(0, new ItemStack(Material.AIR));
+    }
+    if (inputSlots.size() < 2) {
+      inputSlots.add(1, new ItemStack(Material.AIR));
+    }
+    if (outputSlots.size() == 0) {
+      outputSlots.add(0, new ItemStack(Material.AIR));
+    }
     this.inventoryInterface = inventory;
   }
 
@@ -137,7 +145,9 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
 
   @Override
   protected boolean validateContentes() {
-    if (inputSlots.get(0) == null || inputSlots.get(1) == null || inputSlots.get(0).getType() == Material.AIR || inputSlots.get(1).getType() == Material.AIR) {
+    if (inputSlots.get(0) == null || inputSlots.get(1) == null
+        || inputSlots.get(0).getType() == Material.AIR
+        || inputSlots.get(1).getType() == Material.AIR) {
       return false;
     }
     String inputType1 = CustomItemManager.getCustomItemName(inputSlots.get(0));
@@ -151,7 +161,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     //If the recipe is unchanged there is no need to find the recipe.
     boolean valid;
     if (currentRecipe != null) {
-       valid = true;
+      valid = true;
       for (Map.Entry<String, Integer> entry : currentRecipe.getIngredients().entrySet()) {
         String item = entry.getKey();
         int number = entry.getValue();
@@ -162,9 +172,10 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
         }
       }
       if (valid && outputSlots.get(0) != null && outputSlots.get(0).getType() != Material.AIR) {
-        for(ItemStack stack: currentRecipe.getProducts()){
-          if(outputType.equals(CustomItemManager.getCustomItemName(stack)) &&
-              (outputSlots.get(0).getAmount() + stack.getAmount()) <= outputSlots.get(0).getMaxStackSize()) {
+        for (ItemStack stack : currentRecipe.getProducts()) {
+          if (outputType.equals(CustomItemManager.getCustomItemName(stack)) &&
+              (outputSlots.get(0).getAmount() + stack.getAmount()) <= outputSlots.get(0)
+                  .getMaxStackSize()) {
             return true;
           }
         }
@@ -183,10 +194,13 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
       }
       if (valid) {
         currentRecipe = recipe;
-        if (outputSlots.get(0) == null || outputSlots.get(0).getType().equals(Material.AIR)) return true;
-        for(ItemStack stack: currentRecipe.getProducts()){
-          if(outputType.equals(CustomItemManager.getCustomItemName(stack)) &&
-              (outputSlots.get(0).getAmount() + stack.getAmount()) <= outputSlots.get(0).getMaxStackSize()) {
+        if (outputSlots.get(0) == null || outputSlots.get(0).getType().equals(Material.AIR)) {
+          return true;
+        }
+        for (ItemStack stack : currentRecipe.getProducts()) {
+          if (outputType.equals(CustomItemManager.getCustomItemName(stack)) &&
+              (outputSlots.get(0).getAmount() + stack.getAmount()) <= outputSlots.get(0)
+                  .getMaxStackSize()) {
             return true;
           }
         }

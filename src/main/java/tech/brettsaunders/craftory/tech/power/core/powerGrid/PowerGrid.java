@@ -26,6 +26,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerGrid extends BukkitRunnable {
+
   @Getter
   @Setter
   private HashMap<Location, HashSet<Location>> powerConnectors = new HashMap<>();
@@ -39,7 +40,7 @@ public class PowerGrid extends BukkitRunnable {
   @Getter
   private HashSet<Location> machines = new HashSet<>();
   private int machinesNeedingEnergy = 0;
-  private BukkitTask taskID;
+  private final BukkitTask taskID;
 
   public PowerGrid() {
     taskID = this.runTaskTimer(Craftory.plugin, 5, 1);
@@ -199,7 +200,7 @@ public class PowerGrid extends BukkitRunnable {
           continue;
         }
         block = PoweredBlockUtils.getPoweredBlock(location);
-        if(block==null){ //Shouldn't be
+        if (block == null) { //Shouldn't be
           Logger.debug("block in new grid gave null pointer");
         } else if (block instanceof BaseCell) {
           cells.add(location);
@@ -208,7 +209,7 @@ public class PowerGrid extends BukkitRunnable {
         } else if (block instanceof BaseMachine) {
           machines.add(location);
         } else {
-          Logger.warn("Machine is not one of known types "+ block.toString());
+          Logger.warn("Machine is not one of known types " + block.toString());
         }
       }
     }

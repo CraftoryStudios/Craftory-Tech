@@ -15,16 +15,17 @@ import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 
 public class LongAdapter implements DataAdapter<Long> {
 
-    @Override
-    public void store(PersistenceStorage persistenceStorage, Long value, NBTCompound nbtCompound) {
-        nbtCompound.setLong("long", value);
-    }
+  @Override
+  public void store(PersistenceStorage persistenceStorage, Long value, NBTCompound nbtCompound) {
+    nbtCompound.setLong("long", value);
+  }
 
-    @Override
-    public Long parse(PersistenceStorage persistenceStorage, Object parentObject, NBTCompound nbtCompound) {
-        if (!nbtCompound.hasKey("long")) {
-            return null;
-        }
-        return nbtCompound.getLong("long");
+  @Override
+  public Long parse(PersistenceStorage persistenceStorage, Object parentObject,
+      NBTCompound nbtCompound) {
+    if (!nbtCompound.hasKey("long")) {
+      return null;
     }
+    return nbtCompound.getLong("long");
+  }
 }

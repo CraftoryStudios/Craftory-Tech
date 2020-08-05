@@ -17,6 +17,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -89,20 +90,17 @@ public class Utilities {
   public final static String LANG_FOLDER;
   public static FileConfiguration config;
   public static FileConfiguration data;
+  public static Metrics metrics;
+  public static Properties langProperties;
+  public static Optional<AdvancementManager> advancementManager = Optional.empty();
+  public static boolean updateItemGraphics = false;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
-  private static String UNIT_ENERGY = "Re";
-  private static String UNIT_FLUID = "B";
-  private static DecimalFormat df = new DecimalFormat("###.###");
-  public static Metrics metrics;
-
-  public static Properties langProperties;
+  private static final String UNIT_ENERGY = "Re";
+  private static final String UNIT_FLUID = "B";
+  private static final DecimalFormat df = new DecimalFormat("###.###");
   @Getter
-  private static HashMap<String, BasicBlocks> basicBlockRegistry;
-
-  public static Optional<AdvancementManager> advancementManager = Optional.empty();
-
-  public static boolean updateItemGraphics = false;
+  private static final HashMap<String, BasicBlocks> basicBlockRegistry;
 
   static {
     config = YamlConfiguration
@@ -152,7 +150,7 @@ public class Utilities {
     config.addDefault("language.locale", "en-GB");
     config.addDefault("generators.solarDuringStorms", true);
     config.addDefault("resourcePack.forcePack", true);
-    config.addDefault("fixItemGraphics",false);
+    config.addDefault("fixItemGraphics", false);
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -178,12 +176,12 @@ public class Utilities {
         Craftory.customBlockManager.getInactiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
               Craftory.plugin.getServer().getScheduler().runTaskLater(Craftory.plugin,
-                  () -> convertMushroomType(customBlock),2L);
+                  () -> convertMushroomType(customBlock), 2L);
             }));
         Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
               Craftory.plugin.getServer().getScheduler().runTaskLater(Craftory.plugin,
-                  () -> convertMushroomType(customBlock),2L);
+                  () -> convertMushroomType(customBlock), 2L);
             }));
       }
     }
@@ -209,13 +207,16 @@ public class Utilities {
 
   static void getTranslations() {
     String locale = config.getString("language.locale");
-    Logger.info("Using "+locale + " locale" );
+    Logger.info("Using " + locale + " locale");
     Properties defaultLang = new Properties();
     try {
-      defaultLang.load(new InputStreamReader(new FileInputStream(new File(Craftory.plugin.getDataFolder(),
-          "data/default_lang.properties")), Charset.forName("UTF-8")));
+      defaultLang
+          .load(new InputStreamReader(new FileInputStream(new File(Craftory.plugin.getDataFolder(),
+              "data/default_lang.properties")), StandardCharsets.UTF_8));
       langProperties = new Properties(defaultLang);
-      langProperties.load(new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale+".properties")), Charset.forName("UTF-8")));
+      langProperties.load(
+          new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale + ".properties")),
+              StandardCharsets.UTF_8));
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -256,14 +257,19 @@ public class Utilities {
           Map<String, Integer> valueMap = new HashMap<>();
           //valueMap.put("totalCustomBlocks",Craftory.customBlockManager.statsContainer.getTotalCustomBlocks());
           //valueMap.put("totalPoweredBlocks",Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks());
-          valueMap.put("totalCells",Craftory.customBlockManager.statsContainer.getTotalCells());
-          valueMap.put("totalGenerators",Craftory.customBlockManager.statsContainer.getTotalGenerators());
-          valueMap.put("totalPowerConnectors",Craftory.customBlockManager.statsContainer.getTotalPowerConnectors());
-          valueMap.put("totalMachines",Craftory.customBlockManager.statsContainer.getTotalMachines());
+          valueMap.put("totalCells", Craftory.customBlockManager.statsContainer.getTotalCells());
+          valueMap.put("totalGenerators",
+              Craftory.customBlockManager.statsContainer.getTotalGenerators());
+          valueMap.put("totalPowerConnectors",
+              Craftory.customBlockManager.statsContainer.getTotalPowerConnectors());
+          valueMap
+              .put("totalMachines", Craftory.customBlockManager.statsContainer.getTotalMachines());
           return valueMap;
         }));
-    metrics.addCustomChart(new SingleLineChart("total_custom_blocks", () -> Craftory.customBlockManager.statsContainer.getTotalCustomBlocks()));
-    metrics.addCustomChart(new SingleLineChart("total_powered_blocks", () -> Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks()));
+    metrics.addCustomChart(new SingleLineChart("total_custom_blocks",
+        () -> Craftory.customBlockManager.statsContainer.getTotalCustomBlocks()));
+    metrics.addCustomChart(new SingleLineChart("total_powered_blocks",
+        () -> Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks()));
   }
 
   static void registerCommandsAndCompletions() {
@@ -283,29 +289,50 @@ public class Utilities {
     customBlockFactory.registerCustomBlock(Blocks.GOLD_CELL, GoldCell.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.DIAMOND_CELL, DiamondCell.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.EMERALD_CELL, EmeraldCell.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FURNACE, IronElectricFurnace.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FURNACE, GoldElectricFurnace.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FURNACE, DiamondElectricFurnace.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FURNACE, EmeraldElectricFurnace.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.IRON_ELECTRIC_FOUNDRY, IronElectricFoundry.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.GOLD_ELECTRIC_FOUNDRY, GoldElectricFoundry.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FOUNDRY, DiamondElectricFoundry.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.EMERALD_ELECTRIC_FOUNDRY, EmeraldElectricFoundry.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.IRON_ELECTRIC_FURNACE, IronElectricFurnace.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.GOLD_ELECTRIC_FURNACE, GoldElectricFurnace.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FURNACE, DiamondElectricFurnace.class, true,
+            false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.EMERALD_ELECTRIC_FURNACE, EmeraldElectricFurnace.class, true,
+            false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.IRON_ELECTRIC_FOUNDRY, IronElectricFoundry.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.GOLD_ELECTRIC_FOUNDRY, GoldElectricFoundry.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.DIAMOND_ELECTRIC_FOUNDRY, DiamondElectricFoundry.class, true,
+            false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.EMERALD_ELECTRIC_FOUNDRY, EmeraldElectricFoundry.class, true,
+            false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.SOLID_FUEL_GENERATOR, SolidFuelGenerator.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.IRON_FOUNDRY, IronFoundry.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.POWER_CONNECTOR, PowerConnector.class, false, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.POWER_CONNECTOR, PowerConnector.class, false, false);
     customBlockFactory.registerCustomBlock(Blocks.IRON_MACERATOR, IronMacerator.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.GOLD_MACERATOR, GoldMacerator.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.EMERALD_MACERATOR, EmeraldMacerator.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.BASIC_SOLAR_PANEL, BasicSolarPanel.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.DIAMOND_MACERATOR, DiamondMacerator.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.EMERALD_MACERATOR, EmeraldMacerator.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.BASIC_SOLAR_PANEL, BasicSolarPanel.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.SOLAR_PANEL, SolarPanel.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.COMPACTED_SOLAR_PANEL, CompactedSolarPanel.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.COMPACTED_SOLAR_PANEL, CompactedSolarPanel.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.SOLAR_ARRAY, SolarArray.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.GEOTHERMAL_GENERATOR, GeothermalGenerator.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.ROTARY_GENERATOR, RotaryGenerator.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.GEOTHERMAL_GENERATOR, GeothermalGenerator.class, true, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.ROTARY_GENERATOR, RotaryGenerator.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.MAGNETISER, Magnetiser.class, true, false);
-    customBlockFactory.registerCustomBlock(Blocks.MAGNETISING_TABLE, MagnetisingTable.class, false, false);
+    customBlockFactory
+        .registerCustomBlock(Blocks.MAGNETISING_TABLE, MagnetisingTable.class, false, false);
     customBlockFactory.registerCustomBlock(Blocks.BLOCK_BREAKER, BlockBreaker.class, true, true);
     customBlockFactory.registerCustomBlock(Blocks.BLOCK_PLACER, BlockPlacer.class, true, true);
   }
@@ -400,7 +427,7 @@ public class Utilities {
   }
 
   public static String convertWorldChunkIDToChunkID(String worldChunkID) {
-    return worldChunkID.replaceFirst(".*?,","");
+    return worldChunkID.replaceFirst(".*?,", "");
   }
 
   public static String getLocationID(Location location) {
@@ -417,11 +444,15 @@ public class Utilities {
   public static String rawEnergyToPrefixed(Integer energy) {
     String s = Integer.toString(energy);
     int length = s.length();
-    if(length < 6) return s + " " + UNIT_ENERGY;
+    if (length < 6) {
+      return s + " " + UNIT_ENERGY;
+    }
     /*if (length < 7) {
       return s + " " + UNIT;
     }*/
-    if(length < 7) return df.format(energy/1000f) + " K" + UNIT_ENERGY;
+    if (length < 7) {
+      return df.format(energy / 1000f) + " K" + UNIT_ENERGY;
+    }
     if (length < 10) {
       return df.format(energy / 1000000f) + " M" + UNIT_ENERGY;
     }
@@ -443,13 +474,27 @@ public class Utilities {
   public static String rawFluidToPrefixed(Integer amount) {
     String s = Integer.toString(amount);
     int length = s.length();
-    if(length < 6) return s + " m" + UNIT_FLUID;
-    if(length < 7) return s + " " + UNIT_FLUID;
-    if(length < 10) return df.format(amount / 1000000f) + " K" + UNIT_FLUID;
-    if(length < 13) return df.format(amount / 1000000000f) + " M" + UNIT_FLUID;
-    if(length < 16) return df.format(amount / 1000000f) + " G" + UNIT_FLUID;
-    if(length < 19) return df.format(amount / 1000000f) + " T" + UNIT_FLUID;
-    if(length < 22) return df.format(amount / 1000000f) + " P" + UNIT_FLUID;
+    if (length < 6) {
+      return s + " m" + UNIT_FLUID;
+    }
+    if (length < 7) {
+      return s + " " + UNIT_FLUID;
+    }
+    if (length < 10) {
+      return df.format(amount / 1000000f) + " K" + UNIT_FLUID;
+    }
+    if (length < 13) {
+      return df.format(amount / 1000000000f) + " M" + UNIT_FLUID;
+    }
+    if (length < 16) {
+      return df.format(amount / 1000000f) + " G" + UNIT_FLUID;
+    }
+    if (length < 19) {
+      return df.format(amount / 1000000f) + " T" + UNIT_FLUID;
+    }
+    if (length < 22) {
+      return df.format(amount / 1000000f) + " P" + UNIT_FLUID;
+    }
     return "A bukkit load";
   }
 }

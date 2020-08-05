@@ -35,11 +35,10 @@ import tech.brettsaunders.craftory.world.WorldGenHandler;
 
 public final class Craftory extends JavaPlugin implements Listener {
 
-  public static String VERSION;
   public static final int SPIGOT_ID = 81151;
   public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/67acc1d0b755fd2c9eba29178293a38ea85308de.zip";
   public static final String HASH = "67acc1d0b755fd2c9eba29178293a38ea85308de";
-
+  public static String VERSION;
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
   public static Craftory plugin = null;
@@ -52,16 +51,24 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static FileConfiguration serverDataConfig;
   public static CustomBlockTickManager tickManager;
   public static PowerGridManager powerGridManager;
-
+  public static int lastVersionCode;
+  public static int thisVersionCode;
+  public static boolean folderExists = false;
   private static File customItemConfigFile;
   private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
   private static File customModelDataFile;
   private static File serverDataFile;
 
-  public static int lastVersionCode;
-  public static int thisVersionCode;
-  public static boolean folderExists = false;
+  private static int generateVersionCode() {
+    String[] subVersions = VERSION.split("\\.");
+    String resultString = "";
+    for (String subVersion : subVersions) {
+      resultString += StringUtils.leftPad(subVersion, 5, "0");
+    }
+    int result = Integer.parseInt(resultString);
+    return result;
+  }
 
   @SneakyThrows
   @Override
@@ -86,8 +93,8 @@ public final class Craftory extends JavaPlugin implements Listener {
       new ResourcePackEvents();
     }
     customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
-    customItemConfigFile = new File(getDataFolder(),"data/customItemConfig.yml");
-    customRecipeConfigFile = new File(getDataFolder(),"data/customRecipesConfig.yml");
+    customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
+    customRecipeConfigFile = new File(getDataFolder(), "data/customRecipesConfig.yml");
     customModelDataFile = new File(getDataFolder(), "config/customModelDataV2.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
@@ -117,11 +124,10 @@ public final class Craftory extends JavaPlugin implements Listener {
     Utilities.compatibilityUpdater();
   }
 
-
   @Override
   public void onDisable() {
     try {
-      Utilities.data.set("lastVersion",thisVersionCode);
+      Utilities.data.set("lastVersion", thisVersionCode);
       Utilities.saveDataFile();
       customItemConfig.save(customItemConfigFile);
       customBlocksConfig.save(customBlockConfigFile);
@@ -133,15 +139,5 @@ public final class Craftory extends JavaPlugin implements Listener {
     Utilities.reloadConfigFile();
     Utilities.saveConfigFile();
     plugin = null;
-  }
-
-  private static int generateVersionCode() {
-    String[] subVersions = VERSION.split("\\.");
-    String resultString = "";
-    for (String subVersion : subVersions) {
-      resultString += StringUtils.leftPad(subVersion, 5, "0");
-    }
-    int result = Integer.parseInt(resultString);
-    return result;
   }
 }

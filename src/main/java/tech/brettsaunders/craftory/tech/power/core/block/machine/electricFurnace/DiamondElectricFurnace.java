@@ -21,7 +21,7 @@ public class DiamondElectricFurnace extends BaseElectricFurnace {
 
   /* Construction */
   public DiamondElectricFurnace(Location location) {
-    super(location, Blocks.DIAMOND_ELECTRIC_FURNACE,  C_LEVEL);
+    super(location, Blocks.DIAMOND_ELECTRIC_FURNACE, C_LEVEL);
   }
 
   /* Saving, Setup and Loading */

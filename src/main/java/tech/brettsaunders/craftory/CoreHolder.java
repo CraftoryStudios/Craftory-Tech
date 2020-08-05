@@ -24,6 +24,21 @@ public class CoreHolder {
     HOPPER_OUT
   }
 
+  public enum FLUIDS {
+    LAVA("lava"),
+    WATER("water");
+
+    private final String name;
+
+    FLUIDS(String s) {
+      name = s;
+    }
+
+    public String toString() {
+      return this.name;
+    }
+  }
+
   /* Block Names */
   public static class Blocks {
 
@@ -104,20 +119,5 @@ public class CoreHolder {
     /* World Items */
     public static final String WINDMILL = "windmill";
     public static final String WATER_WHEEL = "waterwheel";
-  }
-
-  public static enum FLUIDS {
-    LAVA ("lava"),
-    WATER ("water");
-
-    private final String name;
-
-    private FLUIDS(String s) {
-      name = s;
-    }
-
-    public String toString() {
-      return this.name;
-    }
   }
 }

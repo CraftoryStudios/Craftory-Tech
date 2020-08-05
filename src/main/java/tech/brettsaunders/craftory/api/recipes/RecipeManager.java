@@ -30,7 +30,7 @@ import tech.brettsaunders.craftory.utils.RecipeUtils;
 
 public class RecipeManager implements Listener {
 
-  private HashMap<String, String> customRecipes;
+  private final HashMap<String, String> customRecipes;
   private HashMap<String, ItemStack> customFurnaceRecipes; //Map of Source to Result
 
   public RecipeManager() {
@@ -76,12 +76,13 @@ public class RecipeManager implements Listener {
             char key = ingredient.charAt(0);
             final String ingridentMaterial = sectionIn.getString(ingredient);
             if (ingridentMaterial.startsWith("TAG-")) {
-              if (ingridentMaterial.replaceFirst("TAG-","").equalsIgnoreCase("PLANKS")) {
+              if (ingridentMaterial.replaceFirst("TAG-", "").equalsIgnoreCase("PLANKS")) {
                 shapedRecipe.setIngredient(key, new MaterialChoice(Tag.PLANKS));
               } else {
                 shapedRecipe.setIngredient(key, Material.AIR);
               }
-            }else if (CustomItemManager.getCustomItem(ingridentMaterial).getType() == Material.AIR) {
+            } else if (CustomItemManager.getCustomItem(ingridentMaterial).getType()
+                == Material.AIR) {
               Material material = Material.getMaterial(ingridentMaterial);
               shapedRecipe.setIngredient(key, material);
             } else {
@@ -105,39 +106,46 @@ public class RecipeManager implements Listener {
     }
     HashMap<String, String> toAdd = new HashMap<>();
     //Furnace Recipes
-    ConfigurationSection furnaceRecipes = Craftory.customRecipeConfig.getConfigurationSection("furnace_recipes");
+    ConfigurationSection furnaceRecipes = Craftory.customRecipeConfig
+        .getConfigurationSection("furnace_recipes");
     if (furnaceRecipes == null) {
       Logger.warn("No Furnace Recipes found!");
     } else {
       customFurnaceRecipes = new HashMap<>();
-      for(String recipe: furnaceRecipes.getKeys(false)){
-        ItemStack result = CustomItemManager.getCustomItem(furnaceRecipes.getString(recipe+".result.name"));
-        result.setAmount(furnaceRecipes.getInt(recipe+".result.amount"));
-        customFurnaceRecipes.put(furnaceRecipes.getString(recipe+".input.name"),result);
-        toAdd.put(furnaceRecipes.getString(recipe+".input.name"), furnaceRecipes.getString(recipe+".result.name"));
+      for (String recipe : furnaceRecipes.getKeys(false)) {
+        ItemStack result = CustomItemManager
+            .getCustomItem(furnaceRecipes.getString(recipe + ".result.name"));
+        result.setAmount(furnaceRecipes.getInt(recipe + ".result.amount"));
+        customFurnaceRecipes.put(furnaceRecipes.getString(recipe + ".input.name"), result);
+        toAdd.put(furnaceRecipes.getString(recipe + ".input.name"),
+            furnaceRecipes.getString(recipe + ".result.name"));
       }
       RecipeUtils.addAllFurnaceRecipes(toAdd);
     }
     //Macerator Recipes
-    ConfigurationSection maceratorRecipes = Craftory.customRecipeConfig.getConfigurationSection("macerator_recipes");
+    ConfigurationSection maceratorRecipes = Craftory.customRecipeConfig
+        .getConfigurationSection("macerator_recipes");
     if (maceratorRecipes == null) {
       Logger.warn("No Macerator Recipes found!");
     } else {
       toAdd = new HashMap<>();
-      for(String recipe: maceratorRecipes.getKeys(false)){
-        toAdd.put(maceratorRecipes.getString(recipe+".input.name"), maceratorRecipes.getString(recipe+".result.name"));
+      for (String recipe : maceratorRecipes.getKeys(false)) {
+        toAdd.put(maceratorRecipes.getString(recipe + ".input.name"),
+            maceratorRecipes.getString(recipe + ".result.name"));
       }
       RecipeUtils.addAllMaceratorRecipes(toAdd);
     }
 
     //Magnetiser Recipes
-    ConfigurationSection magnetiserRecipes = Craftory.customRecipeConfig.getConfigurationSection("magnetiser_recipes");
+    ConfigurationSection magnetiserRecipes = Craftory.customRecipeConfig
+        .getConfigurationSection("magnetiser_recipes");
     if (magnetiserRecipes == null) {
       Logger.warn("No Magnetiser Recipes found!");
     } else {
       toAdd = new HashMap<>();
-      for(String recipe: magnetiserRecipes.getKeys(false)){
-        toAdd.put(magnetiserRecipes.getString(recipe+".input.name"), magnetiserRecipes.getString(recipe+".result.name"));
+      for (String recipe : magnetiserRecipes.getKeys(false)) {
+        toAdd.put(magnetiserRecipes.getString(recipe + ".input.name"),
+            magnetiserRecipes.getString(recipe + ".result.name"));
       }
       RecipeUtils.addAllMagnetiserRecipes(toAdd);
     }
@@ -158,8 +166,8 @@ public class RecipeManager implements Listener {
 
     String pattern = customRecipes.get(resultName);
     if (pattern == null) {
-      for(ItemStack item: e.getInventory().getMatrix()){
-        if(item != null && CustomItemManager.isCustomItem(item, true)){
+      for (ItemStack item : e.getInventory().getMatrix()) {
+        if (item != null && CustomItemManager.isCustomItem(item, true)) {
           e.getInventory().setResult(new ItemStack(Material.AIR));
           return;
         }
@@ -186,10 +194,13 @@ public class RecipeManager implements Listener {
 
   @EventHandler
   public void FurnaceSmelt(FurnaceSmeltEvent event) {
-    if(!CustomItemManager.isCustomItem(event.getSource(),true)) return;
+    if (!CustomItemManager.isCustomItem(event.getSource(), true)) {
+      return;
+    }
     String source = CustomItemManager.getCustomItemName(event.getSource());
-    if(customFurnaceRecipes.containsKey(source))
-    event.setResult(customFurnaceRecipes.get(source).clone());
+    if (customFurnaceRecipes.containsKey(source)) {
+      event.setResult(customFurnaceRecipes.get(source).clone());
+    }
   }
 
 }

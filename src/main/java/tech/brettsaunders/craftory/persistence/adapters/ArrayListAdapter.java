@@ -20,34 +20,40 @@ import tech.brettsaunders.craftory.utils.Logger;
 @NoArgsConstructor
 public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
 
-    @Override
-    public void store(@NonNull final PersistenceStorage persistenceStorage, @NonNull final ArrayList<?> value, @NonNull final NBTCompound nbtCompound) {
-        if (value.size() == 0 || value.get(0) == null) {
-            return;
-        }
-        nbtCompound.setString("dataclass",value.get(0).getClass().getName());
-        for (int i = 0; i < value.size(); i++) {
-            NBTCompound container = nbtCompound.addCompound(""+i);
-            persistenceStorage.saveObject(value.get(i), container);
-        }
+  @Override
+  public void store(@NonNull final PersistenceStorage persistenceStorage,
+      @NonNull final ArrayList<?> value, @NonNull final NBTCompound nbtCompound) {
+    if (value.size() == 0 || value.get(0) == null) {
+      return;
     }
+    nbtCompound.setString("dataclass", value.get(0).getClass().getName());
+    for (int i = 0; i < value.size(); i++) {
+      NBTCompound container = nbtCompound.addCompound("" + i);
+      persistenceStorage.saveObject(value.get(i), container);
+    }
+  }
 
-    @Override
-    public ArrayList<Object> parse(PersistenceStorage persistenceStorage, Object parentObject, NBTCompound nbtCompound) {
-        Class dataClass;
-        ArrayList<Object> arrayList = new ArrayList<>();
-        if (nbtCompound.getKeys().size() == 0) return arrayList;
-        try {
-            dataClass = Class.forName(nbtCompound.getString("dataclass"));
-            for (String key : nbtCompound.getKeys()) {
-                if (key.equals("dataclass")) continue;
-                NBTCompound container = nbtCompound.getCompound(key);
-                arrayList.add(persistenceStorage.loadObject(parentObject, dataClass, container));
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.error(nbtCompound.getString("dataclass"));
-            ex.printStackTrace();
-        }
-        return arrayList;
+  @Override
+  public ArrayList<Object> parse(PersistenceStorage persistenceStorage, Object parentObject,
+      NBTCompound nbtCompound) {
+    Class dataClass;
+    ArrayList<Object> arrayList = new ArrayList<>();
+    if (nbtCompound.getKeys().size() == 0) {
+      return arrayList;
     }
+    try {
+      dataClass = Class.forName(nbtCompound.getString("dataclass"));
+      for (String key : nbtCompound.getKeys()) {
+        if (key.equals("dataclass")) {
+          continue;
+        }
+        NBTCompound container = nbtCompound.getCompound(key);
+        arrayList.add(persistenceStorage.loadObject(parentObject, dataClass, container));
+      }
+    } catch (ClassNotFoundException ex) {
+      Logger.error(nbtCompound.getString("dataclass"));
+      ex.printStackTrace();
+    }
+    return arrayList;
+  }
 }

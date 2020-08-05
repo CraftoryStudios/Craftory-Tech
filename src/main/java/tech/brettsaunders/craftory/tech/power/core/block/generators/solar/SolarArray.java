@@ -15,6 +15,7 @@ import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseSolarGenerator;
 
 public class SolarArray extends BaseSolarGenerator {
+
   /* Static Constants Private */
   private static final byte C_LEVEL = 3;
 

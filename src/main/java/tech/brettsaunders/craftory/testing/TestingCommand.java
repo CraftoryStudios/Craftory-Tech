@@ -30,11 +30,13 @@ public class TestingCommand implements CommandExecutor {
             Blocks.SOLID_FUEL_GENERATOR, Blocks.EMERALD_CELL,
             Material.COBBLESTONE.name(), Material.COAL_BLOCK.name(), Integer.parseInt(args[0]));
       } else {
-        player.sendMessage("Blocks Created " + (3 * Integer.parseInt(args[0])) * Integer.parseInt(args[1]));
+        player.sendMessage(
+            "Blocks Created " + (3 * Integer.parseInt(args[0])) * Integer.parseInt(args[1]));
 
         Testing.placeGrid(player.getLocation(), Blocks.DIAMOND_ELECTRIC_FURNACE,
             Blocks.SOLID_FUEL_GENERATOR, Blocks.EMERALD_CELL,
-            Material.COBBLESTONE.name(), Material.COAL_BLOCK.name(), Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+            Material.COBBLESTONE.name(), Material.COAL_BLOCK.name(), Integer.parseInt(args[0]),
+            Integer.parseInt(args[1]));
       }
     }
     return true;

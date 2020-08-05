@@ -40,7 +40,8 @@ import tech.brettsaunders.craftory.tech.power.core.block.generators.RotaryGenera
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 
 public class PoweredBlockEvents implements Listener {
-  private final HashMap<UUID, HashMap<BlockFace,Boolean>> configuratorData = new HashMap<>();
+
+  private final HashMap<UUID, HashMap<BlockFace, Boolean>> configuratorData = new HashMap<>();
 
   public PoweredBlockEvents() {
     Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
@@ -49,7 +50,7 @@ public class PoweredBlockEvents implements Listener {
   @EventHandler
   public void onPoweredBlockPlace(CustomBlockPlaceEvent e) {
     if (PoweredBlockUtils.isEnergyReceiver(e.getCustomBlock())) {
-      PoweredBlockUtils.updateAdjacentProviders(e.getLocation(),true, e.getCustomBlock());
+      PoweredBlockUtils.updateAdjacentProviders(e.getLocation(), true, e.getCustomBlock());
     }
     if (e.getName().equals(Blocks.POWER_CONNECTOR)) {
       PowerGrid powerGrid = new PowerGrid();
@@ -66,7 +67,7 @@ public class PoweredBlockEvents implements Listener {
       PoweredBlockUtils.updateAdjacentProviders(e.getLocation(), false, e.getCustomBlock());
     }
     //Drop Inventory
-    if(PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) {
+    if (PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) {
       PoweredBlock poweredBlock = (PoweredBlock) e.getCustomBlock();
       World world = e.getLocation().getWorld();
       Inventory inventory = poweredBlock.getInventory();
@@ -95,7 +96,8 @@ public class PoweredBlockEvents implements Listener {
     if (PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) {
       PoweredBlock block = (PoweredBlock) e.getCustomBlock();
       e.getPlayer().sendMessage(
-          Utilities.getTranslation("EnergyStored")+": " + block.getInfoEnergyStored() + " RE / " + block.getInfoEnergyCapacity()
+          Utilities.getTranslation("EnergyStored") + ": " + block.getInfoEnergyStored() + " RE / "
+              + block.getInfoEnergyCapacity()
               + " RE");
     }
   }
@@ -133,14 +135,19 @@ public class PoweredBlockEvents implements Listener {
     if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
       return;
     }
-    if ((e.getCustomBlock() instanceof RotaryGenerator) && (CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WINDMILL) || CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WATER_WHEEL))) {
+    if ((e.getCustomBlock() instanceof RotaryGenerator) && (
+        CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WINDMILL) || CustomItemManager
+            .matchCustomItemName(e.getItemStack(), Items.WATER_WHEEL))) {
       RotaryGenerator generator = (RotaryGenerator) e.getCustomBlock();
-      if(generator.getWheelPlaced()) return;
-      if(!generator.setFacing(e.getBlockFace())){
-        e.getPlayer().sendMessage(ChatColor.RED + "WaterWheels/WindMills require 7x7 clearance two blocks in front of them"); //TODO Brett make lang
+      if (generator.getWheelPlaced()) {
+        return;
       }
-      if(generator.placeItemIn(e.getItemStack().clone())){
-        e.getItemStack().setAmount(e.getItemStack().getAmount()-1);
+      if (!generator.setFacing(e.getBlockFace())) {
+        e.getPlayer().sendMessage(ChatColor.RED
+            + "WaterWheels/WindMills require 7x7 clearance two blocks in front of them"); //TODO Brett make lang
+      }
+      if (generator.placeItemIn(e.getItemStack().clone())) {
+        e.getItemStack().setAmount(e.getItemStack().getAmount() - 1);
       }
 
     }

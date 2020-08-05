@@ -48,7 +48,7 @@ public class GIndicator implements IGUIComponent {
       name = Utilities.getTranslation("light_off");
     }
     ItemMeta meta = light.getItemMeta();
-    meta.setDisplayName(ChatColor.RESET +name);
+    meta.setDisplayName(ChatColor.RESET + name);
     light.setItemMeta(meta);
     inventory.setItem(slot, light);
   }

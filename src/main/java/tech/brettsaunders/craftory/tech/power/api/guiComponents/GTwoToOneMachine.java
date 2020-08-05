@@ -49,13 +49,12 @@ public class GTwoToOneMachine implements IGUIComponent {
   }
 
 
-
   @Override
   public void update() {
     int x = (int) Math.floor(progress.getT() * 10);
     ItemStack arrow = CustomItemManager.getCustomItem("arrow_" + x);
     ItemMeta meta = arrow.getItemMeta();
-    meta.setDisplayName(ChatColor.RESET +"");
+    meta.setDisplayName(ChatColor.RESET + "");
     arrow.setItemMeta(meta);
     inventory.setItem(arrowSlot, arrow);
   }

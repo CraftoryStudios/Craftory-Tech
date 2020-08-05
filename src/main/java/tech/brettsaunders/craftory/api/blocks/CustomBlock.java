@@ -48,11 +48,15 @@ public class CustomBlock {
       displayName = Utilities.getTranslation(blockName);
     }
 
-    if (direction == null) direction = BlockFace.NORTH;
+    if (direction == null) {
+      direction = BlockFace.NORTH;
+    }
   }
 
-  public void beforeSaveUpdate() {}
+  public void beforeSaveUpdate() {
+  }
 
-  public void blockBreak() {}
+  public void blockBreak() {
+  }
 
 }

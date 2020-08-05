@@ -14,6 +14,7 @@ import lombok.Getter;
 
 @Getter
 public class StatsContainer {
+
   //Stats
   private int totalCustomBlocks = 0;
   private int totalPoweredBlocks = 0;

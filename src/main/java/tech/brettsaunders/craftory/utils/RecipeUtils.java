@@ -32,6 +32,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class RecipeUtils {
+
   @Getter
   private static final HashSet<Recipe> allRecipes = new HashSet<>();
   @Getter
@@ -53,9 +54,9 @@ public class RecipeUtils {
   @Getter
   private static final HashSet<CustomMachineRecipe> twoToOneRecipes = new HashSet<>();
   @Getter
-  private static final HashMap<String,String > maceratorRecipes = new HashMap<>();
+  private static final HashMap<String, String> maceratorRecipes = new HashMap<>();
   @Getter
-  private static final HashMap<String,String> magnetiserRecipes = new HashMap<>();
+  private static final HashMap<String, String> magnetiserRecipes = new HashMap<>();
 
   static {
     Logger.debug("Extracting Recipes");
@@ -71,7 +72,8 @@ public class RecipeUtils {
       } else if (recipe instanceof StonecuttingRecipe) {
         stonecuttingRecipes.add(recipe);
       } else if (recipe instanceof FurnaceRecipe) {
-        furnaceRecipes.put(((FurnaceRecipe) recipe).getInput().getType().toString(),recipe.getResult().getType().toString());
+        furnaceRecipes.put(((FurnaceRecipe) recipe).getInput().getType().toString(),
+            recipe.getResult().getType().toString());
       } else if (recipe instanceof BlastingRecipe) {
         blastingRecipes.add(recipe);
       } else if (recipe instanceof SmokingRecipe) {
@@ -124,11 +126,11 @@ public class RecipeUtils {
     furnaceRecipes.putAll(recipes);
   }
 
-  public static void addAllMaceratorRecipes(HashMap<String,String> recipes) {
+  public static void addAllMaceratorRecipes(HashMap<String, String> recipes) {
     maceratorRecipes.putAll(recipes);
   }
 
-  public static void addAllMagnetiserRecipes(HashMap<String,String> recipes) {
+  public static void addAllMagnetiserRecipes(HashMap<String, String> recipes) {
     magnetiserRecipes.putAll(recipes);
   }
 
@@ -162,6 +164,7 @@ public class RecipeUtils {
   }
 
   public static class BinaryRecipe {
+
     @Getter
     final String ingredient;
     @Getter
@@ -172,7 +175,6 @@ public class RecipeUtils {
       this.product = product;
     }
   }
-
 
 
 }

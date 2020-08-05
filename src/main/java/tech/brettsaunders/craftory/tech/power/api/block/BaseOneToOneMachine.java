@@ -66,7 +66,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     init();
   }
 
-  public BaseOneToOneMachine(){
+  public BaseOneToOneMachine() {
     super();
     init();
   }
@@ -78,13 +78,13 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     outputLocations.add(OUTPUT_LOCATION);
     interactableSlots = new HashSet<>(Arrays.asList(INPUT_LOCATION, OUTPUT_LOCATION));
   }
+
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
     processTime = PROCESS_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
   }
-
 
 
   @Override
@@ -95,8 +95,12 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
         new GOneToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer, 30));
-    if (inputSlots.size() == 0) inputSlots.add(0, new ItemStack(Material.AIR));
-    if (outputSlots.size() == 0) outputSlots.add(0, new ItemStack(Material.AIR));
+    if (inputSlots.size() == 0) {
+      inputSlots.add(0, new ItemStack(Material.AIR));
+    }
+    if (outputSlots.size() == 0) {
+      outputSlots.add(0, new ItemStack(Material.AIR));
+    }
     this.inventoryInterface = inventory;
   }
 
@@ -118,7 +122,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     outputSlots.set(0, inventoryInterface.getItem(OUTPUT_LOCATION));
   }
 
-  protected HashMap<String,String> getRecipes(){
+  protected HashMap<String, String> getRecipes() {
     Logger.warn("THIS CODE SHOULD NEVER BE RUN");
     return null;
   }
@@ -130,22 +134,25 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     }
     ItemStack outputSlot = outputSlots.get(0);
     String inputType = CustomItemManager.getCustomItemName(inputSlots.get(0));
-    String outputType = (outputSlot==null) ? null : CustomItemManager.getCustomItemName(outputSlots.get(0));
+    String outputType =
+        (outputSlot == null) ? null : CustomItemManager.getCustomItemName(outputSlots.get(0));
     //If the recipe is unchanged there is no need to find the recipe.
     if (currentRecipe != null && currentRecipe.getX().equals(inputType)) {
       if (outputSlot == null || outputSlot.getType() == Material.AIR) {
         return true;
       }
-      if (outputType.equals(currentRecipe.getY()) && outputSlot.getAmount() <= outputSlot.getMaxStackSize() - 1) {
+      if (outputType.equals(currentRecipe.getY())
+          && outputSlot.getAmount() <= outputSlot.getMaxStackSize() - 1) {
         return true;
       }
     }
-    if(getRecipes().containsKey(inputType)) {
+    if (getRecipes().containsKey(inputType)) {
       String product;
       product = getRecipes().get(inputType);
-      if((outputSlot==null) || outputSlot.getType().equals(Material.AIR) || (outputType.equals(product) && outputSlot.getAmount() < outputSlot.getMaxStackSize())){
+      if ((outputSlot == null) || outputSlot.getType().equals(Material.AIR) || (
+          outputType.equals(product) && outputSlot.getAmount() < outputSlot.getMaxStackSize())) {
         currentRecipe = new Pair<>(inputType, product);
-        if(CustomItemManager.isCustomItemName(product)) {
+        if (CustomItemManager.isCustomItemName(product)) {
           currentProduct = CustomItemManager.getCustomItem(product);
         } else {
           currentProduct = new ItemStack(Material.valueOf(product));
@@ -157,10 +164,12 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     currentProduct = null;
     return false;
   }
+
   @Override
   public HashMap<BlockFace, Integer> getInputFaces() {
     return inputFaces;
   }
+
   @Override
   public HashMap<BlockFace, Integer> getOutputFaces() {
     return outputFaces;

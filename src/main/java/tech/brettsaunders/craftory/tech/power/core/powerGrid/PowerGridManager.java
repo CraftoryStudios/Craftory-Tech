@@ -35,9 +35,9 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerGridManager implements Listener {
 
-  @Getter
-  private HashMap<Location, PowerGrid> powerGrids;
   private final PersistenceStorage persistenceStorage;
+  @Getter
+  private final HashMap<Location, PowerGrid> powerGrids;
   private NBTFile nbtFile;
   private NBTFile nbtFileBackup;
 
@@ -47,7 +47,8 @@ public class PowerGridManager implements Listener {
       nbtFile = new NBTFile(
           new File(Craftory.plugin.getDataFolder() + File.separator + "data", "PoweredGrids.nbt"));
       nbtFileBackup = new NBTFile(
-          new File(Craftory.plugin.getDataFolder() + File.separator + "data", "PoweredGridsBackup.nbt"));
+          new File(Craftory.plugin.getDataFolder() + File.separator + "data",
+              "PoweredGridsBackup.nbt"));
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -81,10 +82,10 @@ public class PowerGridManager implements Listener {
       PowerGrid grid = powerGrids.remove(location);
       grid.cancelTask();
       if (grid.getGridSize() > 1) {
-        List<PowerGrid> newGrids = splitGrids(location,  grid);
+        List<PowerGrid> newGrids = splitGrids(location, grid);
         for (Location l : grid.getPowerConnectors().keySet()) {
           PowerGrid g = powerGrids.remove(l);
-          if(!g.isCancelled()){
+          if (!g.isCancelled()) {
             g.cancelTask(); //Stop runable
           }
         }
@@ -164,7 +165,8 @@ public class PowerGridManager implements Listener {
   }
 
   private void ungroupPowerGrids(HashMap<PowerGrid, HashSet<Location>> data) {
-    data.forEach((powerGrid, locations) -> locations.forEach(location -> powerGrids.put(location,powerGrid)));
+    data.forEach((powerGrid, locations) -> locations
+        .forEach(location -> powerGrids.put(location, powerGrid)));
   }
 
   /* Grid Splitting */
@@ -226,7 +228,7 @@ public class PowerGridManager implements Listener {
         if (connections != null) {
           connections.remove(breakPoint);
           grid.getPowerConnectors().put(location, connections);
-          if(powerGrid.getBlockConnections().containsKey(location)) {
+          if (powerGrid.getBlockConnections().containsKey(location)) {
             grid.getBlockConnections().put(location, powerGrid.getBlockConnections().get(location));
           }
           ArrayList<Location> openList = new ArrayList<>(connections);
@@ -239,9 +241,11 @@ public class PowerGridManager implements Listener {
             closedSet.add(connection);
             //Add it to the grid
             if (powerGrid.getBlockConnections().containsKey(connection)) {
-              grid.getBlockConnections().put(connection, powerGrid.getBlockConnections().get(connection));
+              grid.getBlockConnections()
+                  .put(connection, powerGrid.getBlockConnections().get(connection));
             }
-            HashSet<Location> connectionConnections = powerGrid.getPowerConnectors().get(connection);
+            HashSet<Location> connectionConnections = powerGrid.getPowerConnectors()
+                .get(connection);
             if (connectionConnections == null) {
               continue;
             }
@@ -262,7 +266,6 @@ public class PowerGridManager implements Listener {
     });
     return managers;
   }
-
 
 
 }

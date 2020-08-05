@@ -103,15 +103,17 @@ public class FluidStorage {
 
   public void forceAdd(int amount) {
     fluid += amount;
-    if(fluid > capacity) fluid = capacity;
+    if (fluid > capacity) {
+      fluid = capacity;
+    }
   }
 
   public int forceExtract(int amount) {
-    if(amount > fluid){
+    if (amount > fluid) {
       amount = fluid;
       fluid = 0;
     } else {
-      fluid -=amount;
+      fluid -= amount;
     }
     return amount;
   }
@@ -157,7 +159,7 @@ public class FluidStorage {
   }
 
   public boolean isFull() {
-    return fluid >=capacity;
+    return fluid >= capacity;
   }
 
   public int getMaxFluidStored() {

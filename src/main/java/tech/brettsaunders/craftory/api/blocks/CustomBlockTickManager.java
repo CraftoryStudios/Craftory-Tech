@@ -27,13 +27,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class CustomBlockTickManager extends BukkitRunnable {
 
   //Custom Block in future
-  private HashMap<Class<? extends CustomBlock>, HashMap<Method, Integer>> classCache = new HashMap<>();
-  private Set<CustomBlock> trackedBlocks;
+  private final HashMap<Class<? extends CustomBlock>, HashMap<Method, Integer>> classCache = new HashMap<>();
+  private final Set<CustomBlock> trackedBlocks;
   private long tick = 0;
 
   public CustomBlockTickManager() {
     ConcurrentHashMap trackedBlocksMap = new ConcurrentHashMap<>();
-    trackedBlocks = trackedBlocksMap.newKeySet();
+    trackedBlocks = ConcurrentHashMap.newKeySet();
   }
 
   public static Collection<Method> getMethodsRecursively(@NonNull Class<?> startClass,

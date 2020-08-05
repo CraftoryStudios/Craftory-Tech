@@ -32,22 +32,16 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTank;
 
 public class GeothermalGenerator extends BaseGenerator {
 
-  /* Static Constants Private */
-  private static final byte C_LEVEL = 0;
-  private static final int C_OUTPUT_AMOUNT = 100;
-
   public static final int FUEL_SLOT = 14;
   public static final int OUT_SLOT = 16;
   /* Static Constants Protected */
   protected static final int CAPACITY_BASE = 40000;
   protected static final double[] CAPACITY_LEVEL = {1, 1.5, 2, 3};
-
   protected static final int LAVA_CAPACITY_BASE = 10000;
-
+  /* Static Constants Private */
+  private static final byte C_LEVEL = 0;
+  private static final int C_OUTPUT_AMOUNT = 100;
   private static final double lavaToEnergyRatio = 25;
-
-  @Persistent
-  private FluidStorage fluidStorage;
 
   static {
     inputFaces = new HashMap<BlockFace, Integer>() {
@@ -66,13 +60,8 @@ public class GeothermalGenerator extends BaseGenerator {
     };
   }
 
-  private void init() {
-    inputLocations = new ArrayList<>();
-    inputLocations.add(0,FUEL_SLOT);
-    outputLocations = new ArrayList<>();
-    outputLocations.add(OUT_SLOT);
-    interactableSlots = new HashSet<>(Arrays.asList(FUEL_SLOT,OUT_SLOT));
-  }
+  @Persistent
+  private FluidStorage fluidStorage;
 
   /* Construction */
   public GeothermalGenerator() {
@@ -82,35 +71,47 @@ public class GeothermalGenerator extends BaseGenerator {
 
   /* Saving, Setup and Loading */
   public GeothermalGenerator(Location location) {
-    super(location, Blocks.GEOTHERMAL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,(int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
+    super(location, Blocks.GEOTHERMAL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,
+        (int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
     fluidStorage = new FluidStorage((int) (LAVA_CAPACITY_BASE * CAPACITY_LEVEL[C_LEVEL]));
     inputSlots = new ArrayList<>();
-    inputSlots.add(0,new ItemStack(Material.AIR));
+    inputSlots.add(0, new ItemStack(Material.AIR));
     outputSlots = new ArrayList<>();
     outputSlots.add(new ItemStack(Material.AIR));
     init();
   }
 
+  private void init() {
+    inputLocations = new ArrayList<>();
+    inputLocations.add(0, FUEL_SLOT);
+    outputLocations = new ArrayList<>();
+    outputLocations.add(OUT_SLOT);
+    interactableSlots = new HashSet<>(Arrays.asList(FUEL_SLOT, OUT_SLOT));
+  }
 
   @Override
-  public void updateGenerator(){
+  public void updateGenerator() {
     ItemStack input = inventoryInterface.getItem(FUEL_SLOT);
     ItemStack out = inventoryInterface.getItem(OUT_SLOT);
-    if(input != null && input.getType().equals(Material.LAVA_BUCKET) && fluidStorage.getSpace() > 1000){
-      if(out==null || out.getType().equals(Material.BUCKET) && out.getAmount() < out.getMaxStackSize()) {
+    if (input != null && input.getType().equals(Material.LAVA_BUCKET)
+        && fluidStorage.getSpace() > 1000) {
+      if (out == null || out.getType().equals(Material.BUCKET) && out.getAmount() < out
+          .getMaxStackSize()) {
         input.setAmount(0);
         inventoryInterface.setItem(FUEL_SLOT, input);
         fluidStorage.forceAdd(1000);
-        if(out==null){
-          inventoryInterface.setItem(OUT_SLOT,new ItemStack(Material.BUCKET));
+        if (out == null) {
+          inventoryInterface.setItem(OUT_SLOT, new ItemStack(Material.BUCKET));
         } else {
-          out.setAmount(out.getAmount()+1);
-          inventoryInterface.setItem(OUT_SLOT,out);
+          out.setAmount(out.getAmount() + 1);
+          inventoryInterface.setItem(OUT_SLOT, out);
         }
       }
     }
     super.updateGenerator();
-    inventoryInterface.getViewers().forEach(player -> {((Player) player).updateInventory();});
+    inventoryInterface.getViewers().forEach(player -> {
+      ((Player) player).updateInventory();
+    });
   }
 
   @Override
@@ -125,11 +126,15 @@ public class GeothermalGenerator extends BaseGenerator {
 
   @Override
   protected void processTick() {
-    double change = Math.min(Math.min(fluidStorage.getFluidStored(),C_OUTPUT_AMOUNT/lavaToEnergyRatio),getEnergySpace()/lavaToEnergyRatio);
-    if(change!=0) change = Math.ceil(change);
+    double change = Math
+        .min(Math.min(fluidStorage.getFluidStored(), C_OUTPUT_AMOUNT / lavaToEnergyRatio),
+            getEnergySpace() / lavaToEnergyRatio);
+    if (change != 0) {
+      change = Math.ceil(change);
+    }
     int amount = (int) Math.round(change);
     fluidStorage.forceExtract(amount);
-    energyStorage.modifyEnergyStored((int) (amount*lavaToEnergyRatio));
+    energyStorage.modifyEnergyStored((int) (amount * lavaToEnergyRatio));
   }
 
   @Override

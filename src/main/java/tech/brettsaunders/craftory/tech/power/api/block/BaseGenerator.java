@@ -36,7 +36,8 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
   protected boolean isActive;
 
   /* Construction */
-  public BaseGenerator(Location location, String blockName, byte level, int outputAmount, int capacity) {
+  public BaseGenerator(Location location, String blockName, byte level, int outputAmount,
+      int capacity) {
     super(location, blockName, level, outputAmount);
     energyStorage = new EnergyStorage(capacity);
     init();

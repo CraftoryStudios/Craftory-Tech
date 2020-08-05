@@ -37,19 +37,24 @@ public class CustomBlockStorage {
 
   /* Saving */
   @Synchronized
-  public static void saveAllCustomChunks(String dataFolder, PersistenceStorage persistenceStorage,HashMap<String, HashSet<CustomBlock>> active, HashMap<String, HashSet<CustomBlock>> inactive) {
+  public static void saveAllCustomChunks(String dataFolder, PersistenceStorage persistenceStorage,
+      HashMap<String, HashSet<CustomBlock>> active,
+      HashMap<String, HashSet<CustomBlock>> inactive) {
     Logger.info("Saving Custom Block Data");
     active.forEach((chunk, customBlocks) -> {
-      saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder, persistenceStorage);
+      saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder,
+          persistenceStorage);
     });
     inactive.forEach(((chunk, customBlocks) -> {
-      saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder, persistenceStorage);
+      saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder,
+          persistenceStorage);
     }));
     Logger.info("Saved Custom Block Data");
   }
 
   @Synchronized
-  public static void saveCustomChunk(String chunkID, HashSet<CustomBlock> customBlocks, String dataFolder, PersistenceStorage persistenceStorage) {
+  public static void saveCustomChunk(String chunkID, HashSet<CustomBlock> customBlocks,
+      String dataFolder, PersistenceStorage persistenceStorage) {
     try {
       Optional<CustomBlock> customBlockFirst = Optional.of(customBlocks.stream().findFirst().get());
       if (!customBlockFirst.isPresent()) {
@@ -73,23 +78,27 @@ public class CustomBlockStorage {
     }
   }
 
-  /** Loading */
+  /**
+   * Loading
+   */
   @Synchronized
-  public static void loadAllSavedRegions(World world, String dataFolder, CustomBlockManager manager, PersistenceStorage persistenceStorage) {
+  public static void loadAllSavedRegions(World world, String dataFolder, CustomBlockManager manager,
+      PersistenceStorage persistenceStorage) {
     int regions = 0;
-      File directory = new File(dataFolder + File.separator + world.getName());
-      if (directory.exists()) {
-        File[] filesList = directory.listFiles();
-        for (File file : filesList) {
-          loadSavedRegion(world, file.getName(), dataFolder, manager, persistenceStorage);
-          regions++;
-        }
+    File directory = new File(dataFolder + File.separator + world.getName());
+    if (directory.exists()) {
+      File[] filesList = directory.listFiles();
+      for (File file : filesList) {
+        loadSavedRegion(world, file.getName(), dataFolder, manager, persistenceStorage);
+        regions++;
       }
-    Logger.info("Loaded " + regions + " region data files for world "+world.getName() + "!");
+    }
+    Logger.info("Loaded " + regions + " region data files for world " + world.getName() + "!");
   }
 
   @Synchronized
-  public static void loadSavedRegion(World world, String regionID, String dataFolder, CustomBlockManager manager, PersistenceStorage persistenceStorage) {
+  public static void loadSavedRegion(World world, String regionID, String dataFolder,
+      CustomBlockManager manager, PersistenceStorage persistenceStorage) {
     try {
       NBTCompound chunkCompound;
       NBTCompound locationCompound = null;
@@ -142,7 +151,8 @@ public class CustomBlockStorage {
             Logger.info(e.getMessage());
             Logger.info(e.getStackTrace().toString());
             Logger.debug("Location Key: " + locationKey);
-            Logger.debug(locationCompound != null ? locationCompound.toString() : "NO Location Compound");
+            Logger.debug(
+                locationCompound != null ? locationCompound.toString() : "NO Location Compound");
           }
         }
         //TODO Remove Later
@@ -158,8 +168,8 @@ public class CustomBlockStorage {
       }
       nbtFile.save();
     } catch (IOException e) {
-        e.printStackTrace();
-      }
+      e.printStackTrace();
+    }
   }
 
 }

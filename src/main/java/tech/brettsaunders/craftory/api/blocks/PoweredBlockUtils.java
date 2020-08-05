@@ -29,20 +29,22 @@ public class PoweredBlockUtils {
 
   /**
    * Checks if a {@link CustomBlock} is an implementation of a PoweredBlock
-   * @see PoweredBlock
+   *
    * @param block Custom block to check
    * @return true if instance of PoweredBlock
+   * @see PoweredBlock
    */
   public static boolean isPoweredBlock(CustomBlock block) {
     return block instanceof PoweredBlock;
   }
 
   /**
-   * Checks if a {@link CustomBlock} is an implementation of a PoweredBlock
-   * Prefer use of {@link #isPoweredBlock(CustomBlock block)} over this
-   * @see PoweredBlock
+   * Checks if a {@link CustomBlock} is an implementation of a PoweredBlock Prefer use of {@link
+   * #isPoweredBlock(CustomBlock block)} over this
+   *
    * @param location of custom block to check
    * @return true if instance of PoweredBlock
+   * @see PoweredBlock
    */
   public static boolean isPoweredBlock(Location location) {
     return Craftory.customBlockManager.getCustomBlock(location) instanceof PoweredBlock;
@@ -50,9 +52,10 @@ public class PoweredBlockUtils {
 
   /**
    * Checks if a {@link CustomBlock} is an implementation of a Cell
-   * @see BaseCell
+   *
    * @param block Custom block to check
    * @return true if instance of Cell
+   * @see BaseCell
    */
   public static boolean isCell(CustomBlock block) {
     return block instanceof BaseCell;
@@ -60,9 +63,10 @@ public class PoweredBlockUtils {
 
   /**
    * Checks if a {@link CustomBlock} is an implementation of a Generator
-   * @see BaseGenerator
+   *
    * @param block Custom block to check
    * @return true if instance of Generator
+   * @see BaseGenerator
    */
   public static boolean isGenerator(CustomBlock block) {
     return block instanceof BaseGenerator;
@@ -70,9 +74,10 @@ public class PoweredBlockUtils {
 
   /**
    * Checks if a {@link CustomBlock} is an implementation of a Machine
-   * @see BaseMachine
+   *
    * @param block Custom block to check
    * @return true if instance of BaseMachine
+   * @see BaseMachine
    */
   public static boolean isMachine(CustomBlock block) {
     return block instanceof BaseMachine;
@@ -80,9 +85,10 @@ public class PoweredBlockUtils {
 
   /**
    * Checks if a {@link CustomBlock} is an implementation of a IEnergyReceiver
-   * @see IEnergyReceiver
+   *
    * @param block Custom block to check
    * @return true if instance of IEnergyReceiver
+   * @see IEnergyReceiver
    */
   public static boolean isEnergyReceiver(CustomBlock block) {
     return block instanceof IEnergyReceiver;
@@ -94,37 +100,41 @@ public class PoweredBlockUtils {
 
   /**
    * Checks if a {@link CustomBlock} is an implementation of a IEnergyProvider
-   * @see IEnergyProvider
+   *
    * @param block Custom block to check
    * @return true if instance of IEnergyProvider
+   * @see IEnergyProvider
    */
   public static boolean isEnergyProvider(CustomBlock block) {
     return block instanceof IEnergyProvider;
   }
 
   /**
-   * Checks if a {@link CustomBlock} is an implementation of a IEnergyProvider
-   * Prefer use of {@link #isEnergyProvider(CustomBlock)} over this
-   * @see IEnergyProvider
+   * Checks if a {@link CustomBlock} is an implementation of a IEnergyProvider Prefer use of {@link
+   * #isEnergyProvider(CustomBlock)} over this
+   *
    * @param location of custom block to check
    * @return true if instance of IEnergyProvider
+   * @see IEnergyProvider
    */
   public static boolean isEnergyProvider(Location location) {
     return Craftory.customBlockManager.getCustomBlock(location) instanceof IEnergyProvider;
   }
 
   /**
-   * Checks if a {@link CustomBlock} is an implementation of a IEnergyReceiver
-   * Prefer use of {@link #isEnergyReceiver(CustomBlock)} over this
-   * @see IEnergyReceiver
+   * Checks if a {@link CustomBlock} is an implementation of a IEnergyReceiver Prefer use of {@link
+   * #isEnergyReceiver(CustomBlock)} over this
+   *
    * @param location of custom block to check
    * @return true if instance of IEnergyReceiver
+   * @see IEnergyReceiver
    */
   public static boolean isEnergyReceiver(Location location) {
     return Craftory.customBlockManager.getCustomBlock(location) instanceof IEnergyReceiver;
   }
 
-  public static void updateAdjacentProviders(Location location, Boolean blockPlaced, CustomBlock originBlock) {
+  public static void updateAdjacentProviders(Location location, Boolean blockPlaced,
+      CustomBlock originBlock) {
     Block block;
     Location blockLocation;
     for (BlockFace face : Utilities.faces) {
@@ -139,11 +149,14 @@ public class PoweredBlockUtils {
         } else if (blockPlaced && Craftory.customBlockManager.getCustomBlockName(blockLocation)
             == CoreHolder.Blocks.POWER_CONNECTOR) {
           if (isMachine(customBlock)) {
-            Craftory.powerGridManager.getPowerGrids().get(location).addMachine(location, blockLocation);
+            Craftory.powerGridManager.getPowerGrids().get(location)
+                .addMachine(location, blockLocation);
           } else if (isGenerator(customBlock)) {
-            Craftory.powerGridManager.getPowerGrids().get(location).addGenerator(location, blockLocation);
+            Craftory.powerGridManager.getPowerGrids().get(location)
+                .addGenerator(location, blockLocation);
           } else if (isCell(customBlock)) {
-            Craftory.powerGridManager.getPowerGrids().get(location).addPowerCell(location, blockLocation);
+            Craftory.powerGridManager.getPowerGrids().get(location)
+                .addPowerCell(location, blockLocation);
           }
 
         }
@@ -153,7 +166,8 @@ public class PoweredBlockUtils {
 
   public static void updateHopperNeighbour(Block block, boolean hopperIsPresent) {
     BlockFace facingDirection = ((Directional) block.getBlockData()).getFacing();
-    PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock((block.getRelative(facingDirection).getLocation()));
+    PoweredBlock poweredBlock = PoweredBlockUtils
+        .getPoweredBlock((block.getRelative(facingDirection).getLocation()));
     if (poweredBlock != null) {
       poweredBlock.setSideCache(facingDirection.getOppositeFace(),
           (hopperIsPresent) ? INTERACTABLEBLOCK.HOPPER_IN

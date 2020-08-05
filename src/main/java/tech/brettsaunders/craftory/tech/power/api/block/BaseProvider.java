@@ -35,7 +35,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     this.maxOutput = maxOutput;
     init();
     for (BlockFace face : Utilities.faces) {
-      sidesConfig.put(face,false);
+      sidesConfig.put(face, false);
     }
   }
 
@@ -53,18 +53,22 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   /* Update Loop */
   @Ticking(ticks = 1)
   public void transferEnergy() {
-    if (isBlockPowered()) return;
+    if (isBlockPowered()) {
+      return;
+    }
     cachedSides.forEach(((blockFace, customBlock) -> {
       if (customBlock == null) {
         Bukkit.getScheduler().runTaskLater(Craftory.plugin, () -> {
-          CustomBlock sideBlock = Craftory.customBlockManager.getCustomBlock(location.getBlock().getRelative(blockFace).getLocation());
+          CustomBlock sideBlock = Craftory.customBlockManager
+              .getCustomBlock(location.getBlock().getRelative(blockFace).getLocation());
           if (sideBlock != null) {
             cachedSides.put(blockFace, sideBlock);
           }
-        },4);
+        }, 4);
       }
       if (sidesConfig.get(blockFace)) {
-        energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(Math.min(maxOutput, energyStorage.getEnergyStored()), false, customBlock));
+        energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(
+            Math.min(maxOutput, energyStorage.getEnergyStored()), false, customBlock));
       }
     }));
   }
@@ -75,7 +79,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     return energyExtracted;
   }
 
-  public void setSideConfigSide(BlockFace side,  boolean result) {
+  public void setSideConfigSide(BlockFace side, boolean result) {
     sidesConfig.put(side, result);
   }
 
@@ -83,7 +87,8 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   /* Internal Helper Functions */
 
 
-  public int insertEnergyIntoAdjacentEnergyReceiver(int energy, boolean simulate, CustomBlock customBlock) {
+  public int insertEnergyIntoAdjacentEnergyReceiver(int energy, boolean simulate,
+      CustomBlock customBlock) {
     if (customBlock instanceof BaseMachine) {
       return ((BaseMachine) customBlock).receiveEnergy(energy, simulate);
     } else if (customBlock instanceof BaseCell) {

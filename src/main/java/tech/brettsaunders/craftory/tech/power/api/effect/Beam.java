@@ -29,6 +29,9 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class Beam {
 
+  private static final int version = Integer.parseInt(
+      Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]
+          .substring(1).split("_")[1]);
   private final int duration;
   private final int distanceSquared;
   private final Object createGuardianPacket;
@@ -43,9 +46,6 @@ public class Beam {
   private Location start;
   private Location end;
   private BukkitRunnable run;
-  private static final int version = Integer.parseInt(
-      Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]
-          .substring(1).split("_")[1]);
 
   /**
    * Create a Beam instance
@@ -59,7 +59,7 @@ public class Beam {
       throws ReflectiveOperationException {
     this.start = start;
     if (version >= 1.16) {
-      this.end = end.add(0,-0.6,0);
+      this.end = end.add(0, -0.6, 0);
     } else {
       this.end = end;
     }

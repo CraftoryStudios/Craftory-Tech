@@ -28,11 +28,12 @@ import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnecto
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockFactory {
-  private HashMap<String, Class<? extends CustomBlock>> blockTypes = new HashMap<>();
-  private HashMap<String, Constructor<? extends CustomBlock>> createConstructor = new HashMap<>();
-  private HashMap<String, Constructor<? extends CustomBlock>> loadConstructor = new HashMap<>();
-  private HashSet<String> directional = new HashSet<>();
-  private String locationName;
+
+  private final HashMap<String, Class<? extends CustomBlock>> blockTypes = new HashMap<>();
+  private final HashMap<String, Constructor<? extends CustomBlock>> createConstructor = new HashMap<>();
+  private final HashMap<String, Constructor<? extends CustomBlock>> loadConstructor = new HashMap<>();
+  private final HashSet<String> directional = new HashSet<>();
+  private final String locationName;
   private StatsContainer statsContainer;
 
   public CustomBlockFactory() {
@@ -40,13 +41,15 @@ public class CustomBlockFactory {
   }
 
   @Synchronized
-  public void registerCustomBlock(String nameID, Class<? extends CustomBlock> block, boolean registerTickable, boolean directional) {
+  public void registerCustomBlock(String nameID, Class<? extends CustomBlock> block,
+      boolean registerTickable, boolean directional) {
     blockTypes.put(nameID, block);
     Constructor[] constructors = block.getConstructors();
     for (Constructor constructor : constructors) {
       if (constructor.getParameterCount() == 0) {
         loadConstructor.put(nameID, constructor);
-      } else if (constructor.getParameterCount() == 1 && constructor.getParameterTypes()[0].getName().equals(locationName)){
+      } else if (constructor.getParameterCount() == 1 && constructor.getParameterTypes()[0]
+          .getName().equals(locationName)) {
         createConstructor.put(nameID, constructor);
       }
     }
@@ -79,7 +82,8 @@ public class CustomBlockFactory {
   }
 
   @Synchronized
-  public CustomBlock createLoad(NBTCompound locationCompound, PersistenceStorage persistenceStorage, Location location) {
+  public CustomBlock createLoad(NBTCompound locationCompound, PersistenceStorage persistenceStorage,
+      Location location) {
     CustomBlock customBlock = null;
     NBTCompound nameCompound = locationCompound.getCompound("blockName");
     String nameID = nameCompound.getString("data");
@@ -87,7 +91,7 @@ public class CustomBlockFactory {
       Constructor constructor = loadConstructor.get(nameID);
       try {
         customBlock = (CustomBlock) constructor.newInstance();
-        persistenceStorage.loadFields(customBlock,locationCompound);
+        persistenceStorage.loadFields(customBlock, locationCompound);
         customBlock.setLocation(location);
         customBlock.afterLoadUpdate();
         calculateStatsIncrease(customBlock);

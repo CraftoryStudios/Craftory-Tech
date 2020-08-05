@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
-public abstract class  G21PointBar implements IGUIComponent {
+public abstract class G21PointBar implements IGUIComponent {
 
   private final int TOP_SLOT;
   private final int BOTTOM_SLOT;

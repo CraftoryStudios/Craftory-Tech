@@ -23,11 +23,23 @@ public enum BasicBlocks {
   private final Set<BlockFace> allowedFaces = new HashSet<BlockFace>();
 
   BasicBlocks(boolean west, boolean up, boolean south, boolean north, boolean east, boolean down) {
-    if (west) allowedFaces.add(BlockFace.WEST);
-    if (up) allowedFaces.add(BlockFace.UP);
-    if (south) allowedFaces.add(BlockFace.SOUTH);
-    if (north) allowedFaces.add(BlockFace.NORTH);
-    if (east) allowedFaces.add(BlockFace.EAST);
-    if (down) allowedFaces.add(BlockFace.DOWN);
+    if (west) {
+      allowedFaces.add(BlockFace.WEST);
+    }
+    if (up) {
+      allowedFaces.add(BlockFace.UP);
+    }
+    if (south) {
+      allowedFaces.add(BlockFace.SOUTH);
+    }
+    if (north) {
+      allowedFaces.add(BlockFace.NORTH);
+    }
+    if (east) {
+      allowedFaces.add(BlockFace.EAST);
+    }
+    if (down) {
+      allowedFaces.add(BlockFace.DOWN);
+    }
   }
 }

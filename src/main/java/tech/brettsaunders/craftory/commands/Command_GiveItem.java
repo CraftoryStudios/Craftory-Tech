@@ -84,11 +84,14 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
         itemStack.setAmount(amount);
         Player player = Craftory.plugin.getServer().getPlayer(playerName);
         if (player != null) {
-          HashMap<Integer,ItemStack> result = player.getInventory().addItem(itemStack);
+          HashMap<Integer, ItemStack> result = player.getInventory().addItem(itemStack);
           if (result.size() > 0) {
-            result.forEach((i, item) ->player.getWorld().dropItemNaturally(player.getLocation(), item));
+            result.forEach(
+                (i, item) -> player.getWorld().dropItemNaturally(player.getLocation(), item));
           }
-          Utilities.msg(sender, Utilities.getTranslation("GiveCommandGave") + " " + playerName + " x" + amount + " " + itemName);
+          Utilities.msg(sender,
+              Utilities.getTranslation("GiveCommandGave") + " " + playerName + " x" + amount + " "
+                  + itemName);
           return true;
         } else {
           Utilities.msg(sender, Utilities.getTranslation("GiveCommandErrorPlayer"));

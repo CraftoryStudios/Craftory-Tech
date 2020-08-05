@@ -23,7 +23,7 @@ import tech.brettsaunders.craftory.Craftory;
 public class WorldGenHandler implements Listener {
 
   private OrePopulator orePopulator;
-  private ArrayList<World> registeredWorlds;
+  private final ArrayList<World> registeredWorlds;
 
   public WorldGenHandler() {
     Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);

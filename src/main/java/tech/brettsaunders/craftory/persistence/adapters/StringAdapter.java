@@ -18,16 +18,17 @@ import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 @NoArgsConstructor
 public class StringAdapter implements DataAdapter<String> {
 
-    @Override
-    public void store(PersistenceStorage persistenceStorage, String value, NBTCompound nbtCompound) {
-        nbtCompound.setString("data", value);
-    }
+  @Override
+  public void store(PersistenceStorage persistenceStorage, String value, NBTCompound nbtCompound) {
+    nbtCompound.setString("data", value);
+  }
 
-    @Override
-    public String parse(PersistenceStorage persistenceStorage, Object parentObject, NBTCompound nbtCompound) {
-        if (!nbtCompound.hasKey("data")) {
-            return null;
-        }
-        return nbtCompound.getString("data");
+  @Override
+  public String parse(PersistenceStorage persistenceStorage, Object parentObject,
+      NBTCompound nbtCompound) {
+    if (!nbtCompound.hasKey("data")) {
+      return null;
     }
+    return nbtCompound.getString("data");
+  }
 }

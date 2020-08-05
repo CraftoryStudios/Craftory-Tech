@@ -140,7 +140,7 @@ public class EnergyStorage implements IEnergyStorage {
   }
 
   public boolean isFull() {
-    return energy>=capacity;
+    return energy >= capacity;
   }
 
   @Override

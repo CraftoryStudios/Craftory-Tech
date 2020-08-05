@@ -16,10 +16,10 @@ import tech.brettsaunders.craftory.CoreHolder.FLUIDS;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.tech.power.api.fluids.FluidStorage;
 
-public class GTank extends G21PointBar{
+public class GTank extends G21PointBar {
 
   private final FluidStorage storage;
-  private FLUIDS fluid = FLUIDS.LAVA;
+  private final FLUIDS fluid = FLUIDS.LAVA;
 
   public GTank(Inventory inventory, FluidStorage storage, int top_slot) {
     super(inventory, top_slot);
@@ -32,12 +32,14 @@ public class GTank extends G21PointBar{
 
   @Override
   String getDisplayName() {
-    return ChatColor.RESET + Utilities.getTranslation(fluid.toString()) + Utilities.getTranslation("Stored")+": " + Utilities.rawFluidToPrefixed(storage.getFluidStored());
+    return ChatColor.RESET + Utilities.getTranslation(fluid.toString()) + Utilities
+        .getTranslation("Stored") + ": " + Utilities.rawFluidToPrefixed(storage.getFluidStored());
   }
 
   @Override
   double getAmountFilled() {
-    return ((double) storage.getFluidStored() / (double) storage.getMaxFluidStored()) * (double) 100;
+    return ((double) storage.getFluidStored() / (double) storage.getMaxFluidStored())
+        * (double) 100;
   }
 
   @Override
