@@ -143,10 +143,14 @@ public class CustomItemManager {
 
   public static String getCustomItemName(ItemStack itemStack) {
     NBTItem nbtItem = new NBTItem(itemStack);
+    return getCustomItemName(nbtItem);
+  }
+
+  public static String getCustomItemName(NBTItem nbtItem) {
     if (nbtItem.hasKey("NAME")) {
       return nbtItem.getString("NAME");
     }
-    return itemStack.getType().toString();
+    return nbtItem.getItem().getType().toString();
   }
 
   public static void updateItemGraphics(ItemStack itemStack) {

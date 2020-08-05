@@ -10,8 +10,13 @@
 
 package tech.brettsaunders.craftory.api.blocks;
 
+import static tech.brettsaunders.craftory.Craftory.customBlockManager;
+
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.HashMap;
 import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -100,6 +105,40 @@ public class PoweredBlockEvents implements Listener {
               + block.getInfoEnergyCapacity()
               + " RE");
     }
+  }
+
+  @EventHandler
+  public void onWrenchRightClick(CustomBlockInteractEvent e) {
+    if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    if (!CustomItemManager.matchCustomItemName(e.getItemStack(), CoreHolder.Items.WRENCH)) return;
+    if (!e.getPlayer().isSneaking()) return;
+    if (!PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) return;
+    PoweredBlock poweredBlock = (PoweredBlock) e.getCustomBlock();
+
+    //Break Block
+    poweredBlock.blockBreak();
+    CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(
+        e.getCustomBlock().getLocation(), e.getCustomBlock().blockName, e.getCustomBlock());
+    customBlockManager.removeCustomBlock(e.getCustomBlock());
+    Craftory.tickManager.removeTickingBlock(e.getCustomBlock());
+    Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
+    e.getBlockClicked().setType(Material.AIR);
+    //calculateStatsDecrease(customBlock);
+
+    //Drop Item With Data
+    ItemStack itemStack = CustomItemManager.getCustomItem(e.getCustomBlock().blockName);
+    NBTItem nbtItem = new NBTItem(itemStack);
+    NBTCompound extraData = nbtItem.addCompound("extraData");
+
+    //Calculate Energy Storage
+    int energyStored = poweredBlock.getEnergyStorage().getEnergyStored();
+    double amount = (100d - (double)Utilities.config.getInt("wrench.powerLoss"))/100d;
+    double energyAfter = energyStored * amount;
+    extraData.setInteger("energyStorage", (int) energyAfter);
+
+    //Drop Item
+    e.getBlockClicked().getLocation().getWorld().dropItemNaturally(e.getBlockClicked().getLocation(), nbtItem.getItem());
+
   }
 
   @EventHandler
