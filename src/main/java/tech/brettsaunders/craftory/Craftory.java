@@ -37,8 +37,8 @@ public final class Craftory extends JavaPlugin implements Listener {
 
   public static String VERSION;
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/a4583aaebbc1d70e303abae0be49fa0514aae337.zip";
-  public static final String HASH = "a4583aaebbc1d70e303abae0be49fa0514aae337";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/67acc1d0b755fd2c9eba29178293a38ea85308de.zip";
+  public static final String HASH = "67acc1d0b755fd2c9eba29178293a38ea85308de";
 
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
@@ -59,7 +59,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   private static File customModelDataFile;
   private static File serverDataFile;
 
-  public static int lastVersionCode = 0;
+  public static int lastVersionCode;
   public static int thisVersionCode;
   public static boolean folderExists = false;
 
@@ -89,13 +89,10 @@ public final class Craftory extends JavaPlugin implements Listener {
     customItemConfigFile = new File(getDataFolder(),"data/customItemConfig.yml");
     customRecipeConfigFile = new File(getDataFolder(),"data/customRecipesConfig.yml");
     customModelDataFile = new File(getDataFolder(), "config/customModelDataV2.yml");
-    serverDataFile = new File(getDataFolder(), "data/serverData.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
     customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
-    serverDataConfig = YamlConfiguration.loadConfiguration(serverDataFile);
-    lastVersionCode = serverDataConfig.getInt("lastVersion");
     CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
     customBlockManager = new CustomBlockManager();
     customBlockFactory.registerStats();
@@ -124,8 +121,8 @@ public final class Craftory extends JavaPlugin implements Listener {
   @Override
   public void onDisable() {
     try {
-      serverDataConfig.set("lastVersion",thisVersionCode);
-      serverDataConfig.save(serverDataFile);
+      Utilities.data.set("lastVersion",thisVersionCode);
+      Utilities.saveDataFile();
       customItemConfig.save(customItemConfigFile);
       customBlocksConfig.save(customBlockConfigFile);
     } catch (IOException e) {

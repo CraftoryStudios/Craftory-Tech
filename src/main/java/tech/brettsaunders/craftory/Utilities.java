@@ -160,10 +160,13 @@ public class Utilities {
 
     data.options().header("Do Not Touch");
     data.addDefault("reporting.serverUUID", UUID.randomUUID().toString());
+    data.addDefault("lastVersion", 0);
     data.options().copyHeader(true);
     data.options().copyDefaults(true);
     saveDataFile();
     reloadDataFile();
+
+    Craftory.lastVersionCode = data.getInt("lastVersion");
   }
 
   static void compatibilityUpdater() {
