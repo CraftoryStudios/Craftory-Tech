@@ -39,6 +39,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.basicBlocks.BasicBlocks;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
+import tech.brettsaunders.craftory.api.blocks.tools.ToolLevel;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.utils.Logger;
@@ -246,6 +247,15 @@ public class CustomBlockManager {
       CustomBlockData data = new CustomBlockData(block.getBoolean("UP"), block.getBoolean("DOWN"),
           block.getBoolean("NORTH"), block.getBoolean("EAST"), block.getBoolean("SOUTH"),
           block.getBoolean("WEST"));
+      if (block.contains("BreakLevel")) {
+        ToolLevel toolLevel;
+        try {
+          toolLevel = ToolLevel.valueOf(block.getString("BreakLevel"));
+        } catch (IllegalArgumentException | NullPointerException e) {
+          toolLevel = ToolLevel.HAND;
+        }
+        data.BREAK_LEVEL = toolLevel;
+      }
       customBlockDataHashMap.put(key, data);
     }
   }

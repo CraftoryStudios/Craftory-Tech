@@ -7,6 +7,7 @@ blocks:
     EAST: true
     DOWN: false
     itemModel: stone
+    BreakLevel: IRON
   GoldCell:
     WEST: true
     UP: true

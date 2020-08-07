@@ -18,15 +18,20 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -42,12 +47,16 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldInitEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
+import tech.brettsaunders.craftory.api.blocks.tools.ToolLevel;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
@@ -165,6 +174,95 @@ public class CustomBlockManagerEvents implements Listener {
       return;
     }
     e.setCancelled(true);
+  }
+
+  public BlockFace getBlockFace(Player player) {
+    List<Block> lastTwoTargetBlocks = player.getLastTwoTargetBlocks(null, 100);
+    if (lastTwoTargetBlocks.size() != 2 || !lastTwoTargetBlocks.get(1).getType().isOccluding()) return null;
+    Block targetBlock = lastTwoTargetBlocks.get(1);
+    Block adjacentBlock = lastTwoTargetBlocks.get(0);
+    return targetBlock.getFace(adjacentBlock);
+  }
+
+  public Location calculateLocation(Location start, Player player) {
+    BlockFace blockFace = getBlockFace(player);
+    start.add(start.getX() > 0 ? -0.5 : 0.5, 0.0, start.getZ() > 0 ? -0.5 : 0.5);
+    switch (blockFace) {
+      case NORTH:
+        start.add(0,0,-0.4);
+        break;
+      case SOUTH:
+        start.add(0,0,0.4);
+        break;
+      case EAST:
+        start.add(0.4,0,0);
+        break;
+      case WEST:
+        start.add(-0.4,0,0);
+        break;
+    }
+    return start;
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onBlockDamage(PlayerInteractEvent e) {
+    if (e.getAction() != Action.LEFT_CLICK_BLOCK) return;
+    final Location location = e.getClickedBlock().getLocation();
+    if (currentCustomBlocks.containsKey(location)) {
+      CustomBlock customBlock = currentCustomBlocks.get(location);
+      ToolLevel toolLevel = customBlockDataHashMap.get(customBlock.blockName).BREAK_LEVEL;
+      if (toolLevel == ToolLevel.HAND) return;
+      Material itemInHand;
+      if (e.getItem() == null) {
+        itemInHand = Material.AIR;
+      } else {
+        itemInHand = e.getItem().getType();
+      }
+      switch (toolLevel) {
+        case IRON:
+          if (!(itemInHand == Material.IRON_PICKAXE || itemInHand == Material.GOLDEN_PICKAXE || itemInHand == Material.DIAMOND_PICKAXE || itemInHand == Material.NETHERITE_PICKAXE)) {
+            //e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20, 999999, false, false));
+            e.setCancelled(true);
+
+            LivingEntity entity = (LivingEntity) e.getPlayer().getWorld().spawnEntity(calculateLocation(location,e.getPlayer()),
+                EntityType.SNOWMAN );
+            entity.setInvulnerable(true);
+            entity.setSilent(true);
+            entity.setAI(false);
+            entity.setGravity(false);
+            entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
+
+            Craftory.plugin.getServer().getScheduler().runTaskTimer(Craftory.plugin,
+                new BukkitRunnable() {
+                  @Override
+                  public void run() {
+                    Block block = e.getPlayer().getTargetBlockExact(5);
+                    if (block == null || !block.getLocation().equals(e.getClickedBlock().getLocation())){
+                      entity.remove();
+                      cancel();
+
+                    }
+                  }
+                },4L,4L);
+          }
+          break;
+        case GOLD:
+          if (!(itemInHand == Material.GOLDEN_PICKAXE || itemInHand == Material.DIAMOND_PICKAXE || itemInHand == Material.NETHERITE_PICKAXE)) {
+            e.setCancelled(true);
+          }
+          break;
+        case DIAMOND:
+          if (!(itemInHand == Material.DIAMOND_PICKAXE || itemInHand == Material.NETHERITE_PICKAXE)) {
+            e.setCancelled(true);
+          }
+          break;
+        case NETHERITE:
+          if (!(itemInHand == Material.NETHERITE_PICKAXE)) {
+            e.setCancelled(true);
+          }
+          break;
+      }
+    }
   }
 
   @EventHandler
@@ -299,9 +397,6 @@ public class CustomBlockManagerEvents implements Listener {
             customBlock,
             e);
         Bukkit.getServer().getPluginManager().callEvent(customBlockInteractEvent);
-        //if (e.getAction() == Action.RIGHT_CLICK_BLOCK && !e.getPlayer().isSneaking()) {
-        //e.setCancelled(true);
-        //}
       }
     }
     return;
