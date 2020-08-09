@@ -27,7 +27,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="CrazyAdvancementsAPI" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.16-R0.3" level="project" />
     <orderEntry type="module-library">
       <library name="Maven: eu.endercentral.crazy_advancements:CrazyAdvancementsAPI:1.13.8">
         <CLASSES>

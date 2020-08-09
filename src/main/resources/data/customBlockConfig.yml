@@ -154,7 +154,7 @@ blocks:
     itemModel: stone
   DiamondMacerator:
     WEST: true
-    UP: false
+    UP: true
     SOUTH: true
     NORTH: true
     EAST: true

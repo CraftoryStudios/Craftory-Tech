@@ -169,9 +169,10 @@ public class Utilities {
 
   static void compatibilityUpdater() {
     if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
-      //Version 0.2.0 or before
-      if (Craftory.lastVersionCode == 0) {
-        config.set("fixItemGraphics", true);
+      //Fix all Item Graphics
+      if (Craftory.lastVersionCode == 0) config.set("fixItemGraphics", true);
+      //Version 0.2.1 or before
+      if (Craftory.lastVersionCode == 0 || Craftory.lastVersionCode == 200001) {
         //Convert all mushrooms to Stem
         Craftory.customBlockManager.getInactiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
