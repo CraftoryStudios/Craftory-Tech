@@ -12,8 +12,10 @@ package tech.brettsaunders.craftory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -25,10 +27,12 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockEvents;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.recipes.RecipeBook;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.testing.TestingCommand;
+import tech.brettsaunders.craftory.utils.DataConfigUtils;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
@@ -94,12 +98,16 @@ public final class Craftory extends JavaPlugin implements Listener {
     }
     customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
     customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
-    customRecipeConfigFile = new File(getDataFolder(), "data/customRecipesConfig.yml");
+    customRecipeConfigFile = new File(getDataFolder(), "config/customRecipesConfig.yml");
     customModelDataFile = new File(getDataFolder(), "config/customModelDataV2.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
+    customRecipeConfig.save(customRecipeConfigFile);
     customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
+    Optional<ConfigurationSection> recipesDefaults = Optional.ofNullable(YamlConfiguration.loadConfiguration(new File(Craftory.plugin.getDataFolder(), "data/customRecipesConfig.yml")));
+    recipesDefaults.ifPresent(source -> DataConfigUtils.copyDefaults(source, customRecipeConfig));
+    customRecipeConfig.save(customRecipeConfigFile);
     CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
     customBlockManager = new CustomBlockManager();
     customBlockFactory.registerStats();
@@ -121,6 +129,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     powerGridManager.onEnable();
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     new RecipeManager();
+    new RecipeBook();
     Utilities.compatibilityUpdater();
   }
 
@@ -131,6 +140,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       Utilities.saveDataFile();
       customItemConfig.save(customItemConfigFile);
       customBlocksConfig.save(customBlockConfigFile);
+      customRecipeConfig.save(customRecipeConfigFile);
     } catch (IOException e) {
       e.printStackTrace();
     }
