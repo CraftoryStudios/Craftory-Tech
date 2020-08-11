@@ -18,6 +18,7 @@ public enum Font {
   GENERATOR_GUI('\u1a08'),
   GEOTHERMAL_GUI('\u1a0a'),
   BLANK('\u1a0c'),
+  BOOK('\u1a0f'),
   PLACER('\u1a0b');
   public final char label;
 
