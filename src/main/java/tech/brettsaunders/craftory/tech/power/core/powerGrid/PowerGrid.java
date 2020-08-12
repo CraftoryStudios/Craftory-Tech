@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
@@ -77,7 +78,7 @@ public class PowerGrid extends BukkitRunnable {
     int e;
     for (Location loc : machines) {
       BaseMachine machine = (BaseMachine) PoweredBlockUtils.getPoweredBlock(loc);
-      if (machine == null) {
+      if (Objects.isNull(machine)) {
         continue;
       }
       e = machine.getEnergySpace();
@@ -93,7 +94,7 @@ public class PowerGrid extends BukkitRunnable {
     int amount = 0;
     for (Location loc : cells) {
       BaseCell cell = (BaseCell) PoweredBlockUtils.getPoweredBlock(loc);
-      if (cell == null) {
+      if (Objects.isNull(cell)) {
         continue;
       }
       amount += cell.getEnergySpace();
@@ -107,7 +108,7 @@ public class PowerGrid extends BukkitRunnable {
     int e;
     for (Location loc : generators) {
       BaseGenerator generator = (BaseGenerator) PoweredBlockUtils.getPoweredBlock(loc);
-      if (generator == null) {
+      if (Objects.isNull(generator)) {
         continue;
       }
       e = generator.getEnergyAvailable();
@@ -135,9 +136,11 @@ public class PowerGrid extends BukkitRunnable {
     int amount = 0;
     for (Location loc : cells) {
       BaseCell cell = (BaseCell) PoweredBlockUtils.getPoweredBlock(loc);
-      amount += cell.retrieveEnergy((goal - amount));
-      if (amount >= goal) {
-        break;
+      if (Objects.nonNull(cell)) {
+        amount += cell.retrieveEnergy((goal - amount));
+        if (amount >= goal) {
+          break;
+        }
       }
     }
     return amount;
@@ -150,7 +153,9 @@ public class PowerGrid extends BukkitRunnable {
   private int distributeGridEnergy(int amount) {
     for (Location loc : machines) {
       BaseMachine machine = (BaseMachine) PoweredBlockUtils.getPoweredBlock(loc);
-      amount -= machine.receiveEnergy(amount, false);
+      if (Objects.nonNull(machine)) {
+        amount -= machine.receiveEnergy(amount, false);
+      }
     }
     return amount;
   }
@@ -163,7 +168,9 @@ public class PowerGrid extends BukkitRunnable {
   private void distributeExcessGridEnergy(int amount) {
     for (Location loc : cells) {
       BaseCell cell = (BaseCell) PoweredBlockUtils.getPoweredBlock(loc);
-      amount -= cell.receiveEnergy(amount, false);
+      if (Objects.nonNull(cell)) {
+        amount -= cell.receiveEnergy(amount, false);
+      }
     }
   }
 
@@ -179,7 +186,9 @@ public class PowerGrid extends BukkitRunnable {
       c += 1;
       for (Location loc : machines) {
         BaseMachine machine = (BaseMachine) PoweredBlockUtils.getPoweredBlock(loc);
-        amount -= machine.receiveEnergy(allotment, false);
+        if (Objects.nonNull(machine)) {
+          amount -= machine.receiveEnergy(allotment, false);
+        }
       }
     }
   }
@@ -200,7 +209,7 @@ public class PowerGrid extends BukkitRunnable {
           continue;
         }
         block = PoweredBlockUtils.getPoweredBlock(location);
-        if (block == null) { //Shouldn't be
+        if (Objects.isNull(block)) { //Shouldn't be
           Logger.debug("block in new grid gave null pointer");
         } else if (block instanceof BaseCell) {
           cells.add(location);
