@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -105,7 +104,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
     customRecipeConfig.save(customRecipeConfigFile);
     customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
-    Optional<ConfigurationSection> recipesDefaults = Optional.ofNullable(YamlConfiguration.loadConfiguration(new File(Craftory.plugin.getDataFolder(), "data/customRecipesConfig.yml")));
+    Optional<FileConfiguration> recipesDefaults = Optional.ofNullable(YamlConfiguration.loadConfiguration(new File(Craftory.plugin.getDataFolder(), "data/customRecipesConfig.yml")));
     recipesDefaults.ifPresent(source -> DataConfigUtils.copyDefaults(source, customRecipeConfig));
     customRecipeConfig.save(customRecipeConfigFile);
     CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);

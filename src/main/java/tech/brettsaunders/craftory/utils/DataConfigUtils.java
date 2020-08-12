@@ -14,7 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -23,10 +23,11 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 public class DataConfigUtils {
 
-  public static void copyDefaults(ConfigurationSection source, ConfigurationSection dest) {
+  public static void copyDefaults(FileConfiguration source, FileConfiguration dest) {
     source.getValues(true).forEach((key,value) -> {
       dest.addDefault(key, value);
     });
+    dest.options().copyDefaults(true);
   }
 
   /**
