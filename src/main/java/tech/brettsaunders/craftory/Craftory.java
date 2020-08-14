@@ -26,7 +26,7 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockEvents;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.api.recipes.RecipeBook2;
+import tech.brettsaunders.craftory.api.recipes.RecipeBook;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
@@ -128,7 +128,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     powerGridManager.onEnable();
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     new RecipeManager();
-    new RecipeBook2();
+    new RecipeBook();
     Utilities.compatibilityUpdater();
   }
 
