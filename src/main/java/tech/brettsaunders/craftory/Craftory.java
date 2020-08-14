@@ -65,11 +65,11 @@ public final class Craftory extends JavaPlugin implements Listener {
 
   private static int generateVersionCode() {
     String[] subVersions = VERSION.split("\\.");
-    String resultString = "";
+    StringBuffer resultString = new StringBuffer();
     for (String subVersion : subVersions) {
-      resultString += StringUtils.leftPad(subVersion, 5, "0");
+      resultString.append(StringUtils.leftPad(subVersion, 5, "0"));
     }
-    int result = Integer.parseInt(resultString);
+    int result = Integer.parseInt(resultString.toString());
     return result;
   }
 

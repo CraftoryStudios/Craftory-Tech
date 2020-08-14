@@ -390,3 +390,6 @@ items:
   lava_20_t:
     itemModel: paper
     hideItem: true
+  titleHider:
+    itemModel: paper
+    hideItem: true

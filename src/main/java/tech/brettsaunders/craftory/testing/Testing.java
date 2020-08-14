@@ -22,7 +22,6 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
-import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 
 public class Testing {
 
@@ -55,8 +54,6 @@ public class Testing {
     //Machine Hooper
     Block hopperMachine = baseLocation.clone().add(0, 2, 1).getBlock();
     hopperMachine.setType(Material.HOPPER);
-    ItemStack[] machineHopperContents = ((Hopper) hopperMachine.getState()).getInventory()
-        .getContents();
     int size = ((Hopper) hopperMachine.getState()).getInventory().getSize();
     ItemStack insertItem;
     if (CustomItemManager.isCustomItemName(insertItemName)) {
@@ -73,8 +70,6 @@ public class Testing {
     //Generator Hopper
     Block hopperGenerator = baseLocation.clone().add(0, 2, 3).getBlock();
     hopperGenerator.setType(Material.HOPPER);
-    ItemStack[] generatorHopperContents = ((Hopper) hopperGenerator.getState()).getInventory()
-        .getContents();
     ItemStack fuelItem;
     if (CustomItemManager.isCustomItemName(fuelName)) {
       fuelItem = CustomItemManager.getCustomItem(fuelName);
@@ -91,8 +86,7 @@ public class Testing {
         baseLocation.clone().add(0, 1, 2));
     BaseProvider generatorBlock = (BaseProvider) placeBlock(generatorName,
         baseLocation.clone().add(0, 1, 3));
-    PoweredBlock machineBlock = (PoweredBlock) placeBlock(mainMachineName,
-        baseLocation.clone().add(0, 1, 1));
+    placeBlock(mainMachineName, baseLocation.clone().add(0, 1, 1));
     energyCellBlock.setSideConfigSide(BlockFace.NORTH, true);
     generatorBlock.setSideConfigSide(BlockFace.NORTH, true);
   }

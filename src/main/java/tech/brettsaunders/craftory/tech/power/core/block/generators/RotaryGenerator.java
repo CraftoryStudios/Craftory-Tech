@@ -227,6 +227,7 @@ public class RotaryGenerator extends BaseGenerator {
   protected boolean placeWheel(Location loc) {
     Location spawnLoc = loc.clone();
     switch (facing) {
+      default:
       case NORTH:
         spawnLoc.add(0.5, -0.95, 0.7);
         spawnArmourStand(spawnLoc);
@@ -335,6 +336,7 @@ public class RotaryGenerator extends BaseGenerator {
       facing = face;
       Location loc = location.clone();
       switch (facing) {
+        default:
         case NORTH:
           wheelLocation = loc.add(0, 0, -1);
           break;

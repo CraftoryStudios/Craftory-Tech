@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
@@ -35,7 +36,7 @@ public class RecipeManager implements Listener {
 
   public RecipeManager() {
     customRecipes = new HashMap<>();
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
     ConfigurationSection recipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
     if (recipes == null) {
       Logger.warn("No Crafting Recipes found!");
@@ -193,7 +194,7 @@ public class RecipeManager implements Listener {
   }
 
   @EventHandler
-  public void FurnaceSmelt(FurnaceSmeltEvent event) {
+  public void onFurnaceSmelt(FurnaceSmeltEvent event) {
     if (!CustomItemManager.isCustomItem(event.getSource(), true)) {
       return;
     }

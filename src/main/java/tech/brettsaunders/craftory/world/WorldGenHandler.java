@@ -18,7 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.world.WorldInitEvent;
-import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.events.Events;
 
 public class WorldGenHandler implements Listener {
 
@@ -26,7 +26,7 @@ public class WorldGenHandler implements Listener {
   private final ArrayList<World> registeredWorlds;
 
   public WorldGenHandler() {
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
     registeredWorlds = new ArrayList<>();
   }
 

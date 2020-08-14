@@ -26,6 +26,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
@@ -53,8 +54,7 @@ public class PowerGridManager implements Listener {
       e.printStackTrace();
     }
     powerGrids = new HashMap<>();
-    Craftory.plugin.getServer().getPluginManager()
-        .registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
   }
 
   private void generatorPowerBeams() {

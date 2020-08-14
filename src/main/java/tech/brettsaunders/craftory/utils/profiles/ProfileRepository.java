@@ -23,13 +23,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.ServerLoadEvent;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.events.Events;
 
 public class ProfileRepository implements Listener {
   private static FileConfiguration profilesConfig;
   private static HashMap<UUID, Profile> profiles = new HashMap<>();
 
   public ProfileRepository() {
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
   }
 
   @EventHandler

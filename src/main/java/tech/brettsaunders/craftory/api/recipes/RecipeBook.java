@@ -20,7 +20,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.font.NegativeSpaceFont;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -29,7 +31,7 @@ public class RecipeBook implements Listener {
   private static ArrayList<Inventory> inventories = new ArrayList<>();
 
   public RecipeBook() {
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
     String[] keys = Craftory.customRecipeConfig.getConfigurationSection("recipes").getKeys(false).stream().toArray(String[]::new);
 
     for (int i = 0; i < keys.length; i += 2) {
@@ -56,6 +58,12 @@ public class RecipeBook implements Listener {
       setGrid(recipeTwo, page, 24);
       setResult(recipeTwo, page, 7);
     }
+
+    ItemStack itemStack = CustomItemManager.getCustomItem("titleHider");
+    ItemMeta itemMeta = itemStack.getItemMeta();
+    itemMeta.setDisplayName(" ");
+    itemStack.setItemMeta(itemMeta);
+    page.setItem(45, itemStack);
 
   return page;
   }

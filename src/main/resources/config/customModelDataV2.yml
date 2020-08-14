@@ -315,6 +315,8 @@ items:
     customModelID: 100128
   waterwheel:
     customModelID: 100131
+  titleHider:
+    customModelID: 100132
   upgrade_card_iron:
     customModelID: 1001
   upgrade_card_gold:

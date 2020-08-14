@@ -138,7 +138,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
-    if (fuelItem.getType() != Material.AIR && fuelItem != null) {
+    if (fuelItem.getType() != Material.AIR ) {
       inventoryInterface.setItem(FUEL_SLOT, fuelItem);
     }
   }

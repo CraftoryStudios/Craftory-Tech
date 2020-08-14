@@ -88,6 +88,7 @@ public class CustomBlockStorage {
     File directory = new File(dataFolder + File.separator + world.getName());
     if (directory.exists()) {
       File[] filesList = directory.listFiles();
+      if (filesList == null) return;
       for (File file : filesList) {
         loadSavedRegion(world, file.getName(), dataFolder, manager, persistenceStorage);
         regions++;
@@ -107,9 +108,6 @@ public class CustomBlockStorage {
 
       NBTFile nbtFile = new NBTFile(
           new File(dataFolder + File.separator + world.getName(), regionID));
-      if (nbtFile == null) {
-        return;
-      }
       for (String chunkKey : nbtFile.getKeys()) {
 
         chunkCompound = nbtFile.getCompound(chunkKey);
