@@ -13,7 +13,12 @@ package tech.brettsaunders.craftory.api.items;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Optional;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
@@ -108,6 +113,25 @@ public class CustomItemManager {
     if (itemIDCache.containsKey(itemName)) {
       CustomItem customItem = itemIDCache.get(itemName);
       return customItem.getItem();
+    }
+    return new ItemStack(Material.AIR);
+  }
+
+  public static ItemStack getCustomItemOrDefault(String itemName) {
+    if (itemName.startsWith("TAG-")) {
+      String tagName = itemName.replace("TAG-","");
+      Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase()), Material.class);
+      if (Objects.nonNull(materialTag)) {
+        return new ItemStack(materialTag.getValues().iterator().next());
+      }
+    }
+    if (itemIDCache.containsKey(itemName)) {
+      CustomItem customItem = itemIDCache.get(itemName);
+      return customItem.getItem();
+    }
+    Optional<Material> material = Optional.ofNullable(Material.getMaterial(itemName));
+    if (material.isPresent()) {
+      return new ItemStack(material.get());
     }
     return new ItemStack(Material.AIR);
   }

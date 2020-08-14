@@ -317,6 +317,10 @@ items:
     customModelID: 100131
   titleHider:
     customModelID: 100132
+  back_button:
+    customModelID: 100133
+  forward_button:
+    customModelID: 100134
   upgrade_card_iron:
     customModelID: 1001
   upgrade_card_gold:

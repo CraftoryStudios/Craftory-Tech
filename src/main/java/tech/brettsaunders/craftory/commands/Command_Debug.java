@@ -18,14 +18,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Utilities;
-import tech.brettsaunders.craftory.api.recipes.RecipeBook;
+import tech.brettsaunders.craftory.api.recipes.RecipeBook2;
 
 public class Command_Debug implements CommandExecutor, TabCompleter {
 
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
     if (args.length == 1) {
-      ((Player)sender).openInventory(RecipeBook.getRecipePage());
+      RecipeBook2.openRecipeBook((Player)sender);
       Utilities.msg(sender, Utilities.getTranslation("DebugCommandToggled"));
     } else {
       Utilities.msg(sender, "Usage");
