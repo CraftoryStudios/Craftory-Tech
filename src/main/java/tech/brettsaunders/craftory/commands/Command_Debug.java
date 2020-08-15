@@ -16,17 +16,17 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Utilities;
-import tech.brettsaunders.craftory.api.recipes.RecipeBook;
 
 public class Command_Debug implements CommandExecutor, TabCompleter {
 
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
     if (args.length == 1) {
-      RecipeBook.openRecipeBook((Player)sender);
-      Utilities.msg(sender, Utilities.getTranslation("DebugCommandToggled"));
+      boolean debugMode = Utilities.config.getBoolean("general.debug");
+      Utilities.config.set("general.debug", !debugMode);
+      Utilities.saveConfigFile();
+      Utilities.msg(sender, Utilities.getTranslation("DebugCommandToggled") + !debugMode);
     } else {
       Utilities.msg(sender, "Usage");
     }

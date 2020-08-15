@@ -399,3 +399,5 @@ items:
   forward_button:
     itemModel: paper
     hideItem: true
+  recipe_book:
+    itemModel: paper

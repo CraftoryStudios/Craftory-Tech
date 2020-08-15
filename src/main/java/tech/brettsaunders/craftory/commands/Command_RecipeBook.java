@@ -16,25 +16,24 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import tech.brettsaunders.craftory.Craftory;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.api.recipes.RecipeBook;
 
-public class Command_Main implements CommandExecutor, TabCompleter {
+public class Command_RecipeBook implements CommandExecutor, TabCompleter {
 
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
-    Utilities.msg(sender, Utilities.getTranslation("MainCommandLineOne") + Craftory.VERSION);
-    Utilities.msg(sender, Utilities.getTranslation("MainCommandLineTwo") + " ©");
+    if (args.length == 1) {
+      RecipeBook.openRecipeBook((Player)sender);
+    } else {
+      Utilities.msg(sender, "Usage");
+    }
     return true;
   }
 
   public List<String> onTabComplete(CommandSender s, Command c, String label, String[] args) {
     ArrayList<String> tabs = new ArrayList<>();
-    tabs.add("help");
-    tabs.add("toggleDebug");
-    tabs.add("give");
-    tabs.add("fixGraphics");
-    tabs.add("recipeBook");
     return CommandWrapper.filterTabs(tabs, args);
   }
 }

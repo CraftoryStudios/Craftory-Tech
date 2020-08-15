@@ -122,7 +122,9 @@ public class CustomItemManager {
       String tagName = itemName.replace("TAG-","");
       Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase()), Material.class);
       if (Objects.nonNull(materialTag)) {
-        return new ItemStack(materialTag.getValues().iterator().next());
+        if (materialTag.getValues().iterator().hasNext()) {
+          return new ItemStack(materialTag.getValues().iterator().next());
+        }
       }
     }
     if (itemIDCache.containsKey(itemName)) {

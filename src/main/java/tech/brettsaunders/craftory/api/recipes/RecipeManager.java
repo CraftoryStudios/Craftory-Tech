@@ -11,6 +11,7 @@
 package tech.brettsaunders.craftory.api.recipes;
 
 import java.util.HashMap;
+import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -18,11 +19,14 @@ import org.bukkit.Tag;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -76,16 +80,27 @@ public class RecipeManager implements Listener {
           for (String ingredient : sectionIn.getKeys(false)) {
             char key = ingredient.charAt(0);
             final String ingridentMaterial = sectionIn.getString(ingredient);
-            if (ingridentMaterial.startsWith("TAG-")) {
-              if (ingridentMaterial.replaceFirst("TAG-", "").equalsIgnoreCase("PLANKS")) {
-                shapedRecipe.setIngredient(key, new MaterialChoice(Tag.PLANKS));
+
+            //Ingredient TAG
+            if (ingridentMaterial.toLowerCase().startsWith("tag-")) {
+              String tagName = ingridentMaterial.toLowerCase().replace("tag-","");
+              Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase()), Material.class);
+              //Tag Found, using
+              if (Objects.nonNull(materialTag)) {
+                shapedRecipe.setIngredient(key, new MaterialChoice(materialTag));
+              //Tag Missing, using AIR
               } else {
+                Logger.warn("Recipe used tag: "+ ingridentMaterial+ " which wasn't a recognised Material Tag. Recipe: "+recipe);
                 shapedRecipe.setIngredient(key, Material.AIR);
               }
+
+            //Ingredient Vanilla Item
             } else if (CustomItemManager.getCustomItem(ingridentMaterial).getType()
                 == Material.AIR) {
               Material material = Material.getMaterial(ingridentMaterial);
               shapedRecipe.setIngredient(key, material);
+
+            //Ingredient Custom Item
             } else {
               String ingredientName = ingridentMaterial;
               ItemStack itemStack = CustomItemManager.getCustomItem(ingredientName);
@@ -202,6 +217,18 @@ public class RecipeManager implements Listener {
     if (customFurnaceRecipes.containsKey(source)) {
       event.setResult(customFurnaceRecipes.get(source).clone());
     }
+  }
+
+  @EventHandler
+  public void onRecipeBookOpen(PlayerInteractEvent e) {
+    //Pre-Conditions: Right Click and Recipe Book
+    if (!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))) return;
+    if (e.getItem() == null) return;
+    if (e.getItem().getType() != Material.PAPER) return;
+    if (!CustomItemManager.matchCustomItemName(e.getItem(), Items.RECIPE_BOOK)) return;
+
+    //Open Recipe Book
+    RecipeBook.openRecipeBook(e.getPlayer());
   }
 
 }

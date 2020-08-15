@@ -141,7 +141,13 @@ public class RecipeBook {
     //Set Amount if produces multiple
     result.setAmount(recipeOne.getInt("result.amount"));
     //Add Recipe Result to Recipe Book
-    chestMenu.addItem(slot, result, (player, i, item, cursor,action) -> {return false;});
+    chestMenu.addItem(slot, result, (player, i, item, cursor,action) -> {
+      //TODO Ensure this respects inventory deleting
+      if (player.isOp() || player.hasPermission("craftory.give")) {
+        player.getInventory().addItem(result);
+      }
+      return false;
+    });
   }
 
   public static void openRecipeBook(Player... players) {

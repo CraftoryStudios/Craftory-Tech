@@ -27,6 +27,7 @@ public class Command_Help implements CommandExecutor, TabCompleter {
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineTwo"));
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineThree"));
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineFour"));
+      Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineFive"));
     }
     return true;
   }
