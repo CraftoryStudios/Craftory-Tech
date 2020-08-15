@@ -97,7 +97,7 @@ public class CustomBlockManager {
 
   private void generateCustomBlock(String customBlockItemName, Block block) {
     CustomBlockData data = customBlockDataHashMap.get(customBlockItemName);
-    block.setType(Material.MUSHROOM_STEM);
+    block.setType(Material.MUSHROOM_STEM, false);
 
     BlockData blockData = block.getBlockData();
     MultipleFacing multipleFacing = (MultipleFacing) blockData;
@@ -109,7 +109,7 @@ public class CustomBlockManager {
     multipleFacing.setFace(BlockFace.EAST, data.EAST);
     multipleFacing.setFace(BlockFace.SOUTH, data.SOUTH);
     multipleFacing.setFace(BlockFace.WEST, data.WEST);
-    block.setBlockData(multipleFacing);
+    block.setBlockData(multipleFacing, false);
   }
 
   public void putActiveCustomBlock(CustomBlock customBlock) {
