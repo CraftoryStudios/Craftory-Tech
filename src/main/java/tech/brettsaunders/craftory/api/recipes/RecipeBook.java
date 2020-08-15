@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,10 +32,14 @@ import tech.brettsaunders.craftory.api.menu.ChestMenu;
 public class RecipeBook {
 
   private static ArrayList<ChestMenu> recipeBookPages = new ArrayList<>();
+  private final Sound sound;
 
   public RecipeBook() {
     //Get All Recipes
     String[] keys = Craftory.customRecipeConfig.getConfigurationSection("recipes").getKeys(false).stream().toArray(String[]::new);
+
+    //Load Sound
+    sound = Sound.ITEM_BOOK_PAGE_TURN;
 
     //Loop through recipes two at a time
     for (int i = 0; i < keys.length; i += 2) {
@@ -88,6 +93,7 @@ public class RecipeBook {
         int pageBeforeID = page - 1;
         Optional<ChestMenu> pageBefore = Optional.ofNullable(recipeBookPages.get(pageBeforeID));
         pageBefore.ifPresent((chestMenu1 -> chestMenu1.open(player)));
+        player.playSound(player.getLocation(), sound, 1, 1);
         return false;
       });
     }
@@ -102,6 +108,7 @@ public class RecipeBook {
       if(pageAfterID < recipeBookPages.size()) {
         Optional<ChestMenu> pageAfter = Optional.ofNullable(recipeBookPages.get(pageAfterID));
         pageAfter.ifPresent((chestMenu1 -> chestMenu1.open(player)));
+        player.playSound(player.getLocation(), sound, 1, 1);
       }
       return false;
     });
