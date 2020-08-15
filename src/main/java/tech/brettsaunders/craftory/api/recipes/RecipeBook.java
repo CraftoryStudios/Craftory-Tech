@@ -155,9 +155,8 @@ public class RecipeBook {
     result.setAmount(recipeOne.getInt("result.amount"));
     //Add Recipe Result to Recipe Book
     chestMenu.addItem(slot, result, (player, i, item, cursor,action) -> {
-      //TODO Ensure this respects inventory deleting
       if (player.isOp() || player.hasPermission("craftory.give")) {
-        player.getInventory().addItem(result);
+        Craftory.recipeBookEvents.addItemToPlayerInventory(player.getUniqueId(),result, action.isShiftClick());
       }
       return false;
     });
@@ -168,9 +167,6 @@ public class RecipeBook {
     if(recipeBook.isPresent()){
       recipeBook.get().open(players);
       Craftory.recipeBookEvents.savePlayerInventory(players);
-      for(Player player: players) {
-
-      }
     }
 
   }

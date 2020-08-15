@@ -79,6 +79,29 @@ public class RecipeBookEvents implements Listener {
     }
   }
 
+  public void addItemToPlayerInventory(UUID id, ItemStack itemStack, boolean shiftClick) {
+    if(playerInventories.containsKey(id)) {
+      ItemStack[] items =  playerInventories.get(id);
+
+      for (int i = 0; i < items.length; i++) {
+        ItemStack item = items[i];
+        if(item!=null && item.getType()==item.getType() && item.getAmount() < item.getMaxStackSize()){
+          if(shiftClick) item.setAmount(item.getMaxStackSize());
+          else item.setAmount(item.getAmount() + 1);
+          items[i] = item;
+          return;
+        }
+      }
+      for (int i = 0; i < items.length; i++) {
+        if(items[i]==null){
+          if(shiftClick) itemStack.setAmount(itemStack.getMaxStackSize());
+          items[i] = itemStack;
+          return;
+        }
+      }
+    }
+  }
+
   public void onDisable() {
     playerInventories.forEach((id,inventory) -> {
       Craftory.plugin.getServer().getPlayer(id).getInventory().setContents(inventory);
