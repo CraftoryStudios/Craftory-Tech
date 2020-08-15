@@ -27,6 +27,7 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockEvents;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeBook;
+import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
@@ -54,6 +55,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static FileConfiguration serverDataConfig;
   public static CustomBlockTickManager tickManager;
   public static PowerGridManager powerGridManager;
+  public static RecipeBookEvents recipeBookEvents;
   public static int lastVersionCode;
   public static int thisVersionCode;
   public static boolean folderExists = false;
@@ -129,6 +131,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     new RecipeManager();
     new RecipeBook();
+    recipeBookEvents = new RecipeBookEvents();
     Utilities.compatibilityUpdater();
   }
 
@@ -143,6 +146,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     } catch (IOException e) {
       e.printStackTrace();
     }
+    recipeBookEvents.onDisable();
     customBlockManager.onDisable();
     powerGridManager.onDisable();
     Utilities.reloadConfigFile();

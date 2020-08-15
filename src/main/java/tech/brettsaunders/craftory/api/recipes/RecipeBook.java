@@ -92,8 +92,11 @@ public class RecipeBook {
       chestMenu.addItem(45, backButton, (player, slot, item, cursor,action) -> {
         int pageBeforeID = page - 1;
         Optional<ChestMenu> pageBefore = Optional.ofNullable(recipeBookPages.get(pageBeforeID));
-        pageBefore.ifPresent((chestMenu1 -> chestMenu1.open(player)));
-        player.playSound(player.getLocation(), sound, 1, 1);
+        if(pageBefore.isPresent()){
+          Craftory.recipeBookEvents.skipPlayer(player.getUniqueId()); //Make sure close event isnt triggered
+          pageBefore.get().open(player);
+          player.playSound(player.getLocation(), sound, 1, 1);
+        }
         return false;
       });
     }
@@ -107,8 +110,11 @@ public class RecipeBook {
       int pageAfterID = page + 1;
       if(pageAfterID < recipeBookPages.size()) {
         Optional<ChestMenu> pageAfter = Optional.ofNullable(recipeBookPages.get(pageAfterID));
-        pageAfter.ifPresent((chestMenu1 -> chestMenu1.open(player)));
-        player.playSound(player.getLocation(), sound, 1, 1);
+        if(pageAfter.isPresent()) {
+          Craftory.recipeBookEvents.skipPlayer(player.getUniqueId()); //Make sure close event isnt triggered
+          pageAfter.get().open(player);
+          player.playSound(player.getLocation(), sound, 1, 1);
+        }
       }
       return false;
     });
@@ -159,7 +165,14 @@ public class RecipeBook {
 
   public static void openRecipeBook(Player... players) {
     Optional<ChestMenu> recipeBook = Optional.ofNullable(recipeBookPages.get(0));
-    recipeBook.ifPresent((book) -> book.open(players));
+    if(recipeBook.isPresent()){
+      recipeBook.get().open(players);
+      Craftory.recipeBookEvents.savePlayerInventory(players);
+      for(Player player: players) {
+
+      }
+    }
+
   }
 
 }

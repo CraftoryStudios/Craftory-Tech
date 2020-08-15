@@ -19,14 +19,11 @@ import org.bukkit.Tag;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
-import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -219,16 +216,5 @@ public class RecipeManager implements Listener {
     }
   }
 
-  @EventHandler
-  public void onRecipeBookOpen(PlayerInteractEvent e) {
-    //Pre-Conditions: Right Click and Recipe Book
-    if (!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))) return;
-    if (e.getItem() == null) return;
-    if (e.getItem().getType() != Material.PAPER) return;
-    if (!CustomItemManager.matchCustomItemName(e.getItem(), Items.RECIPE_BOOK)) return;
-
-    //Open Recipe Book
-    RecipeBook.openRecipeBook(e.getPlayer());
-  }
 
 }
