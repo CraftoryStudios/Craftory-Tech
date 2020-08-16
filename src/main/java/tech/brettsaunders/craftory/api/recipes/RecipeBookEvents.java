@@ -19,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -98,6 +99,15 @@ public class RecipeBookEvents implements Listener {
           items[i] = itemStack;
           return;
         }
+      }
+    }
+  }
+
+  @EventHandler
+  public void entityPickupItemEvent(EntityPickupItemEvent e) {
+    if(e.getEntity() instanceof Player) {
+      if(playerInventories.containsKey(e.getEntity().getUniqueId())){
+        e.setCancelled(true);
       }
     }
   }
