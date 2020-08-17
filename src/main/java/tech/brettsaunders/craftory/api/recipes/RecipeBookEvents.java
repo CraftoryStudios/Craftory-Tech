@@ -86,7 +86,7 @@ public class RecipeBookEvents implements Listener {
 
       for (int i = 0; i < items.length; i++) {
         ItemStack item = items[i];
-        if(item!=null && item.getType()==item.getType() && item.getAmount() < item.getMaxStackSize()){
+        if(item!=null && CustomItemManager.getCustomItemName(itemStack).equals(CustomItemManager.getCustomItemName(item)) && item.getAmount() < item.getMaxStackSize()){
           if(shiftClick) item.setAmount(item.getMaxStackSize());
           else item.setAmount(item.getAmount() + 1);
           items[i] = item;
