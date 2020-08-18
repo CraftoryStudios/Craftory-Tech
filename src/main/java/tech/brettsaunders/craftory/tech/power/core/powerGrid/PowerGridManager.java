@@ -11,6 +11,8 @@
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
 import de.tr7zw.changeme.nbtapi.NBTFile;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class PowerGridManager implements Listener {
 
   private final PersistenceStorage persistenceStorage;
   @Getter
-  private final HashMap<Location, PowerGrid> powerGrids;
+  private final Object2ObjectOpenHashMap<Location, PowerGrid> powerGrids;
   private NBTFile nbtFile;
   private NBTFile nbtFileBackup;
 
@@ -53,7 +55,7 @@ public class PowerGridManager implements Listener {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    powerGrids = new HashMap<>();
+    powerGrids = new Object2ObjectOpenHashMap<>();
     Events.registerEvents(this);
   }
 
@@ -100,19 +102,19 @@ public class PowerGridManager implements Listener {
     //Destroy any beams
     Craftory.powerConnectorManager.destroyBeams(location);
     if (event.getCustomBlock() instanceof BaseMachine) {
-      for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
+      for (PowerGrid grid : new ObjectOpenHashSet<>(powerGrids.values())) {
         if (grid.removeMachine(location)) {
           break;
         }
       }
     } else if (event.getCustomBlock() instanceof BaseCell) {
-      for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
+      for (PowerGrid grid : new ObjectOpenHashSet<>(powerGrids.values())) {
         if (grid.removeCell(location)) {
           break;
         }
       }
     } else if (event.getCustomBlock() instanceof BaseGenerator) {
-      for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
+      for (PowerGrid grid : new ObjectOpenHashSet<>(powerGrids.values())) {
         if (grid.removeGenerator(location)) {
           break;
         }
@@ -150,13 +152,13 @@ public class PowerGridManager implements Listener {
     generatorPowerBeams();
   }
 
-  private HashMap<PowerGrid, HashSet<Location>> groupPowerGrids() {
-    HashMap<PowerGrid, HashSet<Location>> grouped = new HashMap<>();
+  private Object2ObjectOpenHashMap<PowerGrid, ObjectOpenHashSet<Location>> groupPowerGrids() {
+    Object2ObjectOpenHashMap<PowerGrid, ObjectOpenHashSet<Location>> grouped = new Object2ObjectOpenHashMap<>();
     powerGrids.forEach(((location, powerGrid) -> {
       if (grouped.containsKey(powerGrid)) {
         grouped.get(powerGrid).add(location);
       } else {
-        HashSet<Location> locationHashSet = new HashSet<>();
+        ObjectOpenHashSet<Location> locationHashSet = new ObjectOpenHashSet<>();
         locationHashSet.add(location);
         grouped.put(powerGrid, locationHashSet);
       }
@@ -164,7 +166,7 @@ public class PowerGridManager implements Listener {
     return grouped;
   }
 
-  private void ungroupPowerGrids(HashMap<PowerGrid, HashSet<Location>> data) {
+  private void ungroupPowerGrids(Object2ObjectOpenHashMap<PowerGrid, ObjectOpenHashSet<Location>> data) {
     data.forEach((powerGrid, locations) -> locations
         .forEach(location -> powerGrids.put(location, powerGrid)));
   }
@@ -217,14 +219,14 @@ public class PowerGridManager implements Listener {
   public ArrayList<PowerGrid> splitGrids(Location breakPoint, PowerGrid powerGrid) {
     ArrayList<PowerGrid> managers = new ArrayList<>();
     powerGrid.getBlockConnections().remove(breakPoint);
-    HashSet<Location> neighbours = powerGrid.getPowerConnectors().remove(breakPoint);
+    ObjectOpenHashSet<Location> neighbours = powerGrid.getPowerConnectors().remove(breakPoint);
     Logger.debug("Connector had: " + neighbours.size());
-    HashSet<Location> closedSet = new HashSet<>();
+    ObjectOpenHashSet<Location> closedSet = new ObjectOpenHashSet<>();
     neighbours.forEach(location -> { //Loop through all the neighbours of broken connector
       if (!closedSet.contains(location)) {
         closedSet.add(location);
         PowerGrid grid = new PowerGrid();
-        HashSet<Location> connections = powerGrid.getPowerConnectors().get(location);
+        ObjectOpenHashSet<Location> connections = powerGrid.getPowerConnectors().get(location);
         if (connections != null) {
           connections.remove(breakPoint);
           grid.getPowerConnectors().put(location, connections);
@@ -244,7 +246,7 @@ public class PowerGridManager implements Listener {
               grid.getBlockConnections()
                   .put(connection, powerGrid.getBlockConnections().get(connection));
             }
-            HashSet<Location> connectionConnections = powerGrid.getPowerConnectors()
+            ObjectOpenHashSet<Location> connectionConnections = powerGrid.getPowerConnectors()
                 .get(connection);
             if (connectionConnections == null) {
               continue;

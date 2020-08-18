@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,7 +36,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   private static final byte C_LEVEL = 0;
   private static final int MAX_RECEIVE = 10000;
   private static final int SLOT = 22;
-  protected static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
+  protected static final Object2ObjectOpenHashMap<BlockFace, Integer> inputFaces = new Object2ObjectOpenHashMap<BlockFace, Integer>() {
     {
       put(BlockFace.NORTH, SLOT);
       put(BlockFace.EAST, SLOT);
@@ -43,7 +45,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
       put(BlockFace.UP, SLOT);
     }
   };
-  protected static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
+  protected static final Object2ObjectOpenHashMap<BlockFace, Integer> outputFaces = new Object2ObjectOpenHashMap<BlockFace, Integer>() {
     {
       put(BlockFace.DOWN, SLOT);
     }
@@ -74,7 +76,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   private void init() {
     inputLocations = new ArrayList<>();
     inputLocations.add(0, SLOT);
-    interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
+    interactableSlots = new ObjectOpenHashSet<>(Collections.singletonList(SLOT));
   }
 
   @Override
@@ -142,12 +144,12 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getInputFaces() {
+  public Object2ObjectOpenHashMap<BlockFace, Integer> getInputFaces() {
     return inputFaces;
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getOutputFaces() {
+  public Object2ObjectOpenHashMap<BlockFace, Integer> getOutputFaces() {
     return outputFaces;
   }
 }

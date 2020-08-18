@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -44,7 +46,7 @@ public class GeothermalGenerator extends BaseGenerator {
   private static final double lavaToEnergyRatio = 25;
 
   static {
-    inputFaces = new HashMap<BlockFace, Integer>() {
+    inputFaces = new Object2ObjectOpenHashMap<BlockFace, Integer>() {
       {
         put(BlockFace.NORTH, FUEL_SLOT);
         put(BlockFace.EAST, FUEL_SLOT);
@@ -53,7 +55,7 @@ public class GeothermalGenerator extends BaseGenerator {
         put(BlockFace.UP, FUEL_SLOT);
       }
     };
-    outputFaces = new HashMap<BlockFace, Integer>() {
+    outputFaces = new Object2ObjectOpenHashMap<BlockFace, Integer>() {
       {
         put(BlockFace.DOWN, OUT_SLOT);
       }
@@ -86,7 +88,7 @@ public class GeothermalGenerator extends BaseGenerator {
     inputLocations.add(0, FUEL_SLOT);
     outputLocations = new ArrayList<>();
     outputLocations.add(OUT_SLOT);
-    interactableSlots = new HashSet<>(Arrays.asList(FUEL_SLOT, OUT_SLOT));
+    interactableSlots = new ObjectOpenHashSet<>(Arrays.asList(FUEL_SLOT, OUT_SLOT));
   }
 
   @Override

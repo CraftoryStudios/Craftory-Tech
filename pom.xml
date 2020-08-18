@@ -77,6 +77,11 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>it.unimi.dsi</groupId>
+      <artifactId>fastutil</artifactId>
+      <version>8.4.1</version>
+    </dependency>
+    <dependency>
       <groupId>eu.endercentral.crazy_advancements</groupId>
       <artifactId>CrazyAdvancementsAPI</artifactId>
       <version>1.13.8</version>

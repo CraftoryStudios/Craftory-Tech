@@ -10,8 +10,7 @@
 
 package tech.brettsaunders.craftory.api.menu;
 
-import java.util.HashSet;
-import java.util.Set;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -48,11 +47,11 @@ public final class MaterialCollections {
   @Getter private static final MaterialCollection allFuelItems;
 
   static {
-    Set<Material> ores = new HashSet<>();
-    Set<Material> heads = new HashSet<>();
-    Set<Material> buckets = new HashSet<>();
-    Set<Material> plates = new HashSet<>();
-    Set<Material> fuel = new HashSet<>();
+    ObjectOpenHashSet<Material> ores = new ObjectOpenHashSet<>();
+    ObjectOpenHashSet<Material> heads = new ObjectOpenHashSet<>();
+    ObjectOpenHashSet<Material> buckets = new ObjectOpenHashSet<>();
+    ObjectOpenHashSet<Material> plates = new ObjectOpenHashSet<>();
+    ObjectOpenHashSet<Material> fuel = new ObjectOpenHashSet<>();
 
     for (Material mat : Material.values()) {
       if (mat.name().startsWith("LEGACY_")) continue;

@@ -16,8 +16,8 @@ import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import java.util.HashMap;
-import java.util.HashSet;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -60,17 +60,17 @@ import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnecto
 public class CustomBlockManagerEvents implements Listener {
 
   private final PersistenceStorage persistenceStorage;
-  private final HashMap<Location, CustomBlock> currentCustomBlocks;
-  private final HashMap<String, HashSet<CustomBlock>> activeChunks;
-  private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
-  private final HashMap<String, CustomBlockData> customBlockDataHashMap;
+  private final Object2ObjectOpenHashMap<Location, CustomBlock> currentCustomBlocks;
+  private final Object2ObjectOpenHashMap<String, ObjectOpenHashSet<CustomBlock>> activeChunks;
+  private final Object2ObjectOpenHashMap<String, ObjectOpenHashSet<CustomBlock>> inactiveChunks;
+  private final Object2ObjectOpenHashMap<String, CustomBlockData> customBlockDataHashMap;
   private final StatsContainer statsContainer;
 
   public CustomBlockManagerEvents(PersistenceStorage persistenceStorage,
-      HashMap<Location, CustomBlock> currentCustomBlocks,
-      HashMap<String, HashSet<CustomBlock>> activeChunks,
-      HashMap<String, HashSet<CustomBlock>> inactiveChunks,
-      HashMap<String, CustomBlockData> customBlockDataHashMap,
+      Object2ObjectOpenHashMap<Location, CustomBlock> currentCustomBlocks,
+      Object2ObjectOpenHashMap<String, ObjectOpenHashSet<CustomBlock>> activeChunks,
+      Object2ObjectOpenHashMap<String, ObjectOpenHashSet<CustomBlock>> inactiveChunks,
+      Object2ObjectOpenHashMap<String, CustomBlockData> customBlockDataHashMap,
       StatsContainer statsContainer) {
     this.persistenceStorage = persistenceStorage;
     this.currentCustomBlocks = currentCustomBlocks;
@@ -195,7 +195,7 @@ public class CustomBlockManagerEvents implements Listener {
       MultipleFacing multipleFacing = (MultipleFacing) blockData;
       Utilities.getBasicBlockRegistry().forEach((name, placement) -> {
         Set<BlockFace> blockFaces = multipleFacing.getFaces();
-        Set<BlockFace> compareFaces = placement.getAllowedFaces();
+        ObjectOpenHashSet<BlockFace> compareFaces = placement.getAllowedFaces();
         if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces)) {
           if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
             location.getWorld()
@@ -210,7 +210,7 @@ public class CustomBlockManagerEvents implements Listener {
       MultipleFacing multipleFacing = (MultipleFacing) blockData;
       Utilities.getBasicBlockRegistry().forEach((name, placement) -> {
         Set<BlockFace> blockFaces = multipleFacing.getFaces();
-        Set<BlockFace> compareFaces = placement.getAllowedFaces();
+        ObjectOpenHashSet<BlockFace> compareFaces = placement.getAllowedFaces();
         if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces) && name
             .equalsIgnoreCase(
                 Blocks.COPPER_ORE)) {
@@ -233,7 +233,7 @@ public class CustomBlockManagerEvents implements Listener {
   private void loadCustomBlocksChunk(Chunk chunk) {
     String chunkID = getChunkWorldID(chunk);
     if (inactiveChunks.containsKey(chunkID)) {
-      HashSet<CustomBlock> customBlocks = inactiveChunks.get(chunkID);
+      ObjectOpenHashSet<CustomBlock> customBlocks = inactiveChunks.get(chunkID);
       customBlocks.forEach(block -> {
         customBlockManager.putActiveCustomBlock(block);
         Craftory.tickManager.addTickingBlock(block);
@@ -253,7 +253,7 @@ public class CustomBlockManagerEvents implements Listener {
   public void onChunkUnLoad(ChunkUnloadEvent e) {
     final String chunkID = getChunkWorldID(e.getChunk());
     if (activeChunks.containsKey(chunkID)) {
-      HashSet<CustomBlock> customBlocks = activeChunks.get(chunkID);
+      ObjectOpenHashSet<CustomBlock> customBlocks = activeChunks.get(chunkID);
       customBlocks.forEach(customBlock -> {
         if (currentCustomBlocks.containsKey(customBlock.location)) {
           currentCustomBlocks.remove(customBlock.location);

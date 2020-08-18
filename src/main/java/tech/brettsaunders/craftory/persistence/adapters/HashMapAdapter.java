@@ -11,17 +11,18 @@
 package tech.brettsaunders.craftory.persistence.adapters;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 
 @NoArgsConstructor
-public class HashMapAdapter implements DataAdapter<HashMap<?, ?>> {
+public class HashMapAdapter implements DataAdapter<Object2ObjectOpenHashMap<?, ?>> {
 
   @Override
   public void store(@NonNull final PersistenceStorage persistenceStorage,
-      @NonNull final HashMap<?, ?> value, @NonNull final NBTCompound nbtCompound) {
+      @NonNull final Object2ObjectOpenHashMap<?, ?> value, @NonNull final NBTCompound nbtCompound) {
     NBTCompound parent = nbtCompound.getParent();
     String name = nbtCompound.getName();
     nbtCompound.getParent().removeKey(name);
@@ -37,9 +38,9 @@ public class HashMapAdapter implements DataAdapter<HashMap<?, ?>> {
   }
 
   @Override
-  public HashMap<Object, Object> parse(PersistenceStorage persistenceStorage, Object parentObject,
+  public Object2ObjectOpenHashMap<Object, Object> parse(PersistenceStorage persistenceStorage, Object parentObject,
       NBTCompound nbtCompound) {
-    HashMap<Object, Object> map = new HashMap<>();
+    Object2ObjectOpenHashMap<Object, Object> map = new Object2ObjectOpenHashMap<>();
     for (String key : nbtCompound.getKeys()) {
       NBTCompound container = nbtCompound.getCompound(key);
       NBTCompound keyData = container.getCompound("key");

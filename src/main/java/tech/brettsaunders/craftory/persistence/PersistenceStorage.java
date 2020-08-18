@@ -12,6 +12,8 @@ package tech.brettsaunders.craftory.persistence;
 
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,21 +48,21 @@ import tech.brettsaunders.craftory.utils.ReflectionUtils;
 public class PersistenceStorage {
 
   private final Gson gson;
-  private final Map<Class<?>, DataAdapter<?>> converters;
-  private final Map<Class<?>, DataAdapter<?>> interfaceConverters;
+  private final Object2ObjectOpenHashMap<Class<?>, DataAdapter<?>> converters;
+  private final Object2ObjectOpenHashMap<Class<?>, DataAdapter<?>> interfaceConverters;
 
   public PersistenceStorage() {
     gson = new Gson();
-    converters = new HashMap<>();
+    converters = new Object2ObjectOpenHashMap<>();
 
     // Register default converters
     registerDataConverter(String.class, new StringAdapter(), false);
     registerDataConverter(int.class, new IntegerAdapter(), false);
     registerDataConverter(Integer.class, new IntegerAdapter(), false);
     registerDataConverter(Long.class, new LongAdapter(), false);
-    registerDataConverter(HashMap.class, new HashMapAdapter(), false);
+    registerDataConverter(Object2ObjectOpenHashMap.class, new HashMapAdapter(), false);
     registerDataConverter(Location.class, new LocationAdapter(), false);
-    registerDataConverter(HashSet.class, new HashSetAdapter(), false);
+    registerDataConverter(ObjectOpenHashSet.class, new HashSetAdapter(), false);
     registerDataConverter(EnergyStorage.class, new EnergyStorageAdapter(), false);
     registerDataConverter(BlockFace.class, new BlockFaceAdapter(), false);
     registerDataConverter(INTERACTABLEBLOCK.class, new InteractableBlockAdapter(), false);
@@ -69,7 +71,7 @@ public class PersistenceStorage {
     registerDataConverter(PowerGrid.class, new PowerGridAdapter(), false);
     registerDataConverter(FluidStorage.class, new FluidStorageAdapter(), false);
 
-    interfaceConverters = new HashMap<>();
+    interfaceConverters = new Object2ObjectOpenHashMap<>();
     registerInterfaceConverter(ItemStack.class, new ItemStackAdapter(), false);
   }
 

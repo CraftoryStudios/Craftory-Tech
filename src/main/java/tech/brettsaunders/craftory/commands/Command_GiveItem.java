@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.commands;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

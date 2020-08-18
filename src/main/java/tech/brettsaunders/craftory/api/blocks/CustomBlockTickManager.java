@@ -11,6 +11,8 @@
 package tech.brettsaunders.craftory.api.blocks;
 
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,12 +29,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class CustomBlockTickManager extends BukkitRunnable {
 
   //Custom Block in future
-  private final HashMap<Class<? extends CustomBlock>, HashMap<Method, Integer>> classCache = new HashMap<>();
-  private final Set<CustomBlock> trackedBlocks;
+  private final Object2ObjectOpenHashMap<Class<? extends CustomBlock>, Object2ObjectOpenHashMap<Method, Integer>> classCache = new Object2ObjectOpenHashMap<>();
+  private final ObjectOpenHashSet<CustomBlock> trackedBlocks;
   private long tick = 0;
 
   public CustomBlockTickManager() {
-    trackedBlocks = ConcurrentHashMap.newKeySet();
+    trackedBlocks = new ObjectOpenHashSet(ConcurrentHashMap.newKeySet());
   }
 
   public static Collection<Method> getMethodsRecursively(@NonNull Class<?> startClass,
@@ -51,7 +53,7 @@ public class CustomBlockTickManager extends BukkitRunnable {
   public void run() {
     tick++;
     for (CustomBlock customBlock : trackedBlocks) {
-      HashMap<Method, Integer> tickMap = classCache.get(customBlock.getClass());
+      Object2ObjectOpenHashMap<Method, Integer> tickMap = classCache.get(customBlock.getClass());
       tickMap.forEach(((method, current) -> {
         if (tick % current == 0) {
           try {
@@ -80,7 +82,7 @@ public class CustomBlockTickManager extends BukkitRunnable {
   public void registerCustomBlockClass(@NonNull Class<? extends CustomBlock> clazz) {
     if (!classCache.containsKey(clazz)) {
       Collection<Method> methods = getMethodsRecursively(clazz, Object.class);
-      HashMap<Method, Integer> tickingMethods = new HashMap<>();
+      Object2ObjectOpenHashMap<Method, Integer> tickingMethods = new Object2ObjectOpenHashMap<>();
       methods.forEach(method -> {
         Ticking ticking = method.getAnnotation(Ticking.class);
         if (ticking != null && method.getParameterCount() == 0) {

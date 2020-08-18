@@ -10,10 +10,11 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -40,7 +41,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   protected static final int INPUT_LOCATION1 = 12;
   protected static final int INPUT_LOCATION2 = 30;
   protected static final int OUTPUT_LOCATION = 25;
-  private static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
+  private static final Object2ObjectOpenHashMap<BlockFace, Integer> inputFaces = new Object2ObjectOpenHashMap<BlockFace, Integer>() {
     {
       put(BlockFace.NORTH, INPUT_LOCATION1);
       put(BlockFace.EAST, INPUT_LOCATION2);
@@ -50,7 +51,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     }
   };
 
-  private static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
+  private static final Object2ObjectOpenHashMap<BlockFace, Integer> outputFaces = new Object2ObjectOpenHashMap<BlockFace, Integer>() {
     {
       put(BlockFace.DOWN, OUTPUT_LOCATION);
     }
@@ -96,7 +97,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     inputLocations.add(INPUT_LOCATION1);
     inputLocations.add(INPUT_LOCATION2);
     outputLocations.add(OUTPUT_LOCATION);
-    interactableSlots = new HashSet<>(
+    interactableSlots = new ObjectOpenHashSet<>(
         Arrays.asList(INPUT_LOCATION1, INPUT_LOCATION2, OUTPUT_LOCATION));
   }
 
@@ -211,12 +212,12 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getInputFaces() {
+  public Object2ObjectOpenHashMap<BlockFace, Integer> getInputFaces() {
     return inputFaces;
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getOutputFaces() {
+  public Object2ObjectOpenHashMap<BlockFace, Integer> getOutputFaces() {
     return outputFaces;
   }
 }

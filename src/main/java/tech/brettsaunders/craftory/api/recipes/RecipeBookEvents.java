@@ -10,8 +10,9 @@
 
 package tech.brettsaunders.craftory.api.recipes;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -32,8 +33,8 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class RecipeBookEvents implements Listener {
 
-  private final HashMap<UUID, ItemStack[]> playerInventories = new HashMap<>();
-  private final HashSet<UUID> playersToNotRestore = new HashSet<>();
+  private final Object2ObjectOpenHashMap<UUID, ItemStack[]> playerInventories = new Object2ObjectOpenHashMap<>();
+  private final ObjectOpenHashSet<UUID> playersToNotRestore = new ObjectOpenHashSet<>();
 
   public RecipeBookEvents() { Events.registerEvents(this); }
 

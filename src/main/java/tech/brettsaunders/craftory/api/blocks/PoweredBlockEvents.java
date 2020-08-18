@@ -14,6 +14,7 @@ import static tech.brettsaunders.craftory.Craftory.customBlockManager;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -47,7 +48,7 @@ import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
 
 public class PoweredBlockEvents implements Listener {
 
-  private final HashMap<UUID, HashMap<BlockFace, Boolean>> configuratorData = new HashMap<>();
+  private final Object2ObjectOpenHashMap<UUID, Object2ObjectOpenHashMap<BlockFace, Boolean>> configuratorData = new Object2ObjectOpenHashMap<>();
 
   public PoweredBlockEvents() {
     Events.registerEvents(this);
