@@ -157,6 +157,7 @@ public class RecipeBook {
     chestMenu.addItem(slot, result, (player, i, item, cursor,action) -> {
       if (player.isOp() || player.hasPermission("craftory.give")) {
         Craftory.recipeBookEvents.addItemToPlayerInventory(player.getUniqueId(),result.clone(), action.isShiftClick());
+        Utilities.msg(player, "Gave player " + CustomItemManager.getCustomItemName(result));
       }
       return false;
     });
