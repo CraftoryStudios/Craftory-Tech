@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -26,6 +27,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
@@ -53,8 +55,7 @@ public class PowerGridManager implements Listener {
       e.printStackTrace();
     }
     powerGrids = new HashMap<>();
-    Craftory.plugin.getServer().getPluginManager()
-        .registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
   }
 
   private void generatorPowerBeams() {
@@ -121,7 +122,10 @@ public class PowerGridManager implements Listener {
   }
 
   public void onDisable() {
-    nbtFileBackup.getKeys().forEach(key -> nbtFileBackup.removeKey(key));
+    Set<String> keys = nbtFileBackup.getKeys();
+    for(String s: keys) {
+      if(s!=null) nbtFileBackup.removeKey(s);
+    }
     nbtFileBackup.mergeCompound(nbtFile);
     try {
       nbtFileBackup.save();
@@ -129,7 +133,11 @@ public class PowerGridManager implements Listener {
       e.printStackTrace();
     }
     PowerGridSaver container = new PowerGridSaver(groupPowerGrids());
-    nbtFile.getKeys().forEach(key -> nbtFile.removeKey(key));
+    //nbtFile.getKeys().forEach(key -> nbtFile.removeKey(key));
+    keys = nbtFile.getKeys();
+    for(String s: keys) {
+      if(s!=null) nbtFile.removeKey(s);
+    }
     persistenceStorage.saveFields(container, nbtFile);
     try {
       nbtFile.save();

@@ -154,11 +154,11 @@ blocks:
     itemModel: stone
   DiamondMacerator:
     WEST: true
-    UP: false
+    UP: true
     SOUTH: true
     NORTH: true
-    EAST: true
-    DOWN: false
+    EAST: false
+    DOWN: true
     itemModel: stone
   EmeraldMacerator:
     WEST: false

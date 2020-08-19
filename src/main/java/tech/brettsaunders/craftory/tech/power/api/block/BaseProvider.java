@@ -11,13 +11,13 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.HashMap;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
+import tech.brettsaunders.craftory.api.tasks.Tasks;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 
@@ -58,7 +58,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     }
     cachedSides.forEach(((blockFace, customBlock) -> {
       if (customBlock == null) {
-        Bukkit.getScheduler().runTaskLater(Craftory.plugin, () -> {
+        Tasks.runTaskLater(() -> {
           CustomBlock sideBlock = Craftory.customBlockManager
               .getCustomBlock(location.getBlock().getRelative(blockFace).getLocation());
           if (sideBlock != null) {

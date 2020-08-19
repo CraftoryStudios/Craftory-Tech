@@ -16,7 +16,6 @@ import eu.endercentral.crazy_advancements.AdvancementDisplay.AdvancementFrame;
 import eu.endercentral.crazy_advancements.AdvancementVisibility;
 import eu.endercentral.crazy_advancements.NameKey;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -26,7 +25,9 @@ import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.tasks.Tasks;
 
 public class Advancements implements Listener {
 
@@ -35,7 +36,7 @@ public class Advancements implements Listener {
 
   public Advancements() {
     if (Utilities.advancementManager.isPresent()) {
-      Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+      Events.registerEvents(this);
       advancementManager = Utilities.advancementManager.get();
       registerBase();
     }
@@ -129,7 +130,7 @@ public class Advancements implements Listener {
 
   @EventHandler
   public void addAdvancementsOnJoin(PlayerJoinEvent e) {
-    Bukkit.getScheduler().scheduleSyncDelayedTask(Craftory.plugin, () -> {
+    Tasks.runTaskLater(() -> {
       advancementManager.addPlayer(e.getPlayer());
       advancementManager.loadProgress(e.getPlayer(), "craftory");
       if (craftory.isGranted(e.getPlayer())) {
@@ -140,7 +141,7 @@ public class Advancements implements Listener {
 
   @EventHandler
   public void removeAdvancementsOnQuit(PlayerQuitEvent e) {
-    Bukkit.getScheduler().scheduleSyncDelayedTask(Craftory.plugin, () -> {
+    Tasks.runTaskLater(() -> {
       advancementManager.saveProgress(e.getPlayer(), "craftory");
       advancementManager.removePlayer(e.getPlayer());
     }, 5);

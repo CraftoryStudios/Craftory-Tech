@@ -29,8 +29,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.CoreHolder.Items;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
@@ -52,7 +52,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   /* Construction */
   public MagnetisingTable(Location location) {
     super(location, Blocks.MAGNETISING_TABLE);
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
     progress = 0;
     framePlaced = false;
   }
@@ -60,7 +60,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   /* Saving, Setup and Loading */
   public MagnetisingTable() {
     super();
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
   }
 
   @Override

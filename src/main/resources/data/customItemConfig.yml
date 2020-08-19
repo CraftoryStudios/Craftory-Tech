@@ -390,3 +390,14 @@ items:
   lava_20_t:
     itemModel: paper
     hideItem: true
+  titleHider:
+    itemModel: paper
+    hideItem: true
+  back_button:
+    itemModel: paper
+    hideItem: true
+  forward_button:
+    itemModel: paper
+    hideItem: true
+  recipe_book:
+    itemModel: paper

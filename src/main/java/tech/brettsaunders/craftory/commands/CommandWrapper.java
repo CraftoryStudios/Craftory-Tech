@@ -27,6 +27,7 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
   private final CommandExecutor DebugCommand;
   private final CommandExecutor GiveCommand;
   private final CommandExecutor FixCommand;
+  private final CommandExecutor RecipeBookCommand;
 
   /* Tab Complete */
   private final TabCompleter MainTab;
@@ -34,6 +35,7 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
   private final TabCompleter DebugTab;
   private final TabCompleter GiveTab;
   private final TabCompleter FixTab;
+  private final TabCompleter RecipeBookTab;
 
   public CommandWrapper() {
     /* Commands */
@@ -42,6 +44,7 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
     DebugCommand = new Command_Debug();
     GiveCommand = new Command_GiveItem();
     FixCommand = new Command_FixItemGraphics();
+    RecipeBookCommand = new Command_RecipeBook();
 
     /* Tab Complete */
     MainTab = new Command_Main();
@@ -49,6 +52,7 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
     DebugTab = new Command_Debug();
     GiveTab = new Command_GiveItem();
     FixTab = new Command_FixItemGraphics();
+    RecipeBookTab = new Command_RecipeBook();
   }
 
   public static ArrayList<String> filterTabs(ArrayList<String> list, String[] origArgs) {
@@ -104,6 +108,12 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
         } else {
           Utilities.msg(sender, Utilities.getTranslation("NoPermissions"));
         }
+      } else if (args[0].equalsIgnoreCase("recipebook")) {
+        if (sender.hasPermission("craftory.recipebook")) {
+          return RecipeBookCommand.onCommand(sender, command, label, args);
+        } else {
+          Utilities.msg(sender, Utilities.getTranslation("NoPermissions"));
+        }
       } else if (args[0].equalsIgnoreCase("give")) {
         if (sender.hasPermission("craftory.give")) {
           return GiveCommand.onCommand(sender, command, label, args);
@@ -131,6 +141,10 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
       } else if (args[0].equalsIgnoreCase("toggleDebug")) {
         if (sender.hasPermission("craftory.debug")) {
           return DebugTab.onTabComplete(sender, command, label, args);
+        }
+      } else if (args[0].equalsIgnoreCase("recipebook")) {
+        if (sender.hasPermission("craftory.recipebook")) {
+          return RecipeBookTab.onTabComplete(sender, command, label, args);
         }
       } else if (args[0].equalsIgnoreCase("give")) {
         if (sender.hasPermission("craftory.give")) {

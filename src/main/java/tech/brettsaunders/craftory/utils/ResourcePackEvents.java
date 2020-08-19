@@ -18,11 +18,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.api.events.Events;
 
 public class ResourcePackEvents implements Listener {
 
   public ResourcePackEvents() {
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
   }
 
   public static byte[] hexStringToByteArray(String s) {
@@ -47,6 +48,7 @@ public class ResourcePackEvents implements Listener {
         //e.getPlayer().sendMessage("Craftory: Downloading texture pack!");
         e.getPlayer().setInvulnerable(true);
         break;
+      default:
       case DECLINED:
         e.getPlayer()
             .sendMessage(ChatColor.RED + "[Craftory]" + ChatColor.RESET + Utilities

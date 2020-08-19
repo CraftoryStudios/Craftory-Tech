@@ -11,6 +11,7 @@
 package tech.brettsaunders.craftory.api.recipes;
 
 import java.util.HashMap;
+import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
@@ -35,7 +37,7 @@ public class RecipeManager implements Listener {
 
   public RecipeManager() {
     customRecipes = new HashMap<>();
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
     ConfigurationSection recipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
     if (recipes == null) {
       Logger.warn("No Crafting Recipes found!");
@@ -75,16 +77,27 @@ public class RecipeManager implements Listener {
           for (String ingredient : sectionIn.getKeys(false)) {
             char key = ingredient.charAt(0);
             final String ingridentMaterial = sectionIn.getString(ingredient);
-            if (ingridentMaterial.startsWith("TAG-")) {
-              if (ingridentMaterial.replaceFirst("TAG-", "").equalsIgnoreCase("PLANKS")) {
-                shapedRecipe.setIngredient(key, new MaterialChoice(Tag.PLANKS));
+
+            //Ingredient TAG
+            if (ingridentMaterial.toLowerCase().startsWith("tag-")) {
+              String tagName = ingridentMaterial.toLowerCase().replace("tag-","");
+              Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase()), Material.class);
+              //Tag Found, using
+              if (Objects.nonNull(materialTag)) {
+                shapedRecipe.setIngredient(key, new MaterialChoice(materialTag));
+              //Tag Missing, using AIR
               } else {
+                Logger.warn("Recipe used tag: "+ ingridentMaterial+ " which wasn't a recognised Material Tag. Recipe: "+recipe);
                 shapedRecipe.setIngredient(key, Material.AIR);
               }
+
+            //Ingredient Vanilla Item
             } else if (CustomItemManager.getCustomItem(ingridentMaterial).getType()
                 == Material.AIR) {
               Material material = Material.getMaterial(ingridentMaterial);
               shapedRecipe.setIngredient(key, material);
+
+            //Ingredient Custom Item
             } else {
               String ingredientName = ingridentMaterial;
               ItemStack itemStack = CustomItemManager.getCustomItem(ingredientName);
@@ -193,7 +206,7 @@ public class RecipeManager implements Listener {
   }
 
   @EventHandler
-  public void FurnaceSmelt(FurnaceSmeltEvent event) {
+  public void onFurnaceSmelt(FurnaceSmeltEvent event) {
     if (!CustomItemManager.isCustomItem(event.getSource(), true)) {
       return;
     }
@@ -202,5 +215,6 @@ public class RecipeManager implements Listener {
       event.setResult(customFurnaceRecipes.get(source).clone());
     }
   }
+
 
 }

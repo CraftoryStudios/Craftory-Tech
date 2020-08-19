@@ -528,6 +528,16 @@ recipes:
     result:
       item: BlockBreaker
       amount: 1
+  recipe_book:
+    pattern:
+      - DDD
+      - DDD
+      - DDD
+    ingredients:
+      D: DIRT
+    result:
+      item: recipe_book
+      amount: 1
 
 furnace_recipes:
   copper_ingot:

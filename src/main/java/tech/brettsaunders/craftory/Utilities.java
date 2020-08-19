@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -102,13 +101,16 @@ public class Utilities {
   @Getter
   private static final HashMap<String, BasicBlocks> basicBlockRegistry;
 
+  private static final Craftory plugin;
+
   static {
+    plugin = Craftory.plugin;
     config = YamlConfiguration
-        .loadConfiguration(new File(Craftory.plugin.getDataFolder(), "config.yml"));
+        .loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
     data = YamlConfiguration
-        .loadConfiguration(new File(Craftory.plugin.getDataFolder(), "data.yml"));
-    DATA_FOLDER = Craftory.plugin.getDataFolder().getPath() + File.separator + "data";
-    LANG_FOLDER = Craftory.plugin.getDataFolder().getPath() + File.separator + "lang";
+        .loadConfiguration(new File(plugin.getDataFolder(), "data.yml"));
+    DATA_FOLDER = plugin.getDataFolder().getPath() + File.separator + "data";
+    LANG_FOLDER = plugin.getDataFolder().getPath() + File.separator + "lang";
     basicBlockRegistry = new HashMap<>();
   }
 
@@ -126,7 +128,7 @@ public class Utilities {
   }
 
   static void checkVersion() {
-    new UpdateChecker(Craftory.plugin, Craftory.SPIGOT_ID).getVersion(version -> {
+    new UpdateChecker(plugin, Craftory.SPIGOT_ID).getVersion(version -> {
       if (Craftory.VERSION.equalsIgnoreCase(version)) {
         Logger.info("Plugin is update to date!");
       } else {
@@ -151,6 +153,7 @@ public class Utilities {
     config.addDefault("generators.solarDuringStorms", true);
     config.addDefault("resourcePack.forcePack", true);
     config.addDefault("fixItemGraphics", false);
+    config.addDefault("wrench.powerLoss", 10);
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -168,26 +171,48 @@ public class Utilities {
   }
 
   static void compatibilityUpdater() {
+    Logger.info(Craftory.lastVersionCode+"   new: " + Craftory.thisVersionCode);
     if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
-      //Version 0.2.0 or before
-      if (Craftory.lastVersionCode == 0) {
-        config.set("fixItemGraphics", true);
+      //Fix all Item Graphics
+      Logger.info("fixing");
+      if (Craftory.lastVersionCode == 0) config.set("fixItemGraphics", true);
+      //Version 0.2.1 or before
+      if (Craftory.lastVersionCode == 0 || Craftory.lastVersionCode == 200001) {
         //Convert all mushrooms to Stem
         Craftory.customBlockManager.getInactiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
-              Craftory.plugin.getServer().getScheduler().runTaskLater(Craftory.plugin,
+              plugin.getServer().getScheduler().runTaskLater(plugin,
                   () -> convertMushroomType(customBlock), 2L);
+              Logger.info("made to stem inactive");
             }));
         Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
-              Craftory.plugin.getServer().getScheduler().runTaskLater(Craftory.plugin,
+              plugin.getServer().getScheduler().runTaskLater(plugin,
                   () -> convertMushroomType(customBlock), 2L);
+              if(customBlock.getBlockName().equals(Blocks.DIAMOND_MACERATOR)){
+                plugin.getServer().getScheduler().runTaskLater(plugin,
+                    () -> setToNewDiamondMacerator(customBlock), 2L);
+              }
+              Logger.info("made to stem active");
             }));
       }
     }
     updateItemGraphics = config.getBoolean("fixItemGraphics");
   }
 
+  private static void setToNewDiamondMacerator(CustomBlock customBlock) {
+    Block block = customBlock.getLocation().getBlock();
+    MultipleFacing multipleFacing = (MultipleFacing) block.getBlockData().clone();
+    multipleFacing.setFace(
+        BlockFace.UP, true);
+    multipleFacing.setFace(BlockFace.DOWN, true);
+    multipleFacing.setFace(BlockFace.NORTH,true);
+    multipleFacing.setFace(BlockFace.EAST, false);
+    multipleFacing.setFace(BlockFace.SOUTH, true);
+    multipleFacing.setFace(BlockFace.UP,true);
+    multipleFacing.setFace(BlockFace.WEST, true);
+    block.setBlockData(multipleFacing);
+  }
   private static void convertMushroomType(CustomBlock customBlock) {
     Block block = customBlock.getLocation().getBlock();
     MultipleFacing multipleFacingOG = (MultipleFacing) block.getBlockData().clone();
@@ -205,20 +230,24 @@ public class Utilities {
     block.setBlockData(multipleFacing);
   }
 
-  static void getTranslations() {
+  static void getTranslations() throws IOException {
     String locale = config.getString("language.locale");
     Logger.info("Using " + locale + " locale");
     Properties defaultLang = new Properties();
+    FileInputStream fileInputStream = null;
     try {
+      fileInputStream = new FileInputStream(new File(plugin.getDataFolder(),
+          "data/default_lang.properties"));
       defaultLang
-          .load(new InputStreamReader(new FileInputStream(new File(Craftory.plugin.getDataFolder(),
-              "data/default_lang.properties")), StandardCharsets.UTF_8));
+          .load(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8));
       langProperties = new Properties(defaultLang);
       langProperties.load(
           new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale + ".properties")),
               StandardCharsets.UTF_8));
     } catch (IOException e) {
       e.printStackTrace();
+    } finally {
+      if (fileInputStream != null) fileInputStream.close();
     }
   }
 
@@ -230,24 +259,24 @@ public class Utilities {
       Craftory.folderExists = true;
     }
 
-    File modelData = new File(Craftory.plugin.getDataFolder(), "/config/customModelDataV2.yml");
+    File modelData = new File(plugin.getDataFolder(), "/config/customModelDataV2.yml");
     if (!modelData.exists() || Craftory.lastVersionCode == 0) {
-      FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/config"),
-          new File(Craftory.plugin.getDataFolder(), "/config"));
+      FileUtils.copyResourcesRecursively(plugin.getClass().getResource("/config"),
+          new File(plugin.getDataFolder(), "/config"));
     }
 
-    FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/data"),
-        new File(Craftory.plugin.getDataFolder(), "/data"));
+    FileUtils.copyResourcesRecursively(plugin.getClass().getResource("/data"),
+        new File(plugin.getDataFolder(), "/data"));
 
     file = new File(LANG_FOLDER);
     if (!file.exists()) {
       file.mkdirs();
-      FileUtils.copyResourcesRecursively(Craftory.plugin.getClass().getResource("/lang"), file);
+      FileUtils.copyResourcesRecursively(plugin.getClass().getResource("/lang"), file);
     }
   }
 
   static void startMetrics() {
-    metrics = new Metrics(Craftory.plugin, 7804);
+    metrics = new Metrics(plugin, 7804);
     metrics.addCustomChart(
         new Metrics.SimplePie("debug_enabled", () -> config.getString("general.debug")));
     metrics.addCustomChart(
@@ -273,10 +302,10 @@ public class Utilities {
   }
 
   static void registerCommandsAndCompletions() {
-    Craftory.plugin.getCommand("craftory").setExecutor(new CommandWrapper());
-    Craftory.plugin.getCommand("cr").setExecutor(new CommandWrapper());
-    Craftory.plugin.getCommand("craftory").setTabCompleter(new CommandWrapper());
-    Craftory.plugin.getCommand("cr").setTabCompleter(new CommandWrapper());
+    plugin.getCommand("craftory").setExecutor(new CommandWrapper());
+    plugin.getCommand("cr").setExecutor(new CommandWrapper());
+    plugin.getCommand("craftory").setTabCompleter(new CommandWrapper());
+    plugin.getCommand("cr").setTabCompleter(new CommandWrapper());
   }
 
   static void registerEvents() {
@@ -344,21 +373,21 @@ public class Utilities {
 
   static void done() {
     Bukkit.getLogger().info(
-        "[" + Craftory.plugin.getDescription().getPrefix() + "] " + ChatColor.GREEN
+        "[" + plugin.getDescription().getPrefix() + "] " + ChatColor.GREEN
             + "Finished Loading!");
   }
 
   /* Helper Functions */
   public static void reloadConfigFile() {
     if (configFile == null) {
-      configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
+      configFile = new File(plugin.getDataFolder(), "config.yml");
     }
     config = YamlConfiguration.loadConfiguration(configFile);
   }
 
   public static void reloadDataFile() {
     if (dataFile == null) {
-      dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
+      dataFile = new File(plugin.getDataFolder(), "data.yml");
     }
     data = YamlConfiguration.loadConfiguration(dataFile);
   }

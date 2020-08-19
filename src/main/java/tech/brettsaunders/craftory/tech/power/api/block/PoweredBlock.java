@@ -35,6 +35,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
@@ -85,8 +86,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   /* Saving, Setup and Loading */
   public PoweredBlock() {
     super();
-    Craftory.plugin.getServer().getPluginManager()
-        .registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
   }
 
   public void refreshSideCache() {

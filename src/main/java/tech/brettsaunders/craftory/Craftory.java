@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,10 +26,13 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockEvents;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.recipes.RecipeBook;
+import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.testing.TestingCommand;
+import tech.brettsaunders.craftory.utils.DataConfigUtils;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
@@ -36,8 +40,8 @@ import tech.brettsaunders.craftory.world.WorldGenHandler;
 public final class Craftory extends JavaPlugin implements Listener {
 
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/67acc1d0b755fd2c9eba29178293a38ea85308de.zip";
-  public static final String HASH = "67acc1d0b755fd2c9eba29178293a38ea85308de";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/5663854af8f650b28e27abf0eaa7ddf372d358dc.zip";
+  public static final String HASH = "5663854af8f650b28e27abf0eaa7ddf372d358dc";
   public static String VERSION;
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
@@ -51,6 +55,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static FileConfiguration serverDataConfig;
   public static CustomBlockTickManager tickManager;
   public static PowerGridManager powerGridManager;
+  public static RecipeBookEvents recipeBookEvents;
   public static int lastVersionCode;
   public static int thisVersionCode;
   public static boolean folderExists = false;
@@ -62,11 +67,11 @@ public final class Craftory extends JavaPlugin implements Listener {
 
   private static int generateVersionCode() {
     String[] subVersions = VERSION.split("\\.");
-    String resultString = "";
+    StringBuffer resultString = new StringBuffer();
     for (String subVersion : subVersions) {
-      resultString += StringUtils.leftPad(subVersion, 5, "0");
+      resultString.append(StringUtils.leftPad(subVersion, 5, "0"));
     }
-    int result = Integer.parseInt(resultString);
+    int result = Integer.parseInt(resultString.toString());
     return result;
   }
 
@@ -94,12 +99,16 @@ public final class Craftory extends JavaPlugin implements Listener {
     }
     customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
     customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
-    customRecipeConfigFile = new File(getDataFolder(), "data/customRecipesConfig.yml");
+    customRecipeConfigFile = new File(getDataFolder(), "config/customRecipesConfig.yml");
     customModelDataFile = new File(getDataFolder(), "config/customModelDataV2.yml");
     customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
     customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
     customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
+    customRecipeConfig.save(customRecipeConfigFile);
     customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
+    Optional<FileConfiguration> recipesDefaults = Optional.ofNullable(YamlConfiguration.loadConfiguration(new File(Craftory.plugin.getDataFolder(), "data/customRecipesConfig.yml")));
+    recipesDefaults.ifPresent(source -> DataConfigUtils.copyDefaults(source, customRecipeConfig));
+    customRecipeConfig.save(customRecipeConfigFile);
     CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
     customBlockManager = new CustomBlockManager();
     customBlockFactory.registerStats();
@@ -121,6 +130,8 @@ public final class Craftory extends JavaPlugin implements Listener {
     powerGridManager.onEnable();
     getServer().getPluginManager().registerEvents(powerConnectorManager, this);
     new RecipeManager();
+    new RecipeBook();
+    recipeBookEvents = new RecipeBookEvents();
     Utilities.compatibilityUpdater();
   }
 
@@ -131,9 +142,11 @@ public final class Craftory extends JavaPlugin implements Listener {
       Utilities.saveDataFile();
       customItemConfig.save(customItemConfigFile);
       customBlocksConfig.save(customBlockConfigFile);
+      customRecipeConfig.save(customRecipeConfigFile);
     } catch (IOException e) {
       e.printStackTrace();
     }
+    recipeBookEvents.onDisable();
     customBlockManager.onDisable();
     powerGridManager.onDisable();
     Utilities.reloadConfigFile();

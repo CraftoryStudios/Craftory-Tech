@@ -22,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.CoreHolder.Items;
-import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class ToolManager implements Listener {
@@ -39,7 +39,7 @@ public class ToolManager implements Listener {
   }
 
   public ToolManager() {
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
   }
 
   public static void decreaseDurability(ItemStack itemStack, int amount) {

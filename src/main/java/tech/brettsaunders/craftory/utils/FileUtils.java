@@ -48,7 +48,9 @@ public class FileUtils {
       if (!newDestDir.exists() && !newDestDir.mkdir()) {
         return false;
       }
-      for (final File child : toCopy.listFiles()) {
+      File[] files =  toCopy.listFiles();
+      if (files == null) return false;
+      for (final File child : files) {
         if (!FileUtils.copyFilesRecusively(child, newDestDir)) {
           return false;
         }

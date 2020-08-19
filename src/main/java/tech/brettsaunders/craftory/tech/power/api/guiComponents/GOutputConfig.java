@@ -18,7 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
@@ -59,8 +59,7 @@ public class GOutputConfig implements IGUIComponent, Listener {
     WEST_SLOT = middleSlot + 1;
     NORTH_SLOT = middleSlot;
     ALT = alt;
-    Craftory.plugin.getServer().getPluginManager()
-        .registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
 
     DISABLED = CustomItemManager
         .getCustomItem("output_disabled" + (ALT ? "_alt" : ""));

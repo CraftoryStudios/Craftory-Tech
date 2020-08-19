@@ -13,7 +13,12 @@ package tech.brettsaunders.craftory.api.items;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.Optional;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
@@ -112,6 +117,27 @@ public class CustomItemManager {
     return new ItemStack(Material.AIR);
   }
 
+  public static ItemStack getCustomItemOrDefault(String itemName) {
+    if (itemName.startsWith("TAG-")) {
+      String tagName = itemName.replace("TAG-","");
+      Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase()), Material.class);
+      if (Objects.nonNull(materialTag)) {
+        if (materialTag.getValues().iterator().hasNext()) {
+          return new ItemStack(materialTag.getValues().iterator().next());
+        }
+      }
+    }
+    if (itemIDCache.containsKey(itemName)) {
+      CustomItem customItem = itemIDCache.get(itemName);
+      return customItem.getItem();
+    }
+    Optional<Material> material = Optional.ofNullable(Material.getMaterial(itemName));
+    if (material.isPresent()) {
+      return new ItemStack(material.get());
+    }
+    return new ItemStack(Material.AIR);
+  }
+
   public static boolean isCustomItemName(String name) {
     return itemIDCache.containsKey(name);
   }
@@ -143,10 +169,14 @@ public class CustomItemManager {
 
   public static String getCustomItemName(ItemStack itemStack) {
     NBTItem nbtItem = new NBTItem(itemStack);
+    return getCustomItemName(nbtItem);
+  }
+
+  public static String getCustomItemName(NBTItem nbtItem) {
     if (nbtItem.hasKey("NAME")) {
       return nbtItem.getString("NAME");
     }
-    return itemStack.getType().toString();
+    return nbtItem.getItem().getType().toString();
   }
 
   public static void updateItemGraphics(ItemStack itemStack) {

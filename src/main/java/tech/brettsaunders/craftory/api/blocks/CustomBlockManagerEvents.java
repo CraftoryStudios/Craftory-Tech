@@ -14,6 +14,8 @@ import static tech.brettsaunders.craftory.Craftory.customBlockManager;
 import static tech.brettsaunders.craftory.Craftory.lastVersionCode;
 import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,6 +48,7 @@ import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
@@ -75,7 +78,7 @@ public class CustomBlockManagerEvents implements Listener {
     this.inactiveChunks = inactiveChunks;
     this.customBlockDataHashMap = customBlockDataHashMap;
     this.statsContainer = statsContainer;
-    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
+    Events.registerEvents(this);
   }
 
   @EventHandler
@@ -94,7 +97,8 @@ public class CustomBlockManagerEvents implements Listener {
     if (!CustomItemManager.isCustomBlockItem(e.getItemInHand())) {
       return;
     }
-    final String customBlockItemName = CustomItemManager.getCustomItemName(e.getItemInHand());
+    NBTItem nbtItem = new NBTItem(e.getItemInHand());
+    final String customBlockItemName = CustomItemManager.getCustomItemName(nbtItem);
     if (!customBlockDataHashMap.containsKey(customBlockItemName)) {
       return;
     }
@@ -108,6 +112,15 @@ public class CustomBlockManagerEvents implements Listener {
         CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
             e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
         Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
+
+        //Give data
+        if (nbtItem.hasKey("extraData")) {
+          NBTCompound extraCompound = nbtItem.getCompound("extraData");
+          if (extraCompound.hasKey("energyStorage") && customBlock instanceof PoweredBlock) {
+            ((PoweredBlock) customBlock).getEnergyStorage().setEnergyStored(extraCompound.getInteger("energyStorage"));
+          }
+        }
+
       }
     }
   }
@@ -161,11 +174,8 @@ public class CustomBlockManagerEvents implements Listener {
     if (currentCustomBlocks.containsKey(location)) {
       CustomBlock customBlock = currentCustomBlocks.get(location);
       customBlock.blockBreak();
-      //Return custom item
-      final String blockName = currentCustomBlocks.get(
-          location).blockName;
       CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(
-          location, blockName, customBlock);
+          location, customBlock.blockName, customBlock);
       if (e.isCancelled()) {
         customBlockBreakEvent.setCancelled(true);
       } else {
@@ -173,7 +183,7 @@ public class CustomBlockManagerEvents implements Listener {
         Craftory.tickManager.removeTickingBlock(customBlock);
         if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
           location.getWorld()
-              .dropItemNaturally(location, CustomItemManager.getCustomItem(blockName));
+              .dropItemNaturally(location, CustomItemManager.getCustomItem(customBlock.blockName));
         }
       }
       Bukkit.getPluginManager().callEvent(customBlockBreakEvent);

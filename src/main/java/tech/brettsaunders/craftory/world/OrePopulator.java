@@ -62,6 +62,7 @@ public class OrePopulator extends BlockPopulator {
               yy = y;
               zz = z;
               switch (options.remove(r.nextInt(options.size()))) {
+                default:
                 case 0:
                   x++;
                   break;

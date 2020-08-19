@@ -32,7 +32,6 @@ public class CustomBlockTickManager extends BukkitRunnable {
   private long tick = 0;
 
   public CustomBlockTickManager() {
-    ConcurrentHashMap trackedBlocksMap = new ConcurrentHashMap<>();
     trackedBlocks = ConcurrentHashMap.newKeySet();
   }
 

@@ -315,6 +315,14 @@ items:
     customModelID: 100128
   waterwheel:
     customModelID: 100131
+  titleHider:
+    customModelID: 100132
+  back_button:
+    customModelID: 100133
+  forward_button:
+    customModelID: 100134
+  recipe_book:
+    customModelID: 100135
   upgrade_card_iron:
     customModelID: 1001
   upgrade_card_gold:

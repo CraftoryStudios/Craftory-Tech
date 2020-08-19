@@ -87,7 +87,7 @@ public class IronFoundry extends BaseFoundry {
     if (inputSlots.get(1) == null) {
       inputSlots.add(1, new ItemStack(Material.AIR));
     }
-    if (outputSlots.get(0) == null) {
+    if (outputSlots.isEmpty() || outputSlots.get(0) == null) {
       outputSlots.add(0, new ItemStack(Material.AIR));
     }
     inventory.setItem(INPUT_LOCATION1, inputSlots.get(0));
