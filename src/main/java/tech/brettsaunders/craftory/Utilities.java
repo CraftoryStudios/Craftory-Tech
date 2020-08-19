@@ -171,8 +171,10 @@ public class Utilities {
   }
 
   static void compatibilityUpdater() {
+    Logger.info(Craftory.lastVersionCode+"   new: " + Craftory.thisVersionCode);
     if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
       //Fix all Item Graphics
+      Logger.info("fixing");
       if (Craftory.lastVersionCode == 0) config.set("fixItemGraphics", true);
       //Version 0.2.1 or before
       if (Craftory.lastVersionCode == 0 || Craftory.lastVersionCode == 200001) {
@@ -181,17 +183,36 @@ public class Utilities {
             customBlocks.forEach(customBlock -> {
               plugin.getServer().getScheduler().runTaskLater(plugin,
                   () -> convertMushroomType(customBlock), 2L);
+              Logger.info("made to stem inactive");
             }));
         Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
               plugin.getServer().getScheduler().runTaskLater(plugin,
                   () -> convertMushroomType(customBlock), 2L);
+              if(customBlock.getBlockName().equals(Blocks.DIAMOND_MACERATOR)){
+                plugin.getServer().getScheduler().runTaskLater(plugin,
+                    () -> setToNewDiamondMacerator(customBlock), 2L);
+              }
+              Logger.info("made to stem active");
             }));
       }
     }
     updateItemGraphics = config.getBoolean("fixItemGraphics");
   }
 
+  private static void setToNewDiamondMacerator(CustomBlock customBlock) {
+    Block block = customBlock.getLocation().getBlock();
+    MultipleFacing multipleFacing = (MultipleFacing) block.getBlockData().clone();
+    multipleFacing.setFace(
+        BlockFace.UP, true);
+    multipleFacing.setFace(BlockFace.DOWN, true);
+    multipleFacing.setFace(BlockFace.NORTH,true);
+    multipleFacing.setFace(BlockFace.EAST, false);
+    multipleFacing.setFace(BlockFace.SOUTH, true);
+    multipleFacing.setFace(BlockFace.UP,true);
+    multipleFacing.setFace(BlockFace.WEST, true);
+    block.setBlockData(multipleFacing);
+  }
   private static void convertMushroomType(CustomBlock customBlock) {
     Block block = customBlock.getLocation().getBlock();
     MultipleFacing multipleFacingOG = (MultipleFacing) block.getBlockData().clone();
