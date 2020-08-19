@@ -40,8 +40,8 @@ import tech.brettsaunders.craftory.world.WorldGenHandler;
 public final class Craftory extends JavaPlugin implements Listener {
 
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/67acc1d0b755fd2c9eba29178293a38ea85308de.zip";
-  public static final String HASH = "67acc1d0b755fd2c9eba29178293a38ea85308de";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/8e1673541a7b26020f8e0cfbacfcaaba35382702.zip";
+  public static final String HASH = "8e1673541a7b26020f8e0cfbacfcaaba35382702";
   public static String VERSION;
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
