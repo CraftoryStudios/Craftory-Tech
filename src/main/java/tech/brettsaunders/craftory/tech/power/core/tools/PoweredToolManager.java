@@ -32,6 +32,7 @@ public class PoweredToolManager implements Listener {
     poweredTools.add("DiamondDrill");
     poweredTools.add("DiamondPowerHammer");
     poweredTools.add("DiamondChainSaw");
+    poweredTools.add("DiamondExcavator");
   }
 
   @EventHandler

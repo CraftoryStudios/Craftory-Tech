@@ -46,11 +46,13 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
     energyStorage = new EnergyStorage(CAPACITY_BASE * CAPACITY_LEVEL[level]);
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
+    init();
   }
 
   /* Saving, Setup and Loading */
   public BaseCell() {
     super();
+    init();
   }
 
   private void init() {
@@ -92,6 +94,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
   @Ticking(ticks = 1)
   public void chargeItem() {
     ItemStack item = inventoryInterface.getItem(ITEM_LOCATION);
+    if(item==null || item.getType()==Material.AIR) return;
     NBTItem nbt = new NBTItem(item);
     if(nbt.hasKey(CHARGE_KEY) && nbt.hasKey(MAX_CHARGE_KEY)) {
       int charge = nbt.getInteger(CHARGE_KEY);
@@ -109,6 +112,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
 
   @Override
   public void setupGUI() {
+    //TODO change GUI so that it has the charging slot
     Inventory inventory = createInterfaceInventory(displayName, Font.CELL_GUI.label + "");
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 23, true));
