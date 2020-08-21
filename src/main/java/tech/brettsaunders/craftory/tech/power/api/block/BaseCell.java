@@ -101,9 +101,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
       int maxCharge = nbt.getInteger(MAX_CHARGE_KEY);
       int diff = maxCharge - charge;
       if(diff <= 0) return;
-      int cost = Math.min(diff, CHARGE_SPEED_BASE*CHARGE_SPEED_LEVEL[level])*20;
-      int change = energyStorage.extractEnergy(cost, false)/20;
-      charge += change;
+      int cost = Math.min(diff, CHARGE_SPEED_BASE*CHARGE_SPEED_LEVEL[level]);
+      charge += energyStorage.extractEnergy(cost, false);
       item = PoweredToolManager.setCharge(item,charge);
       inventoryInterface.setItem(ITEM_LOCATION, item);
       inputSlots.set(0, item);

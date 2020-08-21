@@ -26,6 +26,7 @@ public class PoweredToolManager implements Listener {
   public static String CHARGE_KEY = "Charge";
   public static String MAX_CHARGE_KEY = "MaxCharge";
   private HashMap<UUID, BlockFace> lastHitFace = new HashMap<>();
+  private static int TOOL_POWER_COST = 100;
 
   public PoweredToolManager() {
     Events.registerEvents(this);
@@ -49,20 +50,20 @@ public class PoweredToolManager implements Listener {
     NBTItem nbt = new NBTItem(tool);
     if(!nbt.hasKey(CHARGE_KEY)|| !nbt.hasKey(MAX_CHARGE_KEY)) return;
     int charge = nbt.getInteger(CHARGE_KEY);
-    if(charge < 1) {
+    if(charge < TOOL_POWER_COST) {
       event.setCancelled(true);
       return;
     }
-    charge -=1;
+    charge -=TOOL_POWER_COST;
     if(isHammer(name)) {
       ArrayList<Block> blocks = getHammerBlocks(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
       //ArrayList<ItemStack> drops = new ArrayList<>();
       for(Block block: blocks) {
         Collection<ItemStack> blockDrops = block.getDrops(tool);
-        if(!blockDrops.isEmpty() && charge > 0) {
+        if(!blockDrops.isEmpty() && charge >= TOOL_POWER_COST) {
           block.breakNaturally(tool);
           //drops.addAll(drops);
-          charge -=1;
+          charge -=TOOL_POWER_COST;
         }
       }
       /*for (ItemStack stack: drops){
