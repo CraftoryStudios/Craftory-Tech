@@ -31,6 +31,7 @@ import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
+import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 import tech.brettsaunders.craftory.testing.TestingCommand;
 import tech.brettsaunders.craftory.utils.DataConfigUtils;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
@@ -132,6 +133,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     new RecipeManager();
     new RecipeBook();
     recipeBookEvents = new RecipeBookEvents();
+    new PoweredToolManager();
     Utilities.compatibilityUpdater();
   }
 
