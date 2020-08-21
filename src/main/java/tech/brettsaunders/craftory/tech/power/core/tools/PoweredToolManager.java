@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
@@ -45,7 +46,7 @@ public class PoweredToolManager implements Listener {
     String name = CustomItemManager.getCustomItemName(tool);
     if(!poweredTools.contains(name)) return;
     NBTItem nbt = new NBTItem(tool);
-    if(!nbt.hasKey(CHARGE_KEY)) return;
+    if(!nbt.hasKey(CHARGE_KEY)|| !nbt.hasKey(MAX_CHARGE_KEY)) return;
     int charge = nbt.getInteger(CHARGE_KEY);
     if(charge < 1) {
       event.setCancelled(true);
@@ -67,9 +68,20 @@ public class PoweredToolManager implements Listener {
         event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(),stack);
       } */
     }
+    tool = setCharge(tool, charge);
+    event.getPlayer().getInventory().setItemInMainHand(tool);
+  }
+
+  public static ItemStack setCharge(ItemStack tool, int charge) {
+    NBTItem nbt = new NBTItem(tool);
     nbt.setInteger(CHARGE_KEY, charge);
     tool = nbt.getItem();
-    event.getPlayer().getInventory().setItemInMainHand(tool);
+    ArrayList<String> lore = new ArrayList<>();
+    lore.add("Charge: " + charge + "/" + nbt.getInteger(MAX_CHARGE_KEY));
+    ItemMeta meta = tool.getItemMeta();
+    meta.setLore(lore);
+    tool.setItemMeta(meta);
+    return tool;
   }
 
   private boolean isHammer(String name) {

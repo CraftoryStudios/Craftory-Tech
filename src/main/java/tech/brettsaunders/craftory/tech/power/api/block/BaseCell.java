@@ -101,8 +101,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
       int cost = Math.min(diff, CHARGE_SPEED_BASE*CHARGE_SPEED_LEVEL[level])*20;
       int change = energyStorage.extractEnergy(cost, false)/20;
       charge += change;
-      nbt.setInteger(CHARGE_KEY,charge);
-      item = nbt.getItem();
+      item = PoweredToolManager.setCharge(item,charge);
       inventoryInterface.setItem(ITEM_LOCATION, item);
       inputSlots.set(0, item);
     }
