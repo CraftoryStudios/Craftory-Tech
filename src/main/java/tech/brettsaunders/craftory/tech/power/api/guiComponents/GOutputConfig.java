@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.tech.power.api.guiComponents;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -34,21 +35,21 @@ public class GOutputConfig implements IGUIComponent, Listener {
   private final int DOWN_SLOT;
   private final boolean ALT;
   private final Inventory inventory;
-  private final HashMap<BlockFace, Boolean> config;
+  private final Object2ObjectOpenHashMap<BlockFace, Boolean> config;
 
-  public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config) {
+  public GOutputConfig(Inventory inventory, Object2ObjectOpenHashMap<BlockFace, Boolean> config) {
     this(inventory, config, 43);
   }
 
-  public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config, int middleSlot) {
+  public GOutputConfig(Inventory inventory, Object2ObjectOpenHashMap<BlockFace, Boolean> config, int middleSlot) {
     this(inventory, config, middleSlot, false);
   }
 
-  public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config, boolean alt) {
+  public GOutputConfig(Inventory inventory, Object2ObjectOpenHashMap<BlockFace, Boolean> config, boolean alt) {
     this(inventory, config, 43, alt);
   }
 
-  public GOutputConfig(Inventory inventory, HashMap<BlockFace, Boolean> config, int middleSlot,
+  public GOutputConfig(Inventory inventory, Object2ObjectOpenHashMap<BlockFace, Boolean> config, int middleSlot,
       boolean alt) {
     this.inventory = inventory;
     this.config = config;

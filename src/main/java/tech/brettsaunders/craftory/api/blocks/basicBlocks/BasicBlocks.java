@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.api.blocks.basicBlocks;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public enum BasicBlocks {
   CRYSTAL_ORE(false, false, true, true, false, false);
 
   @Getter
-  private final Set<BlockFace> allowedFaces = new HashSet<BlockFace>();
+  private final ObjectOpenHashSet<BlockFace> allowedFaces = new ObjectOpenHashSet<BlockFace>();
 
   BasicBlocks(boolean west, boolean up, boolean south, boolean north, boolean east, boolean down) {
     if (west) {

@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,12 +35,12 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerConnectorManager implements Listener {
 
-  private final transient HashMap<UUID, Location> formingConnection;
-  private final transient HashMap<Location, ArrayList<Beam>> activeBeams;
+  private final transient Object2ObjectOpenHashMap<UUID, Location> formingConnection;
+  private final transient Object2ObjectOpenHashMap<Location, ArrayList<Beam>> activeBeams;
 
   public PowerConnectorManager() {
-    formingConnection = new HashMap<>();
-    activeBeams = new HashMap<>();
+    formingConnection = new Object2ObjectOpenHashMap<>();
+    activeBeams = new Object2ObjectOpenHashMap<>();
   }
 
   @EventHandler

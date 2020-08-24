@@ -11,6 +11,7 @@
 package tech.brettsaunders.craftory.persistence.adapters;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -48,9 +49,9 @@ public class PowerGridAdapter implements DataAdapter<PowerGrid> {
 
     PowerGrid powerGrid = new PowerGrid();
     powerGrid.setBlockConnections(
-        persistenceStorage.loadObject(parentObject, HashMap.class, blockConnectionsCompound));
+        persistenceStorage.loadObject(parentObject, Object2ObjectOpenHashMap.class, blockConnectionsCompound));
     powerGrid.setPowerConnectors(
-        persistenceStorage.loadObject(parentObject, HashMap.class, powerConnectorsCompound));
+        persistenceStorage.loadObject(parentObject, Object2ObjectOpenHashMap.class, powerConnectorsCompound));
     powerGrid.findPoweredBlocks();
     return powerGrid;
   }

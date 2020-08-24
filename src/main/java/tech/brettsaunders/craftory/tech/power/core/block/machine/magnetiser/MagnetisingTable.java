@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,7 +39,7 @@ import tech.brettsaunders.craftory.utils.RecipeUtils;
 
 public class MagnetisingTable extends CustomBlock implements Listener {
 
-  private static final HashMap<String, String> recipes = RecipeUtils.getMagnetiserRecipes();
+  private static final Object2ObjectOpenHashMap<String, String> recipes = RecipeUtils.getMagnetiserRecipes();
   private static final int processTime = 10;
   @Persistent
   protected Boolean framePlaced;

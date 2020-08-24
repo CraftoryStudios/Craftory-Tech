@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.api.recipes;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import java.util.Objects;
 import org.bukkit.Bukkit;
@@ -32,11 +33,11 @@ import tech.brettsaunders.craftory.utils.RecipeUtils;
 
 public class RecipeManager implements Listener {
 
-  private final HashMap<String, String> customRecipes;
-  private HashMap<String, ItemStack> customFurnaceRecipes; //Map of Source to Result
+  private final Object2ObjectOpenHashMap<String, String> customRecipes;
+  private Object2ObjectOpenHashMap<String, ItemStack> customFurnaceRecipes; //Map of Source to Result
 
   public RecipeManager() {
-    customRecipes = new HashMap<>();
+    customRecipes = new Object2ObjectOpenHashMap<>();
     Events.registerEvents(this);
     ConfigurationSection recipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
     if (recipes == null) {
@@ -117,14 +118,14 @@ public class RecipeManager implements Listener {
 
       }
     }
-    HashMap<String, String> toAdd = new HashMap<>();
+    Object2ObjectOpenHashMap<String, String> toAdd = new Object2ObjectOpenHashMap<>();
     //Furnace Recipes
     ConfigurationSection furnaceRecipes = Craftory.customRecipeConfig
         .getConfigurationSection("furnace_recipes");
     if (furnaceRecipes == null) {
       Logger.warn("No Furnace Recipes found!");
     } else {
-      customFurnaceRecipes = new HashMap<>();
+      customFurnaceRecipes = new Object2ObjectOpenHashMap<>();
       for (String recipe : furnaceRecipes.getKeys(false)) {
         ItemStack result = CustomItemManager
             .getCustomItem(furnaceRecipes.getString(recipe + ".result.name"));
@@ -141,7 +142,7 @@ public class RecipeManager implements Listener {
     if (maceratorRecipes == null) {
       Logger.warn("No Macerator Recipes found!");
     } else {
-      toAdd = new HashMap<>();
+      toAdd = new Object2ObjectOpenHashMap<>();
       for (String recipe : maceratorRecipes.getKeys(false)) {
         toAdd.put(maceratorRecipes.getString(recipe + ".input.name"),
             maceratorRecipes.getString(recipe + ".result.name"));
@@ -155,7 +156,7 @@ public class RecipeManager implements Listener {
     if (magnetiserRecipes == null) {
       Logger.warn("No Magnetiser Recipes found!");
     } else {
-      toAdd = new HashMap<>();
+      toAdd = new Object2ObjectOpenHashMap<>();
       for (String recipe : magnetiserRecipes.getKeys(false)) {
         toAdd.put(magnetiserRecipes.getString(recipe + ".input.name"),
             magnetiserRecipes.getString(recipe + ".result.name"));

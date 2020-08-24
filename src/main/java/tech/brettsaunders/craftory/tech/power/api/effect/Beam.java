@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.tech.power.api.effect;
 
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -42,7 +43,7 @@ public class Beam {
   private final Object metadataPacketSquid;
   private final int squid;
   private final int guardian;
-  private final HashSet<Player> show = new HashSet<>();
+  private final ObjectOpenHashSet<Player> show = new ObjectOpenHashSet<>();
   private Location start;
   private Location end;
   private BukkitRunnable run;

@@ -11,17 +11,17 @@
 package tech.brettsaunders.craftory.persistence.adapters;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
-import java.util.HashSet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 
 @NoArgsConstructor
-public class HashSetAdapter implements DataAdapter<HashSet<?>> {
+public class HashSetAdapter implements DataAdapter<ObjectOpenHashSet<?>> {
 
   @Override
   public void store(@NonNull final PersistenceStorage persistenceStorage,
-      @NonNull final HashSet<?> value, @NonNull final NBTCompound nbtCompound) {
+      @NonNull final ObjectOpenHashSet<?> value, @NonNull final NBTCompound nbtCompound) {
     value.forEach(entryValue -> {
       NBTCompound container = nbtCompound.addCompound("" + entryValue.hashCode());
       NBTCompound data = container.addCompound("data");
@@ -30,9 +30,9 @@ public class HashSetAdapter implements DataAdapter<HashSet<?>> {
   }
 
   @Override
-  public HashSet<Object> parse(PersistenceStorage persistenceStorage, Object parentObject,
+  public ObjectOpenHashSet<Object> parse(PersistenceStorage persistenceStorage, Object parentObject,
       NBTCompound nbtCompound) {
-    HashSet<Object> set = new HashSet<>();
+    ObjectOpenHashSet<Object> set = new ObjectOpenHashSet<>();
     if (nbtCompound.getKeys().size() == 0) {
       return set;
     }

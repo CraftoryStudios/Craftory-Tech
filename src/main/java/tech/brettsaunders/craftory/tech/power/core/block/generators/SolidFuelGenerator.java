@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,7 +41,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   private static final int C_OUTPUT_AMOUNT = 80;
 
   static {
-    inputFaces = new HashMap<BlockFace, Integer>() {
+    inputFaces = new Object2ObjectOpenHashMap<BlockFace, Integer>() {
       {
         put(BlockFace.NORTH, FUEL_SLOT);
         put(BlockFace.EAST, FUEL_SLOT);
@@ -77,7 +79,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   private void init() {
     inputLocations = new ArrayList<>();
     inputLocations.add(0, FUEL_SLOT);
-    interactableSlots = new HashSet<>(Collections.singletonList(FUEL_SLOT));
+    interactableSlots = new ObjectOpenHashSet<>(Collections.singletonList(FUEL_SLOT));
   }
 
   protected boolean canFinish() {

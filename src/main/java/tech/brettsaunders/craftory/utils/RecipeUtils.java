@@ -11,6 +11,8 @@
 package tech.brettsaunders.craftory.utils;
 
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,29 +36,29 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 public class RecipeUtils {
 
   @Getter
-  private static final HashSet<Recipe> allRecipes = new HashSet<>();
+  private static final ObjectOpenHashSet<Recipe> allRecipes = new ObjectOpenHashSet<>();
   @Getter
-  private static final HashSet<Recipe> shapedRecipes = new HashSet<>();
+  private static final ObjectOpenHashSet<Recipe> shapedRecipes = new ObjectOpenHashSet<>();
   @Getter
-  private static final HashSet<Recipe> shapelessRecipes = new HashSet<>();
+  private static final ObjectOpenHashSet<Recipe> shapelessRecipes = new ObjectOpenHashSet<>();
   @Getter
-  private static final HashSet<Recipe> stonecuttingRecipes = new HashSet<>();
+  private static final ObjectOpenHashSet<Recipe> stonecuttingRecipes = new ObjectOpenHashSet<>();
   @Getter
-  private static final HashMap<String, String> furnaceRecipes = new HashMap<>();
+  private static final Object2ObjectOpenHashMap<String, String> furnaceRecipes = new Object2ObjectOpenHashMap<>();
   @Getter
-  private static final HashSet<Recipe> blastingRecipes = new HashSet<>();
+  private static final ObjectOpenHashSet<Recipe> blastingRecipes = new ObjectOpenHashSet<>();
   @Getter
-  private static final HashSet<Recipe> smokingRecipeRecipes = new HashSet<>();
+  private static final ObjectOpenHashSet<Recipe> smokingRecipeRecipes = new ObjectOpenHashSet<>();
   @Getter
-  private static final HashSet<Recipe> campfireRecipes = new HashSet<>();
+  private static final ObjectOpenHashSet<Recipe> campfireRecipes = new ObjectOpenHashSet<>();
   @Getter
-  private static final HashSet<ICustomRecipe> customRecipes = new HashSet<>();
+  private static final ObjectOpenHashSet<ICustomRecipe> customRecipes = new ObjectOpenHashSet<>();
   @Getter
-  private static final HashSet<CustomMachineRecipe> twoToOneRecipes = new HashSet<>();
+  private static final ObjectOpenHashSet<CustomMachineRecipe> twoToOneRecipes = new ObjectOpenHashSet<>();
   @Getter
-  private static final HashMap<String, String> maceratorRecipes = new HashMap<>();
+  private static final Object2ObjectOpenHashMap<String, String> maceratorRecipes = new Object2ObjectOpenHashMap<>();
   @Getter
-  private static final HashMap<String, String> magnetiserRecipes = new HashMap<>();
+  private static final Object2ObjectOpenHashMap<String, String> magnetiserRecipes = new Object2ObjectOpenHashMap<>();
 
   static {
     Logger.debug("Extracting Recipes");
@@ -95,13 +97,13 @@ public class RecipeUtils {
       }
     } */
     //Add foundry iron + coal -> steel recipe
-    HashMap<String, Integer> ingredients = new HashMap<>();
+    Object2ObjectOpenHashMap<String, Integer> ingredients = new Object2ObjectOpenHashMap<>();
     ingredients.put(Material.CHARCOAL.toString(), 1);
     ingredients.put(Material.IRON_INGOT.toString(), 1);
     ArrayList<ItemStack> products = new ArrayList<>();
     products.add(CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT));
     twoToOneRecipes.add(new CustomMachineRecipe(ingredients, products));
-    ingredients = new HashMap<>();
+    ingredients = new Object2ObjectOpenHashMap<>();
     ingredients.put(Items.COAL_DUST, 1);
     ingredients.put(Material.IRON_INGOT.toString(), 1);
     products = new ArrayList<>();
@@ -122,38 +124,38 @@ public class RecipeUtils {
     furnaceRecipes.put(source, result);
   }
 
-  public static void addAllFurnaceRecipes(HashMap<String, String> recipes) {
+  public static void addAllFurnaceRecipes(Object2ObjectOpenHashMap<String, String> recipes) {
     furnaceRecipes.putAll(recipes);
   }
 
-  public static void addAllMaceratorRecipes(HashMap<String, String> recipes) {
+  public static void addAllMaceratorRecipes(Object2ObjectOpenHashMap<String, String> recipes) {
     maceratorRecipes.putAll(recipes);
   }
 
-  public static void addAllMagnetiserRecipes(HashMap<String, String> recipes) {
+  public static void addAllMagnetiserRecipes(Object2ObjectOpenHashMap<String, String> recipes) {
     magnetiserRecipes.putAll(recipes);
   }
 
   public interface ICustomRecipe {
 
-    HashMap<String, Integer> getIngredients();
+    Object2ObjectOpenHashMap<String, Integer> getIngredients();
 
     ArrayList<ItemStack> getProducts();
   }
 
   public static class CustomMachineRecipe implements ICustomRecipe {
 
-    final HashMap<String, Integer> ingredients;
+    final Object2ObjectOpenHashMap<String, Integer> ingredients;
     final ArrayList<ItemStack> products;
 
-    public CustomMachineRecipe(HashMap<String, Integer> ingredients,
+    public CustomMachineRecipe(Object2ObjectOpenHashMap<String, Integer> ingredients,
         ArrayList<ItemStack> products) {
       this.ingredients = ingredients;
       this.products = products;
     }
 
     @Override
-    public HashMap<String, Integer> getIngredients() {
+    public Object2ObjectOpenHashMap<String, Integer> getIngredients() {
       return ingredients;
     }
 

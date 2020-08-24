@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,7 +51,7 @@ public class RotaryGenerator extends BaseGenerator {
       .asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
 
   static {
-    inputFaces = new HashMap<BlockFace, Integer>() {
+    inputFaces = new Object2ObjectOpenHashMap<BlockFace, Integer>() {
       {
         put(BlockFace.NORTH, SLOT);
         put(BlockFace.EAST, SLOT);
@@ -96,7 +98,7 @@ public class RotaryGenerator extends BaseGenerator {
   private void init() {
     inputLocations = new ArrayList<>();
     inputLocations.add(0, SLOT);
-    interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
+    interactableSlots = new ObjectOpenHashSet<>(Collections.singletonList(SLOT));
   }
 
   @Override

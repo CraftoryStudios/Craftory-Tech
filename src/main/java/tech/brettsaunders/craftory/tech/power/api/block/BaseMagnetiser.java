@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
@@ -28,7 +29,7 @@ public class BaseMagnetiser extends BaseOneToOneMachine {
   }
 
   @Override
-  protected HashMap<String, String> getRecipes() {
+  protected Object2ObjectOpenHashMap<String, String> getRecipes() {
     return RecipeUtils.getMagnetiserRecipes();
   }
 
