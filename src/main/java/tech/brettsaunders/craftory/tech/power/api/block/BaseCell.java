@@ -14,6 +14,7 @@ import static tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManag
 import static tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager.MAX_CHARGE_KEY;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,7 +33,7 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 import tech.brettsaunders.craftory.utils.Logger;
 
-public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, IHopperInteract {
+public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
 
   protected static final int CAPACITY_BASE = 400000;
   protected static final int[] CAPACITY_LEVEL = {1, 5, 50, 200};
@@ -62,7 +63,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, 
     inputLocations = new ArrayList<>();
     outputLocations = new ArrayList<>();
     inputLocations.add(ITEM_LOCATION);
-    interactableSlots = new HashSet<>(Arrays.asList(ITEM_LOCATION));
+    interactableSlots = new ObjectOpenHashSet<>(Arrays.asList(ITEM_LOCATION));
   }
 
   /* IEnergyReceiver */

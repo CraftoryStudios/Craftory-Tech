@@ -2,6 +2,8 @@ package tech.brettsaunders.craftory.tech.power.core.tools;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,10 +24,10 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class PoweredToolManager implements Listener {
 
-  private ArrayList<String> poweredTools = new ArrayList<>();
+  private ObjectOpenHashSet<String> poweredTools = new ObjectOpenHashSet<>();
   public static String CHARGE_KEY = "Charge";
   public static String MAX_CHARGE_KEY = "MaxCharge";
-  private HashMap<UUID, BlockFace> lastHitFace = new HashMap<>();
+  private Object2ObjectOpenHashMap<UUID, BlockFace> lastHitFace = new Object2ObjectOpenHashMap<>();
   private static int TOOL_POWER_COST = 100;
 
   public PoweredToolManager() {
