@@ -30,10 +30,10 @@ public class PoweredToolManager implements Listener {
 
   public PoweredToolManager() {
     Events.registerEvents(this);
-    poweredTools.add("DiamondDrill");
-    poweredTools.add("DiamondPowerHammer");
-    poweredTools.add("DiamondChainSaw");
-    poweredTools.add("DiamondExcavator");
+    poweredTools.add("diamond_drill");
+    poweredTools.add("diamond_power_hammer");
+    poweredTools.add("diamond_chainsaw");
+    poweredTools.add("diamond_excavator");
   }
 
   @EventHandler

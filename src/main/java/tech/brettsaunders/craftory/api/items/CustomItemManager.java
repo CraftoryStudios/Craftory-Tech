@@ -67,6 +67,9 @@ public class CustomItemManager {
             customItem.setAttackDamage(itemSection.getInt("attack_damage"));
           }
 
+          if(itemSection.contains("unbreakable")) {
+            customItem.setUnbreakable(itemSection.getBoolean("unbreakable"));
+          }
           itemIDCache.put(key, customItem);
           if (!(customItemConfig.contains("items." + key + ".hideItem") && customItemConfig
               .getBoolean("items." + key + ".hideItem"))) {

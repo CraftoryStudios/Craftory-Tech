@@ -86,6 +86,12 @@ public class CustomItem {
     itemStack.setItemMeta(meta);
   }
 
+  public void setUnbreakable(boolean unbreakable) {
+    ItemMeta meta = itemStack.getItemMeta();
+    meta.setUnbreakable(unbreakable);
+    itemStack.setItemMeta(meta);
+  }
+
   private ChatColor getDisplayNameColour() {
     String displayNameChecker = displayName.toLowerCase();
     if (displayNameChecker.contains("Iron")) {

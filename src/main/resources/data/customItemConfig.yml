@@ -53,6 +53,15 @@ items:
     durability: 320
     attack_speed: 1
     attack_damage: 5
+  diamond_drill:
+    itemModel: diamond_pickaxe
+    unbreakable: true
+    attack_damage: 4
+  diamond_power_hammer:
+    itemModel: diamond_pickaxe
+    unbreakable: true
+    attack_speed: 0.8
+    attack_damage: 6
 
   configurator:
     itemModel: paper
