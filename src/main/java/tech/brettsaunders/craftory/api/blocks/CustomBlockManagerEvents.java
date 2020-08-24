@@ -18,6 +18,7 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import java.util.List;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -225,25 +226,25 @@ public class CustomBlockManagerEvents implements Listener {
             e.setCancelled(true);
 
             LivingEntity entity = (LivingEntity) e.getPlayer().getWorld().spawnEntity(calculateLocation(location,e.getPlayer()),
-                EntityType.SNOWMAN );
+                EntityType.SNOWMAN);
             entity.setInvulnerable(true);
             entity.setSilent(true);
             entity.setAI(false);
             entity.setGravity(false);
-            entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false, false));
+            //entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,Integer.MAX_VALUE, 1, false, false));
 
-            Craftory.plugin.getServer().getScheduler().runTaskTimer(Craftory.plugin,
-                new BukkitRunnable() {
-                  @Override
-                  public void run() {
-                    Block block = e.getPlayer().getTargetBlockExact(5);
-                    if (block == null || !block.getLocation().equals(e.getClickedBlock().getLocation())){
-                      entity.remove();
-                      cancel();
+            BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+              @Override
+              public void run() {
+                Block block = e.getPlayer().getTargetBlockExact(5);
+                if (block == null || !block.getLocation().equals(e.getClickedBlock().getLocation())){
+                  entity.remove();
+                  cancel();
 
-                    }
-                  }
-                },4L,4L);
+                }
+              }
+            };
+            bukkitRunnable.runTaskTimer(Craftory.plugin,4L,4L);
           }
           break;
         case GOLD:

@@ -90,6 +90,7 @@ public class CustomItem {
   public void setUnbreakable(boolean unbreakable) {
     ItemMeta meta = itemStack.getItemMeta();
     meta.setUnbreakable(unbreakable);
+    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
     itemStack.setItemMeta(meta);
   }
 

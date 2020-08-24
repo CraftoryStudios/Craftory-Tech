@@ -9,18 +9,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryInteractEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredToolManager implements Listener {
 
@@ -38,6 +47,55 @@ public class PoweredToolManager implements Listener {
     poweredTools.add("diamond_excavator");
   }
 
+  /*@EventHandler
+  public void onInventoryOpen(InventoryOpenEvent event) {
+    hidePotionEffects(event.getPlayer().getInventory().getItemInMainHand(),
+        (Player) event.getPlayer());
+  }*/ //Needs to trigger when player opens their inventory
+
+  /*EventHandler
+  public void onInventoryClose(InventoryCloseEvent event) {
+    addPotionEffects(event.getPlayer().getInventory().getItemInMainHand(),
+        (Player) event.getPlayer());
+  }*/ // Needs to trigger when player closes their inventory
+
+  @EventHandler
+  public void onPlayerItemHeld(PlayerItemHeldEvent event) {
+    ItemStack itemStack = event.getPlayer().getInventory().getItem(event.getPreviousSlot());
+    hidePotionEffects(itemStack, event.getPlayer());
+    itemStack = event.getPlayer().getInventory().getItem(event.getNewSlot());
+    addPotionEffects(itemStack,event.getPlayer());
+  }
+
+  private void hidePotionEffects(ItemStack itemStack, Player player) {
+    if(itemStack==null || itemStack.getType()==Material.AIR) {
+      return;
+    }
+    //TODO CHECK IF ITS A TOOL FIRST
+    String name = CustomItemManager.getCustomItemName(itemStack);
+    if(isHammer(name)) {
+      player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
+    } else if(isDrill(name)){
+      player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+    }
+  }
+
+  private void addPotionEffects(ItemStack itemStack, Player player) {
+    if(itemStack==null || itemStack.getType()==Material.AIR) {
+      return;
+    }
+    //TODO CHECK IF ITS A TOOL FIRST
+    String name = CustomItemManager.getCustomItemName(itemStack);
+    if(isHammer(name)) {
+      player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,
+          Integer.MAX_VALUE,0,
+          false, false, false));
+    } else if(isDrill(name)){
+      player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,
+          Integer.MAX_VALUE, 1,
+          false, false, false));
+    }
+  }
   @EventHandler
   public void onPlayerBlockHit(PlayerInteractEvent event) {
     lastHitFace.put(event.getPlayer().getUniqueId(),event.getBlockFace());
@@ -47,7 +105,7 @@ public class PoweredToolManager implements Listener {
   public void ToolBlockBreak(BlockBreakEvent event) {
     if(event.isCancelled()) return;
     ItemStack tool =  event.getPlayer().getInventory().getItemInMainHand();
-    if(tool == null || tool.getType()==Material.AIR) return;
+    if(tool.getType()==Material.AIR) return;
     String name = CustomItemManager.getCustomItemName(tool);
     if(!poweredTools.contains(name)) return;
     NBTItem nbt = new NBTItem(tool);
@@ -90,8 +148,10 @@ public class PoweredToolManager implements Listener {
   }
 
   private boolean isHammer(String name) {
-    return name.substring(name.length()-6).equals("hammer");
+    return name.endsWith("hammer");
   }
+
+  private boolean isDrill(String name) { return name.endsWith("drill"); }
 
   private ArrayList<Block> getHammerBlocks(Block centerBlock, BlockFace face) {
     ArrayList<Location> locations = new ArrayList<>();
