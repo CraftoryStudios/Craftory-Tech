@@ -22,6 +22,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import tech.brettsaunders.craftory.Craftory;
@@ -101,7 +103,7 @@ public class RecipeManager implements Listener {
             } else {
               String ingredientName = ingridentMaterial;
               ItemStack itemStack = CustomItemManager.getCustomItem(ingredientName);
-              shapedRecipe.setIngredient(key, itemStack.getType());
+              shapedRecipe.setIngredient(key, new ExactChoice(itemStack));
             }
           }
           Bukkit.getServer().addRecipe(shapedRecipe);
@@ -162,47 +164,6 @@ public class RecipeManager implements Listener {
       }
       RecipeUtils.addAllMagnetiserRecipes(toAdd);
     }
-  }
-
-  @EventHandler
-  public void onRecipeCompleted(PrepareItemCraftEvent e) {
-    String resultName;
-    if (e.getInventory().getResult() == null
-        || e.getInventory().getResult().getType() == Material.AIR) {
-      return;
-    }
-    if (CustomItemManager.isCustomItem(e.getInventory().getResult(), true)) {
-      resultName = CustomItemManager.getCustomItemName(e.getInventory().getResult());
-    } else {
-      resultName = e.getInventory().getResult().getType().name();
-    }
-
-    String pattern = customRecipes.get(resultName);
-    if (pattern == null) {
-      for (ItemStack item : e.getInventory().getMatrix()) {
-        if (item != null && CustomItemManager.isCustomItem(item, true)) {
-          e.getInventory().setResult(new ItemStack(Material.AIR));
-          return;
-        }
-      }
-      return;
-    }
-
-    String recipePattern = "";
-    for (ItemStack itemStack : e.getInventory().getMatrix()) {
-      if (itemStack == null || itemStack.getType() == Material.AIR) {
-        recipePattern = recipePattern + "X";
-      } else if (CustomItemManager.isCustomItem(itemStack, true)) {
-        recipePattern = recipePattern + "C";
-      } else {
-        recipePattern = recipePattern + "N";
-      }
-    }
-
-    if (!recipePattern.equals(pattern)) {
-      e.getInventory().setResult(new ItemStack(Material.AIR));
-    }
-
   }
 
   @EventHandler
