@@ -22,6 +22,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 
 public class CustomItem {
 
@@ -90,6 +91,13 @@ public class CustomItem {
     ItemMeta meta = itemStack.getItemMeta();
     meta.setUnbreakable(unbreakable);
     itemStack.setItemMeta(meta);
+  }
+
+  public void setMaxCharge(int maxCharge) {
+    NBTItem nbtItem = new NBTItem(itemStack);
+    nbtItem.setInteger(PoweredToolManager.CHARGE_KEY,0);
+    nbtItem.setInteger(PoweredToolManager.MAX_CHARGE_KEY, maxCharge);
+    itemStack = nbtItem.getItem();
   }
 
   private ChatColor getDisplayNameColour() {

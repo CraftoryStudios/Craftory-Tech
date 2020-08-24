@@ -70,6 +70,10 @@ public class CustomItemManager {
           if(itemSection.contains("unbreakable")) {
             customItem.setUnbreakable(itemSection.getBoolean("unbreakable"));
           }
+
+          if(itemSection.contains("max_charge")) {
+            customItem.setMaxCharge(itemSection.getInt("max_charge"));
+          }
           itemIDCache.put(key, customItem);
           if (!(customItemConfig.contains("items." + key + ".hideItem") && customItemConfig
               .getBoolean("items." + key + ".hideItem"))) {

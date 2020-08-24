@@ -45,6 +45,7 @@ public class PoweredToolManager implements Listener {
   public void ToolBlockBreak(BlockBreakEvent event) {
     if(event.isCancelled()) return;
     ItemStack tool =  event.getPlayer().getInventory().getItemInMainHand();
+    if(tool == null || tool.getType()==Material.AIR) return;
     String name = CustomItemManager.getCustomItemName(tool);
     if(!poweredTools.contains(name)) return;
     NBTItem nbt = new NBTItem(tool);
@@ -87,7 +88,7 @@ public class PoweredToolManager implements Listener {
   }
 
   private boolean isHammer(String name) {
-    return name.substring(name.length()-7).equals("Hammer");
+    return name.substring(name.length()-6).equals("hammer");
   }
 
   private ArrayList<Block> getHammerBlocks(Block centerBlock, BlockFace face) {

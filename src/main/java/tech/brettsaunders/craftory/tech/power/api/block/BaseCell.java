@@ -17,10 +17,12 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import lombok.extern.flogger.Flogger;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import sun.rmi.runtime.Log;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
@@ -28,16 +30,17 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
+import tech.brettsaunders.craftory.utils.Logger;
 
-public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
+public abstract class BaseCell extends BaseProvider implements IEnergyReceiver, IHopperInteract {
 
   protected static final int CAPACITY_BASE = 400000;
   protected static final int[] CAPACITY_LEVEL = {1, 5, 50, 200};
   protected static final int MAX_INPUT = 200;
   protected static final int[] INPUT_LEVEL = {1, 4, 40, 160};
-  protected static final int CHARGE_SPEED_BASE = 1;
+  protected static final int CHARGE_SPEED_BASE = 5;
   protected static final int[] CHARGE_SPEED_LEVEL = {1,2,4,8};
-  protected static final int ITEM_LOCATION = 31;
+  protected static final int ITEM_LOCATION = 50;
   /* Static Constants */
 
   /* Construction */
@@ -93,6 +96,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
   /* Update Loop */
   @Ticking(ticks = 1)
   public void chargeItem() {
+    if(getEnergyStored() < 1) return;
     ItemStack item = inventoryInterface.getItem(ITEM_LOCATION);
     if(item==null || item.getType()==Material.AIR) return;
     NBTItem nbt = new NBTItem(item);
@@ -112,8 +116,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
   @Override
   public void setupGUI() {
     //TODO change GUI so that it has the charging slot
-    Inventory inventory = createInterfaceInventory(displayName, Font.CELL_GUI.label + "");
-    addGUIComponent(new GBattery(inventory, energyStorage));
-    addGUIComponent(new GOutputConfig(inventory, sidesConfig, 23, true));
+    inventoryInterface = createInterfaceInventory(displayName, Font.CELL_GUI.label + "");
+    addGUIComponent(new GBattery(inventoryInterface, energyStorage));
+    addGUIComponent(new GOutputConfig(inventoryInterface, sidesConfig, 23, true));
   }
 }
