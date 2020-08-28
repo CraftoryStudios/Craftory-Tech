@@ -11,6 +11,7 @@
 package tech.brettsaunders.craftory.api.items;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import java.util.ArrayList;
 import java.util.UUID;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -22,6 +23,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 
 public class CustomItem {
@@ -101,6 +103,11 @@ public class CustomItem {
     nbtItem.setInteger(PoweredToolManager.CHARGE_KEY,0);
     nbtItem.setInteger(PoweredToolManager.MAX_CHARGE_KEY, maxCharge);
     itemStack = nbtItem.getItem();
+    ItemMeta meta = itemStack.getItemMeta();
+    ArrayList<String> lore = new ArrayList<>();
+    lore.add("Charge: " + Utilities.rawEnergyToPrefixed(0) + "/" + Utilities.rawEnergyToPrefixed(maxCharge));
+    meta.setLore(lore);
+    itemStack.setItemMeta(meta);
   }
 
   private ChatColor getDisplayNameColour() {

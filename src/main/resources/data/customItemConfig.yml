@@ -64,7 +64,12 @@ items:
     attack_speed: 0.8
     attack_damage: 6
     max_charge: 100000
-
+  diamond_excavator:
+    itemModel: diamond_shovel
+    unbreakable: true
+    attack_speed: 1.0
+    attack_damage: 4
+    max_charge: 100000
   configurator:
     itemModel: paper
   steel_ingot:

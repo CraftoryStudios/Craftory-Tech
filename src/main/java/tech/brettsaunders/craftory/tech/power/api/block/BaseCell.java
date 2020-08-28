@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import static tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager.CHARGE_KEY;
 import static tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager.MAX_CHARGE_KEY;
+import static tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager.isPoweredTool;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -93,9 +94,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
   public void chargeItem() {
     if(getEnergyStored() < 1) return;
     ItemStack item = inventoryInterface.getItem(ITEM_LOCATION);
-    if(item==null || item.getType()==Material.AIR) return;
-    NBTItem nbt = new NBTItem(item);
-    if(nbt.hasKey(CHARGE_KEY) && nbt.hasKey(MAX_CHARGE_KEY)) {
+    if(item!=null && isPoweredTool(item)){
+      NBTItem nbt = new NBTItem(item);
       int charge = nbt.getInteger(CHARGE_KEY);
       int maxCharge = nbt.getInteger(MAX_CHARGE_KEY);
       int diff = maxCharge - charge;
@@ -104,8 +104,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
       charge += energyStorage.extractEnergy(cost, false);
       item = PoweredToolManager.setCharge(item,charge);
       inventoryInterface.setItem(ITEM_LOCATION, item);
-      inputSlots.set(0, item);
     }
+    inputSlots.set(0, item);
   }
 
   @Override
@@ -114,5 +114,9 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
     inventoryInterface = createInterfaceInventory(displayName, Font.CELL_GUI.label + "");
     addGUIComponent(new GBattery(inventoryInterface, energyStorage));
     addGUIComponent(new GOutputConfig(inventoryInterface, sidesConfig, 23, true));
+
+    if (inputSlots.size() == 0) {
+      inputSlots.add(0, new ItemStack(Material.AIR));
+    }
   }
 }
