@@ -10,6 +10,13 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import java.util.Objects;
+import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyStorage;
 
 /**
@@ -26,6 +33,8 @@ public class EnergyStorage implements IEnergyStorage {
   protected int capacity;
   protected int maxReceive;
   protected int maxExtract;
+  @Getter
+  protected BossBar energyBar;
 
   /* Per Object Variables Not-Saved */
 
@@ -146,5 +155,61 @@ public class EnergyStorage implements IEnergyStorage {
   @Override
   public int getMaxEnergyStored() {
     return capacity;
+  }
+
+  public String getEnergyBarTitle() {
+    return "Energy "+getEnergyStored() + "/" + getMaxEnergyStored();
+  }
+
+  public double getEnergyBarProgress() {
+    return (double) getEnergyStored() / (double) getMaxEnergyStored();
+  }
+
+  public BarColor getEnergyBarColour() {
+    switch ((int) (getEnergyBarProgress() * 2)) {
+      case 0:
+        return BarColor.RED;
+      case 1:
+        return BarColor.YELLOW;
+      case 2:
+        return BarColor.GREEN;
+    }
+    return BarColor.WHITE;
+  }
+
+  public BarStyle getEnergyBarStyle() {
+    return BarStyle.SEGMENTED_20;
+  }
+
+  public BarFlag[] getEnergyBarFlags() {
+    return new BarFlag[0];
+  }
+
+  public void setupEnergyBar() {
+    energyBar = Bukkit.createBossBar(getEnergyBarTitle(), getEnergyBarColour(), getEnergyBarStyle()
+        , getEnergyBarFlags());
+  }
+
+  public void updateEnergyBar() {
+    if (Objects.isNull(energyBar)) {
+      setupEnergyBar();
+    } else {
+      // Title
+      if (!energyBar.getTitle().equals(getEnergyBarTitle())) {
+        energyBar.setTitle(getEnergyBarTitle());
+      }
+      // Progress
+      if (energyBar.getProgress() != getEnergyBarProgress()) {
+        energyBar.setProgress(getEnergyBarProgress());
+      }
+      // Color
+      if (!energyBar.getColor().equals(getEnergyBarColour())) {
+        energyBar.setColor(getEnergyBarColour());
+      }
+      // Style
+      if (!energyBar.getStyle().equals(getEnergyBarStyle())) {
+        energyBar.setStyle(getEnergyBarStyle());
+      }
+    }
   }
 }

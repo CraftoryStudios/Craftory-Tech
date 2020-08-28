@@ -31,6 +31,8 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeBook;
 import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
+import tech.brettsaunders.craftory.api.tasks.Tasks;
+import tech.brettsaunders.craftory.tech.power.api.effect.EnergyDisplayManager;
 import tech.brettsaunders.craftory.tech.power.core.advancments.AdvancementManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
@@ -120,7 +122,10 @@ public final class Craftory extends JavaPlugin implements Listener {
     new PoweredBlockEvents();
     Utilities.startMetrics();
     Utilities.done();
-    tickManager.runTaskTimer(this, 20L, 1L);
+
+    //Tasks
+    Tasks.runTaskTimer(new EnergyDisplayManager(), 30L, 30L);
+    Tasks.runTaskTimer(tickManager, 20L, 1L);
     //Testing
     this.getCommand("crtesting").setExecutor(new TestingCommand());
   }
