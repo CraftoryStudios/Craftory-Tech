@@ -48,7 +48,6 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.basicBlocks.BasicBlocks;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
-import tech.brettsaunders.craftory.external.Advancements;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
@@ -136,14 +135,6 @@ public class Utilities {
         Logger.info("There is a new update available!");
       }
     });
-  }
-
-  static void setupAdvancements() {
-    if (Bukkit.getPluginManager().isPluginEnabled("CrazyAdvancementsAPI")) {
-      advancementManager = Optional.ofNullable(CrazyAdvancements.getNewAdvancementManager());
-      new Advancements();
-      Logger.info("Advancements are Enabled");
-    }
   }
 
   static void createConfigs() {
