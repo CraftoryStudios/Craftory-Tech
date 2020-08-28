@@ -84,7 +84,9 @@ public class Advancement {
 
   public Advancement register() {
     try {
-      Bukkit.getUnsafe().loadAdvancement(getNamespaceKey(), toJson());
+      if (Bukkit.getAdvancement(getNamespaceKey()) == null) {
+        Bukkit.getUnsafe().loadAdvancement(getNamespaceKey(), toJson());
+      }
     } catch (Exception e) {
       Logger.error("Failed to register advancement: "+getNamespaceKey());
       Logger.info(toJson());
