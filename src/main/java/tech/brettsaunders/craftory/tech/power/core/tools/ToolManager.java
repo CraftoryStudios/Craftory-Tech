@@ -42,33 +42,25 @@ public class ToolManager implements Listener {
     Events.registerEvents(this);
   }
 
-  public static void decreaseDurability(ItemStack itemStack, int amount) {
-    ItemMeta itemMeta = itemStack.getItemMeta();
-    if (itemMeta instanceof Damageable) {
-      NBTItem nbtItem = new NBTItem(itemStack);
-      if (nbtItem.hasKey("custom_max_durability")) {
-        int currentDurability = nbtItem.getInteger("custom_durability") - amount;
+  public static ItemStack decreaseDurability(ItemStack itemStack, int amount) {
+    NBTItem nbtItem = new NBTItem(itemStack);
+    if (nbtItem.hasKey("custom_max_durability")) {
+      int currentDurability = nbtItem.getInteger("custom_durability") - amount;
+      if (currentDurability > 0) {
+        nbtItem.setInteger("custom_durability", currentDurability);
         int maxCustom = nbtItem.getInteger("custom_max_durability");
-        int max = itemStack.getType().getMaxDurability();
-
-        int newDurability = calculateNewDurability(currentDurability, maxCustom, max);
-        ((Damageable) itemMeta).setDamage(newDurability);
-        itemStack.setItemMeta(itemMeta);
+        itemStack = nbtItem.getItem();
+        ItemMeta meta = itemStack.getItemMeta();
+        float damage =
+            (float) itemStack.getType().getMaxDurability() - (float)currentDurability / (float)maxCustom * (float)itemStack.getType().getMaxDurability();
+        ((Damageable) meta).setDamage(Math.round(damage));
+        itemStack.setItemMeta(meta);
+        itemStack = CustomItemManager.updateDurabilityLore(itemStack,currentDurability, maxCustom);
+      } else {
+        itemStack.setAmount(0);
       }
-
     }
-  }
-
-  private static int calculateNewDurability(int current, int customMax, int max) {
-    double durability = ((double) current / (double) customMax) * (double) max;
-    durability = Math.ceil(durability);
-    if (durability == 0 && current != 0) {
-      durability = 1;
-    }
-    if (durability == max && current < customMax) {
-      durability--;
-    }
-    return (int) (max - durability);
+    return itemStack;
   }
 
   @EventHandler
@@ -76,26 +68,30 @@ public class ToolManager implements Listener {
     ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
     if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_WOOD)) {
-      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 2));
+      itemStack = decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(),
+          2));
     } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_STONE)) {
-      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 4));
+      itemStack = decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 4));
     } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_IRON)) {
-      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 6));
+      itemStack = decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 6));
     } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_GOLD)) {
-      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 12));
+      itemStack = decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 12));
     } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_STEEL)) {
-      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 8));
+      itemStack = decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 8));
     } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_COPPER)) {
-      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 6));
+      itemStack = decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 6));
     } else if (CustomItemManager.matchCustomItemName(itemStack,
         Items.SICKLE_DIAMOND)) {
-      decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 10));
+      itemStack = decreaseDurability(itemStack, getPlantsInRange(event.getBlock().getLocation(), 10));
+    } else {
+      return;
     }
+    event.getPlayer().getInventory().setItemInMainHand(itemStack);
   }
 
   private int getPlantsInRange(Location startPoint, int range) {

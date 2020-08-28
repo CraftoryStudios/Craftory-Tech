@@ -10,12 +10,15 @@
 
 package tech.brettsaunders.craftory.api.items;
 
+import com.google.common.base.Strings;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
@@ -198,6 +201,72 @@ public class CustomItemManager {
     for (ItemStack itemStack : inventory.getContents()) {
       updateItemGraphics(itemStack);
     }
+  }
+
+  public static ItemStack updateDurabilityLore(ItemStack item, int current, int max) {
+    ItemMeta itemMeta = item.getItemMeta();
+    List<String> lore;
+    if (itemMeta.hasLore()) {
+      lore = itemMeta.getLore();
+    } else {
+      lore = new ArrayList<>();
+    }
+    int line = -1;
+    for (int i = 0; i < lore.size(); i++) {
+      if (lore.get(i).contains("Durability")) {
+        line = i;
+        break;
+      }
+    }
+    if (line == -1) {
+      lore.add("");
+      lore.add(ChatColor.WHITE+"Durability "+current + " / "+max);
+    } else {
+      lore.set(line,ChatColor.WHITE+"Durability "+current + " / "+max);
+    }
+
+    itemMeta.setLore(lore);
+    item.setItemMeta(itemMeta);
+    return item;
+  }
+
+  public static ItemStack updateLoreProgressBar(ItemStack item, String title, int max, int progress) {
+    ItemMeta itemMeta = item.getItemMeta();
+    List<String> lore;
+    if (itemMeta.hasLore()) {
+      lore = itemMeta.getLore();
+    } else {
+      lore = new ArrayList<>();
+    }
+    int line = -1;
+    for (int i = 0; i < lore.size(); i++) {
+      if (lore.get(i).toLowerCase().startsWith(title.toLowerCase())) {
+        line = i;
+        break;
+      }
+    }
+    if (line == -1) {
+      lore.add(ChatColor.YELLOW+title+": "+ChatColor.WHITE+progress/max+"%  "+getProgressBar(progress,
+              max, 10, '█', ChatColor.GREEN, ChatColor.RED));
+    } else {
+      lore.set(line,
+          ChatColor.YELLOW+title+": "+ChatColor.WHITE+progress/max+"%  "+getProgressBar(progress,
+              max, 10, '█', ChatColor.GREEN, ChatColor.RED));
+    }
+
+    itemMeta.setLore(lore);
+    item.setItemMeta(itemMeta);
+    return item;
+  }
+
+  public static String getProgressBar(int current, int max, int totalBars, char symbol,
+      ChatColor completedColor,
+      ChatColor notCompletedColor) {
+    float percent = (float) current / max;
+    int progressBars = (int) (totalBars * percent);
+
+    return Strings.repeat("" + completedColor + symbol, progressBars)
+        + Strings.repeat("" + notCompletedColor + symbol, totalBars - progressBars);
   }
 
 }

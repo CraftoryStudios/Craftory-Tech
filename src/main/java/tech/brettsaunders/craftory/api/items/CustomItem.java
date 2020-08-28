@@ -68,6 +68,8 @@ public class CustomItem {
     ItemMeta meta = itemStack.getItemMeta();
     meta.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);
     itemStack.setItemMeta(meta);
+    itemStack = CustomItemManager.updateDurabilityLore(itemStack, maxDurability,
+        maxDurability);
   }
 
   public void setAttackSpeed(int attackSpeed) {
