@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -29,6 +31,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeBook;
 import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
+import tech.brettsaunders.craftory.tech.power.core.advancments.AdvancementManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
@@ -118,8 +121,6 @@ public final class Craftory extends JavaPlugin implements Listener {
     Utilities.startMetrics();
     Utilities.done();
     tickManager.runTaskTimer(this, 20L, 1L);
-
-    Utilities.setupAdvancements();
     //Testing
     this.getCommand("crtesting").setExecutor(new TestingCommand());
   }
@@ -134,6 +135,8 @@ public final class Craftory extends JavaPlugin implements Listener {
     new RecipeBook();
     recipeBookEvents = new RecipeBookEvents();
     new PoweredToolManager();
+    //Advancements
+    new AdvancementManager().register();
     Utilities.compatibilityUpdater();
   }
 
