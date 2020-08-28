@@ -1,15 +1,11 @@
 package tech.brettsaunders.craftory.tech.power.core.tools;
 
-import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.UUID;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,18 +14,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import tech.brettsaunders.craftory.CoreHolder.PoweredToolType;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredToolManager implements Listener {
 
@@ -38,6 +36,27 @@ public class PoweredToolManager implements Listener {
   public static String MAX_CHARGE_KEY = "MaxCharge";
   private Object2ObjectOpenHashMap<UUID, BlockFace> lastHitFace = new Object2ObjectOpenHashMap<>();
   private static int TOOL_POWER_COST = 100;
+  private static ArrayList<Material> excavatorBlocks = new ArrayList<Material>(){
+    {
+      add(Material.SAND);
+      add(Material.GRAVEL);
+      add(Material.DIRT);
+      add(Material.GRASS_BLOCK);
+    }
+  };
+
+  private static ArrayList<PoweredToolType> fastTools = new ArrayList<PoweredToolType>(){
+    {
+      add(PoweredToolType.DRILL);
+    }
+  };
+
+  private static ArrayList<PoweredToolType> slowTools = new ArrayList<PoweredToolType>(){
+    {
+      add(PoweredToolType.EXCAVATOR);
+      add(PoweredToolType.HAMMER);
+    }
+  };
 
   public PoweredToolManager() {
     Events.registerEvents(this);
@@ -58,24 +77,96 @@ public class PoweredToolManager implements Listener {
     addPotionEffects(event.getPlayer().getInventory().getItemInMainHand(),
         (Player) event.getPlayer());
   }*/ // Needs to trigger when player closes their inventory
+  
 
   @EventHandler
   public void onPlayerItemHeld(PlayerItemHeldEvent event) {
     ItemStack itemStack = event.getPlayer().getInventory().getItem(event.getPreviousSlot());
-    hidePotionEffects(itemStack, event.getPlayer());
+    removePotionEffects(itemStack, event.getPlayer());
     itemStack = event.getPlayer().getInventory().getItem(event.getNewSlot());
-    addPotionEffects(itemStack,event.getPlayer());
+    addPotionEffects(itemStack, event.getPlayer());
   }
 
-  private void hidePotionEffects(ItemStack itemStack, Player player) {
+  @EventHandler
+  public void onDrag(InventoryDragEvent event) {
+    Player player = (Player) event.getWhoClicked();
+    ItemStack itemStack = event.getNewItems().values().iterator().next();
+    if(itemStack==null) return;
+    for(int slot: event.getInventorySlots()){
+      if(player.getInventory().getHeldItemSlot()==slot) {
+        if(isPoweredTool(itemStack)) {
+          addPotionEffects(itemStack, player);
+        }
+      }
+    }
+
+  }
+
+  @EventHandler
+  public void onInventoryInteract(InventoryClickEvent event) {
+    Player player = (Player) event.getWhoClicked();
+    PlayerInventory inventory = player.getInventory();
+    if(event.isShiftClick()) {
+      if(inventory.getItemInMainHand().getType().equals(Material.AIR)){
+        if(event.getSlotType().equals(SlotType.QUICKBAR)) return;
+        boolean onlyHeldFree = true;
+        for (int i = 0; i < player.getInventory().getHeldItemSlot(); i++) {
+          if(inventory.getItem(i)==null || inventory.getItem(i).getType()==Material.AIR){
+            onlyHeldFree = false;
+            break;
+          }
+        }
+        if(onlyHeldFree) {
+          ItemStack itemStack = player.getInventory().getItem(event.getSlot());
+          if(itemStack !=null && isPoweredTool(itemStack)) {
+            addPotionEffects(itemStack, player);
+          }
+        }
+      } else {
+        if(player.getInventory().getHeldItemSlot()==event.getSlot()){
+          ItemStack itemStack = inventory.getItemInMainHand();
+          if(itemStack!=null && isPoweredTool(itemStack)){
+            removePotionEffects(itemStack,player);
+          }
+        }
+      }
+      return;
+    }
+    if(event.getHotbarButton()!=-1){
+      if(player.getInventory().getHeldItemSlot()==event.getHotbarButton()) { //Moving item in
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if(itemStack!=null && isPoweredTool(itemStack)){
+          removePotionEffects(itemStack,player);
+        }
+        itemStack = player.getInventory().getItem(event.getSlot());
+        if(isPoweredTool(itemStack)) {
+          addPotionEffects(itemStack, player);
+        }
+      }
+    } else {
+      if(player.getInventory().getHeldItemSlot()==event.getSlot()) { //Moving item in
+        ItemStack itemStack = player.getInventory().getItem(event.getSlot());
+        if(itemStack!=null && isPoweredTool(itemStack)){
+          removePotionEffects(itemStack,player);
+        }
+        itemStack = event.getCursor();
+        if(isPoweredTool(itemStack)) {
+          addPotionEffects(itemStack, player);
+        }
+      }
+    }
+  }
+
+  private void removePotionEffects(ItemStack itemStack, Player player) {
     if(itemStack==null || itemStack.getType()==Material.AIR) {
       return;
     }
-    //TODO CHECK IF ITS A TOOL FIRST
+    if(!isTool(itemStack)) return;
     String name = CustomItemManager.getCustomItemName(itemStack);
-    if(isHammer(name)) {
+    PoweredToolType toolType = getToolType(name);
+    if(slowTools.contains(toolType)) {
       player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
-    } else if(isDrill(name)){
+    } else if(fastTools.contains(toolType)){
       player.removePotionEffect(PotionEffectType.FAST_DIGGING);
     }
   }
@@ -84,13 +175,14 @@ public class PoweredToolManager implements Listener {
     if(itemStack==null || itemStack.getType()==Material.AIR) {
       return;
     }
-    //TODO CHECK IF ITS A TOOL FIRST
+    if(!isTool(itemStack)) return;
     String name = CustomItemManager.getCustomItemName(itemStack);
-    if(isHammer(name)) {
+    PoweredToolType toolType = getToolType(name);
+    if(slowTools.contains(toolType)) {
       player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,
           Integer.MAX_VALUE,0,
           false, false, false));
-    } else if(isDrill(name)){
+    } else if(fastTools.contains(toolType)){
       player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING,
           Integer.MAX_VALUE, 1,
           false, false, false));
@@ -105,19 +197,33 @@ public class PoweredToolManager implements Listener {
   public void ToolBlockBreak(BlockBreakEvent event) {
     if(event.isCancelled()) return;
     ItemStack tool =  event.getPlayer().getInventory().getItemInMainHand();
-    if(tool.getType()==Material.AIR) return;
+    if(!isPoweredTool(tool)) return;
     String name = CustomItemManager.getCustomItemName(tool);
     if(!poweredTools.contains(name)) return;
     NBTItem nbt = new NBTItem(tool);
-    if(!nbt.hasKey(CHARGE_KEY)|| !nbt.hasKey(MAX_CHARGE_KEY)) return;
     int charge = nbt.getInteger(CHARGE_KEY);
     if(charge < TOOL_POWER_COST) {
       event.setCancelled(true);
       return;
     }
     charge -=TOOL_POWER_COST;
-    if(isHammer(name)) {
-      ArrayList<Block> blocks = getHammerBlocks(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
+    PoweredToolType toolType = getToolType(name);
+    if(toolType==PoweredToolType.HAMMER) {
+      ArrayList<Block> blocks = get2DNeighbours(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
+      //ArrayList<ItemStack> drops = new ArrayList<>();
+      for(Block block: blocks) {
+        Collection<ItemStack> blockDrops = block.getDrops(tool);
+        if(!blockDrops.isEmpty() && !excavatorBlocks.contains(block.getType()) && charge >= TOOL_POWER_COST) {
+          block.breakNaturally(tool);
+          //drops.addAll(drops);
+          charge -=TOOL_POWER_COST;
+        }
+      }
+      /*for (ItemStack stack: drops){
+        event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(),stack);
+      } */
+    } else if(toolType==PoweredToolType.EXCAVATOR) {
+      ArrayList<Block> blocks = get2DNeighbours(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
       //ArrayList<ItemStack> drops = new ArrayList<>();
       for(Block block: blocks) {
         Collection<ItemStack> blockDrops = block.getDrops(tool);
@@ -140,20 +246,33 @@ public class PoweredToolManager implements Listener {
     nbt.setInteger(CHARGE_KEY, charge);
     tool = nbt.getItem();
     ArrayList<String> lore = new ArrayList<>();
-    lore.add("Charge: " + charge + "/" + nbt.getInteger(MAX_CHARGE_KEY));
+    lore.add("Charge: " + Utilities.rawEnergyToPrefixed(charge) + "/" + Utilities.rawEnergyToPrefixed(nbt.getInteger(MAX_CHARGE_KEY)));
     ItemMeta meta = tool.getItemMeta();
     meta.setLore(lore);
     tool.setItemMeta(meta);
     return tool;
   }
 
-  private boolean isHammer(String name) {
-    return name.endsWith("hammer");
+
+  public static PoweredToolType getToolType(String name) {
+    for(PoweredToolType type: PoweredToolType.values()){
+      if(name.endsWith(type.getItemSuffix())) return type;
+    }
+    return null;
   }
 
-  private boolean isDrill(String name) { return name.endsWith("drill"); }
+  public static boolean isTool(ItemStack itemStack) {
+    String type = itemStack.getType().toString();
+    return type.endsWith("PICKAXE") || type.endsWith("SHOVEL") || type.endsWith("AXE") || type.endsWith("HOE");
+  }
 
-  private ArrayList<Block> getHammerBlocks(Block centerBlock, BlockFace face) {
+  public static boolean isPoweredTool(ItemStack itemStack) {
+    if(!isTool(itemStack)) return false;
+    NBTItem nbtItem = new NBTItem(itemStack);
+    return nbtItem.hasKey(CHARGE_KEY) && nbtItem.hasKey(MAX_CHARGE_KEY);
+  }
+
+  private ArrayList<Block> get2DNeighbours(Block centerBlock, BlockFace face) {
     ArrayList<Location> locations = new ArrayList<>();
     ArrayList<Block> blocks = new ArrayList<>();
     Location center = centerBlock.getLocation();
@@ -193,4 +312,6 @@ public class PoweredToolManager implements Listener {
     }
     return blocks;
   }
+
+
 }
