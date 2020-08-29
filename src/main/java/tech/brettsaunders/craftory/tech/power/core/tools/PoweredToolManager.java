@@ -1,5 +1,11 @@
 package tech.brettsaunders.craftory.tech.power.core.tools;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.EnumWrappers.ClientCommand;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -14,9 +20,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
@@ -25,9 +32,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import tech.brettsaunders.craftory.CoreHolder.PoweredToolType;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.tasks.Tasks;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredToolManager implements Listener {
 
@@ -60,10 +70,56 @@ public class PoweredToolManager implements Listener {
 
   public PoweredToolManager() {
     Events.registerEvents(this);
+    addPacketListeners();
     poweredTools.add("diamond_drill");
     poweredTools.add("diamond_power_hammer");
     poweredTools.add("diamond_chainsaw");
     poweredTools.add("diamond_excavator");
+  }
+
+  private void addPacketListeners() {
+    Craftory.packetManager.addPacketListener(new PacketAdapter(Craftory.plugin, ListenerPriority.NORMAL, PacketType.Play.Client.CLOSE_WINDOW) {
+      @Override
+      public void onPacketReceiving(PacketEvent event) {
+        PacketContainer packet = event.getPacket();
+        if(packet.getIntegers().read(0)==0){ //It is an inventory
+          Player player = event.getPlayer();
+          ItemStack itemStack = player.getInventory().getItemInMainHand();
+          Tasks.runTaskLater(() -> addPotionEffects(itemStack, player), 1);
+        }
+
+      }
+    });
+
+    //Open inv packet not working
+    Craftory.packetManager.addPacketListener(new PacketAdapter(Craftory.plugin,
+        ListenerPriority.NORMAL,
+        PacketType.Play.Client.CLIENT_COMMAND) {
+      @Override
+      public void onPacketReceiving(PacketEvent event) {
+        if (event.getPacketType() == PacketType.Play.Client.CLIENT_COMMAND) {
+          PacketContainer packet = event.getPacket();
+          ClientCommand action = packet.getClientCommands().read(0);
+          Logger.info(action.toString());
+          if (action == ClientCommand.OPEN_INVENTORY_ACHIEVEMENT) {
+            Player player = event.getPlayer();
+            ItemStack itemStack = player.getInventory().getItemInMainHand();
+            Tasks.runTaskLater(() -> {
+              removePotionEffects(itemStack, player);
+              Logger.info("removed potion effects");
+            }, 1);
+          }
+        }
+      }
+    });
+
+  }
+
+
+  @EventHandler
+  public void onInventoryClose(InventoryCloseEvent event) {
+    addPotionEffects(event.getPlayer().getInventory().getItemInMainHand(),
+        (Player) event.getPlayer());
   }
 
   /*@EventHandler
@@ -71,13 +127,6 @@ public class PoweredToolManager implements Listener {
     hidePotionEffects(event.getPlayer().getInventory().getItemInMainHand(),
         (Player) event.getPlayer());
   }*/ //Needs to trigger when player opens their inventory
-
-  /*EventHandler
-  public void onInventoryClose(InventoryCloseEvent event) {
-    addPotionEffects(event.getPlayer().getInventory().getItemInMainHand(),
-        (Player) event.getPlayer());
-  }*/ // Needs to trigger when player closes their inventory
-  
 
   @EventHandler
   public void onPlayerItemHeld(PlayerItemHeldEvent event) {
@@ -87,20 +136,18 @@ public class PoweredToolManager implements Listener {
     addPotionEffects(itemStack, event.getPlayer());
   }
 
-  @EventHandler
+  //Not needed with set on close packet
+  /*@EventHandler
   public void onDrag(InventoryDragEvent event) {
     Player player = (Player) event.getWhoClicked();
     ItemStack itemStack = event.getNewItems().values().iterator().next();
     if(itemStack==null) return;
     for(int slot: event.getInventorySlots()){
       if(player.getInventory().getHeldItemSlot()==slot) {
-        if(isPoweredTool(itemStack)) {
-          addPotionEffects(itemStack, player);
-        }
+        addPotionEffects(itemStack, player);
       }
     }
-
-  }
+  } */
 
   @EventHandler
   public void onInventoryInteract(InventoryClickEvent event) {
@@ -108,6 +155,8 @@ public class PoweredToolManager implements Listener {
     PlayerInventory inventory = player.getInventory();
     if(event.isShiftClick()) {
       if(inventory.getItemInMainHand().getType().equals(Material.AIR)){
+        //Dont add with close packet working
+        /*
         if(event.getSlotType().equals(SlotType.QUICKBAR)) return;
         boolean onlyHeldFree = true;
         for (int i = 0; i < player.getInventory().getHeldItemSlot(); i++) {
@@ -118,16 +167,12 @@ public class PoweredToolManager implements Listener {
         }
         if(onlyHeldFree) {
           ItemStack itemStack = player.getInventory().getItem(event.getSlot());
-          if(itemStack !=null && isPoweredTool(itemStack)) {
-            addPotionEffects(itemStack, player);
-          }
-        }
+          addPotionEffects(itemStack, player);
+        } */
       } else {
         if(player.getInventory().getHeldItemSlot()==event.getSlot()){
           ItemStack itemStack = inventory.getItemInMainHand();
-          if(itemStack!=null && isPoweredTool(itemStack)){
-            removePotionEffects(itemStack,player);
-          }
+          removePotionEffects(itemStack,player);
         }
       }
       return;
@@ -135,33 +180,57 @@ public class PoweredToolManager implements Listener {
     if(event.getHotbarButton()!=-1){
       if(player.getInventory().getHeldItemSlot()==event.getHotbarButton()) { //Moving item in
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if(itemStack!=null && isPoweredTool(itemStack)){
-          removePotionEffects(itemStack,player);
-        }
-        itemStack = player.getInventory().getItem(event.getSlot());
-        if(isPoweredTool(itemStack)) {
-          addPotionEffects(itemStack, player);
-        }
+        removePotionEffects(itemStack,player);
+        //Dont add with close packet working
+        //itemStack = player.getInventory().getItem(event.getSlot());
+        //addPotionEffects(itemStack, player);
+
       }
     } else {
       if(player.getInventory().getHeldItemSlot()==event.getSlot()) { //Moving item in
         ItemStack itemStack = player.getInventory().getItem(event.getSlot());
-        if(itemStack!=null && isPoweredTool(itemStack)){
-          removePotionEffects(itemStack,player);
-        }
-        itemStack = event.getCursor();
-        if(isPoweredTool(itemStack)) {
-          addPotionEffects(itemStack, player);
-        }
+        removePotionEffects(itemStack,player);
+        //Dont add with close packet working
+        //itemStack = event.getCursor();
+        //addPotionEffects(itemStack, player);
       }
     }
   }
 
+  @EventHandler
+  public void onPlayerItemDrop(PlayerDropItemEvent event) {
+    ItemStack itemStack = event.getItemDrop().getItemStack();
+    if(!isPoweredTool(itemStack)) return;
+    Player player = event.getPlayer();
+    removePotionEffects(itemStack, player);
+    addPotionEffects(player.getInventory().getItemInMainHand(), player);
+  }
+
+  @EventHandler
+  public void onPlayerPickupItem(EntityPickupItemEvent event) {
+    if(!(event.getEntity() instanceof Player)) return;
+    ItemStack itemStack = event.getItem().getItemStack();
+    if(!isPoweredTool(itemStack)) return;
+    Player player = (Player) event.getEntity();
+    PlayerInventory inventory = player.getInventory();
+    if(!inventory.getItemInMainHand().getType().equals(Material.AIR)) return;
+    boolean onlyHeldFree = true;
+    for (int i = 0; i < player.getInventory().getHeldItemSlot(); i++) {
+      if(inventory.getItem(i)==null || inventory.getItem(i).getType()==Material.AIR){
+        onlyHeldFree = false;
+        break;
+      }
+    }
+    if(onlyHeldFree) {
+      addPotionEffects(itemStack, player);
+    }
+  }
+
   private void removePotionEffects(ItemStack itemStack, Player player) {
-    if(itemStack==null || itemStack.getType()==Material.AIR) {
+    if(itemStack==null) {
       return;
     }
-    if(!isTool(itemStack)) return;
+    if(!isPoweredTool(itemStack)) return;
     String name = CustomItemManager.getCustomItemName(itemStack);
     PoweredToolType toolType = getToolType(name);
     if(slowTools.contains(toolType)) {
@@ -172,10 +241,10 @@ public class PoweredToolManager implements Listener {
   }
 
   private void addPotionEffects(ItemStack itemStack, Player player) {
-    if(itemStack==null || itemStack.getType()==Material.AIR) {
+    if(itemStack==null) {
       return;
     }
-    if(!isTool(itemStack)) return;
+    if(!isPoweredTool(itemStack)) return;
     String name = CustomItemManager.getCustomItemName(itemStack);
     PoweredToolType toolType = getToolType(name);
     if(slowTools.contains(toolType)) {

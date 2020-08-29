@@ -10,13 +10,13 @@
 
 package tech.brettsaunders.craftory;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -39,6 +39,7 @@ import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 import tech.brettsaunders.craftory.testing.TestingCommand;
 import tech.brettsaunders.craftory.utils.DataConfigUtils;
+import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
@@ -54,6 +55,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static Craftory plugin = null;
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
+  public static ProtocolManager packetManager;
 
   public static FileConfiguration customModelDataConfig;
   public static FileConfiguration customBlocksConfig;
@@ -84,6 +86,11 @@ public final class Craftory extends JavaPlugin implements Listener {
   @SneakyThrows
   @Override
   public void onEnable() {
+    if(getServer().getPluginManager().getPlugin("ProtocolLib") == null){
+      Logger.error("ProtocolLib is needed to run the latest version of craftory!");
+      getServer().getPluginManager().disablePlugin(this);
+    }
+    packetManager = ProtocolLibrary.getProtocolManager();
     Craftory.VERSION = this.getDescription().getVersion();
     thisVersionCode = generateVersionCode();
     Craftory.plugin = this;
