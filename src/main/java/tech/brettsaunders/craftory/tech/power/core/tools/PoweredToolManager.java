@@ -19,6 +19,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -33,10 +34,12 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import tech.brettsaunders.craftory.CoreHolder.PoweredToolType;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerEntityDestroy;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.tasks.Tasks;
+import tech.brettsaunders.craftory.tech.power.api.effect.NewBeam;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredToolManager implements Listener {
@@ -76,6 +79,21 @@ public class PoweredToolManager implements Listener {
     poweredTools.add("diamond_chainsaw");
     poweredTools.add("diamond_excavator");
   }
+
+
+
+  //TODO remove later this is for testing
+  @EventHandler
+  public void rightCLick(PlayerInteractEvent e) {
+    if(e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+    ItemStack i = e.getItem();
+    if(i==null || i.getType()!=Material.CHARCOAL) return;
+    Logger.info("Calling the method");
+    WrapperPlayServerEntityDestroy destroy =  NewBeam.spawnEntityForPlayer(e.getPlayer(),e.getClickedBlock().getLocation().clone().add(0.5,1,0.5));
+    Tasks.runTaskLater(() -> destroy.sendPacket(e.getPlayer()), 100);
+  }
+
+
 
   private void addPacketListeners() {
     Craftory.packetManager.addPacketListener(new PacketAdapter(Craftory.plugin, ListenerPriority.NORMAL, PacketType.Play.Client.CLOSE_WINDOW) {
