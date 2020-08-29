@@ -89,8 +89,8 @@ public class PoweredToolManager implements Listener {
     ItemStack i = e.getItem();
     if(i==null || i.getType()!=Material.CHARCOAL) return;
     Logger.info("Calling the method");
-    WrapperPlayServerEntityDestroy destroy =  NewBeam.spawnEntityForPlayer(e.getPlayer(),e.getClickedBlock().getLocation().clone().add(0.5,1,0.5));
-    Tasks.runTaskLater(() -> destroy.sendPacket(e.getPlayer()), 100);
+    WrapperPlayServerEntityDestroy destroy =  NewBeam.spawnBeam(e.getPlayer(),e.getClickedBlock().getLocation().clone().add(0.5,0.5,0.5),e.getClickedBlock().getLocation().clone().add(3.5,0.5,3.5));
+    Tasks.runTaskLater(() -> destroy.sendPacket(e.getPlayer()), 300);
   }
 
 

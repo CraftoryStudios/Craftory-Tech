@@ -14,31 +14,42 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.PacketWrapper.UpdatedEntityType;
+import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerAttachEntity;
 import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerEntityDestroy;
 import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerSpawnEntityLiving;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class NewBeam {
 
-  private static int magma = 44;
+  public static WrapperPlayServerEntityDestroy spawnBeam(Player player, Location location1, Location location2) {
+    WrapperPlayServerSpawnEntityLiving packet1 = new WrapperPlayServerSpawnEntityLiving();
+    packet1.setX(location1.getX());
+    packet1.setY(location1.getY());
+    packet1.setZ(location1.getZ());
+    packet1.setYaw(location1.getYaw());
+    packet1.setPitch(location1.getPitch());
+    packet1.setType(UpdatedEntityType.COD);
+    packet1.setUniqueId(UUID.randomUUID());
+    packet1.setEntityID(10000);
+    packet1.sendPacket(player);
 
-  public static WrapperPlayServerEntityDestroy spawnEntityForPlayer(Player player, Location location) {
-    Logger.info("method top");
-    WrapperPlayServerSpawnEntityLiving packet = new WrapperPlayServerSpawnEntityLiving();
-    packet.setX(location.getX());
-    packet.setY(location.getY());
-    packet.setZ(location.getZ());
-    packet.setYaw(location.getYaw());
-    packet.setPitch(location.getPitch());
-    packet.setType(UpdatedEntityType.MAGMA_CUBE);
-    packet.setUniqueId(UUID.randomUUID());
-    packet.setEntityID(696969);
-    Logger.info("Sending");
-    packet.sendPacket(player);
-    Logger.info("'Sent'");
+    WrapperPlayServerSpawnEntityLiving packet2 = new WrapperPlayServerSpawnEntityLiving();
+    packet2.setX(location2.getX());
+    packet2.setY(location2.getY());
+    packet2.setZ(location2.getZ());
+    packet2.setYaw(location2.getYaw());
+    packet2.setPitch(location2.getPitch());
+    packet2.setType(UpdatedEntityType.COD);
+    packet2.setUniqueId(UUID.randomUUID());
+    packet2.setEntityID(10001);
+    packet2.sendPacket(player);
+
+    WrapperPlayServerAttachEntity packet3 = new WrapperPlayServerAttachEntity();
+    packet3.setEntity1ID(10000);
+    packet3.setEntity2ID(10001);
+    packet3.sendPacket(player);
 
     WrapperPlayServerEntityDestroy destroyPacket = new WrapperPlayServerEntityDestroy();
-    destroyPacket.setEntityIds(new int[] {696969});
+    destroyPacket.setEntityIds(new int[] {10000,10001});
     return destroyPacket;
   }
 
