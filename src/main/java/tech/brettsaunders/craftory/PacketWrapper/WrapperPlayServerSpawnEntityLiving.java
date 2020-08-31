@@ -292,4 +292,5 @@ public class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {
     handle.getIntegers().write(4, (int) (value * 8000.0D));
   }
 
+
 }

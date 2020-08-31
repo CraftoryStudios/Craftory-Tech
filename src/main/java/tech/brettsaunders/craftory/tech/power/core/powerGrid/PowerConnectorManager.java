@@ -13,7 +13,6 @@ package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -30,17 +29,19 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.api.effect.Beam;
+import tech.brettsaunders.craftory.tech.power.api.effect.Wire;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerConnectorManager implements Listener {
 
   private final transient Object2ObjectOpenHashMap<UUID, Location> formingConnection;
-  private final transient Object2ObjectOpenHashMap<Location, ArrayList<Beam>> activeBeams;
+  private final transient Object2ObjectOpenHashMap<Location, ArrayList<Wire>> activeBeams;
+  private final transient Object2ObjectOpenHashMap<Location, Location> beamLocations;
 
   public PowerConnectorManager() {
     formingConnection = new Object2ObjectOpenHashMap<>();
     activeBeams = new Object2ObjectOpenHashMap<>();
+    beamLocations = new Object2ObjectOpenHashMap<>();
   }
 
   @EventHandler
@@ -88,11 +89,10 @@ public class PowerConnectorManager implements Listener {
               }
 
             }
-            formBeam(fromLoc, toLoc);
-            formBeam(toLoc, fromLoc);
+            formWire(fromLoc, toLoc);
             event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorFormed"));
           } else {
-            formingConnection.remove(event.getPlayer().getUniqueId());
+            //formingConnection.remove(event.getPlayer().getUniqueId());
             event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorFailed"));
             Logger.debug((powerGridFrom == null) + "");
             Logger.debug((powerGridTo == null) + "");
@@ -119,8 +119,7 @@ public class PowerConnectorManager implements Listener {
           formingConnection.remove(event.getPlayer().getUniqueId());
           return;
         }
-        formBeam(fromLoc, toLoc); //ee
-        formBeam(toLoc, fromLoc);
+        formWire(fromLoc, toLoc);
         event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorMachine"));
         formingConnection.remove(event.getPlayer().getUniqueId());
       }
@@ -129,42 +128,19 @@ public class PowerConnectorManager implements Listener {
     }
   }
 
-  public void formBeam(Location fromLoc, Location toLoc) {
-    /*
-    THIS SHOULDN'T WORK OR BE NEEDED
-     */
-    Location l = fromLoc.clone();
-    fromLoc = toLoc.clone();
-    toLoc = l.clone();
-    /*
-    THIS SHOULDN'T WORK OR BE NEEDED
-     */
-    double x = (fromLoc.getX() - toLoc.getX());
-    double y = (fromLoc.getY() - toLoc.getY());
-    double z = (fromLoc.getZ() - toLoc.getZ());
-    double mag = Math.sqrt((x * x) + (y * y) + (z * z));
-    double xAngle = Math.acos(x / mag);
-    double yAngle = Math.acos(y / mag);
-    double zAngle = Math.acos(z / mag);
-    mag -= 1; //reduce size by one to fix the issue
-    x -= mag * Math.cos(xAngle);
-    y -= mag * Math.cos(yAngle);
-    z -= mag * Math.cos(zAngle);
-    Location to = toLoc.clone();
-    to.add(x, y, z);
-    try {
-      Beam beam = new Beam(fromLoc.clone().add(0.5, 0.1, 0.5), to.clone().add(0.5, 0.1, 0.5),
+  public void formWire(Location fromLoc, Location toLoc) {
+    if(beamLocations.get(fromLoc)!=null && beamLocations.get(fromLoc).equals(toLoc)) return;
+    Wire beam = new Wire(fromLoc.clone().add(0.5, 0.5, 0.5), toLoc.clone().add(0.5, 0.5, 0.5),
           -1, 25);
-      beam.start(Craftory.plugin);
-      addBeamToList(fromLoc, beam);
-      addBeamToList(toLoc, beam);
-    } catch (ReflectiveOperationException e) {
-      Logger.warn("Couldn't form power beam");
-    }
+    beam.start(Craftory.plugin);
+    addBeamToList(fromLoc, beam);
+    addBeamToList(toLoc, beam);
+    beamLocations.put(fromLoc, toLoc);
+    beamLocations.put(toLoc, fromLoc);
   }
 
-  private void addBeamToList(Location location, Beam beam) {
-    ArrayList<Beam> temp;
+  private void addBeamToList(Location location, Wire beam) {
+    ArrayList<Wire> temp;
     if (activeBeams.containsKey(location)) {
       temp = activeBeams.get(location);
       temp.add(beam);
@@ -178,7 +154,7 @@ public class PowerConnectorManager implements Listener {
     if (activeBeams.containsKey(loc)) {
       activeBeams.get(loc).forEach(beam -> {
         if (activeBeams.containsKey(beam.getEnd())) {
-          activeBeams.get(beam.getEnd()).forEach(Beam::stop);
+          activeBeams.get(beam.getEnd()).forEach(Wire::stop);
         }
         beam.stop();
       });
@@ -187,8 +163,8 @@ public class PowerConnectorManager implements Listener {
   }
 
   private void destroyActiveBeams() {
-    for (ArrayList<Beam> list : activeBeams.values()) {
-      list.forEach(Beam::stop);
+    for (ArrayList<Wire> list : activeBeams.values()) {
+      list.forEach(Wire::stop);
     }
   }
 

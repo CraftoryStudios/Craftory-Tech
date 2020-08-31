@@ -61,19 +61,26 @@ public class PowerGridManager implements Listener {
   }
 
   private void generatorPowerBeams() {
-    powerGrids.forEach(((location, powerGrid) -> {
+    HashSet<Location> done = new HashSet<>();
+    new HashSet<>(powerGrids.values()).forEach(powerGrid -> {
       powerGrid.getPowerConnectors().forEach((from, value) -> {
-        value.forEach((to) -> {
-          Craftory.powerConnectorManager.formBeam(from, to);
+        done.add(from);
+        value.forEach(to ->{
+          if(!done.contains(to)){
+            Craftory.powerConnectorManager.formWire(from,to);
+          }
         });
       });
 
       powerGrid.getBlockConnections().forEach((from, value) -> {
-        value.forEach((to) -> {
-          Craftory.powerConnectorManager.formBeam(from, to);
+        done.add(from);
+        value.forEach(to ->{
+          if(!done.contains(to)){
+            Craftory.powerConnectorManager.formWire(from,to);
+          }
         });
       });
-    }));
+    });
   }
 
   /* Events */
