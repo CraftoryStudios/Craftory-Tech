@@ -14,7 +14,6 @@ import com.google.common.base.Strings;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,6 +27,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -57,6 +57,10 @@ public class CustomItemManager {
           displayName = Utilities.getTranslation(key);
 
           CustomItem customItem = new CustomItem(itemID, material, key, displayName);
+
+          if (itemSection.contains("powered_tool") && itemSection.getBoolean("powered_tool")){
+            Craftory.poweredToolManager.addPoweredTool(key);
+          }
 
           /* Add extra data */
           if (itemSection.contains("durability")) {

@@ -56,6 +56,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
   public static ProtocolManager packetManager;
+  public static PoweredToolManager poweredToolManager;
 
   public static FileConfiguration customModelDataConfig;
   public static FileConfiguration customBlocksConfig;
@@ -110,6 +111,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     if (Utilities.config.getBoolean("resourcePack.forcePack")) {
       new ResourcePackEvents();
     }
+    poweredToolManager = new PoweredToolManager(); //Must be before CustomItemManager
     customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
     customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
     customRecipeConfigFile = new File(getDataFolder(), "config/customRecipesConfig.yml");
@@ -146,7 +148,6 @@ public final class Craftory extends JavaPlugin implements Listener {
     new RecipeManager();
     new RecipeBook();
     recipeBookEvents = new RecipeBookEvents();
-    new PoweredToolManager();
     //Advancements
     new AdvancementManager().register();
     Utilities.compatibilityUpdater();

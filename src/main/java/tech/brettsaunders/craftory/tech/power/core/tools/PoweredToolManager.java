@@ -5,7 +5,6 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.EnumWrappers.ClientCommand;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -19,7 +18,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -34,13 +32,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import tech.brettsaunders.craftory.CoreHolder.PoweredToolType;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerEntityDestroy;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.tasks.Tasks;
-import tech.brettsaunders.craftory.tech.power.api.effect.Wire;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class PoweredToolManager implements Listener {
 
@@ -51,10 +46,21 @@ public class PoweredToolManager implements Listener {
   private static int TOOL_POWER_COST = 100;
   private static ArrayList<Material> excavatorBlocks = new ArrayList<Material>(){
     {
-      add(Material.SAND);
-      add(Material.GRAVEL);
-      add(Material.DIRT);
+      add(Material.CLAY);
+      add(Material.FARMLAND);
       add(Material.GRASS_BLOCK);
+      add(Material.GRASS_PATH);
+      add(Material.GRAVEL);
+      add(Material.MYCELIUM);
+      add(Material.PODZOL);
+      add(Material.COARSE_DIRT);
+      add(Material.DIRT);
+      add(Material.RED_SAND);
+      add(Material.SAND);
+      add(Material.SOUL_SAND);
+      add(Material.SOUL_SOIL);
+      add(Material.SNOW_BLOCK);
+      add(Material.SNOW);
     }
   };
 
@@ -74,33 +80,11 @@ public class PoweredToolManager implements Listener {
   public PoweredToolManager() {
     Events.registerEvents(this);
     addPacketListeners();
-    poweredTools.add("diamond_drill");
-    poweredTools.add("diamond_power_hammer");
-    poweredTools.add("diamond_chainsaw");
-    poweredTools.add("diamond_excavator");
   }
 
-
-
-  //TODO remove later this is for testing
-  @EventHandler
-  public void rightCLick(PlayerInteractEvent e) {
-    if(e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-    ItemStack i = e.getItem();
-    if(i==null || i.getType()!=Material.CHARCOAL) return;
-    Logger.info("Calling the method");
-    WrapperPlayServerEntityDestroy destroy =  Wire
-        .spawnWire(e.getPlayer(),e.getClickedBlock().getLocation().clone().add(0.5,0.5,0.5),e.getClickedBlock().getLocation().clone().add(3.5,0.5,3.5));
-    //WrapperPlayServerEntityDestroy destroy =  NewBeam.spawnBeam(e.getPlayer(),e.getClickedBlock().getLocation().clone().add(0.5,0.5,0.5),e.getClickedBlock().getLocation().clone().add(-3.5,3.5,3.5));
-    //WrapperPlayServerEntityDestroy destroy =  NewBeam.spawnBeam(e.getPlayer(),e.getClickedBlock().getLocation().clone().add(0.5,0.5,0.5),e.getClickedBlock().getLocation().clone().add(0.5,-3.5,2.5));
-
-    Tasks.runTaskLater(() -> destroy.sendPacket(e.getPlayer()), 300);
-
-
-    //Tasks.runTaskLater(() -> destroy2.sendPacket(e.getPlayer()), 300);
+  public void addPoweredTool(String tool) {
+    poweredTools.add(tool);
   }
-
-
 
   private void addPacketListeners() {
     Craftory.packetManager.addPacketListener(new PacketAdapter(Craftory.plugin, ListenerPriority.NORMAL, PacketType.Play.Client.CLOSE_WINDOW) {
@@ -115,29 +99,6 @@ public class PoweredToolManager implements Listener {
 
       }
     });
-
-    //Open inv packet not working
-    Craftory.packetManager.addPacketListener(new PacketAdapter(Craftory.plugin,
-        ListenerPriority.NORMAL,
-        PacketType.Play.Client.CLIENT_COMMAND) {
-      @Override
-      public void onPacketReceiving(PacketEvent event) {
-        if (event.getPacketType() == PacketType.Play.Client.CLIENT_COMMAND) {
-          PacketContainer packet = event.getPacket();
-          ClientCommand action = packet.getClientCommands().read(0);
-          Logger.info(action.toString());
-          if (action == ClientCommand.OPEN_INVENTORY_ACHIEVEMENT) {
-            Player player = event.getPlayer();
-            ItemStack itemStack = player.getInventory().getItemInMainHand();
-            Tasks.runTaskLater(() -> {
-              removePotionEffects(itemStack, player);
-              Logger.info("removed potion effects");
-            }, 1);
-          }
-        }
-      }
-    });
-
   }
 
 
