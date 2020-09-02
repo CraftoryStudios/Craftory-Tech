@@ -11,6 +11,7 @@
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.UUID;
@@ -20,11 +21,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.tasks.Tasks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
@@ -37,18 +40,29 @@ public class PowerConnectorManager implements Listener {
   private final transient Object2ObjectOpenHashMap<UUID, Location> formingConnection;
   private final transient Object2ObjectOpenHashMap<Location, ArrayList<Wire>> activeBeams;
   private final transient Object2ObjectOpenHashMap<Location, Location> beamLocations;
+  private final transient ObjectOpenHashSet<UUID> recentClicks;
 
   public PowerConnectorManager() {
     formingConnection = new Object2ObjectOpenHashMap<>();
     activeBeams = new Object2ObjectOpenHashMap<>();
     beamLocations = new Object2ObjectOpenHashMap<>();
+    recentClicks = new ObjectOpenHashSet<>();
   }
 
   @EventHandler
   public void useWrenchFormConnection(PlayerInteractEvent event) {
+    if (event.getHand() == EquipmentSlot.OFF_HAND) return;
     //Check using wrench
     if (CustomItemManager.matchCustomItemName(event.getItem(), CoreHolder.Items.WRENCH)
         && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+
+      if(recentClicks.contains(event.getPlayer().getUniqueId())){
+        Logger.debug("Duplicate interact event");
+        return;
+      } else {
+        recentClicks.add(event.getPlayer().getUniqueId());
+        Tasks.runTaskLater(() -> recentClicks.remove(event.getPlayer().getUniqueId()),4);
+      }
       //Check Power Connector
       final Location location = event.getClickedBlock().getLocation();
       if (Craftory.customBlockManager.isCustomBlockOfType(location,
@@ -92,7 +106,7 @@ public class PowerConnectorManager implements Listener {
             formWire(fromLoc, toLoc);
             event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorFormed"));
           } else {
-            //formingConnection.remove(event.getPlayer().getUniqueId());
+            formingConnection.remove(event.getPlayer().getUniqueId());
             event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorFailed"));
             Logger.debug((powerGridFrom == null) + "");
             Logger.debug((powerGridTo == null) + "");
