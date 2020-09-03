@@ -29,8 +29,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -65,6 +63,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockManagerEvents implements Listener {
 
@@ -222,48 +221,45 @@ public class CustomBlockManagerEvents implements Listener {
       switch (toolLevel) {
         case IRON:
           if (!(itemInHand == Material.IRON_PICKAXE || itemInHand == Material.GOLDEN_PICKAXE || itemInHand == Material.DIAMOND_PICKAXE || itemInHand == Material.NETHERITE_PICKAXE)) {
-            //e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 20, 999999, false, false));
-            e.setCancelled(true);
-
-            LivingEntity entity = (LivingEntity) e.getPlayer().getWorld().spawnEntity(calculateLocation(location,e.getPlayer()),
-                EntityType.SNOWMAN);
-            entity.setInvulnerable(true);
-            entity.setSilent(true);
-            entity.setAI(false);
-            entity.setGravity(false);
-            //entity.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,Integer.MAX_VALUE, 1, false, false));
-
-            BukkitRunnable bukkitRunnable = new BukkitRunnable() {
-              @Override
-              public void run() {
-                Block block = e.getPlayer().getTargetBlockExact(5);
-                if (block == null || !block.getLocation().equals(e.getClickedBlock().getLocation())){
-                  entity.remove();
-                  cancel();
-
-                }
-              }
-            };
-            bukkitRunnable.runTaskTimer(Craftory.plugin,4L,4L);
+            slowBreaking(e.getPlayer(),e.getClickedBlock().getLocation());
           }
           break;
         case GOLD:
           if (!(itemInHand == Material.GOLDEN_PICKAXE || itemInHand == Material.DIAMOND_PICKAXE || itemInHand == Material.NETHERITE_PICKAXE)) {
-            e.setCancelled(true);
+            slowBreaking(e.getPlayer(),e.getClickedBlock().getLocation());
           }
           break;
         case DIAMOND:
           if (!(itemInHand == Material.DIAMOND_PICKAXE || itemInHand == Material.NETHERITE_PICKAXE)) {
-            e.setCancelled(true);
+            slowBreaking(e.getPlayer(),e.getClickedBlock().getLocation());
           }
           break;
         case NETHERITE:
           if (!(itemInHand == Material.NETHERITE_PICKAXE)) {
-            e.setCancelled(true);
+            slowBreaking(e.getPlayer(),e.getClickedBlock().getLocation());
           }
           break;
       }
     }
+  }
+
+  private void slowBreaking(Player player, Location location) {
+    Logger.info("Slowing breaking");
+    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,
+        Integer.MAX_VALUE,1,
+        false, false, false));
+    BukkitRunnable bukkitRunnable = new BukkitRunnable() {
+      @Override
+      public void run() {
+        Block block = player.getTargetBlockExact(5);
+        if (block == null || !block.getLocation().equals(location)){
+          player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
+          Logger.info("removing!");
+          cancel();
+        }
+      }
+    };
+    bukkitRunnable.runTaskTimer(Craftory.plugin,4L,4L);
   }
 
   @EventHandler
