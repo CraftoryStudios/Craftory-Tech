@@ -1,16 +1,59 @@
 package tech.brettsaunders.craftory.tech.power.core.advancments;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.PacketType.Play.Server;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.MinecraftKey;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.CoreHolder.Items;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.advancments.Advancement;
 import tech.brettsaunders.craftory.api.advancments.AdvancementItem;
 import tech.brettsaunders.craftory.api.advancments.triggers.InventoryChangedTrigger;
 import tech.brettsaunders.craftory.api.advancments.triggers.LocationTrigger;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.packetWrapper.WrapperPlayServerAdvancements;
+import tech.brettsaunders.craftory.packetWrapper.WrapperPlayServerAdvancements.SerializedAdvancement;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public class AdvancementManager {
 
+
   public void register() {
+    ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+    manager.addPacketListener(new PacketAdapter(Craftory.plugin, ListenerPriority.NORMAL,
+        Server.ADVANCEMENTS) {
+      @Override
+      public void onPacketSending(PacketEvent event) {
+        //Wrap Packet
+        PacketContainer packetContainer = event.getPacket();
+        WrapperPlayServerAdvancements playServerAdvancements =
+            new WrapperPlayServerAdvancements(packetContainer);
+
+        //Get advancements
+        Optional<Map<MinecraftKey, SerializedAdvancement>> advancementOptional =
+            playServerAdvancements.getAdvancements();
+
+        advancementOptional.ifPresent(advancementMap -> {
+          ArrayList<String> keys =
+              (ArrayList<String>) advancementMap.keySet().stream().filter(Objects::nonNull).map(MinecraftKey::getFullKey).collect(Collectors.toList());
+          Logger.info(keys.toString());
+        });
+      }
+    });
+
+
+
     //Root
     Advancement craftory = Advancement
         .builder()

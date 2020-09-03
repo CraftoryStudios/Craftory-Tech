@@ -23,12 +23,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import tech.brettsaunders.craftory.CoreHolder;
-import tech.brettsaunders.craftory.PacketWrapper.AbstractPacket;
-import tech.brettsaunders.craftory.PacketWrapper.UpdatedEntityType;
-import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerAttachEntity;
-import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerEntityDestroy;
-import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerEntityMetadata;
-import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerSpawnEntityLiving;
+import tech.brettsaunders.craftory.packetWrapper.AbstractPacket;
+import tech.brettsaunders.craftory.packetWrapper.UpdatedEntityType;
+import tech.brettsaunders.craftory.packetWrapper.WrapperPlayServerAttachEntity;
+import tech.brettsaunders.craftory.packetWrapper.WrapperPlayServerEntityDestroy;
+import tech.brettsaunders.craftory.packetWrapper.WrapperPlayServerEntityMetadata;
+import tech.brettsaunders.craftory.packetWrapper.WrapperPlayServerSpawnEntityLiving;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 

@@ -8,7 +8,7 @@
  * File Author: Brett Saunders & Matty Jones
  */
 
-package tech.brettsaunders.craftory.PacketWrapper;
+package tech.brettsaunders.craftory.packetWrapper;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import tech.brettsaunders.craftory.utils.Logger;

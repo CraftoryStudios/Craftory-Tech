@@ -8,7 +8,7 @@
  * File Author: Brett Saunders & Matty Jones
  */
 
-package tech.brettsaunders.craftory.PacketWrapper;
+package tech.brettsaunders.craftory.packetWrapper;
 
 import java.util.List;
 
