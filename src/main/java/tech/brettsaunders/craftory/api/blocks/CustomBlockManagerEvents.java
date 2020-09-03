@@ -244,7 +244,6 @@ public class CustomBlockManagerEvents implements Listener {
   }
 
   private void slowBreaking(Player player, Location location) {
-    Logger.info("Slowing breaking");
     player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING,
         Integer.MAX_VALUE,1,
         false, false, false));
@@ -254,7 +253,6 @@ public class CustomBlockManagerEvents implements Listener {
         Block block = player.getTargetBlockExact(5);
         if (block == null || !block.getLocation().equals(location)){
           player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
-          Logger.info("removing!");
           cancel();
         }
       }
