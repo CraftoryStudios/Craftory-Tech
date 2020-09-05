@@ -39,6 +39,21 @@ public class CoreHolder {
     }
   }
 
+  public enum PoweredToolType {
+    DRILL("drill"),
+    HAMMER("hammer"),
+    EXCAVATOR("excavator");
+
+    private final String name;
+
+    PoweredToolType(String s) {
+      name = s;
+    }
+
+    public String getItemSuffix() {
+      return this.name;
+    }
+  }
   /* Block Names */
   public static class Blocks {
 

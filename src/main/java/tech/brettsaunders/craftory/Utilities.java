@@ -10,16 +10,14 @@
 
 package tech.brettsaunders.craftory;
 
-import eu.endercentral.crazy_advancements.CrazyAdvancements;
 import eu.endercentral.crazy_advancements.manager.AdvancementManager;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
@@ -47,7 +45,6 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.basicBlocks.BasicBlocks;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
-import tech.brettsaunders.craftory.external.Advancements;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.GoldCell;
@@ -99,7 +96,7 @@ public class Utilities {
   private static final String UNIT_FLUID = "B";
   private static final DecimalFormat df = new DecimalFormat("###.###");
   @Getter
-  private static final HashMap<String, BasicBlocks> basicBlockRegistry;
+  private static final Object2ObjectOpenHashMap<String, BasicBlocks> basicBlockRegistry;
 
   private static final Craftory plugin;
 
@@ -111,7 +108,7 @@ public class Utilities {
         .loadConfiguration(new File(plugin.getDataFolder(), "data.yml"));
     DATA_FOLDER = plugin.getDataFolder().getPath() + File.separator + "data";
     LANG_FOLDER = plugin.getDataFolder().getPath() + File.separator + "lang";
-    basicBlockRegistry = new HashMap<>();
+    basicBlockRegistry = new Object2ObjectOpenHashMap<>();
   }
 
   static void pluginBanner() {
@@ -135,14 +132,6 @@ public class Utilities {
         Logger.info("There is a new update available!");
       }
     });
-  }
-
-  static void setupAdvancements() {
-    if (Bukkit.getPluginManager().isPluginEnabled("CrazyAdvancementsAPI")) {
-      advancementManager = Optional.ofNullable(CrazyAdvancements.getNewAdvancementManager());
-      new Advancements();
-      Logger.info("Advancements are Enabled");
-    }
   }
 
   static void createConfigs() {
@@ -171,10 +160,10 @@ public class Utilities {
   }
 
   static void compatibilityUpdater() {
-    Logger.info(Craftory.lastVersionCode+"   new: " + Craftory.thisVersionCode);
+    Logger.info("Last version: " + Craftory.lastVersionCode+ " Current version: " + Craftory.thisVersionCode);
     if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
       //Fix all Item Graphics
-      Logger.info("fixing");
+      Logger.info("Updating blocks");
       if (Craftory.lastVersionCode == 0) config.set("fixItemGraphics", true);
       //Version 0.2.1 or before
       if (Craftory.lastVersionCode == 0 || Craftory.lastVersionCode == 200001) {
@@ -283,7 +272,7 @@ public class Utilities {
         new Metrics.SimplePie("tech_enabled", () -> config.getString("general.techEnabled")));
     metrics.addCustomChart(new AdvancedPie("types_of_machines",
         () -> {
-          Map<String, Integer> valueMap = new HashMap<>();
+          Object2ObjectOpenHashMap<String, Integer> valueMap = new Object2ObjectOpenHashMap<>();
           //valueMap.put("totalCustomBlocks",Craftory.customBlockManager.statsContainer.getTotalCustomBlocks());
           //valueMap.put("totalPoweredBlocks",Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks());
           valueMap.put("totalCells", Craftory.customBlockManager.statsContainer.getTotalCells());

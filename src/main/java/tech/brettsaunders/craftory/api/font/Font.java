@@ -19,6 +19,7 @@ public enum Font {
   GEOTHERMAL_GUI('\u1a0a'),
   BLANK('\u1a0c'),
   BOOK('\u1a0f'),
+  SOLAR('\u1a10'),
   PLACER('\u1a0b');
   public final char label;
 

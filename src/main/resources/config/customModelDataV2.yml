@@ -226,6 +226,30 @@ items:
     customModelID: 1007
   engineers_hammer:
     customModelID: 1008
+  iron_drill:
+    customModelID: 1009
+  golden_drill:
+    customModelID: 1010
+  diamond_drill:
+    customModelID: 1011
+  netherite_drill:
+    customModelID: 1012
+  iron_excavator:
+    customModelID: 1013
+  golden_excavator:
+    customModelID: 1014
+  diamond_excavator:
+    customModelID: 1015
+  netherite_excavator:
+    customModelID: 1016
+  iron_power_hammer:
+    customModelID: 1017
+  golden_power_hammer:
+    customModelID: 1018
+  diamond_power_hammer:
+    customModelID: 1019
+  netherite_power_hammer:
+    customModelID: 1020
 
   lava_0_b:
     customModelID: 10070

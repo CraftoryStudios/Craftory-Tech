@@ -19,10 +19,10 @@ import static tech.brettsaunders.craftory.Utilities.keyToLoc;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Optional;
 import lombok.Synchronized;
 import org.bukkit.Location;
@@ -38,8 +38,8 @@ public class CustomBlockStorage {
   /* Saving */
   @Synchronized
   public static void saveAllCustomChunks(String dataFolder, PersistenceStorage persistenceStorage,
-      HashMap<String, HashSet<CustomBlock>> active,
-      HashMap<String, HashSet<CustomBlock>> inactive) {
+      Object2ObjectOpenHashMap<String, ObjectOpenHashSet<CustomBlock>> active,
+      Object2ObjectOpenHashMap<String, ObjectOpenHashSet<CustomBlock>> inactive) {
     Logger.info("Saving Custom Block Data");
     active.forEach((chunk, customBlocks) -> {
       saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder,
@@ -53,7 +53,7 @@ public class CustomBlockStorage {
   }
 
   @Synchronized
-  public static void saveCustomChunk(String chunkID, HashSet<CustomBlock> customBlocks,
+  public static void saveCustomChunk(String chunkID, ObjectOpenHashSet<CustomBlock> customBlocks,
       String dataFolder, PersistenceStorage persistenceStorage) {
     try {
       Optional<CustomBlock> customBlockFirst = Optional.of(customBlocks.stream().findFirst().get());
@@ -116,10 +116,10 @@ public class CustomBlockStorage {
         }
 
         //TODO Remove later
-        HashSet<String> toDelete = new HashSet<>();
-        HashSet<String> toDeleteFuelItem = new HashSet<>();
+        ObjectOpenHashSet<String> toDelete = new ObjectOpenHashSet<>();
+        ObjectOpenHashSet<String> toDeleteFuelItem = new ObjectOpenHashSet<>();
 
-        HashSet<CustomBlock> chunkData = new HashSet<>();
+        ObjectOpenHashSet<CustomBlock> chunkData = new ObjectOpenHashSet<>();
 
         String chunkWorldKey = "";
         for (String locationKey : chunkCompound.getKeys()) {

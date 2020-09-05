@@ -11,6 +11,7 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import com.google.common.base.Strings;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,12 +31,12 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
 public abstract class BlockGUI extends CustomBlock implements Listener {
 
-  private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
+  private static final ObjectOpenHashSet<InventoryAction> outputDisabledActions = new ObjectOpenHashSet<>(Arrays
       .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
           InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
   /* Static Constants */
   private final ArrayList<IGUIComponent> components = new ArrayList<>();
-  protected HashSet<Integer> interactableSlots = new HashSet<>();
+  protected ObjectOpenHashSet<Integer> interactableSlots = new ObjectOpenHashSet<>();
   /* Per Object Variables */
   private Inventory inventoryInterface;
 
@@ -48,7 +49,7 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
     super();
   }
 
-  public HashSet<Integer> getInteractableSlots() {
+  public ObjectOpenHashSet<Integer> getInteractableSlots() {
     return interactableSlots;
   }
 

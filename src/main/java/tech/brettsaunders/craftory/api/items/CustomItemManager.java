@@ -12,8 +12,8 @@ package tech.brettsaunders.craftory.api.items;
 
 import com.google.common.base.Strings;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,6 +27,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -34,7 +35,7 @@ public class CustomItemManager {
 
   public static final String CUSTOM_ITEM = "CUSTOM_ITEM";
   public static final String CUSTOM_BLOCK_ITEM = "CUSTOM_BLOCK_ITEM";
-  private static final HashMap<String, CustomItem> itemIDCache = new HashMap<>();
+  private static final Object2ObjectOpenHashMap<String, CustomItem> itemIDCache = new Object2ObjectOpenHashMap<>();
   private static final ArrayList<String> itemNames = new ArrayList<>();
 
 
@@ -57,6 +58,10 @@ public class CustomItemManager {
 
           CustomItem customItem = new CustomItem(itemID, material, key, displayName);
 
+          if (itemSection.contains("powered_tool") && itemSection.getBoolean("powered_tool")){
+            Craftory.poweredToolManager.addPoweredTool(key);
+          }
+
           /* Add extra data */
           if (itemSection.contains("durability")) {
             customItem.setMaxDurability(itemSection.getInt("durability"));
@@ -70,6 +75,13 @@ public class CustomItemManager {
             customItem.setAttackDamage(itemSection.getInt("attack_damage"));
           }
 
+          if(itemSection.contains("unbreakable")) {
+            customItem.setUnbreakable(itemSection.getBoolean("unbreakable"));
+          }
+
+          if(itemSection.contains("max_charge")) {
+            customItem.setMaxCharge(itemSection.getInt("max_charge"));
+          }
           itemIDCache.put(key, customItem);
           if (!(customItemConfig.contains("items." + key + ".hideItem") && customItemConfig
               .getBoolean("items." + key + ".hideItem"))) {

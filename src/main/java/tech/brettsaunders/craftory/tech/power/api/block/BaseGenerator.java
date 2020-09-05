@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -27,8 +28,8 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
 
 
   /* Per Object Variables Saved */
-  protected static HashMap<BlockFace, Integer> inputFaces = new HashMap<>();
-  protected static HashMap<BlockFace, Integer> outputFaces = new HashMap<>();
+  protected static Object2ObjectOpenHashMap<BlockFace, Integer> inputFaces = new Object2ObjectOpenHashMap<>();
+  protected static Object2ObjectOpenHashMap<BlockFace, Integer> outputFaces = new Object2ObjectOpenHashMap<>();
   /* Per Object Variables Not-Saved */
   protected transient VariableContainer<Boolean> runningContainer;
   @Persistent
@@ -142,12 +143,12 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
 
 
   @Override
-  public HashMap<BlockFace, Integer> getInputFaces() {
+  public Object2ObjectOpenHashMap<BlockFace, Integer> getInputFaces() {
     return inputFaces;
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getOutputFaces() {
+  public Object2ObjectOpenHashMap<BlockFace, Integer> getOutputFaces() {
     return outputFaces;
   }
 

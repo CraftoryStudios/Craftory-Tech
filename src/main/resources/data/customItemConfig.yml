@@ -53,7 +53,86 @@ items:
     durability: 320
     attack_speed: 1
     attack_damage: 5
-
+  iron_drill:
+    itemModel: iron_pickaxe
+    powered_tool: true
+    unbreakable: true
+    attack_damage: 3
+    max_charge: 30000
+  iron_power_hammer:
+    itemModel: iron_pickaxe
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 0.8
+    attack_damage: 5
+    max_charge: 30000
+  iron_excavator:
+    itemModel: iron_shovel
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 1.0
+    attack_damage: 3
+    max_charge: 30000
+  golden_drill:
+    itemModel: golden_pickaxe
+    powered_tool: true
+    unbreakable: true
+    attack_damage: 2
+    max_charge: 10000
+  golden_power_hammer:
+    itemModel: golden_pickaxe
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 0.9
+    attack_damage: 4
+    max_charge: 10000
+  golden_excavator:
+    itemModel: golden_shovel
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 1.0
+    attack_damage: 2
+    max_charge: 10000
+  diamond_drill:
+    itemModel: diamond_pickaxe
+    powered_tool: true
+    unbreakable: true
+    attack_damage: 4
+    max_charge: 100000
+  diamond_power_hammer:
+    itemModel: diamond_pickaxe
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 0.8
+    attack_damage: 6
+    max_charge: 100000
+  diamond_excavator:
+    itemModel: diamond_shovel
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 1.0
+    attack_damage: 4
+    max_charge: 100000
+  netherite_drill:
+    itemModel: netherite_pickaxe
+    powered_tool: true
+    unbreakable: true
+    attack_damage: 5
+    max_charge: 200000
+  netherite_power_hammer:
+    itemModel: netherite_pickaxe
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 0.8
+    attack_damage: 7
+    max_charge: 200000
+  netherite_excavator:
+    itemModel: netherite_shovel
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 1.0
+    attack_damage: 5
+    max_charge: 200000
   configurator:
     itemModel: paper
   steel_ingot:

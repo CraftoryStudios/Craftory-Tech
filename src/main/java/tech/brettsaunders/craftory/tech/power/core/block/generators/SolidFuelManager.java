@@ -10,11 +10,12 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 
 public class SolidFuelManager {
 
-  private static final HashMap<String, Integer> fuelMap = new HashMap<>();
+  private static final Object2ObjectOpenHashMap<String, Integer> fuelMap = new Object2ObjectOpenHashMap<>();
 
   static {
     fuelMap.put("COAL", 24000);

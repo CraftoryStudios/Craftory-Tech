@@ -7,6 +7,7 @@ main: ${mainClass}
 api-version: 1.13
 prefix: Craftory
 softdepend: [CrazyAdvancementsAPI]
+depend: [ProtocolLib]
 load: STARTUP
 
 commands:

@@ -8,15 +8,12 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.api.interfaces;
+package tech.brettsaunders.craftory.api.blocks.tools;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import java.util.HashMap;
-import org.bukkit.block.BlockFace;
-
-public interface IHopperInteract {
-
-  Object2ObjectOpenHashMap<BlockFace, Integer> getInputFaces();
-
-  Object2ObjectOpenHashMap<BlockFace, Integer> getOutputFaces();
+public enum ToolLevel {
+  HAND,
+  IRON,
+  DIAMOND,
+  GOLD,
+  NETHERITE
 }

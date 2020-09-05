@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.api.recipes;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,19 +125,20 @@ public class RecipeBook {
 
   private void addRecipe(ChestMenu chestMenu, int page, ConfigurationSection recipe, int slot) {
     //Get Ingridents
-    HashMap<String,String> ingredients = new HashMap<>();
+    Object2ObjectOpenHashMap<String,String> ingredients = new Object2ObjectOpenHashMap<>();
     for (String key : recipe.getConfigurationSection("ingredients").getKeys(false)) {
       ingredients.put(key,recipe.getString("ingredients."+key));
     }
     //Get Each Line of Recipe
     List<String> lines = recipe.getStringList("pattern");
+    if (lines == null || lines.size() == 0) return;
     for (int i = 0; i< 3; i++) {
       String[] line = lines.get(i).split("");
       addRecipeLine(ingredients, line, chestMenu, slot + (9*i));
     }
   }
 
-  private void addRecipeLine(HashMap<String,String> ingredients, String[] line, ChestMenu chestMenu, int slot) {
+  private void addRecipeLine(Object2ObjectOpenHashMap<String,String> ingredients, String[] line, ChestMenu chestMenu, int slot) {
     //Add Each item in line of Recipe
     for (int i = 0; i < 3; i++) {
       if (!line[i].equalsIgnoreCase("X")) {
