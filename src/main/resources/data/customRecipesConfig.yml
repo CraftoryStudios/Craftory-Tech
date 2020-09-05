@@ -538,6 +538,174 @@ recipes:
     result:
       item: recipe_book
       amount: 1
+  iron_drill:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: IRON_BLOCK
+      U: copper_ingot
+      T: IRON_PICKAXE
+      M: magnetised_iron
+      C: IronCell
+    result:
+      item: iron_drill
+      amount: 1
+  iron_power_hammer:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: IRON_BLOCK
+      U: steel_ingot
+      T: IRON_PICKAXE
+      M: magnetised_iron
+      C: IronCell
+    result:
+      item: iron_power_hammer
+      amount: 1
+  iron_excavator:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: IRON_BLOCK
+      U: copper_ingot
+      T: IRON_SHOVEL
+      M: magnetised_iron
+      C: IronCell
+    result:
+      item: iron_excavator
+      amount: 1
+  golden_drill:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: GOLD_BLOCK
+      U: copper_ingot
+      T: GOLDEN_PICKAXE
+      M: magnetised_iron
+      C: GoldCell
+    result:
+      item: golden_drill
+      amount: 1
+  golden_power_hammer:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: GOLD_BLOCK
+      U: steel_ingot
+      T: GOLDEN_PICKAXE
+      M: magnetised_iron
+      C: IronCell
+    result:
+      item: golden_power_hammer
+      amount: 1
+  golden_excavator:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: GOLD_BLOCK
+      U: copper_ingot
+      T: GOLDEN_SHOVEL
+      M: magnetised_iron
+      C: GoldCell
+    result:
+      item: golden_excavator
+      amount: 1
+  diamond_drill:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: DIAMOND_BLOCK
+      U: copper_ingot
+      T: DIAMOND_PICKAXE
+      M: magnetised_iron
+      C: DiamondCell
+    result:
+      item: diamond_drill
+      amount: 1
+  diamond_power_hammer:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: DIAMOND_BLOCK
+      U: steel_ingot
+      T: DIAMOND_PICKAXE
+      M: magnetised_iron
+      C: DiamondCell
+    result:
+      item: diamond_power_hammer
+      amount: 1
+  diamond_excavator:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: DIAMOND_BLOCK
+      U: copper_ingot
+      T: DIAMOND_SHOVEL
+      M: magnetised_iron
+      C: DiamondCell
+    result:
+      item: diamond_excavator
+      amount: 1
+  netherite_drill:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: NETHERITE_BLOCK
+      U: copper_ingot
+      T: NETHERITE_PICKAXE
+      M: magnetised_iron
+      C: EmeraldCell
+    result:
+      item: netherite_drill
+      amount: 1
+  netherite_power_hammer:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: NETHERITE_BLOCK
+      U: steel_ingot
+      T: NETHERITE_PICKAXE
+      M: magnetised_iron
+      C: EmeraldCell
+    result:
+      item: netherite_power_hammer
+      amount: 1
+  netherite_excavator:
+    pattern:
+      -XBX
+      -UTU
+      -MCM
+    ingredients:
+      B: NETHERITE_BLOCK
+      U: copper_ingot
+      T: NETHERITE_SHOVEL
+      M: magnetised_iron
+      C: EmeraldCell
+    result:
+      item: netherite_excavator
+      amount: 1
 
 furnace_recipes:
   copper_ingot:
