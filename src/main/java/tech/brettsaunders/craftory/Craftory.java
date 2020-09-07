@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -33,7 +34,6 @@ import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.api.tasks.Tasks;
 import tech.brettsaunders.craftory.tech.power.api.effect.EnergyDisplayManager;
-import tech.brettsaunders.craftory.tech.power.core.advancments.AdvancementManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
@@ -148,8 +148,6 @@ public final class Craftory extends JavaPlugin implements Listener {
     new RecipeManager();
     new RecipeBook();
     recipeBookEvents = new RecipeBookEvents();
-    //Advancements
-    new AdvancementManager().register();
     Utilities.compatibilityUpdater();
   }
 

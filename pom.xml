@@ -14,7 +14,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>Craftory</artifactId>
   <url>brettsaunders.tech</url>
-  <version>0.2.2</version>
+  <version>0.2.3</version>
 
   <build>
     <defaultGoal>clean package</defaultGoal>
@@ -114,7 +114,7 @@
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
       <artifactId>ProtocolLib</artifactId>
-      <version>4.5.0</version>
+      <version>4.5.1</version>
     </dependency>
   </dependencies>
   <description>Adds more functionality to Minecraft with only server side modification</description>

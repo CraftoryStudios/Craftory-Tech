@@ -131,6 +131,7 @@ public class RecipeBook {
     }
     //Get Each Line of Recipe
     List<String> lines = recipe.getStringList("pattern");
+    if (lines == null || lines.size() == 0) return;
     for (int i = 0; i< 3; i++) {
       String[] line = lines.get(i).split("");
       addRecipeLine(ingredients, line, chestMenu, slot + (9*i));
