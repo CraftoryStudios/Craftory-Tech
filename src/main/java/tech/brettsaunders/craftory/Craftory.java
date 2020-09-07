@@ -12,7 +12,6 @@ package tech.brettsaunders.craftory;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;

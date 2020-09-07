@@ -82,13 +82,6 @@
       <version>8.4.1</version>
     </dependency>
     <dependency>
-      <groupId>eu.endercentral.crazy_advancements</groupId>
-      <artifactId>CrazyAdvancementsAPI</artifactId>
-      <version>1.13.8</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/external-libs/CrazyAdvancementsAPI.jar</systemPath>
-    </dependency>
-    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.12</version>
@@ -98,7 +91,7 @@
       <artifactId>spigot-api</artifactId>
       <groupId>org.spigotmc</groupId>
       <scope>provided</scope>
-      <version>1.16.1-R0.1-SNAPSHOT</version>
+      <version>1.16.2-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <artifactId>bstats-bukkit</artifactId>
@@ -114,7 +107,8 @@
     <dependency>
       <groupId>com.comphenix.protocol</groupId>
       <artifactId>ProtocolLib</artifactId>
-      <version>4.5.0</version>
+      <scope>provided</scope>
+      <version>4.6.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <description>Adds more functionality to Minecraft with only server side modification</description>
