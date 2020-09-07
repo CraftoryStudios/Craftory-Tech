@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory;
 
-import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -88,7 +86,6 @@ public class Utilities {
   public static FileConfiguration data;
   public static Metrics metrics;
   public static Properties langProperties;
-  public static Optional<AdvancementManager> advancementManager = Optional.empty();
   public static boolean updateItemGraphics = false;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
