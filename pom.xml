@@ -82,6 +82,13 @@
       <version>8.4.1</version>
     </dependency>
     <dependency>
+      <groupId>com.github.Th0rgal</groupId>
+      <artifactId>Oraxen</artifactId>
+      <version>1.49.2</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/external-libs/oraxen-1.49.2.jar</systemPath>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <version>1.18.12</version>
