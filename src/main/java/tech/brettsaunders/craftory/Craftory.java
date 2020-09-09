@@ -10,13 +10,13 @@
 
 package tech.brettsaunders.craftory;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -33,12 +33,12 @@ import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.api.tasks.Tasks;
 import tech.brettsaunders.craftory.tech.power.api.effect.EnergyDisplayManager;
-import tech.brettsaunders.craftory.tech.power.core.advancments.AdvancementManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 import tech.brettsaunders.craftory.testing.TestingCommand;
 import tech.brettsaunders.craftory.utils.DataConfigUtils;
+import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
@@ -46,14 +46,16 @@ import tech.brettsaunders.craftory.world.WorldGenHandler;
 public final class Craftory extends JavaPlugin implements Listener {
 
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/5663854af8f650b28e27abf0eaa7ddf372d358dc.zip";
-  public static final String HASH = "5663854af8f650b28e27abf0eaa7ddf372d358dc";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/beb6b420d791fb64f6321b1a8b9dc70d44f9a955.zip";
+  public static final String HASH = "beb6b420d791fb64f6321b1a8b9dc70d44f9a955";
   public static String VERSION;
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
   public static Craftory plugin = null;
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
+  public static ProtocolManager packetManager;
+  public static PoweredToolManager poweredToolManager;
 
   public static FileConfiguration customModelDataConfig;
   public static FileConfiguration customBlocksConfig;
@@ -84,6 +86,11 @@ public final class Craftory extends JavaPlugin implements Listener {
   @SneakyThrows
   @Override
   public void onEnable() {
+    if(getServer().getPluginManager().getPlugin("ProtocolLib") == null){
+      Logger.error("ProtocolLib is needed to run the latest version of craftory!");
+      getServer().getPluginManager().disablePlugin(this);
+    }
+    packetManager = ProtocolLibrary.getProtocolManager();
     Craftory.VERSION = this.getDescription().getVersion();
     thisVersionCode = generateVersionCode();
     Craftory.plugin = this;
@@ -103,6 +110,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     if (Utilities.config.getBoolean("resourcePack.forcePack")) {
       new ResourcePackEvents();
     }
+    poweredToolManager = new PoweredToolManager(); //Must be before CustomItemManager
     customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
     customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
     customRecipeConfigFile = new File(getDataFolder(), "config/customRecipesConfig.yml");
@@ -139,9 +147,6 @@ public final class Craftory extends JavaPlugin implements Listener {
     new RecipeManager();
     new RecipeBook();
     recipeBookEvents = new RecipeBookEvents();
-    new PoweredToolManager();
-    //Advancements
-    new AdvancementManager().register();
     Utilities.compatibilityUpdater();
   }
 

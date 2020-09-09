@@ -15,8 +15,6 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import lombok.Getter;
 import org.bukkit.Location;
@@ -80,7 +78,7 @@ public class RotaryGenerator extends BaseGenerator {
   protected Location wheelLocation;
 
   public RotaryGenerator(Location location) {
-    super(location, Blocks.ROTARY_GENERATOR, C_LEVEL, BASE_CAPACITY,
+    super(location, Blocks.ROTARY_GENERATOR, C_LEVEL, (int) (maxOutput*1.5f),
         BASE_CAPACITY * MULTIPLIERS[C_LEVEL]);
     setFacing(BlockFace.NORTH);
     checkWheel();

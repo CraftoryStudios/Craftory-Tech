@@ -10,8 +10,6 @@
 
 package tech.brettsaunders.craftory;
 
-import eu.endercentral.crazy_advancements.CrazyAdvancements;
-import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,9 +17,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -91,7 +86,6 @@ public class Utilities {
   public static FileConfiguration data;
   public static Metrics metrics;
   public static Properties langProperties;
-  public static Optional<AdvancementManager> advancementManager = Optional.empty();
   public static boolean updateItemGraphics = false;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
@@ -163,10 +157,10 @@ public class Utilities {
   }
 
   static void compatibilityUpdater() {
-    Logger.info(Craftory.lastVersionCode+"   new: " + Craftory.thisVersionCode);
+    Logger.info("Last version: " + Craftory.lastVersionCode+ " Current version: " + Craftory.thisVersionCode);
     if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
       //Fix all Item Graphics
-      Logger.info("fixing");
+      Logger.info("Updating blocks");
       if (Craftory.lastVersionCode == 0) config.set("fixItemGraphics", true);
       //Version 0.2.1 or before
       if (Craftory.lastVersionCode == 0 || Craftory.lastVersionCode == 200001) {
