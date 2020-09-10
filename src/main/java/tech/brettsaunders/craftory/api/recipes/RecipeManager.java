@@ -38,14 +38,8 @@ public class RecipeManager implements Listener {
 
   private final Object2ObjectOpenHashMap<String, String> customRecipes;
   private Object2ObjectOpenHashMap<String, ItemStack> customFurnaceRecipes; //Map of Source to Result
-  private boolean oraxenEnabled = false;
 
   public RecipeManager() {
-    //Compatibility
-    if (Craftory.plugin.getServer().getPluginManager().isPluginEnabled("Oraxen")) {
-      oraxenEnabled = true;
-    }
-
     customRecipes = new Object2ObjectOpenHashMap<>();
     Events.registerEvents(this);
     ConfigurationSection recipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
@@ -102,7 +96,7 @@ public class RecipeManager implements Listener {
               }
 
             //Oraxen Item
-            } else if (oraxenEnabled && ingridentMaterial.toLowerCase().startsWith("oraxen-item:")) {
+            } else if (ingridentMaterial.toLowerCase().startsWith("oraxen-item:")) {
               shapedRecipe.setIngredient(key,
                   new ExactChoice(OraxenItems.getItemById(ingridentMaterial.toLowerCase().replace("oraxen"
                       + "-item:","")).build()));

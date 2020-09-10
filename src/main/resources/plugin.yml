@@ -6,7 +6,7 @@ author: ${author}
 main: ${mainClass}
 api-version: 1.13
 prefix: Craftory
-softdepend: [CrazyAdvancementsAPI, Oraxen]
+softdepend: [Oraxen]
 depend: [ProtocolLib]
 load: STARTUP
 

@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory.api.items;
 
 import com.google.common.base.Strings;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import io.th0rgal.oraxen.items.OraxenItems;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
@@ -37,6 +39,8 @@ public class CustomItemManager {
   public static final String CUSTOM_BLOCK_ITEM = "CUSTOM_BLOCK_ITEM";
   private static final Object2ObjectOpenHashMap<String, CustomItem> itemIDCache = new Object2ObjectOpenHashMap<>();
   private static final ArrayList<String> itemNames = new ArrayList<>();
+
+  private static boolean oraxenEnabled = false;
 
 
   public static void setup(FileConfiguration customItemConfig,
@@ -141,6 +145,8 @@ public class CustomItemManager {
           return new ItemStack(materialTag.getValues().iterator().next());
         }
       }
+    } else if (itemName.toLowerCase().startsWith("oraxen-item:")) {
+      OraxenItems.getItemById(itemName.toLowerCase().replace("oraxen-item:","")).build();
     }
     if (itemIDCache.containsKey(itemName)) {
       CustomItem customItem = itemIDCache.get(itemName);

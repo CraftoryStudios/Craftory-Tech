@@ -84,9 +84,9 @@
     <dependency>
       <groupId>com.github.Th0rgal</groupId>
       <artifactId>Oraxen</artifactId>
-      <version>1.49.2</version>
+      <version>1.55.1</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/external-libs/oraxen-1.49.2.jar</systemPath>
+      <systemPath>${project.basedir}/external-libs/oraxen-1.55.1.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
