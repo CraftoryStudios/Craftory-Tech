@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory.api.menu;
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -47,7 +46,7 @@ public class MaterialCollection implements Iterable<Material> {
   }
 
   public MaterialCollection(Tag<Material> tag) {
-    this(tag != null ? tag.getValues() : new ObjectOpenHashSet<>());
+    this(tag != null ? tag.getValues() : new HashSet<>());
   }
 
   public MaterialCollection(@NonNull Stream<Material> stream) {

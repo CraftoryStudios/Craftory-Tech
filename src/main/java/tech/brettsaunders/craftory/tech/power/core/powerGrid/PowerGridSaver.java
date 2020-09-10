@@ -10,8 +10,6 @@
 
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import lombok.AllArgsConstructor;
@@ -24,6 +22,6 @@ import tech.brettsaunders.craftory.persistence.Persistent;
 public class PowerGridSaver {
 
   @Persistent
-  protected Object2ObjectOpenHashMap<PowerGrid, ObjectOpenHashSet<Location>> data = new Object2ObjectOpenHashMap<>();
+  protected HashMap<PowerGrid, HashSet<Location>> data = new HashMap<>();
 
 }

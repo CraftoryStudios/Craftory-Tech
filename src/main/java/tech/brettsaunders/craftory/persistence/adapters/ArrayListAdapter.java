@@ -14,6 +14,7 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import java.util.ArrayList;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.utils.Logger;
 
@@ -26,7 +27,8 @@ public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
     if (value.size() == 0 || value.get(0) == null) {
       return;
     }
-    nbtCompound.setString("dataclass", value.get(0).getClass().getName());
+    nbtCompound.setString("dataclass",
+        persistenceStorage.getConverterClass(value.get(0)).getName());
     for (int i = 0; i < value.size(); i++) {
       NBTCompound container = nbtCompound.addCompound("" + i);
       persistenceStorage.saveObject(value.get(i), container);
@@ -42,7 +44,11 @@ public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
       return arrayList;
     }
     try {
-      dataClass = Class.forName(nbtCompound.getString("dataclass"));
+      if (nbtCompound.getString("dataclass").endsWith("ItemStack")) {
+        dataClass = ItemStack.class;
+      } else {
+        dataClass = Class.forName(nbtCompound.getString("dataclass"));
+      }
       for (String key : nbtCompound.getKeys()) {
         if (key.equals("dataclass")) {
           continue;

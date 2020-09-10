@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -28,7 +27,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   @Persistent
   protected int maxOutput;
   @Persistent
-  protected Object2ObjectOpenHashMap<BlockFace, Boolean> sidesConfig;
+  protected HashMap<BlockFace, Boolean> sidesConfig;
 
   /* Construction */
   public BaseProvider(Location location, String blockName, byte level, int maxOutput) {
@@ -48,7 +47,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
 
   /* Common Load and Construction */
   private void init() {
-    sidesConfig = new Object2ObjectOpenHashMap<>(6);
+    sidesConfig = new HashMap<>(6);
   }
 
   /* Update Loop */
@@ -99,11 +98,11 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   }
 
 
-  public Object2ObjectOpenHashMap<BlockFace, Boolean> getSideConfig() {
+  public HashMap<BlockFace, Boolean> getSideConfig() {
     return sidesConfig;
   }
 
-  public void setSidesConfig(Object2ObjectOpenHashMap<BlockFace, Boolean> config) {
+  public void setSidesConfig(HashMap<BlockFace, Boolean> config) {
     sidesConfig.clear();
     sidesConfig.putAll(config);
   }

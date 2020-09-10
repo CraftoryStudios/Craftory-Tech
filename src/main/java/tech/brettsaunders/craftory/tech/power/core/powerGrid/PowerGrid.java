@@ -10,8 +10,6 @@
 
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
@@ -32,16 +30,17 @@ public class PowerGrid extends BukkitRunnable {
 
   @Getter
   @Setter
-  private Object2ObjectOpenHashMap<Location, ObjectOpenHashSet<Location>> powerConnectors = new Object2ObjectOpenHashMap<>();
+  private HashMap<Location, HashSet<Location>> powerConnectors =
+      new HashMap<>();
   @Getter
   @Setter
-  private Object2ObjectOpenHashMap<Location, ObjectOpenHashSet<Location>> blockConnections = new Object2ObjectOpenHashMap<>();
+  private HashMap<Location, HashSet<Location>> blockConnections = new HashMap<>();
   @Getter
-  private ObjectOpenHashSet<Location> cells = new ObjectOpenHashSet<>();
+  private HashSet<Location> cells = new HashSet<>();
   @Getter
-  private ObjectOpenHashSet<Location> generators = new ObjectOpenHashSet<>();
+  private HashSet<Location> generators = new HashSet<>();
   @Getter
-  private ObjectOpenHashSet<Location> machines = new ObjectOpenHashSet<>();
+  private HashSet<Location> machines = new HashSet<>();
   private int machinesNeedingEnergy = 0;
   private final BukkitTask taskID;
 
@@ -197,12 +196,12 @@ public class PowerGrid extends BukkitRunnable {
 
   /* On Place */
   public void findPoweredBlocks() {
-    cells = new ObjectOpenHashSet<>();
-    generators = new ObjectOpenHashSet<>();
-    machines = new ObjectOpenHashSet<>();
+    cells = new HashSet<>();
+    generators = new HashSet<>();
+    machines = new HashSet<>();
     PoweredBlock block;
     Logger.debug("grid has " + blockConnections.size() + " machine connections");
-    for (ObjectOpenHashSet<Location> set : blockConnections.values()) {
+    for (HashSet<Location> set : blockConnections.values()) {
       if (set == null) {
         continue;
       }
@@ -245,7 +244,7 @@ public class PowerGrid extends BukkitRunnable {
 
   /* Common Methods */
   public void addPowerConnector(Location location) {
-    this.powerConnectors.put(location, new ObjectOpenHashSet<>());
+    this.powerConnectors.put(location, new HashSet<>());
   }
 
   public void addAll(PowerGrid other) {
@@ -257,15 +256,15 @@ public class PowerGrid extends BukkitRunnable {
   }
 
   public void addPowerConnectorConnection(Location from, Location to) {
-    ObjectOpenHashSet<Location> temp = powerConnectors.get(from);
+    HashSet<Location> temp = powerConnectors.get(from);
     if (temp == null) {
-      temp = new ObjectOpenHashSet<>();
+      temp = new HashSet<>();
     }
     temp.add(to);
     powerConnectors.put(from, temp);
     temp = powerConnectors.get(to);
     if (temp == null) {
-      temp = new ObjectOpenHashSet<>();
+      temp = new HashSet<>();
     }
     temp.add(from);
     powerConnectors.put(to, temp);
@@ -287,9 +286,9 @@ public class PowerGrid extends BukkitRunnable {
   }
 
   private void addBlockConnection(Location connector, Location machine) {
-    ObjectOpenHashSet<Location> temp = blockConnections.get(connector);
+    HashSet<Location> temp = blockConnections.get(connector);
     if (temp == null) {
-      temp = new ObjectOpenHashSet<>();
+      temp = new HashSet<>();
     }
     temp.add(machine);
     blockConnections.put(connector, temp);

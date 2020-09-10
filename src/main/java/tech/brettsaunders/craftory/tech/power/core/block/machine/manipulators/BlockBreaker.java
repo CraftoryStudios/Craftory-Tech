@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators;
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -70,7 +69,7 @@ public class BlockBreaker extends BaseMachine {
   private void init() {
     outputLocations = new ArrayList<>();
     outputLocations.add(0, SLOT);
-    interactableSlots = new ObjectOpenHashSet<>(Collections.singletonList(SLOT));
+    interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
   }
 
   @Override

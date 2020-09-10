@@ -11,7 +11,6 @@
 package tech.brettsaunders.craftory.tech.power.core.tools;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +27,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class ToolManager implements Listener {
 
-  private static final ObjectOpenHashSet<Material> plants = new ObjectOpenHashSet<>();
+  private static final HashSet<Material> plants = new HashSet<>();
 
   static {
     plants.addAll(Tag.CROPS.getValues());

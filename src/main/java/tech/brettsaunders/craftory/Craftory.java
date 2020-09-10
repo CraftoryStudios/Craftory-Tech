@@ -14,6 +14,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
@@ -161,7 +162,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    recipeBookEvents.onDisable();
+    if (Objects.nonNull(recipeBookEvents)) recipeBookEvents.onDisable();
     customBlockManager.onDisable();
     powerGridManager.onDisable();
     Utilities.reloadConfigFile();

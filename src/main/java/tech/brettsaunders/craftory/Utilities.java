@@ -10,13 +10,13 @@
 
 package tech.brettsaunders.craftory;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -93,7 +93,7 @@ public class Utilities {
   private static final String UNIT_FLUID = "B";
   private static final DecimalFormat df = new DecimalFormat("###.###");
   @Getter
-  private static final Object2ObjectOpenHashMap<String, BasicBlocks> basicBlockRegistry;
+  private static final HashMap<String, BasicBlocks> basicBlockRegistry;
 
   private static final Craftory plugin;
 
@@ -105,7 +105,7 @@ public class Utilities {
         .loadConfiguration(new File(plugin.getDataFolder(), "data.yml"));
     DATA_FOLDER = plugin.getDataFolder().getPath() + File.separator + "data";
     LANG_FOLDER = plugin.getDataFolder().getPath() + File.separator + "lang";
-    basicBlockRegistry = new Object2ObjectOpenHashMap<>();
+    basicBlockRegistry = new HashMap<>();
   }
 
   static void pluginBanner() {
@@ -269,7 +269,7 @@ public class Utilities {
         new Metrics.SimplePie("tech_enabled", () -> config.getString("general.techEnabled")));
     metrics.addCustomChart(new AdvancedPie("types_of_machines",
         () -> {
-          Object2ObjectOpenHashMap<String, Integer> valueMap = new Object2ObjectOpenHashMap<>();
+          HashMap<String, Integer> valueMap = new HashMap<>();
           //valueMap.put("totalCustomBlocks",Craftory.customBlockManager.statsContainer.getTotalCustomBlocks());
           //valueMap.put("totalPoweredBlocks",Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks());
           valueMap.put("totalCells", Craftory.customBlockManager.statsContainer.getTotalCells());

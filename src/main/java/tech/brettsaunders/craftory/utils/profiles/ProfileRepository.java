@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory.utils.profiles;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Optional;
@@ -28,7 +27,7 @@ import tech.brettsaunders.craftory.api.events.Events;
 
 public class ProfileRepository implements Listener {
   private static FileConfiguration profilesConfig;
-  private static Object2ObjectOpenHashMap<UUID, Profile> profiles = new Object2ObjectOpenHashMap<>();
+  private static HashMap<UUID, Profile> profiles = new HashMap<>();
 
   public ProfileRepository() {
     Events.registerEvents(this);

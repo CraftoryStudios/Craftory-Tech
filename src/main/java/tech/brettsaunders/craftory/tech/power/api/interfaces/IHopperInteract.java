@@ -10,13 +10,12 @@
 
 package tech.brettsaunders.craftory.tech.power.api.interfaces;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import org.bukkit.block.BlockFace;
 
 public interface IHopperInteract {
 
-  Object2ObjectOpenHashMap<BlockFace, Integer> getInputFaces();
+  HashMap<BlockFace, Integer> getInputFaces();
 
-  Object2ObjectOpenHashMap<BlockFace, Integer> getOutputFaces();
+  HashMap<BlockFace, Integer> getOutputFaces();
 }

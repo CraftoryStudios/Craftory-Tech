@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory.api.menu;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -29,13 +28,13 @@ import org.bukkit.plugin.Plugin;
 class ChestMenuListener implements Listener {
 
   private final Plugin plugin;
-  protected final Object2ObjectOpenHashMap<UUID, ChestMenu> menus;
+  protected final HashMap<UUID, ChestMenu> menus;
 
   protected ChestMenuListener(Plugin plugin) {
     plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
     this.plugin = plugin;
-    menus = new Object2ObjectOpenHashMap<>();
+    menus = new HashMap<>();
   }
 
   @EventHandler

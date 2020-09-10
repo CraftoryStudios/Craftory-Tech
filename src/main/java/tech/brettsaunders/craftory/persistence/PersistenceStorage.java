@@ -12,8 +12,6 @@ package tech.brettsaunders.craftory.persistence;
 
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,21 +46,21 @@ import tech.brettsaunders.craftory.utils.ReflectionUtils;
 public class PersistenceStorage {
 
   private final Gson gson;
-  private final Object2ObjectOpenHashMap<Class<?>, DataAdapter<?>> converters;
-  private final Object2ObjectOpenHashMap<Class<?>, DataAdapter<?>> interfaceConverters;
+  private final HashMap<Class<?>, DataAdapter<?>> converters;
+  private final HashMap<Class<?>, DataAdapter<?>> interfaceConverters;
 
   public PersistenceStorage() {
     gson = new Gson();
-    converters = new Object2ObjectOpenHashMap<>();
+    converters = new HashMap<>();
 
     // Register default converters
     registerDataConverter(String.class, new StringAdapter(), false);
     registerDataConverter(int.class, new IntegerAdapter(), false);
     registerDataConverter(Integer.class, new IntegerAdapter(), false);
     registerDataConverter(Long.class, new LongAdapter(), false);
-    registerDataConverter(Object2ObjectOpenHashMap.class, new HashMapAdapter(), false);
+    registerDataConverter(HashMap.class, new HashMapAdapter(), false);
     registerDataConverter(Location.class, new LocationAdapter(), false);
-    registerDataConverter(ObjectOpenHashSet.class, new HashSetAdapter(), false);
+    registerDataConverter(HashSet.class, new HashSetAdapter(), false);
     registerDataConverter(EnergyStorage.class, new EnergyStorageAdapter(), false);
     registerDataConverter(BlockFace.class, new BlockFaceAdapter(), false);
     registerDataConverter(INTERACTABLEBLOCK.class, new InteractableBlockAdapter(), false);
@@ -71,7 +69,7 @@ public class PersistenceStorage {
     registerDataConverter(PowerGrid.class, new PowerGridAdapter(), false);
     registerDataConverter(FluidStorage.class, new FluidStorageAdapter(), false);
 
-    interfaceConverters = new Object2ObjectOpenHashMap<>();
+    interfaceConverters = new HashMap<>();
     registerInterfaceConverter(ItemStack.class, new ItemStackAdapter(), false);
   }
 
@@ -165,6 +163,26 @@ public class PersistenceStorage {
     Logger.warn(
         "Did not find a Wrapper for " + data.getClass().getName() + "! Falling back to Gson!");
     nbtCompound.setString("json", gson.toJson(data));
+    return null;
+  }
+
+  public Class<?> getConverterClass(Object data) {
+    if (data == null) {
+      Logger.error("Error Saving Object. Null");
+      return null;
+    }
+
+    Class<?> clazz = data.getClass();
+    if (converters.containsKey(data.getClass())) {
+      return clazz;
+    }
+
+    for (Entry<Class<?>, DataAdapter<?>> entry : interfaceConverters.entrySet()) {
+      if (entry.getKey().isInstance(data)) {
+        return entry.getKey();
+      }
+    }
+
     return null;
   }
 

@@ -10,10 +10,10 @@
 
 package tech.brettsaunders.craftory.tech.power.core.powerGrid;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -37,16 +37,16 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class PowerConnectorManager implements Listener {
 
-  private final transient Object2ObjectOpenHashMap<UUID, Location> formingConnection;
-  private final transient Object2ObjectOpenHashMap<Location, ArrayList<Wire>> activeBeams;
-  private final transient Object2ObjectOpenHashMap<Location, Location> beamLocations;
-  private final transient ObjectOpenHashSet<UUID> recentClicks;
+  private final transient HashMap<UUID, Location> formingConnection;
+  private final transient HashMap<Location, ArrayList<Wire>> activeBeams;
+  private final transient HashMap<Location, Location> beamLocations;
+  private final transient HashSet<UUID> recentClicks;
 
   public PowerConnectorManager() {
-    formingConnection = new Object2ObjectOpenHashMap<>();
-    activeBeams = new Object2ObjectOpenHashMap<>();
-    beamLocations = new Object2ObjectOpenHashMap<>();
-    recentClicks = new ObjectOpenHashSet<>();
+    formingConnection = new HashMap<>();
+    activeBeams = new HashMap<>();
+    beamLocations = new HashMap<>();
+    recentClicks = new HashSet<>();
   }
 
   @EventHandler

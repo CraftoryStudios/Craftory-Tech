@@ -13,8 +13,8 @@ package tech.brettsaunders.craftory.tech.power.api.effect;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.UUID;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -41,7 +41,7 @@ public class Wire {
   private final int distanceSquared;
   private final AbstractPacket[] createPackets;
   private final WrapperPlayServerEntityDestroy destroyPacket;
-  private final ObjectOpenHashSet<Player> show = new ObjectOpenHashSet<>();
+  private final HashSet<Player> show = new HashSet<>();
   private Location start;
   private Location end;
   private BukkitRunnable run;

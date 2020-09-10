@@ -13,8 +13,8 @@ package tech.brettsaunders.craftory.api.items;
 import com.google.common.base.Strings;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import io.th0rgal.oraxen.items.OraxenItems;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,7 +37,7 @@ public class CustomItemManager {
 
   public static final String CUSTOM_ITEM = "CUSTOM_ITEM";
   public static final String CUSTOM_BLOCK_ITEM = "CUSTOM_BLOCK_ITEM";
-  private static final Object2ObjectOpenHashMap<String, CustomItem> itemIDCache = new Object2ObjectOpenHashMap<>();
+  private static final HashMap<String, CustomItem> itemIDCache = new HashMap<>();
   private static final ArrayList<String> itemNames = new ArrayList<>();
 
   private static boolean oraxenEnabled = false;

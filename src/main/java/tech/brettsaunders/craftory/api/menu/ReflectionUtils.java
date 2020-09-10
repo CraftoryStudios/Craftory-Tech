@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory.api.menu;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -25,7 +24,7 @@ public final class ReflectionUtils {
 
   private ReflectionUtils() {}
 
-  private static final Object2ObjectOpenHashMap<Class<?>, Class<?>> conversion = new Object2ObjectOpenHashMap<>();
+  private static final HashMap<Class<?>, Class<?>> conversion = new HashMap<>();
   private static String currentVersion;
 
   static {

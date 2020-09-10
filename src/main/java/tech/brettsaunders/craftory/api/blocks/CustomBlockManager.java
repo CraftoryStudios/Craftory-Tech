@@ -18,10 +18,10 @@ import static tech.brettsaunders.craftory.Utilities.getRegionID;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
@@ -48,13 +48,13 @@ public class CustomBlockManager {
 
   public final static String DATA_FOLDER =
       Craftory.plugin.getDataFolder() + File.separator + "data";
-  private final Object2ObjectOpenHashMap<Location, CustomBlock> currentCustomBlocks;
+  private final HashMap<Location, CustomBlock> currentCustomBlocks;
   @Getter
-  private final Object2ObjectOpenHashMap<String, ObjectOpenHashSet<CustomBlock>> activeChunks;
+  private final HashMap<String, HashSet<CustomBlock>> activeChunks;
   @Getter
-  private final Object2ObjectOpenHashMap<String, ObjectOpenHashSet<CustomBlock>> inactiveChunks;
+  private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
   @Getter
-  private final Object2ObjectOpenHashMap<String, CustomBlockData> customBlockDataHashMap;
+  private final HashMap<String, CustomBlockData> customBlockDataHashMap;
   public StatsContainer statsContainer;
   private final PersistenceStorage persistenceStorage;
   private final CustomBlockManagerEvents customBlockManagerEvents;
@@ -62,10 +62,10 @@ public class CustomBlockManager {
   public CustomBlockManager() {
     statsContainer = new StatsContainer();
     persistenceStorage = new PersistenceStorage();
-    currentCustomBlocks = new Object2ObjectOpenHashMap<>();
-    customBlockDataHashMap = new Object2ObjectOpenHashMap<>();
-    activeChunks = new Object2ObjectOpenHashMap<>();
-    inactiveChunks = new Object2ObjectOpenHashMap<>();
+    currentCustomBlocks = new HashMap<>();
+    customBlockDataHashMap = new HashMap<>();
+    activeChunks = new HashMap<>();
+    inactiveChunks = new HashMap<>();
     loadCustomBlockData();
     customBlockManagerEvents = new CustomBlockManagerEvents(persistenceStorage,
         currentCustomBlocks,
@@ -119,11 +119,11 @@ public class CustomBlockManager {
       return;
     }
     String chunkID = getChunkWorldID(customBlock.location.getChunk());
-    ObjectOpenHashSet<CustomBlock> chunkData;
+    HashSet<CustomBlock> chunkData;
     if (activeChunks.containsKey(chunkID)) {
       chunkData = activeChunks.get(chunkID);
     } else {
-      chunkData = new ObjectOpenHashSet<>();
+      chunkData = new HashSet<>();
       addActiveChunk(customBlock);
     }
     chunkData.add(customBlock);
@@ -181,7 +181,7 @@ public class CustomBlockManager {
         String name = entry.getKey();
         BasicBlocks placement = entry.getValue();
         Set<BlockFace> blockFaces = multipleFacing.getFaces();
-        ObjectOpenHashSet<BlockFace> compareFaces = placement.getAllowedFaces();
+        HashSet<BlockFace> compareFaces = placement.getAllowedFaces();
         if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces)) {
           location.getBlock().setType(Material.AIR);
           return Optional.of(CustomItemManager.getCustomItem(name));
@@ -213,8 +213,8 @@ public class CustomBlockManager {
 
   private void addActiveChunk(CustomBlock customBlock) {
     String chunkID = getChunkWorldID(customBlock.location.getChunk());
-    ObjectOpenHashSet<CustomBlock> customBlocks = activeChunks
-        .getOrDefault(chunkID, new ObjectOpenHashSet<>());
+    HashSet<CustomBlock> customBlocks = activeChunks
+        .getOrDefault(chunkID, new HashSet<>());
     customBlocks.add(customBlock);
     activeChunks.put(chunkID, customBlocks);
   }
@@ -222,7 +222,7 @@ public class CustomBlockManager {
   private void removeIfLastActiveChunk(CustomBlock customBlock, Boolean addToActive) {
     final String chunkID = getChunkWorldID(customBlock.location.getChunk());
     if (activeChunks.containsKey(chunkID)) {
-      ObjectOpenHashSet<CustomBlock> customBlocks = activeChunks.get(chunkID);
+      HashSet<CustomBlock> customBlocks = activeChunks.get(chunkID);
       if (customBlocks.contains(customBlock)) {
         if (customBlocks.size() == 1) {
           activeChunks.remove(chunkID);

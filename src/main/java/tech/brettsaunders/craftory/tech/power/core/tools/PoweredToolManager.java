@@ -6,10 +6,10 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,10 +39,10 @@ import tech.brettsaunders.craftory.api.tasks.Tasks;
 
 public class PoweredToolManager implements Listener {
 
-  private ObjectOpenHashSet<String> poweredTools = new ObjectOpenHashSet<>();
+  private HashSet<String> poweredTools = new HashSet<>();
   public static String CHARGE_KEY = "Charge";
   public static String MAX_CHARGE_KEY = "MaxCharge";
-  private Object2ObjectOpenHashMap<UUID, BlockFace> lastHitFace = new Object2ObjectOpenHashMap<>();
+  private HashMap<UUID, BlockFace> lastHitFace = new HashMap<>();
   private static int TOOL_POWER_COST = 100;
   private static ArrayList<Material> excavatorBlocks = new ArrayList<Material>(){
     {

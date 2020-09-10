@@ -10,8 +10,6 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,7 +35,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   protected static final int[] CAPACITY_LEVEL = {5000, 10000, 25000, 50000};
   protected static final int INPUT_LOCATION = 21;
   protected static final int OUTPUT_LOCATION = 25;
-  protected static final Object2ObjectOpenHashMap<BlockFace, Integer> inputFaces = new Object2ObjectOpenHashMap<BlockFace, Integer>() {
+  protected static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
     {
       put(BlockFace.NORTH, INPUT_LOCATION);
       put(BlockFace.EAST, INPUT_LOCATION);
@@ -47,7 +45,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     }
   };
 
-  protected static final Object2ObjectOpenHashMap<BlockFace, Integer> outputFaces = new Object2ObjectOpenHashMap<BlockFace, Integer>() {
+  protected static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
     {
       put(BlockFace.DOWN, OUTPUT_LOCATION);
     }
@@ -78,7 +76,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     outputLocations = new ArrayList<>();
     inputLocations.add(INPUT_LOCATION);
     outputLocations.add(OUTPUT_LOCATION);
-    interactableSlots = new ObjectOpenHashSet<>(Arrays.asList(INPUT_LOCATION, OUTPUT_LOCATION));
+    interactableSlots = new HashSet<>(Arrays.asList(INPUT_LOCATION, OUTPUT_LOCATION));
   }
 
   @Override
@@ -124,7 +122,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     outputSlots.set(0, inventoryInterface.getItem(OUTPUT_LOCATION));
   }
 
-  protected Object2ObjectOpenHashMap<String, String> getRecipes() {
+  protected HashMap<String, String> getRecipes() {
     Logger.warn("THIS CODE SHOULD NEVER BE RUN");
     return null;
   }
@@ -168,12 +166,12 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   }
 
   @Override
-  public Object2ObjectOpenHashMap<BlockFace, Integer> getInputFaces() {
+  public HashMap<BlockFace, Integer> getInputFaces() {
     return inputFaces;
   }
 
   @Override
-  public Object2ObjectOpenHashMap<BlockFace, Integer> getOutputFaces() {
+  public HashMap<BlockFace, Integer> getOutputFaces() {
     return outputFaces;
   }
 }

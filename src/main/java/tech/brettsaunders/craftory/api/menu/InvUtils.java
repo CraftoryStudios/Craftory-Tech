@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory.api.menu;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -103,7 +102,7 @@ public final class InvUtils {
       return fits(inv, items[0], slots);
     }
 
-    Object2ObjectOpenHashMap<Integer, ItemStack> cache = new Object2ObjectOpenHashMap<>();
+    HashMap<Integer, ItemStack> cache = new HashMap<>();
 
     for (int i = 0; i < items.length; i++) {
       ItemStack item = items[i];

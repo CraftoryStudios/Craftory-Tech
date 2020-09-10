@@ -12,8 +12,6 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import static tech.brettsaunders.craftory.CoreHolder.HOPPER_INTERACT_FACES;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -49,7 +47,7 @@ import tech.brettsaunders.craftory.utils.Logger;
 public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, Listener {
 
   /* Static Constants Protected */
-  private static final ObjectOpenHashSet<InventoryAction> outputDisabledActions = new ObjectOpenHashSet<>(Arrays
+  private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
       .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
           InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
   /* Per Object Variables Saved */
@@ -58,8 +56,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   @Persistent
   protected int level;
   @Persistent
-  protected Object2ObjectOpenHashMap<BlockFace, INTERACTABLEBLOCK> cachedSidesConfig;
-  protected Object2ObjectOpenHashMap<BlockFace, CustomBlock> cachedSides;
+  protected HashMap<BlockFace, INTERACTABLEBLOCK> cachedSidesConfig;
+  protected HashMap<BlockFace, CustomBlock> cachedSides;
   /* Hopper control variables */
   @Persistent
   protected ArrayList<ItemStack> inputSlots = new ArrayList<>(); //The ItemStacks of the inputs
@@ -76,8 +74,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   /* Construction */
   public PoweredBlock(Location location, String blockName, byte level) {
     super(location, blockName);
-    cachedSidesConfig = new Object2ObjectOpenHashMap<>();
-    cachedSides = new Object2ObjectOpenHashMap<>();
+    cachedSidesConfig = new HashMap<>();
+    cachedSides = new HashMap<>();
     this.energyStorage = new EnergyStorage(0);
     this.level = level;
     cacheSides();
@@ -96,7 +94,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (cachedSides != null) {
       return;
     }
-    cachedSides = new Object2ObjectOpenHashMap<>();
+    cachedSides = new HashMap<>();
     cachedSidesConfig.forEach(((blockFace, interactableblock) -> {
       if (interactableblock.equals(INTERACTABLEBLOCK.RECEIVER)) {
         cachedSides.put(blockFace, Craftory.customBlockManager
@@ -150,8 +148,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (inventoryInterface == null) {
       return;
     }
-    Object2ObjectOpenHashMap<BlockFace, Integer> inputFaces = ((IHopperInteract) this).getInputFaces();
-    Object2ObjectOpenHashMap<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
+    HashMap<BlockFace, Integer> inputFaces = ((IHopperInteract) this).getInputFaces();
+    HashMap<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
 
     //Hopper Input
     inputFaces.forEach((face, slot) -> {

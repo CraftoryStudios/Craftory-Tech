@@ -10,7 +10,7 @@
 
 package tech.brettsaunders.craftory.PacketWrapper;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import java.util.HashMap;
 import tech.brettsaunders.craftory.utils.Logger;
 
 public enum UpdatedEntityType {
@@ -123,7 +123,7 @@ public enum UpdatedEntityType {
   PLAYER(106),
   FISHING_BOBBER(107);
 
-  private static final Int2ObjectOpenHashMap<UpdatedEntityType> map = new Int2ObjectOpenHashMap<>();
+  private static final HashMap<Integer,UpdatedEntityType> map = new HashMap<>();
   static {
     for(UpdatedEntityType type: UpdatedEntityType.values()) {
       map.put(type.id,type);

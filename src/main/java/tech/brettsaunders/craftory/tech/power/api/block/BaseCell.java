@@ -15,9 +15,9 @@ import static tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManag
 import static tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager.isPoweredTool;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -58,7 +58,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
     inputLocations = new ArrayList<>();
     outputLocations = new ArrayList<>();
     inputLocations.add(ITEM_LOCATION);
-    interactableSlots = new ObjectOpenHashSet<>(Arrays.asList(ITEM_LOCATION));
+    interactableSlots = new HashSet<>(Arrays.asList(ITEM_LOCATION));
   }
 
   /* IEnergyReceiver */

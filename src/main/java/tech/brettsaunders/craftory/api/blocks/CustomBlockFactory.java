@@ -11,9 +11,9 @@
 package tech.brettsaunders.craftory.api.blocks;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import lombok.Synchronized;
 import org.bukkit.Location;
@@ -29,10 +29,10 @@ import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockFactory {
 
-  private final Object2ObjectOpenHashMap<String, Class<? extends CustomBlock>> blockTypes = new Object2ObjectOpenHashMap<>();
-  private final Object2ObjectOpenHashMap<String, Constructor<? extends CustomBlock>> createConstructor = new Object2ObjectOpenHashMap<>();
-  private final Object2ObjectOpenHashMap<String, Constructor<? extends CustomBlock>> loadConstructor = new Object2ObjectOpenHashMap<>();
-  private final ObjectOpenHashSet<String> directional = new ObjectOpenHashSet<>();
+  private final HashMap<String, Class<? extends CustomBlock>> blockTypes = new HashMap<>();
+  private final HashMap<String, Constructor<? extends CustomBlock>> createConstructor = new HashMap<>();
+  private final HashMap<String, Constructor<? extends CustomBlock>> loadConstructor = new HashMap<>();
+  private final HashSet<String> directional = new HashSet<>();
   private final String locationName;
   private StatsContainer statsContainer;
 

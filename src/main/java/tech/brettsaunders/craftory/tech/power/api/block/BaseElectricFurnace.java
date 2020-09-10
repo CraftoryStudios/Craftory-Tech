@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.HashMap;
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
@@ -30,8 +29,8 @@ public class BaseElectricFurnace extends BaseOneToOneMachine {
   }
 
   @Override
-  protected Object2ObjectOpenHashMap<String, String> getRecipes() {
-    return new Object2ObjectOpenHashMap(RecipeUtils.getFurnaceRecipes());
+  protected HashMap<String, String> getRecipes() {
+    return new HashMap(RecipeUtils.getFurnaceRecipes());
   }
 
 }

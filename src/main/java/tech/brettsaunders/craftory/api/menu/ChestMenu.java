@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory.api.menu;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -55,7 +54,7 @@ public class ChestMenu implements Cloneable, Iterable<ItemStack> {
   protected boolean emptyClickable;
   protected Inventory inv;
   protected List<ItemStack> items;
-  protected Object2ObjectOpenHashMap<Integer, MenuClickHandler> handlers;
+  protected HashMap<Integer, MenuClickHandler> handlers;
   protected MenuClickHandler playerclick;
   protected Predicate<ItemStack> predicate;
 
@@ -83,7 +82,7 @@ public class ChestMenu implements Cloneable, Iterable<ItemStack> {
     this.playerInventoryClickable = true;
     this.emptyClickable = true;
     this.items = new LinkedList<>();
-    this.handlers = new Object2ObjectOpenHashMap<>();
+    this.handlers = new HashMap<>();
 
     this.timeout = -1;
     this.dirtyRunnable = dirtyRunnable;
@@ -165,7 +164,7 @@ public class ChestMenu implements Cloneable, Iterable<ItemStack> {
    *
    * @return A Map containing all Click Events
    */
-  public Object2ObjectOpenHashMap<Integer, MenuClickHandler> getClickHandlers() {
+  public HashMap<Integer, MenuClickHandler> getClickHandlers() {
     return handlers;
   }
 
