@@ -44,8 +44,12 @@ public class PoweredToolManager implements Listener {
   public static String MAX_CHARGE_KEY = "MaxCharge";
   private HashMap<UUID, BlockFace> lastHitFace = new HashMap<>();
   private static int TOOL_POWER_COST = 100;
+  private static final int version = Integer.parseInt(Craftory.plugin.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
   private static ArrayList<Material> excavatorBlocks = new ArrayList<Material>(){
     {
+      if(version > 16) {
+        add(Material.SOUL_SOIL);
+      }
       add(Material.CLAY);
       add(Material.FARMLAND);
       add(Material.GRASS_BLOCK);
@@ -58,7 +62,6 @@ public class PoweredToolManager implements Listener {
       add(Material.RED_SAND);
       add(Material.SAND);
       add(Material.SOUL_SAND);
-      add(Material.SOUL_SOIL);
       add(Material.SNOW_BLOCK);
       add(Material.SNOW);
     }
