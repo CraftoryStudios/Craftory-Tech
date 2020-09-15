@@ -21,9 +21,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
-import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.ShapedRecipe;
@@ -37,6 +35,7 @@ public class RecipeManager implements Listener {
 
   private final HashMap<String, String> customRecipes;
   private HashMap<String, ItemStack> customFurnaceRecipes; //Map of Source to Result
+  private static final int version = Integer.parseInt(Craftory.plugin.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
 
   public RecipeManager() {
     customRecipes = new HashMap<>();
@@ -46,6 +45,9 @@ public class RecipeManager implements Listener {
       Logger.warn("No Crafting Recipes found!");
     } else {
       for (String recipe : recipes.getKeys(false)) {
+        //Check item exists in this version
+        int v = recipes.getInt(recipe + ".version");
+        if(version < v) continue;
         String customItemsInSlots = "";
         //Result
         ItemStack result = CustomItemManager

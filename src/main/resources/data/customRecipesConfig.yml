@@ -678,6 +678,7 @@ recipes:
     result:
       item: netherite_drill
       amount: 1
+    version: 16
   netherite_power_hammer:
     pattern:
       - XBX
@@ -692,6 +693,7 @@ recipes:
     result:
       item: netherite_power_hammer
       amount: 1
+    version: 16
   netherite_excavator:
     pattern:
       - XBX
@@ -706,6 +708,7 @@ recipes:
     result:
       item: netherite_excavator
       amount: 1
+    version: 16
 
 furnace_recipes:
   copper_ingot:
