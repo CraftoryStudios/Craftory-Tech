@@ -107,7 +107,7 @@ fabric.properties
 
 # Package Files #
 *.jar
-!CrazyAdvancementsAPI.jar
+!oraxen-1.57.0.jar
 *.war
 *.nar
 *.ear

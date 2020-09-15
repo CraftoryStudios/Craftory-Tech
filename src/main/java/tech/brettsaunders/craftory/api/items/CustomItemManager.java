@@ -146,7 +146,7 @@ public class CustomItemManager {
         }
       }
     } else if (itemName.toLowerCase().startsWith("oraxen-item:")) {
-      OraxenItems.getItemById(itemName.toLowerCase().replace("oraxen-item:","")).build();
+      return OraxenItems.getItemById(itemName.toLowerCase().replace("oraxen-item:","")).build();
     }
     if (itemIDCache.containsKey(itemName)) {
       CustomItem customItem = itemIDCache.get(itemName);
