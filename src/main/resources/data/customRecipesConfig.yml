@@ -485,10 +485,87 @@ recipes:
       - SSS
       - PSP
     ingredients:
-      P: TAG-PLANKS
+      P: DARK_OAK_PLANKS
       S: STICK
     result:
       item: waterwheel
+      amount: 1
+  waterwheel_oak:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: OAK_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_oak
+      amount: 1
+  waterwheel_birch:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: BIRCH_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_birch
+      amount: 1
+  waterwheel_acacia:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: ACACIA_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_acacia
+      amount: 1
+  waterwheel_crimson:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: CRIMSON_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_crimson
+      amount: 1
+  waterwheel_jungle:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: JUNGLE_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_jungle
+      amount: 1
+  waterwheel_spruce:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: SPRUCE_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_spruce
+      amount: 1
+  waterwheel_warpped:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: WARPPED_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_warped
       amount: 1
   Magnetiser:
     pattern:
