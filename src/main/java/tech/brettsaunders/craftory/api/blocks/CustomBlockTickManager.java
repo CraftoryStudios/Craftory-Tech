@@ -48,6 +48,7 @@ public class CustomBlockTickManager extends BukkitRunnable {
   }
 
   @Override
+  @Synchronized
   public void run() {
     tick++;
     for (CustomBlock customBlock : trackedBlocks) {

@@ -95,6 +95,15 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
     return false;
   }
 
+  @Ticking(ticks=60)
+  public void soundLoop() {
+    if(runningContainer.getT()) {
+      playSound();
+    }
+  }
+
+  protected void playSound(){}
+
   protected abstract void processComplete();
 
   protected abstract boolean validateContentes();
