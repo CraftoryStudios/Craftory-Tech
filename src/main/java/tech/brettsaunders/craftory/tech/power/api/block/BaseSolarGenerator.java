@@ -44,10 +44,10 @@ public class BaseSolarGenerator extends BaseGenerator {
     }
     if (solarDuringStorm) {
       return location.getWorld().getTime() < 13000
-          && location.clone().add(0, 1, 1).getBlock().getLightFromSky() == 15;
+          && location.clone().add(0, 1, 0).getBlock().getLightFromSky() == 15;
     }
     return !location.getWorld().isThundering() && location.getWorld().getTime() < 13000
-        && location.clone().add(0, 1, 1).getBlock().getLightFromSky() == 15;
+        && location.clone().add(0, 1, 0).getBlock().getLightFromSky() == 15;
 
   }
 
