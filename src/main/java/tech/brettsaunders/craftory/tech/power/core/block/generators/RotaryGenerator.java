@@ -17,10 +17,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import lombok.Getter;
+import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
@@ -32,6 +34,7 @@ import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.items.CustomTag;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
@@ -152,8 +155,8 @@ public class RotaryGenerator extends BaseGenerator {
           } else {
             wheelPlaced = false;
           }
-        } else if (CustomItemManager.matchCustomItemName(itemStack,
-            Items.WATER_WHEEL)) {
+        } else if (CustomItemManager.matchCustomItemTag(itemStack,
+            CustomTag.WATERWHEEL)) {
           mode = WheelMode.WATER;
           wheelPlaced = true;
           checkWheel();
@@ -197,8 +200,8 @@ public class RotaryGenerator extends BaseGenerator {
       removeWheels();
       return false;
     }
-    if ((mode.equals(WheelMode.WATER) && CustomItemManager.matchCustomItemName(itemStack,
-        Items.WATER_WHEEL)) || mode.equals(WheelMode.WIND) && CustomItemManager
+    if ((mode.equals(WheelMode.WATER) && CustomItemManager.matchCustomItemTag(itemStack,
+        CustomTag.WATERWHEEL)) || mode.equals(WheelMode.WIND) && CustomItemManager
         .matchCustomItemName(itemStack,
             Items.WINDMILL)) {
       if (!wheelPlaced) {
@@ -249,6 +252,9 @@ public class RotaryGenerator extends BaseGenerator {
   }
 
   private void spawnArmourStand(Location spawnLoc) {
+    if (checkArmourStand(spawnLoc)) {
+      return;
+    }
     wheel = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
     wheel.setArms(false);
     wheel.setBasePlate(false);
@@ -256,14 +262,28 @@ public class RotaryGenerator extends BaseGenerator {
     wheel.setInvulnerable(true);
     wheel.setGravity(false);
     wheel.setAI(false);
+    wheel.setSilent(true);
     wheel.setMarker(true);
     wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
     EntityEquipment entityEquipment = wheel.getEquipment();
     if (mode.equals(WheelMode.WIND)) {
       entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WINDMILL));
     } else {
-      entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WATER_WHEEL));
+      entityEquipment.setHelmet(inventoryInterface.getItem(SLOT));
     }
+  }
+
+  private boolean checkArmourStand(Location location) {
+    for (Entity entity: location.getChunk().getEntities()) {
+      if (entity instanceof ArmorStand && location.distanceSquared(entity.getLocation()) < 0.4D && isGenArmour((ArmorStand) entity)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean isGenArmour(@NonNull ArmorStand armorStand) {
+    return armorStand.isSilent() && !armorStand.hasGravity() && armorStand.isMarker() && armorStand.isInsideVehicle();
   }
 
   @Override

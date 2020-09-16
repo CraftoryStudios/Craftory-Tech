@@ -163,6 +163,20 @@ items:
     itemModel: paper
   waterwheel:
     itemModel: paper
+  waterwheel_oak:
+    itemModel: paper
+  waterwheel_birch:
+    itemModel: paper
+  waterwheel_acacia:
+    itemModel: paper
+  waterwheel_crimson:
+    itemModel: paper
+  waterwheel_jungle:
+    itemModel: paper
+  waterwheel_spruce:
+    itemModel: paper
+  waterwheel_warpped:
+    itemModel: paper
   light_off:
     itemModel: paper
     hideItem: true

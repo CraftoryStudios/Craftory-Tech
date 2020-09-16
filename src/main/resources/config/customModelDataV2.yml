@@ -347,6 +347,21 @@ items:
     customModelID: 100134
   recipe_book:
     customModelID: 100135
+  waterwheel_oak:
+    customModelID: 100140
+  waterwheel_birch:
+    customModelID: 100137
+  waterwheel_acacia:
+    customModelID: 100136
+  waterwheel_crimson:
+    customModelID: 100138
+  waterwheel_jungle:
+    customModelID: 100139
+  waterwheel_spruce:
+    customModelID: 100141
+  waterwheel_warpped:
+    customModelID: 100142
+
   upgrade_card_iron:
     customModelID: 1001
   upgrade_card_gold:

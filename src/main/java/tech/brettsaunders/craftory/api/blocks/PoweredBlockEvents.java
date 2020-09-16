@@ -40,6 +40,7 @@ import tech.brettsaunders.craftory.api.blocks.events.CustomBlockInteractEvent;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockPlaceEvent;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.items.CustomTag;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.RotaryGenerator;
@@ -177,7 +178,7 @@ public class PoweredBlockEvents implements Listener {
     }
     if ((e.getCustomBlock() instanceof RotaryGenerator) && (
         CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WINDMILL) || CustomItemManager
-            .matchCustomItemName(e.getItemStack(), Items.WATER_WHEEL))) {
+            .matchCustomItemTag(e.getItemStack(), CustomTag.WATERWHEEL))) {
       RotaryGenerator generator = (RotaryGenerator) e.getCustomBlock();
       if (generator.getWheelPlaced()) {
         return;

@@ -133,7 +133,6 @@ public class CoreHolder {
 
     /* World Items */
     public static final String WINDMILL = "windmill";
-    public static final String WATER_WHEEL = "waterwheel";
 
     /* Recipe Book */
     public static final String RECIPE_BOOK = "recipe_book";

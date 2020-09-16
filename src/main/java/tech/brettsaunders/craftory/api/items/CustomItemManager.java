@@ -188,6 +188,17 @@ public class CustomItemManager {
     return false;
   }
 
+  public static boolean matchCustomItemTag(ItemStack itemStack, CustomTag customTag) {
+    if (itemStack == null || itemStack.getType() == Material.AIR) {
+      return false;
+    }
+    NBTItem nbtItem = new NBTItem(itemStack);
+    if (isCustomItem(itemStack, true)) {
+      return customTag.items.contains(nbtItem.getString("NAME"));
+    }
+    return false;
+  }
+
   public static String getCustomItemName(ItemStack itemStack) {
     NBTItem nbtItem = new NBTItem(itemStack);
     return getCustomItemName(nbtItem);
