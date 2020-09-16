@@ -12,11 +12,13 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
+import ru.beykerykt.lightapi.LightAPI;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
+import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver {
@@ -31,6 +33,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   protected transient int processTime;
   protected transient int energyConsumption;
   protected transient int tickCount = 0;
+  protected boolean lightSpawned = false;
 
   /* Construction */
   public BaseMachine(Location location, String blockName, byte level, int maxReceive) {
@@ -67,9 +70,19 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
         tickCount = 0;
         processComplete();
       }
+      if(!lightSpawned){
+        lightSpawned = true;
+        LightAPI.createLight(location, 10, false);
+        Logger.info(" creatin machine light");
+      }
     } else {
       runningContainer.setT(false);
       tickCount = 0;
+      if(lightSpawned) {
+        lightSpawned = false;
+        LightAPI.deleteLight(location, false);
+        Logger.info("deleted light");
+      }
     }
     progressContainer.setT(((double) tickCount) / processTime);
   }

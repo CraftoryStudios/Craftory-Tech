@@ -16,17 +16,21 @@ import static tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManag
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import ru.beykerykt.lightapi.LightAPI;
+import ru.beykerykt.lightapi.LightType;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
+import tech.brettsaunders.craftory.utils.Logger;
 
 public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
 
@@ -38,6 +42,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
   protected static final int[] CHARGE_SPEED_LEVEL = {1,2,4,8};
   protected static final int ITEM_LOCATION = 50;
   /* Static Constants */
+
+  protected int currentLightLevel = -1;
 
   /* Construction */
   public BaseCell(Location location, String blockName, byte level, int outputAmount) {
@@ -58,7 +64,7 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
     inputLocations = new ArrayList<>();
     outputLocations = new ArrayList<>();
     inputLocations.add(ITEM_LOCATION);
-    interactableSlots = new HashSet<>(Arrays.asList(ITEM_LOCATION));
+    interactableSlots = new HashSet<>(Collections.singletonList(ITEM_LOCATION));
   }
 
   /* IEnergyReceiver */
@@ -88,6 +94,27 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
   public boolean canConnectEnergy() {
     return true;
   }
+
+  @Ticking(ticks = 100)
+  public void updateLight() {
+    if(Craftory.plugin.getServer().getPluginManager().getPlugin("LightAPI")==null) {
+      Logger.info("API OFF");
+      return;
+    }
+    int level = Math.round((getEnergyStored() / (float) getMaxEnergyStored()) * 10);
+    if(currentLightLevel!=level) {
+      if(currentLightLevel!=-1) {
+        LightAPI.deleteLight(location, LightType.BLOCK, false);
+        Logger.info("DELETING LIGHT");
+      }
+      if(level>0) {
+        LightAPI.createLight(location, level, false);
+        Logger.info("CREATING LIGHT");
+      }
+      currentLightLevel = level;
+    }
+  }
+
 
   /* Update Loop */
   @Ticking(ticks = 1)
