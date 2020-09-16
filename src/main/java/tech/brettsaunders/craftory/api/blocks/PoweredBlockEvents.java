@@ -177,7 +177,7 @@ public class PoweredBlockEvents implements Listener {
       return;
     }
     if ((e.getCustomBlock() instanceof RotaryGenerator) && (
-        CustomItemManager.matchCustomItemName(e.getItemStack(), Items.WINDMILL) || CustomItemManager
+        CustomItemManager.matchCustomItemTag(e.getItemStack(), CustomTag.WINDMILL) || CustomItemManager
             .matchCustomItemTag(e.getItemStack(), CustomTag.WATERWHEEL))) {
       RotaryGenerator generator = (RotaryGenerator) e.getCustomBlock();
       if (generator.getWheelPlaced()) {

@@ -145,8 +145,8 @@ public class RotaryGenerator extends BaseGenerator {
     if (!wheelPlaced && wheelFree && inventoryInterface.getItem(SLOT) != null) {
       ItemStack itemStack = inventoryInterface.getItem(SLOT);
       if (CustomItemManager.isCustomItem(itemStack, false)) {
-        if (CustomItemManager.matchCustomItemName(itemStack,
-            Items.WINDMILL)) {
+        if (CustomItemManager.matchCustomItemTag(itemStack,
+            CustomTag.WINDMILL)) {
           mode = WheelMode.WIND;
           wheelPlaced = true;
           checkWheel();
@@ -202,8 +202,8 @@ public class RotaryGenerator extends BaseGenerator {
     }
     if ((mode.equals(WheelMode.WATER) && CustomItemManager.matchCustomItemTag(itemStack,
         CustomTag.WATERWHEEL)) || mode.equals(WheelMode.WIND) && CustomItemManager
-        .matchCustomItemName(itemStack,
-            Items.WINDMILL)) {
+        .matchCustomItemTag(itemStack,
+            CustomTag.WINDMILL)) {
       if (!wheelPlaced) {
         return false;
       }
@@ -266,11 +266,7 @@ public class RotaryGenerator extends BaseGenerator {
     wheel.setMarker(true);
     wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
     EntityEquipment entityEquipment = wheel.getEquipment();
-    if (mode.equals(WheelMode.WIND)) {
-      entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WINDMILL));
-    } else {
-      entityEquipment.setHelmet(inventoryInterface.getItem(SLOT));
-    }
+    entityEquipment.setHelmet(inventoryInterface.getItem(SLOT));
   }
 
   private boolean checkArmourStand(Location location) {

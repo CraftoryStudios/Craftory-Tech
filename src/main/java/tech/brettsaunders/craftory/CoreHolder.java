@@ -131,9 +131,6 @@ public class CoreHolder {
     public static final String SICKLE_COPPER = "sickle_copper";
     public static final String SICKLE_DIAMOND = "sickle_diamond";
 
-    /* World Items */
-    public static final String WINDMILL = "windmill";
-
     /* Recipe Book */
     public static final String RECIPE_BOOK = "recipe_book";
   }
