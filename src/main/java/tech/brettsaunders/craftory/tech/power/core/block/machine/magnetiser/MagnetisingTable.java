@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser;
 
+import java.nio.channels.ScatteringByteChannel;
 import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -34,6 +35,7 @@ import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
+import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
 public class MagnetisingTable extends CustomBlock implements Listener {
@@ -108,7 +110,12 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     if (!frameLocation.getBlock().getType().equals(Material.AIR)) {
       return false;
     }
-    itemFrame = location.getWorld().spawn(frameLocation, ItemFrame.class);
+    try {
+      itemFrame = location.getWorld().spawn(frameLocation, ItemFrame.class);
+    }catch (IllegalArgumentException e) {
+      Logger.warn("ItemFrame error caught.");
+      Logger.debug(e.toString());
+    }
     itemFrame.setFacingDirection(BlockFace.UP);
     itemFrame.setVisible(false);
     framePlaced = true;
