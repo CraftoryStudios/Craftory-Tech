@@ -846,7 +846,7 @@ recipes:
       U: steel_ingot
       T: GOLDEN_PICKAXE
       M: magnetised_iron
-      C: IronCell
+      C: GoldCell
     result:
       item: golden_power_hammer
       amount: 1
