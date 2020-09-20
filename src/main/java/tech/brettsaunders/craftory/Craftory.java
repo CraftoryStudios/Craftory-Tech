@@ -95,6 +95,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     Craftory.VERSION = this.getDescription().getVersion();
     thisVersionCode = generateVersionCode();
     Craftory.plugin = this;
+    Utilities.setupSentry();
     this.getServer().getPluginManager().registerEvents(this, this);
 
     Utilities.createDataPath();

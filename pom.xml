@@ -14,7 +14,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>Craftory</artifactId>
   <url>brettsaunders.tech</url>
-  <version>0.2.5</version>
+  <version>0.2.6</version>
 
   <build>
     <defaultGoal>clean package</defaultGoal>
@@ -39,6 +39,10 @@
             <relocation>
               <pattern>de.tr7zw.changeme.nbtapi</pattern>
               <shadedPattern>tech.brettsaunders.craftory.external</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>io.sentry</pattern>
+              <shadedPattern>tech.brettsaunders.craftory.external.sentry</shadedPattern>
             </relocation>
           </relocations>
         </configuration>
@@ -112,6 +116,19 @@
       <artifactId>ProtocolLib</artifactId>
       <scope>provided</scope>
       <version>4.6.0-SNAPSHOT</version>
+    </dependency>
+    <!-- Sentry, a library that collects exception data and reports them automatically -->
+    <dependency>
+      <groupId>io.sentry</groupId>
+      <artifactId>sentry</artifactId>
+      <version>1.7.30</version>
+      <optional>true</optional>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
   <description>Adds more functionality to Minecraft with only server side modification</description>

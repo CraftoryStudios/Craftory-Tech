@@ -10,6 +10,10 @@
 
 package tech.brettsaunders.craftory;
 
+import io.sentry.Sentry;
+import io.sentry.SentryClient;
+import io.sentry.SentryClientFactory;
+import io.sentry.dsn.Dsn;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -95,6 +99,7 @@ public class Utilities {
   private static final DecimalFormat df = new DecimalFormat("###.###");
   @Getter
   private static final HashMap<String, BasicBlocks> basicBlockRegistry;
+  private static SentryClient client;
 
   private static final Craftory plugin;
 
@@ -129,6 +134,22 @@ public class Utilities {
       } else {
         Logger.info("There is a new update available!");
       }
+    });
+  }
+
+  static void setupSentry() {
+    client = Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry"
+        + ".io/5257818?stacktrace.app.packages=tech.brettsaunders.craftory&release=" + plugin.getDescription().getVersion(),
+        new SentryClientFactory() {
+      @Override
+      public SentryClient createSentryClient(Dsn dsn) {
+        return null;
+      }
+    });
+
+    Thread.currentThread().setUncaughtExceptionHandler((currentThread, throwable) -> {
+      plugin.getLogger().log(Level.SEVERE, "An uncaught error occurred!", throwable);
+      client.sendException(throwable);
     });
   }
 
