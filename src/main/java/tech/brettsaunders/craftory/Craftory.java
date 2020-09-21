@@ -194,6 +194,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     Tasks.runTaskLater(sentryClientFactory::updateInAppFrames, 1L);
     Tasks.runTaskLater(sentryClientFactory::updateInAppFrames, 20L);
     startSentryCollecting();
+    Log.info("Sentry Enabled!");
   }
 
   private void startSentryCollecting() {
@@ -218,5 +219,8 @@ public final class Craftory extends JavaPlugin implements Listener {
     // Start the collector
     appender.start();
     logger.addAppender(appender);
+
+    Sentry.capture("Test");
+    sentryClient.sendMessage("Testing");
   }
 }
