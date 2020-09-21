@@ -33,7 +33,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class PowerGridManager implements Listener {
 
@@ -233,7 +233,7 @@ public class PowerGridManager implements Listener {
     ArrayList<PowerGrid> managers = new ArrayList<>();
     powerGrid.getBlockConnections().remove(breakPoint);
     HashSet<Location> neighbours = powerGrid.getPowerConnectors().remove(breakPoint);
-    Logger.debug("Connector had: " + neighbours.size());
+    Log.debug("Connector had: " + neighbours.size());
     HashSet<Location> closedSet = new HashSet<>();
     neighbours.forEach(location -> { //Loop through all the neighbours of broken connector
       if (!closedSet.contains(location)) {

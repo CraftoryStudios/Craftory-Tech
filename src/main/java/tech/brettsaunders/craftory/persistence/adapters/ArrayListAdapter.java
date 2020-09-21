@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 @NoArgsConstructor
 public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
@@ -57,7 +57,7 @@ public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
         arrayList.add(persistenceStorage.loadObject(parentObject, dataClass, container));
       }
     } catch (ClassNotFoundException ex) {
-      Logger.error(nbtCompound.getString("dataclass"));
+      Log.error(nbtCompound.getString("dataclass"));
       ex.printStackTrace();
     }
     return arrayList;

@@ -12,12 +12,17 @@ package tech.brettsaunders.craftory;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import io.sentry.Sentry;
+import io.sentry.SentryClient;
+import io.sentry.dsn.InvalidDsnException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.logging.log4j.LogManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -28,7 +33,10 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockEvents;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.logging.CraftSentryAppender;
+import tech.brettsaunders.craftory.api.logging.SpigotSentryClientFactory;
 import tech.brettsaunders.craftory.api.recipes.RecipeBook;
 import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
@@ -39,9 +47,10 @@ import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 import tech.brettsaunders.craftory.testing.TestingCommand;
 import tech.brettsaunders.craftory.utils.DataConfigUtils;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
+import org.apache.logging.log4j.core.Logger;
 
 
 public final class Craftory extends JavaPlugin implements Listener {
@@ -72,6 +81,9 @@ public final class Craftory extends JavaPlugin implements Listener {
   private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
   private static File customModelDataFile;
+  private SentryClient sentryClient;
+  private CraftSentryAppender appender;
+  private SpigotSentryClientFactory sentryClientFactory;
   private static File serverDataFile;
 
   private static int generateVersionCode() {
@@ -88,14 +100,14 @@ public final class Craftory extends JavaPlugin implements Listener {
   @Override
   public void onEnable() {
     if(getServer().getPluginManager().getPlugin("ProtocolLib") == null){
-      Logger.error("ProtocolLib is needed to run the latest version of craftory!");
+      Log.error("ProtocolLib is needed to run the latest version of craftory!");
       getServer().getPluginManager().disablePlugin(this);
     }
     packetManager = ProtocolLibrary.getProtocolManager();
     Craftory.VERSION = this.getDescription().getVersion();
     thisVersionCode = generateVersionCode();
     Craftory.plugin = this;
-    Utilities.setupSentry();
+    setupSentry();
     this.getServer().getPluginManager().registerEvents(this, this);
 
     Utilities.createDataPath();
@@ -168,6 +180,43 @@ public final class Craftory extends JavaPlugin implements Listener {
     powerGridManager.onDisable();
     Utilities.reloadConfigFile();
     Utilities.saveConfigFile();
+    Logger log = (Logger) LogManager.getRootLogger();
+    if(appender != null) {
+      log.removeAppender(appender);
+      appender.stop();
+    }
     plugin = null;
+  }
+
+  private void setupSentry() {
+    sentryClientFactory = new SpigotSentryClientFactory();
+    Events.registerEvents(sentryClientFactory);
+    Tasks.runTaskLater(sentryClientFactory::updateInAppFrames, 1L);
+    Tasks.runTaskLater(sentryClientFactory::updateInAppFrames, 20L);
+    startSentryCollecting();
+  }
+
+  private void startSentryCollecting() {
+    // Setup connection to Sentry.io
+    try {
+      sentryClient = Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry"
+          + ".io/5257818", new SpigotSentryClientFactory());
+    } catch(InvalidDsnException | IllegalArgumentException e) {
+      Log.error("Provided Sentry DSN is invalid:", ExceptionUtils.getStackTrace(e));
+      return;
+    }
+
+    Logger logger = (Logger)LogManager.getRootLogger();
+
+    // Start collecting errors from the Logger
+    appender = new CraftSentryAppender();
+
+    // Default data
+    sentryClient.setServerName(this.getServer().getName());
+    sentryClient.setRelease(VERSION);
+
+    // Start the collector
+    appender.start();
+    logger.addAppender(appender);
   }
 }

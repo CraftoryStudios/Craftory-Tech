@@ -33,7 +33,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.api.effect.Wire;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class PowerConnectorManager implements Listener {
 
@@ -57,7 +57,7 @@ public class PowerConnectorManager implements Listener {
         && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
       if(recentClicks.contains(event.getPlayer().getUniqueId())){
-        Logger.debug("Duplicate interact event");
+        Log.debug("Duplicate interact event");
         return;
       } else {
         recentClicks.add(event.getPlayer().getUniqueId());
@@ -108,9 +108,9 @@ public class PowerConnectorManager implements Listener {
           } else {
             formingConnection.remove(event.getPlayer().getUniqueId());
             event.getPlayer().sendMessage(Utilities.getTranslation("PowerConnectorFailed"));
-            Logger.debug((powerGridFrom == null) + "");
-            Logger.debug((powerGridTo == null) + "");
-            Logger.debug((fromLoc == toLoc) + "");
+            Log.debug((powerGridFrom == null) + "");
+            Log.debug((powerGridTo == null) + "");
+            Log.debug((fromLoc == toLoc) + "");
           }
         }
       } else if (

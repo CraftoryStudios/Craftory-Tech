@@ -10,10 +10,6 @@
 
 package tech.brettsaunders.craftory;
 
-import io.sentry.Sentry;
-import io.sentry.SentryClient;
-import io.sentry.SentryClientFactory;
-import io.sentry.dsn.Dsn;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -79,7 +75,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.Bl
 import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
 import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class Utilities {
 
@@ -99,7 +95,6 @@ public class Utilities {
   private static final DecimalFormat df = new DecimalFormat("###.###");
   @Getter
   private static final HashMap<String, BasicBlocks> basicBlockRegistry;
-  private static SentryClient client;
 
   private static final Craftory plugin;
 
@@ -130,26 +125,10 @@ public class Utilities {
   static void checkVersion() {
     new UpdateChecker(plugin, Craftory.SPIGOT_ID).getVersion(version -> {
       if (Craftory.VERSION.equalsIgnoreCase(version)) {
-        Logger.info("Plugin is update to date!");
+        Log.info("Plugin is update to date!");
       } else {
-        Logger.info("There is a new update available!");
+        Log.info("There is a new update available!");
       }
-    });
-  }
-
-  static void setupSentry() {
-    client = Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry"
-        + ".io/5257818?stacktrace.app.packages=tech.brettsaunders.craftory&release=" + plugin.getDescription().getVersion(),
-        new SentryClientFactory() {
-      @Override
-      public SentryClient createSentryClient(Dsn dsn) {
-        return null;
-      }
-    });
-
-    Thread.currentThread().setUncaughtExceptionHandler((currentThread, throwable) -> {
-      plugin.getLogger().log(Level.SEVERE, "An uncaught error occurred!", throwable);
-      client.sendException(throwable);
     });
   }
 
@@ -180,10 +159,10 @@ public class Utilities {
   }
 
   static void compatibilityUpdater() {
-    Logger.info("Last version: " + Craftory.lastVersionCode+ " Current version: " + Craftory.thisVersionCode);
+    Log.info("Last version: " + Craftory.lastVersionCode+ " Current version: " + Craftory.thisVersionCode);
     if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
       //Fix all Item Graphics
-      Logger.info("Updating blocks");
+      Log.info("Updating blocks");
       if (Craftory.lastVersionCode == 0) config.set("fixItemGraphics", true);
       //Version 0.2.1 or before
       if (Craftory.lastVersionCode == 0 || Craftory.lastVersionCode == 200001) {
@@ -192,7 +171,7 @@ public class Utilities {
             customBlocks.forEach(customBlock -> {
               plugin.getServer().getScheduler().runTaskLater(plugin,
                   () -> convertMushroomType(customBlock), 2L);
-              Logger.info("made to stem inactive");
+              Log.info("made to stem inactive");
             }));
         Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
@@ -202,7 +181,7 @@ public class Utilities {
                 plugin.getServer().getScheduler().runTaskLater(plugin,
                     () -> setToNewDiamondMacerator(customBlock), 2L);
               }
-              Logger.info("made to stem active");
+              Log.info("made to stem active");
             }));
       }
     }
@@ -241,7 +220,7 @@ public class Utilities {
 
   static void getTranslations() throws IOException {
     String locale = config.getString("language.locale");
-    Logger.info("Using " + locale + " locale");
+    Log.info("Using " + locale + " locale");
     Properties defaultLang = new Properties();
     FileInputStream fileInputStream = null;
     try {

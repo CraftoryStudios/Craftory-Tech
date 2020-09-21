@@ -42,7 +42,7 @@ import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.tools.ToolLevel;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class CustomBlockManager {
 
@@ -115,7 +115,7 @@ public class CustomBlockManager {
 
   public void putActiveCustomBlock(CustomBlock customBlock) {
     if (customBlock == null) {
-      Logger.warn("Custom Block is null");
+      Log.warn("Custom Block is null");
       return;
     }
     String chunkID = getChunkWorldID(customBlock.location.getChunk());

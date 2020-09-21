@@ -63,7 +63,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
-import tech.brettsaunders.craftory.utils.Logger;
 
 public class CustomBlockManagerEvents implements Listener {
 

@@ -21,7 +21,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.world.WorldInitEvent;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.events.Events;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class WorldGenHandler implements Listener {
 
@@ -48,7 +48,7 @@ public class WorldGenHandler implements Listener {
     //Register Populators
     List<String> blacklist = Craftory.plugin.getConfig().getStringList("ore.blackListedWorlds");
     if(blacklist.contains(e.getWorld().getName())) {
-      Logger.info("Skipped spawning ores in blacklisted world: " + e.getWorld().getName());
+      Log.info("Skipped spawning ores in blacklisted world: " + e.getWorld().getName());
       return;
     }
     if (e.getWorld().getEnvironment() == Environment.NORMAL) {

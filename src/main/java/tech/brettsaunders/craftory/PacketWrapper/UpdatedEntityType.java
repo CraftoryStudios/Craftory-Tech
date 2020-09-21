@@ -11,7 +11,7 @@
 package tech.brettsaunders.craftory.PacketWrapper;
 
 import java.util.HashMap;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public enum UpdatedEntityType {
   AREA_EFFECT_CLOUD(0),
@@ -137,7 +137,7 @@ public enum UpdatedEntityType {
 
   public static UpdatedEntityType fromID(int id) {
     if(map.containsKey(id)) return map.get(id);
-    Logger.error("Failed to create Entity type - Invalid ID");
+    Log.error("Failed to create Entity type - Invalid ID");
     return null;
   }
 

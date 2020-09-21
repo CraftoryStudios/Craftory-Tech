@@ -59,7 +59,7 @@ public class RecipeUtils {
   private static final HashMap<String, String> magnetiserRecipes = new HashMap<>();
 
   static {
-    Logger.debug("Extracting Recipes");
+    Log.debug("Extracting Recipes");
     Iterator<Recipe> recipeIterator;
     recipeIterator = Craftory.plugin.getServer().recipeIterator();
     while (recipeIterator.hasNext()) {
@@ -107,15 +107,15 @@ public class RecipeUtils {
     products = new ArrayList<>();
     products.add(CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT));
     twoToOneRecipes.add(new CustomMachineRecipe(ingredients, products));
-    Logger.debug("All: " + allRecipes.size());
-    Logger.debug("Shaped: " + shapedRecipes.size());
-    Logger.debug("Shapeless: " + shapelessRecipes.size());
-    Logger.debug("Stone Cutting: " + stonecuttingRecipes.size());
-    Logger.debug("Furnace: " + furnaceRecipes.size());
-    Logger.debug("Blasting: " + blastingRecipes.size());
-    Logger.debug("Smoking: " + smokingRecipeRecipes.size());
-    Logger.debug("Campfire: " + campfireRecipes.size());
-    Logger.debug("Finished Extracting");
+    Log.debug("All: " + allRecipes.size());
+    Log.debug("Shaped: " + shapedRecipes.size());
+    Log.debug("Shapeless: " + shapelessRecipes.size());
+    Log.debug("Stone Cutting: " + stonecuttingRecipes.size());
+    Log.debug("Furnace: " + furnaceRecipes.size());
+    Log.debug("Blasting: " + blastingRecipes.size());
+    Log.debug("Smoking: " + smokingRecipeRecipes.size());
+    Log.debug("Campfire: " + campfireRecipes.size());
+    Log.debug("Finished Extracting");
   }
 
   public static void addFurnaceRecipe(String source, String result) {

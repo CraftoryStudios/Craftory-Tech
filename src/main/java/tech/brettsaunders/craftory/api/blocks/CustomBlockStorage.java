@@ -31,7 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.SolidFuelGenerator;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class CustomBlockStorage {
 
@@ -40,7 +40,7 @@ public class CustomBlockStorage {
   public static void saveAllCustomChunks(String dataFolder, PersistenceStorage persistenceStorage,
       HashMap<String, HashSet<CustomBlock>> active,
       HashMap<String, HashSet<CustomBlock>> inactive) {
-    Logger.info("Saving Custom Block Data");
+    Log.info("Saving Custom Block Data");
     active.forEach((chunk, customBlocks) -> {
       saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder,
           persistenceStorage);
@@ -49,7 +49,7 @@ public class CustomBlockStorage {
       saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder,
           persistenceStorage);
     }));
-    Logger.info("Saved Custom Block Data");
+    Log.info("Saved Custom Block Data");
   }
 
   @Synchronized
@@ -94,7 +94,7 @@ public class CustomBlockStorage {
         regions++;
       }
     }
-    Logger.info("Loaded " + regions + " region data files for world " + world.getName() + "!");
+    Log.info("Loaded " + regions + " region data files for world " + world.getName() + "!");
   }
 
   @Synchronized
@@ -146,10 +146,10 @@ public class CustomBlockStorage {
             }
             chunkData.add(customBlock);
           } catch (Exception e) {
-            Logger.info(e.getMessage());
-            Logger.info(e.getStackTrace().toString());
-            Logger.debug("Location Key: " + locationKey);
-            Logger.debug(
+            Log.info(e.getMessage());
+            Log.info(e.getStackTrace().toString());
+            Log.debug("Location Key: " + locationKey);
+            Log.debug(
                 locationCompound != null ? locationCompound.toString() : "NO Location Compound");
           }
         }

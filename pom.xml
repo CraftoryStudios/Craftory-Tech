@@ -120,7 +120,7 @@
     <!-- Sentry, a library that collects exception data and reports them automatically -->
     <dependency>
       <groupId>io.sentry</groupId>
-      <artifactId>sentry</artifactId>
+      <artifactId>sentry-log4j2</artifactId>
       <version>1.7.30</version>
       <optional>true</optional>
       <exclusions>
