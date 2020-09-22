@@ -219,8 +219,5 @@ public final class Craftory extends JavaPlugin implements Listener {
     // Start the collector
     appender.start();
     logger.addAppender(appender);
-
-    Sentry.capture("Test");
-    sentryClient.sendMessage("Testing");
   }
 }

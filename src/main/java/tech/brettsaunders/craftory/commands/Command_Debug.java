@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.SneakyThrows;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,6 +21,7 @@ import tech.brettsaunders.craftory.Utilities;
 
 public class Command_Debug implements CommandExecutor, TabCompleter {
 
+  @SneakyThrows
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
     if (args.length == 1) {
@@ -29,6 +31,7 @@ public class Command_Debug implements CommandExecutor, TabCompleter {
       Utilities.msg(sender, Utilities.getTranslation("DebugCommandToggled") + !debugMode);
     } else {
       Utilities.msg(sender, "Usage");
+      throw new Exception("test");
     }
     return true;
   }

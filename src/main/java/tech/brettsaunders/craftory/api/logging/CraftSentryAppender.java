@@ -27,9 +27,9 @@ public class CraftSentryAppender extends SentryAppender {
   public CraftSentryAppender() {
 
     adapters = new HashSet<>();
-    this.adapters.add(new StackInfo());
-    this.adapters.add(new PluginInfo());
-    this.adapters.add(new StackInfo());
+    //this.adapters.add(new StackInfo());
+    //this.adapters.add(new PluginInfo());
+    //this.adapters.add(new StackInfo());
 
     this.addFilter(new CraftoryFilter());
   }
