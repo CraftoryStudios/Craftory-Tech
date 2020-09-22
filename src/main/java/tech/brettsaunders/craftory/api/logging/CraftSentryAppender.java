@@ -16,6 +16,7 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.message.Message;
 import tech.brettsaunders.craftory.api.logging.adapters.CraftLoggingAdapters;
 import tech.brettsaunders.craftory.api.logging.adapters.PluginInfo;
+import tech.brettsaunders.craftory.api.logging.adapters.ServerInfo;
 import tech.brettsaunders.craftory.api.logging.adapters.StackInfo;
 import tech.brettsaunders.craftory.api.logging.filters.CraftoryFilter;
 import tech.brettsaunders.craftory.utils.Log;
@@ -26,12 +27,14 @@ public class CraftSentryAppender extends SentryAppender {
 
   public CraftSentryAppender() {
 
-    adapters = new HashSet<>();
-    //this.adapters.add(new StackInfo());
-    //this.adapters.add(new PluginInfo());
-    //this.adapters.add(new StackInfo());
-
     this.addFilter(new CraftoryFilter());
+
+    adapters = new HashSet<>();
+    this.adapters.add(new StackInfo());
+    this.adapters.add(new PluginInfo());
+    this.adapters.add(new ServerInfo());
+
+
   }
 
   @Override
