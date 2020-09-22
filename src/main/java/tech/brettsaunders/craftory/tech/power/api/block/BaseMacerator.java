@@ -14,7 +14,6 @@ import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.utils.Logger;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
 public class BaseMacerator extends BaseOneToOneMachine {
@@ -55,9 +54,4 @@ public class BaseMacerator extends BaseOneToOneMachine {
     inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots.get(0));
   }
 
-  @Override
-  protected void playSound() {
-    Logger.info("Playing sound");
-    location.getWorld().playSound(location,"charged",2,1);
-  }
 }

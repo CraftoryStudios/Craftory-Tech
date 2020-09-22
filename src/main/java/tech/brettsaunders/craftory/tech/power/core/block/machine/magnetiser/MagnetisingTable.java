@@ -14,7 +14,7 @@ import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.CoreHolder.Items;
+import tech.brettsaunders.craftory.CoreHolder.Sounds;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -127,9 +128,9 @@ public class MagnetisingTable extends CustomBlock implements Listener {
         itemFrame.setItem(CustomItemManager.getCustomItem(recipes.get(itemName)));
         frameLocation.getWorld().spawnParticle(Particle.SMOKE_LARGE, frameLocation, 10);
         progress = 0;
-        player.playSound(frameLocation, Sound.BLOCK_ANVIL_USE, 1f, 1f);
+        frameLocation.getWorld().playSound(frameLocation, Sounds.HAMMER_DOUBLE_HIT, SoundCategory.BLOCKS, 1f, 1f);
       } else {
-        player.playSound(frameLocation, Sound.BLOCK_ANVIL_LAND, 1f, 1f);
+        frameLocation.getWorld().playSound(frameLocation, Sounds.HAMMER_HIT, SoundCategory.BLOCKS, 1f, 1f);
       }
       return true;
     }

@@ -138,4 +138,12 @@ public class CoreHolder {
     /* Recipe Book */
     public static final String RECIPE_BOOK = "recipe_book";
   }
+
+  /* Sounds */
+  public static class Sounds {
+    /* Machines */
+    public static final String MACHINE_1 = "minecraft:craftory.power.machine.default";
+    public static final String HAMMER_HIT = "minecraft:craftory.action.hammer_hit";
+    public static final String HAMMER_DOUBLE_HIT = "minecraft:craftory.action.hammer_double_hit";
+  }
 }
