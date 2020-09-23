@@ -94,6 +94,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   protected void playSound() {
     location.getWorld().playSound(location, Sounds.MACHINE_1, SoundCategory.BLOCKS, 1, 1);
   }
+
   protected abstract void processComplete();
 
   protected abstract boolean validateContentes();
