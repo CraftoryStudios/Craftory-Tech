@@ -11,7 +11,9 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import org.bukkit.Location;
+import org.bukkit.SoundCategory;
 import org.bukkit.inventory.Inventory;
+import tech.brettsaunders.craftory.CoreHolder.Sounds;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
@@ -80,6 +82,17 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
       return true;
     }
     return false;
+  }
+
+  @Ticking(ticks=60)
+  public void soundLoop() {
+    if(runningContainer.getT()) {
+      playSound();
+    }
+  }
+
+  protected void playSound() {
+    location.getWorld().playSound(location, Sounds.MACHINE_1, SoundCategory.BLOCKS, 1, 1);
   }
 
   protected abstract void processComplete();

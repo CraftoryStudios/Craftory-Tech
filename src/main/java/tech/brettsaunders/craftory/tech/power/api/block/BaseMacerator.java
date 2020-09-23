@@ -53,4 +53,5 @@ public class BaseMacerator extends BaseOneToOneMachine {
     }
     inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots.get(0));
   }
+
 }

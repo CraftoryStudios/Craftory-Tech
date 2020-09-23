@@ -12,6 +12,8 @@ package tech.brettsaunders.craftory.tech.power.core.block.machine.foundry;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
@@ -73,6 +75,10 @@ public class IronFoundry extends BaseFoundry {
     fuelItem = getInventory().getItem(FUEL_SLOT);
   }
 
+  @Override
+  protected void playSound() {
+    location.getWorld().playSound(location, Sound.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1, 1);
+  }
 
   @Override
   public void setupGUI() {

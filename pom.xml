@@ -151,6 +151,10 @@
       <id>dmulloy2-repo</id>
       <url>https://repo.dmulloy2.net/nexus/repository/public/</url>
     </repository>
+    <repository>
+      <id>sonatype</id>
+      <url>https://oss.sonatype.org/content/groups/public/</url>
+    </repository>
   </repositories>
 
 </project>
