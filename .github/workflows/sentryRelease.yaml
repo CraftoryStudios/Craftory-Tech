@@ -9,6 +9,11 @@ jobs:
   createSentryRelease:
     runs-on: ubuntu-latest
     steps:
+      - uses: olegtarasov/get-tag@v2
+          id: tagName
+          with:
+            tagRegex: "v(.*)"
+            tagRegexGroup: 1
       - uses: actions/checkout@v2
       - name: Create Sentry release
         uses: getsentry/action-release@v1.0.2
@@ -17,6 +22,6 @@ jobs:
           SENTRY_ORG: craftory
           SENTRY_PROJECT: craftory
         with:
-          version: ${{ github.event.release.tag_name }}
+          version: ${{ steps.tagName.outputs.tag }}
           environment: production
 
