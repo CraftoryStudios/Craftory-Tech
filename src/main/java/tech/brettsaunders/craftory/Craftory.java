@@ -149,20 +149,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       Tasks.runTaskTimer(new EnergyDisplayManager(), 30L, 30L);
       Tasks.runTaskTimer(tickManager, 20L, 1L);
       //Testing
-      //this.getCommand("crtesting").setExecutor(new TestingCommand());
-
-      Events.registerEvents(new Listener() {
-        @EventHandler
-        public void onInventoryClickEvent(InventoryClickEvent event) {
-          throw new RuntimeException("Problem? 1");
-        }
-      });
-
-      Tasks.runTaskLater(() -> {
-        throw new RuntimeException("Problem! 2");
-      }, 20L);
-
-      throw new RuntimeException("Problem 3...");
+      this.getCommand("crtesting").setExecutor(new TestingCommand());
 
     } catch (Exception e) {
       sentryLog(e);

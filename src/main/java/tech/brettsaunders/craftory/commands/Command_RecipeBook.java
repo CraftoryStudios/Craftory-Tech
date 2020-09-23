@@ -10,7 +10,11 @@
 
 package tech.brettsaunders.craftory.commands;
 
+import io.sentry.Sentry;
+import io.sentry.event.Breadcrumb.Type;
+import io.sentry.event.BreadcrumbBuilder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,6 +30,12 @@ public class Command_RecipeBook implements CommandExecutor, TabCompleter {
       final String[] args) {
     if (args.length == 1) {
       RecipeBook.openRecipeBook((Player)sender);
+      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+          .setCategory("command")
+          .setTimestamp(new Date(System.currentTimeMillis()))
+          .setMessage("Player "+sender.getName() + " used recipe book")
+          .setType(Type.DEFAULT)
+          .build());
     } else {
       Utilities.msg(sender, "Usage");
     }

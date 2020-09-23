@@ -6,8 +6,12 @@ import io.sentry.event.interfaces.ExceptionInterface;
 import io.sentry.event.interfaces.SentryException;
 import java.util.Date;
 import java.util.Deque;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import tech.brettsaunders.craftory.Craftory;
 
 public class SentryLogging {
 
@@ -40,7 +44,23 @@ public class SentryLogging {
       eventBuilder.withSentryInterface(new ExceptionInterface(exceptionDeque));
     }
 
+    eventBuilder.withTag("Bukkit", Bukkit.getBukkitVersion());
+    eventBuilder.withTag("CraftBukkit", Bukkit.getVersion());
+    eventBuilder.withExtra("Online players", Bukkit.getOnlinePlayers().size());
+    eventBuilder.withExtra("Plugins", getLoadedPlugins());
+    eventBuilder.withTag("OS", System.getProperty("os.name"));
+    eventBuilder.withTag("OS Cores",Runtime.getRuntime().availableProcessors() + "");
+    eventBuilder.withTag("JavaVersion",System.getProperty("java.version"));
+
     Sentry.capture(eventBuilder);
+  }
+
+  private static SortedMap<String, String> getLoadedPlugins() {
+    SortedMap<String, String> pluginVersions = new TreeMap<>();
+    for(Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+      pluginVersions.put(plugin.getName(), plugin.getDescription().getVersion());
+    }
+    return pluginVersions;
   }
 
 }

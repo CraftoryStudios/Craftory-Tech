@@ -10,7 +10,11 @@
 
 package tech.brettsaunders.craftory.commands;
 
+import io.sentry.Sentry;
+import io.sentry.event.Breadcrumb.Type;
+import io.sentry.event.BreadcrumbBuilder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,6 +29,13 @@ public class Command_Main implements CommandExecutor, TabCompleter {
       final String[] args) {
     Utilities.msg(sender, Utilities.getTranslation("MainCommandLineOne") + Craftory.VERSION);
     Utilities.msg(sender, Utilities.getTranslation("MainCommandLineTwo") + " ©");
+
+    Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+        .setCategory("command")
+        .setTimestamp(new Date(System.currentTimeMillis()))
+        .setMessage("Player "+sender.getName() + " used main command")
+        .setType(Type.DEFAULT)
+        .build());
     return true;
   }
 
