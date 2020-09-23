@@ -17,6 +17,6 @@ jobs:
           SENTRY_ORG: craftory
           SENTRY_PROJECT: craftory
         with:
-          release: ${{ github.event.release.tag_name }}
-          enviroment: production
+          version: ${{ github.event.release.tag_name }}
+          environment: production
 
