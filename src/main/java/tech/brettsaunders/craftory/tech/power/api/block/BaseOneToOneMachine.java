@@ -25,7 +25,7 @@ import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.Pair;
 
 public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract {
@@ -123,7 +123,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   }
 
   protected HashMap<String, String> getRecipes() {
-    Logger.warn("THIS CODE SHOULD NEVER BE RUN");
+    Log.warn("THIS CODE SHOULD NEVER BE RUN");
     return null;
   }
 

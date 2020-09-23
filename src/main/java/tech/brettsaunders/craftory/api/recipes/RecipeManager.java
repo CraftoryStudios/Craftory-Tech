@@ -28,7 +28,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
 public class RecipeManager implements Listener {
@@ -42,7 +42,7 @@ public class RecipeManager implements Listener {
     Events.registerEvents(this);
     ConfigurationSection recipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
     if (recipes == null) {
-      Logger.warn("No Crafting Recipes found!");
+      Log.warn("No Crafting Recipes found!");
     } else {
       for (String recipe : recipes.getKeys(false)) {
         //Check item exists in this version
@@ -92,7 +92,7 @@ public class RecipeManager implements Listener {
                 shapedRecipe.setIngredient(key, new MaterialChoice(materialTag));
               //Tag Missing, using AIR
               } else {
-                Logger.warn("Recipe used tag: "+ ingridentMaterial+ " which wasn't a recognised Material Tag. Recipe: "+recipe);
+                Log.warn("Recipe used tag: "+ ingridentMaterial+ " which wasn't a recognised Material Tag. Recipe: "+recipe);
                 shapedRecipe.setIngredient(key, Material.AIR);
               }
 
@@ -117,10 +117,10 @@ public class RecipeManager implements Listener {
           Bukkit.getServer().addRecipe(shapedRecipe);
           customRecipes.put(recipe, customItemsInSlots);
         } catch (Exception e) {
-          Logger.error("RECIPE BROKEN: " + recipe + "  " + result.getType().toString());
-          Logger.debug(result + "");
-          Logger.error(recipes.getString(recipe + ".result.item"));
-          Logger.error("Amount: " + recipes.getInt(recipe + ".result.amount"));
+          Log.error("RECIPE BROKEN: " + recipe + "  " + result.getType().toString());
+          Log.debug(result + "");
+          Log.error(recipes.getString(recipe + ".result.item"));
+          Log.error("Amount: " + recipes.getInt(recipe + ".result.amount"));
           e.printStackTrace();
         }
 
@@ -132,7 +132,7 @@ public class RecipeManager implements Listener {
     ConfigurationSection furnaceRecipes = Craftory.customRecipeConfig
         .getConfigurationSection("furnace_recipes");
     if (furnaceRecipes == null) {
-      Logger.warn("No Furnace Recipes found!");
+      Log.warn("No Furnace Recipes found!");
     } else {
       customFurnaceRecipes = new HashMap<>();
       for (String recipe : furnaceRecipes.getKeys(false)) {
@@ -149,7 +149,7 @@ public class RecipeManager implements Listener {
     ConfigurationSection maceratorRecipes = Craftory.customRecipeConfig
         .getConfigurationSection("macerator_recipes");
     if (maceratorRecipes == null) {
-      Logger.warn("No Macerator Recipes found!");
+      Log.warn("No Macerator Recipes found!");
     } else {
       toAdd = new HashMap<>();
       for (String recipe : maceratorRecipes.getKeys(false)) {
@@ -163,7 +163,7 @@ public class RecipeManager implements Listener {
     ConfigurationSection magnetiserRecipes = Craftory.customRecipeConfig
         .getConfigurationSection("magnetiser_recipes");
     if (magnetiserRecipes == null) {
-      Logger.warn("No Magnetiser Recipes found!");
+      Log.warn("No Magnetiser Recipes found!");
     } else {
       toAdd = new HashMap<>();
       for (String recipe : magnetiserRecipes.getKeys(false)) {

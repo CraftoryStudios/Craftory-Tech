@@ -10,12 +10,13 @@
 
 package tech.brettsaunders.craftory.utils;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 
-public class Logger {
+public class Log {
 
   static final ChatColor INFO_COLOR = ChatColor.GREEN;
   static final ChatColor ERROR_COLOR = ChatColor.RED;
@@ -37,13 +38,13 @@ public class Logger {
     Bukkit.getLogger().warning(prefix + logMessage);
   }
 
-  public static void error(String logMessage) {
-    Bukkit.getLogger().warning(ERROR_COLOR + prefix + logMessage);
+  public static void error(Object... message) {
+    Bukkit.getLogger().warning(ERROR_COLOR + prefix + StringUtils.join(message, " "));
   }
 
-  public static void debug(String logMessage) {
+  public static void debug(Object... message) {
     if (debugMode) {
-      Bukkit.getLogger().info(debugPrefix + DEBUG_COLOR + logMessage);
+      Bukkit.getLogger().info(debugPrefix + DEBUG_COLOR + StringUtils.join(message, " "));
     }
   }
 

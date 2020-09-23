@@ -39,7 +39,7 @@ import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 /**
  * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
@@ -108,7 +108,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     super.afterLoadUpdate();
     powered = location.getBlock().isBlockPowered();
     if(inventoryInterface==null)
-      Logger.warn("INVENTORY INTERFACE IS NULL");
+      Log.warn("INVENTORY INTERFACE IS NULL");
     //Load in items in machines
     for (int i = 0; i < inputLocations.size(); i++) {
       if (i >= inputSlots.size()) {

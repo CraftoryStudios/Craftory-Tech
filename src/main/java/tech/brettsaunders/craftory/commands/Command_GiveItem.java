@@ -10,8 +10,12 @@
 
 package tech.brettsaunders.craftory.commands;
 
+import io.sentry.Sentry;
+import io.sentry.event.Breadcrumb.Type;
+import io.sentry.event.BreadcrumbBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +48,13 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
         amount = 64;
       }
       giveCustomItem(amount, args[1], args[2], sender);
+
+      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+          .setCategory("command")
+          .setTimestamp(new Date(System.currentTimeMillis()))
+          .setMessage("Player "+sender.getName() + " used give item command, spawn "+ args[2])
+          .setType(Type.DEFAULT)
+          .build());
     } else {
       Utilities.msg(sender, Utilities.getTranslation("GiveCommandUsage"));
     }

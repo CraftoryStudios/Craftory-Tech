@@ -10,6 +10,10 @@
 
 package tech.brettsaunders.craftory.api.blocks.events;
 
+import io.sentry.Sentry;
+import io.sentry.event.Breadcrumb.Type;
+import io.sentry.event.BreadcrumbBuilder;
+import java.util.Date;
 import lombok.Getter;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -21,6 +25,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class CustomBlockInteractEvent extends Event implements Cancellable {
 
@@ -41,6 +46,8 @@ public class CustomBlockInteractEvent extends Event implements Cancellable {
   private final PlayerInteractEvent baseEvent;
   private boolean isCancelled;
 
+  private String itemName;
+
   public CustomBlockInteractEvent(Action action, Block blockClicked, BlockFace blockFace,
       ItemStack itemStack, Player player, CustomBlock customBlock, PlayerInteractEvent baseEvent) {
     this.action = action;
@@ -51,6 +58,18 @@ public class CustomBlockInteractEvent extends Event implements Cancellable {
     this.isCancelled = false;
     this.customBlock = customBlock;
     this.baseEvent = baseEvent;
+    if (itemStack == null || itemStack.getItemMeta() == null || itemStack.getItemMeta().getDisplayName() == null) {
+      itemName = "Hand";
+    } else {
+      this.itemName = itemStack.getItemMeta().getDisplayName();
+    }
+
+    Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+        .setCategory("customInteractEvent")
+        .setTimestamp(new Date(System.currentTimeMillis()))
+        .setMessage("Interact with Custom Block "+customBlock.getBlockName() + " with item "+ itemName + " with player "+ player.getDisplayName())
+        .setType(Type.DEFAULT)
+        .build());
   }
 
   public static HandlerList getHandlerList() {

@@ -24,7 +24,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class PowerGrid extends BukkitRunnable {
 
@@ -55,7 +55,7 @@ public class PowerGrid extends BukkitRunnable {
 
   @Override
   public void run() {
-    //Logger.debug("grid run " + generators.size() + " " + machines.size() + " " + cells.size());//rr
+    //Log.debug("grid run " + generators.size() + " " + machines.size() + " " + cells.size());//rr
     int needed = calculateGridEnergyRequirement();
     int cellCapacity = calculateGridStorageSpace();
     int produced = calculateGridEnergyProduced(needed + cellCapacity);
@@ -200,7 +200,7 @@ public class PowerGrid extends BukkitRunnable {
     generators = new HashSet<>();
     machines = new HashSet<>();
     PoweredBlock block;
-    Logger.debug("grid has " + blockConnections.size() + " machine connections");
+    Log.debug("grid has " + blockConnections.size() + " machine connections");
     for (HashSet<Location> set : blockConnections.values()) {
       if (set == null) {
         continue;
@@ -211,7 +211,7 @@ public class PowerGrid extends BukkitRunnable {
         }
         block = PoweredBlockUtils.getPoweredBlock(location);
         if (Objects.isNull(block)) { //Shouldn't be
-          Logger.debug("block in new grid gave null pointer");
+          Log.debug("block in new grid gave null pointer");
         } else if (block instanceof BaseCell) {
           cells.add(location);
         } else if (block instanceof BaseGenerator) {
@@ -219,7 +219,7 @@ public class PowerGrid extends BukkitRunnable {
         } else if (block instanceof BaseMachine) {
           machines.add(location);
         } else {
-          Logger.warn("Machine is not one of known types " + block.toString());
+          Log.warn("Machine is not one of known types " + block.toString());
         }
       }
     }

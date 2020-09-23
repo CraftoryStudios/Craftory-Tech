@@ -15,7 +15,6 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Map.Entry;
 import lombok.NonNull;
 import org.bukkit.Location;
@@ -40,7 +39,7 @@ import tech.brettsaunders.craftory.persistence.adapters.StringAdapter;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.fluids.FluidStorage;
 import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.ReflectionUtils;
 
 public class PersistenceStorage {
@@ -95,7 +94,7 @@ public class PersistenceStorage {
 
   public void saveFields(Object object, NBTCompound nbtCompound) {
     if (object == null || nbtCompound == null) {
-      Logger.error("Couldn't save object! Null");
+      Log.error("Couldn't save object! Null");
       return;
     }
     ReflectionUtils.getFieldsRecursively(object.getClass(), Object.class).stream()
@@ -141,7 +140,7 @@ public class PersistenceStorage {
   @SuppressWarnings("unchecked")
   public Class<?> saveObject(Object data, NBTCompound nbtCompound) {
     if (data == null || nbtCompound == null) {
-      Logger.error("Error Saving Object. Null");
+      Log.error("Error Saving Object. Null");
       return null;
     }
     Class<?> clazz = data.getClass();
@@ -160,7 +159,7 @@ public class PersistenceStorage {
     }
 
     // Fallback to Json
-    Logger.warn(
+    Log.warn(
         "Did not find a Wrapper for " + data.getClass().getName() + "! Falling back to Gson!");
     nbtCompound.setString("json", gson.toJson(data));
     return null;
@@ -168,7 +167,7 @@ public class PersistenceStorage {
 
   public Class<?> getConverterClass(Object data) {
     if (data == null) {
-      Logger.error("Error Saving Object. Null");
+      Log.error("Error Saving Object. Null");
       return null;
     }
 

@@ -33,7 +33,7 @@ public class FileUtils {
       return FileUtils.copyStream(new FileInputStream(toCopy),
           new FileOutputStream(destFile));
     } catch (final FileNotFoundException e) {
-      Logger.warn("File not found when copying resources");
+      Log.warn("File not found when copying resources");
     }
     return false;
   }
@@ -108,7 +108,7 @@ public class FileUtils {
     try {
       return FileUtils.copyStream(is, new FileOutputStream(f));
     } catch (final FileNotFoundException e) {
-      Logger.warn("File not found when copying resource stream");
+      Log.warn("File not found when copying resource stream");
     }
     return false;
   }

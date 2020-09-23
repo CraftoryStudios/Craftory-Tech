@@ -27,11 +27,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class CustomItemManager {
 
@@ -53,7 +52,7 @@ public class CustomItemManager {
         Material material = Material
             .getMaterial(itemSection.getString("itemModel").toUpperCase());
         if (material == null) {
-          Logger.error(
+          Log.error(
               key + " Material doesn't exist :" + itemSection.getString("itemModel").toUpperCase());
         } else {
           int itemID = customModeData.getInt("items." + key + ".customModelID");
@@ -105,7 +104,7 @@ public class CustomItemManager {
           }
           Material material = Material.getMaterial(block.getString("itemModel").toUpperCase());
           if (material == null) {
-            Logger.error(
+            Log.error(
                 key + " Material doesn't exist :" + block.getString("itemModel").toUpperCase());
           } else {
             int itemID = customModeData.getInt("items." + key + ".customModelID");
@@ -121,7 +120,7 @@ public class CustomItemManager {
         }
       }
     }
-    Logger.debug("Loaded Items");
+    Log.debug("Loaded Items");
   }
 
   public static ArrayList<String> getItemNames() {

@@ -25,7 +25,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class CustomBlockFactory {
 
@@ -100,7 +100,7 @@ public class CustomBlockFactory {
       }
       return customBlock;
     }
-    Logger.error("No Custom Block Class found of type " + nameID);
+    Log.error("No Custom Block Class found of type " + nameID);
     return customBlock;
   }
 
@@ -123,7 +123,7 @@ public class CustomBlockFactory {
       }
       return customBlock;
     }
-    Logger.error("No Custom Block Class found of type " + nameID);
+    Log.error("No Custom Block Class found of type " + nameID);
     return customBlock;
   }
 

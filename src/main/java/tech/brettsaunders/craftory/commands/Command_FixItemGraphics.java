@@ -10,7 +10,11 @@
 
 package tech.brettsaunders.craftory.commands;
 
+import io.sentry.Sentry;
+import io.sentry.event.Breadcrumb.Type;
+import io.sentry.event.BreadcrumbBuilder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,6 +34,12 @@ public class Command_FixItemGraphics implements CommandExecutor, TabCompleter {
         CustomItemManager.updateInventoryItemGraphics(player.getInventory());
         CustomItemManager.updateInventoryItemGraphics(player.getEnderChest());
         Utilities.msg(sender, "Update graphics of custom items in inventory.");
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+            .setCategory("command")
+            .setTimestamp(new Date(System.currentTimeMillis()))
+            .setMessage("Player "+sender.getName() + " used fix item Graphics command")
+            .setType(Type.DEFAULT)
+            .build());
       }
     }
     return true;

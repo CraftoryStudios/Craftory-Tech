@@ -10,7 +10,11 @@
 
 package tech.brettsaunders.craftory.commands;
 
+import io.sentry.Sentry;
+import io.sentry.event.Breadcrumb.Type;
+import io.sentry.event.BreadcrumbBuilder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,6 +32,13 @@ public class Command_Help implements CommandExecutor, TabCompleter {
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineThree"));
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineFour"));
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineFive"));
+
+      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+          .setCategory("command")
+          .setTimestamp(new Date(System.currentTimeMillis()))
+          .setMessage("Player "+sender.getName() + " used help command")
+          .setType(Type.DEFAULT)
+          .build());
     }
     return true;
   }
