@@ -199,6 +199,10 @@ public class CustomItemManager {
   }
 
   public static String getCustomItemName(ItemStack itemStack) {
+    if(Craftory.plugin.isPluginLoaded("Oraxen")){
+      String name = OraxenItems.getIdByItem(itemStack);
+      if(name!=null) return "oraxen-item:"+name;
+    }
     NBTItem nbtItem = new NBTItem(itemStack);
     return getCustomItemName(nbtItem);
   }
