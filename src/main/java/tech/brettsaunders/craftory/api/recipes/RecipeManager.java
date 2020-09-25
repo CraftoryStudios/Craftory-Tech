@@ -97,10 +97,10 @@ public class RecipeManager implements Listener {
               }
 
             //Oraxen Item
-            } else if (ingridentMaterial.toLowerCase().startsWith("oraxen-item:")) {
+            } else if (ingridentMaterial.toLowerCase().startsWith("oraxen-item/")) {
               shapedRecipe.setIngredient(key,
                   new ExactChoice(OraxenItems.getItemById(ingridentMaterial.toLowerCase().replace("oraxen"
-                      + "-item:","")).build()));
+                      + "-item/","")).build()));
             //Ingredient Vanilla Item
             } else if (CustomItemManager.getCustomItem(ingridentMaterial).getType()
                 == Material.AIR) {

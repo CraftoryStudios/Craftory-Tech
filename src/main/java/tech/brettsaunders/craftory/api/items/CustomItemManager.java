@@ -144,8 +144,8 @@ public class CustomItemManager {
           return new ItemStack(materialTag.getValues().iterator().next());
         }
       }
-    } else if (itemName.toLowerCase().startsWith("oraxen-item:")) {
-      return OraxenItems.getItemById(itemName.toLowerCase().replace("oraxen-item:","")).build();
+    } else if (itemName.toLowerCase().startsWith("oraxen-item/")) {
+      return OraxenItems.getItemById(itemName.toLowerCase().replace("oraxen-item/","")).build();
     }
     if (itemIDCache.containsKey(itemName)) {
       CustomItem customItem = itemIDCache.get(itemName);
@@ -201,7 +201,7 @@ public class CustomItemManager {
   public static String getCustomItemName(ItemStack itemStack) {
     if(Craftory.plugin.isPluginLoaded("Oraxen")){
       String name = OraxenItems.getIdByItem(itemStack);
-      if(name!=null) return "oraxen-item:"+name;
+      if(name!=null) return "oraxen-item/"+name;
     }
     NBTItem nbtItem = new NBTItem(itemStack);
     return getCustomItemName(nbtItem);
