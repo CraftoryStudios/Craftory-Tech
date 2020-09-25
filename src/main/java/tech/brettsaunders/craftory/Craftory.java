@@ -18,9 +18,11 @@ import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.dsn.InvalidDsnException;
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -28,14 +30,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.server.ServerLoadEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockEvents;
-import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeBook;
 import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
@@ -82,6 +83,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   private static File customModelDataFile;
   private SentryClient sentryClient;
   private static File serverDataFile;
+  private static HashSet<String> loadedPlugins = new HashSet<>();
 
   private static int generateVersionCode() {
     String[] subVersions = VERSION.split("\\.");
@@ -104,6 +106,8 @@ public final class Craftory extends JavaPlugin implements Listener {
         Log.error("ProtocolLib is needed to run the latest version of craftory!");
         getServer().getPluginManager().disablePlugin(this);
       }
+      loadedPlugins = (HashSet<String>) Arrays.stream(plugin.getServer().getPluginManager().getPlugins()).map(Plugin::getName).collect(
+          Collectors.toSet());
       packetManager = ProtocolLibrary.getProtocolManager();
       thisVersionCode = generateVersionCode();
       this.getServer().getPluginManager().registerEvents(this, this);
@@ -159,6 +163,8 @@ public final class Craftory extends JavaPlugin implements Listener {
   @EventHandler
   public void onServerLoaded(ServerLoadEvent e) {
     try {
+      loadedPlugins = (HashSet<String>) Arrays.stream(plugin.getServer().getPluginManager().getPlugins()).map(Plugin::getName).collect(
+          Collectors.toSet());
       powerConnectorManager = new PowerConnectorManager();
       powerGridManager = new PowerGridManager();
       powerGridManager.onEnable();
@@ -191,6 +197,9 @@ public final class Craftory extends JavaPlugin implements Listener {
     }
   }
 
+  public boolean isPluginLoaded(String name) {
+    return loadedPlugins.contains(name);
+  }
   private void setupSentry() {
     // Setup connection to Sentry.io
     try {

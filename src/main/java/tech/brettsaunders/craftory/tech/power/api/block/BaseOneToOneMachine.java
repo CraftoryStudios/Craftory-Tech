@@ -152,11 +152,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
       if ((outputSlot == null) || outputSlot.getType().equals(Material.AIR) || (
           outputType.equals(product) && outputSlot.getAmount() < outputSlot.getMaxStackSize())) {
         currentRecipe = new Pair<>(inputType, product);
-        if (CustomItemManager.isCustomItemName(product)) {
-          currentProduct = CustomItemManager.getCustomItem(product);
-        } else {
-          currentProduct = new ItemStack(Material.valueOf(product));
-        }
+        currentProduct = CustomItemManager.getCustomItemOrDefault(product);
         return true;
       }
     }
