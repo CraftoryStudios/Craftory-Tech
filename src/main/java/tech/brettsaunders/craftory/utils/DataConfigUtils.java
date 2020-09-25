@@ -13,6 +13,9 @@ package tech.brettsaunders.craftory.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
@@ -24,9 +27,18 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 public class DataConfigUtils {
 
   public static void copyDefaults(FileConfiguration source, FileConfiguration dest) {
-    source.getValues(true).forEach((key,value) -> {
-      dest.addDefault(key, value);
+    Set<String> sectionKeys = source.getKeys(false);
+
+    sectionKeys.forEach(section -> {
+      if (dest.contains(section)) {
+        source.getConfigurationSection(section).getValues(false).forEach((key,value) -> {
+          dest.getConfigurationSection(section).addDefault(key, value);
+        });
+      } else {
+        dest.addDefault(section, source.getConfigurationSection(section));
+      }
     });
+
     dest.options().copyDefaults(true);
   }
 
