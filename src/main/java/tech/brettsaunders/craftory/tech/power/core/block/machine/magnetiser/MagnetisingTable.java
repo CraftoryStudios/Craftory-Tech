@@ -167,7 +167,8 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     boolean hit = frameHit(((Player) event.getDamager()));
     if (hit) {
       event.setCancelled(true);
-      ToolManager.decreaseDurability(itemStack, 1);
+      ((Player) event.getDamager()).getInventory().setItemInMainHand(ToolManager.decreaseDurability(itemStack, 1));
+          ;
     }
   }
 
