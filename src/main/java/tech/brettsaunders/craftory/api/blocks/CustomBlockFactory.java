@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory.api.blocks;
 
+import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
+
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -97,6 +99,7 @@ public class CustomBlockFactory {
         calculateStatsIncrease(customBlock);
       } catch (Exception e) {
         e.printStackTrace();
+        sentryLog(e);
       }
       return customBlock;
     }
@@ -120,6 +123,7 @@ public class CustomBlockFactory {
         calculateStatsIncrease(customBlock);
       } catch (Exception e) {
         e.printStackTrace();
+        sentryLog(e);
       }
       return customBlock;
     }

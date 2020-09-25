@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory.persistence;
 
+import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
+
 import com.google.gson.Gson;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import java.util.ArrayList;
@@ -105,6 +107,7 @@ public class PersistenceStorage {
           saveObject(field.get(object), nbtCompound.addCompound(field.getName()));
         }
       } catch (IllegalAccessException e) {
+        sentryLog(e);
         throw new IllegalStateException(
             "Unable to save field " + object.getClass().getSimpleName() + "." + field.getName(), e);
       }
@@ -129,6 +132,7 @@ public class PersistenceStorage {
             field.set(object, obj);
           }
         } catch (IllegalAccessException e) {
+          sentryLog(e);
           throw new IllegalStateException(
               "Unable to load field " + object.getClass().getSimpleName() + "." + field.getName(),
               e);

@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory.api.blocks;
 
+import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
+
 import com.google.common.collect.Lists;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -60,6 +62,7 @@ public class CustomBlockTickManager extends BukkitRunnable {
           try {
             method.invoke(customBlock);
           } catch (Exception e) {
+            sentryLog(e);
             e.printStackTrace();
           }
         }

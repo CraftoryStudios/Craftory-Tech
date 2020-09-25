@@ -15,6 +15,7 @@ import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 import static tech.brettsaunders.craftory.Utilities.getLocationID;
 import static tech.brettsaunders.craftory.Utilities.getRegionID;
 import static tech.brettsaunders.craftory.Utilities.keyToLoc;
+import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTFile;
@@ -75,6 +76,7 @@ public class CustomBlockStorage {
 
     } catch (IOException e) {
       e.printStackTrace();
+      sentryLog(e);
     }
   }
 
@@ -146,6 +148,7 @@ public class CustomBlockStorage {
             }
             chunkData.add(customBlock);
           } catch (Exception e) {
+            sentryLog(e);
             Log.info(e.getMessage());
             Log.info(e.getStackTrace().toString());
             Log.debug("Location Key: " + locationKey);
@@ -166,6 +169,7 @@ public class CustomBlockStorage {
       }
       nbtFile.save();
     } catch (IOException e) {
+      sentryLog(e);
       e.printStackTrace();
     }
   }
