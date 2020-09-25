@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory;
 
+import io.sentry.Sentry;
+import io.sentry.event.UserBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -156,6 +158,9 @@ public class Utilities {
     reloadDataFile();
 
     Craftory.lastVersionCode = data.getInt("lastVersion");
+    Sentry.getContext().setUser(new UserBuilder()
+        .setId(data.getString("reporting.serverUUID"))
+        .build());
   }
 
   static void compatibilityUpdater() {

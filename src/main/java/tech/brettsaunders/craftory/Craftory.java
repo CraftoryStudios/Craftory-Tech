@@ -17,6 +17,7 @@ import com.comphenix.protocol.ProtocolManager;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.dsn.InvalidDsnException;
+import io.sentry.event.UserBuilder;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -153,7 +154,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       Tasks.runTaskTimer(new EnergyDisplayManager(), 30L, 30L);
       Tasks.runTaskTimer(tickManager, 20L, 1L);
       //Testing
-      this.getCommand("crtesting").setExecutor(new TestingCommand());
+      //this.getCommand("crtesting").setExecutor(new TestingCommand());
 
     } catch (Exception e) {
       sentryLog(e);
