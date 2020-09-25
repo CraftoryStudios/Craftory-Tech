@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: olegtarasov/get-tag@v2
-          id: tagName
-          with:
-            tagRegex: "v(.*)"
-            tagRegexGroup: 1
+        id: tagName
+        with:
+          tagRegex: "v(.*)"
+          tagRegexGroup: 1
       - uses: actions/checkout@v2
       - name: Create Sentry release
         uses: getsentry/action-release@v1.0.2
