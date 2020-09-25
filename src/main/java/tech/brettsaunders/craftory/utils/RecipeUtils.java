@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import lombok.Getter;
-import org.bukkit.Material;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.CampfireRecipe;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -26,10 +25,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.SmokingRecipe;
 import org.bukkit.inventory.StonecuttingRecipe;
-import tech.brettsaunders.craftory.CoreHolder;
-import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class RecipeUtils {
 
@@ -52,7 +48,7 @@ public class RecipeUtils {
   @Getter
   private static final HashSet<ICustomRecipe> customRecipes = new HashSet<>();
   @Getter
-  private static final HashSet<CustomMachineRecipe> twoToOneRecipes = new HashSet<>();
+  private static final HashSet<CustomMachineRecipe> foundryRecipes = new HashSet<>();
   @Getter
   private static final HashMap<String, String> maceratorRecipes = new HashMap<>();
   @Getter
@@ -94,19 +90,6 @@ public class RecipeUtils {
         }
       }
     } */
-    //Add foundry iron + coal -> steel recipe
-    HashMap<String, Integer> ingredients = new HashMap<>();
-    ingredients.put(Material.CHARCOAL.toString(), 1);
-    ingredients.put(Material.IRON_INGOT.toString(), 1);
-    ArrayList<ItemStack> products = new ArrayList<>();
-    products.add(CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT));
-    twoToOneRecipes.add(new CustomMachineRecipe(ingredients, products));
-    ingredients = new HashMap<>();
-    ingredients.put(Items.COAL_DUST, 1);
-    ingredients.put(Material.IRON_INGOT.toString(), 1);
-    products = new ArrayList<>();
-    products.add(CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT));
-    twoToOneRecipes.add(new CustomMachineRecipe(ingredients, products));
     Log.debug("All: " + allRecipes.size());
     Log.debug("Shaped: " + shapedRecipes.size());
     Log.debug("Shapeless: " + shapelessRecipes.size());
@@ -132,6 +115,10 @@ public class RecipeUtils {
 
   public static void addAllMagnetiserRecipes(HashMap<String, String> recipes) {
     magnetiserRecipes.putAll(recipes);
+  }
+
+  public static void addAllFoundryRecipes(HashSet<CustomMachineRecipe> recipes) {
+    foundryRecipes.addAll(recipes);
   }
 
   public interface ICustomRecipe {

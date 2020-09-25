@@ -181,7 +181,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
         }
       }
     }
-    for (CustomMachineRecipe recipe : RecipeUtils.getTwoToOneRecipes()) {
+    for (CustomMachineRecipe recipe : RecipeUtils.getFoundryRecipes()) {
       valid = true;
       for (Map.Entry<String, Integer> entry : recipe.getIngredients().entrySet()) {
         String item = entry.getKey();

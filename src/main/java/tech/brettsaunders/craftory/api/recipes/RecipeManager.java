@@ -11,7 +11,9 @@
 package tech.brettsaunders.craftory.api.recipes;
 
 import io.th0rgal.oraxen.items.OraxenItems;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,6 +32,7 @@ import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
+import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 
 public class RecipeManager implements Listener {
 
@@ -171,6 +174,36 @@ public class RecipeManager implements Listener {
             magnetiserRecipes.getString(recipe + ".result.name"));
       }
       RecipeUtils.addAllMagnetiserRecipes(toAdd);
+
+      //Foundry Recipes
+      ConfigurationSection foundryRecipes = Craftory.customRecipeConfig
+          .getConfigurationSection("foundry_recipes");
+      if (foundryRecipes == null) {
+        Log.warn("No Foundry Recipes found!");
+      } else {
+        HashSet<CustomMachineRecipe> recipesToAdd = new HashSet<>();
+        for (String recipe : foundryRecipes.getKeys(false)) {
+          HashMap<String, Integer> ingredients = new HashMap<>();
+          ingredients.put(
+              foundryRecipes.getString(recipe + ".input1.name"),
+              foundryRecipes.getInt(recipe + ".input1.amount"));
+          ingredients.put(
+              foundryRecipes.getString(recipe + ".input2.name"),
+              foundryRecipes.getInt(recipe + ".input2.amount"));
+          ArrayList<ItemStack> products = new ArrayList<>();
+          String productName = foundryRecipes.getString(recipe + ".result.name");
+          ItemStack product;
+          if(Material.getMaterial(productName)!=null) {
+            product = new ItemStack(Material.valueOf(productName));
+          } else {
+            product = CustomItemManager.getCustomItemOrDefault(productName);
+          }
+          product.setAmount(foundryRecipes.getInt(recipe + ".result.amount"));
+          products.add(product);
+          recipesToAdd.add(new CustomMachineRecipe(ingredients, products));
+        }
+        RecipeUtils.addAllFoundryRecipes(recipesToAdd);
+        }
     }
   }
 

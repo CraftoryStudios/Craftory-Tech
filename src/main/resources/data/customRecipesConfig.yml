@@ -1057,3 +1057,25 @@ magnetiser_recipes:
       name: IRON_INGOT
     result:
       name: magnetised_iron
+
+foundry_recipes:
+  steel_ingot_coal_dust:
+    input1:
+      name: IRON_INGOT
+      amount: 1
+    input2:
+      name: coal_dust
+      amount: 1
+    result:
+      name: steel_ingot
+      amount: 1
+  steel_ingot_charcoal:
+    input1:
+      name: IRON_INGOT
+      amount: 1
+    input2:
+      name: CHARCOAL
+      amount: 1
+    result:
+      name: steel_ingot
+      amount: 1
