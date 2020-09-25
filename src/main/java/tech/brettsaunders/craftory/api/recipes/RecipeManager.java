@@ -203,7 +203,7 @@ public class RecipeManager implements Listener {
           recipesToAdd.add(new CustomMachineRecipe(ingredients, products));
         }
         RecipeUtils.addAllFoundryRecipes(recipesToAdd);
-        }
+      }
     }
   }
 
