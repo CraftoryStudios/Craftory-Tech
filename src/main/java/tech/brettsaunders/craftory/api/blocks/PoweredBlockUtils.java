@@ -95,7 +95,10 @@ public class PoweredBlockUtils {
   }
 
   public static PoweredBlock getPoweredBlock(Location location) {
-    return (PoweredBlock) Craftory.customBlockManager.getCustomBlock(location);
+    CustomBlock block = Craftory.customBlockManager.getCustomBlock(location);
+    if(block instanceof PoweredBlock)
+      return (PoweredBlock) block;
+    return null;
   }
 
   /**
