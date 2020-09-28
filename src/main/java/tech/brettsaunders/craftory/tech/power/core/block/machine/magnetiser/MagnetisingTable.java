@@ -16,6 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -98,6 +99,10 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   public void beforeSaveUpdate() {
     super.beforeSaveUpdate();
     if (framePlaced) {
+      if(itemFrame == null) {
+        findOrSpawnFrame();
+        if(!framePlaced) return;
+      }
       frameItem = itemFrame.getItem();
       itemFrame.setItem(new ItemStack(Material.AIR));
       itemFrame.remove();
@@ -108,18 +113,36 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     frameLocation = location.clone().add(0.5, 1.03125, 0.5);
     frameLocation.setPitch(-90);
     if (!frameLocation.getBlock().getType().equals(Material.AIR)) {
+      framePlaced = false;
       return false;
     }
     try {
       itemFrame = location.getWorld().spawn(frameLocation, ItemFrame.class);
+      itemFrame.setFacingDirection(BlockFace.UP);
+      itemFrame.setVisible(false);
+      framePlaced = true;
+      return true;
     }catch (IllegalArgumentException e) {
       Log.warn("ItemFrame error caught.");
       Log.debug(e.toString());
+      framePlaced = false;
+      return false;
     }
-    itemFrame.setFacingDirection(BlockFace.UP);
-    itemFrame.setVisible(false);
-    framePlaced = true;
-    return true;
+  }
+
+  private void findOrSpawnFrame() {
+    for (Entity entity : frameLocation.getWorld().getNearbyEntities(frameLocation, 2, 2, 2)) {
+      if(entity instanceof ItemFrame) {
+        if(entity.getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation().equals(location)) {
+          itemFrame = (ItemFrame) entity;
+          itemFrame.setFacingDirection(BlockFace.UP);
+          itemFrame.setVisible(false);
+          framePlaced = true;
+          return;
+        }
+      }
+    }
+    spawnFrame();
   }
 
   private boolean frameHit(Player player) {
@@ -152,7 +175,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
       return;
     }
     ItemStack itemStack = ((Player) event.getDamager()).getInventory().getItemInMainHand();
-    if (itemStack == null || itemStack.getType() == Material.AIR) {
+    if (itemStack.getType() == Material.AIR) {
       return;
     }
     if (!CustomItemManager.getCustomItemName(itemStack).equals(Items.ENGINEERS_HAMMER)) {
