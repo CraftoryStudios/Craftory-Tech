@@ -91,31 +91,31 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
       if (args.length == 0) {
         return MainCommand.onCommand(sender, command, label, args);
       } else if (args[0].equalsIgnoreCase("help")) {
-        if (sender.hasPermission("carftory.help")) {
+        if (sender.hasPermission("carftory.command.help")) {
           return HelpCommand.onCommand(sender, command, label, args);
         } else {
           Utilities.msg(sender, Utilities.getTranslation("NoPermissions"));
         }
       } else if (args[0].equalsIgnoreCase("fixGraphics")) {
-        if (sender.hasPermission("carftory.fixGraphics")) {
+        if (sender.hasPermission("carftory.command.fixGraphics")) {
           return FixCommand.onCommand(sender, command, label, args);
         } else {
           Utilities.msg(sender, Utilities.getTranslation("NoPermissions"));
         }
       } else if (args[0].equalsIgnoreCase("toggleDebug")) {
-        if (sender.hasPermission("craftory.debug")) {
+        if (sender.hasPermission("craftory.command.debug")) {
           return DebugCommand.onCommand(sender, command, label, args);
         } else {
           Utilities.msg(sender, Utilities.getTranslation("NoPermissions"));
         }
       } else if (args[0].equalsIgnoreCase("recipebook")) {
-        if (sender.hasPermission("craftory.recipebook")) {
+        if (sender.hasPermission("craftory.command.recipebook")) {
           return RecipeBookCommand.onCommand(sender, command, label, args);
         } else {
           Utilities.msg(sender, Utilities.getTranslation("NoPermissions"));
         }
       } else if (args[0].equalsIgnoreCase("give")) {
-        if (sender.hasPermission("craftory.give")) {
+        if (sender.hasPermission("craftory.command.give")) {
           return GiveCommand.onCommand(sender, command, label, args);
         } else {
           Utilities.msg(sender, Utilities.getTranslation("NoPermissions"));

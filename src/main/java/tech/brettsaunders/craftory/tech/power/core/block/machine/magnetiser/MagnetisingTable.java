@@ -70,11 +70,12 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   public void blockBreak() {
     super.blockBreak();
     if (itemFrame != null) {
-      itemFrame.remove();
       if (itemFrame.getItem().getType() != Material.AIR) {
         itemFrame.getLocation().getWorld()
             .dropItemNaturally(itemFrame.getLocation(), itemFrame.getItem());
       }
+      itemFrame.remove();
+      framePlaced = false;
     }
     HandlerList.unregisterAll(this);
   }
@@ -100,7 +101,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     super.beforeSaveUpdate();
     if (framePlaced) {
       if(itemFrame == null) {
-        findOrSpawnFrame();
+        if(findFrame())
         if(!framePlaced) return;
       }
       frameItem = itemFrame.getItem();
@@ -130,7 +131,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     }
   }
 
-  private void findOrSpawnFrame() {
+  private boolean findFrame() {
     for (Entity entity : frameLocation.getWorld().getNearbyEntities(frameLocation, 2, 2, 2)) {
       if(entity instanceof ItemFrame) {
         if(entity.getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation().equals(location)) {
@@ -138,11 +139,11 @@ public class MagnetisingTable extends CustomBlock implements Listener {
           itemFrame.setFacingDirection(BlockFace.UP);
           itemFrame.setVisible(false);
           framePlaced = true;
-          return;
+          return true;
         }
       }
     }
-    spawnFrame();
+    return false;
   }
 
   private boolean frameHit(Player player) {
@@ -191,7 +192,6 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     if (hit) {
       event.setCancelled(true);
       ((Player) event.getDamager()).getInventory().setItemInMainHand(ToolManager.decreaseDurability(itemStack, 1));
-          ;
     }
   }
 
