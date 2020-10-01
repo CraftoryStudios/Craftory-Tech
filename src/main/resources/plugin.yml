@@ -19,9 +19,6 @@ commands:
     description: Testing
 
 permissions:
-  craftory:
-    description: Allows you to do anything craftory related
-    default: op
   craftory.command.help:
     description: Allows you to use the craftory help command
     default: op
