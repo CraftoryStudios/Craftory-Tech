@@ -17,7 +17,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseMacerator;
 public class DiamondMacerator extends BaseMacerator {
 
   /* Static Constants Private */
-  private static final byte C_LEVEL = 0;
+  private static final byte C_LEVEL = 2;
 
   /* Construction */
   public DiamondMacerator(Location location) {
