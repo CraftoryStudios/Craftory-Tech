@@ -19,6 +19,7 @@ public class MagnetisingTableManager implements Listener {
 
 
   private HashMap<Location, MagnetisingTable> tables;
+  //TODO create
   /*
   @EventHandler
   public void itemFrameHit(EntityDamageByEntityEvent event) {

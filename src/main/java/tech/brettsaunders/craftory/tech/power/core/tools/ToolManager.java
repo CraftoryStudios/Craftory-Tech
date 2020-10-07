@@ -44,7 +44,7 @@ public class ToolManager implements Listener {
 
   public static ItemStack decreaseDurability(ItemStack itemStack, int amount) {
     NBTItem nbtItem = new NBTItem(itemStack);
-    if (nbtItem.hasKey("custom_max_durability")) {
+    if (Boolean.TRUE.equals(nbtItem.hasKey("custom_max_durability"))) {
       int currentDurability = nbtItem.getInteger("custom_durability") - amount;
       if (currentDurability > 0) {
         nbtItem.setInteger("custom_durability", currentDurability);

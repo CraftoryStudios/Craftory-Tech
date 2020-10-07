@@ -107,26 +107,7 @@ public class PowerConnectorManager implements Listener {
       //Both have manager and not same power connector
       if (powerGridFrom != null && powerGridTo != null
           && !fromLoc.equals(toLoc)) {
-        //Form Graphical Connection
-        formingConnection.remove(uuid);
-        powerGridFrom.addPowerConnectorConnection(fromLoc, toLoc);
-        //Merge Managers
-        if (powerGridFrom != powerGridTo) {
-          if (powerGridFrom.getGridSize() >= powerGridTo.getGridSize()) {
-            powerGridFrom.addAll(powerGridTo);
-            powerGridFrom.addPowerConnectorConnection(fromLoc, toLoc);
-            Craftory.powerGridManager
-                .mergeGrids(powerGridTo, powerGridFrom);
-          } else {
-            powerGridTo.addAll(powerGridFrom);
-            powerGridTo.addPowerConnectorConnection(fromLoc, toLoc);
-            Craftory.powerGridManager
-                .mergeGrids(powerGridFrom, powerGridTo);
-          }
-
-        }
-        formWire(fromLoc, toLoc);
-        player.sendMessage(Utilities.getTranslation("PowerConnectorFormed"));
+        formConnection(toLoc, fromLoc, powerGridTo, powerGridFrom, player);
       } else {
         formingConnection.remove(uuid);
         player.sendMessage(Utilities.getTranslation("PowerConnectorFailed"));
@@ -136,6 +117,28 @@ public class PowerConnectorManager implements Listener {
       }
     }
   }
+
+  private void formConnection(Location toLoc, Location fromLoc, PowerGrid toGrid, PowerGrid fromGrid, Player player) {
+    formingConnection.remove(player.getUniqueId());
+    fromGrid.addPowerConnectorConnection(fromLoc, toLoc);
+    //Merge Managers
+    if (fromGrid != toGrid) {
+      if (fromGrid.getGridSize() >= toGrid.getGridSize()) {
+        fromGrid.addAll(toGrid);
+        fromGrid.addPowerConnectorConnection(fromLoc, toLoc);
+        Craftory.powerGridManager
+            .mergeGrids(toGrid, fromGrid);
+      } else {
+        toGrid.addAll(fromGrid);
+        toGrid.addPowerConnectorConnection(fromLoc, toLoc);
+        Craftory.powerGridManager
+            .mergeGrids(fromGrid, toGrid);
+      }
+    }
+    formWire(fromLoc, toLoc);
+    player.sendMessage(Utilities.getTranslation("PowerConnectorFormed"));
+  }
+
   private boolean recentlyClicked(UUID uuid) {
     if(recentClicks.contains(uuid)){
       Log.debug("Duplicate interact event");
