@@ -19,9 +19,23 @@ commands:
     description: Testing
 
 permissions:
-  craftory:
+  craftory.command.help:
+    description: Allows you to use the craftory help command
     default: op
-  craftory.debug:
+  craftory.command.fixGraphics:
+    description: Allows you to use the fixGraphics command
     default: op
-  craftory.help:
+  craftory.command.debug:
+    description: Allows you to use the debug commands and features
     default: op
+  craftory.command.recipebook:
+    description: Allows you to use the recipe book command
+    default: op
+  craftory.command.give:
+    description: Allows you to use the give command
+    default: op
+  craftory.command.reload:
+    description: Allows you to use the reload command to reload Craftory config files.
+  craftory.craft:
+    description: Allows you to craft craftory recipes
+    defaut: true
