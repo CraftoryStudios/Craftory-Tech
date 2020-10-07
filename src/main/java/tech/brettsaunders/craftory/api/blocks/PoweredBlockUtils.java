@@ -27,6 +27,10 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public class PoweredBlockUtils {
 
+  private PoweredBlockUtils() {
+    throw new IllegalStateException("Utils Class");
+  }
+
   /**
    * Checks if a {@link CustomBlock} is an implementation of a PoweredBlock
    *
@@ -136,7 +140,7 @@ public class PoweredBlockUtils {
     return Craftory.customBlockManager.getCustomBlock(location) instanceof IEnergyReceiver;
   }
 
-  public static void updateAdjacentProviders(Location location, Boolean blockPlaced,
+  public static void updateAdjacentProviders(Location location, boolean blockPlaced,
       CustomBlock originBlock) {
     Block block;
     Location blockLocation;

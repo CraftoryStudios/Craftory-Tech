@@ -30,7 +30,7 @@ public abstract class LoggedScheduler implements BukkitScheduler {
     public void run() {
       try {
         delegate.run();
-      } catch (Throwable e) {
+      } catch (Exception e) {
         customHandler(taskID, e);
       }
     }
@@ -47,11 +47,11 @@ public abstract class LoggedScheduler implements BukkitScheduler {
   // A reference to the underlying scheduler
   private BukkitScheduler delegate;
 
-  public LoggedScheduler(Plugin owner) {
+  protected LoggedScheduler(Plugin owner) {
     this(owner.getServer().getScheduler());
   }
 
-  public LoggedScheduler(BukkitScheduler delegate) {
+  protected LoggedScheduler(BukkitScheduler delegate) {
     this.delegate = delegate;
   }
 

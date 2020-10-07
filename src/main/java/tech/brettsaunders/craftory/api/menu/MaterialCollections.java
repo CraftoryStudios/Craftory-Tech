@@ -204,24 +204,25 @@ public final class MaterialCollections {
       Material.BLACK_GLAZED_TERRACOTTA
   );
 
+  public static final String V_1_13 = "v1_13_";
   @Getter
   private static final MaterialCollection allDyeColors = new MaterialCollection(
-      ReflectionUtils.isVersion("v1_13_") ? Material.valueOf("BONE_MEAL") : Material.WHITE_DYE,
+      ReflectionUtils.isVersion(V_1_13) ? Material.valueOf("BONE_MEAL") : Material.WHITE_DYE,
       Material.ORANGE_DYE,
       Material.MAGENTA_DYE,
       Material.LIGHT_BLUE_DYE,
-      ReflectionUtils.isVersion("v1_13_") ? Material.valueOf("DANDELION_YELLOW") : Material.YELLOW_DYE,
+      ReflectionUtils.isVersion(V_1_13) ? Material.valueOf("DANDELION_YELLOW") : Material.YELLOW_DYE,
       Material.LIME_DYE,
       Material.PINK_DYE,
       Material.GRAY_DYE,
       Material.LIGHT_GRAY_DYE,
       Material.CYAN_DYE,
       Material.PURPLE_DYE,
-      ReflectionUtils.isVersion("v1_13_") ? Material.valueOf("LAPIS_LAZULI") : Material.BLUE_DYE,
-      ReflectionUtils.isVersion("v1_13_") ? Material.valueOf("COCOA_BEANS") : Material.BROWN_DYE,
-      ReflectionUtils.isVersion("v1_13_") ? Material.valueOf("CACTUS_GREEN") : Material.GREEN_DYE,
-      ReflectionUtils.isVersion("v1_13_") ? Material.valueOf("ROSE_RED") : Material.RED_DYE,
-      ReflectionUtils.isVersion("v1_13_") ? Material.valueOf("INK_SAC") : Material.BLACK_DYE
+      ReflectionUtils.isVersion(V_1_13) ? Material.valueOf("LAPIS_LAZULI") : Material.BLUE_DYE,
+      ReflectionUtils.isVersion(V_1_13) ? Material.valueOf("COCOA_BEANS") : Material.BROWN_DYE,
+      ReflectionUtils.isVersion(V_1_13) ? Material.valueOf("CACTUS_GREEN") : Material.GREEN_DYE,
+      ReflectionUtils.isVersion(V_1_13) ? Material.valueOf("ROSE_RED") : Material.RED_DYE,
+      ReflectionUtils.isVersion(V_1_13) ? Material.valueOf("INK_SAC") : Material.BLACK_DYE
   );
 
   @Getter

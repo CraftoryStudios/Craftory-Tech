@@ -44,7 +44,7 @@ import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
-import tech.brettsaunders.craftory.api.blocks.basicBlocks.BasicBlocks;
+import tech.brettsaunders.craftory.api.blocks.BasicBlocks;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;

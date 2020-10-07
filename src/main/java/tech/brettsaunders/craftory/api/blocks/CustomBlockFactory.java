@@ -47,7 +47,7 @@ public class CustomBlockFactory {
       boolean registerTickable, boolean directional) {
     blockTypes.put(nameID, block);
     Constructor[] constructors = block.getConstructors();
-    for (Constructor constructor : constructors) {
+    for (Constructor<? extends CustomBlock> constructor : constructors) {
       if (constructor.getParameterCount() == 0) {
         loadConstructor.put(nameID, constructor);
       } else if (constructor.getParameterCount() == 1 && constructor.getParameterTypes()[0]
@@ -61,16 +61,6 @@ public class CustomBlockFactory {
     if (directional) {
       this.directional.add(nameID);
     }
-  }
-
-  @Synchronized
-  public boolean isCustomBlockRegistered(CustomBlock block) {
-    return blockTypes.containsKey(block.getClass());
-  }
-
-  @Synchronized
-  public String getKey(CustomBlock block) {
-    return getKey(block.getClass());
   }
 
   @Synchronized
@@ -90,9 +80,9 @@ public class CustomBlockFactory {
     NBTCompound nameCompound = locationCompound.getCompound("blockName");
     String nameID = nameCompound.getString("data");
     if (loadConstructor.containsKey(nameID)) {
-      Constructor constructor = loadConstructor.get(nameID);
+      Constructor<? extends CustomBlock> constructor = loadConstructor.get(nameID);
       try {
-        customBlock = (CustomBlock) constructor.newInstance();
+        customBlock = constructor.newInstance();
         persistenceStorage.loadFields(customBlock, locationCompound);
         customBlock.setLocation(location);
         customBlock.afterLoadUpdate();
@@ -111,9 +101,9 @@ public class CustomBlockFactory {
   public CustomBlock create(String nameID, Location location, BlockFace direction) {
     CustomBlock customBlock = null;
     if (createConstructor.containsKey(nameID)) {
-      Constructor constructor = createConstructor.get(nameID);
+      Constructor<? extends CustomBlock> constructor = createConstructor.get(nameID);
       try {
-        customBlock = (CustomBlock) constructor.newInstance(location);
+        customBlock = constructor.newInstance(location);
         if (directional.contains(nameID)) {
           customBlock.setDirection(direction);
         } else {

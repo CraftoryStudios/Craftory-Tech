@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import lombok.Getter;
 import org.bukkit.Location;
@@ -85,28 +86,12 @@ public class PowerGridManager implements Listener {
   @EventHandler
   public void onPoweredBlockBreak(CustomBlockBreakEvent event) {
     Location location = event.getLocation();
-    if (powerGrids.containsKey(location)) { //GRID / Power connector stuff
-      Craftory.powerConnectorManager.destroyBeams(location);
-      PowerGrid grid = powerGrids.remove(location);
-      grid.cancelTask();
-      if (grid.getGridSize() > 1) {
-        List<PowerGrid> newGrids = splitGrids(location, grid);
-        for (Location l : grid.getPowerConnectors().keySet()) {
-          PowerGrid g = powerGrids.remove(l);
-          if (!g.isCancelled()) {
-            g.cancelTask(); //Stop runable
-          }
-        }
-        for (PowerGrid newGrid : newGrids) {
-          for (Location loc : newGrid.getPowerConnectors().keySet()) {
-            powerGrids.put(loc, newGrid);
-          }
-        }
-      }
-
-    }
-    //Destroy any beams
     Craftory.powerConnectorManager.destroyBeams(location);
+
+    if (powerGrids.containsKey(location)) {
+      removeGrid(location);
+    }
+
     if (event.getCustomBlock() instanceof BaseMachine) {
       for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
         if (grid.removeMachine(location)) {
@@ -128,6 +113,25 @@ public class PowerGridManager implements Listener {
     }
   }
 
+  private void removeGrid(Location location) {
+    PowerGrid grid = powerGrids.remove(location);
+    grid.cancelTask();
+    if (grid.getGridSize() > 1) {
+      List<PowerGrid> newGrids = splitGrids(location, grid);
+      for (Location l : grid.getPowerConnectors().keySet()) {
+        PowerGrid g = powerGrids.remove(l);
+        if (!g.isCancelled()) {
+          g.cancelTask(); //Stop runable
+        }
+      }
+      for (PowerGrid newGrid : newGrids) {
+        for (Location loc : newGrid.getPowerConnectors().keySet()) {
+          powerGrids.put(loc, newGrid);
+        }
+      }
+    }
+  }
+
   public void onDisable() {
     Set<String> keys = nbtFileBackup.getKeys();
     for(String s: keys) {
@@ -140,9 +144,7 @@ public class PowerGridManager implements Listener {
       e.printStackTrace();
     }
     PowerGridSaver container = new PowerGridSaver(groupPowerGrids());
-    //nbtFile.getKeys().forEach(key -> nbtFile.removeKey(key));
-    keys = nbtFile.getKeys();
-    for(String s: keys) {
+    for(String s: nbtFile.getKeys()) {
       if(s!=null) nbtFile.removeKey(s);
     }
     persistenceStorage.saveFields(container, nbtFile);
@@ -186,7 +188,7 @@ public class PowerGridManager implements Listener {
 
   /* Grid Splitting */
   public void mergeGrids(PowerGrid old, PowerGrid merged) {
-    for (HashMap.Entry<Location, PowerGrid> entry : powerGrids.entrySet()) {
+    for (Entry<Location, PowerGrid> entry : powerGrids.entrySet()) {
       if (entry.getValue().equals(old)) {
         powerGrids.put(entry.getKey(), merged);
       }

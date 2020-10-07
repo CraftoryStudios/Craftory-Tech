@@ -38,7 +38,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
-import tech.brettsaunders.craftory.api.blocks.basicBlocks.BasicBlocks;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.tools.ToolLevel;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -47,7 +46,9 @@ import tech.brettsaunders.craftory.utils.Log;
 
 public class CustomBlockManager {
 
-  public final static String DATA_FOLDER =
+  public static final StatsContainer statsContainer = new StatsContainer();
+
+  public static final String DATA_FOLDER =
       Craftory.plugin.getDataFolder() + File.separator + "data";
   private final HashMap<Location, CustomBlock> currentCustomBlocks;
   @Getter
@@ -56,19 +57,17 @@ public class CustomBlockManager {
   private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
   @Getter
   private final HashMap<String, CustomBlockData> customBlockDataHashMap;
-  public StatsContainer statsContainer;
+
   private final PersistenceStorage persistenceStorage;
-  private final CustomBlockManagerEvents customBlockManagerEvents;
 
   public CustomBlockManager() {
-    statsContainer = new StatsContainer();
     persistenceStorage = new PersistenceStorage();
     currentCustomBlocks = new HashMap<>();
     customBlockDataHashMap = new HashMap<>();
     activeChunks = new HashMap<>();
     inactiveChunks = new HashMap<>();
     loadCustomBlockData();
-    customBlockManagerEvents = new CustomBlockManagerEvents(persistenceStorage,
+    new CustomBlockManagerEvents(persistenceStorage,
         currentCustomBlocks,
         activeChunks,
         inactiveChunks,
@@ -105,12 +104,12 @@ public class CustomBlockManager {
     MultipleFacing multipleFacing = (MultipleFacing) blockData;
 
     multipleFacing.setFace(
-        BlockFace.UP, data.UP);
-    multipleFacing.setFace(BlockFace.DOWN, data.DOWN);
-    multipleFacing.setFace(BlockFace.NORTH, data.NORTH);
-    multipleFacing.setFace(BlockFace.EAST, data.EAST);
-    multipleFacing.setFace(BlockFace.SOUTH, data.SOUTH);
-    multipleFacing.setFace(BlockFace.WEST, data.WEST);
+        BlockFace.UP, data.up);
+    multipleFacing.setFace(BlockFace.DOWN, data.down);
+    multipleFacing.setFace(BlockFace.NORTH, data.north);
+    multipleFacing.setFace(BlockFace.EAST, data.east);
+    multipleFacing.setFace(BlockFace.SOUTH, data.south);
+    multipleFacing.setFace(BlockFace.WEST, data.west);
     block.setBlockData(multipleFacing, false);
   }
 
@@ -202,7 +201,7 @@ public class CustomBlockManager {
       NBTCompound chunk = nbtFile.getCompound(getChunkID(block.location.getChunk()));
       if (chunk != null) {
         String locationName = getLocationID(block.location);
-        if (chunk.hasKey(locationName)) {
+        if (Boolean.TRUE.equals(chunk.hasKey(locationName))) {
           chunk.removeKey(locationName);
         }
       }
@@ -221,7 +220,7 @@ public class CustomBlockManager {
     activeChunks.put(chunkID, customBlocks);
   }
 
-  private void removeIfLastActiveChunk(CustomBlock customBlock, Boolean addToActive) {
+  private void removeIfLastActiveChunk(CustomBlock customBlock, boolean addToActive) {
     final String chunkID = getChunkWorldID(customBlock.location.getChunk());
     if (activeChunks.containsKey(chunkID)) {
       HashSet<CustomBlock> customBlocks = activeChunks.get(chunkID);
@@ -256,7 +255,7 @@ public class CustomBlockManager {
         } catch (IllegalArgumentException | NullPointerException e) {
           toolLevel = ToolLevel.HAND;
         }
-        data.BREAK_LEVEL = toolLevel;
+        data.breakLevel = toolLevel;
       }
       customBlockDataHashMap.put(key, data);
     }

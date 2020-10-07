@@ -8,10 +8,9 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.api.blocks.basicBlocks;
+package tech.brettsaunders.craftory.api.blocks;
 
 import java.util.HashSet;
-import java.util.Set;
 import lombok.Getter;
 import org.bukkit.block.BlockFace;
 
@@ -20,7 +19,7 @@ public enum BasicBlocks {
   CRYSTAL_ORE(false, false, true, true, false, false);
 
   @Getter
-  private final HashSet<BlockFace> allowedFaces = new HashSet<BlockFace>();
+  private final HashSet<BlockFace> allowedFaces = new HashSet<>();
 
   BasicBlocks(boolean west, boolean up, boolean south, boolean north, boolean east, boolean down) {
     if (west) {
