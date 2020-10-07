@@ -26,6 +26,8 @@ public class ResourcePackEvents implements Listener {
     Events.registerEvents(this);
   }
 
+  private static final String CRAFTORY_MESSAGE_PREFIX = "[Craftory]";
+
   public static byte[] hexStringToByteArray(String s) {
     byte[] byteArray = new BigInteger(s, 16).toByteArray();
     if (byteArray[0] == 0) {
@@ -45,22 +47,21 @@ public class ResourcePackEvents implements Listener {
   public void onResourcePackStatus(PlayerResourcePackStatusEvent e) {
     switch (e.getStatus()) {
       case ACCEPTED:
-        //e.getPlayer().sendMessage("Craftory: Downloading texture pack!");
         e.getPlayer().setInvulnerable(true);
         break;
       default:
       case DECLINED:
         e.getPlayer()
-            .sendMessage(ChatColor.RED + "[Craftory]" + ChatColor.RESET + Utilities
+            .sendMessage(ChatColor.RED + CRAFTORY_MESSAGE_PREFIX + ChatColor.RESET + Utilities
                 .getTranslation("ResourcePackDeclined"));
         break;
       case FAILED_DOWNLOAD:
-        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]" + ChatColor.RESET + Utilities
+        e.getPlayer().sendMessage(ChatColor.RED + CRAFTORY_MESSAGE_PREFIX + ChatColor.RESET + Utilities
             .getTranslation("ResourcePackFailed"));
         e.getPlayer().setInvulnerable(false);
         break;
       case SUCCESSFULLY_LOADED:
-        e.getPlayer().sendMessage(ChatColor.RED + "[Craftory]" + ChatColor.RESET + Utilities
+        e.getPlayer().sendMessage(ChatColor.RED + CRAFTORY_MESSAGE_PREFIX + ChatColor.RESET + Utilities
             .getTranslation("ResourcePackEnabled"));
         e.getPlayer().setInvulnerable(false);
     }
