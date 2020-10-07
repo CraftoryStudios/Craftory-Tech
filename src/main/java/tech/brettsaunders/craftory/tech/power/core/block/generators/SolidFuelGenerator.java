@@ -51,7 +51,6 @@ public class SolidFuelGenerator extends BaseGenerator {
   }
 
   //TODO Remove in future
-  @Deprecated
   @Setter
   protected ItemStack fuelItem = new ItemStack(Material.AIR);
   @Persistent
