@@ -164,7 +164,7 @@ public class ChestMenu implements Cloneable, Iterable<ItemStack> {
    *
    * @return A Map containing all Click Events
    */
-  public HashMap<Integer, MenuClickHandler> getClickHandlers() {
+  public Map<Integer, MenuClickHandler> getClickHandlers() {
     return handlers;
   }
 

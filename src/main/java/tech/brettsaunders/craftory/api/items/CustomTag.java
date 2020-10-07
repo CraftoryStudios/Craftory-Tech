@@ -2,6 +2,7 @@ package tech.brettsaunders.craftory.api.items;
 
 import java.util.Arrays;
 import java.util.List;
+import lombok.Getter;
 
 public enum CustomTag {
   WATERWHEEL(new String[]{"waterwheel", "waterwheel_oak", "waterwheel_birch", "waterwheel_acacia",
@@ -11,7 +12,8 @@ public enum CustomTag {
       "windmill_light_gray","windmill_lime","windmill_magenta","windmill_pink","windmill_purple",
       "windmill_red","windmill_yellow"});
 
-  public final List<String> items;
+  @Getter
+  private final List<String> items;
 
   private CustomTag(String[] items) {
     this.items = Arrays.asList(items);

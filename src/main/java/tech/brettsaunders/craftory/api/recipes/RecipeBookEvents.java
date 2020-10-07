@@ -105,17 +105,13 @@ public class RecipeBookEvents implements Listener {
 
   @EventHandler
   public void entityPickupItemEvent(EntityPickupItemEvent e) {
-    if(e.getEntity() instanceof Player) {
-      if(playerInventories.containsKey(e.getEntity().getUniqueId())){
+    if(e.getEntity() instanceof Player && playerInventories.containsKey(e.getEntity().getUniqueId())) {
         e.setCancelled(true);
-      }
     }
   }
 
   public void onDisable() {
-    playerInventories.forEach((id,inventory) -> {
-      Craftory.plugin.getServer().getPlayer(id).getInventory().setContents(inventory);
-    });
+    playerInventories.forEach((id,inventory) -> Craftory.plugin.getServer().getPlayer(id).getInventory().setContents(inventory));
   }
 
   public void skipPlayer(UUID id) {
