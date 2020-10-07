@@ -144,6 +144,7 @@ public class Utilities {
     config.addDefault("fixItemGraphics", false);
     config.addDefault("wrench.powerLoss", 10);
     config.addDefault("ore.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
+    config.addDefault("crafting.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();

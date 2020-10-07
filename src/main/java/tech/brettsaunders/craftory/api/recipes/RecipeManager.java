@@ -14,6 +14,7 @@ import io.th0rgal.oraxen.items.OraxenItems;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,6 +24,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
@@ -39,8 +41,10 @@ public class RecipeManager implements Listener {
   private final HashMap<String, String> customRecipes;
   private HashMap<String, ItemStack> customFurnaceRecipes; //Map of Source to Result
   private static final int version = Integer.parseInt(Craftory.plugin.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
+  private static List<String> blackListedWorlds;
 
   public RecipeManager() {
+    blackListedWorlds = Craftory.plugin.getConfig().getStringList("crafting.blackListedWorlds");
     customRecipes = new HashMap<>();
     Events.registerEvents(this);
     ConfigurationSection recipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
@@ -205,6 +209,51 @@ public class RecipeManager implements Listener {
         RecipeUtils.addAllFoundryRecipes(recipesToAdd);
       }
     }
+  }
+
+  @EventHandler
+  public void onRecipeCompleted(PrepareItemCraftEvent e) {
+
+    String resultName;
+    if (e.getInventory().getResult() == null
+        || e.getInventory().getResult().getType() == Material.AIR) {
+      return;
+    }
+    if (CustomItemManager.isCustomItem(e.getInventory().getResult(), true)) {
+      resultName = CustomItemManager.getCustomItemName(e.getInventory().getResult());
+    } else {
+      resultName = e.getInventory().getResult().getType().name();
+    }
+
+    String pattern = customRecipes.get(resultName);
+    if (pattern == null) {
+      for (ItemStack item : e.getInventory().getMatrix()) {
+        if (item != null && CustomItemManager.isCustomItem(item, true)) {
+          e.getInventory().setResult(new ItemStack(Material.AIR));
+          return;
+        }
+      }
+      return;
+    } else if(!e.getView().getPlayer().hasPermission("craftory.craft") || blackListedWorlds.contains(e.getView().getPlayer().getWorld().getName()) ){
+      e.getInventory().setResult(new ItemStack(Material.AIR));
+      return;
+    }
+
+    String recipePattern = "";
+    for (ItemStack itemStack : e.getInventory().getMatrix()) {
+      if (itemStack == null || itemStack.getType() == Material.AIR) {
+        recipePattern = recipePattern + "X";
+      } else if (CustomItemManager.isCustomItem(itemStack, true)) {
+        recipePattern = recipePattern + "C";
+      } else {
+        recipePattern = recipePattern + "N";
+      }
+    }
+
+    if (!recipePattern.equals(pattern)) {
+      e.getInventory().setResult(new ItemStack(Material.AIR));
+    }
+
   }
 
   @EventHandler
