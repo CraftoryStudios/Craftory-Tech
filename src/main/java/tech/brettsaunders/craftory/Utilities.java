@@ -45,6 +45,7 @@ import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.BasicBlocks;
+import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
@@ -228,20 +229,14 @@ public class Utilities {
     String locale = config.getString("language.locale");
     Log.info("Using " + locale + " locale");
     Properties defaultLang = new Properties();
-    FileInputStream fileInputStream = null;
-    try {
-      fileInputStream = new FileInputStream(new File(plugin.getDataFolder(),
-          "data/default_lang.properties"));
-      defaultLang
-          .load(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8));
+    try (FileInputStream fileInputStream = new FileInputStream(new File(plugin.getDataFolder(),
+        "data/default_lang.properties"));InputStreamReader streamReader = new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale + ".properties")),
+        StandardCharsets.UTF_8)) {
+      defaultLang.load(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8));
       langProperties = new Properties(defaultLang);
-      langProperties.load(
-          new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale + ".properties")),
-              StandardCharsets.UTF_8));
+      langProperties.load(streamReader);
     } catch (IOException e) {
       e.printStackTrace();
-    } finally {
-      if (fileInputStream != null) fileInputStream.close();
     }
   }
 
@@ -280,19 +275,19 @@ public class Utilities {
           HashMap<String, Integer> valueMap = new HashMap<>();
           //valueMap.put("totalCustomBlocks",Craftory.customBlockManager.statsContainer.getTotalCustomBlocks());
           //valueMap.put("totalPoweredBlocks",Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks());
-          valueMap.put("totalCells", Craftory.customBlockManager.statsContainer.getTotalCells());
+          valueMap.put("totalCells", CustomBlockManager.statsContainer.getTotalCells());
           valueMap.put("totalGenerators",
-              Craftory.customBlockManager.statsContainer.getTotalGenerators());
+              CustomBlockManager.statsContainer.getTotalGenerators());
           valueMap.put("totalPowerConnectors",
-              Craftory.customBlockManager.statsContainer.getTotalPowerConnectors());
+              CustomBlockManager.statsContainer.getTotalPowerConnectors());
           valueMap
-              .put("totalMachines", Craftory.customBlockManager.statsContainer.getTotalMachines());
+              .put("totalMachines", CustomBlockManager.statsContainer.getTotalMachines());
           return valueMap;
         }));
     metrics.addCustomChart(new SingleLineChart("total_custom_blocks",
-        () -> Craftory.customBlockManager.statsContainer.getTotalCustomBlocks()));
+        CustomBlockManager.statsContainer::getTotalCustomBlocks));
     metrics.addCustomChart(new SingleLineChart("total_powered_blocks",
-        () -> Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks()));
+        CustomBlockManager.statsContainer::getTotalPoweredBlocks));
   }
 
   static void registerCommandsAndCompletions() {
