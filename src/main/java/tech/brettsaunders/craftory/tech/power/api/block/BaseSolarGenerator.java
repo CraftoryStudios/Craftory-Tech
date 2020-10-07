@@ -22,7 +22,7 @@ import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
 
 public class BaseSolarGenerator extends BaseGenerator {
 
-  static final boolean solarDuringStorm = Utilities.config
+  static final boolean SOLAR_DURING_STORM = Utilities.config
       .getBoolean("generators.solarDuringStorms");
   private static final int BASE_CAPACITY = 50000;
   private static final int NOON_OUTPUT = 20;
@@ -42,7 +42,7 @@ public class BaseSolarGenerator extends BaseGenerator {
     if (!location.getWorld().getEnvironment().equals(Environment.NORMAL)) {
       return false;
     }
-    if (solarDuringStorm) {
+    if (SOLAR_DURING_STORM) {
       return location.getWorld().getTime() < 13000
           && location.clone().add(0, 1, 0).getBlock().getLightFromSky() == 15;
     }
@@ -65,8 +65,7 @@ public class BaseSolarGenerator extends BaseGenerator {
   protected int calculateAmountProduced() {
     long time = location.getWorld().getTime();
     double diff = Math.abs(time - 6000) / 1000d; //might be too complex
-    int amount = ((int) Math.round((-0.555 * (diff * diff)))) + NOON_OUTPUT; //same for this
-    return amount;
+    return ((int) Math.round((-0.555 * (diff * diff)))) + NOON_OUTPUT;
   }
 
   @Override

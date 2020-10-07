@@ -72,7 +72,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   private  boolean powered = false;
 
   /* Construction */
-  public PoweredBlock(Location location, String blockName, byte level) {
+  protected PoweredBlock(Location location, String blockName, byte level) {
     super(location, blockName);
     cachedSidesConfig = new HashMap<>();
     cachedSides = new HashMap<>();
@@ -85,7 +85,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   }
 
   /* Saving, Setup and Loading */
-  public PoweredBlock() {
+  protected PoweredBlock() {
     super();
     Events.registerEvents(this);
   }
@@ -125,6 +125,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     }
   }
 
+  @Override
   public void beforeSaveUpdate() {
     super.beforeSaveUpdate();
     inputSlots.clear();
@@ -161,19 +162,18 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
           ItemStack[] hopperItems = ((Hopper) relative.getState())
               .getInventory().getContents();
           for (ItemStack item : hopperItems) {
-            if (item == null) {
-              continue;
-            }
-            if (stack == null) {
-              stack = item.clone();
-              stack.setAmount(1);
-              item.setAmount(item.getAmount() - 1);
-              break;
-            } else if (stack.getType().toString().equals(item.getType().toString())
-                && stack.getAmount() < stack.getMaxStackSize()) {
-              stack.setAmount(stack.getAmount() + 1);
-              item.setAmount(item.getAmount() - 1);
-              break;
+            if (item != null) {
+              if (stack == null) {
+                stack = item.clone();
+                stack.setAmount(1);
+                item.setAmount(item.getAmount() - 1);
+                break;
+              } else if (stack.getType().toString().equals(item.getType().toString())
+                  && stack.getAmount() < stack.getMaxStackSize()) {
+                stack.setAmount(stack.getAmount() + 1);
+                item.setAmount(item.getAmount() - 1);
+                break;
+              }
             }
           }
           inventoryInterface.setItem(slot, stack);
@@ -247,9 +247,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       }
     } else {
       //Stop moving items from any slot but intractable ones
-      if (!interactableSlots.contains(event.getRawSlot())) {
-        event.setCancelled(true);
-      } else if (outputDisabledActions.contains(event.getAction()) && outputLocations
+      if (!interactableSlots.contains(event.getRawSlot()) && outputDisabledActions.contains(event.getAction()) && outputLocations
           .contains(event.getRawSlot())) {
         event.setCancelled(true);
       }

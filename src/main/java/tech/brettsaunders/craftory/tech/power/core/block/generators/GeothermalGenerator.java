@@ -66,7 +66,7 @@ public class GeothermalGenerator extends BaseGenerator {
   /* Construction */
   public GeothermalGenerator() {
     super();
-    init();
+    setup();
   }
 
   /* Saving, Setup and Loading */
@@ -78,10 +78,10 @@ public class GeothermalGenerator extends BaseGenerator {
     inputSlots.add(0, new ItemStack(Material.AIR));
     outputSlots = new ArrayList<>();
     outputSlots.add(new ItemStack(Material.AIR));
-    init();
+    setup();
   }
 
-  private void init() {
+  private void setup() {
     inputLocations = new ArrayList<>();
     inputLocations.add(0, FUEL_SLOT);
     outputLocations = new ArrayList<>();
@@ -94,9 +94,8 @@ public class GeothermalGenerator extends BaseGenerator {
     ItemStack input = inventoryInterface.getItem(FUEL_SLOT);
     ItemStack out = inventoryInterface.getItem(OUT_SLOT);
     if (input != null && input.getType().equals(Material.LAVA_BUCKET)
-        && fluidStorage.getSpace() > 1000) {
-      if (out == null || out.getType().equals(Material.BUCKET) && out.getAmount() < out
-          .getMaxStackSize()) {
+        && fluidStorage.getSpace() > 1000 && (out == null || out.getType().equals(Material.BUCKET) && out.getAmount() < out
+        .getMaxStackSize())) {
         input.setAmount(0);
         inventoryInterface.setItem(FUEL_SLOT, input);
         fluidStorage.forceAdd(1000);
@@ -106,7 +105,6 @@ public class GeothermalGenerator extends BaseGenerator {
           out.setAmount(out.getAmount() + 1);
           inventoryInterface.setItem(OUT_SLOT, out);
         }
-      }
     }
     super.updateGenerator();
     inventoryInterface.getViewers().forEach(player -> {

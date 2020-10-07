@@ -36,22 +36,22 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
   protected boolean isActive;
 
   /* Construction */
-  public BaseGenerator(Location location, String blockName, byte level, int outputAmount,
+  protected BaseGenerator(Location location, String blockName, byte level, int outputAmount,
       int capacity) {
     super(location, blockName, level, outputAmount);
     energyStorage = new EnergyStorage(capacity);
-    init();
+    setup();
   }
 
   /* Saving, Setup and Loading */
-  public BaseGenerator() {
+  protected BaseGenerator() {
     super();
     isActive = false;
-    init();
+    setup();
   }
 
   /* Common Load and Construction */
-  private void init() {
+  private void setup() {
     isActive = false;
     runningContainer = new VariableContainer<>(false);
   }
@@ -83,23 +83,12 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
     }
   }
 
-  /* Internal Helper Functions */
-  protected boolean timeCheck() {
-    //Time check factor to slow down check speed;
-    //Core Props
-    //return world.getTotalWorldTime() % TIME_CONSTANT == 0;
-    return true;
-  }
-
   protected abstract boolean canStart();
 
   protected abstract boolean canFinish();
 
   protected void processStart() {
     runningContainer.setT(true);
-  }
-
-  protected void processFinish() {
   }
 
   protected void processIdle() {

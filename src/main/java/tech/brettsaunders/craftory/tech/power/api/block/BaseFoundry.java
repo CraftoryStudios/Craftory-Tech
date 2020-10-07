@@ -73,13 +73,13 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     inputSlots.add(new ItemStack(Material.AIR));
     outputSlots = new ArrayList<>();
     outputSlots.add(new ItemStack(Material.AIR));
-    init();
+    setup();
   }
 
   /* Saving, Setup and Loading */
   public BaseFoundry() {
     super();
-    init();
+    setup();
   }
 
   @Override
@@ -90,7 +90,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   }
 
 
-  private void init() {
+  private void setup() {
     inputLocations = new ArrayList<>();
     outputLocations = new ArrayList<>();
     inputLocations.add(INPUT_LOCATION1);
@@ -105,8 +105,8 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     Inventory inventory = createInterfaceInventory(displayName,
         Font.ELECTRIC_FOUNDRY_GUI.label + "");
     addGUIComponent(
-        new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
-            OUTPUT_LOCATION));
+        new GTwoToOneMachine(inventory, 23, progressContainer
+        ));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer, 21));
     if (inputSlots.size() < 2) {
@@ -115,7 +115,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     if (inputSlots.size() < 2) {
       inputSlots.add(1, new ItemStack(Material.AIR));
     }
-    if (outputSlots.size() == 0) {
+    if (outputSlots.isEmpty()) {
       outputSlots.add(0, new ItemStack(Material.AIR));
     }
     this.inventoryInterface = inventory;

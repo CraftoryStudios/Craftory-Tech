@@ -20,8 +20,8 @@ public class GBattery extends G21PointBar {
 
   private final EnergyStorage storage;
 
-  public GBattery(Inventory inventory, EnergyStorage storage, int top_slot) {
-    super(inventory, top_slot);
+  public GBattery(Inventory inventory, EnergyStorage storage, int topSlot) {
+    super(inventory, topSlot);
     this.storage = storage;
   }
 

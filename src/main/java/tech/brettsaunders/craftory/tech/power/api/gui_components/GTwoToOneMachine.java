@@ -24,27 +24,18 @@ public class GTwoToOneMachine implements IGUIComponent {
   private final int arrowSlot;
   private final VariableContainer<Double> progress;
   private final Inventory inventory;
-  private final int inputSlot1;
-  private final int inputSlot2;
-  private final int outputSlot;
 
   public GTwoToOneMachine(Inventory inventory, int arrowSlot,
-      VariableContainer<Double> progress, int inputSlot1, int inputSlot2, int outputSlot) {
+      VariableContainer<Double> progress) {
     this.inventory = inventory;
     this.arrowSlot = arrowSlot;
     this.progress = progress;
-    this.inputSlot1 = inputSlot1;
-    this.inputSlot2 = inputSlot2;
-    this.outputSlot = outputSlot;
   }
 
   public GTwoToOneMachine(Inventory inventory,
-      VariableContainer<Double> progress, int inputSlot1, int inputSlot2, int outputSlot) {
+      VariableContainer<Double> progress) {
     this.inventory = inventory;
     this.progress = progress;
-    this.outputSlot = outputSlot;
-    this.inputSlot1 = inputSlot1;
-    this.inputSlot2 = inputSlot2;
     this.arrowSlot = 24;
   }
 

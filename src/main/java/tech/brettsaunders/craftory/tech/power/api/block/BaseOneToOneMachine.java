@@ -63,15 +63,15 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     processTime = PROCESS_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
-    init();
+    setup();
   }
 
   public BaseOneToOneMachine() {
     super();
-    init();
+    setup();
   }
 
-  private void init() {
+  private void setup() {
     inputLocations = new ArrayList<>();
     outputLocations = new ArrayList<>();
     inputLocations.add(INPUT_LOCATION);
@@ -92,13 +92,13 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     Inventory inventory = createInterfaceInventory(displayName,
         Font.FURNACE_GUI.label + "");
     addGUIComponent(
-        new GOneToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));
+        new GOneToOneMachine(inventory, 23, progressContainer));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer, 30));
-    if (inputSlots.size() == 0) {
+    if (inputSlots.isEmpty()) {
       inputSlots.add(0, new ItemStack(Material.AIR));
     }
-    if (outputSlots.size() == 0) {
+    if (outputSlots.isEmpty()) {
       outputSlots.add(0, new ItemStack(Material.AIR));
     }
     this.inventoryInterface = inventory;

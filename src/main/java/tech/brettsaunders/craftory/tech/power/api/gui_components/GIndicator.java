@@ -40,7 +40,7 @@ public class GIndicator implements IGUIComponent {
     ItemStack light;
     String name;
 
-    if (state.getT()) {
+    if (Boolean.TRUE.equals(state.getT())) {
       light = CustomItemManager.getCustomItem("light_on");
       name = Utilities.getTranslation("light_on");
     } else {

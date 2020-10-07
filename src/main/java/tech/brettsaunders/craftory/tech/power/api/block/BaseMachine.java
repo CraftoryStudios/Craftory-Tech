@@ -35,7 +35,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   protected  int tickCount = 0;
 
   /* Construction */
-  public BaseMachine(Location location, String blockName, byte level, int maxReceive) {
+  protected BaseMachine(Location location, String blockName, byte level, int maxReceive) {
     super(location, blockName, level);
     this.maxReceive = maxReceive;
     energyStorage.setMaxReceive(maxReceive);
@@ -43,7 +43,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   }
 
   /* Saving, Setup and Loading */
-  public BaseMachine() {
+  protected BaseMachine() {
     super();
     init();
   }
@@ -86,7 +86,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   @Ticking(ticks=60)
   public void soundLoop() {
-    if(runningContainer.getT()) {
+    if(Boolean.TRUE.equals(runningContainer.getT())) {
       playSound();
     }
   }

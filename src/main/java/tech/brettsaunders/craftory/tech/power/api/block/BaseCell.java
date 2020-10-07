@@ -40,21 +40,21 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
   /* Static Constants */
 
   /* Construction */
-  public BaseCell(Location location, String blockName, byte level, int outputAmount) {
+  protected BaseCell(Location location, String blockName, byte level, int outputAmount) {
     super(location, blockName, level, outputAmount);
     energyStorage = new EnergyStorage(CAPACITY_BASE * CAPACITY_LEVEL[level]);
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
-    init();
+    setup();
   }
 
   /* Saving, Setup and Loading */
-  public BaseCell() {
+  protected BaseCell() {
     super();
-    init();
+    setup();
   }
 
-  private void init() {
+  private void setup() {
     inputLocations = new ArrayList<>();
     outputLocations = new ArrayList<>();
     inputLocations.add(ITEM_LOCATION);
@@ -110,12 +110,11 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
 
   @Override
   public void setupGUI() {
-    //TODO change GUI so that it has the charging slot
     inventoryInterface = createInterfaceInventory(displayName, Font.CELL_GUI.label + "");
     addGUIComponent(new GBattery(inventoryInterface, energyStorage));
     addGUIComponent(new GOutputConfig(inventoryInterface, sidesConfig, 23, true));
 
-    if (inputSlots.size() == 0) {
+    if (inputSlots.isEmpty()) {
       inputSlots.add(0, new ItemStack(Material.AIR));
     }
   }

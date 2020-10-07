@@ -18,17 +18,17 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 
 public abstract class G21PointBar implements IGUIComponent {
 
-  private final int TOP_SLOT;
-  private final int BOTTOM_SLOT;
+  private final int topSlot;
+  private final int bottomSlot;
   private final Inventory inventory;
 
-  public G21PointBar(Inventory inventory, int top_slot) {
+  protected G21PointBar(Inventory inventory, int topSlot) {
     this.inventory = inventory;
-    TOP_SLOT = top_slot;
-    BOTTOM_SLOT = top_slot + 27;
+    this.topSlot = topSlot;
+    bottomSlot = topSlot + 27;
   }
 
-  public G21PointBar(Inventory inventory) {
+  protected G21PointBar(Inventory inventory) {
     this(inventory, 10);
   }
 
@@ -79,15 +79,15 @@ public abstract class G21PointBar implements IGUIComponent {
     batteryIndicator.setItemMeta(batteryIndicatorMeta);
 
     //Display in Inventory
-    inventory.setItem(TOP_SLOT, topItem);
-    inventory.setItem(BOTTOM_SLOT, bottomItem);
+    inventory.setItem(topSlot, topItem);
+    inventory.setItem(bottomSlot, bottomItem);
 
     //Fill other slots
     for (int i = -1; i < 1; i++) {
-      int x = TOP_SLOT + i;
+      int x = topSlot + i;
       for (int j = -1; j < 5; j++) {
         int slot = x + (9 * j);
-        if (slot > -1 && slot < 54 && slot != TOP_SLOT && slot != BOTTOM_SLOT) {
+        if (slot > -1 && slot < 54 && slot != topSlot && slot != bottomSlot) {
           inventory.setItem(slot, batteryIndicator);
         }
       }
