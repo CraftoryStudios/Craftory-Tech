@@ -67,6 +67,7 @@ public class RotaryGenerator extends BaseGenerator {
   @Persistent
   protected String modeSaved;
   protected WheelMode mode;
+
   @Persistent
   @Getter
   protected boolean wheelPlaced = false;
