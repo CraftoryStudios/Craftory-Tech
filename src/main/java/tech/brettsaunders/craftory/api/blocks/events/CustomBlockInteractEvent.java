@@ -25,7 +25,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
-import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class CustomBlockInteractEvent extends Event implements Cancellable {
 
@@ -58,7 +57,7 @@ public class CustomBlockInteractEvent extends Event implements Cancellable {
     this.isCancelled = false;
     this.customBlock = customBlock;
     this.baseEvent = baseEvent;
-    if (itemStack == null || itemStack.getItemMeta() == null || itemStack.getItemMeta().getDisplayName() == null) {
+    if (itemStack == null || itemStack.getItemMeta() == null) {
       itemName = "Hand";
     } else {
       this.itemName = itemStack.getItemMeta().getDisplayName();

@@ -34,7 +34,6 @@ public final class ItemUtils {
       toString = ReflectionUtils.getMethod(ReflectionUtils.getNMSClass("IChatBaseComponent"), "getString");
     }
     catch (Exception x) {
-      System.err.println("Perhaps you forgot to shade CS-CoreLib's \"reflection\" package?");
       x.printStackTrace();
     }
   }
@@ -87,20 +86,20 @@ public final class ItemUtils {
 
       // Item Damage
       if (aMeta instanceof Damageable != bMeta instanceof Damageable) return false;
-      if (aMeta instanceof Damageable) {
-        if (((Damageable) aMeta).getDamage() != ((Damageable) bMeta).getDamage()) return false;
+      if (aMeta instanceof Damageable &&((Damageable) aMeta).getDamage() != ((Damageable) bMeta).getDamage() ) {
+        return false;
       }
 
       // Leather Armor Color
       if (aMeta instanceof LeatherArmorMeta != bMeta instanceof LeatherArmorMeta) return false;
-      if (aMeta instanceof LeatherArmorMeta) {
-        if (!((LeatherArmorMeta) aMeta).getColor().equals(((LeatherArmorMeta) bMeta).getColor())) return false;
+      if (aMeta instanceof LeatherArmorMeta && !((LeatherArmorMeta) aMeta).getColor().equals(((LeatherArmorMeta) bMeta).getColor())) {
+        return false;
       }
 
       // Custom Model Data
       if (aMeta.hasCustomModelData() != bMeta.hasCustomModelData()) return false;
-      if (aMeta.hasCustomModelData()) {
-        if (aMeta.getCustomModelData() != bMeta.getCustomModelData()) return false;
+      if (aMeta.hasCustomModelData() && aMeta.getCustomModelData() != bMeta.getCustomModelData()) {
+        return false;
       }
 
       // Enchantments
@@ -108,8 +107,8 @@ public final class ItemUtils {
 
       // Display Name
       if (aMeta.hasDisplayName() != bMeta.hasDisplayName()) return false;
-      if (aMeta.hasDisplayName()) {
-        if (!aMeta.getDisplayName().equals(bMeta.getDisplayName())) return false;
+      if (aMeta.hasDisplayName() && !aMeta.getDisplayName().equals(bMeta.getDisplayName())) {
+        return false;
       }
 
       // Lore

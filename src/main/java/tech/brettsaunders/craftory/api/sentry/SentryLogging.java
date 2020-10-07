@@ -11,9 +11,12 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import tech.brettsaunders.craftory.Craftory;
 
 public class SentryLogging {
+
+  private SentryLogging() {
+    throw new IllegalStateException("Utils Class");
+  }
 
   public static void sentryLog(Throwable e) {
     Bukkit.getLogger().log(Level.SEVERE, e.getMessage(),e);
@@ -22,27 +25,25 @@ public class SentryLogging {
         .withMessage(e.getMessage())
         .withLevel(io.sentry.event.Event.Level.ERROR);
 
-    if(e != null) {
-      Deque<SentryException> exceptionDeque = SentryException.extractExceptionQueue(e);
-      if(!exceptionDeque.isEmpty()) {
-        SentryException firstException = exceptionDeque.removeFirst();
-        if(firstException != null) {
-          // If message in exception is empty, use the log message
-          String exceptionMessage = firstException.getExceptionMessage();
-          if(exceptionMessage == null || exceptionMessage.isEmpty()) {
-            exceptionMessage = e.getMessage();
-          }
-          firstException = new SentryException(
-              exceptionMessage,
-              firstException.getExceptionClassName(),
-              firstException.getExceptionPackageName(),
-              firstException.getStackTraceInterface()
-          );
-          exceptionDeque.addFirst(firstException);
+    Deque<SentryException> exceptionDeque = SentryException.extractExceptionQueue(e);
+    if(!exceptionDeque.isEmpty()) {
+      SentryException firstException = exceptionDeque.removeFirst();
+      if(firstException != null) {
+        // If message in exception is empty, use the log message
+        String exceptionMessage = firstException.getExceptionMessage();
+        if(exceptionMessage == null || exceptionMessage.isEmpty()) {
+          exceptionMessage = e.getMessage();
         }
+        firstException = new SentryException(
+            exceptionMessage,
+            firstException.getExceptionClassName(),
+            firstException.getExceptionPackageName(),
+            firstException.getStackTraceInterface()
+        );
+        exceptionDeque.addFirst(firstException);
       }
-      eventBuilder.withSentryInterface(new ExceptionInterface(exceptionDeque));
     }
+    eventBuilder.withSentryInterface(new ExceptionInterface(exceptionDeque));
 
     eventBuilder.withTag("Bukkit", Bukkit.getBukkitVersion());
     eventBuilder.withTag("CraftBukkit", Bukkit.getVersion());
