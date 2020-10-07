@@ -21,7 +21,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import tech.brettsaunders.craftory.CoreHolder;
+import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.packet_wrapper.AbstractPacket;
 import tech.brettsaunders.craftory.packet_wrapper.UpdatedEntityType;
@@ -114,9 +114,9 @@ public class Wire {
 
   private boolean isCloseEnough(Location location, Player player) {
     if (CustomItemManager
-        .matchCustomItemName(player.getInventory().getItemInMainHand(), CoreHolder.Items.WRENCH) ||
+        .matchCustomItemName(player.getInventory().getItemInMainHand(), Constants.Items.WRENCH) ||
         CustomItemManager.matchCustomItemName(player.getInventory().getItemInMainHand(),
-            CoreHolder.Blocks.POWER_CONNECTOR)) {
+            Constants.Blocks.POWER_CONNECTOR)) {
       return start.distanceSquared(location) <= distanceSquared ||
           end.distanceSquared(location) <= distanceSquared;
     } else {

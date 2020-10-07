@@ -14,8 +14,8 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
-import tech.brettsaunders.craftory.CoreHolder;
-import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
+import tech.brettsaunders.craftory.Constants;
+import tech.brettsaunders.craftory.Constants.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
@@ -154,7 +154,7 @@ public class PoweredBlockUtils {
           poweredBlock.setSideCache(face.getOppositeFace(),
               (blockPlaced) ? INTERACTABLEBLOCK.RECEIVER : INTERACTABLEBLOCK.NONE, originBlock);
         } else if (blockPlaced && Craftory.customBlockManager.getCustomBlockName(blockLocation)
-            == CoreHolder.Blocks.POWER_CONNECTOR) {
+            == Constants.Blocks.POWER_CONNECTOR) {
           if (isMachine(customBlock)) {
             Craftory.powerGridManager.getPowerGrids().get(location)
                 .addMachine(location, blockLocation);

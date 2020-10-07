@@ -18,7 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 
 public class OrePopulator extends BlockPopulator {
@@ -38,7 +38,9 @@ public class OrePopulator extends BlockPopulator {
 
   private void spawnOre(Random r, Chunk chunk, String ore, int attempts, int chance,
       int minVeinSize, int maxVeinSize, int minHeight, int maxHeight) {
-    int x, y, z;
+    int x;
+    int y;
+    int z;
     Block block;
     boolean valid;
     ArrayList<Integer> options;
@@ -54,10 +56,12 @@ public class OrePopulator extends BlockPopulator {
             if (j >= minVeinSize && r.nextInt(100) < 40) {
               break;
             }
-            int xx, yy, zz;
+            int xx;
+            int yy;
+            int zz;
             options = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4, 5));
             valid = false;
-            while (options.size() > 0) {
+            while (!options.isEmpty()) {
               xx = x;
               yy = y;
               zz = z;

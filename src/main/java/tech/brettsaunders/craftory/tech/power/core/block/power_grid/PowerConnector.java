@@ -11,7 +11,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.power_grid;
 
 import org.bukkit.Location;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 
 public class PowerConnector extends CustomBlock {

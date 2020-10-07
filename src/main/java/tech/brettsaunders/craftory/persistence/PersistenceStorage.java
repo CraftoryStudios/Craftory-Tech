@@ -22,7 +22,7 @@ import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
+import tech.brettsaunders.craftory.Constants.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.persistence.adapters.ArrayListAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.BlockFaceAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.BooleanAdapter;

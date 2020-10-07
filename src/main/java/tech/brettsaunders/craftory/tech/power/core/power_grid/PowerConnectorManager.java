@@ -23,7 +23,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import tech.brettsaunders.craftory.CoreHolder;
+import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
@@ -53,12 +53,12 @@ public class PowerConnectorManager implements Listener {
   @EventHandler
   public void useWrenchFormConnection(PlayerInteractEvent event) {
     //Check using wrench
-    if (event.getHand() == EquipmentSlot.HAND && CustomItemManager.matchCustomItemName(event.getItem(), CoreHolder.Items.WRENCH)
+    if (event.getHand() == EquipmentSlot.HAND && CustomItemManager.matchCustomItemName(event.getItem(), Constants.Items.WRENCH)
         && event.getAction() == Action.RIGHT_CLICK_BLOCK && !recentlyClicked(event.getPlayer().getUniqueId())) {
       //Check Power Connector
       final Location location = event.getClickedBlock().getLocation();
       if (Craftory.customBlockManager.isCustomBlockOfType(location,
-          CoreHolder.Blocks.POWER_CONNECTOR)) {
+          Constants.Blocks.POWER_CONNECTOR)) {
         connectorWrenchClick(location, event.getPlayer());
       } else if (
           PoweredBlockUtils.isPoweredBlock(location)

@@ -13,7 +13,7 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.inventory.Inventory;
-import tech.brettsaunders.craftory.CoreHolder.Sounds;
+import tech.brettsaunders.craftory.Constants.Sounds;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;

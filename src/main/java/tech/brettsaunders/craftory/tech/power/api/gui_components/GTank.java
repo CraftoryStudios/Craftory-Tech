@@ -12,7 +12,7 @@ package tech.brettsaunders.craftory.tech.power.api.gui_components;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
-import tech.brettsaunders.craftory.CoreHolder.FLUIDS;
+import tech.brettsaunders.craftory.Constants.FLUIDS;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.tech.power.api.fluids.FluidStorage;
 
