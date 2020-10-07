@@ -43,7 +43,7 @@ import tech.brettsaunders.craftory.api.items.CustomTag;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.RotaryGenerator;
-import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
+import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGrid;
 
 public class PoweredBlockEvents implements Listener {
 

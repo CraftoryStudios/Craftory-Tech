@@ -8,7 +8,7 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.api.guiComponents;
+package tech.brettsaunders.craftory.tech.power.api.gui_components;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
@@ -18,36 +18,31 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
-public class GTwoToOneMachine implements IGUIComponent {
+public class GOneToOneMachine implements IGUIComponent {
 
-
-  private final int arrowSlot;
+  private final int slot;
   private final VariableContainer<Double> progress;
   private final Inventory inventory;
-  private final int inputSlot1;
-  private final int inputSlot2;
+  private final int inputSlot;
   private final int outputSlot;
 
-  public GTwoToOneMachine(Inventory inventory, int arrowSlot,
-      VariableContainer<Double> progress, int inputSlot1, int inputSlot2, int outputSlot) {
+  public GOneToOneMachine(Inventory inventory, int slot,
+      VariableContainer<Double> progress, int inputSlot, int outputSlot) {
     this.inventory = inventory;
-    this.arrowSlot = arrowSlot;
+    this.slot = slot;
     this.progress = progress;
-    this.inputSlot1 = inputSlot1;
-    this.inputSlot2 = inputSlot2;
+    this.inputSlot = inputSlot;
     this.outputSlot = outputSlot;
   }
 
-  public GTwoToOneMachine(Inventory inventory,
-      VariableContainer<Double> progress, int inputSlot1, int inputSlot2, int outputSlot) {
+  public GOneToOneMachine(Inventory inventory,
+      VariableContainer<Double> progress, int inputSlot, int outputSlot) {
     this.inventory = inventory;
     this.progress = progress;
     this.outputSlot = outputSlot;
-    this.inputSlot1 = inputSlot1;
-    this.inputSlot2 = inputSlot2;
-    this.arrowSlot = 24;
+    this.inputSlot = inputSlot;
+    this.slot = 24;
   }
-
 
   @Override
   public void update() {
@@ -56,6 +51,6 @@ public class GTwoToOneMachine implements IGUIComponent {
     ItemMeta meta = arrow.getItemMeta();
     meta.setDisplayName(ChatColor.RESET + "");
     arrow.setItemMeta(meta);
-    inventory.setItem(arrowSlot, arrow);
+    inventory.setItem(slot, arrow);
   }
 }

@@ -30,7 +30,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 
 public class BlockBreaker extends BaseMachine {
 

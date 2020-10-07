@@ -57,10 +57,10 @@ import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.BasicS
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.CompactedSolarPanel;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.SolarArray;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.SolarPanel;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.DiamondElectricFurnace;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.DiamondElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.EmeraldElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.GoldElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.IronElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.DiamondElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.EmeraldElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.GoldElectricFoundry;
@@ -74,7 +74,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.Magn
 import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.MagnetisingTable;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockBreaker;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockPlacer;
-import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
+import tech.brettsaunders.craftory.tech.power.core.block.power_grid.PowerConnector;
 import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Log;

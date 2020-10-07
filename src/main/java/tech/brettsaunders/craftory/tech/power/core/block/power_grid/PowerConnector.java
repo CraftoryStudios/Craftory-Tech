@@ -8,25 +8,19 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace;
+package tech.brettsaunders.craftory.tech.power.core.block.power_grid;
 
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseElectricFurnace;
+import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 
-public class GoldElectricFurnace extends BaseElectricFurnace {
+public class PowerConnector extends CustomBlock {
 
-  /* Static Constants Private */
-  private static final byte C_LEVEL = 1;
-
-  /* Construction */
-  public GoldElectricFurnace(Location location) {
-    super(location, Blocks.GOLD_ELECTRIC_FURNACE, C_LEVEL);
-  }
-
-  /* Saving, Setup and Loading */
-  public GoldElectricFurnace() {
+  public PowerConnector() {
     super();
   }
 
+  public PowerConnector(Location location) {
+    super(location, Blocks.POWER_CONNECTOR);
+  }
 }

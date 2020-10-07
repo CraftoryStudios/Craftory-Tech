@@ -8,7 +8,7 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.core.powerGrid;
+package tech.brettsaunders.craftory.tech.power.core.power_grid;
 
 import de.tr7zw.changeme.nbtapi.NBTFile;
 import java.io.File;
@@ -26,6 +26,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.events.Events;
@@ -34,7 +35,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.utils.Log;
 
 public class PowerGridManager implements Listener {
 
@@ -90,21 +90,26 @@ public class PowerGridManager implements Listener {
 
     if (powerGrids.containsKey(location)) {
       removeGrid(location);
+    } else if (event.getCustomBlock() instanceof PoweredBlock) {
+      removePoweredBlock(location, event.getCustomBlock());
     }
 
-    if (event.getCustomBlock() instanceof BaseMachine) {
+  }
+
+  private void removePoweredBlock(Location location, CustomBlock block) {
+    if (block instanceof BaseMachine) {
       for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
         if (grid.removeMachine(location)) {
           break;
         }
       }
-    } else if (event.getCustomBlock() instanceof BaseCell) {
+    } else if (block instanceof BaseCell) {
       for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
         if (grid.removeCell(location)) {
           break;
         }
       }
-    } else if (event.getCustomBlock() instanceof BaseGenerator) {
+    } else if (block instanceof BaseGenerator) {
       for (PowerGrid grid : new HashSet<>(powerGrids.values())) {
         if (grid.removeGenerator(location)) {
           break;
@@ -231,12 +236,11 @@ public class PowerGridManager implements Listener {
    * @param breakPoint The location of the broken power connector
    * @return A list of the individual grids (could just be one)
    */
-  public ArrayList<PowerGrid> splitGrids(Location breakPoint, PowerGrid powerGrid) {
-    ArrayList<PowerGrid> managers = new ArrayList<>();
+  public List<PowerGrid> splitGrids(Location breakPoint, PowerGrid powerGrid) {
+    List<PowerGrid> managers = new ArrayList<>();
     powerGrid.getBlockConnections().remove(breakPoint);
-    HashSet<Location> neighbours = powerGrid.getPowerConnectors().remove(breakPoint);
-    Log.debug("Connector had: " + neighbours.size());
-    HashSet<Location> closedSet = new HashSet<>();
+    Set<Location> neighbours = powerGrid.getPowerConnectors().remove(breakPoint);
+    Set<Location> closedSet = new HashSet<>();
     neighbours.forEach(location -> { //Loop through all the neighbours of broken connector
       if (!closedSet.contains(location)) {
         closedSet.add(location);
@@ -248,32 +252,30 @@ public class PowerGridManager implements Listener {
           if (powerGrid.getBlockConnections().containsKey(location)) {
             grid.getBlockConnections().put(location, powerGrid.getBlockConnections().get(location));
           }
-          ArrayList<Location> openList = new ArrayList<>(connections);
+          List<Location> openList = new ArrayList<>(connections);
           Location connection;
-          while (openList.size() > 0) { //Add all its connections to the grid
+          while (!openList.isEmpty()) { //Add all its connections to the grid
             connection = openList.remove(0);
-            if (closedSet.contains(connection)) {
-              continue; //Skip if they are already in a grid
-            }
-            closedSet.add(connection);
-            //Add it to the grid
-            if (powerGrid.getBlockConnections().containsKey(connection)) {
-              grid.getBlockConnections()
-                  .put(connection, powerGrid.getBlockConnections().get(connection));
-            }
-            HashSet<Location> connectionConnections = powerGrid.getPowerConnectors()
-                .get(connection);
-            if (connectionConnections == null) {
-              continue;
-            }
-            connectionConnections.remove(breakPoint);
-            grid.getPowerConnectors().put(connection, connectionConnections);
-            //Continue traversal
-            connectionConnections.forEach(loc -> {
-              if (!closedSet.contains(loc)) {
-                openList.add(loc);
+            if (!closedSet.contains(connection)) {
+              closedSet.add(connection);
+              //Add it to the grid
+              if (powerGrid.getBlockConnections().containsKey(connection)) {
+                grid.getBlockConnections()
+                    .put(connection, powerGrid.getBlockConnections().get(connection));
               }
-            });
+              HashSet<Location> connectionConnections = powerGrid.getPowerConnectors()
+                  .get(connection);
+              if (connectionConnections != null) {
+                connectionConnections.remove(breakPoint);
+                grid.getPowerConnectors().put(connection, connectionConnections);
+                connectionConnections.forEach(loc -> {
+                  if (!closedSet.contains(loc)) {
+                    openList.add(loc);
+                  }
+                });
+              }
+            }
+
           }
         }
         grid.findPoweredBlocks();

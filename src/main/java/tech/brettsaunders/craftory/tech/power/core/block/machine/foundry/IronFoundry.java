@@ -21,8 +21,8 @@ import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseFoundry;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GTwoToOneMachine;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.SolidFuelManager;
 
 public class IronFoundry extends BaseFoundry {

@@ -8,7 +8,7 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.core.powerGrid;
+package tech.brettsaunders.craftory.tech.power.core.power_grid;
 
 import java.util.ArrayList;
 import java.util.Collections;

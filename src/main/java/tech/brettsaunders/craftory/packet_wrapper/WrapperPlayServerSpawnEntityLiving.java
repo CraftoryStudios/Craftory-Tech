@@ -19,7 +19,7 @@
  * Edited by Matthew Jones and Brett Saunders
  */
 
-package tech.brettsaunders.craftory.PacketWrapper;
+package tech.brettsaunders.craftory.packet_wrapper;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;

@@ -23,8 +23,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 

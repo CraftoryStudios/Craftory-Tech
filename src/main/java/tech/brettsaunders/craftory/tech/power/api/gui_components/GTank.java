@@ -8,7 +8,7 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.api.guiComponents;
+package tech.brettsaunders.craftory.tech.power.api.gui_components;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;

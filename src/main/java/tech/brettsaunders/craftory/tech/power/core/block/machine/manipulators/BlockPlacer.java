@@ -26,7 +26,7 @@ import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
 public class BlockPlacer extends BaseMachine implements IHopperInteract {
