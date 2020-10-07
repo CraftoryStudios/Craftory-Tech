@@ -84,8 +84,8 @@ public class IronFoundry extends BaseFoundry {
   public void setupGUI() {
     Inventory inventory = createInterfaceInventory(displayName, Font.IRON_FOUNDRY_GUI.label + "");
     addGUIComponent(
-        new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
-            OUTPUT_LOCATION));
+        new GTwoToOneMachine(inventory, 23, progressContainer
+        ));
     addGUIComponent(new GIndicator(inventory, runningContainer, 21));
     if (inputSlots.size() == 0 || inputSlots.get(0) == null) {
       inputSlots.add(0, new ItemStack(Material.AIR));

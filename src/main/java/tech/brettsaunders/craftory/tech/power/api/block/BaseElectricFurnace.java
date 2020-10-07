@@ -30,7 +30,7 @@ public class BaseElectricFurnace extends BaseOneToOneMachine {
 
   @Override
   protected HashMap<String, String> getRecipes() {
-    return new HashMap(RecipeUtils.getFurnaceRecipes());
+    return new HashMap<>(RecipeUtils.getFurnaceRecipes());
   }
 
 }

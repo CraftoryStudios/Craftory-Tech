@@ -23,24 +23,18 @@ public class GOneToOneMachine implements IGUIComponent {
   private final int slot;
   private final VariableContainer<Double> progress;
   private final Inventory inventory;
-  private final int inputSlot;
-  private final int outputSlot;
 
   public GOneToOneMachine(Inventory inventory, int slot,
-      VariableContainer<Double> progress, int inputSlot, int outputSlot) {
+      VariableContainer<Double> progress) {
     this.inventory = inventory;
     this.slot = slot;
     this.progress = progress;
-    this.inputSlot = inputSlot;
-    this.outputSlot = outputSlot;
   }
 
   public GOneToOneMachine(Inventory inventory,
-      VariableContainer<Double> progress, int inputSlot, int outputSlot) {
+      VariableContainer<Double> progress) {
     this.inventory = inventory;
     this.progress = progress;
-    this.outputSlot = outputSlot;
-    this.inputSlot = inputSlot;
     this.slot = 24;
   }
 

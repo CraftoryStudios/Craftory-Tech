@@ -19,10 +19,10 @@ import tech.brettsaunders.craftory.tech.power.api.fluids.FluidStorage;
 public class GTank extends G21PointBar {
 
   private final FluidStorage storage;
-  private final FLUIDS fluid = FLUIDS.LAVA;
+  private static final FLUIDS fluid = FLUIDS.LAVA;
 
-  public GTank(Inventory inventory, FluidStorage storage, int top_slot) {
-    super(inventory, top_slot);
+  public GTank(Inventory inventory, FluidStorage storage, int topSlot) {
+    super(inventory, topSlot);
     this.storage = storage;
   }
 

@@ -167,14 +167,16 @@ public class EnergyStorage implements IEnergyStorage {
 
   public BarColor getEnergyBarColour() {
     switch ((int) (getEnergyBarProgress() * 2)) {
+
       case 0:
         return BarColor.RED;
       case 1:
         return BarColor.YELLOW;
       case 2:
         return BarColor.GREEN;
+      default:
+        return BarColor.WHITE;
     }
-    return BarColor.WHITE;
   }
 
   public BarStyle getEnergyBarStyle() {
