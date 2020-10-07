@@ -21,13 +21,15 @@ import tech.brettsaunders.craftory.utils.Log;
 @NoArgsConstructor
 public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
 
+  public static final String DATACLASS = "dataclass";
+
   @Override
   public void store(@NonNull final PersistenceStorage persistenceStorage,
       @NonNull final ArrayList<?> value, @NonNull final NBTCompound nbtCompound) {
-    if (value.size() == 0 || value.get(0) == null) {
+    if (value.isEmpty() || value.get(0) == null) {
       return;
     }
-    nbtCompound.setString("dataclass",
+    nbtCompound.setString(DATACLASS,
         persistenceStorage.getConverterClass(value.get(0)).getName());
     for (int i = 0; i < value.size(); i++) {
       NBTCompound container = nbtCompound.addCompound("" + i);
@@ -40,24 +42,24 @@ public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
       NBTCompound nbtCompound) {
     Class dataClass;
     ArrayList<Object> arrayList = new ArrayList<>();
-    if (nbtCompound.getKeys().size() == 0) {
+    if (nbtCompound.getKeys().isEmpty()) {
       return arrayList;
     }
     try {
-      if (nbtCompound.getString("dataclass").endsWith("ItemStack")) {
+      if (nbtCompound.getString(DATACLASS).endsWith("ItemStack")) {
         dataClass = ItemStack.class;
       } else {
-        dataClass = Class.forName(nbtCompound.getString("dataclass"));
+        dataClass = Class.forName(nbtCompound.getString(DATACLASS));
       }
       for (String key : nbtCompound.getKeys()) {
-        if (key.equals("dataclass")) {
+        if (key.equals(DATACLASS)) {
           continue;
         }
         NBTCompound container = nbtCompound.getCompound(key);
         arrayList.add(persistenceStorage.loadObject(parentObject, dataClass, container));
       }
     } catch (ClassNotFoundException ex) {
-      Log.error(nbtCompound.getString("dataclass"));
+      Log.error(nbtCompound.getString(DATACLASS));
       ex.printStackTrace();
     }
     return arrayList;

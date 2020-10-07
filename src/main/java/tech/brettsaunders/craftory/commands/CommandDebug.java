@@ -16,37 +16,37 @@ import io.sentry.event.BreadcrumbBuilder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import lombok.SneakyThrows;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 
-public class Command_Main implements CommandExecutor, TabCompleter {
+public class CommandDebug implements CommandExecutor, TabCompleter {
 
+  @SneakyThrows
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
-    Utilities.msg(sender, Utilities.getTranslation("MainCommandLineOne") + Craftory.VERSION);
-    Utilities.msg(sender, Utilities.getTranslation("MainCommandLineTwo") + " ©");
-    Utilities.msg(sender, "Reporting ID: "+Utilities.data.getString("reporting.serverUUID"));
-
-    Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
-        .setCategory("command")
-        .setTimestamp(new Date(System.currentTimeMillis()))
-        .setMessage("Player "+sender.getName() + " used main command")
-        .setType(Type.DEFAULT)
-        .build());
+    if (args.length == 1) {
+      boolean debugMode = Utilities.config.getBoolean("general.debug");
+      Utilities.config.set("general.debug", !debugMode);
+      Utilities.saveConfigFile();
+      Utilities.msg(sender, Utilities.getTranslation("DebugCommandToggled") + !debugMode);
+      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+          .setCategory("command")
+          .setTimestamp(new Date(System.currentTimeMillis()))
+          .setMessage("Player "+sender.getName() + " used debug command")
+          .setType(Type.DEFAULT)
+          .build());
+    } else {
+      Utilities.msg(sender, "Usage");
+    }
     return true;
   }
 
   public List<String> onTabComplete(CommandSender s, Command c, String label, String[] args) {
     ArrayList<String> tabs = new ArrayList<>();
-    tabs.add("help");
-    tabs.add("toggleDebug");
-    tabs.add("give");
-    tabs.add("fixGraphics");
-    tabs.add("recipeBook");
     return CommandWrapper.filterTabs(tabs, args);
   }
 }

@@ -23,7 +23,7 @@ public class LongAdapter implements DataAdapter<Long> {
   @Override
   public Long parse(PersistenceStorage persistenceStorage, Object parentObject,
       NBTCompound nbtCompound) {
-    if (!nbtCompound.hasKey("long")) {
+    if (!Boolean.TRUE.equals(nbtCompound.hasKey("long"))) {
       return null;
     }
     return nbtCompound.getLong("long");

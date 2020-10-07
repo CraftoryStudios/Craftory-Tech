@@ -31,7 +31,7 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
-public class Command_GiveItem implements CommandExecutor, TabCompleter {
+public class CommandGiveItem implements CommandExecutor, TabCompleter {
 
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
@@ -82,9 +82,8 @@ public class Command_GiveItem implements CommandExecutor, TabCompleter {
   private List<String> getOnlinePlayerNames() {
     Player[] players = new Player[Bukkit.getServer().getOnlinePlayers().size()];
     Bukkit.getServer().getOnlinePlayers().toArray(players);
-    List<String> playerNames = Arrays.stream(players).map(Player::getName)
+    return Arrays.stream(players).map(Player::getName)
         .collect(Collectors.toList());
-    return playerNames;
   }
 
   private boolean giveCustomItem(int amount, String playerName, String itemName,

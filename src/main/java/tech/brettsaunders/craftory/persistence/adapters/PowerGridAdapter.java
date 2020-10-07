@@ -35,17 +35,6 @@ public class PowerGridAdapter implements DataAdapter<PowerGrid> {
     NBTCompound blockConnectionsCompound = nbtCompound.addCompound("blockConnections");
     NBTCompound powerConnectorsCompound = nbtCompound.addCompound("powerConnectors");
 
-    //TODO Remove in future
-      if (nbtCompound.hasKey("cells")) {
-          nbtCompound.removeKey("cells");
-      }
-      if (nbtCompound.hasKey("generators")) {
-          nbtCompound.removeKey("generators");
-      }
-      if (nbtCompound.hasKey("machines")) {
-          nbtCompound.removeKey("machines");
-      }
-
     PowerGrid powerGrid = new PowerGrid();
     powerGrid.setBlockConnections(
         persistenceStorage.loadObject(parentObject, HashMap.class, blockConnectionsCompound));

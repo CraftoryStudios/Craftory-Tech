@@ -26,7 +26,7 @@ public class StringAdapter implements DataAdapter<String> {
   @Override
   public String parse(PersistenceStorage persistenceStorage, Object parentObject,
       NBTCompound nbtCompound) {
-    if (!nbtCompound.hasKey("data")) {
+    if (!Boolean.TRUE.equals(nbtCompound.hasKey("data"))) {
       return null;
     }
     return nbtCompound.getString("data");

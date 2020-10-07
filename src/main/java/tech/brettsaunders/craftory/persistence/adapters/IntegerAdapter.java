@@ -16,17 +16,19 @@ import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 
 public class IntegerAdapter implements DataAdapter<Integer> {
 
+  public static final String INT = "int";
+
   @Override
   public void store(PersistenceStorage persistenceStorage, Integer value, NBTCompound nbtCompound) {
-    nbtCompound.setInteger("int", value);
+    nbtCompound.setInteger(INT, value);
   }
 
   @Override
   public Integer parse(PersistenceStorage persistenceStorage, Object parentObject,
       NBTCompound nbtCompound) {
-    if (!nbtCompound.hasKey("int")) {
+    if (!Boolean.TRUE.equals(nbtCompound.hasKey(INT))) {
       return null;
     }
-    return nbtCompound.getInteger("int");
+    return nbtCompound.getInteger(INT);
   }
 }
