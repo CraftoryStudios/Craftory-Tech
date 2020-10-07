@@ -123,7 +123,7 @@ public class PersistenceStorage {
     ReflectionUtils.getFieldsRecursively(object.getClass(), Object.class).stream()
         .filter(field -> field.getAnnotation(Persistent.class) != null).forEach(field -> {
       field.setAccessible(true);
-      if (nbtCompound.hasKey(field.getName())) {
+      if (Boolean.TRUE.equals(nbtCompound.hasKey(field.getName()))) {
         try {
           Object obj = loadObject(parent, field.getType(),
               nbtCompound.getCompound(field.getName()));
@@ -203,7 +203,7 @@ public class PersistenceStorage {
     }
 
     // Fallback to Json
-    if (nbtCompound.hasKey("json")) {
+    if (Boolean.TRUE.equals(nbtCompound.hasKey("json"))) {
       return gson.fromJson(nbtCompound.getString("json"), type);
     }
 

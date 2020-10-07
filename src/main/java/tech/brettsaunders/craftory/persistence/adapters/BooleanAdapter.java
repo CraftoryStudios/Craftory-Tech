@@ -16,17 +16,19 @@ import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 
 public class BooleanAdapter implements DataAdapter<Boolean> {
 
+  public static final String BOOLEAN = "boolean";
+
   @Override
   public void store(PersistenceStorage persistenceStorage, Boolean value, NBTCompound nbtCompound) {
-    nbtCompound.setBoolean("boolean", value);
+    nbtCompound.setBoolean(BOOLEAN, value);
   }
 
   @Override
   public Boolean parse(PersistenceStorage persistenceStorage, Object parentObject,
       NBTCompound nbtCompound) {
-    if (!nbtCompound.hasKey("boolean")) {
-      return null;
+    if (!Boolean.TRUE.equals(nbtCompound.hasKey(BOOLEAN))) {
+      return false;
     }
-    return nbtCompound.getBoolean("boolean");
+    return nbtCompound.getBoolean(BOOLEAN);
   }
 }

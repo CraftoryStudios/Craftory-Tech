@@ -8,7 +8,7 @@
  * File Author: Brett Saunders & Matty Jones
  */
 
-package tech.brettsaunders.craftory.PacketWrapper;
+package tech.brettsaunders.craftory.packet_wrapper;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;

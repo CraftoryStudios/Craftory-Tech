@@ -20,25 +20,25 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
-public class Command_Help implements CommandExecutor, TabCompleter {
+public class CommandFixItemGraphics implements CommandExecutor, TabCompleter {
 
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
-    if (args.length == 1) {
-      Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineOne"));
-      Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineTwo"));
-      Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineThree"));
-      Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineFour"));
-      Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineFive"));
-
-      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
-          .setCategory("command")
-          .setTimestamp(new Date(System.currentTimeMillis()))
-          .setMessage("Player "+sender.getName() + " used help command")
-          .setType(Type.DEFAULT)
-          .build());
+    if (args.length == 1 && sender instanceof Player) {
+        Player player = (Player) sender;
+        CustomItemManager.updateInventoryItemGraphics(player.getInventory());
+        CustomItemManager.updateInventoryItemGraphics(player.getEnderChest());
+        Utilities.msg(sender, "Update graphics of custom items in inventory.");
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+            .setCategory("command")
+            .setTimestamp(new Date(System.currentTimeMillis()))
+            .setMessage("Player "+sender.getName() + " used fix item Graphics command")
+            .setType(Type.DEFAULT)
+            .build());
     }
     return true;
   }

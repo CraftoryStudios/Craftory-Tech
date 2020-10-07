@@ -33,7 +33,7 @@ public class HashSetAdapter implements DataAdapter<HashSet<?>> {
   public HashSet<Object> parse(PersistenceStorage persistenceStorage, Object parentObject,
       NBTCompound nbtCompound) {
     HashSet<Object> set = new HashSet<>();
-    if (nbtCompound.getKeys().size() == 0) {
+    if (nbtCompound.getKeys().isEmpty()) {
       return set;
     }
     for (String key : nbtCompound.getKeys()) {

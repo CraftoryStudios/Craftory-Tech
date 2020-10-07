@@ -47,15 +47,20 @@ public class BlockBreaker extends BaseMachine {
 
   public BlockBreaker(Location location) {
     super(location, Blocks.BLOCK_BREAKER, C_LEVEL, MAX_RECEIVE);
-    init();
+    setup();
     energyStorage = new EnergyStorage(40000);
     outputInventory = Optional.empty();
   }
 
   public BlockBreaker() {
     super();
-    init();
+    setup();
     outputInventory = Optional.empty();
+  }
+
+  @Override
+  protected void processComplete() {
+    //No Implementation
   }
 
   @Override
@@ -66,16 +71,12 @@ public class BlockBreaker extends BaseMachine {
     setOutputInventory(opposite.getBlock());
   }
 
-  private void init() {
+  private void setup() {
     outputLocations = new ArrayList<>();
     outputLocations.add(0, SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
   }
 
-  @Override
-  public void updateMachine() {
-
-  }
 
   @Override
   public void setupGUI() {
@@ -126,7 +127,7 @@ public class BlockBreaker extends BaseMachine {
         Block block = breakLoc.getBlock();
         if (Craftory.customBlockManager.isCustomBlock(breakLoc)) {
           Optional<ItemStack> itemStack = Craftory.customBlockManager.breakCustomBlock(breakLoc);
-          itemStack.ifPresent(itemStack1 -> dropItem(itemStack1));
+          itemStack.ifPresent(this::dropItem);
         } else {
           block.getDrops().forEach(this::dropItem);
           block.setType(Material.AIR);
@@ -152,10 +153,6 @@ public class BlockBreaker extends BaseMachine {
     return energyStorage.getEnergyStored() > ENERGY_REQUIRED;
   }
 
-  @Override
-  protected void processComplete() {
-
-  }
 
   @Override
   protected boolean validateContentes() {
@@ -164,6 +161,7 @@ public class BlockBreaker extends BaseMachine {
 
   @Override
   protected void updateSlots() {
-
+    //No Implementation
   }
+
 }

@@ -56,13 +56,13 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
     super(location, Blocks.BLOCK_PLACER, C_LEVEL, MAX_RECEIVE);
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
-    init();
+    setup();
     energyStorage = new EnergyStorage(40000);
   }
 
   public BlockPlacer() {
     super();
-    init();
+    setup();
   }
 
   @Override
@@ -71,7 +71,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
     placeLoc = location.getBlock().getRelative(direction).getLocation();
   }
 
-  private void init() {
+  private void setup() {
     inputLocations = new ArrayList<>();
     inputLocations.add(0, SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
@@ -79,7 +79,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
 
   @Override
   public void updateMachine() {
-
+    //No Implementation
   }
 
   @Override
@@ -128,7 +128,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
 
   @Override
   protected void processComplete() {
-
+    //No Implementation
   }
 
   @Override
@@ -138,7 +138,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
 
   @Override
   protected void updateSlots() {
-
+    //No Implementation
   }
 
   @Override
