@@ -22,6 +22,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class HopperItemMovement {
 
+  private HopperItemMovement() {
+    throw new IllegalStateException("Utils Class");
+  }
+
   private static final BlockFace[] inputDirections = {BlockFace.NORTH, BlockFace.EAST,
       BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP};
 

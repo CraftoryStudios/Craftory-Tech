@@ -20,13 +20,13 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
 
 public class SolidFuelGenerator extends BaseGenerator {
 
@@ -51,7 +51,6 @@ public class SolidFuelGenerator extends BaseGenerator {
   }
 
   //TODO Remove in future
-  @Deprecated
   @Setter
   protected ItemStack fuelItem = new ItemStack(Material.AIR);
   @Persistent

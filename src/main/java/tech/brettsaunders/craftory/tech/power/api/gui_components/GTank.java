@@ -8,21 +8,21 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.api.guiComponents;
+package tech.brettsaunders.craftory.tech.power.api.gui_components;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
-import tech.brettsaunders.craftory.CoreHolder.FLUIDS;
+import tech.brettsaunders.craftory.Constants.FLUIDS;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.tech.power.api.fluids.FluidStorage;
 
 public class GTank extends G21PointBar {
 
   private final FluidStorage storage;
-  private final FLUIDS fluid = FLUIDS.LAVA;
+  private static final FLUIDS fluid = FLUIDS.LAVA;
 
-  public GTank(Inventory inventory, FluidStorage storage, int top_slot) {
-    super(inventory, top_slot);
+  public GTank(Inventory inventory, FluidStorage storage, int topSlot) {
+    super(inventory, topSlot);
     this.storage = storage;
   }
 

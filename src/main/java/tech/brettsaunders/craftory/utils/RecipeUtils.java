@@ -11,10 +11,12 @@
 package tech.brettsaunders.craftory.utils;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import lombok.Getter;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.CampfireRecipe;
@@ -78,18 +80,6 @@ public class RecipeUtils {
         campfireRecipes.add(recipe);
       }
     }
-    /*for(Material material: Material.values()) {
-      List<Recipe> recipes =  Craftory.plugin.getServer().getRecipesFor(new ItemStack(material));
-      for(Recipe recipe: recipes) {
-        if(recipe instanceof FurnaceRecipe) {
-          HashMap<String, Integer> ingredients = new HashMap<>();
-          ingredients.put(((FurnaceRecipe) recipe).getInput().getType().toString(),((FurnaceRecipe) recipe).getInput().getAmount());
-          ArrayList<ItemStack> products = new ArrayList<>();
-          products.add(recipe.getResult().clone());
-          furnaceRecipes.add(new CustomMachineRecipe(ingredients,products));
-        }
-      }
-    } */
     Log.debug("All: " + allRecipes.size());
     Log.debug("Shaped: " + shapedRecipes.size());
     Log.debug("Shapeless: " + shapelessRecipes.size());
@@ -105,47 +95,47 @@ public class RecipeUtils {
     furnaceRecipes.put(source, result);
   }
 
-  public static void addAllFurnaceRecipes(HashMap<String, String> recipes) {
+  public static void addAllFurnaceRecipes(Map<String, String> recipes) {
     furnaceRecipes.putAll(recipes);
   }
 
-  public static void addAllMaceratorRecipes(HashMap<String, String> recipes) {
+  public static void addAllMaceratorRecipes(Map<String, String> recipes) {
     maceratorRecipes.putAll(recipes);
   }
 
-  public static void addAllMagnetiserRecipes(HashMap<String, String> recipes) {
+  public static void addAllMagnetiserRecipes(Map<String, String> recipes) {
     magnetiserRecipes.putAll(recipes);
   }
 
-  public static void addAllFoundryRecipes(HashSet<CustomMachineRecipe> recipes) {
+  public static void addAllFoundryRecipes(Set<CustomMachineRecipe> recipes) {
     foundryRecipes.addAll(recipes);
   }
 
   public interface ICustomRecipe {
 
-    HashMap<String, Integer> getIngredients();
+    Map<String, Integer> getIngredients();
 
-    ArrayList<ItemStack> getProducts();
+    List<ItemStack> getProducts();
   }
 
   public static class CustomMachineRecipe implements ICustomRecipe {
 
-    final HashMap<String, Integer> ingredients;
-    final ArrayList<ItemStack> products;
+    final Map<String, Integer> ingredients;
+    final List<ItemStack> products;
 
-    public CustomMachineRecipe(HashMap<String, Integer> ingredients,
-        ArrayList<ItemStack> products) {
+    public CustomMachineRecipe(Map<String, Integer> ingredients,
+        List<ItemStack> products) {
       this.ingredients = ingredients;
       this.products = products;
     }
 
     @Override
-    public HashMap<String, Integer> getIngredients() {
+    public Map<String, Integer> getIngredients() {
       return ingredients;
     }
 
     @Override
-    public ArrayList<ItemStack> getProducts() {
+    public List<ItemStack> getProducts() {
       return products;
     }
   }

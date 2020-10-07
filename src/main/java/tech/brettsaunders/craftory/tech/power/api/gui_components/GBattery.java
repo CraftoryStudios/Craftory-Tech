@@ -8,7 +8,7 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.api.guiComponents;
+package tech.brettsaunders.craftory.tech.power.api.gui_components;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
@@ -20,8 +20,8 @@ public class GBattery extends G21PointBar {
 
   private final EnergyStorage storage;
 
-  public GBattery(Inventory inventory, EnergyStorage storage, int top_slot) {
-    super(inventory, top_slot);
+  public GBattery(Inventory inventory, EnergyStorage storage, int topSlot) {
+    super(inventory, topSlot);
     this.storage = storage;
   }
 

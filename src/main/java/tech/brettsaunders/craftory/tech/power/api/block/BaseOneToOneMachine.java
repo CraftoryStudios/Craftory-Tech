@@ -21,9 +21,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GOneToOneMachine;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.Pair;
@@ -51,8 +51,8 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     }
   };
 
-  protected transient Pair<String, String> currentRecipe = null;
-  protected transient ItemStack currentProduct = null;
+  protected  Pair<String, String> currentRecipe = null;
+  protected  ItemStack currentProduct = null;
 
   public BaseOneToOneMachine(Location location, String blockName, byte level, int maxRecieve) {
     super(location, blockName, level, maxRecieve);
@@ -63,15 +63,15 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     processTime = PROCESS_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
-    init();
+    setup();
   }
 
   public BaseOneToOneMachine() {
     super();
-    init();
+    setup();
   }
 
-  private void init() {
+  private void setup() {
     inputLocations = new ArrayList<>();
     outputLocations = new ArrayList<>();
     inputLocations.add(INPUT_LOCATION);
@@ -92,13 +92,13 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     Inventory inventory = createInterfaceInventory(displayName,
         Font.FURNACE_GUI.label + "");
     addGUIComponent(
-        new GOneToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));
+        new GOneToOneMachine(inventory, 23, progressContainer));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer, 30));
-    if (inputSlots.size() == 0) {
+    if (inputSlots.isEmpty()) {
       inputSlots.add(0, new ItemStack(Material.AIR));
     }
-    if (outputSlots.size() == 0) {
+    if (outputSlots.isEmpty()) {
       outputSlots.add(0, new ItemStack(Material.AIR));
     }
     this.inventoryInterface = inventory;

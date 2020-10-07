@@ -10,7 +10,7 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import static tech.brettsaunders.craftory.CoreHolder.HOPPER_INTERACT_FACES;
+import static tech.brettsaunders.craftory.Constants.HOPPER_INTERACT_FACES;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
+import tech.brettsaunders.craftory.Constants.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
@@ -68,11 +68,11 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
 
   protected ArrayList<Integer> outputLocations = new ArrayList<>(); //The inventory locations of outputs
   /* Per Object Variables Not-Saved */
-  protected transient Inventory inventoryInterface;
-  private transient boolean powered = false;
+  protected  Inventory inventoryInterface;
+  private  boolean powered = false;
 
   /* Construction */
-  public PoweredBlock(Location location, String blockName, byte level) {
+  protected PoweredBlock(Location location, String blockName, byte level) {
     super(location, blockName);
     cachedSidesConfig = new HashMap<>();
     cachedSides = new HashMap<>();
@@ -85,7 +85,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   }
 
   /* Saving, Setup and Loading */
-  public PoweredBlock() {
+  protected PoweredBlock() {
     super();
     Events.registerEvents(this);
   }
@@ -125,6 +125,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     }
   }
 
+  @Override
   public void beforeSaveUpdate() {
     super.beforeSaveUpdate();
     inputSlots.clear();
@@ -161,19 +162,18 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
           ItemStack[] hopperItems = ((Hopper) relative.getState())
               .getInventory().getContents();
           for (ItemStack item : hopperItems) {
-            if (item == null) {
-              continue;
-            }
-            if (stack == null) {
-              stack = item.clone();
-              stack.setAmount(1);
-              item.setAmount(item.getAmount() - 1);
-              break;
-            } else if (stack.getType().toString().equals(item.getType().toString())
-                && stack.getAmount() < stack.getMaxStackSize()) {
-              stack.setAmount(stack.getAmount() + 1);
-              item.setAmount(item.getAmount() - 1);
-              break;
+            if (item != null) {
+              if (stack == null) {
+                stack = item.clone();
+                stack.setAmount(1);
+                item.setAmount(item.getAmount() - 1);
+                break;
+              } else if (stack.getType().toString().equals(item.getType().toString())
+                  && stack.getAmount() < stack.getMaxStackSize()) {
+                stack.setAmount(stack.getAmount() + 1);
+                item.setAmount(item.getAmount() - 1);
+                break;
+              }
             }
           }
           inventoryInterface.setItem(slot, stack);
@@ -247,9 +247,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       }
     } else {
       //Stop moving items from any slot but intractable ones
-      if (!interactableSlots.contains(event.getRawSlot())) {
-        event.setCancelled(true);
-      } else if (outputDisabledActions.contains(event.getAction()) && outputLocations
+      if (!interactableSlots.contains(event.getRawSlot()) && outputDisabledActions.contains(event.getAction()) && outputLocations
           .contains(event.getRawSlot())) {
         event.setCancelled(true);
       }

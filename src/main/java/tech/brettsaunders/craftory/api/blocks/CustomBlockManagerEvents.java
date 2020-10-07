@@ -48,7 +48,7 @@ import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -62,7 +62,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
+import tech.brettsaunders.craftory.tech.power.core.block.power_grid.PowerConnector;
 
 public class CustomBlockManagerEvents implements Listener {
 

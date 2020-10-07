@@ -22,7 +22,7 @@ import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
+import tech.brettsaunders.craftory.Constants.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.persistence.adapters.ArrayListAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.BlockFaceAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.BooleanAdapter;
@@ -40,7 +40,7 @@ import tech.brettsaunders.craftory.persistence.adapters.PowerGridAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.StringAdapter;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.fluids.FluidStorage;
-import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
+import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGrid;
 import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.ReflectionUtils;
 

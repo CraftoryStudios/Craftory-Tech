@@ -15,6 +15,7 @@ import static tech.brettsaunders.craftory.Craftory.customBlockManager;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,8 +31,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -43,11 +44,11 @@ import tech.brettsaunders.craftory.api.items.CustomTag;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.RotaryGenerator;
-import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
+import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGrid;
 
 public class PoweredBlockEvents implements Listener {
 
-  private final HashMap<UUID, HashMap<BlockFace, Boolean>> configuratorData = new HashMap<>();
+  private final Map<UUID, Map<BlockFace, Boolean>> configuratorData = new HashMap<>();
 
   public PoweredBlockEvents() {
     Events.registerEvents(this);
@@ -94,7 +95,7 @@ public class PoweredBlockEvents implements Listener {
     if (e.getAction() != Action.LEFT_CLICK_BLOCK) {
       return;
     }
-    if (!CustomItemManager.matchCustomItemName(e.getItemStack(), CoreHolder.Items.WRENCH)) {
+    if (!CustomItemManager.matchCustomItemName(e.getItemStack(), Constants.Items.WRENCH)) {
       return;
     }
     e.setCancelled(true);
@@ -111,7 +112,7 @@ public class PoweredBlockEvents implements Listener {
   @EventHandler
   public void onWrenchRightClick(CustomBlockInteractEvent e) {
     if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-    if (!CustomItemManager.matchCustomItemName(e.getItemStack(), CoreHolder.Items.WRENCH)) return;
+    if (!CustomItemManager.matchCustomItemName(e.getItemStack(), Constants.Items.WRENCH)) return;
     if (!e.getPlayer().isSneaking()) return;
     if (!PoweredBlockUtils.isPoweredBlock(e.getCustomBlock())) return;
     PoweredBlock poweredBlock = (PoweredBlock) e.getCustomBlock();
@@ -143,7 +144,7 @@ public class PoweredBlockEvents implements Listener {
 
   @EventHandler
   public void onConfiguratorClick(CustomBlockInteractEvent e) {
-    if (!CustomItemManager.matchCustomItemName(e.getItemStack(), CoreHolder.Items.CONFIGURATOR)) {
+    if (!CustomItemManager.matchCustomItemName(e.getItemStack(), Constants.Items.CONFIGURATOR)) {
       return;
     }
     e.setCancelled(true);
@@ -198,7 +199,7 @@ public class PoweredBlockEvents implements Listener {
       return;
     }
     if ((e.getPlayer().isSneaking() || CustomItemManager
-        .matchCustomItemName(e.getItemStack(), CoreHolder.Items.CONFIGURATOR))) {
+        .matchCustomItemName(e.getItemStack(), Constants.Items.CONFIGURATOR))) {
       return;
     }
 

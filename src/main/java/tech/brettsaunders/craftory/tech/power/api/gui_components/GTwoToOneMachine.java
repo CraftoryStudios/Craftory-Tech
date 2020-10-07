@@ -8,7 +8,7 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.api.guiComponents;
+package tech.brettsaunders.craftory.tech.power.api.gui_components;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
@@ -18,31 +18,27 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IGUIComponent;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
-public class GOneToOneMachine implements IGUIComponent {
+public class GTwoToOneMachine implements IGUIComponent {
 
-  private final int slot;
+
+  private final int arrowSlot;
   private final VariableContainer<Double> progress;
   private final Inventory inventory;
-  private final int inputSlot;
-  private final int outputSlot;
 
-  public GOneToOneMachine(Inventory inventory, int slot,
-      VariableContainer<Double> progress, int inputSlot, int outputSlot) {
+  public GTwoToOneMachine(Inventory inventory, int arrowSlot,
+      VariableContainer<Double> progress) {
     this.inventory = inventory;
-    this.slot = slot;
+    this.arrowSlot = arrowSlot;
     this.progress = progress;
-    this.inputSlot = inputSlot;
-    this.outputSlot = outputSlot;
   }
 
-  public GOneToOneMachine(Inventory inventory,
-      VariableContainer<Double> progress, int inputSlot, int outputSlot) {
+  public GTwoToOneMachine(Inventory inventory,
+      VariableContainer<Double> progress) {
     this.inventory = inventory;
     this.progress = progress;
-    this.outputSlot = outputSlot;
-    this.inputSlot = inputSlot;
-    this.slot = 24;
+    this.arrowSlot = 24;
   }
+
 
   @Override
   public void update() {
@@ -51,6 +47,6 @@ public class GOneToOneMachine implements IGUIComponent {
     ItemMeta meta = arrow.getItemMeta();
     meta.setDisplayName(ChatColor.RESET + "");
     arrow.setItemMeta(meta);
-    inventory.setItem(slot, arrow);
+    inventory.setItem(arrowSlot, arrow);
   }
 }

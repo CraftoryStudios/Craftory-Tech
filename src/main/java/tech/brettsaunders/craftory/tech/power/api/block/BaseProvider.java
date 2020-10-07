@@ -11,6 +11,7 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
@@ -30,7 +31,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   protected HashMap<BlockFace, Boolean> sidesConfig;
 
   /* Construction */
-  public BaseProvider(Location location, String blockName, byte level, int maxOutput) {
+  protected BaseProvider(Location location, String blockName, byte level, int maxOutput) {
     super(location, blockName, level);
     this.maxOutput = maxOutput;
     init();
@@ -40,7 +41,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   }
 
   /* Saving, Setup and Loading */
-  public BaseProvider() {
+  protected BaseProvider() {
     super();
     init();
   }
@@ -66,7 +67,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
           }
         }, 4);
       }
-      if (sidesConfig.get(blockFace)) {
+      if (Boolean.TRUE.equals(sidesConfig.get(blockFace))) {
         energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(
             Math.min(maxOutput, energyStorage.getEnergyStored()), false, customBlock));
       }
@@ -98,11 +99,11 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
   }
 
 
-  public HashMap<BlockFace, Boolean> getSideConfig() {
+  public Map<BlockFace, Boolean> getSideConfig() {
     return sidesConfig;
   }
 
-  public void setSidesConfig(HashMap<BlockFace, Boolean> config) {
+  public void setSidesConfig(Map<BlockFace, Boolean> config) {
     sidesConfig.clear();
     sidesConfig.putAll(config);
   }

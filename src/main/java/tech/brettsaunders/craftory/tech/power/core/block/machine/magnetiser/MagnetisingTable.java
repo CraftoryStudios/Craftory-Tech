@@ -28,9 +28,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
-import tech.brettsaunders.craftory.CoreHolder.Items;
-import tech.brettsaunders.craftory.CoreHolder.Sounds;
+import tech.brettsaunders.craftory.Constants.Blocks;
+import tech.brettsaunders.craftory.Constants.Items;
+import tech.brettsaunders.craftory.Constants.Sounds;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -42,9 +42,9 @@ import tech.brettsaunders.craftory.utils.RecipeUtils;
 public class MagnetisingTable extends CustomBlock implements Listener {
 
   private static final HashMap<String, String> recipes = RecipeUtils.getMagnetiserRecipes();
-  private static final int processTime = 10;
+  private static final int PROCESS_TIME = 10;
   @Persistent
-  protected Boolean framePlaced;
+  protected boolean framePlaced;
   @Persistent
   protected ItemStack frameItem; //Only used for saving
   protected ItemFrame itemFrame;
@@ -100,10 +100,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   public void beforeSaveUpdate() {
     super.beforeSaveUpdate();
     if (framePlaced) {
-      if(itemFrame == null) {
-        if(findFrame())
-        if(!framePlaced) return;
-      }
+      if(itemFrame == null && (!findFrame() || !framePlaced)) return;
       frameItem = itemFrame.getItem();
       itemFrame.setItem(new ItemStack(Material.AIR));
       itemFrame.remove();
@@ -133,20 +130,18 @@ public class MagnetisingTable extends CustomBlock implements Listener {
 
   private boolean findFrame() {
     for (Entity entity : frameLocation.getWorld().getNearbyEntities(frameLocation, 2, 2, 2)) {
-      if(entity instanceof ItemFrame) {
-        if(entity.getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation().equals(location)) {
-          itemFrame = (ItemFrame) entity;
-          itemFrame.setFacingDirection(BlockFace.UP);
-          itemFrame.setVisible(false);
-          framePlaced = true;
-          return true;
-        }
+      if(entity instanceof ItemFrame && entity.getLocation().getBlock().getRelative(BlockFace.DOWN).getLocation().equals(location)) {
+        itemFrame = (ItemFrame) entity;
+        itemFrame.setFacingDirection(BlockFace.UP);
+        itemFrame.setVisible(false);
+        framePlaced = true;
+        return true;
       }
     }
     return false;
   }
 
-  private boolean frameHit(Player player) {
+  private boolean frameHit() {
     if (itemFrame.getItem().getType().equals(Material.AIR)) {
       return true;
     }
@@ -154,7 +149,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     if (recipes.containsKey(itemName)) {
       progress += 1;
       frameLocation.getWorld().spawnParticle(Particle.SPELL_INSTANT, frameLocation, 5);
-      if (progress == processTime) {
+      if (progress == PROCESS_TIME) {
         itemFrame.setItem(CustomItemManager.getCustomItem(recipes.get(itemName)));
         frameLocation.getWorld().spawnParticle(Particle.SMOKE_LARGE, frameLocation, 10);
         progress = 0;
@@ -188,7 +183,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     if (!event.getEntity().getLocation().equals(frameLocation)) {
       return;
     }
-    boolean hit = frameHit(((Player) event.getDamager()));
+    boolean hit = frameHit();
     if (hit) {
       event.setCancelled(true);
       ((Player) event.getDamager()).getInventory().setItemInMainHand(ToolManager.decreaseDurability(itemStack, 1));

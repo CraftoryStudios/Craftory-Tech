@@ -25,6 +25,10 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseProvider;
 
 public class Testing {
 
+  private Testing() {
+    throw new IllegalStateException("Utils Class");
+  }
+
   public static void placeGrid(Location baseLocation, String mainMachineName, String generatorName,
       String energyCellName, String insertItemName, String fuelName, int length, int width) {
     Location location = baseLocation.clone();

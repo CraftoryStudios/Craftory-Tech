@@ -20,12 +20,12 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder;
+import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GTwoToOneMachine;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
@@ -59,7 +59,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
 
   /* Per Object Variables Not-Saved */
 
-  private transient CustomMachineRecipe currentRecipe = null;
+  private  CustomMachineRecipe currentRecipe = null;
 
 
   /* Construction */
@@ -73,13 +73,13 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     inputSlots.add(new ItemStack(Material.AIR));
     outputSlots = new ArrayList<>();
     outputSlots.add(new ItemStack(Material.AIR));
-    init();
+    setup();
   }
 
   /* Saving, Setup and Loading */
   public BaseFoundry() {
     super();
-    init();
+    setup();
   }
 
   @Override
@@ -90,7 +90,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   }
 
 
-  private void init() {
+  private void setup() {
     inputLocations = new ArrayList<>();
     outputLocations = new ArrayList<>();
     inputLocations.add(INPUT_LOCATION1);
@@ -105,8 +105,8 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     Inventory inventory = createInterfaceInventory(displayName,
         Font.ELECTRIC_FOUNDRY_GUI.label + "");
     addGUIComponent(
-        new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
-            OUTPUT_LOCATION));
+        new GTwoToOneMachine(inventory, 23, progressContainer
+        ));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer, 21));
     if (inputSlots.size() < 2) {
@@ -115,7 +115,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     if (inputSlots.size() < 2) {
       inputSlots.add(1, new ItemStack(Material.AIR));
     }
-    if (outputSlots.size() == 0) {
+    if (outputSlots.isEmpty()) {
       outputSlots.add(0, new ItemStack(Material.AIR));
     }
     this.inventoryInterface = inventory;
@@ -127,7 +127,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     inputSlots.get(0).setAmount(inputSlots.get(0).getAmount() - 1);
     inputSlots.get(1).setAmount(inputSlots.get(1).getAmount() - 1);
     if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
-      outputSlots.set(0, CustomItemManager.getCustomItem(CoreHolder.Items.STEEL_INGOT));
+      outputSlots.set(0, CustomItemManager.getCustomItem(Constants.Items.STEEL_INGOT));
     } else {
       outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + 1);
     }

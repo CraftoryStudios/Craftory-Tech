@@ -13,11 +13,11 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.inventory.Inventory;
-import tech.brettsaunders.craftory.CoreHolder.Sounds;
+import tech.brettsaunders.craftory.Constants.Sounds;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -28,14 +28,14 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   protected int maxReceive;
 
   /* Per Object Variables Not-Saved */
-  protected transient VariableContainer<Boolean> runningContainer;
-  protected transient VariableContainer<Double> progressContainer;
-  protected transient int processTime;
-  protected transient int energyConsumption;
-  protected transient int tickCount = 0;
+  protected  VariableContainer<Boolean> runningContainer;
+  protected  VariableContainer<Double> progressContainer;
+  protected  int processTime;
+  protected  int energyConsumption;
+  protected  int tickCount = 0;
 
   /* Construction */
-  public BaseMachine(Location location, String blockName, byte level, int maxReceive) {
+  protected BaseMachine(Location location, String blockName, byte level, int maxReceive) {
     super(location, blockName, level);
     this.maxReceive = maxReceive;
     energyStorage.setMaxReceive(maxReceive);
@@ -43,7 +43,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   }
 
   /* Saving, Setup and Loading */
-  public BaseMachine() {
+  protected BaseMachine() {
     super();
     init();
   }
@@ -86,7 +86,7 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
 
   @Ticking(ticks=60)
   public void soundLoop() {
-    if(runningContainer.getT()) {
+    if(Boolean.TRUE.equals(runningContainer.getT())) {
       playSound();
     }
   }

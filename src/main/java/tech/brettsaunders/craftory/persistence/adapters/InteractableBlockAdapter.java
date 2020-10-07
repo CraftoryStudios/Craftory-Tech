@@ -12,8 +12,8 @@ package tech.brettsaunders.craftory.persistence.adapters;
 
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
-import tech.brettsaunders.craftory.CoreHolder;
-import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
+import tech.brettsaunders.craftory.Constants;
+import tech.brettsaunders.craftory.Constants.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 
 public class InteractableBlockAdapter implements DataAdapter<INTERACTABLEBLOCK> {
@@ -32,6 +32,6 @@ public class InteractableBlockAdapter implements DataAdapter<INTERACTABLEBLOCK> 
     if (!Boolean.TRUE.equals(nbtCompound.hasKey(INTERACTABLEBLOCK))) {
       return null;
     }
-    return CoreHolder.INTERACTABLEBLOCK.valueOf(nbtCompound.getString(INTERACTABLEBLOCK));
+    return Constants.INTERACTABLEBLOCK.valueOf(nbtCompound.getString(INTERACTABLEBLOCK));
   }
 }

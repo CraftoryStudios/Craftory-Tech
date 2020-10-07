@@ -3,9 +3,6 @@ package tech.brettsaunders.craftory.tech.power.api.effect;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
@@ -33,15 +30,11 @@ public class EnergyDisplayManager extends BukkitRunnable {
 
     private void displayEnergyInfo(@NonNull Player player) {
         try {
-            //TODO Figure out why exception thrown
             Block targetBlock = player.getTargetBlock(null, 8);
-            if (targetBlock == null) {
-                return;
-            }
 
             CustomBlock customBlock =
                 Craftory.customBlockManager.getCustomBlock(targetBlock.getLocation());
-            if (customBlock != null && customBlock instanceof PoweredBlock) {
+            if (customBlock instanceof PoweredBlock) {
                 PoweredBlock poweredBlock = (PoweredBlock) customBlock;
                 if (poweredBlock.getEnergyStorage().getMaxEnergyStored() > 0) {
                     EnergyStorage energyStorage = poweredBlock.getEnergyStorage();
@@ -54,7 +47,7 @@ public class EnergyDisplayManager extends BukkitRunnable {
                 }
             }
         }catch (IllegalStateException e) {
-
+            //TODO Figure out why exception thrown
         }
     }
 }

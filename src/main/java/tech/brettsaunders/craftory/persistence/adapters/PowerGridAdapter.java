@@ -15,7 +15,7 @@ import java.util.HashMap;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
-import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
+import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGrid;
 
 @NoArgsConstructor
 public class PowerGridAdapter implements DataAdapter<PowerGrid> {

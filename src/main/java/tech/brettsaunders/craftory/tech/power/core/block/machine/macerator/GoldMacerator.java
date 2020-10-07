@@ -11,7 +11,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.macerator;
 
 import org.bukkit.Location;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMacerator;
 
 public class GoldMacerator extends BaseMacerator {

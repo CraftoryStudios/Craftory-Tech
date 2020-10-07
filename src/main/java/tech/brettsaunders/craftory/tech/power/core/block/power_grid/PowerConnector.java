@@ -8,20 +8,19 @@
  * File Author: Brett Saunders & Matty Jones
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.tech.power.core.powerGrid;
+package tech.brettsaunders.craftory.tech.power.core.block.power_grid;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.bukkit.Location;
-import tech.brettsaunders.craftory.persistence.Persistent;
+import tech.brettsaunders.craftory.Constants.Blocks;
+import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 
-@AllArgsConstructor
-@NoArgsConstructor
-public class PowerGridSaver {
+public class PowerConnector extends CustomBlock {
 
-  @Persistent
-  protected HashMap<PowerGrid, HashSet<Location>> data = new HashMap<>();
+  public PowerConnector() {
+    super();
+  }
 
+  public PowerConnector(Location location) {
+    super(location, Blocks.POWER_CONNECTOR);
+  }
 }

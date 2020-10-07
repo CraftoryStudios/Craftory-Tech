@@ -12,7 +12,9 @@ package tech.brettsaunders.craftory;
 
 import org.bukkit.block.BlockFace;
 
-public class CoreHolder {
+public class Constants {
+
+  private Constants() {}
 
   public static final BlockFace[] HOPPER_INTERACT_FACES = {BlockFace.NORTH, BlockFace.EAST,
       BlockFace.SOUTH, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
@@ -34,6 +36,7 @@ public class CoreHolder {
       name = s;
     }
 
+    @Override
     public String toString() {
       return this.name;
     }
@@ -57,6 +60,7 @@ public class CoreHolder {
   /* Block Names */
   public static class Blocks {
 
+    private Blocks() {}
     /* Power */
     public static final String IRON_CELL = "IronCell";
     public static final String GOLD_CELL = "GoldCell";
@@ -98,6 +102,7 @@ public class CoreHolder {
   /* Item Names */
   public static class Items {
 
+    private Items () {}
     /* Power */
     public static final String WRENCH = "wrench";
     public static final String CONFIGURATOR = "configurator";
@@ -137,6 +142,8 @@ public class CoreHolder {
 
   /* Sounds */
   public static class Sounds {
+
+    private Sounds() {}
     /* Machines */
     public static final String MACHINE_1 = "minecraft:craftory.power.machine.default";
     public static final String HAMMER_HIT = "minecraft:craftory.action.hammer_hit";

@@ -29,21 +29,20 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
-import tech.brettsaunders.craftory.CoreHolder.Items;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.items.CustomTag;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
 
 public class RotaryGenerator extends BaseGenerator {
 
-  protected static final int maxOutput = 75;
+  protected static final int MAX_OUTPUT = 75;
   protected static final int[] MULTIPLIERS = {1, 2, 3, 4};
   protected static final int BASE_CAPACITY = 100000;
   private static final byte C_LEVEL = 0;
@@ -68,9 +67,9 @@ public class RotaryGenerator extends BaseGenerator {
   @Persistent
   protected String modeSaved;
   protected WheelMode mode;
-  @Persistent
   @Getter
-  protected Boolean wheelPlaced = false;
+  @Persistent
+  protected boolean wheelPlaced = false;
   protected boolean wheelFree = false;
   protected ArmorStand wheel;
   protected double efficiencyMultiplier = 1;
@@ -81,7 +80,7 @@ public class RotaryGenerator extends BaseGenerator {
   protected Location wheelLocation;
 
   public RotaryGenerator(Location location) {
-    super(location, Blocks.ROTARY_GENERATOR, C_LEVEL, (int) (maxOutput*1.5f),
+    super(location, Blocks.ROTARY_GENERATOR, C_LEVEL, (int) (MAX_OUTPUT *1.5f),
         BASE_CAPACITY * MULTIPLIERS[C_LEVEL]);
     setFacing(BlockFace.NORTH);
     checkWheel();
@@ -139,6 +138,9 @@ public class RotaryGenerator extends BaseGenerator {
     removeWheels();
   }
 
+  public boolean getWheelPlaced() {
+    return wheelPlaced;
+  }
 
   @Override
   public void updateGenerator() {
@@ -290,8 +292,7 @@ public class RotaryGenerator extends BaseGenerator {
   }
 
   protected int calculateAmountProduced() {
-    int temp = (int) Math.round(maxOutput * efficiencyMultiplier);
-    return temp;
+    return (int) Math.round(MAX_OUTPUT * efficiencyMultiplier);
   }
 
   @Ticking(ticks = 600)
@@ -305,9 +306,7 @@ public class RotaryGenerator extends BaseGenerator {
 
   private void updateWindEfficiency() {
     final ArrayList<Location> locations = new ArrayList<>();
-    wheelFootprint.forEach(loc -> {
-      locations.add(loc.clone());
-    });
+    wheelFootprint.forEach(loc -> locations.add(loc.clone()));
     Vector v;
     if (facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) {
       v = new Vector(0, 0, 1);
@@ -324,9 +323,7 @@ public class RotaryGenerator extends BaseGenerator {
       }
     }
     locations.clear();
-    wheelFootprint.forEach(loc -> {
-      locations.add(loc.clone());
-    });
+    wheelFootprint.forEach(loc -> locations.add(loc.clone()));
     if (facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) {
       v = new Vector(0, 0, -1);
     } else {
@@ -377,11 +374,11 @@ public class RotaryGenerator extends BaseGenerator {
   @Ticking(ticks = 20)
   public void checkWheel() {
     if (!wheelPlaced) {
-      wheelFree = windWheelAreaFree(wheelLocation) || waterWheelAreaFree(wheelLocation);
+      wheelFree = windWheelAreaFree() || waterWheelAreaFree(wheelLocation);
     } else if (mode.equals(WheelMode.WATER)) {
       wheelFree = waterWheelAreaFree(wheelLocation);
     } else {
-      wheelFree = windWheelAreaFree(wheelLocation);
+      wheelFree = windWheelAreaFree();
     }
 
   }
@@ -432,7 +429,7 @@ public class RotaryGenerator extends BaseGenerator {
     return getLocations(centerLoc, 1, 3);
   }
 
-  protected boolean windWheelAreaFree(Location centerLoc) {
+  protected boolean windWheelAreaFree() {
     wheelFree = false;
     for (Location loc : wheelLocations) {
       if (!loc.getBlock().getType().equals(Material.AIR)) {
