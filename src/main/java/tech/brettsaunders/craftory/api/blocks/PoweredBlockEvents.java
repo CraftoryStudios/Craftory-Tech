@@ -32,7 +32,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.CoreHolder;
 import tech.brettsaunders.craftory.CoreHolder.Blocks;
-import tech.brettsaunders.craftory.CoreHolder.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -125,7 +124,6 @@ public class PoweredBlockEvents implements Listener {
     Craftory.tickManager.removeTickingBlock(e.getCustomBlock());
     Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
     e.getBlockClicked().setType(Material.AIR);
-    //calculateStatsDecrease(customBlock);
 
     //Drop Item With Data
     ItemStack itemStack = CustomItemManager.getCustomItem(e.getCustomBlock().blockName);

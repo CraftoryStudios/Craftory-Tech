@@ -23,7 +23,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredListener;
-import org.bukkit.plugin.UnknownDependencyException;
 
 import com.google.common.collect.Lists;
 
@@ -31,11 +30,11 @@ public abstract class LoggedPluginManager implements PluginManager {
 
   private PluginManager delegate;
 
-  public LoggedPluginManager(Plugin owner) {
+  protected LoggedPluginManager(Plugin owner) {
     this(owner.getServer().getPluginManager());
   }
 
-  public LoggedPluginManager(PluginManager delegate) {
+  protected LoggedPluginManager(PluginManager delegate) {
     this.delegate = delegate;
   }
 
@@ -78,7 +77,7 @@ public abstract class LoggedPluginManager implements PluginManager {
               delegate.callEvent(event);
             } catch (AuthorNagException e) {
               throw e;
-            } catch (Throwable e) {
+            } catch (Exception e) {
               customHandler(event, e);
             }
           }
@@ -97,7 +96,7 @@ public abstract class LoggedPluginManager implements PluginManager {
         executor.execute(listener, event);
       } catch (AuthorNagException e) {
         throw e;
-      } catch (Throwable e) {
+      } catch (Exception e) {
         customHandler(event, e);
       }
     };
@@ -105,7 +104,8 @@ public abstract class LoggedPluginManager implements PluginManager {
 
   private HandlerList getEventListeners(Class<? extends Event> type) {
     try {
-      Method method = getRegistrationClass(type).getDeclaredMethod("getHandlerList", new Class[0]);
+      Method method = getRegistrationClass(type).getDeclaredMethod("getHandlerList",
+           new Class[0]);
       method.setAccessible(true);
       return (HandlerList) method.invoke(null, new Object[0]);
     } catch (Exception e) {
@@ -146,7 +146,7 @@ public abstract class LoggedPluginManager implements PluginManager {
   }
 
   @Override
-  public void registerInterface(Class<? extends PluginLoader> loader) throws IllegalArgumentException {
+  public void registerInterface(Class<? extends PluginLoader> loader)  {
     delegate.registerInterface(loader);
   }
 
@@ -156,7 +156,7 @@ public abstract class LoggedPluginManager implements PluginManager {
   }
 
   @Override
-  public void callEvent(Event event) throws IllegalStateException {
+  public void callEvent(Event event) {
     delegate.callEvent(event);
   }
 
@@ -226,7 +226,7 @@ public abstract class LoggedPluginManager implements PluginManager {
   }
 
   @Override
-  public Plugin loadPlugin(File file) throws InvalidPluginException, InvalidDescriptionException, UnknownDependencyException {
+  public Plugin loadPlugin(File file) throws InvalidPluginException, InvalidDescriptionException{
     return delegate.loadPlugin(file);
   }
 

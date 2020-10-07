@@ -11,15 +11,12 @@
 package tech.brettsaunders.craftory.api.menu;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
-
+import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import lombok.NonNull;
 
 public final class InvUtils {
 
@@ -64,10 +61,7 @@ public final class InvUtils {
     for (int slot : slots) {
       ItemStack stack = inv.getItem(slot);
 
-      if (stack == null || stack.getType() == Material.AIR) {
-        return true;
-      }
-      else if (stack.getAmount() + item.getAmount() <= stack.getMaxStackSize() && ItemUtils.canStack(stack, item)) {
+      if (stack == null || stack.getType() == Material.AIR || (stack.getAmount() + item.getAmount() <= stack.getMaxStackSize() && ItemUtils.canStack(stack, item))) {
         return true;
       }
     }

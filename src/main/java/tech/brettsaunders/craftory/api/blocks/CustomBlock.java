@@ -22,7 +22,7 @@ import tech.brettsaunders.craftory.persistence.Persistent;
 
 @NoArgsConstructor
 @Getter
-public class CustomBlock {
+public abstract class CustomBlock {
 
   @Persistent
   protected String blockName;
@@ -35,7 +35,7 @@ public class CustomBlock {
   @Setter
   protected BlockFace direction;
 
-  public CustomBlock(Location location, String blockName) {
+  protected CustomBlock(Location location, String blockName) {
     this.location = location;
     this.blockName = blockName;
     this.displayName = Utilities.getTranslation(blockName);
@@ -53,10 +53,8 @@ public class CustomBlock {
     }
   }
 
-  public void beforeSaveUpdate() {
-  }
+  public abstract void beforeSaveUpdate();
 
-  public void blockBreak() {
-  }
+  public abstract void blockBreak();
 
 }

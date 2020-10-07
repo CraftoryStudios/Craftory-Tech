@@ -71,16 +71,16 @@ public class RecipeBook {
     itemMeta.setDisplayName(" ");
     itemStack.setItemMeta(itemMeta);
     //Add Item non Clickable
-    chestMenu.addItem(46, itemStack, (player, slot, item, cursor,action) -> {return false;});
+    chestMenu.addItem(46, itemStack, (player, slot, item, cursor,action) -> false);
 
     //Add Recipe One
-    addResult(chestMenu, page, recipeOne, 1);
-    addRecipe(chestMenu, page, recipeOne, 18);
+    addResult(chestMenu, recipeOne, 1);
+    addRecipe(chestMenu, recipeOne, 18);
 
     //Add Recipe Two
     if (Objects.nonNull(recipeTwo)) {
-      addResult(chestMenu, page, recipeTwo, 7);
-      addRecipe(chestMenu, page, recipeTwo, 24);
+      addResult(chestMenu, recipeTwo, 7);
+      addRecipe(chestMenu, recipeTwo, 24);
     }
 
     //Add Back Button
@@ -122,7 +122,7 @@ public class RecipeBook {
     return chestMenu;
   }
 
-  private void addRecipe(ChestMenu chestMenu, int page, ConfigurationSection recipe, int slot) {
+  private void addRecipe(ChestMenu chestMenu, ConfigurationSection recipe, int slot) {
     //Get Ingridents
     HashMap<String,String> ingredients = new HashMap<>();
     for (String key : recipe.getConfigurationSection("ingredients").getKeys(false)) {
@@ -130,7 +130,7 @@ public class RecipeBook {
     }
     //Get Each Line of Recipe
     List<String> lines = recipe.getStringList("pattern");
-    if (lines == null || lines.size() == 0) return;
+    if (lines.isEmpty()) return;
     for (int i = 0; i< 3; i++) {
       String[] line = lines.get(i).split("");
       addRecipeLine(ingredients, line, chestMenu, slot + (9*i));
@@ -144,13 +144,13 @@ public class RecipeBook {
         String itemString = ingredients.get(line[i]);
         //Custom or Minecraft Items
         ItemStack itemStack = CustomItemManager.getCustomItemOrDefault(itemString);
-        chestMenu.addItem(slot + i, itemStack, (player, selectedSlot, item, cursor,action) -> {return false;});
+        chestMenu.addItem(slot + i, itemStack, (player, selectedSlot, item, cursor,action) -> false);
       }
     }
   }
 
 
-  private void addResult(ChestMenu chestMenu, int page, ConfigurationSection recipeOne, int slot) {
+  private void addResult(ChestMenu chestMenu, ConfigurationSection recipeOne, int slot) {
     ItemStack result = CustomItemManager.getCustomItem(recipeOne.getString("result.item"));
     //Set Amount if produces multiple
     result.setAmount(recipeOne.getInt("result.amount"));

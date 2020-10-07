@@ -12,23 +12,17 @@ package tech.brettsaunders.craftory.api.tasks;
 
 import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
 
-import io.sentry.Sentry;
-import io.sentry.event.EventBuilder;
-import io.sentry.event.interfaces.ExceptionInterface;
-import io.sentry.event.interfaces.SentryException;
-import java.util.Date;
-import java.util.Deque;
 import java.util.Objects;
-import java.util.logging.Level;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.sentry.LoggedScheduler;
 
 public class Tasks {
 
   private static LoggedScheduler scheduler;
+
+  private Tasks() {
+    throw new IllegalStateException("Utils Class");
+  }
 
   private static LoggedScheduler getScheduler() {
     if (Objects.isNull(scheduler)) {
