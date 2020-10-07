@@ -21,30 +21,34 @@ public class Log {
   static final ChatColor INFO_COLOR = ChatColor.GREEN;
   static final ChatColor ERROR_COLOR = ChatColor.RED;
   static final ChatColor DEBUG_COLOR = ChatColor.AQUA;
-  static final String prefix = "[" + Craftory.plugin.getDescription().getPrefix() + "] ";
-  static final String debugPrefix =
+  static final String PREFIX = "[" + Craftory.plugin.getDescription().getPrefix() + "] ";
+  static final String DEBUG_PREFIX =
       "[" + Craftory.plugin.getDescription().getPrefix() + " Debug] ";
-  static final boolean debugMode = Utilities.config.getBoolean("general.debug");
+  static final boolean DEBUG_MODE = Utilities.config.getBoolean("general.debug");
+
+  private Log() {
+    throw new IllegalStateException("Utils Classs");
+  }
 
   public static void info(String logMessage) {
-    Bukkit.getLogger().info(prefix + INFO_COLOR + logMessage);
+    Bukkit.getLogger().info(PREFIX + INFO_COLOR + logMessage);
   }
 
   public static void infoDiscrete(String logMessage) {
-    Bukkit.getLogger().info(prefix + logMessage);
+    Bukkit.getLogger().info(PREFIX + logMessage);
   }
 
   public static void warn(String logMessage) {
-    Bukkit.getLogger().warning(prefix + logMessage);
+    Bukkit.getLogger().warning(PREFIX + logMessage);
   }
 
   public static void error(Object... message) {
-    Bukkit.getLogger().warning(ERROR_COLOR + prefix + StringUtils.join(message, " "));
+    Bukkit.getLogger().warning(ERROR_COLOR + PREFIX + StringUtils.join(message, " "));
   }
 
   public static void debug(Object... message) {
-    if (debugMode) {
-      Bukkit.getLogger().info(debugPrefix + DEBUG_COLOR + StringUtils.join(message, " "));
+    if (DEBUG_MODE) {
+      Bukkit.getLogger().info(DEBUG_PREFIX + DEBUG_COLOR + StringUtils.join(message, " "));
     }
   }
 

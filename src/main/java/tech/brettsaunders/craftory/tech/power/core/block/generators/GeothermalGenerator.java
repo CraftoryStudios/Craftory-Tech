@@ -41,7 +41,7 @@ public class GeothermalGenerator extends BaseGenerator {
   /* Static Constants Private */
   private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 100;
-  private static final double lavaToEnergyRatio = 25;
+  private static final double LAVA_TO_ENERGY_RATIO = 25;
 
   static {
     inputFaces = new HashMap<BlockFace, Integer>() {
@@ -66,7 +66,7 @@ public class GeothermalGenerator extends BaseGenerator {
   /* Construction */
   public GeothermalGenerator() {
     super();
-    setup();
+    setupGeo();
   }
 
   /* Saving, Setup and Loading */
@@ -78,10 +78,10 @@ public class GeothermalGenerator extends BaseGenerator {
     inputSlots.add(0, new ItemStack(Material.AIR));
     outputSlots = new ArrayList<>();
     outputSlots.add(new ItemStack(Material.AIR));
-    setup();
+    setupGeo();
   }
 
-  private void setup() {
+  private void setupGeo() {
     inputLocations = new ArrayList<>();
     inputLocations.add(0, FUEL_SLOT);
     outputLocations = new ArrayList<>();
@@ -107,9 +107,7 @@ public class GeothermalGenerator extends BaseGenerator {
         }
     }
     super.updateGenerator();
-    inventoryInterface.getViewers().forEach(player -> {
-      ((Player) player).updateInventory();
-    });
+    inventoryInterface.getViewers().forEach(player -> ((Player) player).updateInventory());
   }
 
   @Override
@@ -125,14 +123,14 @@ public class GeothermalGenerator extends BaseGenerator {
   @Override
   protected void processTick() {
     double change = Math
-        .min(Math.min(fluidStorage.getFluidStored(), C_OUTPUT_AMOUNT / lavaToEnergyRatio),
-            getEnergySpace() / lavaToEnergyRatio);
+        .min(Math.min(fluidStorage.getFluidStored(), C_OUTPUT_AMOUNT / LAVA_TO_ENERGY_RATIO),
+            getEnergySpace() / LAVA_TO_ENERGY_RATIO);
     if (change != 0) {
       change = Math.ceil(change);
     }
     int amount = (int) Math.round(change);
     fluidStorage.forceExtract(amount);
-    energyStorage.modifyEnergyStored((int) (amount * lavaToEnergyRatio));
+    energyStorage.modifyEnergyStored((int) (amount * LAVA_TO_ENERGY_RATIO));
   }
 
   @Override

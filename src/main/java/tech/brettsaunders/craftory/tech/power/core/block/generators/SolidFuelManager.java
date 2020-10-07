@@ -190,6 +190,10 @@ public class SolidFuelManager {
     fuelMap.put("BAMBOO", 750);
   }
 
+  private SolidFuelManager() {
+    throw new IllegalStateException("Utils Class");
+  }
+
   public static int getFuelEnergy(String fuel) {
     if (fuel.isEmpty()) {
       return 0;
