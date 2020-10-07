@@ -106,20 +106,19 @@ public class PowerGrid extends BukkitRunnable {
   /* Calculates how much energy the generators produced this tick */
   private int calculateGridEnergyProduced(int limit) {
     int amount = 0;
-    int e;
+    int energy;
     for (Location loc : generators) {
       BaseGenerator generator = (BaseGenerator) PoweredBlockUtils.getPoweredBlock(loc);
-      if (Objects.isNull(generator)) {
-        continue;
-      }
-      e = generator.getEnergyAvailable();
-      if (amount + e > limit) {
-        e = limit - amount;
-      }
-      e = generator.retrieveEnergy(e);
-      amount += e;
-      if (amount == limit) {
-        break;
+      if (!Objects.isNull(generator)) {
+        energy = generator.getEnergyAvailable();
+        if (amount + energy > limit) {
+          energy = limit - amount;
+        }
+        energy = generator.retrieveEnergy(energy);
+        amount += energy;
+        if (amount == limit) {
+          break;
+        }
       }
     }
     return amount;
@@ -202,13 +201,7 @@ public class PowerGrid extends BukkitRunnable {
     PoweredBlock block;
     Log.debug("grid has " + blockConnections.size() + " machine connections");
     for (HashSet<Location> set : blockConnections.values()) {
-      if (set == null) {
-        continue;
-      }
       for (Location location : set) {
-        if (location == null || !PoweredBlockUtils.isPoweredBlock(location)) {
-          continue;
-        }
         block = PoweredBlockUtils.getPoweredBlock(location);
         if (Objects.isNull(block)) { //Shouldn't be
           Log.debug("block in new grid gave null pointer");

@@ -225,7 +225,7 @@ public class PowerGridManager implements Listener {
     return powerGrids.get(location);
   }
 
-  public Boolean isPowerGrid(Location location) {
+  public boolean isPowerGrid(Location location) {
     return powerGrids.containsKey(location);
   }
 

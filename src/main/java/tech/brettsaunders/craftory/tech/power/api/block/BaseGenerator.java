@@ -30,7 +30,7 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
   protected static HashMap<BlockFace, Integer> inputFaces = new HashMap<>();
   protected static HashMap<BlockFace, Integer> outputFaces = new HashMap<>();
   /* Per Object Variables Not-Saved */
-  protected transient VariableContainer<Boolean> runningContainer;
+  protected  VariableContainer<Boolean> runningContainer;
   @Persistent
   protected int energyProduced;
   protected boolean isActive;

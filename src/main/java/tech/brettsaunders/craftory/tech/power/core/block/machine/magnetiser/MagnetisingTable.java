@@ -44,7 +44,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   private static final HashMap<String, String> recipes = RecipeUtils.getMagnetiserRecipes();
   private static final int processTime = 10;
   @Persistent
-  protected Boolean framePlaced;
+  protected boolean framePlaced;
   @Persistent
   protected ItemStack frameItem; //Only used for saving
   protected ItemFrame itemFrame;

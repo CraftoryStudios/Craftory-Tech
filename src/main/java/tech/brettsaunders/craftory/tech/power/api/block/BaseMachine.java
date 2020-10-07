@@ -28,11 +28,11 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   protected int maxReceive;
 
   /* Per Object Variables Not-Saved */
-  protected transient VariableContainer<Boolean> runningContainer;
-  protected transient VariableContainer<Double> progressContainer;
-  protected transient int processTime;
-  protected transient int energyConsumption;
-  protected transient int tickCount = 0;
+  protected  VariableContainer<Boolean> runningContainer;
+  protected  VariableContainer<Double> progressContainer;
+  protected  int processTime;
+  protected  int energyConsumption;
+  protected  int tickCount = 0;
 
   /* Construction */
   public BaseMachine(Location location, String blockName, byte level, int maxReceive) {

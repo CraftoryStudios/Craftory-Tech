@@ -51,8 +51,8 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     }
   };
 
-  protected transient Pair<String, String> currentRecipe = null;
-  protected transient ItemStack currentProduct = null;
+  protected  Pair<String, String> currentRecipe = null;
+  protected  ItemStack currentProduct = null;
 
   public BaseOneToOneMachine(Location location, String blockName, byte level, int maxRecieve) {
     super(location, blockName, level, maxRecieve);

@@ -59,7 +59,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
 
   /* Per Object Variables Not-Saved */
 
-  private transient CustomMachineRecipe currentRecipe = null;
+  private  CustomMachineRecipe currentRecipe = null;
 
 
   /* Construction */
