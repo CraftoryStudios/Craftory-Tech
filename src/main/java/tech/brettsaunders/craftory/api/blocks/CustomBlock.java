@@ -22,7 +22,7 @@ import tech.brettsaunders.craftory.persistence.Persistent;
 
 @NoArgsConstructor
 @Getter
-public abstract class CustomBlock {
+public class CustomBlock {
 
   @Persistent
   protected String blockName;
@@ -53,8 +53,12 @@ public abstract class CustomBlock {
     }
   }
 
-  public abstract void beforeSaveUpdate();
+  public void beforeSaveUpdate() {
+    //Override to add functionality
+  }
 
-  public abstract void blockBreak();
+  public void blockBreak() {
+    //Override to add functionality
+  }
 
 }
