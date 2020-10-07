@@ -15,6 +15,7 @@ import static tech.brettsaunders.craftory.Craftory.customBlockManager;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -47,7 +48,7 @@ import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGrid;
 
 public class PoweredBlockEvents implements Listener {
 
-  private final HashMap<UUID, HashMap<BlockFace, Boolean>> configuratorData = new HashMap<>();
+  private final Map<UUID, Map<BlockFace, Boolean>> configuratorData = new HashMap<>();
 
   public PoweredBlockEvents() {
     Events.registerEvents(this);

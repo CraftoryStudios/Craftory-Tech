@@ -67,8 +67,8 @@ public class RotaryGenerator extends BaseGenerator {
   @Persistent
   protected String modeSaved;
   protected WheelMode mode;
-  @Persistent
   @Getter
+  @Persistent
   protected boolean wheelPlaced = false;
   protected boolean wheelFree = false;
   protected ArmorStand wheel;
@@ -138,6 +138,9 @@ public class RotaryGenerator extends BaseGenerator {
     removeWheels();
   }
 
+  public boolean getWheelPlaced() {
+    return wheelPlaced;
+  }
 
   @Override
   public void updateGenerator() {
