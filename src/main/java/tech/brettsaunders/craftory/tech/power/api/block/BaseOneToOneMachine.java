@@ -12,8 +12,10 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -35,24 +37,24 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   protected static final int[] CAPACITY_LEVEL = {5000, 10000, 25000, 50000};
   protected static final int INPUT_LOCATION = 21;
   protected static final int OUTPUT_LOCATION = 25;
-  protected static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.NORTH, INPUT_LOCATION);
-      put(BlockFace.EAST, INPUT_LOCATION);
-      put(BlockFace.SOUTH, INPUT_LOCATION);
-      put(BlockFace.WEST, INPUT_LOCATION);
-      put(BlockFace.UP, INPUT_LOCATION);
-    }
-  };
+  protected static final Map<BlockFace, Integer> inputFaces =
+      new EnumMap<>(BlockFace.class);
 
-  protected static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.DOWN, OUTPUT_LOCATION);
-    }
-  };
+  protected static final Map<BlockFace, Integer> outputFaces =
+      new EnumMap<>(BlockFace.class);
 
   protected  Pair<String, String> currentRecipe = null;
   protected  ItemStack currentProduct = null;
+
+  static {
+    inputFaces.put(BlockFace.NORTH, INPUT_LOCATION);
+    inputFaces.put(BlockFace.EAST, INPUT_LOCATION);
+    inputFaces.put(BlockFace.SOUTH, INPUT_LOCATION);
+    inputFaces.put(BlockFace.WEST, INPUT_LOCATION);
+    inputFaces.put(BlockFace.UP, INPUT_LOCATION);
+
+    outputFaces.put(BlockFace.DOWN, OUTPUT_LOCATION);
+  }
 
   public BaseOneToOneMachine(Location location, String blockName, byte level, int maxRecieve) {
     super(location, blockName, level, maxRecieve);
@@ -162,12 +164,12 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getInputFaces() {
+  public Map<BlockFace, Integer> getInputFaces() {
     return inputFaces;
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getOutputFaces() {
+  public Map<BlockFace, Integer> getOutputFaces() {
     return outputFaces;
   }
 }

@@ -10,12 +10,12 @@
 
 package tech.brettsaunders.craftory.tech.power.api.interfaces;
 
-import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.block.BlockFace;
 
 public interface IHopperInteract {
 
-  HashMap<BlockFace, Integer> getInputFaces();
+  Map<BlockFace, Integer> getInputFaces();
 
-  HashMap<BlockFace, Integer> getOutputFaces();
+  Map<BlockFace, Integer> getOutputFaces();
 }
