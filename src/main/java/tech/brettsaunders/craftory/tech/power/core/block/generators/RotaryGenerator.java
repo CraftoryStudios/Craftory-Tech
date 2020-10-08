@@ -13,7 +13,6 @@ package tech.brettsaunders.craftory.tech.power.core.block.generators;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import lombok.Getter;
@@ -51,15 +50,12 @@ public class RotaryGenerator extends BaseGenerator {
       .asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
 
   static {
-    inputFaces = new HashMap<BlockFace, Integer>() {
-      {
-        put(BlockFace.NORTH, SLOT);
-        put(BlockFace.EAST, SLOT);
-        put(BlockFace.SOUTH, SLOT);
-        put(BlockFace.WEST, SLOT);
-        put(BlockFace.UP, SLOT);
-      }
-    };
+    inputFaces.put(BlockFace.NORTH, SLOT);
+    inputFaces.put(BlockFace.EAST, SLOT);
+    inputFaces.put(BlockFace.SOUTH, SLOT);
+    inputFaces.put(BlockFace.WEST, SLOT);
+    inputFaces.put(BlockFace.UP, SLOT);
+
   }
 
   @Persistent
