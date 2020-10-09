@@ -1,12 +1,12 @@
 package tech.brettsaunders.craftory.api.sentry;
 
-import com.google.common.collect.Lists;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
+
 import org.bukkit.event.Event;
 import org.bukkit.event.EventException;
 import org.bukkit.event.EventPriority;
@@ -23,6 +23,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredListener;
+
+import com.google.common.collect.Lists;
 
 public abstract class LoggedPluginManager implements PluginManager {
 

@@ -57,7 +57,7 @@ public class PowerConnectorManager implements Listener {
         && event.getAction() == Action.RIGHT_CLICK_BLOCK && !recentlyClicked(event.getPlayer().getUniqueId())) {
       //Check Power Connector
       final Location location = event.getClickedBlock().getLocation();
-      if (Craftory.instance.getCustomBlockManager().isCustomBlockOfType(location,
+      if (Craftory.customBlockManager.isCustomBlockOfType(location,
           Constants.Blocks.POWER_CONNECTOR)) {
         connectorWrenchClick(location, event.getPlayer());
       } else if (
@@ -66,7 +66,7 @@ public class PowerConnectorManager implements Listener {
 
         Location toLoc = location;
         Location fromLoc = formingConnection.get(event.getPlayer().getUniqueId());
-        PowerGrid gridManager = Craftory.instance.getPowerGridManager()
+        PowerGrid gridManager = Craftory.powerGridManager
             .getPowerGrid(fromLoc);
         PoweredBlock block = PoweredBlockUtils.getPoweredBlock(toLoc);
         if (block instanceof BaseMachine) {
@@ -93,7 +93,7 @@ public class PowerConnectorManager implements Listener {
     UUID uuid = player.getUniqueId();
     if (!formingConnection.containsKey(uuid)) {
       //First Power Connector selected
-      if (Craftory.instance.getPowerGridManager().isPowerGrid(location)) {
+      if (Craftory.powerGridManager.isPowerGrid(location)) {
         formingConnection.put(uuid, location);
         player.sendMessage(Utilities.getTranslation("PowerConnectorSecond"));
       }
@@ -102,8 +102,8 @@ public class PowerConnectorManager implements Listener {
       Location toLoc = location;
       Location fromLoc = formingConnection.get(uuid);
       //Second Power Connector selected
-      PowerGrid powerGridTo = Craftory.instance.getPowerGridManager().getPowerGrid(toLoc);
-      PowerGrid powerGridFrom = Craftory.instance.getPowerGridManager().getPowerGrid(fromLoc);
+      PowerGrid powerGridTo = Craftory.powerGridManager.getPowerGrid(toLoc);
+      PowerGrid powerGridFrom = Craftory.powerGridManager.getPowerGrid(fromLoc);
       //Both have manager and not same power connector
       if (powerGridFrom != null && powerGridTo != null
           && !fromLoc.equals(toLoc)) {
@@ -126,12 +126,12 @@ public class PowerConnectorManager implements Listener {
       if (fromGrid.getGridSize() >= toGrid.getGridSize()) {
         fromGrid.addAll(toGrid);
         fromGrid.addPowerConnectorConnection(fromLoc, toLoc);
-        Craftory.instance.getPowerGridManager()
+        Craftory.powerGridManager
             .mergeGrids(toGrid, fromGrid);
       } else {
         toGrid.addAll(fromGrid);
         toGrid.addPowerConnectorConnection(fromLoc, toLoc);
-        Craftory.instance.getPowerGridManager()
+        Craftory.powerGridManager
             .mergeGrids(fromGrid, toGrid);
       }
     }
@@ -154,7 +154,7 @@ public class PowerConnectorManager implements Listener {
     if(beamLocations.get(fromLoc)!=null && beamLocations.get(fromLoc).equals(toLoc)) return;
     Wire beam = new Wire(fromLoc.clone().add(0.5, 0.5, 0.5), toLoc.clone().add(0.5, 0.5, 0.5),
           -1, 25);
-    beam.start(Craftory.instance);
+    beam.start(Craftory.plugin);
     addBeamToList(fromLoc, beam);
     addBeamToList(toLoc, beam);
     beamLocations.put(fromLoc, toLoc);

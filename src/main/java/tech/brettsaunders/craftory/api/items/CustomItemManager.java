@@ -24,12 +24,12 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
-import tech.brettsaunders.craftory.utils.ConfigManager;
 import tech.brettsaunders.craftory.utils.Log;
 
 public class CustomItemManager {
@@ -47,8 +47,9 @@ public class CustomItemManager {
   }
 
 
-  public static void setup() {
-    ConfigurationSection items = ConfigManager.getCustomItemConfig().getConfigurationSection("items");
+  public static void setup(FileConfiguration customItemConfig,
+      FileConfiguration customBlocksConfig, FileConfiguration customModeData) {
+    ConfigurationSection items = customItemConfig.getConfigurationSection("items");
     String displayName = "";
     if (items != null) {
       for (String key : items.getKeys(false)) {
@@ -59,14 +60,14 @@ public class CustomItemManager {
           Log.error(
               key + " Material doesn't exist :" + itemSection.getString(ITEM_MODEL).toUpperCase());
         } else {
-          int itemID = ConfigManager.getCustomModelDataConfig().getInt(ITEMS + key + ".customModelID");
+          int itemID = customModeData.getInt(ITEMS + key + ".customModelID");
           //Get Display Name
           displayName = Utilities.getTranslation(key);
 
           CustomItem customItem = new CustomItem(itemID, material, key, displayName);
 
           if (itemSection.contains("powered_tool") && itemSection.getBoolean("powered_tool")){
-            Craftory.instance.getPoweredToolManager().addPoweredTool(key);
+            Craftory.poweredToolManager.addPoweredTool(key);
           }
 
           /* Add extra data */
@@ -90,7 +91,7 @@ public class CustomItemManager {
             customItem.setMaxCharge(itemSection.getInt("max_charge"));
           }
           itemIDCache.put(key, customItem);
-          if (!(ConfigManager.getCustomItemConfig().contains(ITEMS + key + ".hideItem") && ConfigManager.getCustomItemConfig()
+          if (!(customItemConfig.contains(ITEMS + key + ".hideItem") && customItemConfig
               .getBoolean(ITEMS + key + ".hideItem"))) {
             itemNames.add(key);
           }
@@ -98,10 +99,10 @@ public class CustomItemManager {
       }
     }
 
-    ConfigurationSection blocks = ConfigManager.getCustomBlocksConfig().getConfigurationSection("blocks");
+    ConfigurationSection blocks = customBlocksConfig.getConfigurationSection("blocks");
     if (blocks != null) {
       for (String key : blocks.getKeys(false)) {
-        ConfigurationSection block = ConfigManager.getCustomBlocksConfig().getConfigurationSection("blocks." + key);
+        ConfigurationSection block = customBlocksConfig.getConfigurationSection("blocks." + key);
         if (block != null) {
           if (!block.contains(ITEM_MODEL)) {
             continue;
@@ -111,7 +112,7 @@ public class CustomItemManager {
             Log.error(
                 key + " Material doesn't exist :" + block.getString(ITEM_MODEL).toUpperCase());
           } else {
-            int itemID = ConfigManager.getCustomModelDataConfig().getInt(ITEMS + key + ".customModelID");
+            int itemID = customModeData.getInt(ITEMS + key + ".customModelID");
             //Set Display Name
             String nameKey = key.replace("_WEST", "").replace("_EAST", "").replace("_SOUTH", "");
             displayName = Utilities.getTranslation(nameKey);
@@ -201,7 +202,7 @@ public class CustomItemManager {
   }
 
   public static String getCustomItemName(ItemStack itemStack) {
-    if(Craftory.instance.isPluginLoaded("Oraxen")){
+    if(Craftory.plugin.isPluginLoaded("Oraxen")){
       String name = OraxenItems.getIdByItem(itemStack);
       if(name!=null) return ORAXEN_ITEM +name;
     }

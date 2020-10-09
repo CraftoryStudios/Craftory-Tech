@@ -51,7 +51,7 @@ public class PoweredBlockUtils {
    * @see PoweredBlock
    */
   public static boolean isPoweredBlock(Location location) {
-    return Craftory.instance.getCustomBlockManager().getCustomBlock(location) instanceof PoweredBlock;
+    return Craftory.customBlockManager.getCustomBlock(location) instanceof PoweredBlock;
   }
 
   /**
@@ -99,7 +99,7 @@ public class PoweredBlockUtils {
   }
 
   public static PoweredBlock getPoweredBlock(Location location) {
-    CustomBlock block = Craftory.instance.getCustomBlockManager().getCustomBlock(location);
+    CustomBlock block = Craftory.customBlockManager.getCustomBlock(location);
     if(block instanceof PoweredBlock)
       return (PoweredBlock) block;
     return null;
@@ -125,7 +125,7 @@ public class PoweredBlockUtils {
    * @see IEnergyProvider
    */
   public static boolean isEnergyProvider(Location location) {
-    return Craftory.instance.getCustomBlockManager().getCustomBlock(location) instanceof IEnergyProvider;
+    return Craftory.customBlockManager.getCustomBlock(location) instanceof IEnergyProvider;
   }
 
   /**
@@ -137,7 +137,7 @@ public class PoweredBlockUtils {
    * @see IEnergyReceiver
    */
   public static boolean isEnergyReceiver(Location location) {
-    return Craftory.instance.getCustomBlockManager().getCustomBlock(location) instanceof IEnergyReceiver;
+    return Craftory.customBlockManager.getCustomBlock(location) instanceof IEnergyReceiver;
   }
 
   public static void updateAdjacentProviders(Location location, boolean blockPlaced,
@@ -147,21 +147,21 @@ public class PoweredBlockUtils {
     for (BlockFace face : Utilities.faces) {
       block = location.getBlock().getRelative(face);
       blockLocation = block.getLocation();
-      if (Craftory.instance.getCustomBlockManager().isCustomBlock(blockLocation)) {
-        CustomBlock customBlock = Craftory.instance.getCustomBlockManager().getCustomBlock(blockLocation);
+      if (Craftory.customBlockManager.isCustomBlock(blockLocation)) {
+        CustomBlock customBlock = Craftory.customBlockManager.getCustomBlock(blockLocation);
         if (isEnergyProvider(customBlock)) {
           PoweredBlock poweredBlock = (PoweredBlock) customBlock;
           poweredBlock.setSideCache(face.getOppositeFace(),
               (blockPlaced) ? INTERACTABLEBLOCK.RECEIVER : INTERACTABLEBLOCK.NONE, originBlock);
-        } else if (blockPlaced && Craftory.instance.getCustomBlockManager().getCustomBlockName(blockLocation).equals(Constants.Blocks.POWER_CONNECTOR)) {
+        } else if (blockPlaced && Craftory.customBlockManager.getCustomBlockName(blockLocation).equals(Constants.Blocks.POWER_CONNECTOR)) {
           if (isMachine(customBlock)) {
-            Craftory.instance.getPowerGridManager().getPowerGrids().get(location)
+            Craftory.powerGridManager.getPowerGrids().get(location)
                 .addMachine(location, blockLocation);
           } else if (isGenerator(customBlock)) {
-            Craftory.instance.getPowerGridManager().getPowerGrids().get(location)
+            Craftory.powerGridManager.getPowerGrids().get(location)
                 .addGenerator(location, blockLocation);
           } else if (isCell(customBlock)) {
-            Craftory.instance.getPowerGridManager().getPowerGrids().get(location)
+            Craftory.powerGridManager.getPowerGrids().get(location)
                 .addPowerCell(location, blockLocation);
           }
 

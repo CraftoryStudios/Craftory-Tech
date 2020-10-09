@@ -125,8 +125,8 @@ public class BlockBreaker extends BaseMachine {
         energyStorage.modifyEnergyStored(-ENERGY_REQUIRED / 10);
       } else {
         Block block = breakLoc.getBlock();
-        if (Craftory.instance.getCustomBlockManager().isCustomBlock(breakLoc)) {
-          Optional<ItemStack> itemStack = Craftory.instance.getCustomBlockManager().breakCustomBlock(breakLoc);
+        if (Craftory.customBlockManager.isCustomBlock(breakLoc)) {
+          Optional<ItemStack> itemStack = Craftory.customBlockManager.breakCustomBlock(breakLoc);
           itemStack.ifPresent(this::dropItem);
         } else {
           block.getDrops().forEach(this::dropItem);

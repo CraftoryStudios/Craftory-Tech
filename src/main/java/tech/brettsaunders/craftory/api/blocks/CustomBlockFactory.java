@@ -22,6 +22,11 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
+import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
+import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
+import tech.brettsaunders.craftory.tech.power.core.block.power_grid.PowerConnector;
 import tech.brettsaunders.craftory.utils.Log;
 
 public class CustomBlockFactory {
@@ -31,6 +36,7 @@ public class CustomBlockFactory {
   private final HashMap<String, Constructor<? extends CustomBlock>> loadConstructor = new HashMap<>();
   private final HashSet<String> directional = new HashSet<>();
   private final String locationName;
+  private StatsContainer statsContainer;
 
   public CustomBlockFactory() {
     locationName = Location.class.getName();
@@ -50,7 +56,7 @@ public class CustomBlockFactory {
       }
     }
     if (registerTickable) {
-      Craftory.instance.getTickManager().registerCustomBlockClass(block);
+      Craftory.tickManager.registerCustomBlockClass(block);
     }
     if (directional) {
       this.directional.add(nameID);
@@ -80,6 +86,7 @@ public class CustomBlockFactory {
         persistenceStorage.loadFields(customBlock, locationCompound);
         customBlock.setLocation(location);
         customBlock.afterLoadUpdate();
+        calculateStatsIncrease(customBlock);
       } catch (Exception e) {
         e.printStackTrace();
         sentryLog(e);
@@ -103,6 +110,7 @@ public class CustomBlockFactory {
           customBlock.setDirection(BlockFace.NORTH);
         }
         customBlock.afterLoadUpdate();
+        calculateStatsIncrease(customBlock);
       } catch (Exception e) {
         e.printStackTrace();
         sentryLog(e);
@@ -111,6 +119,26 @@ public class CustomBlockFactory {
     }
     Log.error("No Custom Block Class found of type " + nameID);
     return customBlock;
+  }
+
+  public void registerStats() {
+    statsContainer = Craftory.customBlockManager.statsContainer;
+  }
+
+  private void calculateStatsIncrease(CustomBlock customBlock) {
+    statsContainer.increaseTotalCustomBlocks();
+    if (customBlock instanceof PoweredBlock) {
+      statsContainer.increaseTotalPoweredBlocks();
+      if (customBlock instanceof BaseMachine) {
+        statsContainer.increaseTotalMachines();
+      } else if (customBlock instanceof BaseCell) {
+        statsContainer.increaseTotalCells();
+      } else if (customBlock instanceof BaseGenerator) {
+        statsContainer.increaseTotalGenerators();
+      } else if (customBlock instanceof PowerConnector) {
+        statsContainer.increaseTotalPowerConnectors();
+      }
+    }
   }
 
 }

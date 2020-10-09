@@ -124,7 +124,7 @@ public class CustomBlockStorage {
           try {
             locationCompound = chunkCompound.getCompound(locationKey);
             location = keyToLoc(locationKey, world);
-            customBlock = Craftory.instance.getCustomBlockFactory()
+            customBlock = Craftory.customBlockFactory
                 .createLoad(locationCompound, persistenceStorage, location);
             if (chunkWorldKey.isEmpty()) {
               chunkWorldKey = getChunkWorldID(customBlock.location.getChunk());

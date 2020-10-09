@@ -45,7 +45,7 @@ public class PowerGrid extends BukkitRunnable {
   private final BukkitTask taskID;
 
   public PowerGrid() {
-    taskID = this.runTaskTimer(Craftory.instance, 5, 1);
+    taskID = this.runTaskTimer(Craftory.plugin, 5, 1);
   }
 
   public void cancelTask() {

@@ -46,7 +46,7 @@ public class WorldGenHandler implements Listener {
   @EventHandler
   public void worldinitEvent(WorldInitEvent e) {
     //Register Populators
-    List<String> blacklist = Craftory.instance.getConfig().getStringList("ore.blackListedWorlds");
+    List<String> blacklist = Craftory.plugin.getConfig().getStringList("ore.blackListedWorlds");
     if(blacklist.contains(e.getWorld().getName())) {
       Log.info("Skipped spawning ores in blacklisted world: " + e.getWorld().getName());
       return;

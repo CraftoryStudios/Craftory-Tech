@@ -92,7 +92,7 @@ public class CommandGiveItem implements CommandExecutor, TabCompleter {
       ItemStack itemStack = CustomItemManager.getCustomItem(itemName);
       if (itemStack != null && itemStack.getType() != Material.AIR) {
         itemStack.setAmount(amount);
-        Player player = Craftory.instance.getServer().getPlayer(playerName);
+        Player player = Craftory.plugin.getServer().getPlayer(playerName);
         if (player != null) {
           HashMap<Integer, ItemStack> result = player.getInventory().addItem(itemStack);
           if (result.size() > 0) {

@@ -32,7 +32,6 @@ import org.bukkit.inventory.ShapedRecipe;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.utils.ConfigManager;
 import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
@@ -41,16 +40,14 @@ public class RecipeManager implements Listener {
 
   private final HashMap<String, String> customRecipes;
   private HashMap<String, ItemStack> customFurnaceRecipes; //Map of Source to Result
-  private static final int version =
-      Integer.parseInt(Craftory.instance.getServer().getClass().getPackage().getName().replace(".",
-          ",").split(",")[3].substring(1).split("_")[1]);
+  private static final int version = Integer.parseInt(Craftory.plugin.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
   private static List<String> blackListedWorlds;
 
   public RecipeManager() {
-    blackListedWorlds = Craftory.instance.getConfig().getStringList("crafting.blackListedWorlds");
+    blackListedWorlds = Craftory.plugin.getConfig().getStringList("crafting.blackListedWorlds");
     customRecipes = new HashMap<>();
     Events.registerEvents(this);
-    ConfigurationSection recipes = ConfigManager.getCustomRecipeConfig().getConfigurationSection("recipes");
+    ConfigurationSection recipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
     if (recipes == null) {
       Log.warn("No Crafting Recipes found!");
     } else {
@@ -65,7 +62,7 @@ public class RecipeManager implements Listener {
         result.setAmount(recipes.getInt(recipe + ".result.amount"));
 
         //Add ShapedRecipe
-        NamespacedKey namespacedKey = new NamespacedKey(Craftory.instance, recipe);
+        NamespacedKey namespacedKey = new NamespacedKey(Craftory.plugin, recipe);
         ShapedRecipe shapedRecipe = null;
         try {
           shapedRecipe = new ShapedRecipe(namespacedKey, result);
@@ -139,7 +136,7 @@ public class RecipeManager implements Listener {
     }
     HashMap<String, String> toAdd = new HashMap<>();
     //Furnace Recipes
-    ConfigurationSection furnaceRecipes = ConfigManager.getCustomRecipeConfig()
+    ConfigurationSection furnaceRecipes = Craftory.customRecipeConfig
         .getConfigurationSection("furnace_recipes");
     if (furnaceRecipes == null) {
       Log.warn("No Furnace Recipes found!");
@@ -156,7 +153,7 @@ public class RecipeManager implements Listener {
       RecipeUtils.addAllFurnaceRecipes(toAdd);
     }
     //Macerator Recipes
-    ConfigurationSection maceratorRecipes = ConfigManager.getCustomRecipeConfig()
+    ConfigurationSection maceratorRecipes = Craftory.customRecipeConfig
         .getConfigurationSection("macerator_recipes");
     if (maceratorRecipes == null) {
       Log.warn("No Macerator Recipes found!");
@@ -170,7 +167,7 @@ public class RecipeManager implements Listener {
     }
 
     //Magnetiser Recipes
-    ConfigurationSection magnetiserRecipes = ConfigManager.getCustomRecipeConfig()
+    ConfigurationSection magnetiserRecipes = Craftory.customRecipeConfig
         .getConfigurationSection("magnetiser_recipes");
     if (magnetiserRecipes == null) {
       Log.warn("No Magnetiser Recipes found!");
@@ -183,7 +180,7 @@ public class RecipeManager implements Listener {
       RecipeUtils.addAllMagnetiserRecipes(toAdd);
 
       //Foundry Recipes
-      ConfigurationSection foundryRecipes = ConfigManager.getCustomRecipeConfig()
+      ConfigurationSection foundryRecipes = Craftory.customRecipeConfig
           .getConfigurationSection("foundry_recipes");
       if (foundryRecipes == null) {
         Log.warn("No Foundry Recipes found!");
