@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory.api.blocks;
 
+import static tech.brettsaunders.craftory.Craftory.customBlockManager;
+
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.HashMap;
@@ -60,8 +62,8 @@ public class PoweredBlockEvents implements Listener {
     if (e.getName().equals(Blocks.POWER_CONNECTOR)) {
       PowerGrid powerGrid = new PowerGrid();
       powerGrid.addPowerConnector(e.getLocation());
-      Craftory.instance.getPowerGridManager().getAdjacentPowerBlocks(e.getLocation(), powerGrid);
-      Craftory.instance.getPowerGridManager().addPowerGrid(e.getLocation(), powerGrid);
+      Craftory.powerGridManager.getAdjacentPowerBlocks(e.getLocation(), powerGrid);
+      Craftory.powerGridManager.addPowerGrid(e.getLocation(), powerGrid);
     }
   }
 
@@ -119,8 +121,8 @@ public class PoweredBlockEvents implements Listener {
     poweredBlock.blockBreak();
     CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(
         e.getCustomBlock().getLocation(), e.getCustomBlock().blockName, e.getCustomBlock());
-    Craftory.instance.getCustomBlockManager().removeCustomBlock(e.getCustomBlock());
-    Craftory.instance.getTickManager().removeTickingBlock(e.getCustomBlock());
+    customBlockManager.removeCustomBlock(e.getCustomBlock());
+    Craftory.tickManager.removeTickingBlock(e.getCustomBlock());
     Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
     e.getBlockClicked().setType(Material.AIR);
 
