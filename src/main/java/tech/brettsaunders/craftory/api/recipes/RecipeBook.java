@@ -28,6 +28,7 @@ import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.font.NegativeSpaceFont;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.menu.ChestMenu;
+import tech.brettsaunders.craftory.utils.ConfigManager;
 
 public class RecipeBook {
 
@@ -36,21 +37,23 @@ public class RecipeBook {
 
   public RecipeBook() {
     //Get All Recipes
-    String[] keys = Craftory.customRecipeConfig.getConfigurationSection("recipes").getKeys(false).stream().toArray(String[]::new);
+    String[] keys =
+        ConfigManager.getCustomRecipeConfig().getConfigurationSection("recipes").getKeys(false).stream().toArray(String[]::new);
 
     //Load Sound
     sound = Sound.ITEM_BOOK_PAGE_TURN;
 
     //Loop through recipes two at a time
     for (int i = 0; i < keys.length; i += 2) {
-      ConfigurationSection recipeOne = Craftory.customRecipeConfig.getConfigurationSection("recipes."+keys[i]);
+      ConfigurationSection recipeOne =
+          ConfigManager.getCustomRecipeConfig().getConfigurationSection("recipes."+keys[i]);
       ConfigurationSection recipeTwo;
       //Deal with case of uneven amount of recipes
       String nameTwo = "";
       if (i+1 >= keys.length) {
         recipeTwo = null;
       } else {
-        recipeTwo = Craftory.customRecipeConfig.getConfigurationSection("recipes."+keys[i+1]);
+        recipeTwo = ConfigManager.getCustomRecipeConfig().getConfigurationSection("recipes."+keys[i+1]);
         nameTwo = keys[i+1];
       }
       recipeBookPages.add(createPage(i / 2, recipeOne, keys[i], recipeTwo, nameTwo));
@@ -61,7 +64,7 @@ public class RecipeBook {
     //Setup Base Page
     String recipeNames = StringUtils.center(Utilities.getTranslation(resultOne),25) + StringUtils.center(Utilities.getTranslation(resultTwo), 25);
     String title = ChatColor.WHITE + "" + NegativeSpaceFont.MINUS_32.label + NegativeSpaceFont.MINUS_16.label + Font.BOOK.label + NegativeSpaceFont.MINUS_128.label+ NegativeSpaceFont.MINUS_128.label+ ChatColor.DARK_GRAY +" "+ recipeNames;
-    ChestMenu chestMenu = new ChestMenu(Craftory.plugin, title);
+    ChestMenu chestMenu = new ChestMenu(Craftory.instance, title);
     chestMenu.setEmptySlotsClickable(false);
 
     //Setup Title Hider
@@ -93,7 +96,8 @@ public class RecipeBook {
         int pageBeforeID = page - 1;
         Optional<ChestMenu> pageBefore = Optional.ofNullable(recipeBookPages.get(pageBeforeID));
         if(pageBefore.isPresent()){
-          Craftory.recipeBookEvents.skipPlayer(player.getUniqueId()); //Make sure close event isnt triggered
+          Craftory.instance.getRecipeBookEvents().skipPlayer(player.getUniqueId()); //Make sure close event isnt
+          // triggered
           pageBefore.get().open(player);
           player.playSound(player.getLocation(), sound, 1, 1);
         }
@@ -111,7 +115,7 @@ public class RecipeBook {
       if(pageAfterID < recipeBookPages.size()) {
         Optional<ChestMenu> pageAfter = Optional.ofNullable(recipeBookPages.get(pageAfterID));
         if(pageAfter.isPresent()) {
-          Craftory.recipeBookEvents.skipPlayer(player.getUniqueId()); //Make sure close event isnt triggered
+          Craftory.instance.getRecipeBookEvents().skipPlayer(player.getUniqueId()); //Make sure close event isnt triggered
           pageAfter.get().open(player);
           player.playSound(player.getLocation(), sound, 1, 1);
         }
@@ -157,7 +161,7 @@ public class RecipeBook {
     //Add Recipe Result to Recipe Book
     chestMenu.addItem(slot, result, (player, i, item, cursor,action) -> {
       if (player.isOp() || player.hasPermission("craftory.give")) {
-        Craftory.recipeBookEvents.addItemToPlayerInventory(player.getUniqueId(),result.clone(), action.isShiftClick());
+        Craftory.instance.getRecipeBookEvents().addItemToPlayerInventory(player.getUniqueId(),result.clone(), action.isShiftClick());
         Utilities.msg(player, "Gave player " + CustomItemManager.getCustomItemName(result));
       }
       return false;
@@ -168,7 +172,7 @@ public class RecipeBook {
     Optional<ChestMenu> recipeBook = Optional.ofNullable(recipeBookPages.get(0));
     if(recipeBook.isPresent()){
       recipeBook.get().open(players);
-      Craftory.recipeBookEvents.savePlayerInventory(players);
+      Craftory.instance.getRecipeBookEvents().savePlayerInventory(players);
     }
 
   }

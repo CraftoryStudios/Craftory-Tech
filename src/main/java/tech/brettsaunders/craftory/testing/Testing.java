@@ -96,7 +96,7 @@ public class Testing {
   }
 
   private static CustomBlock placeBlock(String blockName, Location location) {
-    CustomBlock customBlock = Craftory.customBlockManager
+    CustomBlock customBlock = Craftory.instance.getCustomBlockManager()
         .placeCustomBlock(blockName, location.getBlock(), BlockFace.NORTH);
     CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
         location, blockName, location.getBlock(), customBlock);

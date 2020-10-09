@@ -80,8 +80,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     this.energyStorage = new EnergyStorage(0);
     this.level = level;
     cacheSides();
-    Craftory.plugin.getServer().getPluginManager()
-        .registerEvents(this, Craftory.plugin);
+    Craftory.instance.getServer().getPluginManager()
+        .registerEvents(this, Craftory.instance);
     powered = false;
   }
 
@@ -98,7 +98,7 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     cachedSides = new EnumMap<>(BlockFace.class);
     cachedSidesConfig.forEach(((blockFace, interactableblock) -> {
       if (interactableblock.equals(INTERACTABLEBLOCK.RECEIVER)) {
-        cachedSides.put(blockFace, Craftory.customBlockManager
+        cachedSides.put(blockFace, Craftory.instance.getCustomBlockManager()
             .getCustomBlock(this.location.getBlock().getRelative(blockFace).getLocation()));
       }
     }));

@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory.api.blocks;
 
-import static tech.brettsaunders.craftory.Craftory.customBlockManager;
 import static tech.brettsaunders.craftory.Utilities.getChunkID;
 import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 import static tech.brettsaunders.craftory.Utilities.getLocationID;
@@ -42,14 +41,13 @@ import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.tools.ToolLevel;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.utils.ConfigManager;
 import tech.brettsaunders.craftory.utils.Log;
 
 public class CustomBlockManager {
 
   public static final StatsContainer statsContainer = new StatsContainer();
 
-  public static final String DATA_FOLDER =
-      Craftory.plugin.getDataFolder() + File.separator + "data";
   private final HashMap<Location, CustomBlock> currentCustomBlocks;
   @Getter
   private final HashMap<String, HashSet<CustomBlock>> activeChunks;
@@ -66,6 +64,9 @@ public class CustomBlockManager {
     customBlockDataHashMap = new HashMap<>();
     activeChunks = new HashMap<>();
     inactiveChunks = new HashMap<>();
+  }
+
+  public void setup() {
     loadCustomBlockData();
     new CustomBlockManagerEvents(persistenceStorage,
         currentCustomBlocks,
@@ -81,14 +82,14 @@ public class CustomBlockManager {
 
   public CustomBlock placeCustomBlock(String customBlockItemName, Block block,
       BlockFace direction) {
-    CustomBlock customBlock = Craftory.customBlockFactory
+    CustomBlock customBlock = Craftory.instance.getCustomBlockFactory()
         .create(customBlockItemName, block.getLocation(), direction);
     if (customBlock.getDirection() != BlockFace.NORTH) {
       customBlockItemName = customBlockItemName + "_" + customBlock.getDirection().name();
     }
     generateCustomBlock(customBlockItemName, block);
     putActiveCustomBlock(customBlock);
-    Craftory.tickManager.addTickingBlock(customBlock);
+    Craftory.instance.getTickManager().addTickingBlock(customBlock);
     return customBlock;
   }
 
@@ -133,7 +134,7 @@ public class CustomBlockManager {
 
   public void onDisable() {
     CustomBlockStorage
-        .saveAllCustomChunks(DATA_FOLDER, persistenceStorage, activeChunks, inactiveChunks);
+        .saveAllCustomChunks(ConfigManager.getDataFolder(), persistenceStorage, activeChunks, inactiveChunks);
   }
 
 
@@ -168,8 +169,8 @@ public class CustomBlockManager {
           location).blockName;
       CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(
           location, blockName, customBlock);
-      customBlockManager.removeCustomBlock(customBlock);
-      Craftory.tickManager.removeTickingBlock(customBlock);
+      Craftory.instance.getCustomBlockManager().removeCustomBlock(customBlock);
+      Craftory.instance.getTickManager().removeTickingBlock(customBlock);
       Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
       location.getBlock().setType(Material.AIR);
       return Optional.of(CustomItemManager.getCustomItem(blockName));
@@ -196,7 +197,7 @@ public class CustomBlockManager {
     currentCustomBlocks.remove(block.location);
     try {
       NBTFile nbtFile = new NBTFile(
-          new File(DATA_FOLDER + File.separator + block.location.getWorld().getName(),
+          new File(ConfigManager.getDataFolder() + File.separator + block.location.getWorld().getName(),
               getRegionID(block.location.getChunk())));
       NBTCompound chunk = nbtFile.getCompound(getChunkID(block.location.getChunk()));
       if (chunk != null) {
@@ -238,12 +239,12 @@ public class CustomBlockManager {
   }
 
   private void loadCustomBlockData() {
-    ConfigurationSection blocks = Craftory.customBlocksConfig.getConfigurationSection("blocks");
+    ConfigurationSection blocks = ConfigManager.getCustomBlocksConfig().getConfigurationSection("blocks");
     if (blocks == null) {
       return;
     }
     for (String key : blocks.getKeys(false)) {
-      ConfigurationSection block = Craftory.customBlocksConfig
+      ConfigurationSection block = ConfigManager.getCustomBlocksConfig()
           .getConfigurationSection("blocks." + key);
       CustomBlockData data = new CustomBlockData(block.getBoolean("UP"), block.getBoolean("DOWN"),
           block.getBoolean("NORTH"), block.getBoolean("EAST"), block.getBoolean("SOUTH"),

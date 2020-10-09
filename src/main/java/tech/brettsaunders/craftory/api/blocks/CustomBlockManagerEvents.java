@@ -10,12 +10,11 @@
 
 package tech.brettsaunders.craftory.api.blocks;
 
-import static tech.brettsaunders.craftory.Craftory.customBlockManager;
-import static tech.brettsaunders.craftory.Craftory.lastVersionCode;
 import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +62,7 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
 import tech.brettsaunders.craftory.tech.power.core.block.power_grid.PowerConnector;
+import tech.brettsaunders.craftory.utils.ConfigManager;
 
 public class CustomBlockManagerEvents implements Listener {
 
@@ -91,7 +91,8 @@ public class CustomBlockManagerEvents implements Listener {
   @EventHandler
   public void onWorldInit(WorldInitEvent e) {
     CustomBlockStorage
-        .loadAllSavedRegions(e.getWorld(), CustomBlockManager.DATA_FOLDER, customBlockManager,
+        .loadAllSavedRegions(e.getWorld(), ConfigManager.getDataFolder(),
+            Craftory.instance.getCustomBlockManager(),
             persistenceStorage);
     //Load Custom Block Data into memory of pre-loaded chunks
     for (Chunk chunk : e.getWorld().getLoadedChunks()) {
@@ -112,9 +113,9 @@ public class CustomBlockManagerEvents implements Listener {
     if (!e.isCancelled()) {
       //If Basic Block
       if (Utilities.getBasicBlockRegistry().containsKey(customBlockItemName)) {
-        customBlockManager.placeBasicCustomBlock(customBlockItemName, e.getBlockPlaced());
+        Craftory.instance.getCustomBlockManager().placeBasicCustomBlock(customBlockItemName, e.getBlockPlaced());
       } else {
-        CustomBlock customBlock = customBlockManager
+        CustomBlock customBlock = Craftory.instance.getCustomBlockManager()
             .placeCustomBlock(customBlockItemName, e.getBlockPlaced(), e.getPlayer().getFacing());
         CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
             e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
@@ -258,7 +259,7 @@ public class CustomBlockManagerEvents implements Listener {
         }
       }
     };
-    bukkitRunnable.runTaskTimer(Craftory.plugin,4L,4L);
+    bukkitRunnable.runTaskTimer(Craftory.instance,4L,4L);
   }
 
   @EventHandler
@@ -272,8 +273,8 @@ public class CustomBlockManagerEvents implements Listener {
       if (e.isCancelled()) {
         customBlockBreakEvent.setCancelled(true);
       } else {
-        customBlockManager.removeCustomBlock(customBlock);
-        Craftory.tickManager.removeTickingBlock(customBlock);
+        Craftory.instance.getCustomBlockManager().removeCustomBlock(customBlock);
+        Craftory.instance.getTickManager().removeTickingBlock(customBlock);
         if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
           location.getWorld()
               .dropItemNaturally(location, CustomItemManager.getCustomItem(customBlock.blockName));
@@ -328,8 +329,8 @@ public class CustomBlockManagerEvents implements Listener {
     if (inactiveChunks.containsKey(chunkID)) {
       HashSet<CustomBlock> customBlocks = inactiveChunks.get(chunkID);
       customBlocks.forEach(block -> {
-        customBlockManager.putActiveCustomBlock(block);
-        Craftory.tickManager.addTickingBlock(block);
+        Craftory.instance.getCustomBlockManager().putActiveCustomBlock(block);
+        Craftory.instance.getTickManager().addTickingBlock(block);
       });
       inactiveChunks.remove(chunkID);
 
@@ -350,7 +351,7 @@ public class CustomBlockManagerEvents implements Listener {
       customBlocks.forEach(customBlock -> {
         if (currentCustomBlocks.containsKey(customBlock.location)) {
           currentCustomBlocks.remove(customBlock.location);
-          Craftory.tickManager.removeTickingBlock(customBlock);
+          Craftory.instance.getTickManager().removeTickingBlock(customBlock);
         }
       });
       inactiveChunks.put(chunkID, customBlocks);
@@ -381,7 +382,7 @@ public class CustomBlockManagerEvents implements Listener {
   @EventHandler
   public void onCustomBlockInteract(PlayerInteractEvent e) {
     if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) && currentCustomBlocks.containsKey(e.getClickedBlock().getLocation())) {
-        CustomBlock customBlock = customBlockManager
+        CustomBlock customBlock = Craftory.instance.getCustomBlockManager()
             .getCustomBlock(e.getClickedBlock().getLocation());
         CustomBlockInteractEvent customBlockInteractEvent = new CustomBlockInteractEvent(
             e.getAction(),
@@ -407,7 +408,9 @@ public class CustomBlockManagerEvents implements Listener {
     if (Utilities.updateItemGraphics) {
       CustomItemManager.updateInventoryItemGraphics(e.getPlayer().getInventory());
     }
-    if (lastVersionCode == 0 && Craftory.folderExists && e.getPlayer().isOp() || e.getPlayer().hasPermission("craftory.give") || e.getPlayer()
+    boolean dataFolderExisits = new File(Utilities.DATA_FOLDER).exists();
+    if (Craftory.instance.getLastVersionCode() == 0 && dataFolderExisits && e.getPlayer().isOp() || e.getPlayer().hasPermission(
+        "craftory.give") || e.getPlayer()
         .hasPermission("craftory.debug")) {
         Utilities.msg(e.getPlayer(), "It looks like you are updating from V0.2.0 or lower.");
         Utilities

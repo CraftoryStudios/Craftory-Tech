@@ -27,7 +27,8 @@ public class CommandMain implements CommandExecutor, TabCompleter {
 
   public boolean onCommand(final CommandSender sender, final Command command, final String label,
       final String[] args) {
-    Utilities.msg(sender, Utilities.getTranslation("MainCommandLineOne") + Craftory.VERSION);
+    Utilities.msg(sender,
+        Utilities.getTranslation("MainCommandLineOne") + Craftory.instance.getDescription().getVersion());
     Utilities.msg(sender, Utilities.getTranslation("MainCommandLineTwo") + " ©");
     Utilities.msg(sender, "Reporting ID: "+Utilities.data.getString("reporting.serverUUID"));
 

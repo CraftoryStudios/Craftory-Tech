@@ -21,9 +21,9 @@ public class Log {
   static final ChatColor INFO_COLOR = ChatColor.GREEN;
   static final ChatColor ERROR_COLOR = ChatColor.RED;
   static final ChatColor DEBUG_COLOR = ChatColor.AQUA;
-  static final String PREFIX = "[" + Craftory.plugin.getDescription().getPrefix() + "] ";
+  static final String PREFIX = "[" + Craftory.instance.getDescription().getPrefix() + "] ";
   static final String DEBUG_PREFIX =
-      "[" + Craftory.plugin.getDescription().getPrefix() + " Debug] ";
+      "[" + Craftory.instance.getDescription().getPrefix() + " Debug] ";
   static final boolean DEBUG_MODE = Utilities.config.getBoolean("general.debug");
 
   private Log() {

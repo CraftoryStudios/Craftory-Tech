@@ -59,7 +59,7 @@ public class RecipeUtils {
   static {
     Log.debug("Extracting Recipes");
     Iterator<Recipe> recipeIterator;
-    recipeIterator = Craftory.plugin.getServer().recipeIterator();
+    recipeIterator = Craftory.instance.getServer().recipeIterator();
     while (recipeIterator.hasNext()) {
       Recipe recipe = recipeIterator.next();
       allRecipes.add(recipe);

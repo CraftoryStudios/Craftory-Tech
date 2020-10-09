@@ -20,7 +20,7 @@ public class EnergyDisplayManager extends BukkitRunnable {
     @Override
     public void run() {
         unDisplayEnergyBars();
-        Craftory.plugin.getServer().getOnlinePlayers().forEach(this::displayEnergyInfo);
+        Craftory.instance.getServer().getOnlinePlayers().forEach(this::displayEnergyInfo);
     }
 
     private void unDisplayEnergyBars() {
@@ -33,7 +33,7 @@ public class EnergyDisplayManager extends BukkitRunnable {
             Block targetBlock = player.getTargetBlock(null, 8);
 
             CustomBlock customBlock =
-                Craftory.customBlockManager.getCustomBlock(targetBlock.getLocation());
+                Craftory.instance.getCustomBlockManager().getCustomBlock(targetBlock.getLocation());
             if (customBlock instanceof PoweredBlock) {
                 PoweredBlock poweredBlock = (PoweredBlock) customBlock;
                 if (poweredBlock.getEnergyStorage().getMaxEnergyStored() > 0) {
