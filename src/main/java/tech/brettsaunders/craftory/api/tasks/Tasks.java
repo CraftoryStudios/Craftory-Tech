@@ -26,7 +26,7 @@ public class Tasks {
 
   private static LoggedScheduler getScheduler() {
     if (Objects.isNull(scheduler)) {
-      scheduler = new LoggedScheduler(Craftory.plugin) {
+      scheduler = new LoggedScheduler(Craftory.instance) {
         @Override
         protected void customHandler(int taskID, Throwable e) {
           sentryLog(e);
@@ -37,23 +37,23 @@ public class Tasks {
   }
 
   public static void syncDelayedTask(Runnable runnable, long delay) {
-    getScheduler().scheduleSyncDelayedTask(Craftory.plugin, runnable,delay);
+    getScheduler().scheduleSyncDelayedTask(Craftory.instance, runnable,delay);
   }
 
   public static void runAsyncTask(Runnable runnable) {
-    getScheduler().runTaskAsynchronously(Craftory.plugin, runnable);
+    getScheduler().runTaskAsynchronously(Craftory.instance, runnable);
   }
 
   public static void runTaskLater(Runnable runnable, long delay) {
-    getScheduler().runTaskLater(Craftory.plugin, runnable, delay);
+    getScheduler().runTaskLater(Craftory.instance, runnable, delay);
   }
 
   public static void runAsyncTaskLater(Runnable runnable, long delay) {
-    getScheduler().runTaskLaterAsynchronously(Craftory.plugin, runnable, delay);
+    getScheduler().runTaskLaterAsynchronously(Craftory.instance, runnable, delay);
   }
 
   public static void runTaskTimer(Runnable runnable, long delay, long period) {
-    getScheduler().runTaskTimer(Craftory.plugin, runnable, delay, period);
+    getScheduler().runTaskTimer(Craftory.instance, runnable, delay, period);
   }
 
   public static void runTaskTimer(Runnable runnable, long period) {
@@ -61,7 +61,7 @@ public class Tasks {
   }
 
   public static void runAsyncTaskTimer(Runnable runnable, long delay, long period) {
-    getScheduler().runTaskTimerAsynchronously(Craftory.plugin, runnable, delay, period);
+    getScheduler().runTaskTimerAsynchronously(Craftory.instance, runnable, delay, period);
   }
 
   public static void runAsyncTaskTimer(Runnable runnable, long period) {

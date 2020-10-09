@@ -16,11 +16,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
-import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.events.Events;
 
 public class ResourcePackEvents implements Listener {
+
+  private final String RESOURCE_PACK = "https://download.mc-packs.net/pack/f539edb7419b4aa0a4a3d4c29e2a9e23a6f82d4a.zip";
+  private final String HASH = "f539edb7419b4aa0a4a3d4c29e2a9e23a6f82d4a";
 
   public ResourcePackEvents() {
     Events.registerEvents(this);
@@ -40,7 +42,7 @@ public class ResourcePackEvents implements Listener {
 
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent e) {
-    e.getPlayer().setResourcePack(Craftory.RESOURCE_PACK, hexStringToByteArray(Craftory.HASH));
+    e.getPlayer().setResourcePack(RESOURCE_PACK, hexStringToByteArray(HASH));
   }
 
   @EventHandler

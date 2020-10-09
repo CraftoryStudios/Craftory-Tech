@@ -47,7 +47,6 @@ public class PoweredToolManager implements Listener {
   public static final String MAX_CHARGE_KEY = "MaxCharge";
   private Map<UUID, BlockFace> lastHitFace = new HashMap<>();
   private static final int TOOL_POWER_COST = 100;
-  private static final int VERSION = Integer.parseInt(Craftory.plugin.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
   private static final Set<Material> excavatorBlocks = new HashSet<>();
 
   private static final Set<PoweredToolType> fastTools = new HashSet<>();
@@ -55,9 +54,6 @@ public class PoweredToolManager implements Listener {
   private static final Set<PoweredToolType> slowTools = new HashSet<>();
 
   static {
-    if(VERSION > 16) {
-      excavatorBlocks.add(Material.SOUL_SOIL);
-    }
     excavatorBlocks.add(Material.CLAY);
     excavatorBlocks.add(Material.FARMLAND);
     excavatorBlocks.add(Material.GRASS_BLOCK);
@@ -79,17 +75,24 @@ public class PoweredToolManager implements Listener {
     slowTools.add(PoweredToolType.HAMMER);
   }
 
-  public PoweredToolManager() {
+  public void setup() {
     Events.registerEvents(this);
     addPacketListeners();
-  }
 
+    int version =
+        Integer.parseInt(Craftory.instance.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
+    if(version > 16) {
+      excavatorBlocks.add(Material.SOUL_SOIL);
+    }
+  }
   public void addPoweredTool(String tool) {
     poweredTools.add(tool);
   }
 
   private void addPacketListeners() {
-    Craftory.packetManager.addPacketListener(new PacketAdapter(Craftory.plugin, ListenerPriority.NORMAL, PacketType.Play.Client.CLOSE_WINDOW) {
+    Craftory.instance.getPacketManager().addPacketListener(new PacketAdapter(Craftory.instance,
+        ListenerPriority.NORMAL,
+        PacketType.Play.Client.CLOSE_WINDOW) {
       @Override
       public void onPacketReceiving(PacketEvent event) {
         PacketContainer packet = event.getPacket();

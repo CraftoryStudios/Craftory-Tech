@@ -28,14 +28,14 @@ public class Events {
 
   public static void registerEvents(Listener listener) {
     if (Objects.isNull(loggedPluginManager)) {
-      loggedPluginManager = new LoggedPluginManager(Craftory.plugin) {
+      loggedPluginManager = new LoggedPluginManager(Craftory.instance) {
         @Override
         protected void customHandler(Event event, Throwable e) {
           sentryLog(e);
         }
       };
     }
-    loggedPluginManager.registerEvents(listener, Craftory.plugin);
+    loggedPluginManager.registerEvents(listener, Craftory.instance);
   }
 
 }

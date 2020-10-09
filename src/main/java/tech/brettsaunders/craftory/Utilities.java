@@ -84,32 +84,41 @@ public class Utilities {
 
   public static final BlockFace[] faces = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH,
       BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
-  public final static String DATA_FOLDER;
-  public final static String LANG_FOLDER;
+  public static final String DATA_FOLDER;
+  public static final String LANG_FOLDER;
+  public static final String FIX_ITEM_GRAPHICS = "fixItemGraphics";
   public static FileConfiguration config;
   public static FileConfiguration data;
   public static Metrics metrics;
-  public static Properties langProperties;
+  protected static Properties langProperties;
   public static boolean updateItemGraphics = false;
-  private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
-  private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
+  public static final String CONFIG_YML = "config.yml";
+  private static File configFile = new File(Craftory.instance.getDataFolder(), CONFIG_YML);
+  public static final String DATA_YML = "data.yml";
+  private static File dataFile = new File(Craftory.instance.getDataFolder(), DATA_YML);
   private static final String UNIT_ENERGY = "Re";
   private static final String UNIT_FLUID = "B";
   private static final DecimalFormat df = new DecimalFormat("###.###");
+
+  private static final int SPIGOT_ID = 81151;
   @Getter
   private static final HashMap<String, BasicBlocks> basicBlockRegistry;
 
   private static final Craftory plugin;
 
   static {
-    plugin = Craftory.plugin;
+    plugin = Craftory.instance;
     config = YamlConfiguration
-        .loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
+        .loadConfiguration(new File(plugin.getDataFolder(), CONFIG_YML));
     data = YamlConfiguration
-        .loadConfiguration(new File(plugin.getDataFolder(), "data.yml"));
+        .loadConfiguration(new File(plugin.getDataFolder(), DATA_YML));
     DATA_FOLDER = plugin.getDataFolder().getPath() + File.separator + "data";
     LANG_FOLDER = plugin.getDataFolder().getPath() + File.separator + "lang";
     basicBlockRegistry = new HashMap<>();
+  }
+
+  private Utilities() {
+    throw new IllegalStateException("Utils Class");
   }
 
   static void pluginBanner() {
@@ -126,8 +135,8 @@ public class Utilities {
   }
 
   static void checkVersion() {
-    new UpdateChecker(plugin, Craftory.SPIGOT_ID).getVersion(version -> {
-      if (Craftory.VERSION.equalsIgnoreCase(version)) {
+    new UpdateChecker(plugin, SPIGOT_ID).getVersion(version -> {
+      if (Craftory.instance.getDescription().getVersion().equalsIgnoreCase(version)) {
         Log.info("Plugin is update to date!");
       } else {
         Log.info("There is a new update available!");
@@ -142,7 +151,7 @@ public class Utilities {
     config.addDefault("language.locale", "en-GB");
     config.addDefault("generators.solarDuringStorms", true);
     config.addDefault("resourcePack.forcePack", true);
-    config.addDefault("fixItemGraphics", false);
+    config.addDefault(FIX_ITEM_GRAPHICS, false);
     config.addDefault("wrench.powerLoss", 10);
     config.addDefault("ore.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
     config.addDefault("crafting.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
@@ -159,28 +168,28 @@ public class Utilities {
     saveDataFile();
     reloadDataFile();
 
-    Craftory.lastVersionCode = data.getInt("lastVersion");
+    Craftory.instance.setLastVersionCode(data.getInt("lastVersion"));
     Sentry.getContext().setUser(new UserBuilder()
         .setId(data.getString("reporting.serverUUID"))
         .build());
   }
 
   static void compatibilityUpdater() {
-    Log.info("Last version: " + Craftory.lastVersionCode+ " Current version: " + Craftory.thisVersionCode);
-    if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
+    Log.info("Last version: " + Craftory.instance.getLastVersionCode()+ " Current version: " + Craftory.instance.getThisVersionCode());
+    if (Craftory.instance.getLastVersionCode() < Craftory.instance.getThisVersionCode()) {
       //Fix all Item Graphics
       Log.info("Updating blocks");
-      if (Craftory.lastVersionCode == 0) config.set("fixItemGraphics", true);
+      if (Craftory.instance.getLastVersionCode() == 0) config.set(FIX_ITEM_GRAPHICS, true);
       //Version 0.2.1 or before
-      if (Craftory.lastVersionCode == 0 || Craftory.lastVersionCode == 200001) {
+      if (Craftory.instance.getLastVersionCode() == 0 || Craftory.instance.getLastVersionCode() == 200001) {
         //Convert all mushrooms to Stem
-        Craftory.customBlockManager.getInactiveChunks().forEach((s, customBlocks) ->
+        Craftory.instance.getCustomBlockManager().getInactiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
               plugin.getServer().getScheduler().runTaskLater(plugin,
                   () -> convertMushroomType(customBlock), 2L);
               Log.info("made to stem inactive");
             }));
-        Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
+        Craftory.instance.getCustomBlockManager().getActiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
               plugin.getServer().getScheduler().runTaskLater(plugin,
                   () -> convertMushroomType(customBlock), 2L);
@@ -192,7 +201,7 @@ public class Utilities {
             }));
       }
     }
-    updateItemGraphics = config.getBoolean("fixItemGraphics");
+    updateItemGraphics = config.getBoolean(FIX_ITEM_GRAPHICS);
   }
 
   private static void setToNewDiamondMacerator(CustomBlock customBlock) {
@@ -244,12 +253,10 @@ public class Utilities {
     File file = new File(DATA_FOLDER);
     if (!file.exists()) {
       file.mkdirs();
-    } else {
-      Craftory.folderExists = true;
     }
 
     File modelData = new File(plugin.getDataFolder(), "/config/customModelDataV2.yml");
-    if (!modelData.exists() || Craftory.lastVersionCode == 0) {
+    if (!modelData.exists() || Craftory.instance.getLastVersionCode() == 0) {
       FileUtils.copyResourcesRecursively(plugin.getClass().getResource("/config"),
           new File(plugin.getDataFolder(), "/config"));
     }
@@ -273,8 +280,6 @@ public class Utilities {
     metrics.addCustomChart(new AdvancedPie("types_of_machines",
         () -> {
           HashMap<String, Integer> valueMap = new HashMap<>();
-          //valueMap.put("totalCustomBlocks",Craftory.customBlockManager.statsContainer.getTotalCustomBlocks());
-          //valueMap.put("totalPoweredBlocks",Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks());
           valueMap.put("totalCells", CustomBlockManager.statsContainer.getTotalCells());
           valueMap.put("totalGenerators",
               CustomBlockManager.statsContainer.getTotalGenerators());
@@ -302,7 +307,7 @@ public class Utilities {
   }
 
   static void registerCustomBlocks() {
-    CustomBlockFactory customBlockFactory = Craftory.customBlockFactory;
+    CustomBlockFactory customBlockFactory = Craftory.instance.getCustomBlockFactory();
     customBlockFactory.registerCustomBlock(Blocks.IRON_CELL, IronCell.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.GOLD_CELL, GoldCell.class, true, false);
     customBlockFactory.registerCustomBlock(Blocks.DIAMOND_CELL, DiamondCell.class, true, false);
@@ -369,14 +374,14 @@ public class Utilities {
   /* Helper Functions */
   public static void reloadConfigFile() {
     if (configFile == null) {
-      configFile = new File(plugin.getDataFolder(), "config.yml");
+      configFile = new File(plugin.getDataFolder(), CONFIG_YML);
     }
     config = YamlConfiguration.loadConfiguration(configFile);
   }
 
   public static void reloadDataFile() {
     if (dataFile == null) {
-      dataFile = new File(plugin.getDataFolder(), "data.yml");
+      dataFile = new File(plugin.getDataFolder(), DATA_YML);
     }
     data = YamlConfiguration.loadConfiguration(dataFile);
   }
@@ -445,7 +450,7 @@ public class Utilities {
   }
 
   public static String convertWorldChunkIDToChunkID(String worldChunkID) {
-    return worldChunkID.replaceFirst(".*?,", "");
+    return worldChunkID.replaceFirst("[^\"]*+,", "");
   }
 
   public static String getLocationID(Location location) {
@@ -465,9 +470,7 @@ public class Utilities {
     if (length < 6) {
       return s + " " + UNIT_ENERGY;
     }
-    /*if (length < 7) {
-      return s + " " + UNIT;
-    }*/
+
     if (length < 7) {
       return df.format(energy / 1000f) + " K" + UNIT_ENERGY;
     }

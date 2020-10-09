@@ -27,15 +27,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Constants.Items;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class RecipeBookEvents implements Listener {
 
   private final HashMap<UUID, ItemStack[]> playerInventories = new HashMap<>();
   private final HashSet<UUID> playersToNotRestore = new HashSet<>();
-
-  public RecipeBookEvents() { Events.registerEvents(this); }
 
   public void savePlayerInventory(Player... players) {
     for(Player player: players) {
@@ -111,7 +108,7 @@ public class RecipeBookEvents implements Listener {
   }
 
   public void onDisable() {
-    playerInventories.forEach((id,inventory) -> Craftory.plugin.getServer().getPlayer(id).getInventory().setContents(inventory));
+    playerInventories.forEach((id,inventory) -> Craftory.instance.getServer().getPlayer(id).getInventory().setContents(inventory));
   }
 
   public void skipPlayer(UUID id) {

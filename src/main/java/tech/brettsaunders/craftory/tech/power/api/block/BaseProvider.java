@@ -60,7 +60,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     cachedSides.forEach(((blockFace, customBlock) -> {
       if (customBlock == null) {
         Tasks.runTaskLater(() -> {
-          CustomBlock sideBlock = Craftory.customBlockManager
+          CustomBlock sideBlock = Craftory.instance.getCustomBlockManager()
               .getCustomBlock(location.getBlock().getRelative(blockFace).getLocation());
           if (sideBlock != null) {
             cachedSides.put(blockFace, sideBlock);
