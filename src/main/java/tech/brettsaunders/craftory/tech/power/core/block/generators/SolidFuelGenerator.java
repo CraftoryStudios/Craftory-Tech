@@ -12,7 +12,6 @@ package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import lombok.Setter;
 import org.bukkit.Location;
@@ -39,15 +38,11 @@ public class SolidFuelGenerator extends BaseGenerator {
   private static final int C_OUTPUT_AMOUNT = 80;
 
   static {
-    inputFaces = new HashMap<BlockFace, Integer>() {
-      {
-        put(BlockFace.NORTH, FUEL_SLOT);
-        put(BlockFace.EAST, FUEL_SLOT);
-        put(BlockFace.SOUTH, FUEL_SLOT);
-        put(BlockFace.WEST, FUEL_SLOT);
-        put(BlockFace.UP, FUEL_SLOT);
-      }
-    };
+    inputFaces.put(BlockFace.NORTH, FUEL_SLOT);
+    inputFaces.put(BlockFace.EAST, FUEL_SLOT);
+    inputFaces.put(BlockFace.SOUTH, FUEL_SLOT);
+    inputFaces.put(BlockFace.WEST, FUEL_SLOT);
+    inputFaces.put(BlockFace.UP, FUEL_SLOT);
   }
 
   //TODO Remove in future

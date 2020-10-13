@@ -153,8 +153,7 @@ public class PoweredBlockUtils {
           PoweredBlock poweredBlock = (PoweredBlock) customBlock;
           poweredBlock.setSideCache(face.getOppositeFace(),
               (blockPlaced) ? INTERACTABLEBLOCK.RECEIVER : INTERACTABLEBLOCK.NONE, originBlock);
-        } else if (blockPlaced && Craftory.customBlockManager.getCustomBlockName(blockLocation)
-            == Constants.Blocks.POWER_CONNECTOR) {
+        } else if (blockPlaced && Craftory.customBlockManager.getCustomBlockName(blockLocation).equals(Constants.Blocks.POWER_CONNECTOR)) {
           if (isMachine(customBlock)) {
             Craftory.powerGridManager.getPowerGrids().get(location)
                 .addMachine(location, blockLocation);

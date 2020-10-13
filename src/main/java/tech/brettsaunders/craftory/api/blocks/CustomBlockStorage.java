@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import lombok.Synchronized;
 import org.bukkit.Location;
@@ -55,28 +54,28 @@ public class CustomBlockStorage {
   @Synchronized
   public static void saveCustomChunk(String chunkID, Set<CustomBlock> customBlocks,
       String dataFolder, PersistenceStorage persistenceStorage) {
-    try {
-      Optional<CustomBlock> customBlockFirst = Optional.of(customBlocks.stream().findFirst().get());
-      if (!customBlockFirst.isPresent()) {
-        return;
-      }
-      Location firstBlock = customBlockFirst.get().location;
-      NBTFile nbtFile = new NBTFile(
-          new File(dataFolder + File.separator + firstBlock.getWorld().getName(),
-              getRegionID(firstBlock.getChunk())));
-      NBTCompound chunkCompound = nbtFile.addCompound(chunkID);
-      customBlocks.forEach(customBlock -> {
-        customBlock.beforeSaveUpdate();
-        NBTCompound locationNBTSection = chunkCompound
-            .addCompound(getLocationID(customBlock.location));
-        persistenceStorage.saveFields(customBlock, locationNBTSection);
-      });
-      nbtFile.save();
 
-    } catch (IOException e) {
-      e.printStackTrace();
-      sentryLog(e);
-    }
+      customBlocks.stream().findFirst().ifPresent(customBlock -> {
+        Location firstBlock = customBlock.location;
+        try {
+          NBTFile nbtFile = new NBTFile(
+              new File(dataFolder + File.separator + firstBlock.getWorld().getName(),
+                  getRegionID(firstBlock.getChunk())));
+          NBTCompound chunkCompound = nbtFile.addCompound(chunkID);
+          customBlocks.forEach(customBlockValue -> {
+            customBlockValue.beforeSaveUpdate();
+            NBTCompound locationNBTSection = chunkCompound
+                .addCompound(getLocationID(customBlockValue.location));
+            persistenceStorage.saveFields(customBlockValue, locationNBTSection);
+          });
+
+          nbtFile.save();
+        } catch (IOException e) {
+          e.printStackTrace();
+          sentryLog(e);
+        }
+      });
+
   }
 
   /**

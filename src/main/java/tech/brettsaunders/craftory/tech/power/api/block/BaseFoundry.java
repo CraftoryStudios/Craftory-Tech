@@ -12,7 +12,7 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
 import org.bukkit.Location;
@@ -40,26 +40,26 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   protected static final int INPUT_LOCATION1 = 12;
   protected static final int INPUT_LOCATION2 = 30;
   protected static final int OUTPUT_LOCATION = 25;
-  private static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.NORTH, INPUT_LOCATION1);
-      put(BlockFace.EAST, INPUT_LOCATION2);
-      put(BlockFace.SOUTH, INPUT_LOCATION2);
-      put(BlockFace.WEST, INPUT_LOCATION1);
-      put(BlockFace.UP, INPUT_LOCATION1);
-    }
-  };
+  private static final Map<BlockFace, Integer> inputFaces =
+      new EnumMap<>(BlockFace.class);
 
-  private static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.DOWN, OUTPUT_LOCATION);
-    }
-  };
+  private static final Map<BlockFace, Integer> outputFaces =
+      new EnumMap<>(BlockFace.class);
   /* Per Object Variables Saved */
 
   /* Per Object Variables Not-Saved */
 
   private  CustomMachineRecipe currentRecipe = null;
+
+  static {
+    inputFaces.put(BlockFace.NORTH, INPUT_LOCATION1);
+    inputFaces.put(BlockFace.EAST, INPUT_LOCATION2);
+    inputFaces.put(BlockFace.SOUTH, INPUT_LOCATION2);
+    inputFaces.put(BlockFace.WEST, INPUT_LOCATION1);
+    inputFaces.put(BlockFace.UP, INPUT_LOCATION1);
+
+    outputFaces.put(BlockFace.DOWN, OUTPUT_LOCATION);
+  }
 
 
   /* Construction */
@@ -211,12 +211,12 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getInputFaces() {
+  public Map<BlockFace, Integer> getInputFaces() {
     return inputFaces;
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getOutputFaces() {
+  public Map<BlockFace, Integer> getOutputFaces() {
     return outputFaces;
   }
 }
