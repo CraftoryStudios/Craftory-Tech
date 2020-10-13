@@ -71,7 +71,7 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
   @Override
   public void blockBreak() {
     super.blockBreak();
-    for(HumanEntity viewer: inventoryInterface.getViewers()){
+    for(HumanEntity viewer: new ArrayList<>(inventoryInterface.getViewers())){
       viewer.closeInventory();
     }
   }
