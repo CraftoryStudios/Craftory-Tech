@@ -74,7 +74,7 @@ public class RecipeBookEvents implements Listener {
 
   @EventHandler
   public void onPlayerDamage(EntityDamageEvent e) {
-    if(e.getEntity() instanceof Player){
+    if(e.getEntity() instanceof Player && playerInventories.containsKey(e.getEntity().getUniqueId())){
       restorePlayerInventory((Player) e.getEntity());
       ((Player) e.getEntity()).closeInventory();
     }
