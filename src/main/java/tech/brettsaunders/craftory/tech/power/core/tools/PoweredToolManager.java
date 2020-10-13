@@ -21,6 +21,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -204,7 +205,33 @@ public class PoweredToolManager implements Listener {
   }
   @EventHandler
   public void onPlayerBlockHit(PlayerInteractEvent event) {
-    lastHitFace.put(event.getPlayer().getUniqueId(),event.getBlockFace());
+    if(event.isCancelled()) return;
+    if(event.getAction() == Action.LEFT_CLICK_BLOCK){
+      lastHitFace.put(event.getPlayer().getUniqueId(),event.getBlockFace());
+    } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK){
+      if(event.getClickedBlock().getType()!=Material.GRASS_BLOCK) return;
+      ItemStack tool =  event.getPlayer().getInventory().getItemInMainHand();
+      if(!isPoweredTool(tool)) return;
+      String name = CustomItemManager.getCustomItemName(tool);
+      PoweredToolType toolType = getToolType(name);
+      if(toolType != (PoweredToolType.EXCAVATOR)) return;
+      NBTItem nbt = new NBTItem(tool);
+      int charge = nbt.getInteger(CHARGE_KEY);
+      if(charge < TOOL_POWER_COST) {
+        event.setCancelled(true);
+        return;
+      }
+      charge -= TOOL_POWER_COST;
+      List<Block> blocks = get2DNeighbours(event.getClickedBlock(),event.getBlockFace());
+      for(Block block: blocks) {
+        if(block.getType()==Material.GRASS_BLOCK && charge >= TOOL_POWER_COST) {
+          block.setType(Material.GRASS_PATH);
+          charge -=TOOL_POWER_COST;
+        }
+      }
+      tool = setCharge(tool, charge);
+      event.getPlayer().getInventory().setItemInMainHand(tool);
+    }
   }
 
   @EventHandler

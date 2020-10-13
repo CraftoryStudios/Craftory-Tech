@@ -29,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import tech.brettsaunders.craftory.Constants.Blocks;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -55,7 +56,6 @@ public class RotaryGenerator extends BaseGenerator {
     inputFaces.put(BlockFace.SOUTH, SLOT);
     inputFaces.put(BlockFace.WEST, SLOT);
     inputFaces.put(BlockFace.UP, SLOT);
-
   }
 
   @Persistent
@@ -205,7 +205,7 @@ public class RotaryGenerator extends BaseGenerator {
       if (!wheelPlaced) {
         return false;
       }
-      if (energyStorage.isFull()) {
+      if (!Utilities.config.getBoolean("generators.rotaryGeneratorsSpinWhenFull") && energyStorage.isFull()) {
         return false;
       }
       return wheelFree;
@@ -284,7 +284,7 @@ public class RotaryGenerator extends BaseGenerator {
   protected void processTick() {
     energyProduced = calculateAmountProduced() * MULTIPLIERS[level];
     energyStorage.modifyEnergyStored(energyProduced);
-    wheel.setHeadPose(wheel.getHeadPose().add(0, 0, efficiencyMultiplier * 0.1));
+    wheel.setHeadPose(wheel.getHeadPose().add(0, 0, efficiencyMultiplier * -0.1));
   }
 
   protected int calculateAmountProduced() {
