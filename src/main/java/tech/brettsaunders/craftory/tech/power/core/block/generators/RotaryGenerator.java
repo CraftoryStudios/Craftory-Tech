@@ -65,7 +65,7 @@ public class RotaryGenerator extends BaseGenerator {
   protected WheelMode mode;
   @Getter
   @Persistent
-  protected boolean wheelPlaced = false;
+  protected Boolean wheelPlaced = false;
   protected boolean wheelFree = false;
   protected ArmorStand wheel;
   protected double efficiencyMultiplier = 1;
