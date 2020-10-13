@@ -248,8 +248,9 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       }
     } else {
       //Stop moving items from any slot but intractable ones
-      if (!interactableSlots.contains(event.getRawSlot()) && outputDisabledActions.contains(event.getAction()) && outputLocations
-          .contains(event.getRawSlot())) {
+      if (outputLocations.contains(event.getRawSlot()) ) {
+        event.setCancelled(true);
+      } else if (!interactableSlots.contains(event.getRawSlot()) && outputDisabledActions.contains(event.getAction())) {
         event.setCancelled(true);
       }
     }

@@ -21,10 +21,13 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
@@ -267,5 +270,16 @@ public class RecipeManager implements Listener {
     }
   }
 
+  @EventHandler
+  public void onSheepDye(PlayerInteractEntityEvent event) {
+    if(event.getHand()!= EquipmentSlot.HAND) return;
+    if(!(event.getRightClicked() instanceof Sheep)) return;
+    ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
+    if(!(itemStack.getType().toString().endsWith("DYE"))) return;
+    if(CustomItemManager.isCustomItem(itemStack, false)){
+      // Ensure that this item shouldn't dye the sheep
+      event.setCancelled(true);
+    }
+  }
 
 }

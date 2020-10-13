@@ -143,6 +143,7 @@ public class Utilities {
     config.addDefault("generators.solarDuringStorms", true);
     config.addDefault("resourcePack.forcePack", true);
     config.addDefault("fixItemGraphics", false);
+    config.addDefault("generators.rotaryGeneratorsSpinWhenFull", false);
     config.addDefault("wrench.powerLoss", 10);
     config.addDefault("ore.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
     config.addDefault("crafting.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));

@@ -17,6 +17,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
@@ -64,6 +65,14 @@ public abstract class BlockGUI extends CustomBlock implements Listener {
     }
     for (IGUIComponent component : components) {
       component.update();
+    }
+  }
+
+  @Override
+  public void blockBreak() {
+    super.blockBreak();
+    for(HumanEntity viewer: new ArrayList<>(inventoryInterface.getViewers())){
+      viewer.closeInventory();
     }
   }
 
