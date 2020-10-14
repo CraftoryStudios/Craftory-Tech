@@ -94,9 +94,9 @@ public class RecipeManager implements Listener {
             final String ingridentMaterial = sectionIn.getString(ingredient);
 
             //Ingredient TAG
-            if (ingridentMaterial.toLowerCase().startsWith("tag-")) {
-              String tagName = ingridentMaterial.toLowerCase().replace("tag-","");
-              Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase()), Material.class);
+            if (ingridentMaterial.toLowerCase(Locale.ROOT).startsWith("tag-")) {
+              String tagName = ingridentMaterial.toLowerCase(Locale.ROOT).replace("tag-","");
+              Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase(Locale.ROOT)), Material.class);
               //Tag Found, using
               if (Objects.nonNull(materialTag)) {
                 shapedRecipe.setIngredient(key, new MaterialChoice(materialTag));
@@ -107,9 +107,9 @@ public class RecipeManager implements Listener {
               }
 
             //Oraxen Item
-            } else if (ingridentMaterial.toLowerCase().startsWith("oraxen-item/")) {
+            } else if (ingridentMaterial.toLowerCase(Locale.ROOT).startsWith("oraxen-item/")) {
               shapedRecipe.setIngredient(key,
-                  new ExactChoice(OraxenItems.getItemById(ingridentMaterial.toLowerCase().replace("oraxen"
+                  new ExactChoice(OraxenItems.getItemById(ingridentMaterial.toLowerCase(Locale.ROOT).replace("oraxen"
                       + "-item/","")).build()));
             //Ingredient Vanilla Item
             } else if (CustomItemManager.getCustomItem(ingridentMaterial).getType()

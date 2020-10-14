@@ -62,10 +62,10 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
       return list;
     }
     Iterator<String> itel = list.iterator();
-    String label = origArgs[origArgs.length - 1].toLowerCase();
+    String label = origArgs[origArgs.length - 1].toLowerCase(Locale.ROOT);
     while (itel.hasNext()) {
       String name = itel.next();
-      if (name.toLowerCase().startsWith(label)) {
+      if (name.toLowerCase(Locale.ROOT).startsWith(label)) {
         continue;
       }
       itel.remove();

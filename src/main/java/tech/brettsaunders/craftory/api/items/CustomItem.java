@@ -111,7 +111,7 @@ public class CustomItem {
   }
 
   private ChatColor getDisplayNameColour() {
-    String displayNameChecker = displayName.toLowerCase();
+    String displayNameChecker = displayName.toLowerCase(Locale.ROOT);
     if (displayNameChecker.contains("Iron")) {
       return ChatColor.GRAY;
     } else if (displayNameChecker.contains("Gold")) {
