@@ -16,6 +16,7 @@ import io.th0rgal.oraxen.items.OraxenItems;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import org.bukkit.Bukkit;
@@ -54,11 +55,11 @@ public class CustomItemManager {
     if (items != null) {
       for (String key : items.getKeys(false)) {
         ConfigurationSection itemSection = items.getConfigurationSection(key);
-        Material material = Material
-            .getMaterial(itemSection.getString(ITEM_MODEL).toUpperCase());
+        Material material =
+            Material.getMaterial(itemSection.getString(ITEM_MODEL).toUpperCase(Locale.ROOT));
         if (material == null) {
           Log.error(
-              key + " Material doesn't exist :" + itemSection.getString(ITEM_MODEL).toUpperCase());
+              key + " Material doesn't exist :" + itemSection.getString(ITEM_MODEL).toUpperCase(Locale.ROOT));
         } else {
           int itemID = customModeData.getInt(ITEMS + key + ".customModelID");
           //Get Display Name
@@ -107,10 +108,10 @@ public class CustomItemManager {
           if (!block.contains(ITEM_MODEL)) {
             continue;
           }
-          Material material = Material.getMaterial(block.getString(ITEM_MODEL).toUpperCase());
+          Material material = Material.getMaterial(block.getString(ITEM_MODEL).toUpperCase(Locale.ROOT));
           if (material == null) {
             Log.error(
-                key + " Material doesn't exist :" + block.getString(ITEM_MODEL).toUpperCase());
+                key + " Material doesn't exist :" + block.getString(ITEM_MODEL).toUpperCase(Locale.ROOT));
           } else {
             int itemID = customModeData.getInt(ITEMS + key + ".customModelID");
             //Set Display Name
@@ -143,12 +144,12 @@ public class CustomItemManager {
   public static ItemStack getCustomItemOrDefault(String itemName) {
     if (itemName.startsWith("TAG-")) {
       String tagName = itemName.replace("TAG-","");
-      Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase()), Material.class);
+      Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase(Locale.ROOT)), Material.class);
       if (Objects.nonNull(materialTag) && materialTag.getValues().iterator().hasNext()) {
           return new ItemStack(materialTag.getValues().iterator().next());
       }
-    } else if (itemName.toLowerCase().startsWith(ORAXEN_ITEM)) {
-      return OraxenItems.getItemById(itemName.toLowerCase().replace(ORAXEN_ITEM,"")).build();
+    } else if (itemName.toLowerCase(Locale.ROOT).startsWith(ORAXEN_ITEM)) {
+      return OraxenItems.getItemById(itemName.toLowerCase(Locale.ROOT).replace(ORAXEN_ITEM,"")).build();
     }
     if (itemIDCache.containsKey(itemName)) {
       CustomItem customItem = itemIDCache.get(itemName);
@@ -275,7 +276,7 @@ public class CustomItemManager {
     }
     int line = -1;
     for (int i = 0; i < lore.size(); i++) {
-      if (lore.get(i).toLowerCase().startsWith(title.toLowerCase())) {
+      if (lore.get(i).toLowerCase(Locale.ROOT).startsWith(title.toLowerCase(Locale.ROOT))) {
         line = i;
         break;
       }

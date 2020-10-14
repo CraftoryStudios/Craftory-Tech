@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -229,7 +230,7 @@ public class PoweredToolManager implements Listener {
           charge -=TOOL_POWER_COST;
         }
       }
-      tool = setCharge(tool, charge);
+      if(event.getPlayer().getGameMode() != GameMode.CREATIVE) tool = setCharge(tool, charge);
       event.getPlayer().getInventory().setItemInMainHand(tool);
     }
   }
@@ -272,7 +273,7 @@ public class PoweredToolManager implements Listener {
         }
       }
     }
-    tool = setCharge(tool, charge);
+    if(event.getPlayer().getGameMode() != GameMode.CREATIVE) tool = setCharge(tool, charge);
     event.getPlayer().getInventory().setItemInMainHand(tool);
   }
 

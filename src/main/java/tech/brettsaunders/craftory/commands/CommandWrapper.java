@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -62,10 +63,10 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
       return list;
     }
     Iterator<String> itel = list.iterator();
-    String label = origArgs[origArgs.length - 1].toLowerCase();
+    String label = origArgs[origArgs.length - 1].toLowerCase(Locale.ROOT);
     while (itel.hasNext()) {
       String name = itel.next();
-      if (name.toLowerCase().startsWith(label)) {
+      if (name.toLowerCase(Locale.ROOT).startsWith(label)) {
         continue;
       }
       itel.remove();

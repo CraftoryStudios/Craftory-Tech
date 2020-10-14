@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import tech.brettsaunders.craftory.Craftory;
@@ -57,7 +58,9 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     if (isBlockPowered()) {
       return;
     }
-    cachedSides.forEach(((blockFace, customBlock) -> {
+    for(Entry<BlockFace, CustomBlock> entry: cachedSides.entrySet()) {
+      BlockFace blockFace = entry.getKey();
+      CustomBlock customBlock = entry.getValue();
       if (customBlock == null) {
         Tasks.runTaskLater(() -> {
           CustomBlock sideBlock = Craftory.customBlockManager
@@ -71,7 +74,7 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
         energyStorage.modifyEnergyStored(-insertEnergyIntoAdjacentEnergyReceiver(
             Math.min(maxOutput, energyStorage.getEnergyStored()), false, customBlock));
       }
-    }));
+    }
   }
 
   public int retrieveEnergy(int energy) {
