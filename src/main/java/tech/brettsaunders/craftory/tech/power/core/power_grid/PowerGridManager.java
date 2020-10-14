@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import lombok.Getter;
@@ -40,7 +41,7 @@ public class PowerGridManager implements Listener {
 
   private final PersistenceStorage persistenceStorage;
   @Getter
-  private final HashMap<Location, PowerGrid> powerGrids;
+  private final Map<Location, PowerGrid> powerGrids;
   private NBTFile nbtFile;
   private NBTFile nbtFileBackup;
 
