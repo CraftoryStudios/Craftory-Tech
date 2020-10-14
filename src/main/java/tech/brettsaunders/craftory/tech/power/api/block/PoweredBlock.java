@@ -14,10 +14,10 @@ import static tech.brettsaunders.craftory.Constants.HOPPER_INTERACT_FACES;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -41,6 +41,7 @@ import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
+import tech.brettsaunders.craftory.utils.Log;
 
 /**
  * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
@@ -57,8 +58,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   @Persistent
   protected int level;
   @Persistent
-  protected Map<BlockFace, INTERACTABLEBLOCK> cachedSidesConfig;
-  protected Map<BlockFace, CustomBlock> cachedSides;
+  protected HashMap<BlockFace, INTERACTABLEBLOCK> cachedSidesConfig;
+  protected HashMap<BlockFace, CustomBlock> cachedSides;
   /* Hopper control variables */
   @Persistent
   protected ArrayList<ItemStack> inputSlots = new ArrayList<>(); //The ItemStacks of the inputs
@@ -75,8 +76,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   /* Construction */
   protected PoweredBlock(Location location, String blockName, byte level) {
     super(location, blockName);
-    cachedSidesConfig = new EnumMap<>(BlockFace.class);
-    cachedSides = new EnumMap<>(BlockFace.class);
+    cachedSidesConfig = new HashMap<>();
+    cachedSides = new HashMap<>();
     this.energyStorage = new EnergyStorage(0);
     this.level = level;
     cacheSides();
@@ -95,13 +96,17 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (cachedSides != null) {
       return;
     }
-    cachedSides = new EnumMap<>(BlockFace.class);
-    cachedSidesConfig.forEach(((blockFace, interactableblock) -> {
-      if (interactableblock.equals(INTERACTABLEBLOCK.RECEIVER)) {
-        cachedSides.put(blockFace, Craftory.customBlockManager
-            .getCustomBlock(this.location.getBlock().getRelative(blockFace).getLocation()));
+    cachedSides = new HashMap<>();
+    if (cachedSidesConfig == null) {
+      Log.error("WTF cache config was null");
+      cachedSidesConfig = new HashMap<>();
+    }
+    for(Entry<BlockFace, INTERACTABLEBLOCK> entry: cachedSidesConfig.entrySet()) {
+      if (entry.getValue().equals(INTERACTABLEBLOCK.RECEIVER)) {
+        cachedSides.put(entry.getKey(), Craftory.customBlockManager
+            .getCustomBlock(this.location.getBlock().getRelative(entry.getKey()).getLocation()));
       }
-    }));
+    }
   }
 
   @Override
