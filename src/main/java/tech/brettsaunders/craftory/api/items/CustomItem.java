@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory.api.items;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.UUID;
 import lombok.Getter;
 import org.bukkit.ChatColor;
