@@ -76,6 +76,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.Magn
 import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockBreaker;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockPlacer;
 import tech.brettsaunders.craftory.tech.power.core.block.power_grid.PowerConnector;
+import tech.brettsaunders.craftory.tech.power.core.block.storage_drive.DriveViewer;
 import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Log;
@@ -354,6 +355,7 @@ public class Utilities {
         .registerCustomBlock(Blocks.MAGNETISING_TABLE, MagnetisingTable.class, false, false);
     customBlockFactory.registerCustomBlock(Blocks.BLOCK_BREAKER, BlockBreaker.class, true, true);
     customBlockFactory.registerCustomBlock(Blocks.BLOCK_PLACER, BlockPlacer.class, true, true);
+    customBlockFactory.registerCustomBlock(Blocks.DRIVE_VIEWER, DriveViewer.class, true, false);
   }
 
   static void registerBasicBlocks() {

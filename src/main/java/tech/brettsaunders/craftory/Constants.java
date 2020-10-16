@@ -94,6 +94,8 @@ public class Constants {
 
     public static final String BLOCK_BREAKER = "BlockBreaker";
     public static final String BLOCK_PLACER = "BlockPlacer";
+
+    public static final String DRIVE_VIEWER = "DriveViewer";
     /* Ores */
     public static final String COPPER_ORE = "CopperOre";
     public static final String CRYSTAL_ORE = "crystal";
@@ -126,6 +128,8 @@ public class Constants {
     public static final String UPGRADE_CARD_DIAMOND = "upgrade_card_diamond";
     public static final String UPGRADE_CARD_GOLD = "upgrade_card_gold";
     public static final String UPGRADE_CARD_IRON = "upgrade_card_iron";
+
+    public static final String BASIC_DRIVE = "basic_drive";
 
     /* Tools */
     public static final String SICKLE_WOOD = "sickle_wood";
