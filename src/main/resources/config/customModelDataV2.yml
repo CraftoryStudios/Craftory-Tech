@@ -391,6 +391,8 @@ items:
     customModelID: 100157
   windmill_yellow:
     customModelID: 100158
+  basic_storage_drive:
+    customModelID: 100159
 
   upgrade_card_iron:
     customModelID: 1001
@@ -416,3 +418,5 @@ items:
     customModelID: 10038
   BlockPlacer_EAST:
     customModelID: 10036
+  DriveViewer:
+    customModelID: 10069

@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -28,6 +30,7 @@ import tech.brettsaunders.craftory.Constants.Items;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.tasks.Tasks;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
@@ -37,7 +40,7 @@ import tech.brettsaunders.craftory.tech.power.api.storage_drive.StorageDrive;
 public class DriveViewer extends BaseMachine {
 
   private static final int DRIVE_SLOT = 15;
-  private static final int[] CONTENT_SLOTS = {16,24,25,33,34,42,43};
+  private static final List<Integer> CONTENT_SLOTS = new ArrayList<>(Arrays.asList(16,24,25,33,34,42,43));
   private static final Set<InventoryAction> PLACE_ACTIONS = new HashSet<>(Arrays
       .asList(InventoryAction.PLACE_ALL,
           InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME, InventoryAction.SWAP_WITH_CURSOR, InventoryAction.HOTBAR_SWAP));
@@ -53,7 +56,7 @@ public class DriveViewer extends BaseMachine {
   public DriveViewer(Location location) {
     super(location, Blocks.DRIVE_VIEWER, (byte) 0, 200);
     setup();
-    energyStorage = new EnergyStorage(1000);
+    energyStorage = new EnergyStorage(10000);
   }
 
   public DriveViewer() {
@@ -61,11 +64,33 @@ public class DriveViewer extends BaseMachine {
     setup();
   }
 
+  @Override
+  public void beforeSaveUpdate() {
+    saveItems();
+    inventoryInterface.setItem(DRIVE_SLOT, drive);
+    super.beforeSaveUpdate();
+  }
+
+  @Override
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
+    running = false;
+  }
+
+  @Override
+  public void blockBreak() {
+    saveItems();
+    inputSlots.set(0,drive);
+    clearItems();
+    super.blockBreak();
+  }
+
   private void setup() {
     outputLocations = new ArrayList<>();
     inputLocations = new ArrayList<>();
     inputLocations.add(DRIVE_SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(DRIVE_SLOT));
+    interactableSlots.addAll(CONTENT_SLOTS);
     this.energyConsumption = 10;
   }
 
@@ -73,14 +98,15 @@ public class DriveViewer extends BaseMachine {
   @Ticking(ticks = 1)
   @Override
   public void updateMachine() {
+    if(inventoryInterface==null) return;
     drive = inventoryInterface.getItem(DRIVE_SLOT);
     inputSlots.set(0, drive);
     if(drive==null || drive.getType().equals(Material.AIR)) return;
     if(inventoryInterface.getViewers().isEmpty() || !CustomItemManager.getCustomItemName(drive).equals(Items.BASIC_DRIVE)) return;
     if(hasSufficientEnergy()) {
       if(!running) {
-        loadItems();
         running = true;
+        loadItems();
       }
     } else {
       if(running) {
@@ -93,20 +119,29 @@ public class DriveViewer extends BaseMachine {
 
   @EventHandler
   public void InventoryInteract(InventoryClickEvent event) {
-    if(event.getInventory()!=inventoryInterface || event.getRawSlot()!=DRIVE_SLOT) return;
-    if(PICKUP_ACTIONS.contains(event.getAction())) {
-      if(CustomItemManager.getCustomItemName(drive).equals(Items.BASIC_DRIVE)){
+    if(event.getInventory()!=inventoryInterface) return;
+    if(event.getRawSlot()==DRIVE_SLOT){
+      if(PICKUP_ACTIONS.contains(event.getAction()) && CustomItemManager.getCustomItemName(drive).equals(Items.BASIC_DRIVE)) {
         saveItems();
         event.setCurrentItem(drive);
+        clearItems();
+      }
+      if(PLACE_ACTIONS.contains(event.getAction())) {
+        drive = event.getCursor();
+        loadItems();
+      }
+      refreshInventories();
+    } else if (CONTENT_SLOTS.contains(event.getRawSlot()) && PLACE_ACTIONS.contains(event.getAction())){
+      if(CustomItemManager.getCustomItemName(event.getCursor()).equals(Items.BASIC_DRIVE)) {
+        event.setCancelled(true);
       }
     }
-    if(PLACE_ACTIONS.contains(event.getAction())) {
-      drive = event.getCursor();
-      loadItems();
-    }
+
+
   }
 
   private void saveItems() {
+    if(drive==null) return;
     List<ItemStack> items = new ArrayList<>();
     for(int slot : CONTENT_SLOTS) {
       items.add(inventoryInterface.getItem(slot));
@@ -119,15 +154,27 @@ public class DriveViewer extends BaseMachine {
     if(CustomItemManager.getCustomItemName(drive).equals(Items.BASIC_DRIVE)){
       List<ItemStack> items = StorageDrive.getItemsFromDrive(drive);
       for(int i = 0; i < items.size(); i++) {
-        inventoryInterface.setItem(CONTENT_SLOTS[i],items.get(i));
+        inventoryInterface.setItem(CONTENT_SLOTS.get(i),items.get(i));
       }
     }
+    interactableSlots.removeAll(CONTENT_SLOTS);
+    interactableSlots.addAll(CONTENT_SLOTS);
+
+  }
+
+  private void refreshInventories() {
+    Tasks.runTaskLater(() -> {
+      for(HumanEntity viewer: inventoryInterface.getViewers()) {
+        if(viewer instanceof Player) ((Player) viewer).updateInventory();
+      }
+    },1);
   }
 
   private void clearItems() {
     for(int slot : CONTENT_SLOTS) {
       inventoryInterface.setItem(slot, new ItemStack(Material.AIR));
     }
+    interactableSlots.removeAll(CONTENT_SLOTS);
   }
 
   @Override

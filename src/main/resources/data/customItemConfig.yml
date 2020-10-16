@@ -524,3 +524,5 @@ items:
     hideItem: true
   recipe_book:
     itemModel: paper
+  basic_storage_drive:
+    itemModel: paper
