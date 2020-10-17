@@ -42,11 +42,10 @@ public class DriveViewer extends BaseMachine {
   private static final List<Integer> CONTENT_SLOTS = new ArrayList<>(Arrays.asList(16,24,25,33,34,42,43));
   private static final Set<InventoryAction> PLACE_ACTIONS = new HashSet<>(Arrays
       .asList(InventoryAction.PLACE_ALL,
-          InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME, InventoryAction.SWAP_WITH_CURSOR, InventoryAction.HOTBAR_SWAP));
+          InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME, InventoryAction.SWAP_WITH_CURSOR));
   private static final Set<InventoryAction> PICKUP_ACTIONS = new HashSet<>(Arrays
       .asList(InventoryAction.PICKUP_ALL,
-          InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_SOME, InventoryAction.SWAP_WITH_CURSOR,
-          InventoryAction.HOTBAR_SWAP, InventoryAction.MOVE_TO_OTHER_INVENTORY, InventoryAction.HOTBAR_MOVE_AND_READD));
+          InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_SOME, InventoryAction.SWAP_WITH_CURSOR));
 
   private ItemStack drive;
 
@@ -119,25 +118,45 @@ public class DriveViewer extends BaseMachine {
   }
 
   @EventHandler
-  public void InventoryInteract(InventoryClickEvent event) {
+  public void onInventoryInteract(InventoryClickEvent event) {
     if(event.getInventory()!=inventoryInterface || !running) return;
-    if(event.getRawSlot()==DRIVE_SLOT){
-      if(PICKUP_ACTIONS.contains(event.getAction()) && CustomItemManager.getCustomItemName(drive).equals(Items.BASIC_STORAGE_DRIVE)) {
-        saveItems();
-        event.setCurrentItem(drive);
-      }
-      if(PLACE_ACTIONS.contains(event.getAction())) {
-        drive = event.getCursor();
-        loadItems();
-      }
-      refreshInventories();
+    if(event.isShiftClick()){
+      handleShiftClick(event);
+    } else if(event.getRawSlot()==DRIVE_SLOT){
+    handleDriveSlotClick(event);
     } else if (CONTENT_SLOTS.contains(event.getRawSlot()) && PLACE_ACTIONS.contains(event.getAction())){
-      if(CustomItemManager.getCustomItemName(event.getCursor()).equals(Items.BASIC_STORAGE_DRIVE)) {
-        event.setCancelled(true);
-      }
+      handleContentClick(event);
     }
+  }
 
+  private void handleContentClick(InventoryClickEvent event) {
+    if(CustomItemManager.getCustomItemName(event.getCursor()).equals(Items.BASIC_STORAGE_DRIVE)) {
+      event.setCancelled(true);
+    }
+  }
+  private void handleShiftClick(InventoryClickEvent event) {
+    if(event.getRawSlot()==DRIVE_SLOT){
+      saveItems();
+      event.setCurrentItem(drive);
+    } else if(event.getRawSlot() > 57){
+      drive = event.getCurrentItem();
+      loadItems();
+      inventoryInterface.setItem(DRIVE_SLOT, drive);
+      event.setCurrentItem(new ItemStack(Material.AIR));
+    }
+    refreshInventories();
+  }
 
+  private void handleDriveSlotClick(InventoryClickEvent event) {
+    if(PICKUP_ACTIONS.contains(event.getAction()) && CustomItemManager.getCustomItemName(drive).equals(Items.BASIC_STORAGE_DRIVE)) {
+      saveItems();
+      event.setCurrentItem(drive);
+    }
+    if(PLACE_ACTIONS.contains(event.getAction())) {
+      drive = event.getCursor();
+      loadItems();
+    }
+    refreshInventories();
   }
 
   private void saveItems() {

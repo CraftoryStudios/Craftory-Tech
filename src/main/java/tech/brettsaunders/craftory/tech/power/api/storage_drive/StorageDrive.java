@@ -26,7 +26,7 @@ import tech.brettsaunders.craftory.utils.Log;
 public class StorageDrive {
 
   public static final String DRIVE_ITEM_START = "drive_item_";
-  public static final String ID_KEY = "ID";
+  public static final String ID_KEY = "drive_id";
   public static final String CAPACITY_KEY = "capacity";
 
   public static List<ItemStack> getItemsFromDrive(@NonNull ItemStack drive) {
