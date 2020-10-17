@@ -91,6 +91,10 @@ public class CustomItemManager {
           if(itemSection.contains("max_charge")) {
             customItem.setMaxCharge(itemSection.getInt("max_charge"));
           }
+
+          if(itemSection.contains("capacity")) {
+            customItem.setCapacity(itemSection.getInt("capacity"));
+          }
           itemIDCache.put(key, customItem);
           if (!(customItemConfig.contains(ITEMS + key + ".hideItem") && customItemConfig
               .getBoolean(ITEMS + key + ".hideItem"))) {

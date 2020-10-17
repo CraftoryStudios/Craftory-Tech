@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.Utilities;
+import tech.brettsaunders.craftory.tech.power.api.storage_drive.StorageDrive;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 
 public class CustomItem {
@@ -109,6 +110,12 @@ public class CustomItem {
     lore.add("Charge: " + Utilities.rawEnergyToPrefixed(0) + "/" + Utilities.rawEnergyToPrefixed(maxCharge));
     meta.setLore(lore);
     itemStack.setItemMeta(meta);
+  }
+
+  public void setCapacity(int capacity) {
+    NBTItem nbtItem = new NBTItem(itemStack);
+    nbtItem.setInteger(StorageDrive.CAPACITY_KEY, capacity);
+    itemStack = nbtItem.getItem();
   }
 
   private ChatColor getDisplayNameColour() {
