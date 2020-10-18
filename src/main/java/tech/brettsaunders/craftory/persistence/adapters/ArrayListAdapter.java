@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory.persistence.adapters;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import java.util.ArrayList;
+import java.util.Optional;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +31,7 @@ public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
       return;
     }
     nbtCompound.setString(DATACLASS,
-        persistenceStorage.getConverterClass(value.get(0)).getName());
+        persistenceStorage.getConverterClass(value.get(0)).getSimpleName());
     for (int i = 0; i < value.size(); i++) {
       NBTCompound container = nbtCompound.addCompound("" + i);
       persistenceStorage.saveObject(value.get(i), container);
@@ -40,27 +41,27 @@ public class ArrayListAdapter implements DataAdapter<ArrayList<?>> {
   @Override
   public ArrayList<Object> parse(PersistenceStorage persistenceStorage, Object parentObject,
       NBTCompound nbtCompound) {
-    Class dataClass;
+    Optional<Class> dataClass;
     ArrayList<Object> arrayList = new ArrayList<>();
     if (nbtCompound.getKeys().isEmpty()) {
       return arrayList;
     }
-    try {
-      if (nbtCompound.getString(DATACLASS).endsWith("ItemStack")) {
-        dataClass = ItemStack.class;
-      } else {
-        dataClass = Class.forName(nbtCompound.getString(DATACLASS));
-      }
+    if (nbtCompound.getString(DATACLASS).endsWith("ItemStack")) {
+      dataClass = Optional.of(ItemStack.class);
+    } else {
+      dataClass = Optional.ofNullable(persistenceStorage.getPersistenceTable().referenceTable.get(nbtCompound.getString(DATACLASS)));
+    }
+
+    if (dataClass.isPresent()) {
       for (String key : nbtCompound.getKeys()) {
         if (key.equals(DATACLASS)) {
           continue;
         }
         NBTCompound container = nbtCompound.getCompound(key);
-        arrayList.add(persistenceStorage.loadObject(parentObject, dataClass, container));
+        arrayList.add(persistenceStorage.loadObject(parentObject, dataClass.get(), container));
       }
-    } catch (ClassNotFoundException ex) {
-      Log.error(nbtCompound.getString(DATACLASS));
-      ex.printStackTrace();
+    } else {
+      Log.warn("Failure to load ArrayList");
     }
     return arrayList;
   }

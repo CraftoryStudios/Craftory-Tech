@@ -12,9 +12,11 @@ package tech.brettsaunders.craftory.persistence.adapters;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import java.util.HashMap;
+import java.util.Optional;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
+import tech.brettsaunders.craftory.utils.Log;
 
 @NoArgsConstructor
 public class HashMapAdapter implements DataAdapter<HashMap<?, ?>> {
@@ -31,8 +33,8 @@ public class HashMapAdapter implements DataAdapter<HashMap<?, ?>> {
       NBTCompound container = nbtCompound.addCompound("" + entryKey.hashCode());
       NBTCompound keyData = container.addCompound("key");
       NBTCompound data = container.addCompound("data");
-      container.setString("keyclass", persistenceStorage.saveObject(entryKey, keyData).getName());
-      container.setString("dataclass", persistenceStorage.saveObject(entryValue, data).getName());
+      container.setString("keyclass", persistenceStorage.saveObject(entryKey, keyData).getSimpleName());
+      container.setString("dataclass", persistenceStorage.saveObject(entryValue, data).getSimpleName());
     });
   }
 
@@ -44,13 +46,17 @@ public class HashMapAdapter implements DataAdapter<HashMap<?, ?>> {
       NBTCompound container = nbtCompound.getCompound(key);
       NBTCompound keyData = container.getCompound("key");
       NBTCompound data = container.getCompound("data");
-      try {
-        map.put(persistenceStorage
-                .loadObject(parentObject, Class.forName(container.getString("keyclass")), keyData),
+
+      Optional<Class> keyClass = Optional.ofNullable(persistenceStorage.getPersistenceTable().referenceTable.get(container.getString("keyclass")));
+      Optional<Class> dataClass = Optional.ofNullable(persistenceStorage.getPersistenceTable().referenceTable.get(container.getString("dataclass")));
+
+      if (keyClass.isPresent() && dataClass.isPresent()) {
+      map.put(persistenceStorage
+                .loadObject(parentObject,keyClass.get(), keyData),
             persistenceStorage
-                .loadObject(parentObject, Class.forName(container.getString("dataclass")), data));
-      } catch (ClassNotFoundException ex) {
-        ex.printStackTrace();
+                .loadObject(parentObject, dataClass.get(), data));
+      } else {
+        Log.warn("HashMap fail");
       }
     }
     return map;

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
+import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -49,49 +50,43 @@ public class PersistenceStorage {
   private final Gson gson;
   private final HashMap<Class<?>, DataAdapter<?>> converters;
   private final HashMap<Class<?>, DataAdapter<?>> interfaceConverters;
+  @Getter
+  private final PersistenceTable persistenceTable;
 
   public PersistenceStorage() {
     gson = new Gson();
     converters = new HashMap<>();
+    persistenceTable = new PersistenceTable();
 
     // Register default converters
-    registerDataConverter(String.class, new StringAdapter(), false);
-    registerDataConverter(int.class, new IntegerAdapter(), false);
-    registerDataConverter(Integer.class, new IntegerAdapter(), false);
-    registerDataConverter(Long.class, new LongAdapter(), false);
-    registerDataConverter(HashMap.class, new HashMapAdapter(), false);
-    registerDataConverter(Location.class, new LocationAdapter(), false);
-    registerDataConverter(HashSet.class, new HashSetAdapter(), false);
-    registerDataConverter(EnergyStorage.class, new EnergyStorageAdapter(), false);
-    registerDataConverter(BlockFace.class, new BlockFaceAdapter(), false);
-    registerDataConverter(INTERACTABLEBLOCK.class, new InteractableBlockAdapter(), false);
-    registerDataConverter(ArrayList.class, new ArrayListAdapter(), false);
-    registerDataConverter(Boolean.class, new BooleanAdapter(), false);
-    registerDataConverter(PowerGrid.class, new PowerGridAdapter(), false);
-    registerDataConverter(FluidStorage.class, new FluidStorageAdapter(), false);
+    registerDataConverter(String.class, new StringAdapter());
+    registerDataConverter(int.class, new IntegerAdapter());
+    registerDataConverter(Integer.class, new IntegerAdapter());
+    registerDataConverter(Long.class, new LongAdapter());
+    registerDataConverter(HashMap.class, new HashMapAdapter());
+    registerDataConverter(Location.class, new LocationAdapter());
+    registerDataConverter(HashSet.class, new HashSetAdapter());
+    registerDataConverter(EnergyStorage.class, new EnergyStorageAdapter());
+    registerDataConverter(BlockFace.class, new BlockFaceAdapter());
+    registerDataConverter(INTERACTABLEBLOCK.class, new InteractableBlockAdapter());
+    registerDataConverter(ArrayList.class, new ArrayListAdapter());
+    registerDataConverter(Boolean.class, new BooleanAdapter());
+    registerDataConverter(PowerGrid.class, new PowerGridAdapter());
+    registerDataConverter(FluidStorage.class, new FluidStorageAdapter());
 
+    // Register interface converters
     interfaceConverters = new HashMap<>();
-    registerInterfaceConverter(ItemStack.class, new ItemStackAdapter(), false);
+    registerInterfaceConverter(ItemStack.class, new ItemStackAdapter());
   }
 
   public <T> void registerInterfaceConverter(@NonNull Class<T> clazz,
-      @NonNull DataAdapter<? extends T> converter,
-      boolean replace) {
-    if (replace) {
-      interfaceConverters.put(clazz, converter);
-    } else {
+      @NonNull DataAdapter<? extends T> converter) {
       interfaceConverters.putIfAbsent(clazz, converter);
-    }
   }
 
   public <T> void registerDataConverter(@NonNull Class<T> clazz,
-      @NonNull DataAdapter<? extends T> converter,
-      boolean replace) {
-    if (replace) {
-      converters.put(clazz, converter);
-    } else {
+      @NonNull DataAdapter<? extends T> converter) {
       converters.putIfAbsent(clazz, converter);
-    }
   }
 
   public void saveFields(Object object, NBTCompound nbtCompound) {

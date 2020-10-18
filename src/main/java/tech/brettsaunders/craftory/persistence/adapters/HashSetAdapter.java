@@ -12,6 +12,7 @@ package tech.brettsaunders.craftory.persistence.adapters;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import java.util.HashSet;
+import java.util.Optional;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
@@ -25,7 +26,7 @@ public class HashSetAdapter implements DataAdapter<HashSet<?>> {
     value.forEach(entryValue -> {
       NBTCompound container = nbtCompound.addCompound("" + entryValue.hashCode());
       NBTCompound data = container.addCompound("data");
-      container.setString("dataclass", persistenceStorage.saveObject(entryValue, data).getName());
+      container.setString("dataclass", persistenceStorage.saveObject(entryValue, data).getSimpleName());
     });
   }
 
@@ -36,14 +37,16 @@ public class HashSetAdapter implements DataAdapter<HashSet<?>> {
     if (nbtCompound.getKeys().isEmpty()) {
       return set;
     }
+
+
     for (String key : nbtCompound.getKeys()) {
       NBTCompound container = nbtCompound.getCompound(key);
       NBTCompound data = container.getCompound("data");
-      try {
+      Optional<Class> dataClass = Optional.ofNullable(persistenceStorage.getPersistenceTable().referenceTable.get(container.getString("dataclass")));
+
+      if (dataClass.isPresent()) {
         set.add(persistenceStorage
-            .loadObject(parentObject, Class.forName(container.getString("dataclass")), data));
-      } catch (ClassNotFoundException ex) {
-        ex.printStackTrace();
+            .loadObject(parentObject, dataClass.get(), data));
       }
     }
     return set;
