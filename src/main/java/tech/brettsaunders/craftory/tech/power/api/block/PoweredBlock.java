@@ -136,7 +136,11 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     super.beforeSaveUpdate();
     inputSlots.clear();
     for (int i = 0; i < inputLocations.size(); i++) {
-      inputSlots.add(i, inventoryInterface.getItem(inputLocations.get(i)));
+      ItemStack itemStack = inventoryInterface.getItem(inputLocations.get(i));
+      if (itemStack == null) {
+        itemStack = new ItemStack(Material.AIR);
+      }
+      inputSlots.add(i, itemStack);
     }
 
     outputSlots.clear();
