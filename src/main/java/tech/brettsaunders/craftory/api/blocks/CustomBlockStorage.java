@@ -132,8 +132,8 @@ public class CustomBlockStorage {
             chunkData.add(customBlock);
           } catch (Exception e) {
             sentryLog(e);
-            Log.info(e.getMessage());
-            Log.info(Arrays.toString(e.getStackTrace()));
+            Log.warn(e.getMessage());
+            Log.debug(Arrays.toString(e.getStackTrace()));
             Log.debug("Location Key: " + locationKey);
             Log.debug(
                 locationCompound != null ? locationCompound.toString() : "NO Location Compound");
