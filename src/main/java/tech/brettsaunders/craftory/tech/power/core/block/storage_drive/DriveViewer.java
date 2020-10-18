@@ -118,7 +118,7 @@ public class DriveViewer extends BaseMachine {
   }
 
   @EventHandler
-  public void onInventoryInteract(InventoryClickEvent event) {
+  public void inventoryInteract(InventoryClickEvent event) {
     if(event.getInventory()!=inventoryInterface || !running) return;
     if(event.isShiftClick()){
       handleShiftClick(event);
@@ -138,11 +138,11 @@ public class DriveViewer extends BaseMachine {
     if(event.getRawSlot()==DRIVE_SLOT){
       saveItems();
       event.setCurrentItem(drive);
-    } else if(event.getRawSlot() > 57){
+    } else if(event.getRawSlot() > 57 && inventoryInterface.getItem(DRIVE_SLOT)==null){
       drive = event.getCurrentItem();
       loadItems();
       inventoryInterface.setItem(DRIVE_SLOT, drive);
-      event.setCurrentItem(new ItemStack(Material.AIR));
+      event.setCancelled(true);
     }
     refreshInventories();
   }
