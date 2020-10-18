@@ -182,9 +182,9 @@ public final class Craftory extends JavaPlugin implements Listener {
     try {
       Utilities.data.set("lastVersion", thisVersionCode);
       Utilities.saveDataFile();
-      customItemConfig.save(customItemConfigFile);
-      customBlocksConfig.save(customBlockConfigFile);
-      customRecipeConfig.save(customRecipeConfigFile);
+      if (Objects.nonNull(customItemConfigFile) && Objects.nonNull(customItemConfig)) customItemConfig.save(customItemConfigFile);
+      if (Objects.nonNull(customBlockConfigFile) && Objects.nonNull(customBlocksConfig)) customBlocksConfig.save(customBlockConfigFile);
+      if (Objects.nonNull(customRecipeConfigFile) && Objects.nonNull(customRecipeConfig)) customRecipeConfig.save(customRecipeConfigFile);
       if (Objects.nonNull(recipeBookEvents)) recipeBookEvents.onDisable();
       customBlockManager.onDisable();
       powerGridManager.onDisable();
