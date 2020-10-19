@@ -12,7 +12,9 @@ package tech.brettsaunders.craftory.tech.power.core.power_grid;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
@@ -77,15 +79,19 @@ public class PowerGrid extends BukkitRunnable {
     machinesNeedingEnergy = 0;
     int amount = 0;
     int e;
-    for (Location loc : machines) {
-      BaseMachine machine = (BaseMachine) PoweredBlockUtils.getPoweredBlock(loc);
-      if (Objects.isNull(machine)) {
-        continue;
-      }
-      e = machine.getEnergySpace();
-      if (e > 0) {
-        amount += e;
-        machinesNeedingEnergy += 1;
+    for (Iterator<Location> iter = machines.iterator(); iter.hasNext(); ) {
+      Location location = iter.next();
+      PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock(location);
+      if (poweredBlock instanceof BaseMachine) {
+        BaseMachine machine = (BaseMachine) poweredBlock;
+        e = machine.getEnergySpace();
+        if (e > 0) {
+          amount += e;
+          machinesNeedingEnergy += 1;
+        }
+      } else {
+        iter.remove();
+        removeBlockConnection(location);
       }
     }
     return amount;
@@ -93,12 +99,16 @@ public class PowerGrid extends BukkitRunnable {
 
   private int calculateGridStorageSpace() {
     int amount = 0;
-    for (Location loc : cells) {
-      BaseCell cell = (BaseCell) PoweredBlockUtils.getPoweredBlock(loc);
-      if (Objects.isNull(cell)) {
-        continue;
+    for(Iterator<Location> iter = cells.iterator(); iter.hasNext();) {
+      Location location = iter.next();
+      PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock(location);
+      if(poweredBlock instanceof  BaseCell) {
+        BaseCell cell = (BaseCell) poweredBlock;
+        amount += cell.getEnergySpace();
+      } else {
+        iter.remove();
+        removeBlockConnection(location);
       }
-      amount += cell.getEnergySpace();
     }
     return amount;
   }
@@ -107,9 +117,11 @@ public class PowerGrid extends BukkitRunnable {
   private int calculateGridEnergyProduced(int limit) {
     int amount = 0;
     int energy;
-    for (Location loc : generators) {
-      BaseGenerator generator = (BaseGenerator) PoweredBlockUtils.getPoweredBlock(loc);
-      if (!Objects.isNull(generator)) {
+    for(Iterator<Location> iter = generators.iterator(); iter.hasNext();) {
+      Location location = iter.next();
+      PoweredBlock poweredBlock = PoweredBlockUtils.getPoweredBlock(location);
+      if(poweredBlock instanceof  BaseGenerator) {
+        BaseGenerator generator = (BaseGenerator) poweredBlock;
         energy = generator.getEnergyAvailable();
         if (amount + energy > limit) {
           energy = limit - amount;
@@ -119,6 +131,9 @@ public class PowerGrid extends BukkitRunnable {
         if (amount == limit) {
           break;
         }
+      } else {
+        iter.remove();
+        removeBlockConnection(location);
       }
     }
     return amount;
@@ -285,5 +300,15 @@ public class PowerGrid extends BukkitRunnable {
     }
     temp.add(machine);
     blockConnections.put(connector, temp);
+  }
+
+  private boolean removeBlockConnection(Location machine) {
+    for(Set<Location> locations : blockConnections.values()) {
+      if(locations.remove(machine)) {
+        Craftory.powerConnectorManager.destroyBeams(machine);
+        return true;
+      }
+    }
+    return false;
   }
 }
