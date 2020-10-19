@@ -95,6 +95,10 @@ public class CustomItemManager {
           if(itemSection.contains("capacity")) {
             customItem.setCapacity(itemSection.getInt("capacity"));
           }
+
+          if(itemSection.contains("types")) {
+            customItem.setTypes(itemSection.getInt("types"));
+          }
           itemIDCache.put(key, customItem);
           if (!(customItemConfig.contains(ITEMS + key + ".hideItem") && customItemConfig
               .getBoolean(ITEMS + key + ".hideItem"))) {

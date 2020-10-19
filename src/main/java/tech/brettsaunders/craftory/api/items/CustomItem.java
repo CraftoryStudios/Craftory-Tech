@@ -118,6 +118,12 @@ public class CustomItem {
     itemStack = nbtItem.getItem();
   }
 
+  public void setTypes(int types) {
+    NBTItem nbtItem = new NBTItem(itemStack);
+    nbtItem.setInteger(StorageDrive.TYPES_KEY, types);
+    itemStack = nbtItem.getItem();
+  }
+
   private ChatColor getDisplayNameColour() {
     String displayNameChecker = displayName.toLowerCase(Locale.ROOT);
     if (displayNameChecker.contains("Iron")) {
