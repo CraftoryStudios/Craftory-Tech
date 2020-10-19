@@ -1050,6 +1050,21 @@ macerator_recipes:
       name: steel_ingot
     result:
       name: steel_dust
+  cobblestone:
+    input:
+      name: STONE
+    result:
+      name: COBBLESTONE
+  gravel:
+    input:
+      name: COBBLESTONE
+    result:
+      name: GRAVEL
+  sand:
+    input:
+      name: GRAVEL
+    result:
+      name: SAND
 
 magnetiser_recipes:
   magnetised_iron:
