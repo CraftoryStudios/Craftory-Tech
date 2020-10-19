@@ -1,5 +1,3 @@
-![Pre-Release](https://github.com/brettsaunders21/Craftory/workflows/Pre-Release/badge.svg) ![TaggedRelease](https://github.com/brettsaunders21/Craftory/workflows/TaggedRelease/badge.svg) ![sentryRelease](https://github.com/brettsaunders21/Craftory/workflows/sentryRelease/badge.svg)
-
 
 <div style="text-align:center"><img src="https://www.dropbox.com/s/ndlh5ctbhxnx1g2/title.gif?raw=1" /></div>
 
