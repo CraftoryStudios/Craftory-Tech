@@ -526,4 +526,5 @@ items:
     itemModel: paper
   basic_storage_drive:
     itemModel: paper
-    capacity: 7
+    capacity: 1000
+    types: 7
