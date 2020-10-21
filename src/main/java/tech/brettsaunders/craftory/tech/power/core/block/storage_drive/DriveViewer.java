@@ -45,7 +45,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.storage_drive.StorageDrive;
-import tech.brettsaunders.craftory.utils.Log;
 
 public class DriveViewer extends BaseMachine {
 
@@ -160,31 +159,26 @@ public class DriveViewer extends BaseMachine {
   }
 
   private void handleContentClick(InventoryClickEvent event) {
-    Log.info(event.getClick()+"");
+    event.setCancelled(true);
     if(!loaded || !running) return;
     if(event.getCursor()!=null && event.getCursor().getType()!=Material.AIR) {
       if(CustomItemManager.getCustomItemName(event.getCursor()).equals(Items.BASIC_STORAGE_DRIVE)) {
-        event.setCancelled(true);
         return;
       }
-      Log.info("Something in cursor");
       ItemStack itemStack = event.getCursor();
-      int amount_set = addItemToDrive(itemStack);
-      if (amount_set > 0) {
-        itemStack.setAmount(itemStack.getAmount() - amount_set);
-        event.setCursor(itemStack);
+      int amountSet = addItemToDrive(itemStack);
+      if (amountSet > 0) {
+        itemStack.setAmount(itemStack.getAmount() - amountSet);
       }
-      event.setCancelled(true);
     } else if (event.getCurrentItem()!=null && event.getCurrentItem().getType()!=Material.AIR) {
-      Log.info("Something in slot");
       ItemStack item = event.getCurrentItem();
       int amount = getAmountFromClick(event.getClick(), item.getMaxStackSize());
       ItemStack toGive = removeItemFromDrive(item, amount);
+      if(toGive==null) return;
       Map<Integer,ItemStack> failedToAdd = event.getWhoClicked().getInventory().addItem(toGive);
       if(!failedToAdd.isEmpty()) {
         addItemToDrive(failedToAdd.get(0));
       }
-      event.setCancelled(true);
     }
   }
 
@@ -223,31 +217,25 @@ public class DriveViewer extends BaseMachine {
 
   }
   private void handlePlayerInventoryShiftClick(InventoryClickEvent event) {
-    Log.info("handle playreshift");
+    event.setCancelled(true);
     if(inventoryInterface.getItem(DRIVE_SLOT)==null && CustomItemManager.getCustomItemName(event.getCurrentItem()).equals(Items.BASIC_STORAGE_DRIVE)){
       drive = event.getCurrentItem();
       loadItems();
       inventoryInterface.setItem(DRIVE_SLOT, drive);
-      event.setCancelled(true);
       return;
     }
     ItemStack itemStack = event.getCurrentItem();
     if(itemStack==null || itemStack.getType()==Material.AIR) {
-      event.setCancelled(true);
       return;
     }
-    int amount_set = addItemToDrive(itemStack);
-    Log.info(amount_set + "");
-    if (amount_set > 0) {
-      itemStack.setAmount(itemStack.getAmount() - amount_set);
+    int amountSet = addItemToDrive(itemStack);
+    if (amountSet > 0) {
+      itemStack.setAmount(itemStack.getAmount() - amountSet);
       event.setCurrentItem(itemStack);
     }
-    event.setCancelled(true);
-    Log.info("canned event");
   }
 
   private void handleDriveSlotClick(InventoryClickEvent event) {
-    Log.info("handle drive");
     if(PICKUP_ACTIONS.contains(event.getAction()) && CustomItemManager.getCustomItemName(drive).equals(Items.BASIC_STORAGE_DRIVE)) {
       saveItems();
       event.setCurrentItem(drive);
@@ -264,11 +252,10 @@ public class DriveViewer extends BaseMachine {
    * @return How many of the items in the stack were added to the drive (0 if drive is full)
    */
   private int addItemToDrive(@NonNull ItemStack item) {
-    Log.info("adding item to drive");
     if(!running || !loaded) return 0;
     String name = CustomItemManager.getCustomItemName(item);
     int amount = item.getAmount();
-    int total = totalItemsInDrive();
+    int total = StorageDrive.totalItemsInDrive(items);
     if (total + amount > capacity) {
       amount = capacity - total;
     }
@@ -284,7 +271,13 @@ public class DriveViewer extends BaseMachine {
     } else {
       return 0;
     }
+    updateDrive();
     return amount;
+  }
+
+  private void updateDrive() {
+    drive = StorageDrive.updateLoadedLore(drive, items, types, capacity);
+    inventoryInterface.setItem(DRIVE_SLOT,drive);
   }
 
   /**
@@ -295,7 +288,6 @@ public class DriveViewer extends BaseMachine {
    */
   @Nullable
   private ItemStack removeItemFromDrive(String name, int amount) {
-    Log.info("removing item from drive");
     if(items.containsKey(name)) {
       ItemStack item = CustomItemManager.getCustomItemOrDefault(name);
       int stored = items.get(name);
@@ -308,9 +300,9 @@ public class DriveViewer extends BaseMachine {
         items.remove(name);
       }
       item.setAmount(amount);
+      updateDrive();
       return item;
     }
-    Log.info("item not in items " + items.toString());
     return null;
   }
 
@@ -346,13 +338,9 @@ public class DriveViewer extends BaseMachine {
   }
 
 
-  private int totalItemsInDrive() {
-    if(!loaded || !running) return 0;
-    return items.values().stream().reduce(0, Integer::sum);
-  }
+
 
   private void saveItems() {
-    Log.info("saving items");
     if(drive==null || !loaded) return;
     drive = StorageDrive.saveItemsToDrive(drive, items);
     inventoryInterface.setItem(DRIVE_SLOT, drive);
@@ -360,7 +348,6 @@ public class DriveViewer extends BaseMachine {
   }
 
   private void loadItems() {
-    Log.info("loading items");
     if(loaded) return;
     if(!CustomItemManager.getCustomItemName(drive).equals(Items.BASIC_STORAGE_DRIVE)){
       return;
@@ -373,7 +360,6 @@ public class DriveViewer extends BaseMachine {
       return;
     }
     items = StorageDrive.getItemsFromDrive(drive);
-    Log.info(items.toString());
     int c = 0;
     for (String name: items.keySet()) {
       inventoryInterface.setItem(CONTENT_SLOTS.get(c), generateDisplayItem(name));

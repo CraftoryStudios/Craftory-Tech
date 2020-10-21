@@ -14,9 +14,12 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +27,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.utils.Log;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StorageDrive {
 
   public static final String DRIVE_ITEM_TYPE_START = "drive_item_type_";
@@ -31,6 +35,7 @@ public class StorageDrive {
   public static final String ID_KEY = "drive_id";
   public static final String CAPACITY_KEY = "capacity";
   public static final String TYPES_KEY = "types";
+  private static final String STORED = "Stored";
 
   public static boolean isDrive(ItemStack itemStack) {
     return isDrive(new NBTItem(itemStack));
@@ -57,7 +62,6 @@ public class StorageDrive {
     ItemMeta meta = drive.getItemMeta();
     meta.setLore(Collections.singletonList(ChatColor.BLUE + Utilities.getTranslation("DriveLoaded")));
     drive.setItemMeta(meta);
-    Log.info("got items ok");
     return items;
   }
 
@@ -77,11 +81,10 @@ public class StorageDrive {
       Log.warn("Too many item types to save to drive");
     }
     ArrayList<String> lore = new ArrayList<>();
-    lore.add(ChatColor.BLUE + Utilities.getTranslation("Stored")  + " " + items.size() + "/" + types + " types");
+    lore.add(ChatColor.BLUE + Utilities.getTranslation(STORED)  + " " + items.size() + "/" + types + " types");
     int totalItems = 0;
     int c = 0;
     for (Entry<String, Integer> entry: items.entrySet()) {
-      if (c >= types) break;
       String name = entry.getKey();
       int amount = entry.getValue();
       totalItems += amount;
@@ -98,16 +101,27 @@ public class StorageDrive {
     for (int i = c; i < types; i++) {
       nbtItem.removeKey(DRIVE_ITEM_TYPE_START + i);
       nbtItem.removeKey(DRIVE_ITEM_AMOUNT_START + i);
-      Log.info("removed key " + i);
     }
-    lore.add(1, ChatColor.BLUE + Utilities.getTranslation("Stored")  + " " + totalItems + "/" + capacity + " items");
+    lore.add(1, ChatColor.BLUE + Utilities.getTranslation(STORED)  + " " + totalItems + "/" + capacity + " items");
     drive = nbtItem.getItem();
     ItemMeta meta = drive.getItemMeta();
     meta.setLore(lore);
     drive.setItemMeta(meta);
-    Log.info("saved items ok " + items.toString());
     return drive;
   }
 
-  //TODO Make method for the lore setting, add different click types give different amounts from drive.
+  public static ItemStack updateLoadedLore(ItemStack drive, Map<String,Integer> items, int types, int capacity) {
+    List<String> lore = new ArrayList<>();
+    lore.add(ChatColor.BLUE + Utilities.getTranslation(STORED)  + " " + items.size() + "/" + types + " types");
+    lore.add(1, ChatColor.BLUE + Utilities.getTranslation(STORED)  + " " + totalItemsInDrive(items) + "/" + capacity + " items");
+    ItemMeta meta = drive.getItemMeta();
+    meta.setLore(lore);
+    drive.setItemMeta(meta);
+    return drive;
+  }
+
+  public static int totalItemsInDrive(Map<String,Integer> items) {
+    return items.values().stream().reduce(0, Integer::sum);
+  }
+
 }
