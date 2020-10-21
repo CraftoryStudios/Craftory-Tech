@@ -32,11 +32,18 @@ public class StorageDrive {
   public static final String CAPACITY_KEY = "capacity";
   public static final String TYPES_KEY = "types";
 
+  public static boolean isDrive(ItemStack itemStack) {
+    return isDrive(new NBTItem(itemStack));
+  }
+
+  public static boolean isDrive(NBTItem nbtItem) {
+    return nbtItem.hasKey(CAPACITY_KEY) && nbtItem.hasKey(TYPES_KEY);
+  }
   public static Map<String, Integer> getItemsFromDrive(@NonNull ItemStack drive) {
     Map<String, Integer>items = new HashMap<>();
     NBTItem nbtItem = new NBTItem(drive);
     int types;
-    if(nbtItem.hasKey(CAPACITY_KEY) && nbtItem.hasKey(TYPES_KEY)) {
+    if(isDrive(nbtItem)) {
       types = nbtItem.getInteger(TYPES_KEY);
     } else {
       Log.warn("Storage drive had no capacity or types limit set");
@@ -59,7 +66,7 @@ public class StorageDrive {
     nbtItem.setUUID(ID_KEY, UUID.randomUUID());
     int capacity;
     int types;
-    if(nbtItem.hasKey(CAPACITY_KEY) && nbtItem.hasKey(TYPES_KEY)) {
+    if(isDrive(nbtItem)) {
       capacity = nbtItem.getInteger(CAPACITY_KEY);
       types = nbtItem.getInteger(TYPES_KEY);
     } else {
@@ -101,4 +108,6 @@ public class StorageDrive {
     Log.info("saved items ok " + items.toString());
     return drive;
   }
+
+  //TODO Make method for the lore setting, add different click types give different amounts from drive.
 }

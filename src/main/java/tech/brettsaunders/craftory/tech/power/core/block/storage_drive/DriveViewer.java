@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.storage_drive;
 
+import static tech.brettsaunders.craftory.tech.power.api.storage_drive.StorageDrive.isDrive;
+
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import io.sentry.util.Nullable;
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -46,8 +49,8 @@ import tech.brettsaunders.craftory.utils.Log;
 
 public class DriveViewer extends BaseMachine {
 
-  private static final int DRIVE_SLOT = 15;
-  private static final List<Integer> CONTENT_SLOTS = new ArrayList<>(Arrays.asList(16,24,25,33,34,42,43));
+  private static final int DRIVE_SLOT = 12;
+  private static final List<Integer> CONTENT_SLOTS = new ArrayList<>();
   private static final Set<InventoryAction> PLACE_ACTIONS = new HashSet<>(Arrays
       .asList(InventoryAction.PLACE_ALL,
           InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME, InventoryAction.SWAP_WITH_CURSOR));
@@ -64,6 +67,14 @@ public class DriveViewer extends BaseMachine {
   private Map<String,Integer> items = new HashMap<>();
   private int types = 0;
   private int capacity = 0;
+
+  static {
+    for(int i = 14; i <= 41; i+=9) {
+      for(int j = 0; j < 4; j++) {
+        CONTENT_SLOTS.add(i+j);
+      }
+    }
+  }
 
   public DriveViewer(Location location) {
     super(location, Blocks.DRIVE_VIEWER, (byte) 0, 200);
@@ -149,8 +160,7 @@ public class DriveViewer extends BaseMachine {
   }
 
   private void handleContentClick(InventoryClickEvent event) {
-    Log.info("handle content");
-    Log.info(loaded + " " + running);
+    Log.info(event.getClick()+"");
     if(!loaded || !running) return;
     if(event.getCursor()!=null && event.getCursor().getType()!=Material.AIR) {
       if(CustomItemManager.getCustomItemName(event.getCursor()).equals(Items.BASIC_STORAGE_DRIVE)) {
@@ -168,14 +178,30 @@ public class DriveViewer extends BaseMachine {
     } else if (event.getCurrentItem()!=null && event.getCurrentItem().getType()!=Material.AIR) {
       Log.info("Something in slot");
       ItemStack item = event.getCurrentItem();
-      int amount = 1;
-      if (event.isShiftClick()) amount = item.getMaxStackSize();
+      int amount = getAmountFromClick(event.getClick(), item.getMaxStackSize());
       ItemStack toGive = removeItemFromDrive(item, amount);
       Map<Integer,ItemStack> failedToAdd = event.getWhoClicked().getInventory().addItem(toGive);
       if(!failedToAdd.isEmpty()) {
         addItemToDrive(failedToAdd.get(0));
       }
       event.setCancelled(true);
+    }
+  }
+
+  private static int getAmountFromClick(ClickType click, int stackSize) {
+    switch (click) {
+      case LEFT:
+        return 1;
+      case SHIFT_LEFT:
+        return stackSize;
+      case RIGHT:
+        return 5;
+      case SHIFT_RIGHT:
+        return stackSize * 5;
+      case MIDDLE:
+        return stackSize / 2;
+      default:
+        return 1;
     }
   }
 
@@ -329,6 +355,7 @@ public class DriveViewer extends BaseMachine {
     Log.info("saving items");
     if(drive==null || !loaded) return;
     drive = StorageDrive.saveItemsToDrive(drive, items);
+    inventoryInterface.setItem(DRIVE_SLOT, drive);
     clearItems();
   }
 
@@ -339,7 +366,7 @@ public class DriveViewer extends BaseMachine {
       return;
     }
     NBTItem nbtItem = new NBTItem(drive);
-    if(nbtItem.hasKey(StorageDrive.CAPACITY_KEY) && nbtItem.hasKey(StorageDrive.TYPES_KEY)) {
+    if(isDrive(nbtItem)) {
       capacity = nbtItem.getInteger(StorageDrive.CAPACITY_KEY);
       types = nbtItem.getInteger(StorageDrive.TYPES_KEY);
     } else {
