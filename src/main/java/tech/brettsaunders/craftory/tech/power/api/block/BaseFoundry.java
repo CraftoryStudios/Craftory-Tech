@@ -20,7 +20,6 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
@@ -124,12 +123,12 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
 
   @Override
   protected void processComplete() {
-    inputSlots.get(0).setAmount(inputSlots.get(0).getAmount() - 1);
-    inputSlots.get(1).setAmount(inputSlots.get(1).getAmount() - 1);
+    inputSlots.get(0).setAmount(inputSlots.get(0).getAmount() - currentRecipe.getIngredients().get(CustomItemManager.getCustomItemName(inputSlots.get(0))));
+    inputSlots.get(1).setAmount(inputSlots.get(1).getAmount() - currentRecipe.getIngredients().get(CustomItemManager.getCustomItemName(inputSlots.get(1))));
     if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
-      outputSlots.set(0, CustomItemManager.getCustomItem(Constants.Items.STEEL_INGOT));
+      outputSlots.set(0, currentRecipe.getProducts().get(0));
     } else {
-      outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + 1);
+      outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + currentRecipe.getProducts().get(0).getAmount());
     }
     inventoryInterface.setItem(OUTPUT_LOCATION, outputSlots.get(0));
   }
