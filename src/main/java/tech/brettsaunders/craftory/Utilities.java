@@ -11,7 +11,6 @@
 package tech.brettsaunders.craftory;
 
 import io.sentry.Sentry;
-import io.sentry.SentryClient;
 import io.sentry.event.UserBuilder;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,9 +42,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Constants.Blocks;
+import tech.brettsaunders.craftory.api.blocks.BasicBlocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
-import tech.brettsaunders.craftory.api.blocks.BasicBlocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
@@ -168,6 +167,7 @@ public class Utilities {
         .setId(data.getString("reporting.serverUUID"));
     if (!Utilities.config.getString("error_reporting.username").isEmpty()) {
       userBuilder.setUsername(Utilities.config.getString("error_reporting.username"));
+      Log.info("Sentry - Reporting Username: " + Utilities.config.getString("error_reporting.username"));
     }
     Sentry.getContext().setUser(userBuilder.build());
 

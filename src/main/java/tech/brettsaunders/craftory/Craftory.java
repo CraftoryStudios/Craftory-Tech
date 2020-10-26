@@ -69,7 +69,6 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static FileConfiguration customModelDataConfig;
   public static FileConfiguration customBlocksConfig;
   public static FileConfiguration customRecipeConfig;
-  public static FileConfiguration serverDataConfig;
   public static CustomBlockTickManager tickManager;
   public static PowerGridManager powerGridManager;
   public static RecipeBookEvents recipeBookEvents;
@@ -81,7 +80,6 @@ public final class Craftory extends JavaPlugin implements Listener {
   private static File customRecipeConfigFile;
   private static File customModelDataFile;
   private SentryClient sentryClient;
-  private static File serverDataFile;
   private static HashSet<String> loadedPlugins = new HashSet<>();
 
   private static int generateVersionCode() {
@@ -202,8 +200,8 @@ public final class Craftory extends JavaPlugin implements Listener {
   private void setupSentry() {
     // Setup connection to Sentry.io
     try {
-      sentryClient = Sentry.init("https://6b3f8706e5e74f39bbd037a30e3841f7@o399729.ingest.sentry"
-          + ".io/5257818?stacktrace.app.packages=tech.brettsaunders.craftory");
+      sentryClient = Sentry.init("https://3981ae28ec8444368fdc4397121fcac9@o467455.ingest.sentry.io/5493918"
+          + "?stacktrace.app.packages=tech.brettsaunders.craftory");
     } catch(InvalidDsnException | IllegalArgumentException e) {
       Log.error("Provided Sentry DSN is invalid:", ExceptionUtils.getStackTrace(e));
       return;
