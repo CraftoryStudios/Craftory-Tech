@@ -256,8 +256,8 @@ public class Utilities {
       Craftory.folderExists = true;
     }
 
-    File modelData = new File(plugin.getDataFolder(), "/config/customModelDataV2.yml");
-    if (!modelData.exists() || Craftory.lastVersionCode == 0) {
+    File modelData = new File(plugin.getDataFolder(), "config/customModelDataV2.yml");
+    if (!modelData.exists()) {
       FileUtils.copyResourcesRecursively(plugin.getClass().getResource("/config"),
           new File(plugin.getDataFolder(), "/config"));
     }
