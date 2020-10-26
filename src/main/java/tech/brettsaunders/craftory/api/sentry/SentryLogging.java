@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import tech.brettsaunders.craftory.Utilities;
 
 public class SentryLogging {
 
@@ -19,6 +20,11 @@ public class SentryLogging {
   }
 
   public static void sentryLog(Throwable e) {
+
+    if (Utilities.config.getString("error_reporting.username").equalsIgnoreCase("debug")) {
+      return;
+    }
+
     Bukkit.getLogger().log(Level.SEVERE, e.getMessage(),e);
     EventBuilder eventBuilder = new EventBuilder()
         .withTimestamp(new Date(System.currentTimeMillis()))

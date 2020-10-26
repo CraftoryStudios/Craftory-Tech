@@ -11,6 +11,7 @@
 package tech.brettsaunders.craftory;
 
 import io.sentry.Sentry;
+import io.sentry.SentryClient;
 import io.sentry.event.UserBuilder;
 import java.io.File;
 import java.io.FileInputStream;
@@ -147,6 +148,7 @@ public class Utilities {
     config.addDefault("wrench.powerLoss", 10);
     config.addDefault("ore.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
     config.addDefault("crafting.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
+    config.addDefault("error_reporting.username", "");
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -161,9 +163,14 @@ public class Utilities {
     reloadDataFile();
 
     Craftory.lastVersionCode = data.getInt("lastVersion");
-    Sentry.getContext().setUser(new UserBuilder()
-        .setId(data.getString("reporting.serverUUID"))
-        .build());
+
+    UserBuilder userBuilder = new UserBuilder()
+        .setId(data.getString("reporting.serverUUID"));
+    if (!Utilities.config.getString("error_reporting.username").isEmpty()) {
+      userBuilder.setUsername(Utilities.config.getString("error_reporting.username"));
+    }
+    Sentry.getContext().setUser(userBuilder.build());
+
   }
 
   static void compatibilityUpdater() {

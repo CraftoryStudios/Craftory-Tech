@@ -213,6 +213,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     sentryClient.setServerName(this.getServer().getName());
     sentryClient.setRelease(VERSION);
 
+
     Log.info("Sentry Enabled!");
   }
 }
