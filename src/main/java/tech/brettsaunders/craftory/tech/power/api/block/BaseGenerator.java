@@ -15,6 +15,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
@@ -22,6 +23,7 @@ import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
+import tech.brettsaunders.craftory.utils.Light;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public abstract class BaseGenerator extends BaseProvider implements IHopperInteract {
@@ -30,11 +32,13 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
   /* Per Object Variables Saved */
   protected static Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
   protected static Map<BlockFace, Integer> outputFaces = new EnumMap<>(BlockFace.class);
+  protected static int lightLevel = 10;
   /* Per Object Variables Not-Saved */
   protected  VariableContainer<Boolean> runningContainer;
   @Persistent
   protected int energyProduced;
   protected boolean isActive;
+  protected boolean lightSpawned;
 
   /* Construction */
   protected BaseGenerator(Location location, String blockName, byte level, int outputAmount,
@@ -84,12 +88,27 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
     }
   }
 
+  @Ticking(ticks = 1200)
+  public void  refreshLight() {
+    if(!Craftory.plugin.isPluginLoaded("LightAPI")) {
+      return;
+    }
+    if(lightSpawned) {
+      Light.deleteLight(location, false);
+      Light.createLight(location, lightLevel, false);
+    }
+  }
+
   protected abstract boolean canStart();
 
   protected abstract boolean canFinish();
 
   protected void processStart() {
     runningContainer.setT(true);
+    if(!lightSpawned){
+      lightSpawned = true;
+      Light.createLight(location, lightLevel, false);
+    }
   }
 
   protected void processIdle() {
@@ -98,6 +117,10 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
   protected void processOff() {
     isActive = false;
     runningContainer.setT(false);
+    if(lightSpawned) {
+      lightSpawned = false;
+      Light.deleteLight(location, false);
+    }
   }
 
   protected abstract void processTick();
