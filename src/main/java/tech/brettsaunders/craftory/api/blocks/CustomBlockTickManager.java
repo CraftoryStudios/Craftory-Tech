@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory.api.blocks;
 
+import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
+
 import com.google.common.collect.Lists;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -18,7 +20,7 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.NonNull;
 import lombok.Synchronized;
@@ -28,11 +30,12 @@ public class CustomBlockTickManager extends BukkitRunnable {
 
   //Custom Block in future
   private final HashMap<Class<? extends CustomBlock>, HashMap<Method, Integer>> classCache = new HashMap<>();
-  private final HashSet<CustomBlock> trackedBlocks;
+  private ConcurrentHashMap <CustomBlock, Integer> backingTrackedBlock = new ConcurrentHashMap<>();
+  private final Set<CustomBlock> trackedBlocks;
   private long tick = 0;
 
   public CustomBlockTickManager() {
-    trackedBlocks = new HashSet(ConcurrentHashMap.newKeySet());
+    trackedBlocks = backingTrackedBlock.newKeySet();
   }
 
   public static Collection<Method> getMethodsRecursively(@NonNull Class<?> startClass,
@@ -48,6 +51,7 @@ public class CustomBlockTickManager extends BukkitRunnable {
   }
 
   @Override
+  @Synchronized
   public void run() {
     tick++;
     for (CustomBlock customBlock : trackedBlocks) {
@@ -57,6 +61,7 @@ public class CustomBlockTickManager extends BukkitRunnable {
           try {
             method.invoke(customBlock);
           } catch (Exception e) {
+            sentryLog(e);
             e.printStackTrace();
           }
         }

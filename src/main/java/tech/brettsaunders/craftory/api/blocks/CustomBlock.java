@@ -35,7 +35,7 @@ public class CustomBlock {
   @Setter
   protected BlockFace direction;
 
-  public CustomBlock(Location location, String blockName) {
+  protected CustomBlock(Location location, String blockName) {
     this.location = location;
     this.blockName = blockName;
     this.displayName = Utilities.getTranslation(blockName);
@@ -54,9 +54,11 @@ public class CustomBlock {
   }
 
   public void beforeSaveUpdate() {
+    //Override to add functionality
   }
 
   public void blockBreak() {
+    //Override to add functionality
   }
 
 }

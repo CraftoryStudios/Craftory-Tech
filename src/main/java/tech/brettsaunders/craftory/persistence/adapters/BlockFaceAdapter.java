@@ -17,18 +17,20 @@ import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 
 public class BlockFaceAdapter implements DataAdapter<BlockFace> {
 
+  public static final String BLOCK_FACE = "blockFace";
+
   @Override
   public void store(PersistenceStorage persistenceStorage, BlockFace value,
       NBTCompound nbtCompound) {
-    nbtCompound.setString("blockFace", value.name());
+    nbtCompound.setString(BLOCK_FACE, value.name());
   }
 
   @Override
   public BlockFace parse(PersistenceStorage persistenceStorage, Object parentObject,
       NBTCompound nbtCompound) {
-    if (!nbtCompound.hasKey("blockFace")) {
+    if (!Boolean.TRUE.equals(nbtCompound.hasKey(BLOCK_FACE))) {
       return null;
     }
-    return BlockFace.valueOf(nbtCompound.getString("blockFace"));
+    return BlockFace.valueOf(nbtCompound.getString(BLOCK_FACE));
   }
 }

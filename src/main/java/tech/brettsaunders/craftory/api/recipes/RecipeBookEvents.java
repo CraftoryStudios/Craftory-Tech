@@ -25,7 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.Items;
+import tech.brettsaunders.craftory.Constants.Items;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
@@ -74,7 +74,7 @@ public class RecipeBookEvents implements Listener {
 
   @EventHandler
   public void onPlayerDamage(EntityDamageEvent e) {
-    if(e.getEntity() instanceof Player){
+    if(e.getEntity() instanceof Player && playerInventories.containsKey(e.getEntity().getUniqueId())){
       restorePlayerInventory((Player) e.getEntity());
       ((Player) e.getEntity()).closeInventory();
     }
@@ -105,17 +105,13 @@ public class RecipeBookEvents implements Listener {
 
   @EventHandler
   public void entityPickupItemEvent(EntityPickupItemEvent e) {
-    if(e.getEntity() instanceof Player) {
-      if(playerInventories.containsKey(e.getEntity().getUniqueId())){
+    if(e.getEntity() instanceof Player && playerInventories.containsKey(e.getEntity().getUniqueId())) {
         e.setCancelled(true);
-      }
     }
   }
 
   public void onDisable() {
-    playerInventories.forEach((id,inventory) -> {
-      Craftory.plugin.getServer().getPlayer(id).getInventory().setContents(inventory);
-    });
+    playerInventories.forEach((id,inventory) -> Craftory.plugin.getServer().getPlayer(id).getInventory().setContents(inventory));
   }
 
   public void skipPlayer(UUID id) {

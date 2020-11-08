@@ -163,6 +163,50 @@ items:
     itemModel: paper
   waterwheel:
     itemModel: paper
+  waterwheel_oak:
+    itemModel: paper
+  waterwheel_birch:
+    itemModel: paper
+  waterwheel_acacia:
+    itemModel: paper
+  waterwheel_crimson:
+    itemModel: paper
+  waterwheel_jungle:
+    itemModel: paper
+  waterwheel_spruce:
+    itemModel: paper
+  waterwheel_warpped:
+    itemModel: paper
+  windmill_orange:
+    itemModel: paper
+  windmill_black:
+    itemModel: paper
+  windmill_blue:
+    itemModel: paper
+  windmill_brown:
+    itemModel: paper
+  windmill_cyan:
+    itemModel: paper
+  windmill_gray:
+    itemModel: paper
+  windmill_green:
+    itemModel: paper
+  windmill_light_blue:
+    itemModel: paper
+  windmill_light_gray:
+    itemModel: paper
+  windmill_lime:
+    itemModel: paper
+  windmill_magenta:
+    itemModel: paper
+  windmill_pink:
+    itemModel: paper
+  windmill_purple:
+    itemModel: paper
+  windmill_red:
+    itemModel: paper
+  windmill_yellow:
+    itemModel: paper
   light_off:
     itemModel: paper
     hideItem: true

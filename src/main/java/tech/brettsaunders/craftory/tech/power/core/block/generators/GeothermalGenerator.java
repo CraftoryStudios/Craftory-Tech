@@ -12,7 +12,6 @@ package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,15 +19,15 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.fluids.FluidStorage;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTank;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GTank;
 
 public class GeothermalGenerator extends BaseGenerator {
 
@@ -41,23 +40,15 @@ public class GeothermalGenerator extends BaseGenerator {
   /* Static Constants Private */
   private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 100;
-  private static final double lavaToEnergyRatio = 25;
+  private static final double LAVA_TO_ENERGY_RATIO = 25;
 
   static {
-    inputFaces = new HashMap<BlockFace, Integer>() {
-      {
-        put(BlockFace.NORTH, FUEL_SLOT);
-        put(BlockFace.EAST, FUEL_SLOT);
-        put(BlockFace.SOUTH, FUEL_SLOT);
-        put(BlockFace.WEST, FUEL_SLOT);
-        put(BlockFace.UP, FUEL_SLOT);
-      }
-    };
-    outputFaces = new HashMap<BlockFace, Integer>() {
-      {
-        put(BlockFace.DOWN, OUT_SLOT);
-      }
-    };
+    inputFaces.put(BlockFace.NORTH, FUEL_SLOT);
+    inputFaces.put(BlockFace.EAST, FUEL_SLOT);
+    inputFaces.put(BlockFace.SOUTH, FUEL_SLOT);
+    inputFaces.put(BlockFace.WEST, FUEL_SLOT);
+    inputFaces.put(BlockFace.UP, FUEL_SLOT);
+    outputFaces.put(BlockFace.DOWN, OUT_SLOT);
   }
 
   @Persistent
@@ -66,7 +57,7 @@ public class GeothermalGenerator extends BaseGenerator {
   /* Construction */
   public GeothermalGenerator() {
     super();
-    init();
+    setupGeo();
   }
 
   /* Saving, Setup and Loading */
@@ -78,10 +69,10 @@ public class GeothermalGenerator extends BaseGenerator {
     inputSlots.add(0, new ItemStack(Material.AIR));
     outputSlots = new ArrayList<>();
     outputSlots.add(new ItemStack(Material.AIR));
-    init();
+    setupGeo();
   }
 
-  private void init() {
+  private void setupGeo() {
     inputLocations = new ArrayList<>();
     inputLocations.add(0, FUEL_SLOT);
     outputLocations = new ArrayList<>();
@@ -94,9 +85,8 @@ public class GeothermalGenerator extends BaseGenerator {
     ItemStack input = inventoryInterface.getItem(FUEL_SLOT);
     ItemStack out = inventoryInterface.getItem(OUT_SLOT);
     if (input != null && input.getType().equals(Material.LAVA_BUCKET)
-        && fluidStorage.getSpace() > 1000) {
-      if (out == null || out.getType().equals(Material.BUCKET) && out.getAmount() < out
-          .getMaxStackSize()) {
+        && fluidStorage.getSpace() > 1000 && (out == null || out.getType().equals(Material.BUCKET) && out.getAmount() < out
+        .getMaxStackSize())) {
         input.setAmount(0);
         inventoryInterface.setItem(FUEL_SLOT, input);
         fluidStorage.forceAdd(1000);
@@ -106,12 +96,9 @@ public class GeothermalGenerator extends BaseGenerator {
           out.setAmount(out.getAmount() + 1);
           inventoryInterface.setItem(OUT_SLOT, out);
         }
-      }
     }
     super.updateGenerator();
-    inventoryInterface.getViewers().forEach(player -> {
-      ((Player) player).updateInventory();
-    });
+    inventoryInterface.getViewers().forEach(player -> ((Player) player).updateInventory());
   }
 
   @Override
@@ -127,14 +114,14 @@ public class GeothermalGenerator extends BaseGenerator {
   @Override
   protected void processTick() {
     double change = Math
-        .min(Math.min(fluidStorage.getFluidStored(), C_OUTPUT_AMOUNT / lavaToEnergyRatio),
-            getEnergySpace() / lavaToEnergyRatio);
+        .min(Math.min(fluidStorage.getFluidStored(), C_OUTPUT_AMOUNT / LAVA_TO_ENERGY_RATIO),
+            getEnergySpace() / LAVA_TO_ENERGY_RATIO);
     if (change != 0) {
       change = Math.ceil(change);
     }
     int amount = (int) Math.round(change);
     fluidStorage.forceExtract(amount);
-    energyStorage.modifyEnergyStored((int) (amount * lavaToEnergyRatio));
+    energyStorage.modifyEnergyStored((int) (amount * LAVA_TO_ENERGY_RATIO));
   }
 
   @Override

@@ -12,15 +12,17 @@ package tech.brettsaunders.craftory.tech.power.core.block.machine.foundry;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseFoundry;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GTwoToOneMachine;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GTwoToOneMachine;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.SolidFuelManager;
 
 public class IronFoundry extends BaseFoundry {
@@ -73,18 +75,22 @@ public class IronFoundry extends BaseFoundry {
     fuelItem = getInventory().getItem(FUEL_SLOT);
   }
 
+  @Override
+  protected void playSound() {
+    location.getWorld().playSound(location, Sound.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1, 1);
+  }
 
   @Override
   public void setupGUI() {
     Inventory inventory = createInterfaceInventory(displayName, Font.IRON_FOUNDRY_GUI.label + "");
     addGUIComponent(
-        new GTwoToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION1, INPUT_LOCATION2,
-            OUTPUT_LOCATION));
+        new GTwoToOneMachine(inventory, 23, progressContainer
+        ));
     addGUIComponent(new GIndicator(inventory, runningContainer, 21));
-    if (inputSlots.get(0) == null) {
+    if (inputSlots.isEmpty() || inputSlots.get(0) == null) {
       inputSlots.add(0, new ItemStack(Material.AIR));
     }
-    if (inputSlots.get(1) == null) {
+    if (inputSlots.size() < 2 || inputSlots.get(1) == null) {
       inputSlots.add(1, new ItemStack(Material.AIR));
     }
     if (outputSlots.isEmpty() || outputSlots.get(0) == null) {

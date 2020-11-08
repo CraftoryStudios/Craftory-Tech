@@ -12,8 +12,10 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -21,11 +23,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOneToOneMachine;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GOneToOneMachine;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.Pair;
 
 public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract {
@@ -35,24 +37,24 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   protected static final int[] CAPACITY_LEVEL = {5000, 10000, 25000, 50000};
   protected static final int INPUT_LOCATION = 21;
   protected static final int OUTPUT_LOCATION = 25;
-  protected static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.NORTH, INPUT_LOCATION);
-      put(BlockFace.EAST, INPUT_LOCATION);
-      put(BlockFace.SOUTH, INPUT_LOCATION);
-      put(BlockFace.WEST, INPUT_LOCATION);
-      put(BlockFace.UP, INPUT_LOCATION);
-    }
-  };
+  protected static final Map<BlockFace, Integer> inputFaces =
+      new EnumMap<>(BlockFace.class);
 
-  protected static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.DOWN, OUTPUT_LOCATION);
-    }
-  };
+  protected static final Map<BlockFace, Integer> outputFaces =
+      new EnumMap<>(BlockFace.class);
 
-  protected transient Pair<String, String> currentRecipe = null;
-  protected transient ItemStack currentProduct = null;
+  protected  Pair<String, String> currentRecipe = null;
+  protected  ItemStack currentProduct = null;
+
+  static {
+    inputFaces.put(BlockFace.NORTH, INPUT_LOCATION);
+    inputFaces.put(BlockFace.EAST, INPUT_LOCATION);
+    inputFaces.put(BlockFace.SOUTH, INPUT_LOCATION);
+    inputFaces.put(BlockFace.WEST, INPUT_LOCATION);
+    inputFaces.put(BlockFace.UP, INPUT_LOCATION);
+
+    outputFaces.put(BlockFace.DOWN, OUTPUT_LOCATION);
+  }
 
   public BaseOneToOneMachine(Location location, String blockName, byte level, int maxRecieve) {
     super(location, blockName, level, maxRecieve);
@@ -63,15 +65,15 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     processTime = PROCESS_TIME_LEVEL[level];
     energyConsumption = ENERGY_CONSUMPTION_LEVEL[level];
     energyStorage = new EnergyStorage(CAPACITY_LEVEL[level]);
-    init();
+    setup();
   }
 
   public BaseOneToOneMachine() {
     super();
-    init();
+    setup();
   }
 
-  private void init() {
+  private void setup() {
     inputLocations = new ArrayList<>();
     outputLocations = new ArrayList<>();
     inputLocations.add(INPUT_LOCATION);
@@ -92,13 +94,13 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     Inventory inventory = createInterfaceInventory(displayName,
         Font.FURNACE_GUI.label + "");
     addGUIComponent(
-        new GOneToOneMachine(inventory, 23, progressContainer, INPUT_LOCATION, OUTPUT_LOCATION));
+        new GOneToOneMachine(inventory, 23, progressContainer));
     addGUIComponent(new GBattery(inventory, energyStorage));
     addGUIComponent(new GIndicator(inventory, runningContainer, 30));
-    if (inputSlots.size() == 0) {
+    if (inputSlots.isEmpty()) {
       inputSlots.add(0, new ItemStack(Material.AIR));
     }
-    if (outputSlots.size() == 0) {
+    if (outputSlots.isEmpty()) {
       outputSlots.add(0, new ItemStack(Material.AIR));
     }
     this.inventoryInterface = inventory;
@@ -123,7 +125,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   }
 
   protected HashMap<String, String> getRecipes() {
-    Logger.warn("THIS CODE SHOULD NEVER BE RUN");
+    Log.warn("THIS CODE SHOULD NEVER BE RUN");
     return null;
   }
 
@@ -152,11 +154,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
       if ((outputSlot == null) || outputSlot.getType().equals(Material.AIR) || (
           outputType.equals(product) && outputSlot.getAmount() < outputSlot.getMaxStackSize())) {
         currentRecipe = new Pair<>(inputType, product);
-        if (CustomItemManager.isCustomItemName(product)) {
-          currentProduct = CustomItemManager.getCustomItem(product);
-        } else {
-          currentProduct = new ItemStack(Material.valueOf(product));
-        }
+        currentProduct = CustomItemManager.getCustomItemOrDefault(product);
         return true;
       }
     }
@@ -166,12 +164,12 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getInputFaces() {
+  public Map<BlockFace, Integer> getInputFaces() {
     return inputFaces;
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getOutputFaces() {
+  public Map<BlockFace, Integer> getOutputFaces() {
     return outputFaces;
   }
 }

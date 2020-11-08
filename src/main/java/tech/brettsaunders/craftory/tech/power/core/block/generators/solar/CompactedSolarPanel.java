@@ -11,7 +11,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.generators.solar;
 
 import org.bukkit.Location;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseSolarGenerator;
 
 public class CompactedSolarPanel extends BaseSolarGenerator {

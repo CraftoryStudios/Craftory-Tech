@@ -17,26 +17,22 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.UUID;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import tech.brettsaunders.craftory.CoreHolder;
-import tech.brettsaunders.craftory.PacketWrapper.AbstractPacket;
-import tech.brettsaunders.craftory.PacketWrapper.UpdatedEntityType;
-import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerAttachEntity;
-import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerEntityDestroy;
-import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerEntityMetadata;
-import tech.brettsaunders.craftory.PacketWrapper.WrapperPlayServerSpawnEntityLiving;
+import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.packet_wrapper.AbstractPacket;
+import tech.brettsaunders.craftory.packet_wrapper.UpdatedEntityType;
+import tech.brettsaunders.craftory.packet_wrapper.WrapperPlayServerAttachEntity;
+import tech.brettsaunders.craftory.packet_wrapper.WrapperPlayServerEntityDestroy;
+import tech.brettsaunders.craftory.packet_wrapper.WrapperPlayServerEntityMetadata;
+import tech.brettsaunders.craftory.packet_wrapper.WrapperPlayServerSpawnEntityLiving;
 
 
 public class Wire {
 
-  private static final int version = Integer.parseInt(
-      Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3]
-          .substring(1).split("_")[1]);
   private final int duration;
   private final int distanceSquared;
   private final AbstractPacket[] createPackets;
@@ -94,7 +90,7 @@ public class Wire {
       }
 
       @Override
-      public synchronized void cancel() throws IllegalStateException {
+      public synchronized void cancel() {
         super.cancel();
         for (Player p : show) {
           destroyPacket.sendPacket(p);
@@ -106,7 +102,6 @@ public class Wire {
   }
 
   public void stop() {
-    //Validate.isTrue(run != null, "Task not started");
     if (run != null) {
       run.cancel();
     }
@@ -119,9 +114,9 @@ public class Wire {
 
   private boolean isCloseEnough(Location location, Player player) {
     if (CustomItemManager
-        .matchCustomItemName(player.getInventory().getItemInMainHand(), CoreHolder.Items.WRENCH) ||
+        .matchCustomItemName(player.getInventory().getItemInMainHand(), Constants.Items.WRENCH) ||
         CustomItemManager.matchCustomItemName(player.getInventory().getItemInMainHand(),
-            CoreHolder.Blocks.POWER_CONNECTOR)) {
+            Constants.Blocks.POWER_CONNECTOR)) {
       return start.distanceSquared(location) <= distanceSquared ||
           end.distanceSquared(location) <= distanceSquared;
     } else {
@@ -164,6 +159,10 @@ public class Wire {
   }
 
   public static class WirePackets {
+
+    private WirePackets() {
+      throw new IllegalStateException("Utils Class");
+    }
     private static int lastIssuedEID = 2000000000;
 
     static int generateEID() {

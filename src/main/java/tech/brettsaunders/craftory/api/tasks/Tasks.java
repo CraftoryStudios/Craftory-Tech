@@ -10,28 +10,50 @@
 
 package tech.brettsaunders.craftory.api.tasks;
 
+import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
+
+import java.util.Objects;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.api.sentry.LoggedScheduler;
 
 public class Tasks {
 
+  private static LoggedScheduler scheduler;
+
+  private Tasks() {
+    throw new IllegalStateException("Utils Class");
+  }
+
+  private static LoggedScheduler getScheduler() {
+    if (Objects.isNull(scheduler)) {
+      scheduler = new LoggedScheduler(Craftory.plugin) {
+        @Override
+        protected void customHandler(int taskID, Throwable e) {
+          sentryLog(e);
+        }
+      };
+    }
+    return scheduler;
+  }
+
   public static void syncDelayedTask(Runnable runnable, long delay) {
-    Craftory.plugin.getServer().getScheduler().scheduleSyncDelayedTask(Craftory.plugin, runnable,delay);
+    getScheduler().scheduleSyncDelayedTask(Craftory.plugin, runnable,delay);
   }
 
   public static void runAsyncTask(Runnable runnable) {
-    Craftory.plugin.getServer().getScheduler().runTaskAsynchronously(Craftory.plugin, runnable);
+    getScheduler().runTaskAsynchronously(Craftory.plugin, runnable);
   }
 
   public static void runTaskLater(Runnable runnable, long delay) {
-    Craftory.plugin.getServer().getScheduler().runTaskLater(Craftory.plugin, runnable, delay);
+    getScheduler().runTaskLater(Craftory.plugin, runnable, delay);
   }
 
   public static void runAsyncTaskLater(Runnable runnable, long delay) {
-    Craftory.plugin.getServer().getScheduler().runTaskLaterAsynchronously(Craftory.plugin, runnable, delay);
+    getScheduler().runTaskLaterAsynchronously(Craftory.plugin, runnable, delay);
   }
 
   public static void runTaskTimer(Runnable runnable, long delay, long period) {
-    Craftory.plugin.getServer().getScheduler().runTaskTimer(Craftory.plugin, runnable, delay, period);
+    getScheduler().runTaskTimer(Craftory.plugin, runnable, delay, period);
   }
 
   public static void runTaskTimer(Runnable runnable, long period) {
@@ -39,7 +61,7 @@ public class Tasks {
   }
 
   public static void runAsyncTaskTimer(Runnable runnable, long delay, long period) {
-    Craftory.plugin.getServer().getScheduler().runTaskTimerAsynchronously(Craftory.plugin, runnable, delay, period);
+    getScheduler().runTaskTimerAsynchronously(Craftory.plugin, runnable, delay, period);
   }
 
   public static void runAsyncTaskTimer(Runnable runnable, long period) {

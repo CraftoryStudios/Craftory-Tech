@@ -11,16 +11,24 @@
 package tech.brettsaunders.craftory.api.recipes;
 
 import io.th0rgal.oraxen.items.OraxenItems;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Sheep;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
@@ -28,21 +36,24 @@ import org.bukkit.inventory.ShapedRecipe;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
+import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 
 public class RecipeManager implements Listener {
 
   private final HashMap<String, String> customRecipes;
   private HashMap<String, ItemStack> customFurnaceRecipes; //Map of Source to Result
   private static final int version = Integer.parseInt(Craftory.plugin.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
+  private static List<String> blackListedWorlds;
 
   public RecipeManager() {
+    blackListedWorlds = Craftory.plugin.getConfig().getStringList("crafting.blackListedWorlds");
     customRecipes = new HashMap<>();
     Events.registerEvents(this);
     ConfigurationSection recipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
     if (recipes == null) {
-      Logger.warn("No Crafting Recipes found!");
+      Log.warn("No Crafting Recipes found!");
     } else {
       for (String recipe : recipes.getKeys(false)) {
         //Check item exists in this version
@@ -84,23 +95,23 @@ public class RecipeManager implements Listener {
             final String ingridentMaterial = sectionIn.getString(ingredient);
 
             //Ingredient TAG
-            if (ingridentMaterial.toLowerCase().startsWith("tag-")) {
-              String tagName = ingridentMaterial.toLowerCase().replace("tag-","");
-              Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase()), Material.class);
+            if (ingridentMaterial.toLowerCase(Locale.ROOT).startsWith("tag-")) {
+              String tagName = ingridentMaterial.toLowerCase(Locale.ROOT).replace("tag-","");
+              Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase(Locale.ROOT)), Material.class);
               //Tag Found, using
               if (Objects.nonNull(materialTag)) {
                 shapedRecipe.setIngredient(key, new MaterialChoice(materialTag));
               //Tag Missing, using AIR
               } else {
-                Logger.warn("Recipe used tag: "+ ingridentMaterial+ " which wasn't a recognised Material Tag. Recipe: "+recipe);
+                Log.warn("Recipe used tag: "+ ingridentMaterial+ " which wasn't a recognised Material Tag. Recipe: "+recipe);
                 shapedRecipe.setIngredient(key, Material.AIR);
               }
 
             //Oraxen Item
-            } else if (ingridentMaterial.toLowerCase().startsWith("oraxen-item:")) {
+            } else if (ingridentMaterial.toLowerCase(Locale.ROOT).startsWith("oraxen-item/")) {
               shapedRecipe.setIngredient(key,
-                  new ExactChoice(OraxenItems.getItemById(ingridentMaterial.toLowerCase().replace("oraxen"
-                      + "-item:","")).build()));
+                  new ExactChoice(OraxenItems.getItemById(ingridentMaterial.toLowerCase(Locale.ROOT).replace("oraxen"
+                      + "-item/","")).build()));
             //Ingredient Vanilla Item
             } else if (CustomItemManager.getCustomItem(ingridentMaterial).getType()
                 == Material.AIR) {
@@ -117,10 +128,10 @@ public class RecipeManager implements Listener {
           Bukkit.getServer().addRecipe(shapedRecipe);
           customRecipes.put(recipe, customItemsInSlots);
         } catch (Exception e) {
-          Logger.error("RECIPE BROKEN: " + recipe + "  " + result.getType().toString());
-          Logger.debug(result + "");
-          Logger.error(recipes.getString(recipe + ".result.item"));
-          Logger.error("Amount: " + recipes.getInt(recipe + ".result.amount"));
+          Log.error("RECIPE BROKEN: " + recipe + "  " + result.getType().toString());
+          Log.debug(result + "");
+          Log.error(recipes.getString(recipe + ".result.item"));
+          Log.error("Amount: " + recipes.getInt(recipe + ".result.amount"));
           e.printStackTrace();
         }
 
@@ -132,7 +143,7 @@ public class RecipeManager implements Listener {
     ConfigurationSection furnaceRecipes = Craftory.customRecipeConfig
         .getConfigurationSection("furnace_recipes");
     if (furnaceRecipes == null) {
-      Logger.warn("No Furnace Recipes found!");
+      Log.warn("No Furnace Recipes found!");
     } else {
       customFurnaceRecipes = new HashMap<>();
       for (String recipe : furnaceRecipes.getKeys(false)) {
@@ -149,7 +160,7 @@ public class RecipeManager implements Listener {
     ConfigurationSection maceratorRecipes = Craftory.customRecipeConfig
         .getConfigurationSection("macerator_recipes");
     if (maceratorRecipes == null) {
-      Logger.warn("No Macerator Recipes found!");
+      Log.warn("No Macerator Recipes found!");
     } else {
       toAdd = new HashMap<>();
       for (String recipe : maceratorRecipes.getKeys(false)) {
@@ -163,7 +174,7 @@ public class RecipeManager implements Listener {
     ConfigurationSection magnetiserRecipes = Craftory.customRecipeConfig
         .getConfigurationSection("magnetiser_recipes");
     if (magnetiserRecipes == null) {
-      Logger.warn("No Magnetiser Recipes found!");
+      Log.warn("No Magnetiser Recipes found!");
     } else {
       toAdd = new HashMap<>();
       for (String recipe : magnetiserRecipes.getKeys(false)) {
@@ -171,7 +182,82 @@ public class RecipeManager implements Listener {
             magnetiserRecipes.getString(recipe + ".result.name"));
       }
       RecipeUtils.addAllMagnetiserRecipes(toAdd);
+
+      //Foundry Recipes
+      ConfigurationSection foundryRecipes = Craftory.customRecipeConfig
+          .getConfigurationSection("foundry_recipes");
+      if (foundryRecipes == null) {
+        Log.warn("No Foundry Recipes found!");
+      } else {
+        HashSet<CustomMachineRecipe> recipesToAdd = new HashSet<>();
+        for (String recipe : foundryRecipes.getKeys(false)) {
+          HashMap<String, Integer> ingredients = new HashMap<>();
+          ingredients.put(
+              foundryRecipes.getString(recipe + ".input1.name"),
+              foundryRecipes.getInt(recipe + ".input1.amount"));
+          ingredients.put(
+              foundryRecipes.getString(recipe + ".input2.name"),
+              foundryRecipes.getInt(recipe + ".input2.amount"));
+          ArrayList<ItemStack> products = new ArrayList<>();
+          String productName = foundryRecipes.getString(recipe + ".result.name");
+          ItemStack product;
+          if(Material.getMaterial(productName)!=null) {
+            product = new ItemStack(Material.valueOf(productName));
+          } else {
+            product = CustomItemManager.getCustomItemOrDefault(productName);
+          }
+          product.setAmount(foundryRecipes.getInt(recipe + ".result.amount"));
+          products.add(product);
+          recipesToAdd.add(new CustomMachineRecipe(ingredients, products));
+        }
+        RecipeUtils.addAllFoundryRecipes(recipesToAdd);
+      }
     }
+  }
+
+  @EventHandler
+  public void onRecipeCompleted(PrepareItemCraftEvent e) {
+
+    String resultName;
+    if (e.getInventory().getResult() == null
+        || e.getInventory().getResult().getType() == Material.AIR) {
+      return;
+    }
+    if (CustomItemManager.isCustomItem(e.getInventory().getResult(), true)) {
+      resultName = CustomItemManager.getCustomItemName(e.getInventory().getResult());
+    } else {
+      resultName = e.getInventory().getResult().getType().name();
+    }
+
+    String pattern = customRecipes.get(resultName);
+    if (pattern == null) {
+      for (ItemStack item : e.getInventory().getMatrix()) {
+        if (item != null && CustomItemManager.isCustomItem(item, true)) {
+          e.getInventory().setResult(new ItemStack(Material.AIR));
+          return;
+        }
+      }
+      return;
+    } else if(!e.getView().getPlayer().hasPermission("craftory.craft") || blackListedWorlds.contains(e.getView().getPlayer().getWorld().getName()) ){
+      e.getInventory().setResult(new ItemStack(Material.AIR));
+      return;
+    }
+
+    String recipePattern = "";
+    for (ItemStack itemStack : e.getInventory().getMatrix()) {
+      if (itemStack == null || itemStack.getType() == Material.AIR) {
+        recipePattern = recipePattern + "X";
+      } else if (CustomItemManager.isCustomItem(itemStack, true)) {
+        recipePattern = recipePattern + "C";
+      } else {
+        recipePattern = recipePattern + "N";
+      }
+    }
+
+    if (!recipePattern.equals(pattern)) {
+      e.getInventory().setResult(new ItemStack(Material.AIR));
+    }
+
   }
 
   @EventHandler
@@ -185,5 +271,16 @@ public class RecipeManager implements Listener {
     }
   }
 
+  @EventHandler
+  public void onSheepDye(PlayerInteractEntityEvent event) {
+    if(event.getHand()!= EquipmentSlot.HAND) return;
+    if(!(event.getRightClicked() instanceof Sheep)) return;
+    ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
+    if(!(itemStack.getType().toString().endsWith("DYE"))) return;
+    if(CustomItemManager.isCustomItem(itemStack, false)){
+      // Ensure that this item shouldn't dye the sheep
+      event.setCancelled(true);
+    }
+  }
 
 }

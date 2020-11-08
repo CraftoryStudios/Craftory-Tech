@@ -15,7 +15,7 @@ import java.util.HashMap;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
-import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGrid;
+import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGrid;
 
 @NoArgsConstructor
 public class PowerGridAdapter implements DataAdapter<PowerGrid> {
@@ -34,17 +34,6 @@ public class PowerGridAdapter implements DataAdapter<PowerGrid> {
       NBTCompound nbtCompound) {
     NBTCompound blockConnectionsCompound = nbtCompound.addCompound("blockConnections");
     NBTCompound powerConnectorsCompound = nbtCompound.addCompound("powerConnectors");
-
-    //TODO Remove in future
-      if (nbtCompound.hasKey("cells")) {
-          nbtCompound.removeKey("cells");
-      }
-      if (nbtCompound.hasKey("generators")) {
-          nbtCompound.removeKey("generators");
-      }
-      if (nbtCompound.hasKey("machines")) {
-          nbtCompound.removeKey("machines");
-      }
 
     PowerGrid powerGrid = new PowerGrid();
     powerGrid.setBlockConnections(

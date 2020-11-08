@@ -14,8 +14,8 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Directional;
-import tech.brettsaunders.craftory.CoreHolder;
-import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
+import tech.brettsaunders.craftory.Constants;
+import tech.brettsaunders.craftory.Constants.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
@@ -26,6 +26,10 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyProvider;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 
 public class PoweredBlockUtils {
+
+  private PoweredBlockUtils() {
+    throw new IllegalStateException("Utils Class");
+  }
 
   /**
    * Checks if a {@link CustomBlock} is an implementation of a PoweredBlock
@@ -95,7 +99,10 @@ public class PoweredBlockUtils {
   }
 
   public static PoweredBlock getPoweredBlock(Location location) {
-    return (PoweredBlock) Craftory.customBlockManager.getCustomBlock(location);
+    CustomBlock block = Craftory.customBlockManager.getCustomBlock(location);
+    if(block instanceof PoweredBlock)
+      return (PoweredBlock) block;
+    return null;
   }
 
   /**
@@ -133,7 +140,7 @@ public class PoweredBlockUtils {
     return Craftory.customBlockManager.getCustomBlock(location) instanceof IEnergyReceiver;
   }
 
-  public static void updateAdjacentProviders(Location location, Boolean blockPlaced,
+  public static void updateAdjacentProviders(Location location, boolean blockPlaced,
       CustomBlock originBlock) {
     Block block;
     Location blockLocation;
@@ -146,8 +153,7 @@ public class PoweredBlockUtils {
           PoweredBlock poweredBlock = (PoweredBlock) customBlock;
           poweredBlock.setSideCache(face.getOppositeFace(),
               (blockPlaced) ? INTERACTABLEBLOCK.RECEIVER : INTERACTABLEBLOCK.NONE, originBlock);
-        } else if (blockPlaced && Craftory.customBlockManager.getCustomBlockName(blockLocation)
-            == CoreHolder.Blocks.POWER_CONNECTOR) {
+        } else if (blockPlaced && Craftory.customBlockManager.getCustomBlockName(blockLocation).equals(Constants.Blocks.POWER_CONNECTOR)) {
           if (isMachine(customBlock)) {
             Craftory.powerGridManager.getPowerGrids().get(location)
                 .addMachine(location, blockLocation);

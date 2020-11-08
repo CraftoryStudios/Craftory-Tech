@@ -13,7 +13,6 @@ package tech.brettsaunders.craftory.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,12 +27,13 @@ import org.apache.commons.lang.StringUtils;
 
 public class FileUtils {
 
+  private FileUtils() {}
+
   public static boolean copyFile(final File toCopy, final File destFile) {
-    try {
-      return FileUtils.copyStream(new FileInputStream(toCopy),
-          new FileOutputStream(destFile));
-    } catch (final FileNotFoundException e) {
-      Logger.warn("File not found when copying resources");
+    try (FileInputStream in = new FileInputStream(toCopy); FileOutputStream out = new FileOutputStream(destFile)){
+      return FileUtils.copyStream(in, out);
+    } catch (final IOException e) {
+      Log.warn("File not found when copying resources");
     }
     return false;
   }
@@ -105,10 +105,10 @@ public class FileUtils {
   }
 
   private static boolean copyStream(final InputStream is, final File f) {
-    try {
-      return FileUtils.copyStream(is, new FileOutputStream(f));
-    } catch (final FileNotFoundException e) {
-      Logger.warn("File not found when copying resource stream");
+    try (FileOutputStream out =  new FileOutputStream(f)){
+      return FileUtils.copyStream(is, out);
+    } catch (final IOException e) {
+      Log.warn("File not found when copying resource stream");
     }
     return false;
   }

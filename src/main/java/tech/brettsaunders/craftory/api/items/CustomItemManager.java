@@ -16,6 +16,7 @@ import io.th0rgal.oraxen.items.OraxenItems;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import org.bukkit.Bukkit;
@@ -27,11 +28,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class CustomItemManager {
 
@@ -39,8 +39,13 @@ public class CustomItemManager {
   public static final String CUSTOM_BLOCK_ITEM = "CUSTOM_BLOCK_ITEM";
   private static final HashMap<String, CustomItem> itemIDCache = new HashMap<>();
   private static final ArrayList<String> itemNames = new ArrayList<>();
+  public static final String ORAXEN_ITEM = "oraxen-item/";
+  public static final String ITEM_MODEL = "itemModel";
+  public static final String ITEMS = "items.";
 
-  private static boolean oraxenEnabled = false;
+  private CustomItemManager() {
+    throw new IllegalStateException("Utils Class");
+  }
 
 
   public static void setup(FileConfiguration customItemConfig,
@@ -50,13 +55,13 @@ public class CustomItemManager {
     if (items != null) {
       for (String key : items.getKeys(false)) {
         ConfigurationSection itemSection = items.getConfigurationSection(key);
-        Material material = Material
-            .getMaterial(itemSection.getString("itemModel").toUpperCase());
+        Material material =
+            Material.getMaterial(itemSection.getString(ITEM_MODEL).toUpperCase(Locale.ROOT));
         if (material == null) {
-          Logger.error(
-              key + " Material doesn't exist :" + itemSection.getString("itemModel").toUpperCase());
+          Log.error(
+              key + " Material doesn't exist :" + itemSection.getString(ITEM_MODEL).toUpperCase(Locale.ROOT));
         } else {
-          int itemID = customModeData.getInt("items." + key + ".customModelID");
+          int itemID = customModeData.getInt(ITEMS + key + ".customModelID");
           //Get Display Name
           displayName = Utilities.getTranslation(key);
 
@@ -87,8 +92,8 @@ public class CustomItemManager {
             customItem.setMaxCharge(itemSection.getInt("max_charge"));
           }
           itemIDCache.put(key, customItem);
-          if (!(customItemConfig.contains("items." + key + ".hideItem") && customItemConfig
-              .getBoolean("items." + key + ".hideItem"))) {
+          if (!(customItemConfig.contains(ITEMS + key + ".hideItem") && customItemConfig
+              .getBoolean(ITEMS + key + ".hideItem"))) {
             itemNames.add(key);
           }
         }
@@ -100,15 +105,15 @@ public class CustomItemManager {
       for (String key : blocks.getKeys(false)) {
         ConfigurationSection block = customBlocksConfig.getConfigurationSection("blocks." + key);
         if (block != null) {
-          if (!block.contains("itemModel")) {
+          if (!block.contains(ITEM_MODEL)) {
             continue;
           }
-          Material material = Material.getMaterial(block.getString("itemModel").toUpperCase());
+          Material material = Material.getMaterial(block.getString(ITEM_MODEL).toUpperCase(Locale.ROOT));
           if (material == null) {
-            Logger.error(
-                key + " Material doesn't exist :" + block.getString("itemModel").toUpperCase());
+            Log.error(
+                key + " Material doesn't exist :" + block.getString(ITEM_MODEL).toUpperCase(Locale.ROOT));
           } else {
-            int itemID = customModeData.getInt("items." + key + ".customModelID");
+            int itemID = customModeData.getInt(ITEMS + key + ".customModelID");
             //Set Display Name
             String nameKey = key.replace("_WEST", "").replace("_EAST", "").replace("_SOUTH", "");
             displayName = Utilities.getTranslation(nameKey);
@@ -121,10 +126,10 @@ public class CustomItemManager {
         }
       }
     }
-    Logger.debug("Loaded Items");
+    Log.debug("Loaded Items");
   }
 
-  public static ArrayList<String> getItemNames() {
+  public static List<String> getItemNames() {
     return itemNames;
   }
 
@@ -139,14 +144,12 @@ public class CustomItemManager {
   public static ItemStack getCustomItemOrDefault(String itemName) {
     if (itemName.startsWith("TAG-")) {
       String tagName = itemName.replace("TAG-","");
-      Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase()), Material.class);
-      if (Objects.nonNull(materialTag)) {
-        if (materialTag.getValues().iterator().hasNext()) {
+      Tag<Material> materialTag = Bukkit.getTag("blocks", NamespacedKey.minecraft(tagName.toLowerCase(Locale.ROOT)), Material.class);
+      if (Objects.nonNull(materialTag) && materialTag.getValues().iterator().hasNext()) {
           return new ItemStack(materialTag.getValues().iterator().next());
-        }
       }
-    } else if (itemName.toLowerCase().startsWith("oraxen-item:")) {
-      return OraxenItems.getItemById(itemName.toLowerCase().replace("oraxen-item:","")).build();
+    } else if (itemName.toLowerCase(Locale.ROOT).startsWith(ORAXEN_ITEM)) {
+      return OraxenItems.getItemById(itemName.toLowerCase(Locale.ROOT).replace(ORAXEN_ITEM,"")).build();
     }
     if (itemIDCache.containsKey(itemName)) {
       CustomItem customItem = itemIDCache.get(itemName);
@@ -188,13 +191,28 @@ public class CustomItemManager {
     return false;
   }
 
+  public static boolean matchCustomItemTag(ItemStack itemStack, CustomTag customTag) {
+    if (itemStack == null || itemStack.getType() == Material.AIR) {
+      return false;
+    }
+    NBTItem nbtItem = new NBTItem(itemStack);
+    if (isCustomItem(itemStack, true)) {
+      return customTag.getItems().contains(nbtItem.getString("NAME"));
+    }
+    return false;
+  }
+
   public static String getCustomItemName(ItemStack itemStack) {
+    if(Craftory.plugin.isPluginLoaded("Oraxen")){
+      String name = OraxenItems.getIdByItem(itemStack);
+      if(name!=null) return ORAXEN_ITEM +name;
+    }
     NBTItem nbtItem = new NBTItem(itemStack);
     return getCustomItemName(nbtItem);
   }
 
   public static String getCustomItemName(NBTItem nbtItem) {
-    if (nbtItem.hasKey("NAME")) {
+    if (Boolean.TRUE.equals(nbtItem.hasKey("NAME"))) {
       return nbtItem.getString("NAME");
     }
     return nbtItem.getItem().getType().toString();
@@ -258,7 +276,7 @@ public class CustomItemManager {
     }
     int line = -1;
     for (int i = 0; i < lore.size(); i++) {
-      if (lore.get(i).toLowerCase().startsWith(title.toLowerCase())) {
+      if (lore.get(i).toLowerCase(Locale.ROOT).startsWith(title.toLowerCase(Locale.ROOT))) {
         line = i;
         break;
       }

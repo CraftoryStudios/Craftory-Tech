@@ -10,6 +10,8 @@
 
 package tech.brettsaunders.craftory;
 
+import io.sentry.Sentry;
+import io.sentry.event.UserBuilder;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -39,10 +41,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
+import tech.brettsaunders.craftory.api.blocks.BasicBlocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
-import tech.brettsaunders.craftory.api.blocks.basicBlocks.BasicBlocks;
+import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
@@ -55,10 +58,10 @@ import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.BasicS
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.CompactedSolarPanel;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.SolarArray;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.SolarPanel;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.DiamondElectricFurnace;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.EmeraldElectricFurnace;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.GoldElectricFurnace;
-import tech.brettsaunders.craftory.tech.power.core.block.machine.electricFurnace.IronElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.DiamondElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.EmeraldElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.GoldElectricFurnace;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.IronElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.DiamondElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.EmeraldElectricFoundry;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.foundry.GoldElectricFoundry;
@@ -72,10 +75,10 @@ import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.Magn
 import tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser.MagnetisingTable;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockBreaker;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators.BlockPlacer;
-import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
+import tech.brettsaunders.craftory.tech.power.core.block.power_grid.PowerConnector;
 import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class Utilities {
 
@@ -125,9 +128,9 @@ public class Utilities {
   static void checkVersion() {
     new UpdateChecker(plugin, Craftory.SPIGOT_ID).getVersion(version -> {
       if (Craftory.VERSION.equalsIgnoreCase(version)) {
-        Logger.info("Plugin is update to date!");
+        Log.info("Plugin is update to date!");
       } else {
-        Logger.info("There is a new update available!");
+        Log.info("There is a new update available!");
       }
     });
   }
@@ -140,8 +143,11 @@ public class Utilities {
     config.addDefault("generators.solarDuringStorms", true);
     config.addDefault("resourcePack.forcePack", true);
     config.addDefault("fixItemGraphics", false);
+    config.addDefault("generators.rotaryGeneratorsSpinWhenFull", false);
     config.addDefault("wrench.powerLoss", 10);
     config.addDefault("ore.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
+    config.addDefault("crafting.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
+    config.addDefault("error_reporting.username", "");
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -156,13 +162,22 @@ public class Utilities {
     reloadDataFile();
 
     Craftory.lastVersionCode = data.getInt("lastVersion");
+
+    UserBuilder userBuilder = new UserBuilder()
+        .setId(data.getString("reporting.serverUUID"));
+    if (!Utilities.config.getString("error_reporting.username").isEmpty()) {
+      userBuilder.setUsername(Utilities.config.getString("error_reporting.username"));
+      Log.info("Sentry - Reporting Username: " + Utilities.config.getString("error_reporting.username"));
+    }
+    Sentry.getContext().setUser(userBuilder.build());
+
   }
 
   static void compatibilityUpdater() {
-    Logger.info("Last version: " + Craftory.lastVersionCode+ " Current version: " + Craftory.thisVersionCode);
+    Log.info("Last version: " + Craftory.lastVersionCode+ " Current version: " + Craftory.thisVersionCode);
     if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
       //Fix all Item Graphics
-      Logger.info("Updating blocks");
+      Log.info("Updating blocks");
       if (Craftory.lastVersionCode == 0) config.set("fixItemGraphics", true);
       //Version 0.2.1 or before
       if (Craftory.lastVersionCode == 0 || Craftory.lastVersionCode == 200001) {
@@ -171,7 +186,7 @@ public class Utilities {
             customBlocks.forEach(customBlock -> {
               plugin.getServer().getScheduler().runTaskLater(plugin,
                   () -> convertMushroomType(customBlock), 2L);
-              Logger.info("made to stem inactive");
+              Log.info("made to stem inactive");
             }));
         Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
@@ -181,7 +196,7 @@ public class Utilities {
                 plugin.getServer().getScheduler().runTaskLater(plugin,
                     () -> setToNewDiamondMacerator(customBlock), 2L);
               }
-              Logger.info("made to stem active");
+              Log.info("made to stem active");
             }));
       }
     }
@@ -220,22 +235,16 @@ public class Utilities {
 
   static void getTranslations() throws IOException {
     String locale = config.getString("language.locale");
-    Logger.info("Using " + locale + " locale");
+    Log.info("Using " + locale + " locale");
     Properties defaultLang = new Properties();
-    FileInputStream fileInputStream = null;
-    try {
-      fileInputStream = new FileInputStream(new File(plugin.getDataFolder(),
-          "data/default_lang.properties"));
-      defaultLang
-          .load(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8));
+    try (FileInputStream fileInputStream = new FileInputStream(new File(plugin.getDataFolder(),
+        "data/default_lang.properties"));InputStreamReader streamReader = new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale + ".properties")),
+        StandardCharsets.UTF_8)) {
+      defaultLang.load(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8));
       langProperties = new Properties(defaultLang);
-      langProperties.load(
-          new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale + ".properties")),
-              StandardCharsets.UTF_8));
+      langProperties.load(streamReader);
     } catch (IOException e) {
       e.printStackTrace();
-    } finally {
-      if (fileInputStream != null) fileInputStream.close();
     }
   }
 
@@ -247,8 +256,8 @@ public class Utilities {
       Craftory.folderExists = true;
     }
 
-    File modelData = new File(plugin.getDataFolder(), "/config/customModelDataV2.yml");
-    if (!modelData.exists() || Craftory.lastVersionCode == 0) {
+    File modelData = new File(plugin.getDataFolder(), "config/customModelDataV2.yml");
+    if (!modelData.exists()) {
       FileUtils.copyResourcesRecursively(plugin.getClass().getResource("/config"),
           new File(plugin.getDataFolder(), "/config"));
     }
@@ -274,19 +283,19 @@ public class Utilities {
           HashMap<String, Integer> valueMap = new HashMap<>();
           //valueMap.put("totalCustomBlocks",Craftory.customBlockManager.statsContainer.getTotalCustomBlocks());
           //valueMap.put("totalPoweredBlocks",Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks());
-          valueMap.put("totalCells", Craftory.customBlockManager.statsContainer.getTotalCells());
+          valueMap.put("totalCells", CustomBlockManager.statsContainer.getTotalCells());
           valueMap.put("totalGenerators",
-              Craftory.customBlockManager.statsContainer.getTotalGenerators());
+              CustomBlockManager.statsContainer.getTotalGenerators());
           valueMap.put("totalPowerConnectors",
-              Craftory.customBlockManager.statsContainer.getTotalPowerConnectors());
+              CustomBlockManager.statsContainer.getTotalPowerConnectors());
           valueMap
-              .put("totalMachines", Craftory.customBlockManager.statsContainer.getTotalMachines());
+              .put("totalMachines", CustomBlockManager.statsContainer.getTotalMachines());
           return valueMap;
         }));
     metrics.addCustomChart(new SingleLineChart("total_custom_blocks",
-        () -> Craftory.customBlockManager.statsContainer.getTotalCustomBlocks()));
+        CustomBlockManager.statsContainer::getTotalCustomBlocks));
     metrics.addCustomChart(new SingleLineChart("total_powered_blocks",
-        () -> Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks()));
+        CustomBlockManager.statsContainer::getTotalPoweredBlocks));
   }
 
   static void registerCommandsAndCompletions() {

@@ -13,34 +13,36 @@ package tech.brettsaunders.craftory.tech.power.core.block.generators;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import lombok.Getter;
+import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
-import tech.brettsaunders.craftory.CoreHolder.Items;
+import tech.brettsaunders.craftory.Constants.Blocks;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.items.CustomTag;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
 
 public class RotaryGenerator extends BaseGenerator {
 
-  protected static final int maxOutput = 75;
+  protected static final int MAX_OUTPUT = 75;
   protected static final int[] MULTIPLIERS = {1, 2, 3, 4};
   protected static final int BASE_CAPACITY = 100000;
   private static final byte C_LEVEL = 0;
@@ -49,15 +51,11 @@ public class RotaryGenerator extends BaseGenerator {
       .asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
 
   static {
-    inputFaces = new HashMap<BlockFace, Integer>() {
-      {
-        put(BlockFace.NORTH, SLOT);
-        put(BlockFace.EAST, SLOT);
-        put(BlockFace.SOUTH, SLOT);
-        put(BlockFace.WEST, SLOT);
-        put(BlockFace.UP, SLOT);
-      }
-    };
+    inputFaces.put(BlockFace.NORTH, SLOT);
+    inputFaces.put(BlockFace.EAST, SLOT);
+    inputFaces.put(BlockFace.SOUTH, SLOT);
+    inputFaces.put(BlockFace.WEST, SLOT);
+    inputFaces.put(BlockFace.UP, SLOT);
   }
 
   @Persistent
@@ -65,8 +63,8 @@ public class RotaryGenerator extends BaseGenerator {
   @Persistent
   protected String modeSaved;
   protected WheelMode mode;
-  @Persistent
   @Getter
+  @Persistent
   protected Boolean wheelPlaced = false;
   protected boolean wheelFree = false;
   protected ArmorStand wheel;
@@ -78,7 +76,7 @@ public class RotaryGenerator extends BaseGenerator {
   protected Location wheelLocation;
 
   public RotaryGenerator(Location location) {
-    super(location, Blocks.ROTARY_GENERATOR, C_LEVEL, (int) (maxOutput*1.5f),
+    super(location, Blocks.ROTARY_GENERATOR, C_LEVEL, (int) (MAX_OUTPUT *1.5f),
         BASE_CAPACITY * MULTIPLIERS[C_LEVEL]);
     setFacing(BlockFace.NORTH);
     checkWheel();
@@ -136,14 +134,17 @@ public class RotaryGenerator extends BaseGenerator {
     removeWheels();
   }
 
+  public boolean getWheelPlaced() {
+    return wheelPlaced;
+  }
 
   @Override
   public void updateGenerator() {
     if (!wheelPlaced && wheelFree && inventoryInterface.getItem(SLOT) != null) {
       ItemStack itemStack = inventoryInterface.getItem(SLOT);
       if (CustomItemManager.isCustomItem(itemStack, false)) {
-        if (CustomItemManager.matchCustomItemName(itemStack,
-            Items.WINDMILL)) {
+        if (CustomItemManager.matchCustomItemTag(itemStack,
+            CustomTag.WINDMILL)) {
           mode = WheelMode.WIND;
           wheelPlaced = true;
           checkWheel();
@@ -152,8 +153,8 @@ public class RotaryGenerator extends BaseGenerator {
           } else {
             wheelPlaced = false;
           }
-        } else if (CustomItemManager.matchCustomItemName(itemStack,
-            Items.WATER_WHEEL)) {
+        } else if (CustomItemManager.matchCustomItemTag(itemStack,
+            CustomTag.WATERWHEEL)) {
           mode = WheelMode.WATER;
           wheelPlaced = true;
           checkWheel();
@@ -197,14 +198,14 @@ public class RotaryGenerator extends BaseGenerator {
       removeWheels();
       return false;
     }
-    if ((mode.equals(WheelMode.WATER) && CustomItemManager.matchCustomItemName(itemStack,
-        Items.WATER_WHEEL)) || mode.equals(WheelMode.WIND) && CustomItemManager
-        .matchCustomItemName(itemStack,
-            Items.WINDMILL)) {
+    if ((mode.equals(WheelMode.WATER) && CustomItemManager.matchCustomItemTag(itemStack,
+        CustomTag.WATERWHEEL)) || mode.equals(WheelMode.WIND) && CustomItemManager
+        .matchCustomItemTag(itemStack,
+            CustomTag.WINDMILL)) {
       if (!wheelPlaced) {
         return false;
       }
-      if (energyStorage.isFull()) {
+      if (!Utilities.config.getBoolean("generators.rotaryGeneratorsSpinWhenFull") && energyStorage.isFull()) {
         return false;
       }
       return wheelFree;
@@ -249,6 +250,9 @@ public class RotaryGenerator extends BaseGenerator {
   }
 
   private void spawnArmourStand(Location spawnLoc) {
+    if (checkArmourStand(spawnLoc)) {
+      return;
+    }
     wheel = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
     wheel.setArms(false);
     wheel.setBasePlate(false);
@@ -256,26 +260,35 @@ public class RotaryGenerator extends BaseGenerator {
     wheel.setInvulnerable(true);
     wheel.setGravity(false);
     wheel.setAI(false);
+    wheel.setSilent(true);
     wheel.setMarker(true);
     wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
     EntityEquipment entityEquipment = wheel.getEquipment();
-    if (mode.equals(WheelMode.WIND)) {
-      entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WINDMILL));
-    } else {
-      entityEquipment.setHelmet(CustomItemManager.getCustomItem(Items.WATER_WHEEL));
+    entityEquipment.setHelmet(inventoryInterface.getItem(SLOT));
+  }
+
+  private boolean checkArmourStand(Location location) {
+    for (Entity entity: location.getChunk().getEntities()) {
+      if (entity instanceof ArmorStand && location.distanceSquared(entity.getLocation()) < 0.4D && isGenArmour((ArmorStand) entity)) {
+        return true;
+      }
     }
+    return false;
+  }
+
+  private boolean isGenArmour(@NonNull ArmorStand armorStand) {
+    return armorStand.isSilent() && !armorStand.hasGravity() && armorStand.isMarker() && armorStand.isInsideVehicle();
   }
 
   @Override
   protected void processTick() {
     energyProduced = calculateAmountProduced() * MULTIPLIERS[level];
     energyStorage.modifyEnergyStored(energyProduced);
-    wheel.setHeadPose(wheel.getHeadPose().add(0, 0, efficiencyMultiplier * 0.1));
+    wheel.setHeadPose(wheel.getHeadPose().add(0, 0, efficiencyMultiplier * -0.1));
   }
 
   protected int calculateAmountProduced() {
-    int temp = (int) Math.round(maxOutput * efficiencyMultiplier);
-    return temp;
+    return (int) Math.round(MAX_OUTPUT * efficiencyMultiplier);
   }
 
   @Ticking(ticks = 600)
@@ -289,9 +302,7 @@ public class RotaryGenerator extends BaseGenerator {
 
   private void updateWindEfficiency() {
     final ArrayList<Location> locations = new ArrayList<>();
-    wheelFootprint.forEach(loc -> {
-      locations.add(loc.clone());
-    });
+    wheelFootprint.forEach(loc -> locations.add(loc.clone()));
     Vector v;
     if (facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) {
       v = new Vector(0, 0, 1);
@@ -308,9 +319,7 @@ public class RotaryGenerator extends BaseGenerator {
       }
     }
     locations.clear();
-    wheelFootprint.forEach(loc -> {
-      locations.add(loc.clone());
-    });
+    wheelFootprint.forEach(loc -> locations.add(loc.clone()));
     if (facing.equals(BlockFace.NORTH) || facing.equals(BlockFace.SOUTH)) {
       v = new Vector(0, 0, -1);
     } else {
@@ -361,11 +370,11 @@ public class RotaryGenerator extends BaseGenerator {
   @Ticking(ticks = 20)
   public void checkWheel() {
     if (!wheelPlaced) {
-      wheelFree = windWheelAreaFree(wheelLocation) || waterWheelAreaFree(wheelLocation);
+      wheelFree = windWheelAreaFree() || waterWheelAreaFree(wheelLocation);
     } else if (mode.equals(WheelMode.WATER)) {
       wheelFree = waterWheelAreaFree(wheelLocation);
     } else {
-      wheelFree = windWheelAreaFree(wheelLocation);
+      wheelFree = windWheelAreaFree();
     }
 
   }
@@ -416,7 +425,7 @@ public class RotaryGenerator extends BaseGenerator {
     return getLocations(centerLoc, 1, 3);
   }
 
-  protected boolean windWheelAreaFree(Location centerLoc) {
+  protected boolean windWheelAreaFree() {
     wheelFree = false;
     for (Location loc : wheelLocations) {
       if (!loc.getBlock().getType().equals(Material.AIR)) {

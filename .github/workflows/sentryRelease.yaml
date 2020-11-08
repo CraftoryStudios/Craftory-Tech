@@ -1,21 +1,27 @@
 name: sentryRelease
 
-on: 
-  release:	
-    types: [published, prereleased]
+on:
+  push:
+    tags:
+      - v*
 
 jobs:
   createSentryRelease:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@master
-      - name: Create a Sentry.io release
-        uses: tclindner/sentry-releases-action@v1.1.1
+      - uses: olegtarasov/get-tag@v2
+        id: tagName
+        with:
+          tagRegex: "v(.*)"
+          tagRegexGroup: 1
+      - uses: actions/checkout@v2
+      - name: Create Sentry release
+        uses: getsentry/action-release@v1.0.2
         env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_AUTH_TOKEN: 6a4bcd895f8f4f84b3b58e559061042295c141951d8842a1827013733a46c500
           SENTRY_ORG: craftory
           SENTRY_PROJECT: craftory
         with:
-          tagName: ${{ github.ref }}
-          environment: qa
+          version: ${{ steps.tagName.outputs.tag }}
+          environment: production
+

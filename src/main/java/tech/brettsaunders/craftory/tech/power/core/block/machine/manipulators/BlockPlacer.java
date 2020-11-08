@@ -12,8 +12,9 @@ package tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -21,12 +22,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
 public class BlockPlacer extends BaseMachine implements IHopperInteract {
@@ -34,35 +35,33 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   private static final byte C_LEVEL = 0;
   private static final int MAX_RECEIVE = 10000;
   private static final int SLOT = 22;
-  protected static final HashMap<BlockFace, Integer> inputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.NORTH, SLOT);
-      put(BlockFace.EAST, SLOT);
-      put(BlockFace.SOUTH, SLOT);
-      put(BlockFace.WEST, SLOT);
-      put(BlockFace.UP, SLOT);
-    }
-  };
-  protected static final HashMap<BlockFace, Integer> outputFaces = new HashMap<BlockFace, Integer>() {
-    {
-      put(BlockFace.DOWN, SLOT);
-    }
-  };
+  protected static final Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
+  protected static final Map<BlockFace, Integer> outputFaces = new EnumMap<>(BlockFace.class);
   private static final int ENERGY_REQUIRED = 1000;
   private Location placeLoc;
   private int lastRedstoneStrength = 0;
+
+  static {
+    inputFaces.put(BlockFace.NORTH, SLOT);
+    inputFaces.put(BlockFace.EAST, SLOT);
+    inputFaces.put(BlockFace.SOUTH, SLOT);
+    inputFaces.put(BlockFace.WEST, SLOT);
+    inputFaces.put(BlockFace.UP, SLOT);
+
+    outputFaces.put(BlockFace.DOWN, SLOT);
+  }
 
   public BlockPlacer(Location location) {
     super(location, Blocks.BLOCK_PLACER, C_LEVEL, MAX_RECEIVE);
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
-    init();
+    setup();
     energyStorage = new EnergyStorage(40000);
   }
 
   public BlockPlacer() {
     super();
-    init();
+    setup();
   }
 
   @Override
@@ -71,7 +70,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
     placeLoc = location.getBlock().getRelative(direction).getLocation();
   }
 
-  private void init() {
+  private void setup() {
     inputLocations = new ArrayList<>();
     inputLocations.add(0, SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
@@ -79,7 +78,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
 
   @Override
   public void updateMachine() {
-
+    //No Implementation
   }
 
   @Override
@@ -128,7 +127,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
 
   @Override
   protected void processComplete() {
-
+    //No Implementation
   }
 
   @Override
@@ -138,16 +137,16 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
 
   @Override
   protected void updateSlots() {
-
+    //No Implementation
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getInputFaces() {
+  public Map<BlockFace, Integer> getInputFaces() {
     return inputFaces;
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getOutputFaces() {
+  public Map<BlockFace, Integer> getOutputFaces() {
     return outputFaces;
   }
 }

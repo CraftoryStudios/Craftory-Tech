@@ -12,7 +12,6 @@ package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import lombok.Setter;
 import org.bukkit.Location;
@@ -20,13 +19,13 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
 
 public class SolidFuelGenerator extends BaseGenerator {
 
@@ -39,19 +38,14 @@ public class SolidFuelGenerator extends BaseGenerator {
   private static final int C_OUTPUT_AMOUNT = 80;
 
   static {
-    inputFaces = new HashMap<BlockFace, Integer>() {
-      {
-        put(BlockFace.NORTH, FUEL_SLOT);
-        put(BlockFace.EAST, FUEL_SLOT);
-        put(BlockFace.SOUTH, FUEL_SLOT);
-        put(BlockFace.WEST, FUEL_SLOT);
-        put(BlockFace.UP, FUEL_SLOT);
-      }
-    };
+    inputFaces.put(BlockFace.NORTH, FUEL_SLOT);
+    inputFaces.put(BlockFace.EAST, FUEL_SLOT);
+    inputFaces.put(BlockFace.SOUTH, FUEL_SLOT);
+    inputFaces.put(BlockFace.WEST, FUEL_SLOT);
+    inputFaces.put(BlockFace.UP, FUEL_SLOT);
   }
 
   //TODO Remove in future
-  @Deprecated
   @Setter
   protected ItemStack fuelItem = new ItemStack(Material.AIR);
   @Persistent

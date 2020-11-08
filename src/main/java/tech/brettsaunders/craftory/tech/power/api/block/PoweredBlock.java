@@ -10,12 +10,14 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import static tech.brettsaunders.craftory.CoreHolder.HOPPER_INTERACT_FACES;
+import static tech.brettsaunders.craftory.Constants.HOPPER_INTERACT_FACES;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,62 +32,64 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.CoreHolder.INTERACTABLEBLOCK;
+import tech.brettsaunders.craftory.Constants.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockUtils;
 import tech.brettsaunders.craftory.api.events.Events;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 
-/**
- * A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage
- */
+/** A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage */
 public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, Listener {
 
   /* Static Constants Protected */
-  private static final HashSet<InventoryAction> outputDisabledActions = new HashSet<>(Arrays
-      .asList(InventoryAction.SWAP_WITH_CURSOR, InventoryAction.PLACE_ALL,
-          InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME));
+  private static final HashSet<InventoryAction> outputDisabledActions =
+      new HashSet<>(
+          Arrays.asList(
+              InventoryAction.SWAP_WITH_CURSOR,
+              InventoryAction.PLACE_ALL,
+              InventoryAction.PLACE_ONE,
+              InventoryAction.PLACE_SOME));
   /* Per Object Variables Saved */
-  @Persistent
-  protected EnergyStorage energyStorage;
-  @Persistent
-  protected int level;
-  @Persistent
-  protected HashMap<BlockFace, INTERACTABLEBLOCK> cachedSidesConfig;
+  @Persistent protected EnergyStorage energyStorage;
+  @Persistent protected int level;
+  @Persistent protected HashMap<BlockFace, INTERACTABLEBLOCK> cachedSidesConfig;
   protected HashMap<BlockFace, CustomBlock> cachedSides;
   /* Hopper control variables */
   @Persistent
-  protected ArrayList<ItemStack> inputSlots = new ArrayList<>(); //The ItemStacks of the inputs
+  protected ArrayList<ItemStack> inputSlots = new ArrayList<>(); // The ItemStacks of the inputs
 
-  protected ArrayList<Integer> inputLocations = new ArrayList<>();  //The inventory locations of inputs
+  protected ArrayList<Integer> inputLocations =
+      new ArrayList<>(); // The inventory locations of inputs
+
   @Persistent
-  protected ArrayList<ItemStack> outputSlots = new ArrayList<>(); //The ItemStacks of the outputs
+  protected ArrayList<ItemStack> outputSlots = new ArrayList<>(); // The ItemStacks of the outputs
 
-  protected ArrayList<Integer> outputLocations = new ArrayList<>(); //The inventory locations of outputs
+  protected ArrayList<Integer> outputLocations =
+      new ArrayList<>(); // The inventory locations of outputs
   /* Per Object Variables Not-Saved */
-  protected transient Inventory inventoryInterface;
-  private transient boolean powered = false;
+  protected Inventory inventoryInterface;
+  private boolean powered = false;
 
   /* Construction */
-  public PoweredBlock(Location location, String blockName, byte level) {
+  protected PoweredBlock(Location location, String blockName, byte level) {
     super(location, blockName);
     cachedSidesConfig = new HashMap<>();
     cachedSides = new HashMap<>();
     this.energyStorage = new EnergyStorage(0);
     this.level = level;
     cacheSides();
-    Craftory.plugin.getServer().getPluginManager()
-        .registerEvents(this, Craftory.plugin);
+    Craftory.plugin.getServer().getPluginManager().registerEvents(this, Craftory.plugin);
     powered = false;
   }
 
   /* Saving, Setup and Loading */
-  public PoweredBlock() {
+  protected PoweredBlock() {
     super();
     Events.registerEvents(this);
   }
@@ -95,48 +99,58 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       return;
     }
     cachedSides = new HashMap<>();
-    cachedSidesConfig.forEach(((blockFace, interactableblock) -> {
-      if (interactableblock.equals(INTERACTABLEBLOCK.RECEIVER)) {
-        cachedSides.put(blockFace, Craftory.customBlockManager
-            .getCustomBlock(this.location.getBlock().getRelative(blockFace).getLocation()));
+    if (cachedSidesConfig == null) {
+      Log.error("WTF cache config was null");
+      cachedSidesConfig = new HashMap<>();
+    }
+    for (Entry<BlockFace, INTERACTABLEBLOCK> entry : cachedSidesConfig.entrySet()) {
+      if (entry.getValue().equals(INTERACTABLEBLOCK.RECEIVER)) {
+        cachedSides.put(
+            entry.getKey(),
+            Craftory.customBlockManager.getCustomBlock(
+                this.location.getBlock().getRelative(entry.getKey()).getLocation()));
       }
-    }));
+    }
   }
 
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
     powered = location.getBlock().isBlockPowered();
-    if(inventoryInterface==null)
-      Logger.warn("INVENTORY INTERFACE IS NULL");
-    //Load in items in machines
-    for (int i = 0; i < inputLocations.size(); i++) {
-      if (i >= inputSlots.size()) {
-        break;
+    if (inventoryInterface != null) {
+      // Load in items in machines
+      for (int i = 0; i < inputLocations.size(); i++) {
+        if (i >= inputSlots.size()) {
+          break;
+        }
+        inventoryInterface.setItem(inputLocations.get(i), inputSlots.get(i));
       }
-      inventoryInterface.setItem(inputLocations.get(i), inputSlots.get(i));
-    }
 
-    for (int i = 0; i < outputLocations.size(); i++) {
-      if (i >= outputSlots.size()) {
-        break;
+      for (int i = 0; i < outputLocations.size(); i++) {
+        if (i >= outputSlots.size()) {
+          break;
+        }
+        inventoryInterface.setItem(outputLocations.get(i), outputSlots.get(i));
       }
-      inventoryInterface.setItem(outputLocations.get(i), outputSlots.get(i));
     }
   }
 
+  @Override
   public void beforeSaveUpdate() {
     super.beforeSaveUpdate();
     inputSlots.clear();
     for (int i = 0; i < inputLocations.size(); i++) {
-      inputSlots.add(i, inventoryInterface.getItem(inputLocations.get(i)));
+      ItemStack itemStack = inventoryInterface.getItem(inputLocations.get(i));
+      if (itemStack == null) {
+        itemStack = new ItemStack(Material.AIR);
+      }
+      inputSlots.add(i, itemStack);
     }
 
     outputSlots.clear();
     for (int i = 0; i < outputLocations.size(); i++) {
       outputSlots.add(i, inventoryInterface.getItem(outputLocations.get(i)));
     }
-
   }
 
   /* Update Loop */
@@ -148,58 +162,58 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (inventoryInterface == null) {
       return;
     }
-    HashMap<BlockFace, Integer> inputFaces = ((IHopperInteract) this).getInputFaces();
-    HashMap<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
+    Map<BlockFace, Integer> inputFaces = ((IHopperInteract) this).getInputFaces();
+    Map<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
 
-    //Hopper Input
-    inputFaces.forEach((face, slot) -> {
-      if (cachedSidesConfig.containsKey(face) && cachedSidesConfig.get(face)
-          .equals(INTERACTABLEBLOCK.HOPPER_IN)) {
-        ItemStack stack = inventoryInterface.getItem(slot);
-        final Block relative = location.getBlock().getRelative(face);
-        if (!relative.isBlockPowered()) {
-          ItemStack[] hopperItems = ((Hopper) relative.getState())
-              .getInventory().getContents();
-          for (ItemStack item : hopperItems) {
-            if (item == null) {
-              continue;
-            }
-            if (stack == null) {
-              stack = item.clone();
-              stack.setAmount(1);
-              item.setAmount(item.getAmount() - 1);
-              break;
-            } else if (stack.getType().toString().equals(item.getType().toString())
-                && stack.getAmount() < stack.getMaxStackSize()) {
-              stack.setAmount(stack.getAmount() + 1);
-              item.setAmount(item.getAmount() - 1);
-              break;
+    // Hopper Input
+    inputFaces.forEach(
+        (face, slot) -> {
+          if (cachedSidesConfig.containsKey(face)
+              && cachedSidesConfig.get(face).equals(INTERACTABLEBLOCK.HOPPER_IN)) {
+            ItemStack stack = inventoryInterface.getItem(slot);
+            final Block relative = location.getBlock().getRelative(face);
+            if (!relative.isBlockPowered()) {
+              ItemStack[] hopperItems = ((Hopper) relative.getState()).getInventory().getContents();
+              for (ItemStack item : hopperItems) {
+                if (item != null) {
+                  if (stack == null) {
+                    stack = item.clone();
+                    stack.setAmount(1);
+                    item.setAmount(item.getAmount() - 1);
+                    break;
+                  } else if (stack.getType().toString().equals(item.getType().toString())
+                      && stack.getAmount() < stack.getMaxStackSize()) {
+                    stack.setAmount(stack.getAmount() + 1);
+                    item.setAmount(item.getAmount() - 1);
+                    break;
+                  }
+                }
+              }
+              inventoryInterface.setItem(slot, stack);
             }
           }
-          inventoryInterface.setItem(slot, stack);
-        }
-      }
-    });
+        });
 
-    //Hopper Output
-    outputFaces.forEach((face, slot) -> {
-      if (cachedSidesConfig.containsKey(face) && cachedSidesConfig.get(face)
-          .equals(INTERACTABLEBLOCK.HOPPER_OUT)) {
-        ItemStack stack = inventoryInterface.getItem(slot);
-        if (stack != null) {
-          ItemStack toMove = stack.clone();
-          toMove.setAmount(1);
-          Inventory hopperInventory = ((Hopper) location.getBlock().getRelative(face).getState())
-              .getInventory();
-          HashMap<Integer, ItemStack> failedItems = hopperInventory.addItem(toMove);
-          if (failedItems.isEmpty()) {
-            stack.setAmount(stack.getAmount() - 1);
-            inventoryInterface.setItem(slot, stack);
+    // Hopper Output
+    outputFaces.forEach(
+        (face, slot) -> {
+          if (cachedSidesConfig.containsKey(face)
+              && cachedSidesConfig.get(face).equals(INTERACTABLEBLOCK.HOPPER_OUT)) {
+            ItemStack stack = inventoryInterface.getItem(slot);
+            if (stack != null) {
+              ItemStack toMove = stack.clone();
+              toMove.setAmount(1);
+              Inventory hopperInventory =
+                  ((Hopper) location.getBlock().getRelative(face).getState()).getInventory();
+              HashMap<Integer, ItemStack> failedItems = hopperInventory.addItem(toMove);
+              if (failedItems.isEmpty()) {
+                stack.setAmount(stack.getAmount() - 1);
+                inventoryInterface.setItem(slot, stack);
+              }
+            }
           }
-        }
-      }
-    });
-    //Set inventory to equal slots
+        });
+    // Set inventory to equal slots
   }
 
   /* GUI Events */
@@ -209,8 +223,9 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       return;
     }
     if (event.getRawSlot() > 53) {
-      //Handle Shift Clicking Items
-      if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)
+      // Handle Shift Clicking Items
+      if (event.getCurrentItem() == null
+          || event.getCurrentItem().getType().equals(Material.AIR)
           || event.getCurrentItem().getAmount() == 0) {
         return;
       }
@@ -233,9 +248,12 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
           if (destinationItemStack.getAmount() == destinationItemStack.getMaxStackSize()) {
             continue;
           }
-          if (destinationItemStack.getType().equals(sourceItemStack.getType())) {
-            int amountGive = Math
-                .min(destinationItemStack.getMaxStackSize() - destinationItemStack.getAmount(),
+          if (destinationItemStack.getType().equals(sourceItemStack.getType())
+              && CustomItemManager.getCustomItemName(sourceItemStack)
+                  .equals(CustomItemManager.getCustomItemName(destinationItemStack))) {
+            int amountGive =
+                Math.min(
+                    destinationItemStack.getMaxStackSize() - destinationItemStack.getAmount(),
                     amount);
             destinationItemStack.setAmount(destinationItemStack.getAmount() + amountGive);
             getInventory().setItem(inputSlot, destinationItemStack);
@@ -246,11 +264,11 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         event.getView().getBottomInventory().setItem(event.getSlot(), sourceItemStack);
       }
     } else {
-      //Stop moving items from any slot but intractable ones
-      if (!interactableSlots.contains(event.getRawSlot())) {
+      // Stop moving items from any slot but intractable ones
+      if (outputLocations.contains(event.getRawSlot())
+          && outputDisabledActions.contains(event.getAction())) {
         event.setCancelled(true);
-      } else if (outputDisabledActions.contains(event.getAction()) && outputLocations
-          .contains(event.getRawSlot())) {
+      } else if (!interactableSlots.contains(event.getRawSlot())) {
         event.setCancelled(true);
       }
     }
@@ -261,12 +279,15 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (event.getInventory() != getInventory()) {
       return;
     }
-    event.getRawSlots().forEach(slot -> {
-      //Stop moving items from any slot but intractable ones
-      if (slot <= 53 && !interactableSlots.contains(slot)) {
-        event.setCancelled(true);
-      }
-    });
+    event
+        .getRawSlots()
+        .forEach(
+            slot -> {
+              // Stop moving items from any slot but intractable ones
+              if (slot <= 53 && !interactableSlots.contains(slot)) {
+                event.setCancelled(true);
+              }
+            });
   }
 
   @EventHandler
@@ -316,8 +337,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
           this.setSideCache(face, INTERACTABLEBLOCK.HOPPER_OUT);
         }
       } else if (PoweredBlockUtils.isEnergyReceiver(b.getLocation())) {
-        this.setSideCache(face, INTERACTABLEBLOCK.RECEIVER,
-            PoweredBlockUtils.getPoweredBlock(b.getLocation()));
+        this.setSideCache(
+            face, INTERACTABLEBLOCK.RECEIVER, PoweredBlockUtils.getPoweredBlock(b.getLocation()));
       }
     }
   }

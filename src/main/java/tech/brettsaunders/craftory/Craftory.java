@@ -10,19 +10,28 @@
 
 package tech.brettsaunders.craftory;
 
+import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
+
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
+import io.sentry.Sentry;
+import io.sentry.SentryClient;
+import io.sentry.dsn.InvalidDsnException;
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
@@ -34,12 +43,11 @@ import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
 import tech.brettsaunders.craftory.api.recipes.RecipeManager;
 import tech.brettsaunders.craftory.api.tasks.Tasks;
 import tech.brettsaunders.craftory.tech.power.api.effect.EnergyDisplayManager;
-import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerConnectorManager;
-import tech.brettsaunders.craftory.tech.power.core.powerGrid.PowerGridManager;
+import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerConnectorManager;
+import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGridManager;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
-import tech.brettsaunders.craftory.testing.TestingCommand;
 import tech.brettsaunders.craftory.utils.DataConfigUtils;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
@@ -47,8 +55,8 @@ import tech.brettsaunders.craftory.world.WorldGenHandler;
 public final class Craftory extends JavaPlugin implements Listener {
 
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/beb6b420d791fb64f6321b1a8b9dc70d44f9a955.zip";
-  public static final String HASH = "beb6b420d791fb64f6321b1a8b9dc70d44f9a955";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/1c217b5f61b5795b09fd6f2f3d0d878ece3f5ae6.zip";
+  public static final String HASH = "1c217b5f61b5795b09fd6f2f3d0d878ece3f5ae6";
   public static String VERSION;
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
@@ -61,7 +69,6 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static FileConfiguration customModelDataConfig;
   public static FileConfiguration customBlocksConfig;
   public static FileConfiguration customRecipeConfig;
-  public static FileConfiguration serverDataConfig;
   public static CustomBlockTickManager tickManager;
   public static PowerGridManager powerGridManager;
   public static RecipeBookEvents recipeBookEvents;
@@ -72,7 +79,8 @@ public final class Craftory extends JavaPlugin implements Listener {
   private static File customBlockConfigFile;
   private static File customRecipeConfigFile;
   private static File customModelDataFile;
-  private static File serverDataFile;
+  private SentryClient sentryClient;
+  private static HashSet<String> loadedPlugins = new HashSet<>();
 
   private static int generateVersionCode() {
     String[] subVersions = VERSION.split("\\.");
@@ -87,68 +95,84 @@ public final class Craftory extends JavaPlugin implements Listener {
   @SneakyThrows
   @Override
   public void onEnable() {
-    if(getServer().getPluginManager().getPlugin("ProtocolLib") == null){
-      Logger.error("ProtocolLib is needed to run the latest version of craftory!");
-      getServer().getPluginManager().disablePlugin(this);
-    }
-    packetManager = ProtocolLibrary.getProtocolManager();
-    Craftory.VERSION = this.getDescription().getVersion();
-    thisVersionCode = generateVersionCode();
     Craftory.plugin = this;
-    this.getServer().getPluginManager().registerEvents(this, this);
+    Craftory.VERSION = this.getDescription().getVersion();
+    setupSentry();
+    try {
+      if (getServer().getPluginManager().getPlugin("ProtocolLib") == null) {
+        Log.error("ProtocolLib is needed to run the latest version of craftory!");
+        getServer().getPluginManager().disablePlugin(this);
+      }
+      loadedPlugins = (HashSet<String>) Arrays.stream(plugin.getServer().getPluginManager().getPlugins()).map(Plugin::getName).collect(
+          Collectors.toSet());
+      packetManager = ProtocolLibrary.getProtocolManager();
+      thisVersionCode = generateVersionCode();
+      this.getServer().getPluginManager().registerEvents(this, this);
 
-    Utilities.createDataPath();
-    Utilities.createConfigs();
-    Utilities.getTranslations();
-    tickManager = new CustomBlockTickManager();
-    customBlockFactory = new CustomBlockFactory();
-    Utilities.pluginBanner();
-    Utilities.checkVersion();
-    Utilities.registerBasicBlocks();
-    Utilities.registerCustomBlocks();
-    Utilities.registerCommandsAndCompletions();
-    Utilities.registerEvents();
-    if (Utilities.config.getBoolean("resourcePack.forcePack")) {
-      new ResourcePackEvents();
+      Utilities.createDataPath();
+      Utilities.createConfigs();
+      Utilities.getTranslations();
+      tickManager = new CustomBlockTickManager();
+      customBlockFactory = new CustomBlockFactory();
+      Utilities.pluginBanner();
+      Utilities.checkVersion();
+      Utilities.registerBasicBlocks();
+      Utilities.registerCustomBlocks();
+      Utilities.registerCommandsAndCompletions();
+      Utilities.registerEvents();
+      if (Utilities.config.getBoolean("resourcePack.forcePack")) {
+        new ResourcePackEvents();
+      }
+      poweredToolManager = new PoweredToolManager(); //Must be before CustomItemManager
+      customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
+      customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
+      customRecipeConfigFile = new File(getDataFolder(), "config/customRecipesConfig.yml");
+      customModelDataFile = new File(getDataFolder(), "config/customModelDataV2.yml");
+      customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
+      customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
+      customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
+      customRecipeConfig.save(customRecipeConfigFile);
+      customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
+      Optional<FileConfiguration> recipesDefaults = Optional.of(YamlConfiguration
+          .loadConfiguration(
+              new File(Craftory.plugin.getDataFolder(), "data/customRecipesConfig.yml")));
+      recipesDefaults.ifPresent(source -> DataConfigUtils.copyDefaults(source, customRecipeConfig));
+      customRecipeConfig.save(customRecipeConfigFile);
+      CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
+      customBlockManager = new CustomBlockManager();
+      customBlockFactory.registerStats();
+      new WorldGenHandler();
+      new PoweredBlockEvents();
+      Utilities.startMetrics();
+      Utilities.done();
+
+      //Tasks
+      Tasks.runTaskTimer(new EnergyDisplayManager(), 30L, 30L);
+      Tasks.runTaskTimer(tickManager, 20L, 1L);
+      //Testing
+      //this.getCommand("crtesting").setExecutor(new TestingCommand());
+
+    } catch (Exception e) {
+      sentryLog(e);
     }
-    poweredToolManager = new PoweredToolManager(); //Must be before CustomItemManager
-    customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
-    customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
-    customRecipeConfigFile = new File(getDataFolder(), "config/customRecipesConfig.yml");
-    customModelDataFile = new File(getDataFolder(), "config/customModelDataV2.yml");
-    customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
-    customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
-    customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
-    customRecipeConfig.save(customRecipeConfigFile);
-    customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
-    Optional<FileConfiguration> recipesDefaults = Optional.ofNullable(YamlConfiguration.loadConfiguration(new File(Craftory.plugin.getDataFolder(), "data/customRecipesConfig.yml")));
-    recipesDefaults.ifPresent(source -> DataConfigUtils.copyDefaults(source, customRecipeConfig));
-    customRecipeConfig.save(customRecipeConfigFile);
-    CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
-    customBlockManager = new CustomBlockManager();
-    customBlockFactory.registerStats();
-    new WorldGenHandler();
-    new PoweredBlockEvents();
-    Utilities.startMetrics();
-    Utilities.done();
-
-    //Tasks
-    Tasks.runTaskTimer(new EnergyDisplayManager(), 30L, 30L);
-    Tasks.runTaskTimer(tickManager, 20L, 1L);
-    //Testing
-    this.getCommand("crtesting").setExecutor(new TestingCommand());
   }
 
   @EventHandler
   public void onServerLoaded(ServerLoadEvent e) {
-    powerConnectorManager = new PowerConnectorManager();
-    powerGridManager = new PowerGridManager();
-    powerGridManager.onEnable();
-    getServer().getPluginManager().registerEvents(powerConnectorManager, this);
-    new RecipeManager();
-    new RecipeBook();
-    recipeBookEvents = new RecipeBookEvents();
-    Utilities.compatibilityUpdater();
+    try {
+      loadedPlugins = (HashSet<String>) Arrays.stream(plugin.getServer().getPluginManager().getPlugins()).map(Plugin::getName).collect(
+          Collectors.toSet());
+      powerConnectorManager = new PowerConnectorManager();
+      powerGridManager = new PowerGridManager();
+      powerGridManager.onEnable();
+      getServer().getPluginManager().registerEvents(powerConnectorManager, this);
+      new RecipeManager();
+      new RecipeBook();
+      recipeBookEvents = new RecipeBookEvents();
+      Utilities.compatibilityUpdater();
+    } catch (Exception exception) {
+      sentryLog(exception);
+    }
   }
 
   @Override
@@ -156,17 +180,38 @@ public final class Craftory extends JavaPlugin implements Listener {
     try {
       Utilities.data.set("lastVersion", thisVersionCode);
       Utilities.saveDataFile();
-      customItemConfig.save(customItemConfigFile);
-      customBlocksConfig.save(customBlockConfigFile);
-      customRecipeConfig.save(customRecipeConfigFile);
-    } catch (IOException e) {
-      e.printStackTrace();
+      if (Objects.nonNull(customItemConfigFile) && Objects.nonNull(customItemConfig)) customItemConfig.save(customItemConfigFile);
+      if (Objects.nonNull(customBlockConfigFile) && Objects.nonNull(customBlocksConfig)) customBlocksConfig.save(customBlockConfigFile);
+      if (Objects.nonNull(customRecipeConfigFile) && Objects.nonNull(customRecipeConfig)) customRecipeConfig.save(customRecipeConfigFile);
+      if (Objects.nonNull(recipeBookEvents)) recipeBookEvents.onDisable();
+      customBlockManager.onDisable();
+      powerGridManager.onDisable();
+      Utilities.reloadConfigFile();
+      Utilities.saveConfigFile();
+      plugin = null;
+    } catch (Exception e) {
+      sentryLog(e);
     }
-    if (Objects.nonNull(recipeBookEvents)) recipeBookEvents.onDisable();
-    customBlockManager.onDisable();
-    powerGridManager.onDisable();
-    Utilities.reloadConfigFile();
-    Utilities.saveConfigFile();
-    plugin = null;
+  }
+
+  public boolean isPluginLoaded(String name) {
+    return loadedPlugins.contains(name);
+  }
+  private void setupSentry() {
+    // Setup connection to Sentry.io
+    try {
+      sentryClient = Sentry.init("https://3981ae28ec8444368fdc4397121fcac9@o467455.ingest.sentry.io/5493918"
+          + "?stacktrace.app.packages=tech.brettsaunders.craftory");
+    } catch(InvalidDsnException | IllegalArgumentException e) {
+      Log.error("Provided Sentry DSN is invalid:", ExceptionUtils.getStackTrace(e));
+      return;
+    }
+
+    // Default data
+    sentryClient.setServerName(this.getServer().getName());
+    sentryClient.setRelease(VERSION);
+
+
+    Log.info("Sentry Enabled!");
   }
 }

@@ -16,9 +16,9 @@ import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -48,7 +48,7 @@ import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import tech.brettsaunders.craftory.CoreHolder.Blocks;
+import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -62,23 +62,22 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.core.block.powerGrid.PowerConnector;
-import tech.brettsaunders.craftory.utils.Logger;
+import tech.brettsaunders.craftory.tech.power.core.block.power_grid.PowerConnector;
 
 public class CustomBlockManagerEvents implements Listener {
 
   private final PersistenceStorage persistenceStorage;
-  private final HashMap<Location, CustomBlock> currentCustomBlocks;
-  private final HashMap<String, HashSet<CustomBlock>> activeChunks;
-  private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
-  private final HashMap<String, CustomBlockData> customBlockDataHashMap;
+  private final Map<Location, CustomBlock> currentCustomBlocks;
+  private final Map<String, HashSet<CustomBlock>> activeChunks;
+  private final Map<String, HashSet<CustomBlock>> inactiveChunks;
+  private final Map<String, CustomBlockData> customBlockDataHashMap;
   private final StatsContainer statsContainer;
 
   public CustomBlockManagerEvents(PersistenceStorage persistenceStorage,
-      HashMap<Location, CustomBlock> currentCustomBlocks,
-      HashMap<String, HashSet<CustomBlock>> activeChunks,
-      HashMap<String, HashSet<CustomBlock>> inactiveChunks,
-      HashMap<String, CustomBlockData> customBlockDataHashMap,
+      Map<Location, CustomBlock> currentCustomBlocks,
+      Map<String, HashSet<CustomBlock>> activeChunks,
+      Map<String, HashSet<CustomBlock>> inactiveChunks,
+      Map<String, CustomBlockData> customBlockDataHashMap,
       StatsContainer statsContainer) {
     this.persistenceStorage = persistenceStorage;
     this.currentCustomBlocks = currentCustomBlocks;
@@ -122,7 +121,7 @@ public class CustomBlockManagerEvents implements Listener {
         Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
 
         //Give data
-        if (nbtItem.hasKey("extraData")) {
+        if (Boolean.TRUE.equals(nbtItem.hasKey("extraData"))) {
           NBTCompound extraCompound = nbtItem.getCompound("extraData");
           if (extraCompound.hasKey("energyStorage") && customBlock instanceof PoweredBlock) {
             ((PoweredBlock) customBlock).getEnergyStorage().setEnergyStored(extraCompound.getInteger("energyStorage"));
@@ -188,6 +187,7 @@ public class CustomBlockManagerEvents implements Listener {
     BlockFace blockFace = getBlockFace(player);
     start.add(start.getX() > 0 ? -0.5 : 0.5, 0.0, start.getZ() > 0 ? -0.5 : 0.5);
     switch (blockFace) {
+      default:
       case NORTH:
         start.add(0,0,-0.4);
         break;
@@ -210,7 +210,7 @@ public class CustomBlockManagerEvents implements Listener {
     final Location location = e.getClickedBlock().getLocation();
     if (currentCustomBlocks.containsKey(location)) {
       CustomBlock customBlock = currentCustomBlocks.get(location);
-      ToolLevel toolLevel = customBlockDataHashMap.get(customBlock.blockName).BREAK_LEVEL;
+      ToolLevel toolLevel = customBlockDataHashMap.get(customBlock.blockName).breakLevel;
       if (toolLevel == ToolLevel.HAND) return;
       Material itemInHand;
       if (e.getItem() == null) {
@@ -219,6 +219,7 @@ public class CustomBlockManagerEvents implements Listener {
         itemInHand = e.getItem().getType();
       }
       switch (toolLevel) {
+        default:
         case IRON:
           if (!(itemInHand == Material.IRON_PICKAXE || itemInHand == Material.GOLDEN_PICKAXE || itemInHand == Material.DIAMOND_PICKAXE || itemInHand == Material.NETHERITE_PICKAXE)) {
             slowBreaking(e.getPlayer(),e.getClickedBlock().getLocation());
@@ -235,7 +236,7 @@ public class CustomBlockManagerEvents implements Listener {
           }
           break;
         case NETHERITE:
-          if (!(itemInHand == Material.NETHERITE_PICKAXE)) {
+          if (itemInHand != Material.NETHERITE_PICKAXE) {
             slowBreaking(e.getPlayer(),e.getClickedBlock().getLocation());
           }
           break;
@@ -379,8 +380,7 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onCustomBlockInteract(PlayerInteractEvent e) {
-    if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) {
-      if (currentCustomBlocks.containsKey(e.getClickedBlock().getLocation())) {
+    if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) && currentCustomBlocks.containsKey(e.getClickedBlock().getLocation())) {
         CustomBlock customBlock = customBlockManager
             .getCustomBlock(e.getClickedBlock().getLocation());
         CustomBlockInteractEvent customBlockInteractEvent = new CustomBlockInteractEvent(
@@ -392,9 +392,7 @@ public class CustomBlockManagerEvents implements Listener {
             customBlock,
             e);
         Bukkit.getServer().getPluginManager().callEvent(customBlockInteractEvent);
-      }
     }
-    return;
   }
 
   @EventHandler
@@ -409,9 +407,8 @@ public class CustomBlockManagerEvents implements Listener {
     if (Utilities.updateItemGraphics) {
       CustomItemManager.updateInventoryItemGraphics(e.getPlayer().getInventory());
     }
-    if (lastVersionCode == 0 && Craftory.folderExists) {
-      if (e.getPlayer().isOp() || e.getPlayer().hasPermission("craftory.give") || e.getPlayer()
-          .hasPermission("craftory.debug")) {
+    if (lastVersionCode == 0 && Craftory.folderExists && e.getPlayer().isOp() || e.getPlayer().hasPermission("craftory.give") || e.getPlayer()
+        .hasPermission("craftory.debug")) {
         Utilities.msg(e.getPlayer(), "It looks like you are updating from V0.2.0 or lower.");
         Utilities
             .msg(e.getPlayer(), "Due to changes all Items and Blocks may lose their textures.");
@@ -421,7 +418,6 @@ public class CustomBlockManagerEvents implements Listener {
             "All items will be convert when the player opens an inventory with them in, until you turn off the config option Fix Item Graphics.");
         Utilities.msg(e.getPlayer(),
             "Once turned off you can still convert items with /fixGraphics command!");
-      }
     }
   }
 }

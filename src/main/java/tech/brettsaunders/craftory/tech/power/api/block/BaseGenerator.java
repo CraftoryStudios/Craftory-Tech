@@ -10,16 +10,17 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GIndicator;
-import tech.brettsaunders.craftory.tech.power.api.guiComponents.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
+import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
@@ -27,31 +28,31 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
 
 
   /* Per Object Variables Saved */
-  protected static HashMap<BlockFace, Integer> inputFaces = new HashMap<>();
-  protected static HashMap<BlockFace, Integer> outputFaces = new HashMap<>();
+  protected static Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
+  protected static Map<BlockFace, Integer> outputFaces = new EnumMap<>(BlockFace.class);
   /* Per Object Variables Not-Saved */
-  protected transient VariableContainer<Boolean> runningContainer;
+  protected  VariableContainer<Boolean> runningContainer;
   @Persistent
   protected int energyProduced;
   protected boolean isActive;
 
   /* Construction */
-  public BaseGenerator(Location location, String blockName, byte level, int outputAmount,
+  protected BaseGenerator(Location location, String blockName, byte level, int outputAmount,
       int capacity) {
     super(location, blockName, level, outputAmount);
     energyStorage = new EnergyStorage(capacity);
-    init();
+    setup();
   }
 
   /* Saving, Setup and Loading */
-  public BaseGenerator() {
+  protected BaseGenerator() {
     super();
     isActive = false;
-    init();
+    setup();
   }
 
   /* Common Load and Construction */
-  private void init() {
+  private void setup() {
     isActive = false;
     runningContainer = new VariableContainer<>(false);
   }
@@ -83,23 +84,12 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
     }
   }
 
-  /* Internal Helper Functions */
-  protected boolean timeCheck() {
-    //Time check factor to slow down check speed;
-    //Core Props
-    //return world.getTotalWorldTime() % TIME_CONSTANT == 0;
-    return true;
-  }
-
   protected abstract boolean canStart();
 
   protected abstract boolean canFinish();
 
   protected void processStart() {
     runningContainer.setT(true);
-  }
-
-  protected void processFinish() {
   }
 
   protected void processIdle() {
@@ -142,12 +132,12 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
 
 
   @Override
-  public HashMap<BlockFace, Integer> getInputFaces() {
+  public Map<BlockFace, Integer> getInputFaces() {
     return inputFaces;
   }
 
   @Override
-  public HashMap<BlockFace, Integer> getOutputFaces() {
+  public Map<BlockFace, Integer> getOutputFaces() {
     return outputFaces;
   }
 

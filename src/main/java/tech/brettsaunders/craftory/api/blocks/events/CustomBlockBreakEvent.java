@@ -10,6 +10,10 @@
 
 package tech.brettsaunders.craftory.api.blocks.events;
 
+import io.sentry.Sentry;
+import io.sentry.event.Breadcrumb.Type;
+import io.sentry.event.BreadcrumbBuilder;
+import java.util.Date;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
@@ -33,6 +37,13 @@ public class CustomBlockBreakEvent extends Event implements Cancellable {
     this.name = name;
     this.isCancelled = false;
     this.customBlock = customBlock;
+
+    Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+        .setCategory("customBreakEvent")
+        .setTimestamp(new Date(System.currentTimeMillis()))
+        .setMessage("Break Custom Block "+name + " at location: "+location)
+        .setType(Type.DEFAULT)
+        .build());
   }
 
   public static HandlerList getHandlerList() {

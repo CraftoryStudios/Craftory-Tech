@@ -10,7 +10,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,6 +22,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -30,7 +35,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import tech.brettsaunders.craftory.CoreHolder.PoweredToolType;
+import tech.brettsaunders.craftory.Constants.PoweredToolType;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.events.Events;
@@ -39,46 +44,42 @@ import tech.brettsaunders.craftory.api.tasks.Tasks;
 
 public class PoweredToolManager implements Listener {
 
-  private HashSet<String> poweredTools = new HashSet<>();
-  public static String CHARGE_KEY = "Charge";
-  public static String MAX_CHARGE_KEY = "MaxCharge";
-  private HashMap<UUID, BlockFace> lastHitFace = new HashMap<>();
-  private static int TOOL_POWER_COST = 100;
-  private static final int version = Integer.parseInt(Craftory.plugin.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
-  private static ArrayList<Material> excavatorBlocks = new ArrayList<Material>(){
-    {
-      if(version > 16) {
-        add(Material.SOUL_SOIL);
-      }
-      add(Material.CLAY);
-      add(Material.FARMLAND);
-      add(Material.GRASS_BLOCK);
-      add(Material.GRASS_PATH);
-      add(Material.GRAVEL);
-      add(Material.MYCELIUM);
-      add(Material.PODZOL);
-      add(Material.COARSE_DIRT);
-      add(Material.DIRT);
-      add(Material.RED_SAND);
-      add(Material.SAND);
-      add(Material.SOUL_SAND);
-      add(Material.SNOW_BLOCK);
-      add(Material.SNOW);
-    }
-  };
+  private Set<String> poweredTools = new HashSet<>();
+  public static final String CHARGE_KEY = "Charge";
+  public static final String MAX_CHARGE_KEY = "MaxCharge";
+  private Map<UUID, BlockFace> lastHitFace = new HashMap<>();
+  private static final int TOOL_POWER_COST = 100;
+  private static final int VERSION = Integer.parseInt(Craftory.plugin.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
+  private static final Set<Material> excavatorBlocks = new HashSet<>();
 
-  private static ArrayList<PoweredToolType> fastTools = new ArrayList<PoweredToolType>(){
-    {
-      add(PoweredToolType.DRILL);
-    }
-  };
+  private static final Set<PoweredToolType> fastTools = new HashSet<>();
 
-  private static ArrayList<PoweredToolType> slowTools = new ArrayList<PoweredToolType>(){
-    {
-      add(PoweredToolType.EXCAVATOR);
-      add(PoweredToolType.HAMMER);
+  private static final Set<PoweredToolType> slowTools = new HashSet<>();
+
+  static {
+    if(VERSION > 16) {
+      excavatorBlocks.add(Material.SOUL_SOIL);
     }
-  };
+    excavatorBlocks.add(Material.CLAY);
+    excavatorBlocks.add(Material.FARMLAND);
+    excavatorBlocks.add(Material.GRASS_BLOCK);
+    excavatorBlocks.add(Material.GRASS_PATH);
+    excavatorBlocks.add(Material.GRAVEL);
+    excavatorBlocks.add(Material.MYCELIUM);
+    excavatorBlocks.add(Material.PODZOL);
+    excavatorBlocks.add(Material.COARSE_DIRT);
+    excavatorBlocks.add(Material.DIRT);
+    excavatorBlocks.add(Material.RED_SAND);
+    excavatorBlocks.add(Material.SAND);
+    excavatorBlocks.add(Material.SOUL_SAND);
+    excavatorBlocks.add(Material.SNOW_BLOCK);
+    excavatorBlocks.add(Material.SNOW);
+
+    fastTools.add(PoweredToolType.DRILL);
+
+    slowTools.add(PoweredToolType.EXCAVATOR);
+    slowTools.add(PoweredToolType.HAMMER);
+  }
 
   public PoweredToolManager() {
     Events.registerEvents(this);
@@ -111,12 +112,6 @@ public class PoweredToolManager implements Listener {
         (Player) event.getPlayer());
   }
 
-  /*@EventHandler
-  public void onInventoryOpen(InventoryOpenEvent event) {
-    hidePotionEffects(event.getPlayer().getInventory().getItemInMainHand(),
-        (Player) event.getPlayer());
-  }*/ //Needs to trigger when player opens their inventory
-
   @EventHandler
   public void onPlayerItemHeld(PlayerItemHeldEvent event) {
     ItemStack itemStack = event.getPlayer().getInventory().getItem(event.getPreviousSlot());
@@ -125,44 +120,14 @@ public class PoweredToolManager implements Listener {
     addPotionEffects(itemStack, event.getPlayer());
   }
 
-  //Not needed with set on close packet
-  /*@EventHandler
-  public void onDrag(InventoryDragEvent event) {
-    Player player = (Player) event.getWhoClicked();
-    ItemStack itemStack = event.getNewItems().values().iterator().next();
-    if(itemStack==null) return;
-    for(int slot: event.getInventorySlots()){
-      if(player.getInventory().getHeldItemSlot()==slot) {
-        addPotionEffects(itemStack, player);
-      }
-    }
-  } */
-
   @EventHandler
   public void onInventoryInteract(InventoryClickEvent event) {
     Player player = (Player) event.getWhoClicked();
     PlayerInventory inventory = player.getInventory();
     if(event.isShiftClick()) {
-      if(inventory.getItemInMainHand().getType().equals(Material.AIR)){
-        //Dont add with close packet working
-        /*
-        if(event.getSlotType().equals(SlotType.QUICKBAR)) return;
-        boolean onlyHeldFree = true;
-        for (int i = 0; i < player.getInventory().getHeldItemSlot(); i++) {
-          if(inventory.getItem(i)==null || inventory.getItem(i).getType()==Material.AIR){
-            onlyHeldFree = false;
-            break;
-          }
-        }
-        if(onlyHeldFree) {
-          ItemStack itemStack = player.getInventory().getItem(event.getSlot());
-          addPotionEffects(itemStack, player);
-        } */
-      } else {
-        if(player.getInventory().getHeldItemSlot()==event.getSlot()){
-          ItemStack itemStack = inventory.getItemInMainHand();
-          removePotionEffects(itemStack,player);
-        }
+      if(player.getInventory().getHeldItemSlot()==event.getSlot()){
+        ItemStack itemStack = inventory.getItemInMainHand();
+        removePotionEffects(itemStack,player);
       }
       return;
     }
@@ -170,18 +135,11 @@ public class PoweredToolManager implements Listener {
       if(player.getInventory().getHeldItemSlot()==event.getHotbarButton()) { //Moving item in
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         removePotionEffects(itemStack,player);
-        //Dont add with close packet working
-        //itemStack = player.getInventory().getItem(event.getSlot());
-        //addPotionEffects(itemStack, player);
-
       }
     } else {
       if(player.getInventory().getHeldItemSlot()==event.getSlot()) { //Moving item in
         ItemStack itemStack = player.getInventory().getItem(event.getSlot());
         removePotionEffects(itemStack,player);
-        //Dont add with close packet working
-        //itemStack = event.getCursor();
-        //addPotionEffects(itemStack, player);
       }
     }
   }
@@ -248,11 +206,37 @@ public class PoweredToolManager implements Listener {
   }
   @EventHandler
   public void onPlayerBlockHit(PlayerInteractEvent event) {
-    lastHitFace.put(event.getPlayer().getUniqueId(),event.getBlockFace());
+    if(event.isCancelled()) return;
+    if(event.getAction() == Action.LEFT_CLICK_BLOCK){
+      lastHitFace.put(event.getPlayer().getUniqueId(),event.getBlockFace());
+    } else if (event.getAction() == Action.RIGHT_CLICK_BLOCK){
+      if(event.getClickedBlock().getType()!=Material.GRASS_BLOCK) return;
+      ItemStack tool =  event.getPlayer().getInventory().getItemInMainHand();
+      if(!isPoweredTool(tool)) return;
+      String name = CustomItemManager.getCustomItemName(tool);
+      PoweredToolType toolType = getToolType(name);
+      if(toolType != (PoweredToolType.EXCAVATOR)) return;
+      NBTItem nbt = new NBTItem(tool);
+      int charge = nbt.getInteger(CHARGE_KEY);
+      if(charge < TOOL_POWER_COST) {
+        event.setCancelled(true);
+        return;
+      }
+      charge -= TOOL_POWER_COST;
+      List<Block> blocks = get2DNeighbours(event.getClickedBlock(),event.getBlockFace());
+      for(Block block: blocks) {
+        if(block.getType()==Material.GRASS_BLOCK && charge >= TOOL_POWER_COST) {
+          block.setType(Material.GRASS_PATH);
+          charge -=TOOL_POWER_COST;
+        }
+      }
+      if(event.getPlayer().getGameMode() != GameMode.CREATIVE) tool = setCharge(tool, charge);
+      event.getPlayer().getInventory().setItemInMainHand(tool);
+    }
   }
 
   @EventHandler
-  public void ToolBlockBreak(BlockBreakEvent event) {
+  public void toolBlockBreak(BlockBreakEvent event) {
     if(event.isCancelled()) return;
     ItemStack tool =  event.getPlayer().getInventory().getItemInMainHand();
     if(!isPoweredTool(tool)) return;
@@ -264,38 +248,32 @@ public class PoweredToolManager implements Listener {
       event.setCancelled(true);
       return;
     }
+    toolUse(tool, name, charge, event);
+  }
+
+  private void toolUse(ItemStack tool, String name, int charge, BlockBreakEvent event) {
     charge -=TOOL_POWER_COST;
     PoweredToolType toolType = getToolType(name);
     if(toolType==PoweredToolType.HAMMER) {
-      ArrayList<Block> blocks = get2DNeighbours(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
-      //ArrayList<ItemStack> drops = new ArrayList<>();
+      List<Block> blocks = get2DNeighbours(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
       for(Block block: blocks) {
         Collection<ItemStack> blockDrops = block.getDrops(tool);
         if(!blockDrops.isEmpty() && !excavatorBlocks.contains(block.getType()) && charge >= TOOL_POWER_COST) {
           block.breakNaturally(tool);
-          //drops.addAll(drops);
           charge -=TOOL_POWER_COST;
         }
       }
-      /*for (ItemStack stack: drops){
-        event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(),stack);
-      } */
     } else if(toolType==PoweredToolType.EXCAVATOR) {
-      ArrayList<Block> blocks = get2DNeighbours(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
-      //ArrayList<ItemStack> drops = new ArrayList<>();
+      List<Block> blocks = get2DNeighbours(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
       for(Block block: blocks) {
         Collection<ItemStack> blockDrops = block.getDrops(tool);
         if(!blockDrops.isEmpty() && charge >= TOOL_POWER_COST) {
           block.breakNaturally(tool);
-          //drops.addAll(drops);
           charge -=TOOL_POWER_COST;
         }
       }
-      /*for (ItemStack stack: drops){
-        event.getBlock().getLocation().getWorld().dropItemNaturally(event.getBlock().getLocation(),stack);
-      } */
     }
-    tool = setCharge(tool, charge);
+    if(event.getPlayer().getGameMode() != GameMode.CREATIVE) tool = setCharge(tool, charge);
     event.getPlayer().getInventory().setItemInMainHand(tool);
   }
 
@@ -364,7 +342,7 @@ public class PoweredToolManager implements Listener {
     }
     for(Location loc: locations) {
       Block block = loc.getBlock();
-      if(block!=null && block.getType()!= Material.AIR) {
+      if(block.getType() != Material.AIR) {
         blocks.add(block);
       }
     }

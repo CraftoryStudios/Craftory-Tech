@@ -479,16 +479,258 @@ recipes:
     result:
       item: windmill
       amount: 1
+  windmill_orange:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: ORANGE_WOOL
+      S: STICK
+    result:
+      item: windmill_orange
+      amount: 1
+  windmill_black:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: BLACK_WOOL
+      S: STICK
+    result:
+      item: windmill_black
+      amount: 1
+  windmill_blue:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: BLUE_WOOL
+      S: STICK
+    result:
+      item: windmill_blue
+      amount: 1
+  windmill_brown:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: BROWN_WOOL
+      S: STICK
+    result:
+      item: windmill_brown
+      amount: 1
+  windmill_cyan:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: CYAN_WOOL
+      S: STICK
+    result:
+      item: windmill_cyan
+      amount: 1
+  windmill_gray:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: GRAY_WOOL
+      S: STICK
+    result:
+      item: windmill_gray
+      amount: 1
+  windmill_green:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: GREEN_WOOL
+      S: STICK
+    result:
+      item: windmill_green
+      amount: 1
+  windmill_light_blue:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: LIGHT_BLUE_WOOL
+      S: STICK
+    result:
+      item: windmill_light_blue
+      amount: 1
+  windmill_light_gray:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: LIGHT_GRAY_WOOL
+      S: STICK
+    result:
+      item: windmill_light_gray
+      amount: 1
+  windmill_lime:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: LIME_WOOL
+      S: STICK
+    result:
+      item: windmill_lime
+      amount: 1
+  windmill_magenta:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: MAGENTA_WOOL
+      S: STICK
+    result:
+      item: windmill_magenta
+      amount: 1
+  windmill_pink:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: PINK_WOOL
+      S: STICK
+    result:
+      item: windmill_pink
+      amount: 1
+  windmill_red:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: RED_WOOL
+      S: STICK
+    result:
+      item: windmill_red
+      amount: 1
+  windmill_purple:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: PURPLE_WOOL
+      S: STICK
+    result:
+      item: windmill_purple
+      amount: 1
+  windmill_yellow:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: YELLOW_WOOL
+      S: STICK
+    result:
+      item: windmill_yellow
+      amount: 1
   waterwheel:
     pattern:
       - PSP
       - SSS
       - PSP
     ingredients:
-      P: TAG-PLANKS
+      P: DARK_OAK_PLANKS
       S: STICK
     result:
       item: waterwheel
+      amount: 1
+  waterwheel_oak:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: OAK_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_oak
+      amount: 1
+  waterwheel_birch:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: BIRCH_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_birch
+      amount: 1
+  waterwheel_acacia:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: ACACIA_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_acacia
+      amount: 1
+  waterwheel_crimson:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: CRIMSON_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_crimson
+      amount: 1
+  waterwheel_jungle:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: JUNGLE_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_jungle
+      amount: 1
+  waterwheel_spruce:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: SPRUCE_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_spruce
+      amount: 1
+  waterwheel_warpped:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: WARPED_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_warpped
       amount: 1
   Magnetiser:
     pattern:
@@ -604,7 +846,7 @@ recipes:
       U: steel_ingot
       T: GOLDEN_PICKAXE
       M: magnetised_iron
-      C: IronCell
+      C: GoldCell
     result:
       item: golden_power_hammer
       amount: 1
@@ -808,6 +1050,21 @@ macerator_recipes:
       name: steel_ingot
     result:
       name: steel_dust
+  cobblestone:
+    input:
+      name: STONE
+    result:
+      name: COBBLESTONE
+  gravel:
+    input:
+      name: COBBLESTONE
+    result:
+      name: GRAVEL
+  sand:
+    input:
+      name: GRAVEL
+    result:
+      name: SAND
 
 magnetiser_recipes:
   magnetised_iron:
@@ -815,3 +1072,25 @@ magnetiser_recipes:
       name: IRON_INGOT
     result:
       name: magnetised_iron
+
+foundry_recipes:
+  steel_ingot_coal_dust:
+    input1:
+      name: IRON_INGOT
+      amount: 1
+    input2:
+      name: coal_dust
+      amount: 1
+    result:
+      name: steel_ingot
+      amount: 1
+  steel_ingot_charcoal:
+    input1:
+      name: IRON_INGOT
+      amount: 1
+    input2:
+      name: CHARCOAL
+      amount: 1
+    result:
+      name: steel_ingot
+      amount: 1

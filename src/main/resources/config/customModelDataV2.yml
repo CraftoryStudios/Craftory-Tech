@@ -347,6 +347,51 @@ items:
     customModelID: 100134
   recipe_book:
     customModelID: 100135
+  waterwheel_oak:
+    customModelID: 100140
+  waterwheel_birch:
+    customModelID: 100137
+  waterwheel_acacia:
+    customModelID: 100136
+  waterwheel_crimson:
+    customModelID: 100138
+  waterwheel_jungle:
+    customModelID: 100139
+  waterwheel_spruce:
+    customModelID: 100141
+  waterwheel_warpped:
+    customModelID: 100142
+  windmill_orange:
+    customModelID: 100144
+  windmill_black:
+    customModelID: 100145
+  windmill_blue:
+    customModelID: 100146
+  windmill_brown:
+    customModelID: 100147
+  windmill_cyan:
+    customModelID: 100148
+  windmill_gray:
+    customModelID: 100149
+  windmill_green:
+    customModelID: 100150
+  windmill_light_blue:
+    customModelID: 100151
+  windmill_light_gray:
+    customModelID: 100152
+  windmill_lime:
+    customModelID: 100153
+  windmill_magenta:
+    customModelID: 100154
+  windmill_pink:
+    customModelID: 100155
+  windmill_purple:
+    customModelID: 100156
+  windmill_red:
+    customModelID: 100157
+  windmill_yellow:
+    customModelID: 100158
+
   upgrade_card_iron:
     customModelID: 1001
   upgrade_card_gold:
