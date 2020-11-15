@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory;
 
+import static tech.brettsaunders.craftory.Utilities.checkMinecraftVersion;
 import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -49,6 +50,7 @@ import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 import tech.brettsaunders.craftory.utils.DataConfigUtils;
 import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
+import tech.brettsaunders.craftory.utils.Version;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
 
@@ -82,6 +84,9 @@ public final class Craftory extends JavaPlugin implements Listener {
   private SentryClient sentryClient;
   private static HashSet<String> loadedPlugins = new HashSet<>();
 
+  public static final Version MAX_SUPPORTED_MC = new Version("1.16.4");
+  public static Version mcVersion;
+
   private static int generateVersionCode() {
     String[] subVersions = VERSION.split("\\.");
     StringBuffer resultString = new StringBuffer();
@@ -97,6 +102,11 @@ public final class Craftory extends JavaPlugin implements Listener {
   public void onEnable() {
     Craftory.plugin = this;
     Craftory.VERSION = this.getDescription().getVersion();
+    mcVersion = new Version(getServer());
+    if (checkMinecraftVersion()) {
+      return;
+    }
+
     setupSentry();
     try {
       if (getServer().getPluginManager().getPlugin("ProtocolLib") == null) {
@@ -184,8 +194,8 @@ public final class Craftory extends JavaPlugin implements Listener {
       if (Objects.nonNull(customBlockConfigFile) && Objects.nonNull(customBlocksConfig)) customBlocksConfig.save(customBlockConfigFile);
       if (Objects.nonNull(customRecipeConfigFile) && Objects.nonNull(customRecipeConfig)) customRecipeConfig.save(customRecipeConfigFile);
       if (Objects.nonNull(recipeBookEvents)) recipeBookEvents.onDisable();
-      customBlockManager.onDisable();
-      powerGridManager.onDisable();
+      if (Objects.nonNull(customBlockManager)) customBlockManager.onDisable();
+      if (Objects.nonNull(powerGridManager)) powerGridManager.onDisable();
       Utilities.reloadConfigFile();
       Utilities.saveConfigFile();
       plugin = null;

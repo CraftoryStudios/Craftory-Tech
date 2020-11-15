@@ -135,6 +135,16 @@ public class Utilities {
     });
   }
 
+  static boolean checkMinecraftVersion() {
+    if (Craftory.mcVersion.compareTo(Craftory.MAX_SUPPORTED_MC) == 1) {
+      Log.error("Craftory is shutting down! This is not an error with Craftory!");
+      Log.error("Minecraft Version "+Craftory.mcVersion.get() + " is unsupported by this version of Craftory!");
+      Craftory.plugin.getServer().getPluginManager().disablePlugin(Craftory.plugin);
+      return true;
+    }
+    return false;
+  }
+
   static void createConfigs() {
     config.options().header("Craftory");
     config.addDefault("general.debug", false);
@@ -186,7 +196,6 @@ public class Utilities {
             customBlocks.forEach(customBlock -> {
               plugin.getServer().getScheduler().runTaskLater(plugin,
                   () -> convertMushroomType(customBlock), 2L);
-              Log.info("made to stem inactive");
             }));
         Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
             customBlocks.forEach(customBlock -> {
@@ -196,7 +205,6 @@ public class Utilities {
                 plugin.getServer().getScheduler().runTaskLater(plugin,
                     () -> setToNewDiamondMacerator(customBlock), 2L);
               }
-              Log.info("made to stem active");
             }));
       }
     }
