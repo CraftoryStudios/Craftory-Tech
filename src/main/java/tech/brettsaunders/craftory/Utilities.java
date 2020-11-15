@@ -136,7 +136,7 @@ public class Utilities {
   }
 
   static boolean checkMinecraftVersion() {
-    if (Craftory.mcVersion.compareTo(Craftory.MAX_SUPPORTED_MC) == 1) {
+    if (Craftory.mcVersion.compareTo(Craftory.MAX_SUPPORTED_MC) > 0) {
       Log.error("Craftory is shutting down! This is not an error with Craftory!");
       Log.error("Minecraft Version "+Craftory.mcVersion.get() + " is unsupported by this version of Craftory!");
       Craftory.plugin.getServer().getPluginManager().disablePlugin(Craftory.plugin);
