@@ -12,11 +12,8 @@ load: STARTUP
 
 commands:
   craftory:
-    description: Craftory commands.
-  cr:
-    description: Cratory commands.
-  crtesting:
-    description: Testing
+    description: Craftory main command.
+    aliases: cr
 
 permissions:
   craftory.command.help:
