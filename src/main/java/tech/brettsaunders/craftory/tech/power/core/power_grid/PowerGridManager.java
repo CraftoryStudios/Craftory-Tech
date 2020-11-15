@@ -50,6 +50,11 @@ public class PowerGridManager implements Listener {
     try {
       nbtFile = new NBTFile(
           new File(Craftory.plugin.getDataFolder() + File.separator + "data", "PoweredGrids.nbt"));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    try {
       nbtFileBackup = new NBTFile(
           new File(Craftory.plugin.getDataFolder() + File.separator + "data",
               "PoweredGridsBackup.nbt"));
