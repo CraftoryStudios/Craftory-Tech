@@ -21,12 +21,14 @@ import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
+import tech.brettsaunders.craftory.utils.Light;
 
 public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
 
@@ -38,6 +40,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
   protected static final int[] CHARGE_SPEED_LEVEL = {1,2,4,8};
   protected static final int ITEM_LOCATION = 50;
   /* Static Constants */
+
+  protected  int currentLightLevel = -1;
 
   /* Construction */
   protected BaseCell(Location location, String blockName, byte level, int outputAmount) {
@@ -59,6 +63,34 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
     outputLocations = new ArrayList<>();
     inputLocations.add(ITEM_LOCATION);
     interactableSlots = new HashSet<>(Collections.singletonList(ITEM_LOCATION));
+  }
+
+  @Ticking(ticks = 100)
+  public void updateLight() {
+    if(!Craftory.plugin.isPluginLoaded("LightAPI")) {
+      return;
+    }
+    int level = Math.round((getEnergyStored() / (float) getMaxEnergyStored()) * 10);
+    if(currentLightLevel!=level) {
+      if(currentLightLevel!=-1) {
+        Light.deleteLight(location, false);
+      }
+      if(level>0) {
+        Light.createLight(location, level, false);
+      }
+      currentLightLevel = level;
+    }
+  }
+
+  @Ticking(ticks = 1200)
+  public void  refreshLight() {
+    if(!Craftory.plugin.isPluginLoaded("LightAPI")) {
+      return;
+    }
+    if(currentLightLevel>0) {
+      Light.deleteLight(location, false);
+      Light.createLight(location, currentLightLevel, false);
+    }
   }
 
   /* IEnergyReceiver */

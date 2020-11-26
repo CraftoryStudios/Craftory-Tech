@@ -123,6 +123,12 @@
       <version>1.7.30</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>io.github.qveshn</groupId>
+      <artifactId>LightAPI-fork</artifactId>
+      <version>3.4.5-SNAPSHOT</version>
+      <optional>true</optional>
+    </dependency>
   </dependencies>
   <description>Adds more functionality to Minecraft with only server side modification</description>
   <groupId>tech.brettsaunders</groupId>
