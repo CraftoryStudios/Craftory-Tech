@@ -179,7 +179,6 @@ public final class Craftory extends JavaPlugin implements Listener {
       new RecipeManager();
       new RecipeBook();
       recipeBookEvents = new RecipeBookEvents();
-      Utilities.compatibilityUpdater();
     } catch (Exception exception) {
       sentryLog(exception);
     }

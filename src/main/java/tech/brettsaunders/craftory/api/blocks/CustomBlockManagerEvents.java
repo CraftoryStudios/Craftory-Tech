@@ -58,11 +58,7 @@ import tech.brettsaunders.craftory.api.blocks.tools.ToolLevel;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
-import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.PoweredBlock;
-import tech.brettsaunders.craftory.tech.power.core.block.power_grid.PowerConnector;
 
 public class CustomBlockManagerEvents implements Listener {
 
@@ -71,20 +67,17 @@ public class CustomBlockManagerEvents implements Listener {
   private final Map<String, HashSet<CustomBlock>> activeChunks;
   private final Map<String, HashSet<CustomBlock>> inactiveChunks;
   private final Map<String, CustomBlockData> customBlockDataHashMap;
-  private final StatsContainer statsContainer;
 
   public CustomBlockManagerEvents(PersistenceStorage persistenceStorage,
       Map<Location, CustomBlock> currentCustomBlocks,
       Map<String, HashSet<CustomBlock>> activeChunks,
       Map<String, HashSet<CustomBlock>> inactiveChunks,
-      Map<String, CustomBlockData> customBlockDataHashMap,
-      StatsContainer statsContainer) {
+      Map<String, CustomBlockData> customBlockDataHashMap) {
     this.persistenceStorage = persistenceStorage;
     this.currentCustomBlocks = currentCustomBlocks;
     this.activeChunks = activeChunks;
     this.inactiveChunks = inactiveChunks;
     this.customBlockDataHashMap = customBlockDataHashMap;
-    this.statsContainer = statsContainer;
     Events.registerEvents(this);
   }
 
@@ -128,22 +121,6 @@ public class CustomBlockManagerEvents implements Listener {
           }
         }
 
-      }
-    }
-  }
-
-  private void calculateStatsDecrease(CustomBlock customBlock) {
-    statsContainer.decreaseTotalCustomBlocks();
-    if (customBlock instanceof PoweredBlock) {
-      statsContainer.decreaseTotalPoweredBlocks();
-      if (customBlock instanceof BaseMachine) {
-        statsContainer.decreaseTotalMachines();
-      } else if (customBlock instanceof BaseCell) {
-        statsContainer.decreaseTotalCells();
-      } else if (customBlock instanceof BaseGenerator) {
-        statsContainer.decreaseTotalGenerators();
-      } else if (customBlock instanceof PowerConnector) {
-        statsContainer.decreaseTotalPowerConnectors();
       }
     }
   }
@@ -281,7 +258,6 @@ public class CustomBlockManagerEvents implements Listener {
       }
       Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
       e.getBlock().setType(Material.AIR);
-      calculateStatsDecrease(customBlock);
       //If Basic Block
     } else if (e.getBlock().getType() == Material.MUSHROOM_STEM) {
       BlockData blockData = e.getBlock().getBlockData();
