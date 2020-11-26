@@ -14,11 +14,13 @@ import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.Constants.Sounds;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyReceiver;
+import tech.brettsaunders.craftory.utils.Light;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
 public abstract class BaseMachine extends PoweredBlock implements IEnergyReceiver {
@@ -33,6 +35,8 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
   protected  int processTime;
   protected  int energyConsumption;
   protected  int tickCount = 0;
+  protected boolean lightSpawned = false;
+  protected static int lightLevel = 10;
 
   /* Construction */
   protected BaseMachine(Location location, String blockName, byte level, int maxReceive) {
@@ -69,11 +73,30 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
         tickCount = 0;
         processComplete();
       }
+      if(!lightSpawned){
+        lightSpawned = true;
+        Light.createLight(location, lightLevel, false);
+      }
     } else {
       runningContainer.setT(false);
       tickCount = 0;
+      if(lightSpawned) {
+        lightSpawned = false;
+        Light.deleteLight(location, false);
+      }
     }
     progressContainer.setT(((double) tickCount) / processTime);
+  }
+
+  @Ticking(ticks = 1200)
+  public void  refreshLight() {
+    if(!Craftory.plugin.isPluginLoaded("LightAPI")) {
+      return;
+    }
+    if(lightSpawned) {
+      Light.deleteLight(location, false);
+      Light.createLight(location, lightLevel, false);
+    }
   }
 
   protected boolean hasSufficientEnergy() {
