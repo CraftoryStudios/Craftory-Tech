@@ -26,26 +26,19 @@ import java.util.logging.Level;
 import lombok.Getter;
 import lombok.Synchronized;
 import org.bstats.bukkit.Metrics;
-import org.bstats.bukkit.Metrics.AdvancedPie;
-import org.bstats.bukkit.Metrics.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.api.blocks.BasicBlocks;
-import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
-import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.commands.CommandWrapper;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.DiamondCell;
 import tech.brettsaunders.craftory.tech.power.core.block.cell.EmeraldCell;
@@ -148,7 +141,6 @@ public class Utilities {
   static void createConfigs() {
     config.options().header("Craftory");
     config.addDefault("general.debug", false);
-    config.addDefault("general.techEnabled", true);
     config.addDefault("language.locale", "en-GB");
     config.addDefault("generators.solarDuringStorms", true);
     config.addDefault("resourcePack.forcePack", true);
@@ -181,64 +173,8 @@ public class Utilities {
     }
     Sentry.getContext().setUser(userBuilder.build());
 
-  }
-
-  static void compatibilityUpdater() {
     Log.info("Last version: " + Craftory.lastVersionCode+ " Current version: " + Craftory.thisVersionCode);
-    if (Craftory.lastVersionCode < Craftory.thisVersionCode) {
-      //Fix all Item Graphics
-      Log.info("Updating blocks");
-      if (Craftory.lastVersionCode == 0) config.set("fixItemGraphics", true);
-      //Version 0.2.1 or before
-      if (Craftory.lastVersionCode == 0 || Craftory.lastVersionCode == 200001) {
-        //Convert all mushrooms to Stem
-        Craftory.customBlockManager.getInactiveChunks().forEach((s, customBlocks) ->
-            customBlocks.forEach(customBlock -> {
-              plugin.getServer().getScheduler().runTaskLater(plugin,
-                  () -> convertMushroomType(customBlock), 2L);
-            }));
-        Craftory.customBlockManager.getActiveChunks().forEach((s, customBlocks) ->
-            customBlocks.forEach(customBlock -> {
-              plugin.getServer().getScheduler().runTaskLater(plugin,
-                  () -> convertMushroomType(customBlock), 2L);
-              if(customBlock.getBlockName().equals(Blocks.DIAMOND_MACERATOR)){
-                plugin.getServer().getScheduler().runTaskLater(plugin,
-                    () -> setToNewDiamondMacerator(customBlock), 2L);
-              }
-            }));
-      }
-    }
-    updateItemGraphics = config.getBoolean("fixItemGraphics");
-  }
 
-  private static void setToNewDiamondMacerator(CustomBlock customBlock) {
-    Block block = customBlock.getLocation().getBlock();
-    MultipleFacing multipleFacing = (MultipleFacing) block.getBlockData().clone();
-    multipleFacing.setFace(
-        BlockFace.UP, true);
-    multipleFacing.setFace(BlockFace.DOWN, true);
-    multipleFacing.setFace(BlockFace.NORTH,true);
-    multipleFacing.setFace(BlockFace.EAST, false);
-    multipleFacing.setFace(BlockFace.SOUTH, true);
-    multipleFacing.setFace(BlockFace.UP,true);
-    multipleFacing.setFace(BlockFace.WEST, true);
-    block.setBlockData(multipleFacing);
-  }
-  private static void convertMushroomType(CustomBlock customBlock) {
-    Block block = customBlock.getLocation().getBlock();
-    MultipleFacing multipleFacingOG = (MultipleFacing) block.getBlockData().clone();
-
-    block.setType(Material.MUSHROOM_STEM);
-    MultipleFacing multipleFacing = (MultipleFacing) block.getBlockData();
-
-    multipleFacing.setFace(
-        BlockFace.UP, multipleFacingOG.hasFace(BlockFace.UP));
-    multipleFacing.setFace(BlockFace.DOWN, multipleFacingOG.hasFace(BlockFace.DOWN));
-    multipleFacing.setFace(BlockFace.NORTH, multipleFacingOG.hasFace(BlockFace.NORTH));
-    multipleFacing.setFace(BlockFace.EAST, multipleFacingOG.hasFace(BlockFace.EAST));
-    multipleFacing.setFace(BlockFace.SOUTH, multipleFacingOG.hasFace(BlockFace.SOUTH));
-    multipleFacing.setFace(BlockFace.WEST, multipleFacingOG.hasFace(BlockFace.WEST));
-    block.setBlockData(multipleFacing);
   }
 
   static void getTranslations() throws IOException {
@@ -284,26 +220,6 @@ public class Utilities {
     metrics = new Metrics(plugin, 7804);
     metrics.addCustomChart(
         new Metrics.SimplePie("debug_enabled", () -> config.getString("general.debug")));
-    metrics.addCustomChart(
-        new Metrics.SimplePie("tech_enabled", () -> config.getString("general.techEnabled")));
-    metrics.addCustomChart(new AdvancedPie("types_of_machines",
-        () -> {
-          HashMap<String, Integer> valueMap = new HashMap<>();
-          //valueMap.put("totalCustomBlocks",Craftory.customBlockManager.statsContainer.getTotalCustomBlocks());
-          //valueMap.put("totalPoweredBlocks",Craftory.customBlockManager.statsContainer.getTotalPoweredBlocks());
-          valueMap.put("totalCells", CustomBlockManager.statsContainer.getTotalCells());
-          valueMap.put("totalGenerators",
-              CustomBlockManager.statsContainer.getTotalGenerators());
-          valueMap.put("totalPowerConnectors",
-              CustomBlockManager.statsContainer.getTotalPowerConnectors());
-          valueMap
-              .put("totalMachines", CustomBlockManager.statsContainer.getTotalMachines());
-          return valueMap;
-        }));
-    metrics.addCustomChart(new SingleLineChart("total_custom_blocks",
-        CustomBlockManager.statsContainer::getTotalCustomBlocks));
-    metrics.addCustomChart(new SingleLineChart("total_powered_blocks",
-        CustomBlockManager.statsContainer::getTotalPoweredBlocks));
   }
 
   static void registerCommandsAndCompletions() {

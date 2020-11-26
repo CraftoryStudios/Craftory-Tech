@@ -184,7 +184,7 @@ public class PoweredBlockEvents implements Listener {
       }
       if (!generator.setFacing(e.getBlockFace())) {
         e.getPlayer().sendMessage(ChatColor.RED
-            + "WaterWheels/WindMills require 7x7 clearance two blocks in front of them"); //TODO Brett make lang
+            + Utilities.getTranslation("RotaryError"));
       }
       if (generator.placeItemIn(e.getItemStack().clone())) {
         e.getItemStack().setAmount(e.getItemStack().getAmount() - 1);

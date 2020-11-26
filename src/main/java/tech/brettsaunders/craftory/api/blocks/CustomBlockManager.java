@@ -46,8 +46,6 @@ import tech.brettsaunders.craftory.utils.Log;
 
 public class CustomBlockManager {
 
-  public static final StatsContainer statsContainer = new StatsContainer();
-
   public static final String DATA_FOLDER =
       Craftory.plugin.getDataFolder() + File.separator + "data";
   private final HashMap<Location, CustomBlock> currentCustomBlocks;
@@ -71,8 +69,7 @@ public class CustomBlockManager {
         currentCustomBlocks,
         activeChunks,
         inactiveChunks,
-        customBlockDataHashMap,
-        statsContainer);
+        customBlockDataHashMap);
   }
 
   public CustomBlock getCustomBlock(Location location) {
