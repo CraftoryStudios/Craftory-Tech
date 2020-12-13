@@ -167,6 +167,8 @@ public class CustomItemManager {
   }
 
   public static boolean isCustomItem(ItemStack itemStack, boolean includeBlockItems) {
+    if (Objects.isNull(itemStack) || itemStack.getType() == Material.AIR)
+      return false;
     NBTItem nbtItem = new NBTItem(itemStack);
     if (nbtItem.hasNBTData()) {
       return nbtItem.hasKey(CUSTOM_ITEM) || (nbtItem.hasKey(CUSTOM_BLOCK_ITEM)
@@ -176,6 +178,8 @@ public class CustomItemManager {
   }
 
   public static boolean isCustomBlockItem(ItemStack itemStack) {
+    if (Objects.isNull(itemStack) || itemStack.getType() == Material.AIR)
+      return false;
     NBTItem nbtItem = new NBTItem(itemStack);
     return nbtItem.hasNBTData() && nbtItem.hasKey(CUSTOM_BLOCK_ITEM);
   }
