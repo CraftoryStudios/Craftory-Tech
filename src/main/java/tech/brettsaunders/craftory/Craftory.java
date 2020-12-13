@@ -150,7 +150,6 @@ public final class Craftory extends JavaPlugin implements Listener {
       customRecipeConfig.save(customRecipeConfigFile);
       CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
       customBlockManager = new CustomBlockManager();
-      customBlockFactory.registerStats();
       new WorldGenHandler();
       new PoweredBlockEvents();
       Utilities.startMetrics();
