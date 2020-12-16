@@ -11,7 +11,6 @@
 package tech.brettsaunders.craftory.api.blocks;
 
 import static tech.brettsaunders.craftory.Craftory.customBlockManager;
-import static tech.brettsaunders.craftory.Craftory.lastVersionCode;
 import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
@@ -41,7 +40,6 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.event.world.WorldInitEvent;
@@ -375,25 +373,6 @@ public class CustomBlockManagerEvents implements Listener {
   public void onInventoryOpen(InventoryOpenEvent e) {
     if (Utilities.updateItemGraphics) {
       CustomItemManager.updateInventoryItemGraphics(e.getInventory());
-    }
-  }
-
-  @EventHandler
-  public void onPlayerJoin(PlayerJoinEvent e) {
-    if (Utilities.updateItemGraphics) {
-      CustomItemManager.updateInventoryItemGraphics(e.getPlayer().getInventory());
-    }
-    if (lastVersionCode == 0 && Craftory.folderExists && e.getPlayer().isOp() || e.getPlayer().hasPermission("craftory.give") || e.getPlayer()
-        .hasPermission("craftory.debug")) {
-        Utilities.msg(e.getPlayer(), "It looks like you are updating from V0.2.0 or lower.");
-        Utilities
-            .msg(e.getPlayer(), "Due to changes all Items and Blocks may lose their textures.");
-        Utilities.msg(e.getPlayer(),
-            "To deal with this your server should have converted all blocks to the new format.");
-        Utilities.msg(e.getPlayer(),
-            "All items will be convert when the player opens an inventory with them in, until you turn off the config option Fix Item Graphics.");
-        Utilities.msg(e.getPlayer(),
-            "Once turned off you can still convert items with /fixGraphics command!");
     }
   }
 }
