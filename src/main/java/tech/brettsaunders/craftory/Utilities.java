@@ -367,6 +367,9 @@ public class Utilities {
   }
 
   public static String getTranslation(String key) {
+    if (langProperties == null) {
+      return "Unknown Loading Error";
+    }
     String result = langProperties.getProperty(key);
     if (result == null) {
       return "Unknown";
