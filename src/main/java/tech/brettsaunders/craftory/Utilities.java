@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory;
 
+import com.comphenix.protocol.ProtocolLibrary;
 import io.sentry.Sentry;
 import io.sentry.event.UserBuilder;
 import java.io.File;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
@@ -136,6 +138,46 @@ public class Utilities {
       return true;
     }
     return false;
+  }
+
+  static boolean checkProtocolLibVersion() {
+    String version = ProtocolLibrary.getPlugin().getDescription().getVersion();
+    if (isOlderThan("4.6.0",version)) {
+      Log.error("Craftory is shutting down! This is not an error with Craftory!");
+      Log.error("ProtocolLib Version "+version + " is unsupported by this version of Craftory! You require version 4.6.0 or higher");
+      Craftory.plugin.getServer().getPluginManager().disablePlugin(Craftory.plugin);
+      return true;
+    }
+    return false;
+  }
+
+  static boolean isOlderThan(String requiredVersion, String theirVersion) {
+    int[] required = getNumericVersion(requiredVersion);
+    int[] has = getNumericVersion(theirVersion);
+
+    for (int i = 0; i < Math.min(required.length, has.length); i++) {
+      if (required[i] == has[i]) {
+        continue;
+      }
+
+      return required[i] >= has[i];
+    }
+
+    return false;
+  }
+
+  static int[] getNumericVersion(String version) {
+    int[] v = new int[0];
+    for (String split : version.split("[.\\-]")) {
+      if (!split.matches("[0-9]+")) {
+        return v;
+      }
+
+      v = Arrays.copyOf(v, v.length + 1);
+      v[v.length - 1] = Integer.parseInt(split);
+    }
+
+    return v;
   }
 
   static void createConfigs() {

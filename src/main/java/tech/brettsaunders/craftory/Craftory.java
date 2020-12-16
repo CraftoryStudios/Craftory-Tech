@@ -11,6 +11,7 @@
 package tech.brettsaunders.craftory;
 
 import static tech.brettsaunders.craftory.Utilities.checkMinecraftVersion;
+import static tech.brettsaunders.craftory.Utilities.checkProtocolLibVersion;
 import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -106,6 +107,10 @@ public final class Craftory extends JavaPlugin implements Listener {
     if (checkMinecraftVersion()) {
       return;
     }
+    if (checkProtocolLibVersion()) {
+      return;
+    }
+
 
     setupSentry();
     try {
