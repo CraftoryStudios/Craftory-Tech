@@ -37,19 +37,7 @@ public class CustomBlockTickManager extends BukkitRunnable {
   public CustomBlockTickManager() {
     trackedBlocks = backingTrackedBlock.newKeySet();
   }
-
-  public static Collection<Method> getMethodsRecursively(@NonNull Class<?> startClass,
-      @NonNull Class<?> exclusiveParent) {
-    Collection<Method> methods = Lists.newArrayList(startClass.getDeclaredMethods());
-    Class<?> parentClass = startClass.getSuperclass();
-
-    if (parentClass != null && !(parentClass.equals(exclusiveParent))) {
-      methods.addAll(getMethodsRecursively(parentClass, exclusiveParent));
-    }
-
-    return methods;
-  }
-
+  
   @Override
   @Synchronized
   public void run() {
@@ -67,6 +55,18 @@ public class CustomBlockTickManager extends BukkitRunnable {
         }
       }));
     }
+  }
+
+  public static Collection<Method> getMethodsRecursively(@NonNull Class<?> startClass,
+      @NonNull Class<?> exclusiveParent) {
+    Collection<Method> methods = Lists.newArrayList(startClass.getDeclaredMethods());
+    Class<?> parentClass = startClass.getSuperclass();
+
+    if (parentClass != null && !(parentClass.equals(exclusiveParent))) {
+      methods.addAll(getMethodsRecursively(parentClass, exclusiveParent));
+    }
+
+    return methods;
   }
 
   @Synchronized
