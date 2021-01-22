@@ -75,6 +75,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static CustomBlockTickManager tickManager;
   public static PowerGridManager powerGridManager;
   public static RecipeBookEvents recipeBookEvents;
+  public static boolean isLightAPIEnabled = false;
   public static int lastVersionCode;
   public static int thisVersionCode;
   public static boolean folderExists = false;
@@ -118,6 +119,8 @@ public final class Craftory extends JavaPlugin implements Listener {
         Log.error("ProtocolLib is needed to run the latest version of craftory!");
         getServer().getPluginManager().disablePlugin(this);
       }
+      isLightAPIEnabled = getServer().getPluginManager().isPluginEnabled("LightAPI");
+
       loadedPlugins = (HashSet<String>) Arrays.stream(plugin.getServer().getPluginManager().getPlugins()).map(Plugin::getName).collect(
           Collectors.toSet());
       packetManager = ProtocolLibrary.getProtocolManager();
