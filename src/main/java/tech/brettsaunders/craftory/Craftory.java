@@ -85,7 +85,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   private SentryClient sentryClient;
   private static HashSet<String> loadedPlugins = new HashSet<>();
 
-  public static final Version MAX_SUPPORTED_MC = new Version("1.16.4");
+  public static final Version MAX_SUPPORTED_MC = new Version("1.16.5");
   public static Version mcVersion;
 
   private static int generateVersionCode() {
