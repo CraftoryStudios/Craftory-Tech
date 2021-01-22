@@ -98,7 +98,7 @@
       <artifactId>spigot-api</artifactId>
       <groupId>org.spigotmc</groupId>
       <scope>provided</scope>
-      <version>1.16.4-R0.1-SNAPSHOT</version>
+      <version>1.16.5-R0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <artifactId>bstats-bukkit</artifactId>
