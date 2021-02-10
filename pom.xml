@@ -85,7 +85,7 @@
       <artifactId>Oraxen</artifactId>
       <version>1.61.0</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/external-libs/oraxen-1.61.0.jar</systemPath>
+      <systemPath>${project.basedir}/external-libs/oraxen-1.70.0-all.jar</systemPath>
       <optional>true</optional>
     </dependency>
     <dependency>

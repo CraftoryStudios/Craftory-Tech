@@ -442,9 +442,6 @@ public class Utilities {
     if (length < 6) {
       return s + " " + UNIT_ENERGY;
     }
-    /*if (length < 7) {
-      return s + " " + UNIT;
-    }*/
     if (length < 7) {
       return df.format(energy / 1000f) + " K" + UNIT_ENERGY;
     }
