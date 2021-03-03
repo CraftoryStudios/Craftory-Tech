@@ -10,6 +10,7 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators;
 
+import com.gmail.nossr50.mcMMO;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -23,12 +24,14 @@ import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Constants.Blocks;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class BlockPlacer extends BaseMachine implements IHopperInteract {
 
@@ -113,6 +116,10 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
           //No Custom Block Placing
         } else {
           placeLoc.getBlock().setType(item.getType());
+          if (Craftory.plugin.isPluginLoaded("mcMMO")) {
+            mcMMO.getPlaceStore().setTrue(placeLoc.getBlock());
+            Log.debug("Block placed by placer marked as placed by a player");
+          }
         }
         item.setAmount(item.getAmount() - 1);
         energyStorage.modifyEnergyStored(-ENERGY_REQUIRED);

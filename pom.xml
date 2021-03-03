@@ -129,6 +129,18 @@
       <version>3.4.5-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>com.gmail.nossr50.mcMMO</groupId>
+      <artifactId>mcMMO</artifactId>
+      <version>2.1.175</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
   <description>Adds more functionality to Minecraft with only server side modification</description>
   <groupId>tech.brettsaunders</groupId>

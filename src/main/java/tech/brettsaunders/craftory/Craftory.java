@@ -39,6 +39,7 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlockFactory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockEvents;
+import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeBook;
 import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
@@ -186,6 +187,10 @@ public final class Craftory extends JavaPlugin implements Listener {
       new RecipeManager();
       new RecipeBook();
       recipeBookEvents = new RecipeBookEvents();
+
+      if (isPluginLoaded("mcMMO")) {
+        Events.registerEvents(new McMMOListener());
+      }
     } catch (Exception exception) {
       sentryLog(exception);
     }
