@@ -104,7 +104,7 @@
       <artifactId>bstats-bukkit</artifactId>
       <groupId>org.bstats</groupId>
       <scope>compile</scope>
-      <version>1.7</version>
+      <version>2.2.1</version>
     </dependency>
     <dependency>
       <groupId>de.tr7zw</groupId>
