@@ -115,7 +115,7 @@
       <groupId>com.comphenix.protocol</groupId>
       <artifactId>ProtocolLib</artifactId>
       <scope>provided</scope>
-      <version>4.6.0-SNAPSHOT</version>
+      <version>4.6.0</version>
     </dependency>
     <dependency>
       <groupId>io.sentry</groupId>
