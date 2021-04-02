@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -41,7 +42,6 @@ import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.tools.ToolLevel;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.api.tasks.Tasks;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.utils.Log;
 
@@ -51,9 +51,9 @@ public class CustomBlockManager {
       Craftory.plugin.getDataFolder() + File.separator + "data";
   private final HashMap<Location, CustomBlock> currentCustomBlocks;
   @Getter
-  private final HashMap<String, HashSet<CustomBlock>> activeChunks;
+  private final ConcurrentHashMap<String, HashSet<CustomBlock>> activeChunks;
   @Getter
-  private final HashMap<String, HashSet<CustomBlock>> inactiveChunks;
+  private final ConcurrentHashMap<String, HashSet<CustomBlock>> inactiveChunks;
   @Getter
   private final HashMap<String, CustomBlockData> customBlockDataHashMap;
 
@@ -63,8 +63,8 @@ public class CustomBlockManager {
     persistenceStorage = new PersistenceStorage();
     currentCustomBlocks = new HashMap<>();
     customBlockDataHashMap = new HashMap<>();
-    activeChunks = new HashMap<>();
-    inactiveChunks = new HashMap<>();
+    activeChunks = new ConcurrentHashMap<>();
+    inactiveChunks = new ConcurrentHashMap<>();
     loadCustomBlockData();
     new CustomBlockManagerEvents(persistenceStorage,
         currentCustomBlocks,
@@ -132,12 +132,6 @@ public class CustomBlockManager {
   public void onDisable() {
     CustomBlockStorage
         .saveAllCustomChunks(DATA_FOLDER, persistenceStorage, activeChunks, inactiveChunks);
-  }
-
-  public static void setupAutoSave() {
-    if (Utilities.config.isInt("general.autoSaveInternal") && Utilities.config.getInt("general.autoSaveInternal") != 0) {
-      Tasks.runTaskTimer(() -> {customBlockManager.onDisable();},1200, 1200 * Utilities.config.getInt("general.autoSaveInternal"));
-    }
   }
 
 

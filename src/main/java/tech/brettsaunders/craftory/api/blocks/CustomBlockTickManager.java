@@ -25,6 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import lombok.NonNull;
 import lombok.Synchronized;
 import org.bukkit.scheduler.BukkitRunnable;
+import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.Utilities;
 
 public class CustomBlockTickManager extends BukkitRunnable {
 
@@ -34,7 +36,14 @@ public class CustomBlockTickManager extends BukkitRunnable {
   private final Set<CustomBlock> trackedBlocks;
   private long tick = 0;
 
+  private boolean autoSave = false;
+  private int autoSaveInternal;
+
   public CustomBlockTickManager() {
+    if (Utilities.config.isInt("general.autoSaveInterval") && Utilities.config.getInt("general.autoSaveInterval") != 0) {
+      autoSaveInternal = 1200 * Utilities.config.getInt("general.autoSaveInterval");
+      autoSave = true;
+    }
     trackedBlocks = backingTrackedBlock.newKeySet();
   }
   
@@ -54,6 +63,10 @@ public class CustomBlockTickManager extends BukkitRunnable {
           }
         }
       }));
+    }
+    if (autoSave && tick % autoSaveInternal == 0) {
+      //Auto Save
+      Craftory.customBlockManager.onDisable();
     }
   }
 
