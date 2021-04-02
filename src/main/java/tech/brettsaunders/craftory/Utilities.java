@@ -183,6 +183,7 @@ public class Utilities {
   static void createConfigs() {
     config.options().header("Craftory");
     config.addDefault("general.debug", false);
+    config.addDefault("general.autoSaveInterval", 0);
     config.addDefault("language.locale", "en-GB");
     config.addDefault("generators.solarDuringStorms", true);
     config.addDefault("resourcePack.forcePack", true);

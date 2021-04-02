@@ -41,6 +41,7 @@ import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
 import tech.brettsaunders.craftory.api.blocks.tools.ToolLevel;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.api.tasks.Tasks;
 import tech.brettsaunders.craftory.persistence.PersistenceStorage;
 import tech.brettsaunders.craftory.utils.Log;
 
@@ -131,6 +132,12 @@ public class CustomBlockManager {
   public void onDisable() {
     CustomBlockStorage
         .saveAllCustomChunks(DATA_FOLDER, persistenceStorage, activeChunks, inactiveChunks);
+  }
+
+  public static void setupAutoSave() {
+    if (Utilities.config.isInt("general.autoSaveInternal") && Utilities.config.getInt("general.autoSaveInternal") != 0) {
+      Tasks.runTaskTimer(() -> {customBlockManager.onDisable();},1200, 1200 * Utilities.config.getInt("general.autoSaveInternal"));
+    }
   }
 
 
