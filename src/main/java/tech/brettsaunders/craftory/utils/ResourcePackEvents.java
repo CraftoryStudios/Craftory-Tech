@@ -16,9 +16,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
+import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.events.Events;
+import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
 public class ResourcePackEvents implements Listener {
 
@@ -41,6 +43,11 @@ public class ResourcePackEvents implements Listener {
   @EventHandler
   public void onPlayerJoin(PlayerJoinEvent e) {
     e.getPlayer().setResourcePack(Craftory.RESOURCE_PACK, hexStringToByteArray(Craftory.HASH));
+    if (!e.getPlayer().hasPlayedBefore() && Utilities.config.isBoolean("general.recipeBookOnFirstJoin")
+        && Utilities.config.getBoolean("general.recipeBookOnFirstJoin")) {
+      ItemStack recipeBook = CustomItemManager.getCustomItem("recipe_book");
+      e.getPlayer().getInventory().addItem(recipeBook);
+    }
   }
 
   @EventHandler

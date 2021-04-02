@@ -184,6 +184,7 @@ public class Utilities {
     config.options().header("Craftory");
     config.addDefault("general.debug", false);
     config.addDefault("general.autoSaveInterval", 0);
+    config.addDefault("general.recipeBookOnFirstJoin", false);
     config.addDefault("language.locale", "en-GB");
     config.addDefault("generators.solarDuringStorms", true);
     config.addDefault("resourcePack.forcePack", true);
@@ -261,8 +262,6 @@ public class Utilities {
 
   static void startMetrics() {
     metrics = new Metrics(plugin, 7804);
-    metrics.addCustomChart(
-        new Metrics.SimplePie("debug_enabled", () -> config.getString("general.debug")));
   }
 
   static void registerCommandsAndCompletions() {
