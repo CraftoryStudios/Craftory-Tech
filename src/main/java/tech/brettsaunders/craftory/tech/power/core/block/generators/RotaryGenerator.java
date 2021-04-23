@@ -277,7 +277,7 @@ public class RotaryGenerator extends BaseGenerator {
   }
 
   private boolean isGenArmour(@NonNull ArmorStand armorStand) {
-    return armorStand.isSilent() && !armorStand.hasGravity() && armorStand.isMarker() && armorStand.isInsideVehicle();
+    return armorStand.isSilent() && !armorStand.hasGravity() && armorStand.isMarker();
   }
 
   @Override

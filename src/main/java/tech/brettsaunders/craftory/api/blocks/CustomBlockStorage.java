@@ -42,18 +42,18 @@ public class CustomBlockStorage {
   @Synchronized
   public static void saveAllCustomChunks(String dataFolder, PersistenceStorage persistenceStorage,
       Map<String, HashSet<CustomBlock>> active,
-      Map<String, HashSet<CustomBlock>> inactive) {
+      Map<String, HashSet<CustomBlock>> inactive, boolean autoSave) {
     Log.info("Saving Custom Block Data");
     active.forEach((chunk, customBlocks) -> saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder,
-        persistenceStorage));
+        persistenceStorage, autoSave));
     inactive.forEach(((chunk, customBlocks) -> saveCustomChunk(convertWorldChunkIDToChunkID(chunk), customBlocks, dataFolder,
-        persistenceStorage)));
+        persistenceStorage, autoSave)));
     Log.info("Saved Custom Block Data");
   }
 
   @Synchronized
   public static void saveCustomChunk(String chunkID, Set<CustomBlock> customBlocks,
-      String dataFolder, PersistenceStorage persistenceStorage) {
+      String dataFolder, PersistenceStorage persistenceStorage, boolean autoSave) {
 
       customBlocks.stream().findFirst().ifPresent(customBlock -> {
         Location firstBlock = customBlock.location;
@@ -63,7 +63,9 @@ public class CustomBlockStorage {
                   getRegionID(firstBlock.getChunk())));
           NBTCompound chunkCompound = nbtFile.addCompound(chunkID);
           customBlocks.forEach(customBlockValue -> {
-            customBlockValue.beforeSaveUpdate();
+            if (!autoSave) {
+              customBlockValue.beforeSaveUpdate();
+            }
             NBTCompound locationNBTSection = chunkCompound
                 .addCompound(getLocationID(customBlockValue.location));
             persistenceStorage.saveFields(customBlockValue, locationNBTSection);

@@ -14,7 +14,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>Craftory</artifactId>
   <url>brettsaunders.tech</url>
-  <version>0.2.14</version>
+  <version>0.2.15</version>
 
   <build>
     <defaultGoal>clean package</defaultGoal>
@@ -83,9 +83,9 @@
     <dependency>
       <groupId>com.github.Th0rgal</groupId>
       <artifactId>Oraxen</artifactId>
-      <version>1.73.1</version>
+      <version>1.75.0</version>
       <scope>system</scope>
-      <systemPath>${project.basedir}/external-libs/oraxen-1.73.1-all.jar</systemPath>
+      <systemPath>${project.basedir}/external-libs/oraxen-1.75.0-all.jar</systemPath>
       <optional>true</optional>
     </dependency>
     <dependency>

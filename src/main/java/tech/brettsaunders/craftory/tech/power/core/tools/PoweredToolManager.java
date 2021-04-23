@@ -30,6 +30,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -173,6 +174,18 @@ public class PoweredToolManager implements Listener {
     }
   }
 
+  @EventHandler
+  public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+    ItemStack itemStack = event.getOffHandItem();
+    if (isPoweredTool(itemStack)) {
+      removePotionEffects(itemStack, event.getPlayer());
+    }
+    itemStack = event.getMainHandItem();
+    if (isPoweredTool(itemStack)) {
+      addPotionEffects(itemStack, event.getPlayer());
+    }
+  }
+
   private void removePotionEffects(ItemStack itemStack, Player player) {
     if(itemStack==null) {
       return;
@@ -204,6 +217,7 @@ public class PoweredToolManager implements Listener {
           false, false, false));
     }
   }
+
   @EventHandler
   public void onPlayerBlockHit(PlayerInteractEvent event) {
     if(event.isCancelled()) return;
@@ -298,12 +312,13 @@ public class PoweredToolManager implements Listener {
   }
 
   public static boolean isTool(ItemStack itemStack) {
+    if (itemStack==null) return false;
     String type = itemStack.getType().toString();
     return type.endsWith("PICKAXE") || type.endsWith("SHOVEL") || type.endsWith("AXE") || type.endsWith("HOE");
   }
 
   public static boolean isPoweredTool(ItemStack itemStack) {
-    if(!isTool(itemStack)) return false;
+    if (!isTool(itemStack)) return false;
     NBTItem nbtItem = new NBTItem(itemStack);
     return nbtItem.hasKey(CHARGE_KEY) && nbtItem.hasKey(MAX_CHARGE_KEY);
   }

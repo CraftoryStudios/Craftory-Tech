@@ -89,7 +89,7 @@ public class PowerGrid extends BukkitRunnable {
           amount += e;
           machinesNeedingEnergy += 1;
         }
-      } else {
+      } else if (Objects.nonNull(poweredBlock)) {
         iter.remove();
         removeBlockConnection(location);
       }
@@ -105,7 +105,7 @@ public class PowerGrid extends BukkitRunnable {
       if(poweredBlock instanceof  BaseCell) {
         BaseCell cell = (BaseCell) poweredBlock;
         amount += cell.getEnergySpace();
-      } else {
+      } else if (Objects.nonNull(poweredBlock)) {
         iter.remove();
         removeBlockConnection(location);
       }
@@ -131,7 +131,7 @@ public class PowerGrid extends BukkitRunnable {
         if (amount == limit) {
           break;
         }
-      } else {
+      } else if (Objects.nonNull(poweredBlock)) {
         iter.remove();
         removeBlockConnection(location);
       }
