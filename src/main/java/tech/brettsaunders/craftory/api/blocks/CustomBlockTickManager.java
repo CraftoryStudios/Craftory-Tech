@@ -66,7 +66,7 @@ public class CustomBlockTickManager extends BukkitRunnable {
     }
     if (autoSave && tick % autoSaveInternal == 0) {
       //Auto Save
-      Craftory.customBlockManager.onDisable();
+      Craftory.customBlockManager.autoSave();
     }
   }
 

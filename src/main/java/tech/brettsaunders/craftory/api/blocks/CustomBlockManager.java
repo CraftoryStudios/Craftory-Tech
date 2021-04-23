@@ -131,10 +131,13 @@ public class CustomBlockManager {
 
   public void onDisable() {
     CustomBlockStorage
-        .saveAllCustomChunks(DATA_FOLDER, persistenceStorage, activeChunks, inactiveChunks);
+        .saveAllCustomChunks(DATA_FOLDER, persistenceStorage, activeChunks, inactiveChunks, false);
   }
 
-
+  public void autoSave() {
+    CustomBlockStorage
+        .saveAllCustomChunks(DATA_FOLDER, persistenceStorage, activeChunks, inactiveChunks, true);
+  }
   /* API */
   //Only works in active chunk
   public boolean isCustomBlock(Location location) {
