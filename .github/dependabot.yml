@@ -1,0 +1,21 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.gmail.nossr50.mcMMO:mcMMO
+    versions:
+    - 2.1.182
+    - 2.1.183
+    - 2.1.187
+    - 2.1.188
+    - 2.1.190
+    - 2.1.192
+    - 2.1.194
+    - 2.1.195
+  - dependency-name: org.projectlombok:lombok
+    versions:
+    - 1.18.18
