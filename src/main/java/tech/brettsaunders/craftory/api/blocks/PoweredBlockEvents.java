@@ -179,9 +179,6 @@ public class PoweredBlockEvents implements Listener {
         CustomItemManager.matchCustomItemTag(e.getItemStack(), CustomTag.WINDMILL) || CustomItemManager
             .matchCustomItemTag(e.getItemStack(), CustomTag.WATERWHEEL))) {
       RotaryGenerator generator = (RotaryGenerator) e.getCustomBlock();
-      if (generator.getWheelPlaced()) {
-        return;
-      }
       if (!generator.setFacing(e.getBlockFace())) {
         e.getPlayer().sendMessage(ChatColor.RED
             + Utilities.getTranslation("RotaryError"));

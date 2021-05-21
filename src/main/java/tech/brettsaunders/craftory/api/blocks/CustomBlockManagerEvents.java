@@ -302,6 +302,7 @@ public class CustomBlockManagerEvents implements Listener {
     if (inactiveChunks.containsKey(chunkID)) {
       HashSet<CustomBlock> customBlocks = inactiveChunks.get(chunkID);
       customBlocks.forEach(block -> {
+        block.onChunkLoad();
         customBlockManager.putActiveCustomBlock(block);
         Craftory.tickManager.addTickingBlock(block);
       });
@@ -323,6 +324,7 @@ public class CustomBlockManagerEvents implements Listener {
       HashSet<CustomBlock> customBlocks = activeChunks.get(chunkID);
       customBlocks.forEach(customBlock -> {
         if (currentCustomBlocks.containsKey(customBlock.location)) {
+          customBlock.onChunkUnLoad();
           currentCustomBlocks.remove(customBlock.location);
           Craftory.tickManager.removeTickingBlock(customBlock);
         }

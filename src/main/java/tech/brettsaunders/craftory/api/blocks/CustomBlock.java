@@ -61,4 +61,12 @@ public class CustomBlock {
     //Override to add functionality
   }
 
+  public void onChunkLoad() {
+
+  }
+
+  public void onChunkUnLoad() {
+
+  }
+
 }

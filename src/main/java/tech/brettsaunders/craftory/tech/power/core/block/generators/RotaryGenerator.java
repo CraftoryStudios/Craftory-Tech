@@ -15,18 +15,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 import lombok.Getter;
-import lombok.NonNull;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Utilities;
@@ -34,12 +30,15 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.items.CustomTag;
+import tech.brettsaunders.craftory.packet_wrapper.Angle;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.core.utils.ArmourStandUtils;
 
+//TODO on new player joins
 public class RotaryGenerator extends BaseGenerator {
 
   protected static final int MAX_OUTPUT = 75;
@@ -59,31 +58,36 @@ public class RotaryGenerator extends BaseGenerator {
   }
 
   @Persistent
+  @Getter
   protected BlockFace facing;
   @Persistent
   protected String modeSaved;
-  protected WheelMode mode;
-  @Getter
-  @Persistent
-  protected Boolean wheelPlaced = false;
-  protected boolean wheelFree = false;
-  protected ArmorStand wheel;
-  protected double efficiencyMultiplier = 1;
-  protected List<Location> wheelLocations = new ArrayList<>();
-  protected List<Location> wheelFootprint = new ArrayList<>();
   @Persistent
   @Getter
   protected Location wheelLocation;
 
+  protected WheelMode mode;
+  protected double efficiencyMultiplier = 1;
+  protected List<Location> wheelLocations = new ArrayList<>();
+  protected List<Location> wheelFootprint = new ArrayList<>();
+  protected boolean placementSpace = false;
+  @Getter
+  protected int entityID = (int)(Math.random() * Integer.MAX_VALUE);
+  @Getter
+  protected UUID uuid = UUID.randomUUID();
+  Angle headAngle = new Angle();
+  boolean holding = false;
+
   public RotaryGenerator(Location location) {
     super(location, Blocks.ROTARY_GENERATOR, C_LEVEL, (int) (MAX_OUTPUT *1.5f),
         BASE_CAPACITY * MULTIPLIERS[C_LEVEL]);
-    setFacing(BlockFace.NORTH);
-    checkWheel();
+    //Setup defaults
+    mode = WheelMode.WIND;
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
-    mode = WheelMode.WATER;
     init();
+    //Places Armourstand
+    setFacing(BlockFace.NORTH);
   }
 
   public RotaryGenerator() {
@@ -92,6 +96,8 @@ public class RotaryGenerator extends BaseGenerator {
   }
 
   private void init() {
+    ArmourStandUtils.register(this);
+    //Setup GUI
     inputLocations = new ArrayList<>();
     inputLocations.add(0, SLOT);
     interactableSlots = new HashSet<>(Collections.singletonList(SLOT));
@@ -100,77 +106,98 @@ public class RotaryGenerator extends BaseGenerator {
   @Override
   public void beforeSaveUpdate() {
     super.beforeSaveUpdate();
-    removeWheels();
     modeSaved = mode.toString();
   }
 
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
-    placeWheels();
     if (modeSaved != null) {
       mode = WheelMode.valueOf(modeSaved);
     }
+    //Places Armourstand
     setFacing(facing);
   }
 
-  protected void removeWheels() {
-    if (wheel != null) {
-      wheel.remove();
-      wheelPlaced = false;
-    }
+  public boolean setFacing(BlockFace face) {
+    if (!validFaces.contains(face))  return false;
 
+    //Set new direction
+    facing = face;
+
+    //Update wheel location
+    wheelLocation = centerLocation(location.clone(), face);
+    wheelLocations = getWheelLocations(wheelLocation);
+    wheelFootprint = getWheelFootprint(wheelLocation);
+
+    if (checkPlacementSpace()) {
+      ArmourStandUtils.destroyArmourStand(entityID, false);
+      ArmourStandUtils.spawnArmourStand(wheelLocation, entityID, uuid, facing, new HashSet<>(Bukkit.getOnlinePlayers()));
+      return true;
+    }
+    return false;
   }
 
-  protected void placeWheels() {
-    if (wheelPlaced) {
-      wheelPlaced = placeWheel(wheelLocation);
+  private boolean isItemSet() {
+    ItemStack item = inventoryInterface.getItem(SLOT);
+    if (item == null) return false;
+    //TODO improve this check
+    return item.getType() == Material.PAPER;
+  }
+
+  private Location centerLocation(Location location, BlockFace face) {
+    switch (face) {
+      default:
+      case NORTH:
+        return location.add(0, 0, -1);
+      case SOUTH:
+        return location.add(0, 0, 1);
+      case EAST:
+        return location.add(1, 0, 0);
+      case WEST:
+        return location.add(-1, 0, 0);
     }
   }
+
 
   @Override
   public void blockBreak() {
     super.blockBreak();
-    removeWheels();
+    ArmourStandUtils.destroyArmourStand(entityID, true);
   }
 
-  public boolean getWheelPlaced() {
-    return wheelPlaced;
+  public ItemStack getArmourStandItem() {
+    ItemStack itemStack = inventoryInterface.getItem(SLOT);
+    if (itemStack != null && CustomItemManager.isCustomItem(itemStack, false)) {
+        checkPlacementSpace();
+        //Windmill
+        if (placementSpace && CustomItemManager.matchCustomItemTag(itemStack,
+            CustomTag.WINDMILL)) {
+          mode = WheelMode.WIND;
+          return itemStack;
+        }
+        //Waterwheel
+        else if (placementSpace && CustomItemManager.matchCustomItemTag(itemStack,
+            CustomTag.WATERWHEEL)) {
+          mode = WheelMode.WATER;
+          return itemStack;
+        }
+      }
+    return new ItemStack(Material.AIR);
   }
 
   @Override
   public void updateGenerator() {
-    if (!wheelPlaced && wheelFree && inventoryInterface.getItem(SLOT) != null) {
-      ItemStack itemStack = inventoryInterface.getItem(SLOT);
-      if (CustomItemManager.isCustomItem(itemStack, false)) {
-        if (CustomItemManager.matchCustomItemTag(itemStack,
-            CustomTag.WINDMILL)) {
-          mode = WheelMode.WIND;
-          wheelPlaced = true;
-          checkWheel();
-          if (wheelFree) {
-            wheelPlaced = placeWheel(wheelLocation);
-          } else {
-            wheelPlaced = false;
-          }
-        } else if (CustomItemManager.matchCustomItemTag(itemStack,
-            CustomTag.WATERWHEEL)) {
-          mode = WheelMode.WATER;
-          wheelPlaced = true;
-          checkWheel();
-          if (wheelFree) {
-            wheelPlaced = placeWheel(wheelLocation);
-          } else {
-            wheelPlaced = false;
-          }
-        }
-      }
+    if (holding && !isItemSet()) holding = false;
+    if (!holding && placementSpace) {
+      ArmourStandUtils.setEntityHolding(entityID, getArmourStandItem(), Bukkit.getOnlinePlayers());
+      holding = true;
     }
     super.updateGenerator();
   }
 
   public boolean placeItemIn(ItemStack itemStack) {
-    if (wheelPlaced) {
+    if (holding) {
       return false;
     }
     if (inventoryInterface.getItem(SLOT) == null || inventoryInterface.getItem(SLOT).getType()
@@ -195,22 +222,24 @@ public class RotaryGenerator extends BaseGenerator {
   protected boolean canStart() {
     ItemStack itemStack = inventoryInterface.getItem(SLOT);
     if (itemStack == null || !CustomItemManager.isCustomItem(itemStack, false)) {
-      removeWheels();
+      ArmourStandUtils.setEntityHolding(entityID, new ItemStack(Material.AIR), Bukkit.getOnlinePlayers());
+      holding = false;
       return false;
     }
     if ((mode.equals(WheelMode.WATER) && CustomItemManager.matchCustomItemTag(itemStack,
         CustomTag.WATERWHEEL)) || mode.equals(WheelMode.WIND) && CustomItemManager
         .matchCustomItemTag(itemStack,
             CustomTag.WINDMILL)) {
-      if (!wheelPlaced) {
+      if (!holding) {
         return false;
       }
       if (!Utilities.config.getBoolean("generators.rotaryGeneratorsSpinWhenFull") && energyStorage.isFull()) {
         return false;
       }
-      return wheelFree;
+      return true;
     }
-    removeWheels();
+    ArmourStandUtils.setEntityHolding(entityID, new ItemStack(Material.AIR), Bukkit.getOnlinePlayers());
+    holding = false;
     return false;
   }
 
@@ -225,66 +254,18 @@ public class RotaryGenerator extends BaseGenerator {
     return !canStart();
   }
 
-  protected boolean placeWheel(Location loc) {
-    Location spawnLoc = loc.clone();
-    switch (facing) {
-      default:
-      case NORTH:
-        spawnLoc.add(0.5, -0.95, 0.7);
-        spawnArmourStand(spawnLoc);
-        break;
-      case EAST:
-        spawnLoc.add(0.3, -0.95, 0.5).setYaw(90);
-        spawnArmourStand(spawnLoc);
-        break;
-      case SOUTH:
-        spawnLoc.add(0.5, -0.95, 0.3).setYaw(180);
-        spawnArmourStand(spawnLoc);
-        break;
-      case WEST:
-        spawnLoc.add(0.7, -0.95, 0.5).setYaw(270);
-        spawnArmourStand(spawnLoc);
-        break;
-    }
-    return true;
-  }
-
-  private void spawnArmourStand(Location spawnLoc) {
-    if (checkArmourStand(spawnLoc)) {
-      return;
-    }
-    wheel = (ArmorStand) spawnLoc.getWorld().spawnEntity(spawnLoc, EntityType.ARMOR_STAND);
-    wheel.setArms(false);
-    wheel.setBasePlate(false);
-    wheel.setVisible(false);
-    wheel.setInvulnerable(true);
-    wheel.setGravity(false);
-    wheel.setAI(false);
-    wheel.setSilent(true);
-    wheel.setMarker(true);
-    wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
-    EntityEquipment entityEquipment = wheel.getEquipment();
-    entityEquipment.setHelmet(inventoryInterface.getItem(SLOT));
-  }
-
-  private boolean checkArmourStand(Location location) {
-    for (Entity entity: location.getChunk().getEntities()) {
-      if (entity instanceof ArmorStand && location.distanceSquared(entity.getLocation()) < 0.4D && isGenArmour((ArmorStand) entity)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private boolean isGenArmour(@NonNull ArmorStand armorStand) {
-    return armorStand.isSilent() && !armorStand.hasGravity() && armorStand.isMarker();
+  @Ticking(ticks=4)
+  public void rotateEntity() {
+    if (!isActive) return;
+    int amount = ((int) Math.toDegrees(efficiencyMultiplier * 0.1)) * 4;
+    headAngle.add(amount);
+    ArmourStandUtils.rotateEntity(entityID,headAngle.getAngle());
   }
 
   @Override
   protected void processTick() {
     energyProduced = calculateAmountProduced() * MULTIPLIERS[level];
     energyStorage.modifyEnergyStored(energyProduced);
-    wheel.setHeadPose(wheel.getHeadPose().add(0, 0, efficiencyMultiplier * -0.1));
   }
 
   protected int calculateAmountProduced() {
@@ -340,45 +321,18 @@ public class RotaryGenerator extends BaseGenerator {
     efficiencyMultiplier = Math.min(1d, clearBlocks / (1034d - 300));
   }
 
-  public boolean setFacing(BlockFace face) {
-    if (validFaces.contains(face)) {
-      facing = face;
-      Location loc = location.clone();
-      switch (facing) {
-        default:
-        case NORTH:
-          wheelLocation = loc.add(0, 0, -1);
-          break;
-        case SOUTH:
-          wheelLocation = loc.add(0, 0, 1);
-          break;
-        case EAST:
-          wheelLocation = loc.add(1, 0, 0);
-          break;
-        case WEST:
-          wheelLocation = loc.add(-1, 0, 0);
-          break;
-      }
-      wheelLocations = getWheelLocations(wheelLocation);
-      wheelFootprint = getWheelFootprint(wheelLocation);
-      checkWheel();
-      return wheelFree;
-    }
-    return false;
-  }
-
   @Ticking(ticks = 20)
-  public void checkWheel() {
-    if (!wheelPlaced) {
-      wheelFree = windWheelAreaFree() || waterWheelAreaFree(wheelLocation);
-    } else if (mode.equals(WheelMode.WATER)) {
-      wheelFree = waterWheelAreaFree(wheelLocation);
+  public boolean checkPlacementSpace() {
+    //TODO Don't check if entity placed
+    if (mode.equals(WheelMode.WATER)) {
+      placementSpace = waterWheelAreaFree(wheelLocation);
     } else {
-      wheelFree = windWheelAreaFree();
+      placementSpace = windWheelAreaFree();
     }
-
+    return placementSpace;
   }
 
+  //TODO FIx
   protected List<Location> getWheelLocations(Location centerLoc) {
     return getLocations(centerLoc, 2, 3);
   }
@@ -421,23 +375,24 @@ public class RotaryGenerator extends BaseGenerator {
     return locations;
   }
 
+  //TODO Fix
   protected List<Location> getWheelFootprint(Location centerLoc) {
     return getLocations(centerLoc, 1, 3);
   }
 
   protected boolean windWheelAreaFree() {
-    wheelFree = false;
+    placementSpace = false;
     for (Location loc : wheelLocations) {
       if (!loc.getBlock().getType().equals(Material.AIR)) {
         return false;
       }
     }
-    wheelFree = true;
+    placementSpace = true;
     return true;
   }
 
   protected boolean waterWheelAreaFree(Location centerLoc) {
-    wheelFree = false;
+    placementSpace = false;
     if (!centerLoc.getBlock().getType().equals(Material.AIR)) {
       return false;
     }
@@ -454,7 +409,7 @@ public class RotaryGenerator extends BaseGenerator {
     if (waterCount > 5000 || waterCount < 14) {
       return false;
     }
-    wheelFree = true;
+    placementSpace = true;
     return true;
   }
 

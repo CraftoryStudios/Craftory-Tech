@@ -49,6 +49,7 @@ import tech.brettsaunders.craftory.tech.power.api.effect.EnergyDisplayManager;
 import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGridManager;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
+import tech.brettsaunders.craftory.tech.power.core.utils.ArmourStandUtils;
 import tech.brettsaunders.craftory.utils.DataConfigUtils;
 import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
@@ -152,6 +153,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
       customRecipeConfig.save(customRecipeConfigFile);
       customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
+
       Optional<FileConfiguration> recipesDefaults = Optional.of(YamlConfiguration
           .loadConfiguration(
               new File(Craftory.plugin.getDataFolder(), "data/customRecipesConfig.yml")));
@@ -187,6 +189,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       new RecipeManager();
       new RecipeBook();
       recipeBookEvents = new RecipeBookEvents();
+      Events.registerEvents(new ArmourStandUtils());
 
       if (isPluginLoaded("mcMMO")) {
         Events.registerEvents(new McMMOListener());
