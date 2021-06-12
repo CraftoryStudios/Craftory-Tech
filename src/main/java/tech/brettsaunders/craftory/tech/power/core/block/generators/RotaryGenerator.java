@@ -284,7 +284,9 @@ public class RotaryGenerator extends BaseGenerator {
   protected void processTick() {
     energyProduced = calculateAmountProduced() * MULTIPLIERS[level];
     energyStorage.modifyEnergyStored(energyProduced);
-    wheel.setHeadPose(wheel.getHeadPose().add(0, 0, efficiencyMultiplier * -0.1));
+    if (wheel != null) {
+      wheel.setHeadPose(wheel.getHeadPose().add(0, 0, efficiencyMultiplier * -0.1));
+    }
   }
 
   protected int calculateAmountProduced() {
