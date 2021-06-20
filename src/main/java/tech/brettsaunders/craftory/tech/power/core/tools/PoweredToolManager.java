@@ -1,10 +1,5 @@
 package tech.brettsaunders.craftory.tech.power.core.tools;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.events.PacketEvent;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +36,6 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.api.tasks.Tasks;
 
 public class PoweredToolManager implements Listener {
 
@@ -64,7 +58,7 @@ public class PoweredToolManager implements Listener {
     excavatorBlocks.add(Material.CLAY);
     excavatorBlocks.add(Material.FARMLAND);
     excavatorBlocks.add(Material.GRASS_BLOCK);
-    excavatorBlocks.add(Material.GRASS_PATH);
+    excavatorBlocks.add(Material.DIRT_PATH);
     excavatorBlocks.add(Material.GRAVEL);
     excavatorBlocks.add(Material.MYCELIUM);
     excavatorBlocks.add(Material.PODZOL);
@@ -84,27 +78,27 @@ public class PoweredToolManager implements Listener {
 
   public PoweredToolManager() {
     Events.registerEvents(this);
-    addPacketListeners();
+    //addPacketListeners();
   }
 
   public void addPoweredTool(String tool) {
     poweredTools.add(tool);
   }
 
-  private void addPacketListeners() {
-    Craftory.packetManager.addPacketListener(new PacketAdapter(Craftory.plugin, ListenerPriority.NORMAL, PacketType.Play.Client.CLOSE_WINDOW) {
-      @Override
-      public void onPacketReceiving(PacketEvent event) {
-        PacketContainer packet = event.getPacket();
-        if(packet.getIntegers().read(0)==0){ //It is an inventory
-          Player player = event.getPlayer();
-          ItemStack itemStack = player.getInventory().getItemInMainHand();
-          Tasks.runTaskLater(() -> addPotionEffects(itemStack, player), 1);
-        }
-
-      }
-    });
-  }
+//  private void addPacketListeners() {
+//    Craftory.packetManager.addPacketListener(new PacketAdapter(Craftory.plugin, ListenerPriority.NORMAL, PacketType.Play.Client.CLOSE_WINDOW) {
+//      @Override
+//      public void onPacketReceiving(PacketEvent event) {
+//        PacketContainer packet = event.getPacket();
+//        if(packet.getIntegers().read(0)==0){ //It is an inventory
+//          Player player = event.getPlayer();
+//          ItemStack itemStack = player.getInventory().getItemInMainHand();
+//          Tasks.runTaskLater(() -> addPotionEffects(itemStack, player), 1);
+//        }
+//
+//      }
+//    });
+//  }
 
 
   @EventHandler
@@ -240,7 +234,7 @@ public class PoweredToolManager implements Listener {
       List<Block> blocks = get2DNeighbours(event.getClickedBlock(),event.getBlockFace());
       for(Block block: blocks) {
         if(block.getType()==Material.GRASS_BLOCK && charge >= TOOL_POWER_COST) {
-          block.setType(Material.GRASS_PATH);
+          block.setType(Material.DIRT_PATH);
           charge -=TOOL_POWER_COST;
         }
       }

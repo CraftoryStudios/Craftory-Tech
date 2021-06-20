@@ -10,7 +10,6 @@
 
 package tech.brettsaunders.craftory;
 
-import com.comphenix.protocol.ProtocolLibrary;
 import io.sentry.Sentry;
 import io.sentry.event.UserBuilder;
 import java.io.File;
@@ -134,17 +133,6 @@ public class Utilities {
     if (Craftory.mcVersion.compareTo(Craftory.MAX_SUPPORTED_MC) > 0) {
       Log.error("Craftory is shutting down! This is not an error with Craftory!");
       Log.error("Minecraft Version "+Craftory.mcVersion.get() + " is unsupported by this version of Craftory!");
-      Craftory.plugin.getServer().getPluginManager().disablePlugin(Craftory.plugin);
-      return true;
-    }
-    return false;
-  }
-
-  static boolean checkProtocolLibVersion() {
-    String version = ProtocolLibrary.getPlugin().getDescription().getVersion();
-    if (isOlderThan("4.6.0",version)) {
-      Log.error("Craftory is shutting down! This is not an error with Craftory!");
-      Log.error("ProtocolLib Version "+version + " is unsupported by this version of Craftory! You require version 4.6.0 or higher");
       Craftory.plugin.getServer().getPluginManager().disablePlugin(Craftory.plugin);
       return true;
     }

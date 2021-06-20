@@ -207,7 +207,7 @@ recipes:
       - COC
       - SMS
     ingredients:
-      C: copper_ingot
+      C: COPPER_INGOT
       M: magnetised_iron
       S: steel_ingot
       O: iron_core
@@ -232,7 +232,7 @@ recipes:
     ingredients:
       C: iron_core
       S: steel_ingot
-      O: copper_ingot
+      O: COPPER_INGOT
     result:
       item: power_connector
       amount: 1
@@ -297,7 +297,7 @@ recipes:
       - XXI
       - SIX
     ingredients:
-      I: copper_ingot
+      I: COPPER_INGOT
       S: STICK
     result:
       item: sickle_copper
@@ -380,7 +380,7 @@ recipes:
     ingredients:
       S: steel_ingot
       G: GLASS
-      U: copper_ingot
+      U: COPPER_INGOT
       C: iron_core
       M: magnetised_iron
     result:
@@ -447,7 +447,7 @@ recipes:
       - MOM
       - SCS
     ingredients:
-      C: copper_ingot
+      C: COPPER_INGOT
       M: magnetised_iron
       S: steel_ingot
       O: iron_core
@@ -460,7 +460,7 @@ recipes:
       - COM
       - SLS
     ingredients:
-      C: copper_ingot
+      C: COPPER_INGOT
       M: magnetised_iron
       S: steel_ingot
       O: iron_core
@@ -740,7 +740,7 @@ recipes:
     ingredients:
       C: iron_core
       S: steel_ingot
-      U: copper_ingot
+      U: COPPER_INGOT
     result:
       item: Magnetiser
       amount: 1
@@ -787,7 +787,7 @@ recipes:
       - MCM
     ingredients:
       B: IRON_BLOCK
-      U: copper_ingot
+      U: COPPER_INGOT
       T: IRON_PICKAXE
       M: magnetised_iron
       C: IronCell
@@ -815,7 +815,7 @@ recipes:
       - MCM
     ingredients:
       B: IRON_BLOCK
-      U: copper_ingot
+      U: COPPER_INGOT
       T: IRON_SHOVEL
       M: magnetised_iron
       C: IronCell
@@ -829,7 +829,7 @@ recipes:
       - MCM
     ingredients:
       B: GOLD_BLOCK
-      U: copper_ingot
+      U: COPPER_INGOT
       T: GOLDEN_PICKAXE
       M: magnetised_iron
       C: GoldCell
@@ -857,7 +857,7 @@ recipes:
       - MCM
     ingredients:
       B: GOLD_BLOCK
-      U: copper_ingot
+      U: COPPER_INGOT
       T: GOLDEN_SHOVEL
       M: magnetised_iron
       C: GoldCell
@@ -871,7 +871,7 @@ recipes:
       - MCM
     ingredients:
       B: DIAMOND_BLOCK
-      U: copper_ingot
+      U: COPPER_INGOT
       T: DIAMOND_PICKAXE
       M: magnetised_iron
       C: DiamondCell
@@ -899,7 +899,7 @@ recipes:
       - MCM
     ingredients:
       B: DIAMOND_BLOCK
-      U: copper_ingot
+      U: COPPER_INGOT
       T: DIAMOND_SHOVEL
       M: magnetised_iron
       C: DiamondCell
@@ -913,7 +913,7 @@ recipes:
       - MCM
     ingredients:
       B: NETHERITE_BLOCK
-      U: copper_ingot
+      U: COPPER_INGOT
       T: NETHERITE_PICKAXE
       M: magnetised_iron
       C: EmeraldCell
@@ -943,7 +943,7 @@ recipes:
       - MCM
     ingredients:
       B: NETHERITE_BLOCK
-      U: copper_ingot
+      U: COPPER_INGOT
       T: NETHERITE_SHOVEL
       M: magnetised_iron
       C: EmeraldCell
@@ -957,13 +957,13 @@ furnace_recipes:
     input:
       name: CopperOre
     result:
-      name: copper_ingot
+      name: COPPER_INGOT
       amount: 1
   copper_ingot_dust:
     input:
       name: copper_dust
     result:
-      name: copper_ingot
+      name: COPPER_INGOT
       amount: 1
   steel_ingot:
     input:
@@ -1026,6 +1026,11 @@ macerator_recipes:
     result:
       name: iron_dust
   copper_dust:
+    input:
+      name: COPPER_INGOT
+    result:
+      name: copper_dust
+  copper_dust2:
     input:
       name: copper_ingot
     result:

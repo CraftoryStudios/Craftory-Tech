@@ -153,7 +153,7 @@ public class PowerConnectorManager implements Listener {
   public void formWire(Location fromLoc, Location toLoc) {
     if(beamLocations.get(fromLoc)!=null && beamLocations.get(fromLoc).equals(toLoc)) return;
     Wire beam = new Wire(fromLoc.clone().add(0.5, 0.5, 0.5), toLoc.clone().add(0.5, 0.5, 0.5),
-          -1, 25);
+          25);
     beam.start(Craftory.plugin);
     addBeamToList(fromLoc, beam);
     addBeamToList(toLoc, beam);

@@ -11,11 +11,8 @@
 package tech.brettsaunders.craftory;
 
 import static tech.brettsaunders.craftory.Utilities.checkMinecraftVersion;
-import static tech.brettsaunders.craftory.Utilities.checkProtocolLibVersion;
 import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.dsn.InvalidDsnException;
@@ -40,6 +37,7 @@ import tech.brettsaunders.craftory.api.blocks.CustomBlockManager;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager;
 import tech.brettsaunders.craftory.api.blocks.PoweredBlockEvents;
 import tech.brettsaunders.craftory.api.events.Events;
+import tech.brettsaunders.craftory.api.items.CopperIngotConverter;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.api.recipes.RecipeBook;
 import tech.brettsaunders.craftory.api.recipes.RecipeBookEvents;
@@ -59,15 +57,14 @@ import tech.brettsaunders.craftory.world.WorldGenHandler;
 public final class Craftory extends JavaPlugin implements Listener {
 
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/43f3450e6706f0ae224844996de0fba25ba936d8.zip";
-  public static final String HASH = "43f3450e6706f0ae224844996de0fba25ba936d8";
+  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/7299fd24a5c0a382504b37c9d551f7876f13b097.zip";
+  public static final String HASH = "7299fd24a5c0a382504b37c9d551f7876f13b097";
   public static String VERSION;
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
   public static Craftory plugin = null;
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
-  public static ProtocolManager packetManager;
   public static PoweredToolManager poweredToolManager;
 
   public static FileConfiguration customModelDataConfig;
@@ -87,7 +84,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   private SentryClient sentryClient;
   private static HashSet<String> loadedPlugins = new HashSet<>();
 
-  public static final Version MAX_SUPPORTED_MC = new Version("1.16.5");
+  public static final Version MAX_SUPPORTED_MC = new Version("1.17.0");
   public static Version mcVersion;
 
   private static int generateVersionCode() {
@@ -109,22 +106,14 @@ public final class Craftory extends JavaPlugin implements Listener {
     if (checkMinecraftVersion()) {
       return;
     }
-    if (checkProtocolLibVersion()) {
-      return;
-    }
 
 
     setupSentry();
     try {
-      if (getServer().getPluginManager().getPlugin("ProtocolLib") == null) {
-        Log.error("ProtocolLib is needed to run the latest version of craftory!");
-        getServer().getPluginManager().disablePlugin(this);
-      }
       isLightAPIEnabled = getServer().getPluginManager().isPluginEnabled("LightAPI");
 
       loadedPlugins = (HashSet<String>) Arrays.stream(plugin.getServer().getPluginManager().getPlugins()).map(Plugin::getName).collect(
           Collectors.toSet());
-      packetManager = ProtocolLibrary.getProtocolManager();
       thisVersionCode = generateVersionCode();
       this.getServer().getPluginManager().registerEvents(this, this);
 
@@ -187,6 +176,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       new RecipeManager();
       new RecipeBook();
       recipeBookEvents = new RecipeBookEvents();
+      new CopperIngotConverter();
 
       if (isPluginLoaded("mcMMO")) {
         Events.registerEvents(new McMMOListener());

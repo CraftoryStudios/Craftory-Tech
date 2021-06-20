@@ -7,7 +7,6 @@ main: ${mainClass}
 api-version: 1.13
 prefix: Craftory
 softdepend: [Oraxen, LightAPI, mcMMO]
-depend: [ProtocolLib]
 load: STARTUP
 
 commands:

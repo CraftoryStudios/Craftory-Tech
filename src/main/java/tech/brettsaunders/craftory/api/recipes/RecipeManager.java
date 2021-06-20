@@ -115,6 +115,7 @@ public class RecipeManager implements Listener {
             //Ingredient Vanilla Item
             } else if (CustomItemManager.getCustomItem(ingridentMaterial).getType()
                 == Material.AIR) {
+              if (ingridentMaterial == "COPPER_INGOT") Log.info("COPPPPPER");
               Material material = Material.getMaterial(ingridentMaterial);
               shapedRecipe.setIngredient(key, material);
 

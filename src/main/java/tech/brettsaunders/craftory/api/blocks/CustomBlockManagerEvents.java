@@ -16,7 +16,6 @@ import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.Bukkit;
@@ -46,7 +45,6 @@ import org.bukkit.event.world.WorldInitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.events.CustomBlockBreakEvent;
@@ -150,35 +148,6 @@ public class CustomBlockManagerEvents implements Listener {
     e.setCancelled(true);
   }
 
-  public BlockFace getBlockFace(Player player) {
-    List<Block> lastTwoTargetBlocks = player.getLastTwoTargetBlocks(null, 100);
-    if (lastTwoTargetBlocks.size() != 2 || !lastTwoTargetBlocks.get(1).getType().isOccluding()) return null;
-    Block targetBlock = lastTwoTargetBlocks.get(1);
-    Block adjacentBlock = lastTwoTargetBlocks.get(0);
-    return targetBlock.getFace(adjacentBlock);
-  }
-
-  public Location calculateLocation(Location start, Player player) {
-    BlockFace blockFace = getBlockFace(player);
-    start.add(start.getX() > 0 ? -0.5 : 0.5, 0.0, start.getZ() > 0 ? -0.5 : 0.5);
-    switch (blockFace) {
-      default:
-      case NORTH:
-        start.add(0,0,-0.4);
-        break;
-      case SOUTH:
-        start.add(0,0,0.4);
-        break;
-      case EAST:
-        start.add(0.4,0,0);
-        break;
-      case WEST:
-        start.add(-0.4,0,0);
-        break;
-    }
-    return start;
-  }
-
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onBlockDamage(PlayerInteractEvent e) {
     if (e.getAction() != Action.LEFT_CLICK_BLOCK) return;
@@ -264,23 +233,13 @@ public class CustomBlockManagerEvents implements Listener {
         Set<BlockFace> blockFaces = multipleFacing.getFaces();
         HashSet<BlockFace> compareFaces = placement.getAllowedFaces();
         if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces)) {
-          if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-            location.getWorld()
-                .dropItemNaturally(location, CustomItemManager.getCustomItem(name));
+          // If block is CopperOre convert to minecraft copper ore
+          if (name == "CopperOre") {
+            e.setCancelled(true);
+            e.getBlock().setType(Material.COPPER_ORE);
+            e.getPlayer().breakBlock(e.getBlock());
+            return;
           }
-          e.getBlock().setType(Material.AIR);
-          return;
-        }
-      });
-    } else if (e.getBlock().getType() == Material.BROWN_MUSHROOM_BLOCK) {
-      BlockData blockData = e.getBlock().getBlockData();
-      MultipleFacing multipleFacing = (MultipleFacing) blockData;
-      Utilities.getBasicBlockRegistry().forEach((name, placement) -> {
-        Set<BlockFace> blockFaces = multipleFacing.getFaces();
-        HashSet<BlockFace> compareFaces = placement.getAllowedFaces();
-        if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces) && name
-            .equalsIgnoreCase(
-                Blocks.COPPER_ORE)) {
           if (e.getPlayer().getGameMode() == GameMode.SURVIVAL) {
             location.getWorld()
                 .dropItemNaturally(location, CustomItemManager.getCustomItem(name));
