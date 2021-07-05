@@ -32,6 +32,7 @@ blocks:
     EAST: false
     DOWN: false
     itemModel: stone
+
   SolidFuelGenerator:
     WEST: true
     UP: false
@@ -40,14 +41,31 @@ blocks:
     EAST: true
     DOWN: false
     itemModel: stone
-  power_connector:
+  SolidFuelGenerator_EAST:
     WEST: true
     UP: false
     SOUTH: false
     NORTH: false
-    EAST: false
-    DOWN: false
+    EAST: true
+    DOWN: true
     itemModel: stone
+  SolidFuelGenerator_SOUTH:
+    WEST: false
+    UP: true
+    SOUTH: false
+    NORTH: false
+    EAST: true
+    DOWN: true
+    itemModel: stone
+  SolidFuelGenerator_WEST:
+    WEST: true
+    UP: true
+    SOUTH: false
+    NORTH: false
+    EAST: true
+    DOWN: true
+    itemModel: stone
+
   IronElectricFurnace:
     WEST: true
     UP: false
@@ -56,6 +74,31 @@ blocks:
     EAST: true
     DOWN: false
     itemModel: stone
+  IronElectricFurnace_EAST://
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: false
+    EAST: true
+    DOWN: false
+    itemModel: stone
+  IronElectricFurnace_SOUTH:
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: false
+    EAST: true
+    DOWN: false
+    itemModel: stone
+  IronElectricFurnace_WEST:
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: false
+    EAST: true
+    DOWN: false
+    itemModel: stone
+
   GoldElectricFurnace:
     WEST: true
     UP: true
@@ -64,6 +107,31 @@ blocks:
     EAST: true
     DOWN: false
     itemModel: stone
+  GoldElectricFurnace_EAST:
+    WEST: false
+    UP: false
+    SOUTH: true
+    NORTH: false
+    EAST: true
+    DOWN: true
+    itemModel: stone
+  GoldElectricFurnace_SOUTH:
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: false
+    EAST: true
+    DOWN: true
+    itemModel: stone
+  GoldElectricFurnace_WEST:
+    WEST: false
+    UP: true
+    SOUTH: true
+    NORTH: false
+    EAST: true
+    DOWN: true
+    itemModel: stone
+
   DiamondElectricFurnace:
     WEST: false
     UP: false
@@ -128,7 +196,6 @@ blocks:
     EAST: false
     DOWN: false
     itemModel: stone
-
   CopperOre:
     WEST: true
     UP: false
@@ -137,6 +204,15 @@ blocks:
     EAST: false
     DOWN: false
     itemModel: gold_ore
+  power_connector:
+    WEST: true
+    UP: false
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: false
+    itemModel: stone
+
   IronMacerator:
     WEST: true
     UP: true
@@ -145,6 +221,31 @@ blocks:
     EAST: true
     DOWN: false
     itemModel: stone
+  IronMacerator_EAST:
+    WEST: false
+    UP: false
+    SOUTH: treu
+    NORTH: true
+    EAST: false
+    DOWN: false
+    itemModel: stone
+  IronMacerator_SOUTH:
+    WEST: false
+    UP: true
+    SOUTH: false
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemModel: stone
+  IronMacerator_WEST:
+    WEST: false
+    UP: false
+    SOUTH: false
+    NORTH: false
+    EAST: true
+    DOWN: true
+    itemModel: stone
+
   GoldMacerator:
     WEST: false
     UP: false
@@ -153,6 +254,31 @@ blocks:
     EAST: true
     DOWN: false
     itemModel: stone
+  GoldMacerator_EAST:
+    WEST: true
+    UP: true
+    SOUTH: false
+    NORTH: true
+    EAST: false
+    DOWN: false
+    itemModel: stone
+  GoldMacerator_SOUTH:
+    WEST: false
+    UP: true
+    SOUTH: true
+    NORTH: false
+    EAST: true
+    DOWN: false
+    itemModel: stone
+  GoldMacerator_WEST:
+    WEST: false
+    UP: true
+    SOUTH: false
+    NORTH: false
+    EAST: true
+    DOWN: false
+    itemModel: stone
+
   DiamondMacerator:
     WEST: true
     UP: true
@@ -161,6 +287,31 @@ blocks:
     EAST: false
     DOWN: true
     itemModel: stone
+ DiamondMacerator_EAST:
+    WEST: false
+    UP: true
+    SOUTH: false
+    NORTH: true
+    EAST: true
+    DOWN: false
+    itemModel: stone
+  DiamondMacerator_SOUTH:
+    WEST: false 
+    UP: true
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: false
+    itemModel: stone
+  DiamondMacerator_WEST:
+    WEST: true
+    UP: true
+    SOUTH: false
+    NORTH: false
+    EAST: false
+    DOWN: false
+    itemModel: stone
+
   EmeraldMacerator:
     WEST: false
     UP: true
@@ -169,6 +320,31 @@ blocks:
     EAST: true
     DOWN: false
     itemModel: stone
+  EmeraldMacerator_EAST:
+    WEST: false
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: true
+    itemModel: stone
+  EmeraldMacerator_SOUTH:
+    WEST: true
+    UP: false
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: true
+    itemModel: stone
+  EmeraldMacerator_WEST:
+    WEST: false
+    UP: true
+    SOUTH: true
+    NORTH: true
+    EAST: true
+    DOWN: true
+    itemModel: stone
+
   BasicSolarPanel:
     WEST: true
     UP: true
@@ -201,6 +377,7 @@ blocks:
     EAST: false
     DOWN: true
     itemModel: stone
+
   GeothermalGenerator:
     WEST: true
     UP: true
@@ -209,6 +386,31 @@ blocks:
     EAST: false
     DOWN: true
     itemModel: stone
+  GeothermalGenerator_EAST:
+    WEST: false
+    UP: true
+    SOUTH: true
+    NORTH: false
+    EAST: false
+    DOWN: false
+    itemModel: stone
+  GeothermalGenerator_SOUTH:
+    WEST: true
+    UP: true
+    SOUTH: true
+    NORTH: false
+    EAST: false
+    DOWN: false
+    itemModel: stone
+  GeothermalGenerator_WEST:
+    WEST: false
+    UP: true
+    SOUTH: false
+    NORTH: true
+    EAST: false
+    DOWN: false
+    itemModel: stone
+
   RotaryGenerator:
     WEST: false
     UP: false
