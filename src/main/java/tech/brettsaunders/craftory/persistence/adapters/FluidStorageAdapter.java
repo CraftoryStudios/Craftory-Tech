@@ -1,13 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2020. MatthewJones & Craftory Team - All Rights Reserved
- *
- * This file is part of Craftory.
- * Unauthorized copying of this file, via any medium is strictly prohibited.
- * Proprietary and confidential
- *
- * File Author: Matthew Jones
+ * Copyright (c) 2021. Brett Saunders & Matthew Jones - All Rights Reserved
  ******************************************************************************/
-
 package tech.brettsaunders.craftory.persistence.adapters;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
