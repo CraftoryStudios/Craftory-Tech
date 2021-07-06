@@ -167,6 +167,7 @@ public class Utilities {
     config.addDefault("general.debug", false);
     config.addDefault("general.autoSaveInterval", 0);
     config.addDefault("general.recipeBookOnFirstJoin", false);
+    config.addDefault("general.enableRecipeBook", true);
     config.addDefault("language.locale", "en-GB");
     config.addDefault("generators.solarDuringStorms", true);
     config.addDefault("resourcePack.forcePack", true);

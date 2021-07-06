@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Constants.Items;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 
@@ -41,6 +42,8 @@ public class RecipeBookEvents implements Listener {
   @EventHandler
   public void onRecipeBookOpen(PlayerInteractEvent e) {
     //Pre-Conditions: Right Click and Recipe Book
+    if (!e.getPlayer().hasPermission("craftory.recipe.book")) return;
+    if (!Utilities.config.getBoolean("general.enableRecipeBook")) return;
     if (!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))) return;
     if (e.getItem() == null) return;
     if (e.getItem().getType() != Material.PAPER) return;

@@ -35,3 +35,6 @@ permissions:
   craftory.craft:
     description: Allows you to craft craftory recipes
     defaut: true
+  craftory.recipe.book:
+    description: Allows you to use the recipe book
+    defaut: true
