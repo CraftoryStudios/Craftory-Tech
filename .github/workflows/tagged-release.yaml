@@ -21,7 +21,7 @@ jobs:
         uses: whelk-io/maven-settings-xml-action@v18
         with: 
           repositories: '[{ "id": "oraxen", "url": "https://maven.pkg.github.com/oraxen/Oraxen/" }]'
-          servers: '[{ "id": "oraxen", "username": GITHUB_USER_REF, "password": GITHUB_TOKEN_REF }]'
+          servers: '[{ "id": "oraxen", "username": "${GITHUB_USER_REF}", "password": "${GITHUB_TOKEN_REF}" }]'
 
       - name: Cache Maven packages
         uses: actions/cache@v2
