@@ -28,10 +28,10 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B -Pgithub package --file pom.xml
         env:
           GITHUB_USER_REF: ${{ secrets.GH_PACKAGE_REPO_USERNAME }}
-          GITHUB_TOKEN_REF: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN_REF: ${{ secrets.GH_PACKAGE_REPO_PASSWORD }}
 
       - name: Generate Release
         uses: marvinpinto/action-automatic-releases@latest
