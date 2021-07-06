@@ -75,12 +75,9 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>com.github.Th0rgal</groupId>
-      <artifactId>Oraxen</artifactId>
-      <version>1.75.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/external-libs/oraxen-1.75.0-all.jar</systemPath>
-      <optional>true</optional>
+      <groupId>io.th0rgal</groupId>
+      <artifactId>oraxen</artifactId>
+      <version>1.77.1</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -114,7 +111,7 @@
     <dependency>
       <groupId>io.github.qveshn</groupId>
       <artifactId>LightAPI-fork</artifactId>
-      <version>3.4.5-SNAPSHOT</version>
+      <version>3.5.1-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -163,6 +160,10 @@
     <repository>
       <id>sonatype</id>
       <url>https://oss.sonatype.org/content/groups/public/</url>
+    </repository>
+    <repository>
+      <id>jitpack</id>
+      <url>https://jitpack.io</url>
     </repository>
   </repositories>
 
