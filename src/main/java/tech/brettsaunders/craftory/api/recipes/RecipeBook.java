@@ -30,7 +30,9 @@ public class RecipeBook {
 
   public RecipeBook() {
     //Get All Recipes
-    String[] keys = Craftory.customRecipeConfig.getConfigurationSection("recipes").getKeys(false).stream().toArray(String[]::new);
+    String[] keys =
+        Utilities.concatWithStream(Craftory.customRecipeConfig.getConfigurationSection("recipes").getKeys(false).stream().toArray(String[]::new),
+            Craftory.defaultRecipes.getConfigurationSection("recipes").getKeys(false).stream().toArray(String[]::new));
 
     //Load Sound
     sound = Sound.ITEM_BOOK_PAGE_TURN;

@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Synchronized;
 import org.bstats.bukkit.Metrics;
@@ -123,43 +125,20 @@ public class Utilities {
     });
   }
 
+  public static <T> T[] concatWithStream(T[] array1, T[] array2) {
+    return Stream.concat(Arrays.stream(array1), Arrays.stream(array2))
+                 .toArray(size -> (T[]) Array.newInstance(array1.getClass().getComponentType(), size));
+  }
+
   static boolean checkMinecraftVersion() {
-    if (Craftory.mcVersion.compareTo(Craftory.MAX_SUPPORTED_MC) > 0) {
+    if (Craftory.mcVersion.compareTo(Craftory.MAX_SUPPORTED_MC) > 0 || Craftory.mcVersion.compareTo(Craftory.MIN_SUPPORTED_MC) < 0) {
       Log.error("Craftory is shutting down! This is not an error with Craftory!");
       Log.error("Minecraft Version "+Craftory.mcVersion.get() + " is unsupported by this version of Craftory!");
+      Log.error("Please check the https://studio.craftory for version information");
       Craftory.plugin.getServer().getPluginManager().disablePlugin(Craftory.plugin);
       return true;
     }
     return false;
-  }
-
-  static boolean isOlderThan(String requiredVersion, String theirVersion) {
-    int[] required = getNumericVersion(requiredVersion);
-    int[] has = getNumericVersion(theirVersion);
-
-    for (int i = 0; i < Math.min(required.length, has.length); i++) {
-      if (required[i] == has[i]) {
-        continue;
-      }
-
-      return required[i] >= has[i];
-    }
-
-    return false;
-  }
-
-  static int[] getNumericVersion(String version) {
-    int[] v = new int[0];
-    for (String split : version.split("[.\\-]")) {
-      if (!split.matches("[0-9]+")) {
-        return v;
-      }
-
-      v = Arrays.copyOf(v, v.length + 1);
-      v[v.length - 1] = Integer.parseInt(split);
-    }
-
-    return v;
   }
 
   static void createConfigs() {
@@ -204,7 +183,7 @@ public class Utilities {
 
   }
 
-  static void getTranslations() throws IOException {
+  static void getTranslations() {
     String locale = config.getString("language.locale");
     Log.info("Using " + locale + " locale");
     Properties defaultLang = new Properties();

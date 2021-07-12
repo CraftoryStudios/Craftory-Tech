@@ -1,0 +1,1096 @@
+recipes:
+  IronCell:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+    result:
+      item: IronCell
+      amount: 1
+  GoldCell:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      C: gold_core
+      S: steel_ingot
+    result:
+      item: GoldCell
+      amount: 1
+  DiamondCell:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      C: diamond_core
+      S: steel_ingot
+    result:
+      item: DiamondCell
+      amount: 1
+  EmeraldCell:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      C: emerald_core
+      S: steel_ingot
+    result:
+      item: EmeraldCell
+      amount: 1
+  IronElectricFurnace:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+      F: FURNACE
+    result:
+      item: IronElectricFurnace
+      amount: 1
+  GoldElectricFurnace:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: gold_core
+      S: steel_ingot
+      F: FURNACE
+    result:
+      item: GoldElectricFurnace
+      amount: 1
+  DiamondElectricFurnace:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: diamond_core
+      S: steel_ingot
+      F: FURNACE
+    result:
+      item: DiamondElectricFurnace
+      amount: 1
+  EmeraldElectricFurnace:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: emerald_core
+      S: steel_ingot
+      F: FURNACE
+    result:
+      item: EmeraldElectricFurnace
+      amount: 1
+  iron_core:
+    pattern:
+      - SIS
+      - IRI
+      - SIS
+    ingredients:
+      I: IRON_INGOT
+      R: REDSTONE
+      S: steel_ingot
+    result:
+      item: iron_core
+      amount: 1
+  gold_core:
+    pattern:
+      - SGS
+      - GRG
+      - SGS
+    ingredients:
+      G: GOLD_INGOT
+      R: REDSTONE_BLOCK
+      S: steel_ingot
+    result:
+      item: gold_core
+      amount: 1
+  diamond_core:
+    pattern:
+      - SRS
+      - DGD
+      - SRS
+    ingredients:
+      G: gold_core
+      D: DIAMOND
+      R: REDSTONE_BLOCK
+      S: steel_ingot
+    result:
+      item: diamond_core
+      amount: 1
+  emerald_core:
+    pattern:
+      - SRS
+      - EDE
+      - SRS
+    ingredients:
+      E: EMERALD
+      D: diamond_core
+      R: REDSTONE_BLOCK
+      S: steel_ingot
+    result:
+      item: emerald_core
+      amount: 1
+  IronFoundry:
+    pattern:
+      - III
+      - FCF
+      - III
+    ingredients:
+      I: IRON_INGOT
+      F: FURNACE
+      C: COAL_BLOCK
+    result:
+      item: IronFoundry
+      amount: 1
+  IronElectricFoundry:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+      F: IronFoundry
+    result:
+      item: IronElectricFoundry
+      amount: 1
+  GoldElectricFoundry:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: gold_core
+      S: steel_ingot
+      F: IronFoundry
+    result:
+      item: GoldElectricFoundry
+      amount: 1
+  DiamondElectricFoundry:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: diamond_core
+      S: steel_ingot
+      F: IronFoundry
+    result:
+      item: DiamondElectricFoundry
+      amount: 1
+  EmeraldElectricFoundry:
+    pattern:
+      - SSS
+      - SCS
+      - SFS
+    ingredients:
+      C: emerald_core
+      S: steel_ingot
+      F: IronFoundry
+    result:
+      item: EmeraldElectricFoundry
+      amount: 1
+  SolidFuelGenerator:
+    pattern:
+      - SMS
+      - COC
+      - SMS
+    ingredients:
+      C: copper_ingot
+      M: magnetised_iron
+      S: steel_ingot
+      O: iron_core
+    result:
+      item: SolidFuelGenerator
+      amount: 1
+  wrench:
+    pattern:
+      - SXS
+      - XSX
+      - XSX
+    ingredients:
+      S: steel_ingot
+    result:
+      item: wrench
+      amount: 1
+  power_connector:
+    pattern:
+      - SOS
+      - OCO
+      - SOS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+      O: copper_ingot
+    result:
+      item: power_connector
+      amount: 1
+  configurator:
+    pattern:
+      - SMS
+      - XSX
+      - XSX
+    ingredients:
+      S: steel_ingot
+      M: magnetised_iron
+    result:
+      item: configurator
+      amount: 1
+  sickle_wood:
+    pattern:
+      - XWX
+      - XXW
+      - SWX
+    ingredients:
+      W: TAG-PLANKS
+      S: STICK
+    result:
+      item: sickle_wood
+      amount: 1
+  sickle_stone:
+    pattern:
+      - XTX
+      - XXT
+      - STX
+    ingredients:
+      T: STONE
+      S: STICK
+    result:
+      item: sickle_stone
+      amount: 1
+  sickle_iron:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: IRON_INGOT
+      S: STICK
+    result:
+      item: sickle_iron
+      amount: 1
+  sickle_steel:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: steel_ingot
+      S: STICK
+    result:
+      item: sickle_steel
+      amount: 1
+  sickle_copper:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: copper_ingot
+      S: STICK
+    result:
+      item: sickle_copper
+      amount: 1
+  sickle_gold:
+    pattern:
+      - XIX
+      - XXI
+      - SIX
+    ingredients:
+      I: GOLD_INGOT
+      S: STICK
+    result:
+      item: sickle_gold
+      amount: 1
+  sickle_diamond:
+    pattern:
+      - XDX
+      - XXD
+      - SDX
+    ingredients:
+      D: DIAMOND
+      S: STICK
+    result:
+      item: sickle_diamond
+      amount: 1
+  IronMacerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: iron_core
+    result:
+      item: IronMacerator
+      amount: 1
+  GoldMacerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: gold_core
+    result:
+      item: GoldMacerator
+      amount: 1
+  DiamondMacerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: diamond_core
+    result:
+      item: DiamondMacerator
+      amount: 1
+  EmeraldMacerator:
+    pattern:
+      - SDS
+      - DCD
+      - SDS
+    ingredients:
+      S: steel_ingot
+      D: DIAMOND
+      C: emerald_core
+    result:
+      item: EmeraldMacerator
+      amount: 1
+  BasicSolarPanel:
+    pattern:
+      - SGS
+      - UCU
+      - SMS
+    ingredients:
+      S: steel_ingot
+      G: GLASS
+      U: copper_ingot
+      C: iron_core
+      M: magnetised_iron
+    result:
+      item: BasicSolarPanel
+      amount: 1
+  SolarPanel:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      S: BasicSolarPanel
+      C: gold_core
+    result:
+      item: SolarPanel
+      amount: 1
+  CompactedSolarPanel:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      S: SolarPanel
+      C: diamond_core
+    result:
+      item: CompactedSolarPanel
+      amount: 1
+  SolarArray:
+    pattern:
+      - SSS
+      - SCS
+      - SSS
+    ingredients:
+      S: CompactedSolarPanel
+      C: emerald_core
+    result:
+      item: SolarArray
+      amount: 1
+  MagnetisingTable:
+    pattern:
+      - III
+      - PXP
+      - PXP
+    ingredients:
+      I: IRON_BLOCK
+      P: TAG-PLANKS
+    result:
+      item: MagnetisingTable
+      amount: 1
+  engineers_hammer:
+    pattern:
+      - XSS
+      - XHS
+      - HXX
+    ingredients:
+      S: steel_ingot
+      H: STICK
+    result:
+      item: engineers_hammer
+      amount: 1
+  RotaryGenerator:
+    pattern:
+      - SCS
+      - MOM
+      - SCS
+    ingredients:
+      C: copper_ingot
+      M: magnetised_iron
+      S: steel_ingot
+      O: iron_core
+    result:
+      item: RotaryGenerator
+      amount: 1
+  GeothermalGenerator:
+    pattern:
+      - SLS
+      - COM
+      - SLS
+    ingredients:
+      C: copper_ingot
+      M: magnetised_iron
+      S: steel_ingot
+      O: iron_core
+      L: LAVA_BUCKET
+    result:
+      item: GeothermalGenerator
+      amount: 1
+  windmill:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: WHITE_WOOL
+      S: STICK
+    result:
+      item: windmill
+      amount: 1
+  windmill_orange:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: ORANGE_WOOL
+      S: STICK
+    result:
+      item: windmill_orange
+      amount: 1
+  windmill_black:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: BLACK_WOOL
+      S: STICK
+    result:
+      item: windmill_black
+      amount: 1
+  windmill_blue:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: BLUE_WOOL
+      S: STICK
+    result:
+      item: windmill_blue
+      amount: 1
+  windmill_brown:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: BROWN_WOOL
+      S: STICK
+    result:
+      item: windmill_brown
+      amount: 1
+  windmill_cyan:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: CYAN_WOOL
+      S: STICK
+    result:
+      item: windmill_cyan
+      amount: 1
+  windmill_gray:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: GRAY_WOOL
+      S: STICK
+    result:
+      item: windmill_gray
+      amount: 1
+  windmill_green:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: GREEN_WOOL
+      S: STICK
+    result:
+      item: windmill_green
+      amount: 1
+  windmill_light_blue:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: LIGHT_BLUE_WOOL
+      S: STICK
+    result:
+      item: windmill_light_blue
+      amount: 1
+  windmill_light_gray:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: LIGHT_GRAY_WOOL
+      S: STICK
+    result:
+      item: windmill_light_gray
+      amount: 1
+  windmill_lime:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: LIME_WOOL
+      S: STICK
+    result:
+      item: windmill_lime
+      amount: 1
+  windmill_magenta:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: MAGENTA_WOOL
+      S: STICK
+    result:
+      item: windmill_magenta
+      amount: 1
+  windmill_pink:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: PINK_WOOL
+      S: STICK
+    result:
+      item: windmill_pink
+      amount: 1
+  windmill_red:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: RED_WOOL
+      S: STICK
+    result:
+      item: windmill_red
+      amount: 1
+  windmill_purple:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: PURPLE_WOOL
+      S: STICK
+    result:
+      item: windmill_purple
+      amount: 1
+  windmill_yellow:
+    pattern:
+      - WSW
+      - SSS
+      - WSW
+    ingredients:
+      W: YELLOW_WOOL
+      S: STICK
+    result:
+      item: windmill_yellow
+      amount: 1
+  waterwheel:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: DARK_OAK_PLANKS
+      S: STICK
+    result:
+      item: waterwheel
+      amount: 1
+  waterwheel_oak:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: OAK_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_oak
+      amount: 1
+  waterwheel_birch:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: BIRCH_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_birch
+      amount: 1
+  waterwheel_acacia:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: ACACIA_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_acacia
+      amount: 1
+  waterwheel_crimson:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: CRIMSON_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_crimson
+      amount: 1
+  waterwheel_jungle:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: JUNGLE_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_jungle
+      amount: 1
+  waterwheel_spruce:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: SPRUCE_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_spruce
+      amount: 1
+  waterwheel_warpped:
+    pattern:
+      - PSP
+      - SSS
+      - PSP
+    ingredients:
+      P: WARPED_PLANKS
+      S: STICK
+    result:
+      item: waterwheel_warpped
+      amount: 1
+  Magnetiser:
+    pattern:
+      - SSS
+      - UCU
+      - SSS
+    ingredients:
+      C: iron_core
+      S: steel_ingot
+      U: copper_ingot
+    result:
+      item: Magnetiser
+      amount: 1
+  BlockPlacer:
+    pattern:
+      - SSS
+      - PCR
+      - SSS
+    ingredients:
+      R: REDSTONE_BLOCK
+      C: iron_core
+      S: steel_ingot
+      P: PISTON
+    result:
+      item: BlockPlacer
+      amount: 1
+  BlockBreaker:
+    pattern:
+      - SSS
+      - PCR
+      - SSS
+    ingredients:
+      R: REDSTONE_BLOCK
+      C: iron_core
+      S: steel_ingot
+      P: DIAMOND_PICKAXE
+    result:
+      item: BlockBreaker
+      amount: 1
+  recipe_book:
+    pattern:
+      - DDD
+      - DDD
+      - DDD
+    ingredients:
+      D: DIRT
+    result:
+      item: recipe_book
+      amount: 1
+  iron_drill:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: IRON_BLOCK
+      U: copper_ingot
+      T: IRON_PICKAXE
+      M: magnetised_iron
+      C: IronCell
+    result:
+      item: iron_drill
+      amount: 1
+  iron_power_hammer:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: IRON_BLOCK
+      U: steel_ingot
+      T: IRON_PICKAXE
+      M: magnetised_iron
+      C: IronCell
+    result:
+      item: iron_power_hammer
+      amount: 1
+  iron_excavator:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: IRON_BLOCK
+      U: copper_ingot
+      T: IRON_SHOVEL
+      M: magnetised_iron
+      C: IronCell
+    result:
+      item: iron_excavator
+      amount: 1
+  golden_drill:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: GOLD_BLOCK
+      U: copper_ingot
+      T: GOLDEN_PICKAXE
+      M: magnetised_iron
+      C: GoldCell
+    result:
+      item: golden_drill
+      amount: 1
+  golden_power_hammer:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: GOLD_BLOCK
+      U: steel_ingot
+      T: GOLDEN_PICKAXE
+      M: magnetised_iron
+      C: GoldCell
+    result:
+      item: golden_power_hammer
+      amount: 1
+  golden_excavator:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: GOLD_BLOCK
+      U: copper_ingot
+      T: GOLDEN_SHOVEL
+      M: magnetised_iron
+      C: GoldCell
+    result:
+      item: golden_excavator
+      amount: 1
+  diamond_drill:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: DIAMOND_BLOCK
+      U: copper_ingot
+      T: DIAMOND_PICKAXE
+      M: magnetised_iron
+      C: DiamondCell
+    result:
+      item: diamond_drill
+      amount: 1
+  diamond_power_hammer:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: DIAMOND_BLOCK
+      U: steel_ingot
+      T: DIAMOND_PICKAXE
+      M: magnetised_iron
+      C: DiamondCell
+    result:
+      item: diamond_power_hammer
+      amount: 1
+  diamond_excavator:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: DIAMOND_BLOCK
+      U: copper_ingot
+      T: DIAMOND_SHOVEL
+      M: magnetised_iron
+      C: DiamondCell
+    result:
+      item: diamond_excavator
+      amount: 1
+  netherite_drill:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: NETHERITE_BLOCK
+      U: copper_ingot
+      T: NETHERITE_PICKAXE
+      M: magnetised_iron
+      C: EmeraldCell
+    result:
+      item: netherite_drill
+      amount: 1
+    version: 16
+  netherite_power_hammer:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: NETHERITE_BLOCK
+      U: steel_ingot
+      T: NETHERITE_PICKAXE
+      M: magnetised_iron
+      C: EmeraldCell
+    result:
+      item: netherite_power_hammer
+      amount: 1
+    version: 16
+  netherite_excavator:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: NETHERITE_BLOCK
+      U: copper_ingot
+      T: NETHERITE_SHOVEL
+      M: magnetised_iron
+      C: EmeraldCell
+    result:
+      item: netherite_excavator
+      amount: 1
+    version: 16
+
+furnace_recipes:
+  copper_ingot:
+    input:
+      name: CopperOre
+    result:
+      name: copper_ingot
+      amount: 1
+  copper_ingot_dust:
+    input:
+      name: copper_dust
+    result:
+      name: copper_ingot
+      amount: 1
+  steel_ingot:
+    input:
+      name: steel_dust
+    result:
+      name: steel_ingot
+      amount: 1
+  iron_ingot:
+    input:
+      name: iron_dust
+    result:
+      name: IRON_INGOT
+      amount: 1
+  gold_ingot:
+    input:
+      name: gold_dust
+    result:
+      name: GOLD_INGOT
+      amount: 1
+
+macerator_recipes:
+  coal_dust:
+    input:
+      name: COAL
+    result:
+      name: coal_dust
+  coal_dust_ore:
+    input:
+      name: COAL_ORE
+    result:
+      name: coal_dust
+  diamond_dust:
+    input:
+      name: DIAMOND
+    result:
+      name: diamond_dust
+  diamond_dust_ore:
+    input:
+      name: DIAMOND_ORE
+    result:
+      name: diamond_dust
+  gold_dust:
+    input:
+      name: GOLD_INGOT
+    result:
+      name: gold_dust
+  gold_dust_ore:
+    input:
+      name: GOLD_ORE
+    result:
+      name: gold_dust
+  iron_dust:
+    input:
+      name: IRON_INGOT
+    result:
+      name: iron_dust
+  iron_dust_ore:
+    input:
+      name: IRON_ORE
+    result:
+      name: iron_dust
+  copper_dust:
+    input:
+      name: copper_ingot
+    result:
+      name: copper_dust
+  copper_dust_ore:
+    input:
+      name: CopperOre
+    result:
+      name: copper_dust
+  emerald_dust:
+    input:
+      name: EMERALD
+    result:
+      name: emerald_dust
+  emerald_dust_ore:
+    input:
+      name: EMERALD_ORE
+    result:
+      name: emerald_dust
+  steel_dust:
+    input:
+      name: steel_ingot
+    result:
+      name: steel_dust
+  cobblestone:
+    input:
+      name: STONE
+    result:
+      name: COBBLESTONE
+  gravel:
+    input:
+      name: COBBLESTONE
+    result:
+      name: GRAVEL
+  sand:
+    input:
+      name: GRAVEL
+    result:
+      name: SAND
+
+magnetiser_recipes:
+  magnetised_iron:
+    input:
+      name: IRON_INGOT
+    result:
+      name: magnetised_iron
+
+foundry_recipes:
+  steel_ingot_coal_dust:
+    input1:
+      name: IRON_INGOT
+      amount: 1
+    input2:
+      name: coal_dust
+      amount: 1
+    result:
+      name: steel_ingot
+      amount: 1
+  steel_ingot_charcoal:
+    input1:
+      name: IRON_INGOT
+      amount: 1
+    input2:
+      name: CHARCOAL
+      amount: 1
+    result:
+      name: steel_ingot
+      amount: 1

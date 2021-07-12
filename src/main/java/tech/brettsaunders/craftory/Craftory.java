@@ -14,7 +14,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
@@ -41,7 +40,6 @@ import tech.brettsaunders.craftory.tech.power.api.effect.EnergyDisplayManager;
 import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerConnectorManager;
 import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGridManager;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
-import tech.brettsaunders.craftory.utils.DataConfigUtils;
 import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.ResourcePackEvents;
 import tech.brettsaunders.craftory.utils.Version;
@@ -64,6 +62,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static FileConfiguration customModelDataConfig;
   public static FileConfiguration customBlocksConfig;
   public static FileConfiguration customRecipeConfig;
+  public static FileConfiguration defaultRecipes;
   public static CustomBlockTickManager tickManager;
   public static PowerGridManager powerGridManager;
   public static RecipeBookEvents recipeBookEvents;
@@ -73,12 +72,12 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static boolean folderExists = false;
   private static File customItemConfigFile;
   private static File customBlockConfigFile;
-  private static File customRecipeConfigFile;
   private static File customModelDataFile;
   private SentryClient sentryClient;
   private static HashSet<String> loadedPlugins = new HashSet<>();
 
   public static final Version MAX_SUPPORTED_MC = new Version("1.17.0");
+  public static final Version MIN_SUPPORTED_MC = new Version("1.15.1");
   public static Version mcVersion;
 
   private static int generateVersionCode() {
@@ -128,18 +127,24 @@ public final class Craftory extends JavaPlugin implements Listener {
       poweredToolManager = new PoweredToolManager(); //Must be before CustomItemManager
       customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
       customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
-      customRecipeConfigFile = new File(getDataFolder(), "config/customRecipesConfig.yml");
       customModelDataFile = new File(getDataFolder(), "config/customModelDataV2.yml");
       customItemConfig = YamlConfiguration.loadConfiguration(customItemConfigFile);
       customBlocksConfig = YamlConfiguration.loadConfiguration(customBlockConfigFile);
+      customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
+
+      // Setup custom player recipes
+      File customRecipeConfigFile = new File(getDataFolder(), "config/customRecipesConfig.yml");
       customRecipeConfig = YamlConfiguration.loadConfiguration(customRecipeConfigFile);
       customRecipeConfig.save(customRecipeConfigFile);
-      customModelDataConfig = YamlConfiguration.loadConfiguration(customModelDataFile);
-      Optional<FileConfiguration> recipesDefaults = Optional.of(YamlConfiguration
-          .loadConfiguration(
-              new File(Craftory.plugin.getDataFolder(), "data/customRecipesConfig.yml")));
-      recipesDefaults.ifPresent(source -> DataConfigUtils.copyDefaults(source, customRecipeConfig));
-      customRecipeConfig.save(customRecipeConfigFile);
+
+      // Setup Craftory-Tech default recipes
+      if (mcVersion.compareTo(new Version("1.17.0")) >= 0) {
+        defaultRecipes = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "data/recipes17.yml"));
+      } else {
+        defaultRecipes = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "data/recipes16.yml"));
+      }
+
+
       CustomItemManager.setup(customItemConfig, customBlocksConfig, customModelDataConfig);
       customBlockManager = new CustomBlockManager();
       new WorldGenHandler();
@@ -187,7 +192,6 @@ public final class Craftory extends JavaPlugin implements Listener {
       Utilities.saveDataFile();
       if (Objects.nonNull(customItemConfigFile) && Objects.nonNull(customItemConfig)) customItemConfig.save(customItemConfigFile);
       if (Objects.nonNull(customBlockConfigFile) && Objects.nonNull(customBlocksConfig)) customBlocksConfig.save(customBlockConfigFile);
-      if (Objects.nonNull(customRecipeConfigFile) && Objects.nonNull(customRecipeConfig)) customRecipeConfig.save(customRecipeConfigFile);
       if (Objects.nonNull(recipeBookEvents)) recipeBookEvents.onDisable();
       if (Objects.nonNull(customBlockManager)) customBlockManager.onDisable();
       if (Objects.nonNull(powerGridManager)) powerGridManager.onDisable();
