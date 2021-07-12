@@ -78,6 +78,7 @@ public final class Craftory extends JavaPlugin implements Listener {
 
   public static final Version MAX_SUPPORTED_MC = new Version("1.17.0");
   public static final Version MIN_SUPPORTED_MC = new Version("1.15.1");
+  public static boolean isCaveAndCliffsUpdate;
   public static Version mcVersion;
 
   private static int generateVersionCode() {
@@ -96,6 +97,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     Craftory.plugin = this;
     Craftory.VERSION = this.getDescription().getVersion();
     mcVersion = new Version(getServer());
+    isCaveAndCliffsUpdate = mcVersion.compareTo(new Version("1.17.0")) >= 0;
     if (checkMinecraftVersion()) {
       return;
     }
@@ -138,7 +140,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       customRecipeConfig.save(customRecipeConfigFile);
 
       // Setup Craftory-Tech default recipes
-      if (mcVersion.compareTo(new Version("1.17.0")) >= 0) {
+      if (isCaveAndCliffsUpdate) {
         defaultRecipes = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "data/recipes17.yml"));
       } else {
         defaultRecipes = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "data/recipes16.yml"));
