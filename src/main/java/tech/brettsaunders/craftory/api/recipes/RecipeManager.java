@@ -51,25 +51,29 @@ public class RecipeManager implements Listener {
     Events.registerEvents(this);
 
     // Crafting Recipes
-    setupCraftingRecipes(customRecipeConfig.getConfigurationSection("recipes"));
-    setupCraftingRecipes(defaultRecipes.getConfigurationSection("recipes"));
+    setupCraftingRecipes(customRecipeConfig.getConfigurationSection("recipes"), false);
+    setupCraftingRecipes(defaultRecipes.getConfigurationSection("recipes"), true);
 
     // Furnace Recipes
-    setupFurnaceRecipes(customRecipeConfig.getConfigurationSection("furnace_recipes"));
-    setupFurnaceRecipes(defaultRecipes.getConfigurationSection("furnace_recipes"));
+    setupFurnaceRecipes(customRecipeConfig.getConfigurationSection("furnace_recipes"), false);
+    setupFurnaceRecipes(defaultRecipes.getConfigurationSection("furnace_recipes"), true);
 
     // Macerator Recipes
-    setupMaceratorRecipes(customRecipeConfig.getConfigurationSection("macerator_recipes"));
-    setupMaceratorRecipes(defaultRecipes.getConfigurationSection("macerator_recipes"));
+    setupMaceratorRecipes(customRecipeConfig.getConfigurationSection("macerator_recipes"), false);
+    setupMaceratorRecipes(defaultRecipes.getConfigurationSection("macerator_recipes"), true);
 
     // Magnetiser Recipes
-    setupMagnetiserRecipes(customRecipeConfig.getConfigurationSection("magnetiser_recipes"));
-    setupMagnetiserRecipes(defaultRecipes.getConfigurationSection("magnetiser_recipes"));
+    setupMagnetiserRecipes(customRecipeConfig.getConfigurationSection("magnetiser_recipes"), false);
+    setupMagnetiserRecipes(defaultRecipes.getConfigurationSection("magnetiser_recipes"), true);
+
+    //Foundry Recipes
+    setupFoundryRecipes(customRecipeConfig.getConfigurationSection("foundry_recipes"), false);
+    setupFoundryRecipes(defaultRecipes.getConfigurationSection("foundry_recipes"), true);
   }
 
-  private void setupMagnetiserRecipes(ConfigurationSection magnetiserRecipes) {
+  private void setupMagnetiserRecipes(ConfigurationSection magnetiserRecipes, boolean showWarnings) {
     if (magnetiserRecipes == null) {
-      Log.warn("No Magnetiser Recipes found!");
+      if (showWarnings) Log.warn("No Magnetiser Recipes found!");
     } else {
       Map<String, String> toAdd = new HashMap<>();
       for (String recipe : magnetiserRecipes.getKeys(false)) {
@@ -77,15 +81,12 @@ public class RecipeManager implements Listener {
             magnetiserRecipes.getString(recipe + ".result.name"));
       }
       RecipeUtils.addAllMagnetiserRecipes(toAdd);
-
-      //Foundry Recipes
-      setupFoundryRecipes(customRecipeConfig.getConfigurationSection("foundry_recipes"));
     }
   }
 
-  private void setupMaceratorRecipes(ConfigurationSection maceratorRecipes) {
+  private void setupMaceratorRecipes(ConfigurationSection maceratorRecipes, boolean showWarnings) {
     if (maceratorRecipes == null) {
-      Log.warn("No Macerator Recipes found!");
+      if (showWarnings) Log.warn("No Macerator Recipes found!");
     } else {
       Map<String, String> toAdd = new HashMap<>();
       for (String recipe : maceratorRecipes.getKeys(false)) {
@@ -96,9 +97,9 @@ public class RecipeManager implements Listener {
     }
   }
 
-  private void setupFurnaceRecipes(ConfigurationSection furnaceRecipes) {
+  private void setupFurnaceRecipes(ConfigurationSection furnaceRecipes, boolean showWarnings) {
     if (furnaceRecipes == null) {
-      Log.warn("No Furnace Recipes found!");
+      if (showWarnings) Log.warn("No Furnace Recipes found!");
     } else {
       customFurnaceRecipes = new HashMap<>();
       HashMap<String, String> toAdd = new HashMap<>();
@@ -114,9 +115,9 @@ public class RecipeManager implements Listener {
     }
   }
 
-  private void setupFoundryRecipes(ConfigurationSection foundryRecipes) {
+  private void setupFoundryRecipes(ConfigurationSection foundryRecipes, boolean showWarnings) {
     if (foundryRecipes == null) {
-      Log.warn("No Foundry Recipes found!");
+      if (showWarnings) Log.warn("No Foundry Recipes found!");
     } else {
       HashSet<CustomMachineRecipe> recipesToAdd = new HashSet<>();
       for (String recipe : foundryRecipes.getKeys(false)) {
@@ -143,9 +144,9 @@ public class RecipeManager implements Listener {
     }
   }
 
-  private void setupCraftingRecipes(ConfigurationSection recipes) {
+  private void setupCraftingRecipes(ConfigurationSection recipes, boolean showWarnings) {
     if (recipes == null) {
-      Log.warn("No Crafting Recipes found!");
+      if (showWarnings) Log.warn("No Crafting Recipes found!");
     } else {
       for (String recipe : recipes.getKeys(false)) {
         //Check item exists in this version
