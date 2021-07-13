@@ -10,16 +10,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Synchronized;
 import org.bstats.bukkit.Metrics;
@@ -69,6 +66,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.power_grid.PowerConnect
 import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Log;
+import tech.brettsaunders.craftory.utils.Version;
 
 public class Utilities {
 
@@ -117,17 +115,15 @@ public class Utilities {
 
   static void checkVersion() {
     new UpdateChecker(plugin, Craftory.SPIGOT_ID).getVersion(version -> {
-      if (Craftory.VERSION.equalsIgnoreCase(version)) {
-        Log.info("Plugin is update to date!");
+      Version lastestStableVersion = new Version(version);
+      if (Craftory.craftoryVersion.compareTo(lastestStableVersion) > 0) {
+        Log.info("WARNING - You are running a Dev version of Craftory Tech - Proceed with caution");
+      } else if (Craftory.craftoryVersion.compareTo(lastestStableVersion) == 0) {
+        Log.info("Craftory Tech is on the latest stable release!");
       } else {
         Log.info("There is a new update available!");
       }
     });
-  }
-
-  public static <T> T[] concatWithStream(T[] array1, T[] array2) {
-    return Stream.concat(Arrays.stream(array1), Arrays.stream(array2))
-                 .toArray(size -> (T[]) Array.newInstance(array1.getClass().getComponentType(), size));
   }
 
   static boolean checkMinecraftVersion() {

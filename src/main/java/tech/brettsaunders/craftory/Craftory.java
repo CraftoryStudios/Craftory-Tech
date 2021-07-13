@@ -51,7 +51,6 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static final int SPIGOT_ID = 81151;
   public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/7299fd24a5c0a382504b37c9d551f7876f13b097.zip";
   public static final String HASH = "7299fd24a5c0a382504b37c9d551f7876f13b097";
-  public static String VERSION;
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
   public static Craftory plugin = null;
@@ -80,9 +79,10 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static final Version MIN_SUPPORTED_MC = new Version("1.15.1");
   public static boolean isCaveAndCliffsUpdate;
   public static Version mcVersion;
+  public static Version craftoryVersion;
 
   private static int generateVersionCode() {
-    String[] subVersions = VERSION.split("\\.");
+    String[] subVersions = plugin.getDescription().getVersion().split("\\.");
     StringBuffer resultString = new StringBuffer();
     for (String subVersion : subVersions) {
       resultString.append(StringUtils.leftPad(subVersion, 5, "0"));
@@ -95,8 +95,8 @@ public final class Craftory extends JavaPlugin implements Listener {
   @Override
   public void onEnable() {
     Craftory.plugin = this;
-    Craftory.VERSION = this.getDescription().getVersion();
     mcVersion = new Version(getServer());
+    craftoryVersion = new Version(plugin.getDescription().getVersion());
     isCaveAndCliffsUpdate = mcVersion.compareTo(new Version("1.17.0")) >= 0;
     if (checkMinecraftVersion()) {
       return;
@@ -220,7 +220,7 @@ public final class Craftory extends JavaPlugin implements Listener {
 
     // Default data
     sentryClient.setServerName(this.getServer().getName());
-    sentryClient.setRelease(VERSION);
+    sentryClient.setRelease(plugin.getDescription().getVersion());
 
 
     Log.info("Sentry Enabled!");
