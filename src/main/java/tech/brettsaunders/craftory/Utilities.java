@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
@@ -67,6 +66,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.power_grid.PowerConnect
 import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.FileUtils;
 import tech.brettsaunders.craftory.utils.Log;
+import tech.brettsaunders.craftory.utils.Version;
 
 public class Utilities {
 
@@ -115,8 +115,11 @@ public class Utilities {
 
   static void checkVersion() {
     new UpdateChecker(plugin, Craftory.SPIGOT_ID).getVersion(version -> {
-      if (Craftory.VERSION.equalsIgnoreCase(version)) {
-        Log.info("Plugin is update to date!");
+      Version lastestStableVersion = new Version(version);
+      if (Craftory.craftoryVersion.compareTo(lastestStableVersion) > 0) {
+        Log.info("WARNING - You are running a Dev version of Craftory Tech - Proceed with caution");
+      } else if (Craftory.craftoryVersion.compareTo(lastestStableVersion) == 0) {
+        Log.info("Craftory Tech is on the latest stable release!");
       } else {
         Log.info("There is a new update available!");
       }
@@ -124,42 +127,14 @@ public class Utilities {
   }
 
   static boolean checkMinecraftVersion() {
-    if (Craftory.mcVersion.compareTo(Craftory.MAX_SUPPORTED_MC) > 0) {
+    if (Craftory.mcVersion.compareTo(Craftory.MAX_SUPPORTED_MC) > 0 || Craftory.mcVersion.compareTo(Craftory.MIN_SUPPORTED_MC) < 0) {
       Log.error("Craftory is shutting down! This is not an error with Craftory!");
       Log.error("Minecraft Version "+Craftory.mcVersion.get() + " is unsupported by this version of Craftory!");
+      Log.error("Please check the https://studio.craftory for version information");
       Craftory.plugin.getServer().getPluginManager().disablePlugin(Craftory.plugin);
       return true;
     }
     return false;
-  }
-
-  static boolean isOlderThan(String requiredVersion, String theirVersion) {
-    int[] required = getNumericVersion(requiredVersion);
-    int[] has = getNumericVersion(theirVersion);
-
-    for (int i = 0; i < Math.min(required.length, has.length); i++) {
-      if (required[i] == has[i]) {
-        continue;
-      }
-
-      return required[i] >= has[i];
-    }
-
-    return false;
-  }
-
-  static int[] getNumericVersion(String version) {
-    int[] v = new int[0];
-    for (String split : version.split("[.\\-]")) {
-      if (!split.matches("[0-9]+")) {
-        return v;
-      }
-
-      v = Arrays.copyOf(v, v.length + 1);
-      v[v.length - 1] = Integer.parseInt(split);
-    }
-
-    return v;
   }
 
   static void createConfigs() {
@@ -204,7 +179,7 @@ public class Utilities {
 
   }
 
-  static void getTranslations() throws IOException {
+  static void getTranslations() {
     String locale = config.getString("language.locale");
     Log.info("Using " + locale + " locale");
     Properties defaultLang = new Properties();

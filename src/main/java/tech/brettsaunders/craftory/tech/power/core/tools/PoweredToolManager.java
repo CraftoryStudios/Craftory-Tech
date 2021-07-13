@@ -12,6 +12,7 @@ import java.util.UUID;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -44,31 +45,33 @@ public class PoweredToolManager implements Listener {
   public static final String MAX_CHARGE_KEY = "MaxCharge";
   private Map<UUID, BlockFace> lastHitFace = new HashMap<>();
   private static final int TOOL_POWER_COST = 100;
-  private static final int VERSION = Integer.parseInt(Craftory.plugin.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
   private static final Set<Material> excavatorBlocks = new HashSet<>();
-
   private static final Set<PoweredToolType> fastTools = new HashSet<>();
-
   private static final Set<PoweredToolType> slowTools = new HashSet<>();
 
+  private static final int VERSION = Integer.parseInt(Craftory.plugin.getServer().getClass().getPackage().getName().replace(".",",").split(",")[3].substring(1).split("_")[1]);
+
   static {
-    if(VERSION > 16) {
-      excavatorBlocks.add(Material.SOUL_SOIL);
+    if (Craftory.isCaveAndCliffsUpdate) {
+      excavatorBlocks.addAll(Tag.MINEABLE_SHOVEL.getValues());
+    } else {
+      if(VERSION > 16) {
+        excavatorBlocks.add(Material.SOUL_SOIL);
+      }
+      excavatorBlocks.add(Material.CLAY);
+      excavatorBlocks.add(Material.FARMLAND);
+      excavatorBlocks.add(Material.GRASS_BLOCK);
+      excavatorBlocks.add(Material.GRAVEL);
+      excavatorBlocks.add(Material.MYCELIUM);
+      excavatorBlocks.add(Material.PODZOL);
+      excavatorBlocks.add(Material.COARSE_DIRT);
+      excavatorBlocks.add(Material.DIRT);
+      excavatorBlocks.add(Material.RED_SAND);
+      excavatorBlocks.add(Material.SAND);
+      excavatorBlocks.add(Material.SOUL_SAND);
+      excavatorBlocks.add(Material.SNOW_BLOCK);
+      excavatorBlocks.add(Material.SNOW);
     }
-    excavatorBlocks.add(Material.CLAY);
-    excavatorBlocks.add(Material.FARMLAND);
-    excavatorBlocks.add(Material.GRASS_BLOCK);
-    excavatorBlocks.add(Material.DIRT_PATH);
-    excavatorBlocks.add(Material.GRAVEL);
-    excavatorBlocks.add(Material.MYCELIUM);
-    excavatorBlocks.add(Material.PODZOL);
-    excavatorBlocks.add(Material.COARSE_DIRT);
-    excavatorBlocks.add(Material.DIRT);
-    excavatorBlocks.add(Material.RED_SAND);
-    excavatorBlocks.add(Material.SAND);
-    excavatorBlocks.add(Material.SOUL_SAND);
-    excavatorBlocks.add(Material.SNOW_BLOCK);
-    excavatorBlocks.add(Material.SNOW);
 
     fastTools.add(PoweredToolType.DRILL);
 

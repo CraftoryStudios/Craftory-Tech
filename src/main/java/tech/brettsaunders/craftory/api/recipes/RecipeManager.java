@@ -4,12 +4,16 @@
 
 package tech.brettsaunders.craftory.api.recipes;
 
+import static tech.brettsaunders.craftory.Craftory.customRecipeConfig;
+import static tech.brettsaunders.craftory.Craftory.defaultRecipes;
+
 import io.th0rgal.oraxen.items.OraxenItems;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -45,9 +49,104 @@ public class RecipeManager implements Listener {
     blackListedWorlds = Craftory.plugin.getConfig().getStringList("crafting.blackListedWorlds");
     customRecipes = new HashMap<>();
     Events.registerEvents(this);
-    ConfigurationSection recipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
+
+    // Crafting Recipes
+    setupCraftingRecipes(customRecipeConfig.getConfigurationSection("recipes"), false);
+    setupCraftingRecipes(defaultRecipes.getConfigurationSection("recipes"), true);
+
+    // Furnace Recipes
+    setupFurnaceRecipes(customRecipeConfig.getConfigurationSection("furnace_recipes"), false);
+    setupFurnaceRecipes(defaultRecipes.getConfigurationSection("furnace_recipes"), true);
+
+    // Macerator Recipes
+    setupMaceratorRecipes(customRecipeConfig.getConfigurationSection("macerator_recipes"), false);
+    setupMaceratorRecipes(defaultRecipes.getConfigurationSection("macerator_recipes"), true);
+
+    // Magnetiser Recipes
+    setupMagnetiserRecipes(customRecipeConfig.getConfigurationSection("magnetiser_recipes"), false);
+    setupMagnetiserRecipes(defaultRecipes.getConfigurationSection("magnetiser_recipes"), true);
+
+    //Foundry Recipes
+    setupFoundryRecipes(customRecipeConfig.getConfigurationSection("foundry_recipes"), false);
+    setupFoundryRecipes(defaultRecipes.getConfigurationSection("foundry_recipes"), true);
+  }
+
+  private void setupMagnetiserRecipes(ConfigurationSection magnetiserRecipes, boolean showWarnings) {
+    if (magnetiserRecipes == null) {
+      if (showWarnings) Log.warn("No Magnetiser Recipes found!");
+    } else {
+      Map<String, String> toAdd = new HashMap<>();
+      for (String recipe : magnetiserRecipes.getKeys(false)) {
+        toAdd.put(magnetiserRecipes.getString(recipe + ".input.name"),
+            magnetiserRecipes.getString(recipe + ".result.name"));
+      }
+      RecipeUtils.addAllMagnetiserRecipes(toAdd);
+    }
+  }
+
+  private void setupMaceratorRecipes(ConfigurationSection maceratorRecipes, boolean showWarnings) {
+    if (maceratorRecipes == null) {
+      if (showWarnings) Log.warn("No Macerator Recipes found!");
+    } else {
+      Map<String, String> toAdd = new HashMap<>();
+      for (String recipe : maceratorRecipes.getKeys(false)) {
+        toAdd.put(maceratorRecipes.getString(recipe + ".input.name"),
+            maceratorRecipes.getString(recipe + ".result.name"));
+      }
+      RecipeUtils.addAllMaceratorRecipes(toAdd);
+    }
+  }
+
+  private void setupFurnaceRecipes(ConfigurationSection furnaceRecipes, boolean showWarnings) {
+    if (furnaceRecipes == null) {
+      if (showWarnings) Log.warn("No Furnace Recipes found!");
+    } else {
+      customFurnaceRecipes = new HashMap<>();
+      HashMap<String, String> toAdd = new HashMap<>();
+      for (String recipe : furnaceRecipes.getKeys(false)) {
+        ItemStack result = CustomItemManager
+            .getCustomItem(furnaceRecipes.getString(recipe + ".result.name"));
+        result.setAmount(furnaceRecipes.getInt(recipe + ".result.amount"));
+        customFurnaceRecipes.put(furnaceRecipes.getString(recipe + ".input.name"), result);
+        toAdd.put(furnaceRecipes.getString(recipe + ".input.name"),
+            furnaceRecipes.getString(recipe + ".result.name"));
+      }
+      RecipeUtils.addAllFurnaceRecipes(toAdd);
+    }
+  }
+
+  private void setupFoundryRecipes(ConfigurationSection foundryRecipes, boolean showWarnings) {
+    if (foundryRecipes == null) {
+      if (showWarnings) Log.warn("No Foundry Recipes found!");
+    } else {
+      HashSet<CustomMachineRecipe> recipesToAdd = new HashSet<>();
+      for (String recipe : foundryRecipes.getKeys(false)) {
+        HashMap<String, Integer> ingredients = new HashMap<>();
+        ingredients.put(
+            foundryRecipes.getString(recipe + ".input1.name"),
+            foundryRecipes.getInt(recipe + ".input1.amount"));
+        ingredients.put(
+            foundryRecipes.getString(recipe + ".input2.name"),
+            foundryRecipes.getInt(recipe + ".input2.amount"));
+        ArrayList<ItemStack> products = new ArrayList<>();
+        String productName = foundryRecipes.getString(recipe + ".result.name");
+        ItemStack product;
+        if(Material.getMaterial(productName)!=null) {
+          product = new ItemStack(Material.valueOf(productName));
+        } else {
+          product = CustomItemManager.getCustomItemOrDefault(productName);
+        }
+        product.setAmount(foundryRecipes.getInt(recipe + ".result.amount"));
+        products.add(product);
+        recipesToAdd.add(new CustomMachineRecipe(ingredients, products));
+      }
+      RecipeUtils.addAllFoundryRecipes(recipesToAdd);
+    }
+  }
+
+  private void setupCraftingRecipes(ConfigurationSection recipes, boolean showWarnings) {
     if (recipes == null) {
-      Log.warn("No Crafting Recipes found!");
+      if (showWarnings) Log.warn("No Crafting Recipes found!");
     } else {
       for (String recipe : recipes.getKeys(false)) {
         //Check item exists in this version
@@ -109,7 +208,6 @@ public class RecipeManager implements Listener {
             //Ingredient Vanilla Item
             } else if (CustomItemManager.getCustomItem(ingridentMaterial).getType()
                 == Material.AIR) {
-              if (ingridentMaterial == "COPPER_INGOT") Log.info("COPPPPPER");
               Material material = Material.getMaterial(ingridentMaterial);
               shapedRecipe.setIngredient(key, material);
 
@@ -131,81 +229,6 @@ public class RecipeManager implements Listener {
         }
 
 
-      }
-    }
-    HashMap<String, String> toAdd = new HashMap<>();
-    //Furnace Recipes
-    ConfigurationSection furnaceRecipes = Craftory.customRecipeConfig
-        .getConfigurationSection("furnace_recipes");
-    if (furnaceRecipes == null) {
-      Log.warn("No Furnace Recipes found!");
-    } else {
-      customFurnaceRecipes = new HashMap<>();
-      for (String recipe : furnaceRecipes.getKeys(false)) {
-        ItemStack result = CustomItemManager
-            .getCustomItem(furnaceRecipes.getString(recipe + ".result.name"));
-        result.setAmount(furnaceRecipes.getInt(recipe + ".result.amount"));
-        customFurnaceRecipes.put(furnaceRecipes.getString(recipe + ".input.name"), result);
-        toAdd.put(furnaceRecipes.getString(recipe + ".input.name"),
-            furnaceRecipes.getString(recipe + ".result.name"));
-      }
-      RecipeUtils.addAllFurnaceRecipes(toAdd);
-    }
-    //Macerator Recipes
-    ConfigurationSection maceratorRecipes = Craftory.customRecipeConfig
-        .getConfigurationSection("macerator_recipes");
-    if (maceratorRecipes == null) {
-      Log.warn("No Macerator Recipes found!");
-    } else {
-      toAdd = new HashMap<>();
-      for (String recipe : maceratorRecipes.getKeys(false)) {
-        toAdd.put(maceratorRecipes.getString(recipe + ".input.name"),
-            maceratorRecipes.getString(recipe + ".result.name"));
-      }
-      RecipeUtils.addAllMaceratorRecipes(toAdd);
-    }
-
-    //Magnetiser Recipes
-    ConfigurationSection magnetiserRecipes = Craftory.customRecipeConfig
-        .getConfigurationSection("magnetiser_recipes");
-    if (magnetiserRecipes == null) {
-      Log.warn("No Magnetiser Recipes found!");
-    } else {
-      toAdd = new HashMap<>();
-      for (String recipe : magnetiserRecipes.getKeys(false)) {
-        toAdd.put(magnetiserRecipes.getString(recipe + ".input.name"),
-            magnetiserRecipes.getString(recipe + ".result.name"));
-      }
-      RecipeUtils.addAllMagnetiserRecipes(toAdd);
-
-      //Foundry Recipes
-      ConfigurationSection foundryRecipes = Craftory.customRecipeConfig
-          .getConfigurationSection("foundry_recipes");
-      if (foundryRecipes == null) {
-        Log.warn("No Foundry Recipes found!");
-      } else {
-        HashSet<CustomMachineRecipe> recipesToAdd = new HashSet<>();
-        for (String recipe : foundryRecipes.getKeys(false)) {
-          HashMap<String, Integer> ingredients = new HashMap<>();
-          ingredients.put(
-              foundryRecipes.getString(recipe + ".input1.name"),
-              foundryRecipes.getInt(recipe + ".input1.amount"));
-          ingredients.put(
-              foundryRecipes.getString(recipe + ".input2.name"),
-              foundryRecipes.getInt(recipe + ".input2.amount"));
-          ArrayList<ItemStack> products = new ArrayList<>();
-          String productName = foundryRecipes.getString(recipe + ".result.name");
-          ItemStack product;
-          if(Material.getMaterial(productName)!=null) {
-            product = new ItemStack(Material.valueOf(productName));
-          } else {
-            product = CustomItemManager.getCustomItemOrDefault(productName);
-          }
-          product.setAmount(foundryRecipes.getInt(recipe + ".result.amount"));
-          products.add(product);
-          recipesToAdd.add(new CustomMachineRecipe(ingredients, products));
-        }
-        RecipeUtils.addAllFoundryRecipes(recipesToAdd);
       }
     }
   }

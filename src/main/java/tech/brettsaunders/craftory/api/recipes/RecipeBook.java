@@ -29,25 +29,34 @@ public class RecipeBook {
   private final Sound sound;
 
   public RecipeBook() {
-    //Get All Recipes
-    String[] keys = Craftory.customRecipeConfig.getConfigurationSection("recipes").getKeys(false).stream().toArray(String[]::new);
-
     //Load Sound
     sound = Sound.ITEM_BOOK_PAGE_TURN;
 
+    //Get All Recipes
+    ConfigurationSection customRecipes = Craftory.customRecipeConfig.getConfigurationSection("recipes");
+    ConfigurationSection defaultRecipes = Craftory.defaultRecipes.getConfigurationSection("recipes");
+
+    setupRecipeBook(customRecipes);
+    setupRecipeBook(defaultRecipes);
+  }
+
+  private void setupRecipeBook(ConfigurationSection recipesSection) {
+    if (recipesSection == null) return;
+    String[] recipes = recipesSection.getKeys(false).stream().toArray(String[]::new);
+
     //Loop through recipes two at a time
-    for (int i = 0; i < keys.length; i += 2) {
-      ConfigurationSection recipeOne = Craftory.customRecipeConfig.getConfigurationSection("recipes."+keys[i]);
+    for (int i = 0; i < recipes.length; i += 2) {
+      ConfigurationSection recipeOne = recipesSection.getConfigurationSection(recipes[i]);
       ConfigurationSection recipeTwo;
       //Deal with case of uneven amount of recipes
       String nameTwo = "";
-      if (i+1 >= keys.length) {
+      if (i+1 >= recipes.length) {
         recipeTwo = null;
       } else {
-        recipeTwo = Craftory.customRecipeConfig.getConfigurationSection("recipes."+keys[i+1]);
-        nameTwo = keys[i+1];
+        recipeTwo = recipesSection.getConfigurationSection(recipes[i+1]);
+        nameTwo = recipes[i+1];
       }
-      recipeBookPages.add(createPage(i / 2, recipeOne, keys[i], recipeTwo, nameTwo));
+      recipeBookPages.add(createPage(i / 2, recipeOne, recipes[i], recipeTwo, nameTwo));
     }
   }
 
