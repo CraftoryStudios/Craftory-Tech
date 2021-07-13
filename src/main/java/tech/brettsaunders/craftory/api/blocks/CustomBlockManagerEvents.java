@@ -228,7 +228,7 @@ public class CustomBlockManagerEvents implements Listener {
         HashSet<BlockFace> compareFaces = placement.getAllowedFaces();
         if (blockFaces.containsAll(compareFaces) && compareFaces.containsAll(blockFaces)) {
           // If block is CopperOre convert to minecraft copper ore
-          if (name == "CopperOre") {
+          if (Craftory.isCaveAndCliffsUpdate && name == "CopperOre") {
             e.setCancelled(true);
             e.getBlock().setType(Material.COPPER_ORE);
             e.getPlayer().breakBlock(e.getBlock());
