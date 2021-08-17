@@ -30,8 +30,6 @@ permissions:
   craftory.command.give:
     description: Allows you to use the give command
     default: op
-  craftory.command.reload:
-    description: Allows you to use the reload command to reload Craftory config files.
   craftory.craft:
     description: Allows you to craft craftory recipes
     default: true
@@ -41,3 +39,7 @@ permissions:
   craftory.command.reload:
     description: Allows you to use the reload command to reload Craftory config files.
     default: op
+
+libraries:
+  - io.sentry:sentry:1.7.30
+
