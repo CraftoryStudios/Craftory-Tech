@@ -17,7 +17,7 @@ commands:
 permissions:
   craftory.command.help:
     description: Allows you to use the craftory help command
-    default: op
+    default: true
   craftory.command.fixGraphics:
     description: Allows you to use the fixGraphics command
     default: op
@@ -26,7 +26,7 @@ permissions:
     default: op
   craftory.command.recipebook:
     description: Allows you to use the recipe book command
-    default: op
+    default: true
   craftory.command.give:
     description: Allows you to use the give command
     default: op
@@ -34,7 +34,10 @@ permissions:
     description: Allows you to use the reload command to reload Craftory config files.
   craftory.craft:
     description: Allows you to craft craftory recipes
-    defaut: true
+    default: true
   craftory.recipe.book:
     description: Allows you to use the recipe book
-    defaut: true
+    default: true
+  craftory.command.reload:
+    description: Allows you to use the reload command to reload Craftory config files.
+    default: op
