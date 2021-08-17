@@ -21,9 +21,19 @@ public class SentryLogging {
 
   public static void sentryLog(Throwable e) {
 
+    boolean isCraftory = false;
+
     if (Utilities.config.getString("error_reporting.username").equalsIgnoreCase("debug")) {
       return;
     }
+
+    for (StackTraceElement line : e.getStackTrace()) {
+      if (line.getClassName().contains("craftory"))
+        isCraftory = true;
+    }
+
+    // If Craftory Tech isn't in stack trace, then don't send error
+    if (!isCraftory) return;
 
     Bukkit.getLogger().log(Level.SEVERE, e.getMessage(),e);
     EventBuilder eventBuilder = new EventBuilder()
