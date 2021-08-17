@@ -42,11 +42,10 @@ public class RecipeBookEvents implements Listener {
   @EventHandler
   public void onRecipeBookOpen(PlayerInteractEvent e) {
     //Pre-Conditions: Right Click and Recipe Book
+    if (e.getItem() == null || e.getItem().getType() != Material.PAPER) return;
+    if (!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))) return;
     if (!e.getPlayer().hasPermission("craftory.recipe.book")) return;
     if (!Utilities.config.getBoolean("general.enableRecipeBook")) return;
-    if (!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))) return;
-    if (e.getItem() == null) return;
-    if (e.getItem().getType() != Material.PAPER) return;
     if (!CustomItemManager.matchCustomItemName(e.getItem(), Items.RECIPE_BOOK)) return;
 
     //Open Recipe Book
