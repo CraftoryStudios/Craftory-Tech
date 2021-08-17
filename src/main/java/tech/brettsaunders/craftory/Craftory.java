@@ -177,7 +177,8 @@ public final class Craftory extends JavaPlugin implements Listener {
       new RecipeManager();
       new RecipeBook();
       recipeBookEvents = new RecipeBookEvents();
-      new CopperIngotConverter();
+      if (isCaveAndCliffsUpdate)
+        new CopperIngotConverter();
 
       if (isPluginLoaded("mcMMO")) {
         Events.registerEvents(new McMMOListener());
