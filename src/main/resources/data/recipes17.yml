@@ -985,6 +985,21 @@ furnace_recipes:
       amount: 1
 
 macerator_recipes:
+  raw_iron:
+    input:
+      name: RAW_IRON
+    result:
+      name: iron_dust
+  raw_gold:
+    input:
+      name: RAW_GOLD
+    result:
+      name: gold_dust
+  raw_copper:
+    input:
+      name: RAW_COPPER
+    result:
+      name: copper_dust
   coal_dust:
     input:
       name: COAL

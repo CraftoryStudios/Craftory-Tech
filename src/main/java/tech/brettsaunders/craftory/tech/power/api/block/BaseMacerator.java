@@ -32,14 +32,15 @@ public class BaseMacerator extends BaseOneToOneMachine {
     inputSlots.get(0).setAmount(inputSlots.get(0).getAmount() - 1);
     boolean isOre = currentRecipe.getX().substring(currentRecipe.getX().length() - 3)
         .equalsIgnoreCase("ore");
+    boolean isRawOre = currentRecipe.getX().substring(0,3).equalsIgnoreCase("raw");
     if (outputSlots.get(0) == null || outputSlots.get(0).getType() == Material.AIR) {
       ItemStack stack = currentProduct.clone();
-      if (isOre) {
+      if (isOre || isRawOre) {
         stack.setAmount(2);
       }
       outputSlots.set(0, stack);
     } else {
-      if (isOre) {
+      if (isOre || isRawOre) {
         outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + 2);
       } else {
         outputSlots.get(0).setAmount(outputSlots.get(0).getAmount() + 1);
