@@ -5,6 +5,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.foundry;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseFoundry;
 
@@ -14,7 +15,7 @@ public class EmeraldElectricFoundry extends BaseFoundry {
   private static final byte C_LEVEL = 3;
 
   /* Construction */
-  public EmeraldElectricFoundry(Location location) {
+  public EmeraldElectricFoundry(Location location, Player p) {
     super(location, Blocks.EMERALD_ELECTRIC_FOUNDRY, C_LEVEL);
   }
 

@@ -5,6 +5,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseElectricFurnace;
 
@@ -14,7 +15,7 @@ public class DiamondElectricFurnace extends BaseElectricFurnace {
   private static final byte C_LEVEL = 2;
 
   /* Construction */
-  public DiamondElectricFurnace(Location location) {
+  public DiamondElectricFurnace(Location location, Player p) {
     super(location, Blocks.DIAMOND_ELECTRIC_FURNACE, C_LEVEL);
   }
 

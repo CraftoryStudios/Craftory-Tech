@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Location;
@@ -33,6 +34,7 @@ import tech.brettsaunders.craftory.persistence.adapters.LocationAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.LongAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.PowerGridAdapter;
 import tech.brettsaunders.craftory.persistence.adapters.StringAdapter;
+import tech.brettsaunders.craftory.persistence.adapters.UUIDAdapter;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.fluids.FluidStorage;
 import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGrid;
@@ -67,6 +69,7 @@ public class PersistenceStorage {
     registerDataConverter(Boolean.class, new BooleanAdapter());
     registerDataConverter(PowerGrid.class, new PowerGridAdapter());
     registerDataConverter(FluidStorage.class, new FluidStorageAdapter());
+    registerDataConverter(UUID.class, new UUIDAdapter());
 
     // Register interface converters
     interfaceConverters = new HashMap<>();

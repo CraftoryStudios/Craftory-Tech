@@ -5,6 +5,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMagnetiser;
 
@@ -14,7 +15,7 @@ public class Magnetiser extends BaseMagnetiser {
   private static final byte C_LEVEL = 0;
 
   /* Construction */
-  public Magnetiser(Location location) {
+  public Magnetiser(Location location, Player p) {
     super(location, Blocks.MAGNETISER, C_LEVEL);
   }
 

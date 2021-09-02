@@ -5,14 +5,19 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators;
 
 import com.gmail.nossr50.mcMMO;
+import io.github.bakedlibs.dough.protection.Interaction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.inventory.Inventory;
@@ -21,6 +26,7 @@ import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
+import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
@@ -38,6 +44,9 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   private Location placeLoc;
   private int lastRedstoneStrength = 0;
 
+  @Persistent
+  protected UUID owner;
+
   static {
     inputFaces.put(BlockFace.NORTH, SLOT);
     inputFaces.put(BlockFace.EAST, SLOT);
@@ -48,12 +57,13 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
     outputFaces.put(BlockFace.DOWN, SLOT);
   }
 
-  public BlockPlacer(Location location) {
+  public BlockPlacer(Location location, Player p) {
     super(location, Blocks.BLOCK_PLACER, C_LEVEL, MAX_RECEIVE);
     inputSlots = new ArrayList<>();
     inputSlots.add(new ItemStack(Material.AIR));
     setup();
     energyStorage = new EnergyStorage(40000);
+    owner = p.getUniqueId();
   }
 
   public BlockPlacer() {
@@ -93,11 +103,14 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
     if (placeLoc.getBlock().getType() != Material.AIR) {
       return;
     }
+    OfflinePlayer player = Bukkit.getOfflinePlayer(owner);
     if (lastRedstoneStrength != 0) {
       lastRedstoneStrength = e.getBlock().getBlockPower();
       return;
     } else if (e.getBlock().getBlockPower() > 0 && checkPowerRequirement()
-        && inventoryInterface != null) {
+        && inventoryInterface != null
+        && Craftory.protectionManager.hasPermission(player, placeLoc.getBlock(), Interaction.PLACE_BLOCK)) {
+
       final ItemStack item = inventoryInterface.getItem(SLOT);
       if (item == null) {
         lastRedstoneStrength = e.getBlock().getBlockPower();

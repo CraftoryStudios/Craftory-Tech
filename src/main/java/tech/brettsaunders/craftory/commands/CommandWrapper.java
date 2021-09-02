@@ -23,7 +23,6 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
   private final CommandExecutor helpCommand;
   private final CommandExecutor debugCommand;
   private final CommandExecutor giveCommand;
-  private final CommandExecutor fixCommand;
   private final CommandExecutor recipeBookCommand;
 
   /* Tab Complete */
@@ -31,7 +30,6 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
   private final TabCompleter helpTab;
   private final TabCompleter debugTab;
   private final TabCompleter giveTab;
-  private final TabCompleter fixTab;
   private final TabCompleter recipeBookTab;
 
   public CommandWrapper() {
@@ -40,7 +38,6 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
     helpCommand = new CommandHelp();
     debugCommand = new CommandDebug();
     giveCommand = new CommandGiveItem();
-    fixCommand = new CommandFixItemGraphics();
     recipeBookCommand = new CommandRecipeBook();
 
     /* Tab Complete */
@@ -48,7 +45,6 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
     helpTab = new CommandHelp();
     debugTab = new CommandDebug();
     giveTab = new CommandGiveItem();
-    fixTab = new CommandFixItemGraphics();
     recipeBookTab = new CommandRecipeBook();
   }
 
@@ -90,12 +86,6 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
       } else if (args[0].equalsIgnoreCase("help")) {
         if (sender.hasPermission("carftory.command.help")) {
           return helpCommand.onCommand(sender, command, label, args);
-        } else {
-          Utilities.msg(sender, Utilities.getTranslation(NO_PERMISSIONS));
-        }
-      } else if (args[0].equalsIgnoreCase("fixGraphics")) {
-        if (sender.hasPermission("carftory.command.fixGraphics")) {
-          return fixCommand.onCommand(sender, command, label, args);
         } else {
           Utilities.msg(sender, Utilities.getTranslation(NO_PERMISSIONS));
         }
@@ -147,8 +137,6 @@ public class CommandWrapper implements CommandExecutor, TabCompleter {
         if (sender.hasPermission("craftory.give")) {
           return giveTab.onTabComplete(sender, command, label, args);
         }
-      } else if (args[0].equalsIgnoreCase("fixGraphics") && sender.hasPermission("craftory.fixGraphics")) {
-          return fixTab.onTabComplete(sender, command, label, args);
       }
     }
     return Collections.emptyList();

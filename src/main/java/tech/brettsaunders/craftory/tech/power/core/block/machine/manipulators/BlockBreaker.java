@@ -4,14 +4,19 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.machine.manipulators;
 
+import io.github.bakedlibs.dough.protection.Interaction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
@@ -22,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.font.Font;
+import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
@@ -39,11 +45,15 @@ public class BlockBreaker extends BaseMachine {
 
   private Optional<Inventory> outputInventory;
 
-  public BlockBreaker(Location location) {
+  @Persistent
+  protected UUID owner;
+
+  public BlockBreaker(Location location, Player p) {
     super(location, Blocks.BLOCK_BREAKER, C_LEVEL, MAX_RECEIVE);
     setup();
     energyStorage = new EnergyStorage(40000);
     outputInventory = Optional.empty();
+    owner = p.getUniqueId();
   }
 
   public BlockBreaker() {
@@ -111,13 +121,14 @@ public class BlockBreaker extends BaseMachine {
     if (!e.getBlock().getLocation().equals(location)) {
       return;
     }
+    OfflinePlayer player = Bukkit.getOfflinePlayer(owner);
     if (lastRedstoneStrength != 0) {
       lastRedstoneStrength = e.getBlock().getBlockPower();
       return;
     } else if (e.getBlock().getBlockPower() > 0 && checkPowerRequirement()) {
       if (breakLoc.getBlock().isEmpty()) {
         energyStorage.modifyEnergyStored(-ENERGY_REQUIRED / 10);
-      } else {
+      } else if (Craftory.protectionManager.hasPermission(player, breakLoc.getBlock(), Interaction.BREAK_BLOCK)){
         Block block = breakLoc.getBlock();
         if (Craftory.customBlockManager.isCustomBlock(breakLoc)) {
           Optional<ItemStack> itemStack = Craftory.customBlockManager.breakCustomBlock(breakLoc);

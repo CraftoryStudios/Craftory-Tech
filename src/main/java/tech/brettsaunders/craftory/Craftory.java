@@ -7,6 +7,7 @@ package tech.brettsaunders.craftory;
 import static tech.brettsaunders.craftory.Utilities.checkMinecraftVersion;
 import static tech.brettsaunders.craftory.api.sentry.SentryLogging.sentryLog;
 
+import io.github.bakedlibs.dough.protection.ProtectionManager;
 import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.dsn.InvalidDsnException;
@@ -65,6 +66,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static CustomBlockTickManager tickManager;
   public static PowerGridManager powerGridManager;
   public static RecipeBookEvents recipeBookEvents;
+  public static ProtectionManager protectionManager;
   public static boolean isLightAPIEnabled = false;
   public static int lastVersionCode;
   public static int thisVersionCode;
@@ -126,6 +128,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       if (Utilities.config.getBoolean("resourcePack.forcePack")) {
         new ResourcePackEvents();
       }
+      protectionManager = new ProtectionManager(this.getServer());
       poweredToolManager = new PoweredToolManager(); //Must be before CustomItemManager
       customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
       customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");

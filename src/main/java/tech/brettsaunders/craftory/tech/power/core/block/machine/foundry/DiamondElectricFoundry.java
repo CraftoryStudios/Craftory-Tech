@@ -5,6 +5,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.foundry;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseFoundry;
 
@@ -14,7 +15,7 @@ public class DiamondElectricFoundry extends BaseFoundry {
   private static final byte C_LEVEL = 2;
 
   /* Construction */
-  public DiamondElectricFoundry(Location location) {
+  public DiamondElectricFoundry(Location location, Player p) {
     super(location, Blocks.DIAMOND_ELECTRIC_FOUNDRY, C_LEVEL);
   }
 

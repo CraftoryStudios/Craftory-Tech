@@ -30,6 +30,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
@@ -72,9 +73,9 @@ public class CustomBlockManager {
   }
 
   public CustomBlock placeCustomBlock(String customBlockItemName, Block block,
-      BlockFace direction) {
+      BlockFace direction, Player player) {
     CustomBlock customBlock = Craftory.customBlockFactory
-        .create(customBlockItemName, block.getLocation(), direction);
+        .create(customBlockItemName, block.getLocation(), direction, player);
     if (customBlock.getDirection() != BlockFace.NORTH) {
       customBlockItemName = customBlockItemName + "_" + customBlock.getDirection().name();
     }

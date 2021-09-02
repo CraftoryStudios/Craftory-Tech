@@ -5,6 +5,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.macerator;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMacerator;
 
@@ -14,7 +15,7 @@ public class DiamondMacerator extends BaseMacerator {
   private static final byte C_LEVEL = 2;
 
   /* Construction */
-  public DiamondMacerator(Location location) {
+  public DiamondMacerator(Location location, Player p) {
     super(location, Blocks.DIAMOND_MACERATOR, C_LEVEL);
   }
 

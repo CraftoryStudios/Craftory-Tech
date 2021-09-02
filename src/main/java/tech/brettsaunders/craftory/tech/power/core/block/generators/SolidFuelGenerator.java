@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Constants.Blocks;
@@ -54,7 +55,7 @@ public class SolidFuelGenerator extends BaseGenerator {
   }
 
   /* Saving, Setup and Loading */
-  public SolidFuelGenerator(Location location) {
+  public SolidFuelGenerator(Location location, Player p) {
     super(location, Blocks.SOLID_FUEL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,
         (int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
     inputSlots = new ArrayList<>();

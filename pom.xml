@@ -8,7 +8,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <artifactId>Craftory</artifactId>
   <url>brettsaunders.tech</url>
-  <version>0.4.1</version>
+  <version>0.5.0</version>
 
   <build>
     <defaultGoal>clean package</defaultGoal>
@@ -33,6 +33,10 @@
             <relocation>
               <pattern>de.tr7zw.changeme.nbtapi</pattern>
               <shadedPattern>tech.brettsaunders.craftory.external</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>io.github.bakedlibs.dough</pattern>
+              <shadedPattern>tech.brettsaunders.craftory.external.dough</shadedPattern>
             </relocation>
           </relocations>
         </configuration>
@@ -121,6 +125,17 @@
           <artifactId>*</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>io.github.baked-libs</groupId>
+      <artifactId>dough-protection</artifactId>
+      <version>1.0.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.github.baked-libs</groupId>
+      <artifactId>dough-common</artifactId>
+      <version>1.0.2</version>
     </dependency>
   </dependencies>
   <description>Adds more functionality to Minecraft with only server side modification</description>

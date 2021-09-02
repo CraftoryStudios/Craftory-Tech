@@ -55,7 +55,7 @@ public class GeothermalGenerator extends BaseGenerator {
   }
 
   /* Saving, Setup and Loading */
-  public GeothermalGenerator(Location location) {
+  public GeothermalGenerator(Location location, Player p) {
     super(location, Blocks.GEOTHERMAL_GENERATOR, C_LEVEL, C_OUTPUT_AMOUNT,
         (int) (CAPACITY_BASE * CAPACITY_LEVEL[0]));
     fluidStorage = new FluidStorage((int) (LAVA_CAPACITY_BASE * CAPACITY_LEVEL[C_LEVEL]));

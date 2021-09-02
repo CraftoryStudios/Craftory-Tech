@@ -47,7 +47,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   protected int progress;
 
   /* Construction */
-  public MagnetisingTable(Location location) {
+  public MagnetisingTable(Location location, Player p) {
     super(location, Blocks.MAGNETISING_TABLE);
     Events.registerEvents(this);
     progress = 0;

@@ -5,6 +5,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.power_grid;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 
@@ -14,7 +15,7 @@ public class PowerConnector extends CustomBlock {
     super();
   }
 
-  public PowerConnector(Location location) {
+  public PowerConnector(Location location, Player p) {
     super(location, Blocks.POWER_CONNECTOR);
   }
 }

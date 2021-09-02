@@ -5,6 +5,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.cell;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 
@@ -20,7 +21,7 @@ public class EmeraldCell extends BaseCell {
   private static final int C_OUTPUT_AMOUNT = 32000;
 
   /* Construction */
-  public EmeraldCell(Location location) {
+  public EmeraldCell(Location location, Player p) {
     super(location, Blocks.EMERALD_CELL, C_LEVEL, C_OUTPUT_AMOUNT);
   }
 

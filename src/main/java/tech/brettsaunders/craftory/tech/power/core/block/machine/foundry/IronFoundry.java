@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Constants.Blocks;
@@ -31,7 +32,7 @@ public class IronFoundry extends BaseFoundry {
   private int fuel = 0;
 
   /* Construction */
-  public IronFoundry(Location location) {
+  public IronFoundry(Location location, Player p) {
     super(location, Blocks.IRON_FOUNDRY, C_LEVEL);
     interactableSlots.add(FUEL_SLOT);
     inputLocations.add(FUEL_SLOT);

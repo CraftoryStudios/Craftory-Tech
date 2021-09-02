@@ -9,6 +9,7 @@ import static tech.brettsaunders.craftory.Utilities.getChunkWorldID;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import io.github.bakedlibs.dough.protection.Interaction;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -84,6 +86,11 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onPlace(BlockPlaceEvent e) {
+    OfflinePlayer player = Bukkit.getOfflinePlayer(e.getPlayer().getUniqueId());
+    if (!Craftory.protectionManager.hasPermission(player, e.getBlockPlaced(), Interaction.PLACE_BLOCK)) {
+      e.setCancelled(true);
+      return;
+    }
     if (!CustomItemManager.isCustomBlockItem(e.getItemInHand())) {
       return;
     }
@@ -98,7 +105,7 @@ public class CustomBlockManagerEvents implements Listener {
         customBlockManager.placeBasicCustomBlock(customBlockItemName, e.getBlockPlaced());
       } else {
         CustomBlock customBlock = customBlockManager
-            .placeCustomBlock(customBlockItemName, e.getBlockPlaced(), e.getPlayer().getFacing());
+            .placeCustomBlock(customBlockItemName, e.getBlockPlaced(), e.getPlayer().getFacing(), e.getPlayer());
         CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
             e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
         Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
@@ -145,6 +152,10 @@ public class CustomBlockManagerEvents implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onBlockDamage(PlayerInteractEvent e) {
     if (e.getAction() != Action.LEFT_CLICK_BLOCK) return;
+
+    OfflinePlayer player = Bukkit.getOfflinePlayer(e.getPlayer().getUniqueId());
+    if (!Craftory.protectionManager.hasPermission(player, e.getClickedBlock(), Interaction.BREAK_BLOCK)) return;
+
     final Location location = e.getClickedBlock().getLocation();
     if (currentCustomBlocks.containsKey(location)) {
       CustomBlock customBlock = currentCustomBlocks.get(location);
@@ -201,6 +212,9 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onBlockBreak(BlockBreakEvent e) {
+    OfflinePlayer player = Bukkit.getOfflinePlayer(e.getPlayer().getUniqueId());
+    if (!Craftory.protectionManager.hasPermission(player, e.getBlock(), Interaction.BREAK_BLOCK)) return;
+
     final Location location = e.getBlock().getLocation();
     if (currentCustomBlocks.containsKey(location)) {
       CustomBlock customBlock = currentCustomBlocks.get(location);
@@ -307,6 +321,9 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onCustomBlockInteract(PlayerInteractEvent e) {
+    OfflinePlayer player = Bukkit.getOfflinePlayer(e.getPlayer().getUniqueId());
+    if (!Craftory.protectionManager.hasPermission(player, e.getClickedBlock(), Interaction.INTERACT_BLOCK)) return;
+
     if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) && currentCustomBlocks.containsKey(e.getClickedBlock().getLocation())) {
         CustomBlock customBlock = customBlockManager
             .getCustomBlock(e.getClickedBlock().getLocation());

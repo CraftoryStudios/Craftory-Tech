@@ -17,6 +17,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -69,7 +70,7 @@ public class RotaryGenerator extends BaseGenerator {
   @Getter
   protected Location wheelLocation;
 
-  public RotaryGenerator(Location location) {
+  public RotaryGenerator(Location location, Player p) {
     super(location, Blocks.ROTARY_GENERATOR, C_LEVEL, (int) (MAX_OUTPUT *1.5f),
         BASE_CAPACITY * MULTIPLIERS[C_LEVEL]);
     setFacing(BlockFace.NORTH);

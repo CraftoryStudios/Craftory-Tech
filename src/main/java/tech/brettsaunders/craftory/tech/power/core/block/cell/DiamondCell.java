@@ -5,6 +5,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.cell;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseCell;
 
@@ -20,7 +21,7 @@ public class DiamondCell extends BaseCell {
   private static final int C_OUTPUT_AMOUNT = 8000;
 
   /* Construction */
-  public DiamondCell(Location location) {
+  public DiamondCell(Location location, Player p) {
     super(location, Blocks.DIAMOND_CELL, C_LEVEL, C_OUTPUT_AMOUNT);
   }
 
