@@ -321,10 +321,12 @@ public class CustomBlockManagerEvents implements Listener {
 
   @EventHandler
   public void onCustomBlockInteract(PlayerInteractEvent e) {
+    if (!(e.getAction() == Action.RIGHT_CLICK_BLOCK) && !(e.getAction() == Action.LEFT_CLICK_BLOCK)) return;
+    if (!e.hasBlock()) return;
     OfflinePlayer player = Bukkit.getOfflinePlayer(e.getPlayer().getUniqueId());
     if (!Craftory.protectionManager.hasPermission(player, e.getClickedBlock(), Interaction.INTERACT_BLOCK)) return;
 
-    if ((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_BLOCK) && currentCustomBlocks.containsKey(e.getClickedBlock().getLocation())) {
+    if (currentCustomBlocks.containsKey(e.getClickedBlock().getLocation())) {
         CustomBlock customBlock = customBlockManager
             .getCustomBlock(e.getClickedBlock().getLocation());
         CustomBlockInteractEvent customBlockInteractEvent = new CustomBlockInteractEvent(
