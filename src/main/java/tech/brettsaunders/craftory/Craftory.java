@@ -128,7 +128,6 @@ public final class Craftory extends JavaPlugin implements Listener {
       if (Utilities.config.getBoolean("resourcePack.forcePack")) {
         new ResourcePackEvents();
       }
-      protectionManager = new ProtectionManager(this.getServer());
       poweredToolManager = new PoweredToolManager(); //Must be before CustomItemManager
       customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
       customItemConfigFile = new File(getDataFolder(), "data/customItemConfig.yml");
@@ -171,6 +170,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   @EventHandler
   public void onServerLoaded(ServerLoadEvent e) {
     try {
+      protectionManager = new ProtectionManager(this.getServer());
       loadedPlugins = (HashSet<String>) Arrays.stream(plugin.getServer().getPluginManager().getPlugins()).map(Plugin::getName).collect(
           Collectors.toSet());
       powerConnectorManager = new PowerConnectorManager();
