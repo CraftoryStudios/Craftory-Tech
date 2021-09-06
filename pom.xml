@@ -129,13 +129,13 @@
     <dependency>
       <groupId>io.github.baked-libs</groupId>
       <artifactId>dough-protection</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>io.github.baked-libs</groupId>
       <artifactId>dough-common</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.3</version>
     </dependency>
   </dependencies>
   <description>Adds more functionality to Minecraft with only server side modification</description>
