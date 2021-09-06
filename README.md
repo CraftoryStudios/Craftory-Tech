@@ -27,3 +27,6 @@ We have future plans to turn some current items like generators into multi-block
 WARNING: This makes use of Server Resource Pack! This is automatically set up, you must use it.
 This current version isn't compatible with servers that use a custom resource pack. If you know-how, you can merge ours and your resource pack and it will work.
 
+## Credit
+Dough - Baked Libs: Uses the protection module of this library
+https://github.com/baked-libs/dough
