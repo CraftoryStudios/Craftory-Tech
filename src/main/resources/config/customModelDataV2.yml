@@ -250,6 +250,14 @@ items:
     customModelID: 1019
   netherite_power_hammer:
     customModelID: 1020
+  iron_chainsaw:
+    customModelID: 1021
+  golden_chainsaw:
+    customModelID: 1022
+  diamond_chainsaw:
+    customModelID: 1023
+  netherite_chainsaw:
+    customModelID: 1024
 
   lava_0_b:
     customModelID: 10070
