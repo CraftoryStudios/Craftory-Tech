@@ -75,9 +75,9 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>io.th0rgal</groupId>
-      <artifactId>oraxen</artifactId>
-      <version>1.77.1</version>
+      <groupId>com.github.oraxen</groupId>
+      <artifactId>Oraxen</artifactId>
+      <version>-058dfdaeb2-1</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
