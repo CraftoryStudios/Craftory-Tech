@@ -828,11 +828,11 @@ recipes:
       - UTU
       - MCM
     ingredients:
-      B: DIAMOND_BLOCK
+      B: IRON_BLOCK
       U: COPPER_INGOT
-      T: DIAMOND_AXE
+      T: IRON_AXE
       M: magnetised_iron
-      C: DiamondCell
+      C: IronCell
     result:
       item: iron_chainsaw
       amount: 1
@@ -884,11 +884,11 @@ recipes:
       - UTU
       - MCM
     ingredients:
-      B: DIAMOND_BLOCK
+      B: GOLD_BLOCK
       U: COPPER_INGOT
-      T: DIAMOND_AXE
+      T: GOLDEN_AXE
       M: magnetised_iron
-      C: DiamondCell
+      C: GoldCell
     result:
       item: golden_chainsaw
       amount: 1
@@ -999,11 +999,11 @@ recipes:
       - UTU
       - MCM
     ingredients:
-      B: DIAMOND_BLOCK
+      B: NETHERITE_BLOCK
       U: COPPER_INGOT
-      T: DIAMOND_AXE
+      T: NETHERITE_AXE
       M: magnetised_iron
-      C: DiamondCell
+      C: EmeraldCell
     result:
       item: netherite_chainsaw
       amount: 1
