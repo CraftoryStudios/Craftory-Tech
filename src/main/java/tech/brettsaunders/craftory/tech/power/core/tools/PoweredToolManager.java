@@ -267,7 +267,7 @@ public class PoweredToolManager implements Listener {
     if(!poweredTools.contains(name)) return;
     NBTItem nbt = new NBTItem(tool);
     int charge = nbt.getInteger(CHARGE_KEY);
-    if(charge < TOOL_POWER_COST && event.getPlayer().getGameMode()!=GameMode.CREATIVE) {
+    if(charge < TOOL_POWER_COST && event.getPlayer().getGameMode() != GameMode.CREATIVE) {
       event.setCancelled(true);
       return;
     }
