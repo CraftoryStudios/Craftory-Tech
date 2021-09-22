@@ -878,7 +878,7 @@ recipes:
     result:
       item: golden_excavator
       amount: 1
-  gold_chainsaw:
+  golden_chainsaw:
     pattern:
       - XBX
       - UTU
