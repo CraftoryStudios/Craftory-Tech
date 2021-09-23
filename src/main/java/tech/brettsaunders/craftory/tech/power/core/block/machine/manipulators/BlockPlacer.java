@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -38,7 +39,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   private static final byte C_LEVEL = 0;
   private static final int MAX_RECEIVE = 10000;
   private static final int SLOT = 22;
-  protected static final Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
+  protected static final Map<BlockFace, Set<Integer>> inputFaces = new EnumMap<>(BlockFace.class);
   protected static final Map<BlockFace, Integer> outputFaces = new EnumMap<>(BlockFace.class);
   private static final int ENERGY_REQUIRED = 1000;
   private Location placeLoc;
@@ -48,11 +49,11 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   protected UUID owner;
 
   static {
-    inputFaces.put(BlockFace.NORTH, SLOT);
-    inputFaces.put(BlockFace.EAST, SLOT);
-    inputFaces.put(BlockFace.SOUTH, SLOT);
-    inputFaces.put(BlockFace.WEST, SLOT);
-    inputFaces.put(BlockFace.UP, SLOT);
+    inputFaces.put(BlockFace.NORTH, Collections.singleton(SLOT));
+    inputFaces.put(BlockFace.EAST, Collections.singleton(SLOT));
+    inputFaces.put(BlockFace.SOUTH, Collections.singleton(SLOT));
+    inputFaces.put(BlockFace.WEST, Collections.singleton(SLOT));
+    inputFaces.put(BlockFace.UP, Collections.singleton(SLOT));
 
     outputFaces.put(BlockFace.DOWN, SLOT);
   }
@@ -155,7 +156,7 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   }
 
   @Override
-  public Map<BlockFace, Integer> getInputFaces() {
+  public Map<BlockFace, Set<Integer>> getInputFaces() {
     return inputFaces;
   }
 

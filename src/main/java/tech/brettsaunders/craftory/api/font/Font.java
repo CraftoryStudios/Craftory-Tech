@@ -14,7 +14,8 @@ public enum Font {
   BLANK('\u1a0c'),
   BOOK('\u1a0f'),
   SOLAR('\u1a10'),
-  PLACER('\u1a0b');
+  PLACER('\u1a0b'),
+  AUTOCRAFTER('\u1a11');
   public final char label;
 
   Font(char c) {

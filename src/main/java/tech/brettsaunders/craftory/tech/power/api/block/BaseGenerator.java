@@ -6,6 +6,7 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
@@ -24,7 +25,7 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
 
 
   /* Per Object Variables Saved */
-  protected static Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
+  protected static Map<BlockFace, Set<Integer>> inputFaces = new EnumMap<>(BlockFace.class);
   protected static Map<BlockFace, Integer> outputFaces = new EnumMap<>(BlockFace.class);
   protected static int lightLevel = 10;
   /* Per Object Variables Not-Saved */
@@ -149,7 +150,7 @@ public abstract class BaseGenerator extends BaseProvider implements IHopperInter
 
 
   @Override
-  public Map<BlockFace, Integer> getInputFaces() {
+  public Map<BlockFace, Set<Integer>> getInputFaces() {
     return inputFaces;
   }
 

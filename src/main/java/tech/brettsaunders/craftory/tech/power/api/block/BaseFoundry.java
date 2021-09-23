@@ -6,9 +6,11 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -21,8 +23,8 @@ import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GTwoToOneMachine;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.utils.RecipeUtils;
-import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
+import tech.brettsaunders.craftory.utils.recipes.RecipeUtils;
+import tech.brettsaunders.craftory.utils.recipes.RecipeUtils.CustomMachineRecipe;
 
 public class BaseFoundry extends BaseMachine implements IHopperInteract {
 
@@ -34,7 +36,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   protected static final int INPUT_LOCATION1 = 12;
   protected static final int INPUT_LOCATION2 = 30;
   protected static final int OUTPUT_LOCATION = 25;
-  private static final Map<BlockFace, Integer> inputFaces =
+  private static final Map<BlockFace, Set<Integer>> inputFaces =
       new EnumMap<>(BlockFace.class);
 
   private static final Map<BlockFace, Integer> outputFaces =
@@ -46,11 +48,11 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   private  CustomMachineRecipe currentRecipe = null;
 
   static {
-    inputFaces.put(BlockFace.NORTH, INPUT_LOCATION1);
-    inputFaces.put(BlockFace.EAST, INPUT_LOCATION2);
-    inputFaces.put(BlockFace.SOUTH, INPUT_LOCATION2);
-    inputFaces.put(BlockFace.WEST, INPUT_LOCATION1);
-    inputFaces.put(BlockFace.UP, INPUT_LOCATION1);
+    inputFaces.put(BlockFace.NORTH, Collections.singleton(INPUT_LOCATION1));
+    inputFaces.put(BlockFace.EAST, Collections.singleton(INPUT_LOCATION2));
+    inputFaces.put(BlockFace.SOUTH, Collections.singleton(INPUT_LOCATION2));
+    inputFaces.put(BlockFace.WEST, Collections.singleton(INPUT_LOCATION1));
+    inputFaces.put(BlockFace.UP, Collections.singleton(INPUT_LOCATION1));
 
     outputFaces.put(BlockFace.DOWN, OUTPUT_LOCATION);
   }
@@ -205,7 +207,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   }
 
   @Override
-  public Map<BlockFace, Integer> getInputFaces() {
+  public Map<BlockFace, Set<Integer>> getInputFaces() {
     return inputFaces;
   }
 

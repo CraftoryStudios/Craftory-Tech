@@ -2,7 +2,7 @@
  * Copyright (c) 2021. Brett Saunders & Matthew Jones - All Rights Reserved
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.utils;
+package tech.brettsaunders.craftory.utils.recipes;
 
 
 import java.util.HashMap;
@@ -20,19 +20,14 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.SmokingRecipe;
-import org.bukkit.inventory.StonecuttingRecipe;
 import tech.brettsaunders.craftory.Craftory;
+import tech.brettsaunders.craftory.utils.Log;
 
 public class RecipeUtils {
 
   @Getter
-  private static final HashSet<Recipe> allRecipes = new HashSet<>();
-  @Getter
-  private static final HashSet<Recipe> shapedRecipes = new HashSet<>();
-  @Getter
-  private static final HashSet<Recipe> shapelessRecipes = new HashSet<>();
-  @Getter
-  private static final HashSet<Recipe> stonecuttingRecipes = new HashSet<>();
+  private static final RecipeTree recipeTree = new RecipeTree();
+
   @Getter
   private static final HashMap<String, String> furnaceRecipes = new HashMap<>();
   @Getter
@@ -56,13 +51,8 @@ public class RecipeUtils {
     recipeIterator = Craftory.plugin.getServer().recipeIterator();
     while (recipeIterator.hasNext()) {
       Recipe recipe = recipeIterator.next();
-      allRecipes.add(recipe);
-      if (recipe instanceof ShapedRecipe) { //Ordered most to least common should improve performance
-        shapedRecipes.add(recipe);
-      } else if (recipe instanceof ShapelessRecipe) {
-        shapelessRecipes.add(recipe);
-      } else if (recipe instanceof StonecuttingRecipe) {
-        stonecuttingRecipes.add(recipe);
+      if (recipe instanceof ShapedRecipe || recipe instanceof ShapelessRecipe) { //Ordered most to least common should improve performance
+        recipeTree.insert(recipe);
       } else if (recipe instanceof FurnaceRecipe) {
         furnaceRecipes.put(((FurnaceRecipe) recipe).getInput().getType().toString(),
             recipe.getResult().getType().toString());
@@ -74,10 +64,6 @@ public class RecipeUtils {
         campfireRecipes.add(recipe);
       }
     }
-    Log.debug("All: " + allRecipes.size());
-    Log.debug("Shaped: " + shapedRecipes.size());
-    Log.debug("Shapeless: " + shapelessRecipes.size());
-    Log.debug("Stone Cutting: " + stonecuttingRecipes.size());
     Log.debug("Furnace: " + furnaceRecipes.size());
     Log.debug("Blasting: " + blastingRecipes.size());
     Log.debug("Smoking: " + smokingRecipeRecipes.size());

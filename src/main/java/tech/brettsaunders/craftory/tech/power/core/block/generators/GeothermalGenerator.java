@@ -6,6 +6,7 @@ package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -37,11 +38,11 @@ public class GeothermalGenerator extends BaseGenerator {
   private static final double LAVA_TO_ENERGY_RATIO = 25;
 
   static {
-    inputFaces.put(BlockFace.NORTH, FUEL_SLOT);
-    inputFaces.put(BlockFace.EAST, FUEL_SLOT);
-    inputFaces.put(BlockFace.SOUTH, FUEL_SLOT);
-    inputFaces.put(BlockFace.WEST, FUEL_SLOT);
-    inputFaces.put(BlockFace.UP, FUEL_SLOT);
+    inputFaces.put(BlockFace.NORTH, Collections.singleton(FUEL_SLOT));
+    inputFaces.put(BlockFace.EAST, Collections.singleton(FUEL_SLOT));
+    inputFaces.put(BlockFace.SOUTH, Collections.singleton(FUEL_SLOT));
+    inputFaces.put(BlockFace.WEST, Collections.singleton(FUEL_SLOT));
+    inputFaces.put(BlockFace.UP, Collections.singleton(FUEL_SLOT));
     outputFaces.put(BlockFace.DOWN, OUT_SLOT);
   }
 

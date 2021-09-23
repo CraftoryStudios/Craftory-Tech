@@ -12,10 +12,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import io.papermc.lib.PaperLib;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Hopper;
 import org.bukkit.block.data.Directional;
 import org.bukkit.event.EventHandler;
@@ -156,38 +159,52 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     if (inventoryInterface == null) {
       return;
     }
-    Map<BlockFace, Integer> inputFaces = ((IHopperInteract) this).getInputFaces();
+    Map<BlockFace, Set<Integer>> inputFaces = ((IHopperInteract) this).getInputFaces();
     Map<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
 
     // Hopper Input
     inputFaces.forEach(
-        (face, slot) -> {
+        (face, inputSlots) -> {
           if (cachedSidesConfig.containsKey(face)
               && cachedSidesConfig.get(face).equals(INTERACTABLEBLOCK.HOPPER_IN)) {
-            ItemStack stack = inventoryInterface.getItem(slot);
+
             final Block relative = location.getBlock().getRelative(face);
             if (!relative.isBlockPowered()) {
-              if (!(relative.getState() instanceof Hopper)) {
-                cachedSidesConfig.replace(face, INTERACTABLEBLOCK.NONE);
-                return;
-              }
-              ItemStack[] hopperItems = ((Hopper) relative.getState()).getInventory().getContents();
-              for (ItemStack item : hopperItems) {
-                if (item != null) {
-                  if (stack == null) {
-                    stack = item.clone();
-                    stack.setAmount(1);
-                    item.setAmount(item.getAmount() - 1);
-                    break;
-                  } else if (stack.getType().toString().equals(item.getType().toString())
-                      && stack.getAmount() < stack.getMaxStackSize()) {
-                    stack.setAmount(stack.getAmount() + 1);
-                    item.setAmount(item.getAmount() - 1);
-                    break;
+              BlockState relativeBlockState = PaperLib.getBlockState(relative, false).getState();
+              if (relativeBlockState instanceof Hopper) {
+                ItemStack[] hopperItems = ((Hopper) relative.getState()).getInventory().getContents();
+                ItemStack slotStack = null;
+                int currentSlot = -1;
+
+                // Loop inventory slots that accept items
+                outerloop:
+                for (Integer slot : inputSlots) {
+                  currentSlot = slot;
+                  slotStack = inventoryInterface.getItem(slot);
+                  String slotItemType = slotStack.getType().toString();
+                  boolean hasStackSpace = slotStack.getAmount() < slotStack.getMaxStackSize();
+                  // Loop hopper items
+                  for (ItemStack hopperItem : hopperItems) {
+                    if (hopperItem == null) continue;
+
+                    if (slotStack == null) {
+                      slotStack = hopperItem.clone();
+                      slotStack.setAmount(1);
+                      hopperItem.setAmount(hopperItem.getAmount() - 1);
+                      break outerloop;
+                    } else if (slotItemType.equals(hopperItem.getType().toString()) && hasStackSpace){
+                      slotStack.setAmount(slotStack.getAmount() + 1);
+                      hopperItem.setAmount(hopperItem.getAmount() - 1);
+                      break outerloop;
+                    }
                   }
+
                 }
+                if (slotStack != null && currentSlot != -1)
+                  inventoryInterface.setItem(currentSlot, slotStack);
+              } else {
+                cachedSidesConfig.replace(face, INTERACTABLEBLOCK.NONE);
               }
-              inventoryInterface.setItem(slot, stack);
             }
           }
         });

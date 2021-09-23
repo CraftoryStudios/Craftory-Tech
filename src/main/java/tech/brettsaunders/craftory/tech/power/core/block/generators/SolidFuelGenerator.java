@@ -33,11 +33,11 @@ public class SolidFuelGenerator extends BaseGenerator {
   private static final int C_OUTPUT_AMOUNT = 80;
 
   static {
-    inputFaces.put(BlockFace.NORTH, FUEL_SLOT);
-    inputFaces.put(BlockFace.EAST, FUEL_SLOT);
-    inputFaces.put(BlockFace.SOUTH, FUEL_SLOT);
-    inputFaces.put(BlockFace.WEST, FUEL_SLOT);
-    inputFaces.put(BlockFace.UP, FUEL_SLOT);
+    inputFaces.put(BlockFace.NORTH, Collections.singleton(FUEL_SLOT));
+    inputFaces.put(BlockFace.EAST, Collections.singleton(FUEL_SLOT));
+    inputFaces.put(BlockFace.SOUTH,Collections.singleton( FUEL_SLOT));
+    inputFaces.put(BlockFace.WEST, Collections.singleton(FUEL_SLOT));
+    inputFaces.put(BlockFace.UP, Collections.singleton(FUEL_SLOT));
   }
 
   //TODO Remove in future

@@ -303,3 +303,11 @@ blocks:
     DOWN: true
     itemModel: stone
     hideItem: true
+  AutoCrafter:
+    WEST: true
+    UP: false
+    SOUTH: false
+    NORTH: false
+    EAST: true
+    DOWN: true
+    itemModel: stone

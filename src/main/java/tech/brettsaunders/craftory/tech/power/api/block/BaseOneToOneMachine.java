@@ -6,10 +6,12 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -31,7 +33,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   protected static final int[] CAPACITY_LEVEL = {5000, 10000, 25000, 50000};
   protected static final int INPUT_LOCATION = 21;
   protected static final int OUTPUT_LOCATION = 25;
-  protected static final Map<BlockFace, Integer> inputFaces =
+  protected static final Map<BlockFace, Set<Integer>> inputFaces =
       new EnumMap<>(BlockFace.class);
 
   protected static final Map<BlockFace, Integer> outputFaces =
@@ -41,11 +43,11 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   protected  ItemStack currentProduct = null;
 
   static {
-    inputFaces.put(BlockFace.NORTH, INPUT_LOCATION);
-    inputFaces.put(BlockFace.EAST, INPUT_LOCATION);
-    inputFaces.put(BlockFace.SOUTH, INPUT_LOCATION);
-    inputFaces.put(BlockFace.WEST, INPUT_LOCATION);
-    inputFaces.put(BlockFace.UP, INPUT_LOCATION);
+    inputFaces.put(BlockFace.NORTH, Collections.singleton(INPUT_LOCATION));
+    inputFaces.put(BlockFace.EAST, Collections.singleton(INPUT_LOCATION));
+    inputFaces.put(BlockFace.SOUTH, Collections.singleton(INPUT_LOCATION));
+    inputFaces.put(BlockFace.WEST, Collections.singleton(INPUT_LOCATION));
+    inputFaces.put(BlockFace.UP, Collections.singleton(INPUT_LOCATION));
 
     outputFaces.put(BlockFace.DOWN, OUTPUT_LOCATION);
   }
@@ -158,7 +160,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   }
 
   @Override
-  public Map<BlockFace, Integer> getInputFaces() {
+  public Map<BlockFace, Set<Integer>> getInputFaces() {
     return inputFaces;
   }
 

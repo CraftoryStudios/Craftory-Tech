@@ -45,6 +45,7 @@ import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.BasicS
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.CompactedSolarPanel;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.SolarArray;
 import tech.brettsaunders.craftory.tech.power.core.block.generators.solar.SolarPanel;
+import tech.brettsaunders.craftory.tech.power.core.block.machine.crafting.AutoCraftingTable;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.DiamondElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.EmeraldElectricFurnace;
 import tech.brettsaunders.craftory.tech.power.core.block.machine.electric_furnace.GoldElectricFurnace;
@@ -285,6 +286,7 @@ public class Utilities {
         .registerCustomBlock(Blocks.MAGNETISING_TABLE, MagnetisingTable.class, false, false);
     customBlockFactory.registerCustomBlock(Blocks.BLOCK_BREAKER, BlockBreaker.class, true, true);
     customBlockFactory.registerCustomBlock(Blocks.BLOCK_PLACER, BlockPlacer.class, true, true);
+    customBlockFactory.registerCustomBlock(Blocks.AUTO_CRAFTER, AutoCraftingTable.class, true, false);
   }
 
   static void registerBasicBlocks() {

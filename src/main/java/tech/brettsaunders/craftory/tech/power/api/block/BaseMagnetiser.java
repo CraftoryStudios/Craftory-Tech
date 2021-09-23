@@ -6,7 +6,7 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.HashMap;
 import org.bukkit.Location;
-import tech.brettsaunders.craftory.utils.RecipeUtils;
+import tech.brettsaunders.craftory.utils.recipes.RecipeUtils;
 
 public class BaseMagnetiser extends BaseOneToOneMachine {
 

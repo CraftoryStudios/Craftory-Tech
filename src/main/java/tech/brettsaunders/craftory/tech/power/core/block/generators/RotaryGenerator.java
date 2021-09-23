@@ -46,11 +46,11 @@ public class RotaryGenerator extends BaseGenerator {
       .asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
 
   static {
-    inputFaces.put(BlockFace.NORTH, SLOT);
-    inputFaces.put(BlockFace.EAST, SLOT);
-    inputFaces.put(BlockFace.SOUTH, SLOT);
-    inputFaces.put(BlockFace.WEST, SLOT);
-    inputFaces.put(BlockFace.UP, SLOT);
+    inputFaces.put(BlockFace.NORTH, Collections.singleton(SLOT));
+    inputFaces.put(BlockFace.EAST, Collections.singleton(SLOT));
+    inputFaces.put(BlockFace.SOUTH, Collections.singleton(SLOT));
+    inputFaces.put(BlockFace.WEST, Collections.singleton(SLOT));
+    inputFaces.put(BlockFace.UP, Collections.singleton(SLOT));
   }
 
   @Persistent

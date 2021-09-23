@@ -75,7 +75,7 @@ public class Constants {
     public static final String GOLD_MACERATOR = "GoldMacerator";
     public static final String DIAMOND_MACERATOR = "DiamondMacerator";
     public static final String EMERALD_MACERATOR = "EmeraldMacerator";
-    public static final String TURRET_PLATFORM = "TurretPlatform";
+    public static final String AUTO_CRAFTER = "AutoCrafter";
 
     public static final String BASIC_SOLAR_PANEL = "BasicSolarPanel";
     public static final String SOLAR_PANEL = "SolarPanel";
