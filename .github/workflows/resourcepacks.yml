@@ -22,6 +22,6 @@ jobs:
       #     git commit -am "chore(resourcepack): update resource pack zips"
       #     git push
       - name: test
-        run: cd resourcepacks
-      - name: files
-        run: ls
+        run: |
+          cd resourcepacks
+          ls
