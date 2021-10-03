@@ -21,11 +21,11 @@ jobs:
         run: zip -r $GITHUB_WORKSPACE/resourcepacks/original.zip $GITHUB_WORKSPACE/resourcepacks/original
       - name: Zip Resource Pack with Pipes
         run: zip -r $GITHUB_WORKSPACE/resourcepacks/pipes.zip $GITHUB_WORKSPACE/resourcepacks/pipes
-      - name: test
-        run: ls
       - name: Commit Resource Pack Zip
         run: |
           git config --global user.name 'Craftory Bot'
           git config --global user.email 'craftorybot@users.noreply.github.com'
           git commit -am "chore(resourcepack): update resource pack zips"
           git push
+      - name: test
+        run: cd resourcepacks && ls
