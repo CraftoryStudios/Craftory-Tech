@@ -27,3 +27,9 @@ jobs:
           files: resourcepacks/pipes
           dest: resourcepacks/pipes.zip
           recursive: true
+      - name: Commit Resource Pack Zip
+        run: |
+          git config --global user.name 'Craftory Bot'
+          git config --global user.email 'craftorybot@users.noreply.github.com'
+          git commit -am "chore(resourcepack): update resource pack zips"
+          git push
