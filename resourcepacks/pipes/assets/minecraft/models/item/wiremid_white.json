@@ -1,0 +1,6 @@
+{
+    "parent": "item/wiremid",
+    "textures": {
+        "0": "items/wire_white"
+    }
+}

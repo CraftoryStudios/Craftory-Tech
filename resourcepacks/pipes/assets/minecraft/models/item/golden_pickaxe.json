@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/golden_pickaxe"
+  },
+  "overrides": [
+	{"predicate": {"custom_model_data": 1010},"model": "craftory:items/tools/drill/golden_drill"},
+	{"predicate": {"custom_model_data": 1018},"model": "craftory:items/tools/power_hammer/golden_power_hammer"}
+	]
+}

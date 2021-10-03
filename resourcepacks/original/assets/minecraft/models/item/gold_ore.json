@@ -1,0 +1,11 @@
+{
+  "parent": "block/gold_ore",
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1001
+      },
+      "model": "craftory:block/ores/copper_ore"
+    }
+  ]
+}

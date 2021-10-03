@@ -1,0 +1,25 @@
+{
+	"credit": "By BrettSaunders for the Craftory Plugin",
+	"textures": {
+		"texture": "extra:item/book/title_hider"
+	},
+	"elements": [
+		{
+			"name": "Element",
+			"from": [0, 0, 0],
+			"to": [16, 0.001, 16],
+			"faces": {
+				"up": {"uv": [0, 0, 16, 16], "texture": "#texture"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#texture"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"gui": {
+			"rotation": [90, 90, 0],
+			"translation": [-1.5, -14, 0],
+			"scale": [3, 3, 3.2]
+		}
+	}
+}

@@ -1,0 +1,3 @@
+{"parent":"block/gold_block","overrides": [
+	{"predicate":{"custom_model_data": 1001},"model":"craftory:block/powered/generator/solar/solar_panel"}
+	]}

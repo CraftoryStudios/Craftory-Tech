@@ -1,0 +1,6 @@
+{
+    "parent": "item/wireconn",
+    "textures": {
+        "0": "items/wire_white"
+    }
+}
