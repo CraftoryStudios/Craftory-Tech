@@ -3,7 +3,13 @@
 name: Zip Resource Packs
 
 # Controls when the workflow will run
-on: push
+on: 
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -15,11 +21,6 @@ jobs:
         run: zip -r $GITHUB_WORKSPACE/resourcepacks/original.zip $GITHUB_WORKSPACE/resourcepacks/original
       - name: Zip Resource Pack with Pipes
         run: zip -r $GITHUB_WORKSPACE/resourcepacks/pipes.zip $GITHUB_WORKSPACE/resourcepacks/pipes
-
-      - name: test
-        run: |
-          cd resourcepacks
-          ls
       - name: Commit Resource Pack Zip
         run: |
           git config --global user.name 'Craftory Bot'
