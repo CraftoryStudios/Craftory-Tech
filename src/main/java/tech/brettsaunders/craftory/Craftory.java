@@ -12,6 +12,8 @@ import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.dsn.InvalidDsnException;
 import java.io.File;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
@@ -50,8 +52,8 @@ import tech.brettsaunders.craftory.world.WorldGenHandler;
 public final class Craftory extends JavaPlugin implements Listener {
 
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/7299fd24a5c0a382504b37c9d551f7876f13b097.zip";
-  public static final String HASH = "7299fd24a5c0a382504b37c9d551f7876f13b097";
+  public static String RESOURCE_PACK = "";
+  public static String HASH = "";
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
   public static Craftory plugin = null;
@@ -103,6 +105,13 @@ public final class Craftory extends JavaPlugin implements Listener {
     if (checkMinecraftVersion()) {
       return;
     }
+
+    // Resource pack
+    RESOURCE_PACK = "https://raw.githubusercontent.com/CraftoryStudios/Craftory-Tech/v" + this.getDescription().getVersion() + "/resourcepacks/original.zip";
+    MessageDigest digest = MessageDigest.getInstance("SHA-1");
+    digest.reset();
+    digest.update(this.getDescription().getVersion().getBytes("utf8"));
+    HASH = String.format("%040x", new BigInteger(1, digest.digest()));
 
 
     setupSentry();
