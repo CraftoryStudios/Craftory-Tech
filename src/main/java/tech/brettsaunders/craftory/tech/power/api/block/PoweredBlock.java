@@ -6,12 +6,16 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import static tech.brettsaunders.craftory.Constants.HOPPER_INTERACT_FACES;
 
+import de.robotricker.transportpipes.api.TransportPipesAPI;
+import de.robotricker.transportpipes.location.BlockLocation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import lombok.SneakyThrows;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -36,6 +40,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
+import tech.brettsaunders.craftory.tech.power.api.pipes.PipeContainer;
 import tech.brettsaunders.craftory.utils.Log;
 
 /** A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage */
@@ -63,6 +68,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
 
   @Persistent
   protected ArrayList<ItemStack> outputSlots = new ArrayList<>(); // The ItemStacks of the outputs
+
+  protected PipeContainer pipeContainer;
 
   protected ArrayList<Integer> outputLocations =
       new ArrayList<>(); // The inventory locations of outputs
@@ -107,6 +114,15 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     }
   }
 
+  @SneakyThrows
+  @Override
+  public void blockBreak() {
+    super.blockBreak();
+    if (Bukkit.getServer().getPluginManager().isPluginEnabled("TransportPipes") && this instanceof IHopperInteract) {
+      TransportPipesAPI.getInstance().unregisterTransportPipesContainer(new BlockLocation(location), location.getWorld());
+    }
+  }
+
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
@@ -125,6 +141,15 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
           break;
         }
         inventoryInterface.setItem(outputLocations.get(i), outputSlots.get(i));
+      }
+    }
+
+    if (Bukkit.getServer().getPluginManager().isPluginEnabled("TransportPipes") && this instanceof IHopperInteract) {
+      pipeContainer = new PipeContainer(location, ((IHopperInteract) this).getInputFaces(), outputLocations, inventoryInterface);
+      try {
+        TransportPipesAPI.getInstance().registerTransportPipesContainer(pipeContainer, new BlockLocation(location), location.getWorld());
+      } catch (Exception e) {
+        e.printStackTrace();
       }
     }
   }
@@ -157,7 +182,6 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       return;
     }
     Map<BlockFace, Integer> inputFaces = ((IHopperInteract) this).getInputFaces();
-    Map<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
 
     // Hopper Input
     inputFaces.forEach(
@@ -193,24 +217,21 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         });
 
     // Hopper Output
-    outputFaces.forEach(
-        (face, slot) -> {
-          if (cachedSidesConfig.containsKey(face)
-              && cachedSidesConfig.get(face).equals(INTERACTABLEBLOCK.HOPPER_OUT)) {
-            ItemStack stack = inventoryInterface.getItem(slot);
-            if (stack != null) {
-              ItemStack toMove = stack.clone();
-              toMove.setAmount(1);
-              Inventory hopperInventory =
-                  ((Hopper) location.getBlock().getRelative(face).getState()).getInventory();
-              HashMap<Integer, ItemStack> failedItems = hopperInventory.addItem(toMove);
-              if (failedItems.isEmpty()) {
-                stack.setAmount(stack.getAmount() - 1);
-                inventoryInterface.setItem(slot, stack);
-              }
-            }
+      if (cachedSidesConfig.containsKey(BlockFace.DOWN)
+          && cachedSidesConfig.get(BlockFace.DOWN).equals(INTERACTABLEBLOCK.HOPPER_OUT)) {
+        ItemStack stack = inventoryInterface.getItem(((IHopperInteract) this).getOutputSlot());
+        if (stack != null) {
+          ItemStack toMove = stack.clone();
+          toMove.setAmount(1);
+          Inventory hopperInventory =
+              ((Hopper) location.getBlock().getRelative(BlockFace.DOWN).getState()).getInventory();
+          HashMap<Integer, ItemStack> failedItems = hopperInventory.addItem(toMove);
+          if (failedItems.isEmpty()) {
+            stack.setAmount(stack.getAmount() - 1);
+            inventoryInterface.setItem(((IHopperInteract) this).getOutputSlot(), stack);
           }
-        });
+        }
+      }
     // Set inventory to equal slots
   }
 

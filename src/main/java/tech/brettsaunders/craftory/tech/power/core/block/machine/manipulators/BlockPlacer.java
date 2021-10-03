@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.font.Font;
@@ -39,7 +40,6 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   private static final int MAX_RECEIVE = 10000;
   private static final int SLOT = 22;
   protected static final Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
-  protected static final Map<BlockFace, Integer> outputFaces = new EnumMap<>(BlockFace.class);
   private static final int ENERGY_REQUIRED = 1000;
   private Location placeLoc;
   private int lastRedstoneStrength = 0;
@@ -48,13 +48,9 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   protected UUID owner;
 
   static {
-    inputFaces.put(BlockFace.NORTH, SLOT);
-    inputFaces.put(BlockFace.EAST, SLOT);
-    inputFaces.put(BlockFace.SOUTH, SLOT);
-    inputFaces.put(BlockFace.WEST, SLOT);
-    inputFaces.put(BlockFace.UP, SLOT);
-
-    outputFaces.put(BlockFace.DOWN, SLOT);
+    for (BlockFace face : Constants.ALL_FACES) {
+      inputFaces.put(face, SLOT);
+    }
   }
 
   public BlockPlacer(Location location, Player p) {
@@ -160,7 +156,8 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   }
 
   @Override
-  public Map<BlockFace, Integer> getOutputFaces() {
-    return outputFaces;
+  public Integer getOutputSlot() {
+    return SLOT;
   }
+
 }
