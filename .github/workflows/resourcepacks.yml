@@ -17,20 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: papeloto/action-zip@v1
-        with:
-          files: resourcepacks/original
-          dest: resourcepacks/original.zip
-          recursive: true
-      - uses: papeloto/action-zip@v1
-        with:
-          files: resourcepacks/pipes
-          dest: resourcepacks/pipes.zip
-          recursive: true
+      - name: Zip Resource Pack
+        run: zip -r resourcepacks/original.zip resourcepacks/original
+      - name: Zip Resource Pack with Pipes
+        run: zip -r resourcepacks/pipes.zip resourcepacks/pipes
       - name: Commit Resource Pack Zip
         run: |
           git config --global user.name 'Craftory Bot'
           git config --global user.email 'craftorybot@users.noreply.github.com'
-          git add .
           git commit -am "chore(resourcepack): update resource pack zips"
           git push
