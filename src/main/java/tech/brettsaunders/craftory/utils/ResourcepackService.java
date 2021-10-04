@@ -10,6 +10,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import lombok.SneakyThrows;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -25,10 +27,24 @@ public class ResourcepackService implements Listener {
   private byte[] cachedHash;
   private String url = "";
 
+  @SneakyThrows
   public ResourcepackService() {
     Events.registerEvents(this);
-    url = "https://raw.githubusercontent.com/CraftoryStudios/Craftory-Tech/v" + Craftory.plugin.getDescription().getVersion() + "/resourcepacks/original"
-        + ".zip";
+    String pack = "original";
+    if (Bukkit.getServer().getPluginManager().getPlugin("TransportPipes")!=null) {
+      pack = "pipes";
+    }
+
+    String branch = "v" + Craftory.plugin.getDescription().getVersion();
+    url = "https://raw.githubusercontent.com/CraftoryStudios/Craftory-Tech/" + branch + "/resourcepacks/"+ pack +".zip";
+
+    URL packTest = new URL(url);
+    HttpURLConnection huc = (HttpURLConnection) packTest.openConnection();
+    if (huc.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
+      branch = "master";
+      url = "https://raw.githubusercontent.com/CraftoryStudios/Craftory-Tech/" + branch + "/resourcepacks/"+ pack +".zip";
+    }
+
     cachedHash = calcSHA1Hash(url);
   }
 

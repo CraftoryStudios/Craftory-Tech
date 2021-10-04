@@ -6,7 +6,8 @@ author: ${author}
 main: ${mainClass}
 api-version: 1.13
 prefix: Craftory
-softdepend: [Oraxen, LightAPI, mcMMO, WorldGuard, Towny, GriefPrevention, LWC, PreciousStones, Lockette, RedProtect, BentoBox, BlockLocker, Lands, ChestProtect, Factions, FunnyGuilds, PlotSquared]
+softdepend: [TransportPipes, Oraxen, LightAPI, mcMMO, WorldGuard, Towny, GriefPrevention, LWC, PreciousStones, Lockette, RedProtect, BentoBox, BlockLocker, Lands, ChestProtect, Factions, FunnyGuilds,
+             PlotSquared]
 load: STARTUP
 
 commands:

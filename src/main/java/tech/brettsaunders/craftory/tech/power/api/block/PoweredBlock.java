@@ -6,8 +6,6 @@ package tech.brettsaunders.craftory.tech.power.api.block;
 
 import static tech.brettsaunders.craftory.Constants.HOPPER_INTERACT_FACES;
 
-import de.robotricker.transportpipes.api.TransportPipesAPI;
-import de.robotricker.transportpipes.location.BlockLocation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,8 +38,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.tech.power.api.pipes.PipeContainer;
-import tech.brettsaunders.craftory.utils.Log;
+import tech.brettsaunders.craftory.utils.PipesHook;
 
 /** A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage */
 public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, Listener {
@@ -68,8 +65,6 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
 
   @Persistent
   protected ArrayList<ItemStack> outputSlots = new ArrayList<>(); // The ItemStacks of the outputs
-
-  protected PipeContainer pipeContainer;
 
   protected ArrayList<Integer> outputLocations =
       new ArrayList<>(); // The inventory locations of outputs
@@ -117,8 +112,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
   @Override
   public void blockBreak() {
     super.blockBreak();
-    if (Bukkit.getServer().getPluginManager().isPluginEnabled("TransportPipes") && this instanceof IHopperInteract) {
-      TransportPipesAPI.getInstance().unregisterTransportPipesContainer(new BlockLocation(location), location.getWorld());
+    if (Bukkit.getServer().getPluginManager().getPlugin("TransportPipes")!=null && this instanceof IHopperInteract) {
+      PipesHook.removePipeContainer(location);
     }
   }
 
@@ -143,13 +138,8 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       }
     }
 
-    if (Bukkit.getServer().getPluginManager().isPluginEnabled("TransportPipes") && this instanceof IHopperInteract) {
-      pipeContainer = new PipeContainer(location, ((IHopperInteract) this).getInputFaces(), outputLocations, inventoryInterface);
-      try {
-        TransportPipesAPI.getInstance().registerTransportPipesContainer(pipeContainer, new BlockLocation(location), location.getWorld());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    if (Bukkit.getServer().getPluginManager().getPlugin("TransportPipes")!=null && this instanceof IHopperInteract) {
+      PipesHook.addPipeContainer(location, ((IHopperInteract) this).getInputFaces(), outputLocations, inventoryInterface);
     }
   }
 

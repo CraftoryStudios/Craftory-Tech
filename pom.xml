@@ -137,6 +137,13 @@
       <artifactId>dough-common</artifactId>
       <version>1.0.3</version>
     </dependency>
+    <dependency>
+      <groupId>de.robotricker</groupId>
+      <artifactId>transportpipes</artifactId>
+      <version>5.3.0</version>
+      <scope>system</scope>
+      <systemPath>${pom.basedir}/libs/transportpipes-5.3.0-SNAPSHOT.jar</systemPath>
+    </dependency>
   </dependencies>
   <description>Adds more functionality to Minecraft with only server side modification</description>
   <groupId>tech.brettsaunders</groupId>
