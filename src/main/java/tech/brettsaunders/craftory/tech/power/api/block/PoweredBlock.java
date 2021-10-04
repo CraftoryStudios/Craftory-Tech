@@ -36,7 +36,6 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.utils.Log;
 
 /** A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage */
 public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, Listener {
@@ -94,7 +93,6 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     }
     cachedSides = new HashMap<>();
     if (cachedSidesConfig == null) {
-      Log.error("WTF cache config was null");
       cachedSidesConfig = new HashMap<>();
     }
     for (Entry<BlockFace, INTERACTABLEBLOCK> entry : cachedSidesConfig.entrySet()) {
