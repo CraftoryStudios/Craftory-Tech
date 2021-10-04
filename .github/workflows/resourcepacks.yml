@@ -25,6 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.KEY }}
       - name: Zip Resource Pack
         run: |
           cd ./resourcepacks/original
