@@ -822,6 +822,20 @@ recipes:
     result:
       item: iron_excavator
       amount: 1
+  iron_chainsaw:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: IRON_BLOCK
+      U: COPPER_INGOT
+      T: IRON_AXE
+      M: magnetised_iron
+      C: IronCell
+    result:
+      item: iron_chainsaw
+      amount: 1
   golden_drill:
     pattern:
       - XBX
@@ -864,6 +878,20 @@ recipes:
     result:
       item: golden_excavator
       amount: 1
+  golden_chainsaw:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: GOLD_BLOCK
+      U: COPPER_INGOT
+      T: GOLDEN_AXE
+      M: magnetised_iron
+      C: GoldCell
+    result:
+      item: golden_chainsaw
+      amount: 1
   diamond_drill:
     pattern:
       - XBX
@@ -905,6 +933,20 @@ recipes:
       C: DiamondCell
     result:
       item: diamond_excavator
+      amount: 1
+  diamond_chainsaw:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: DIAMOND_BLOCK
+      U: COPPER_INGOT
+      T: DIAMOND_AXE
+      M: magnetised_iron
+      C: DiamondCell
+    result:
+      item: diamond_chainsaw
       amount: 1
   netherite_drill:
     pattern:
@@ -949,6 +991,21 @@ recipes:
       C: EmeraldCell
     result:
       item: netherite_excavator
+      amount: 1
+    version: 16
+  netherite_chainsaw:
+    pattern:
+      - XBX
+      - UTU
+      - MCM
+    ingredients:
+      B: NETHERITE_BLOCK
+      U: COPPER_INGOT
+      T: NETHERITE_AXE
+      M: magnetised_iron
+      C: EmeraldCell
+    result:
+      item: netherite_chainsaw
       amount: 1
     version: 16
 

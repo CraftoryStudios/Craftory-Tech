@@ -39,7 +39,8 @@ public class Constants {
   public enum PoweredToolType {
     DRILL("drill"),
     HAMMER("hammer"),
-    EXCAVATOR("excavator");
+    EXCAVATOR("excavator"),
+    CHAINSAW("chainsaw");
 
     private final String name;
 

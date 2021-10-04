@@ -73,6 +73,13 @@ items:
     attack_speed: 1.0
     attack_damage: 3
     max_charge: 30000
+  iron_chainsaw:
+    itemModel: iron_axe
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 0.8
+    attack_damage: 5
+    max_charge: 30000
   golden_drill:
     itemModel: golden_pickaxe
     powered_tool: true
@@ -92,6 +99,13 @@ items:
     unbreakable: true
     attack_speed: 1.0
     attack_damage: 2
+    max_charge: 10000
+  golden_chainsaw:
+    itemModel: golden_axe
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 0.8
+    attack_damage: 5
     max_charge: 10000
   diamond_drill:
     itemModel: diamond_pickaxe
@@ -113,6 +127,13 @@ items:
     attack_speed: 1.0
     attack_damage: 4
     max_charge: 100000
+  diamond_chainsaw:
+    itemModel: diamond_axe
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 0.8
+    attack_damage: 6
+    max_charge: 100000
   netherite_drill:
     itemModel: netherite_pickaxe
     powered_tool: true
@@ -132,6 +153,13 @@ items:
     unbreakable: true
     attack_speed: 1.0
     attack_damage: 5
+    max_charge: 200000
+  netherite_chainsaw:
+    itemModel: netherite_axe
+    powered_tool: true
+    unbreakable: true
+    attack_speed: 0.8
+    attack_damage: 7
     max_charge: 200000
   configurator:
     itemModel: paper
