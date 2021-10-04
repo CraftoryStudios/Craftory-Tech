@@ -101,7 +101,6 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     }
     cachedSides = new HashMap<>();
     if (cachedSidesConfig == null) {
-      Log.error("WTF cache config was null");
       cachedSidesConfig = new HashMap<>();
     }
     for (Entry<BlockFace, INTERACTABLEBLOCK> entry : cachedSidesConfig.entrySet()) {

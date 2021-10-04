@@ -1,0 +1,9 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "item/stick"
+  },
+  "overrides": [
+    {"predicate": {"custom_model_data": 133744}, "model": "item/item_wrench"}
+  ]
+}

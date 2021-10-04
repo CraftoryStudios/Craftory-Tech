@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/golden_axe"
+  },
+  "overrides": [
+	{"predicate": {"custom_model_data": 1022},"model": "craftory:items/tools/chainsaw/golden_chainsaw"}
+	]
+}

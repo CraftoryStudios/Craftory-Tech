@@ -1,0 +1,46 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Zip Resource Packs
+
+# Controls when the workflow will run
+on: 
+  # Triggers the workflow on push or pull request events but only for the master branch
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'resourcepacks/original'
+      - 'resourcepacks/pipes'
+  push:
+    branches: [ master ]
+    paths:
+      - 'resourcepacks/original'
+      - 'resourcepacks/pipes'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  zip: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.KEY }}
+      - name: Zip Resource Pack
+        run: |
+          cd ./resourcepacks/original
+          zip -r ../original.zip *
+      - name: Zip Resource Pack with Pipes
+        run: |
+          cd ./resourcepacks/pipes
+          zip -r ../pipes.zip *
+      - name: Commit Resource Pack Zip
+        run: |
+          git config --global user.name 'Craftory Bot'
+          git config --global user.email 'craftorybot@users.noreply.github.com'
+          cd ./
+          git add -f resourcepacks/pipes.zip
+          git add -f resourcepacks/original.zip
+          git commit -m "chore(resourcepack): update resource pack zips"
+          git push

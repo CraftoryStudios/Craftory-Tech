@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/diamond_pickaxe"
+  },
+  "overrides": [
+	{"predicate": {"custom_model_data": 1011},"model": "craftory:items/tools/drill/diamond_drill"},
+	{"predicate": {"custom_model_data": 1019},"model": "craftory:items/tools/power_hammer/diamond_power_hammer"}
+	]
+}

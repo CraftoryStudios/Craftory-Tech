@@ -1,0 +1,7 @@
+{
+	"credit": "By BrettSaunders for the Craftory Plugin",
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "craftory:item/tools/book/book_item"
+	}
+}

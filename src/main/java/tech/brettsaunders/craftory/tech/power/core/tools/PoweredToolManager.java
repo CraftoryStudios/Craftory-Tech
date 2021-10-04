@@ -1,5 +1,7 @@
 package tech.brettsaunders.craftory.tech.power.core.tools;
 
+import static tech.brettsaunders.craftory.tech.power.core.tools.Chainsaw.handleChainsawBreak;
+
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import io.github.bakedlibs.dough.protection.Interaction;
 import java.util.ArrayList;
@@ -47,7 +49,7 @@ public class PoweredToolManager implements Listener {
   public static final String CHARGE_KEY = "Charge";
   public static final String MAX_CHARGE_KEY = "MaxCharge";
   private Map<UUID, BlockFace> lastHitFace = new HashMap<>();
-  private static final int TOOL_POWER_COST = 100;
+  public static final int TOOL_POWER_COST = 100;
   private static final Set<Material> excavatorBlocks = new HashSet<>();
   private static final Set<PoweredToolType> fastTools = new HashSet<>();
   private static final Set<PoweredToolType> slowTools = new HashSet<>();
@@ -80,6 +82,7 @@ public class PoweredToolManager implements Listener {
 
     slowTools.add(PoweredToolType.EXCAVATOR);
     slowTools.add(PoweredToolType.HAMMER);
+    slowTools.add(PoweredToolType.CHAINSAW);
   }
 
   public PoweredToolManager() {
@@ -229,25 +232,30 @@ public class PoweredToolManager implements Listener {
       if(!isPoweredTool(tool)) return;
       String name = CustomItemManager.getCustomItemName(tool);
       PoweredToolType toolType = getToolType(name);
-      if(toolType != (PoweredToolType.EXCAVATOR)) return;
-      NBTItem nbt = new NBTItem(tool);
-      int charge = nbt.getInteger(CHARGE_KEY);
-      if(charge < TOOL_POWER_COST) {
-        event.setCancelled(true);
-        return;
+      if(toolType == (PoweredToolType.EXCAVATOR)) {
+        handleExcavatorPath(event, tool);
       }
-      charge -= TOOL_POWER_COST;
-      List<Block> blocks = get2DNeighbours(event.getClickedBlock(),event.getBlockFace());
-      OfflinePlayer player = Bukkit.getOfflinePlayer(event.getPlayer().getUniqueId());
-      for(Block block: blocks) {
-        if(block.getType()==Material.GRASS_BLOCK && charge >= TOOL_POWER_COST && Craftory.protectionManager.hasPermission(player, block, Interaction.BREAK_BLOCK)) {
-          block.setType(Material.DIRT_PATH);
-          charge -=TOOL_POWER_COST;
-        }
-      }
-      if(event.getPlayer().getGameMode() != GameMode.CREATIVE) tool = setCharge(tool, charge);
-      event.getPlayer().getInventory().setItemInMainHand(tool);
     }
+  }
+
+  private void handleExcavatorPath(PlayerInteractEvent event, ItemStack tool) {
+    NBTItem nbt = new NBTItem(tool);
+    int charge = nbt.getInteger(CHARGE_KEY);
+    if(charge < TOOL_POWER_COST) {
+      event.setCancelled(true);
+      return;
+    }
+    charge -= TOOL_POWER_COST;
+    List<Block> blocks = get2DNeighbours(event.getClickedBlock(),event.getBlockFace());
+    OfflinePlayer player = Bukkit.getOfflinePlayer(event.getPlayer().getUniqueId());
+    for(Block block: blocks) {
+      if(block.getType()==Material.GRASS_BLOCK && charge >= TOOL_POWER_COST && Craftory.protectionManager.hasPermission(player, block, Interaction.BREAK_BLOCK)) {
+        block.setType(Material.DIRT_PATH);
+        charge -=TOOL_POWER_COST;
+      }
+    }
+    if(event.getPlayer().getGameMode() != GameMode.CREATIVE) tool = setCharge(tool, charge);
+    event.getPlayer().getInventory().setItemInMainHand(tool);
   }
 
   @EventHandler
@@ -259,7 +267,7 @@ public class PoweredToolManager implements Listener {
     if(!poweredTools.contains(name)) return;
     NBTItem nbt = new NBTItem(tool);
     int charge = nbt.getInteger(CHARGE_KEY);
-    if(charge < TOOL_POWER_COST) {
+    if(charge < TOOL_POWER_COST && event.getPlayer().getGameMode() != GameMode.CREATIVE) {
       event.setCancelled(true);
       return;
     }
@@ -271,31 +279,52 @@ public class PoweredToolManager implements Listener {
     PoweredToolType toolType = getToolType(name);
     OfflinePlayer player = Bukkit.getOfflinePlayer(event.getPlayer().getUniqueId());
     if(toolType==PoweredToolType.HAMMER) {
-      List<Block> blocks = get2DNeighbours(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
-      for(Block block: blocks) {
-        if (Craftory.protectionManager.hasPermission(player, block, Interaction.BREAK_BLOCK)) {
-          Collection<ItemStack> blockDrops = block.getDrops(tool);
-          if (!blockDrops.isEmpty() && !excavatorBlocks.contains(block.getType()) && charge >= TOOL_POWER_COST) {
-            block.breakNaturally(tool);
-            charge -= TOOL_POWER_COST;
-          }
-        }
-      }
+      charge = handleHammerBreak(event, tool, charge, player);
     } else if(toolType==PoweredToolType.EXCAVATOR) {
-      List<Block> blocks = get2DNeighbours(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
-      for(Block block: blocks) {
-        if (Craftory.protectionManager.hasPermission(player, block, Interaction.BREAK_BLOCK)) {
-          Collection<ItemStack> blockDrops = block.getDrops(tool);
-          if (!blockDrops.isEmpty() && charge >= TOOL_POWER_COST) {
-            block.breakNaturally(tool);
-            charge -= TOOL_POWER_COST;
-          }
-        }
-      }
+      charge = handleExcavatorBreak(event, tool, charge, player);
+    } else if(toolType==PoweredToolType.CHAINSAW) {
+      charge = handleChainsawBreak(event, tool, charge, player);
     }
     if(event.getPlayer().getGameMode() != GameMode.CREATIVE) tool = setCharge(tool, charge);
     event.getPlayer().getInventory().setItemInMainHand(tool);
   }
+
+  private int handleHammerBreak(BlockBreakEvent event, ItemStack tool, int charge, OfflinePlayer player) {
+    List<Block> blocks = get2DNeighbours(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
+    for(Block block: blocks) {
+      if (Craftory.protectionManager.hasPermission(player, block, Interaction.BREAK_BLOCK)) {
+        Collection<ItemStack> blockDrops = block.getDrops(tool);
+        if (!blockDrops.isEmpty() && !excavatorBlocks.contains(block.getType()) && charge >= TOOL_POWER_COST) {
+          if (event.getPlayer().getGameMode()!= GameMode.CREATIVE) {
+            block.breakNaturally(tool);
+            charge -= TOOL_POWER_COST;
+          } else {
+            block.setType(Material.AIR);
+          }
+        }
+      }
+    }
+    return charge;
+  }
+
+  private int handleExcavatorBreak(BlockBreakEvent event, ItemStack tool, int charge, OfflinePlayer player) {
+    List<Block> blocks = get2DNeighbours(event.getBlock(),lastHitFace.get(event.getPlayer().getUniqueId()));
+    for(Block block: blocks) {
+      if (Craftory.protectionManager.hasPermission(player, block, Interaction.BREAK_BLOCK)) {
+        Collection<ItemStack> blockDrops = block.getDrops(tool);
+        if (!blockDrops.isEmpty() && charge >= TOOL_POWER_COST) {
+          if (event.getPlayer().getGameMode()!= GameMode.CREATIVE) {
+            block.breakNaturally(tool);
+            charge -= TOOL_POWER_COST;
+          } else {
+            block.setType(Material.AIR);
+          }
+        }
+      }
+    }
+    return charge;
+  }
+
 
   public static ItemStack setCharge(ItemStack tool, int charge) {
     NBTItem nbt = new NBTItem(tool);

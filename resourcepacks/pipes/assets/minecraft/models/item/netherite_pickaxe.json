@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/netherite_pickaxe"
+  },
+  "overrides": [
+	{"predicate": {"custom_model_data": 1012},"model": "craftory:items/tools/drill/netherite_drill"},
+	{"predicate": {"custom_model_data": 1020},"model": "craftory:items/tools/power_hammer/netherite_power_hammer"}
+	]
+}

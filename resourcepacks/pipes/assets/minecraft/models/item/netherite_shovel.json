@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/netherite_shovel"
+  },
+  "overrides": [
+	{"predicate": {"custom_model_data": 1016},"model": "craftory:items/tools/excavator/netherite_excavator"}
+	]
+}
