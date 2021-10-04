@@ -21,9 +21,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Zip Resource Pack
-        run: zip -r original.zip $GITHUB_WORKSPACE/resourcepacks/original
+        run: |
+          cd ./resourcepacks/original
+          zip -r ../original.zip *
       - name: Zip Resource Pack with Pipes
-        run: zip -r pipes.zip $GITHUB_WORKSPACE/resourcepacks/pipes
+        run: |
+          cd ./resourcepacks/pipes
+          zip -r ../pipes.zip *
       - name: Commit Resource Pack Zip
         run: |
           git config --global user.name 'Craftory Bot'
