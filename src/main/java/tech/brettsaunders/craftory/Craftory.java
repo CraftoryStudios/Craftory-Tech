@@ -12,8 +12,6 @@ import io.sentry.Sentry;
 import io.sentry.SentryClient;
 import io.sentry.dsn.InvalidDsnException;
 import java.io.File;
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
@@ -44,7 +42,7 @@ import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerConnectorMana
 import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGridManager;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 import tech.brettsaunders.craftory.utils.Log;
-import tech.brettsaunders.craftory.utils.ResourcePackEvents;
+import tech.brettsaunders.craftory.utils.ResourcepackService;
 import tech.brettsaunders.craftory.utils.Version;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
@@ -52,8 +50,6 @@ import tech.brettsaunders.craftory.world.WorldGenHandler;
 public final class Craftory extends JavaPlugin implements Listener {
 
   public static final int SPIGOT_ID = 81151;
-  public static String RESOURCE_PACK = "";
-  public static String HASH = "";
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
   public static Craftory plugin = null;
@@ -106,14 +102,6 @@ public final class Craftory extends JavaPlugin implements Listener {
       return;
     }
 
-    // Resource pack
-    RESOURCE_PACK = "https://raw.githubusercontent.com/CraftoryStudios/Craftory-Tech/v" + this.getDescription().getVersion() + "/resourcepacks/original.zip";
-    MessageDigest digest = MessageDigest.getInstance("SHA-1");
-    digest.reset();
-    digest.update(this.getDescription().getVersion().getBytes("utf8"));
-    HASH = String.format("%040x", new BigInteger(1, digest.digest()));
-
-
     setupSentry();
     try {
       isLightAPIEnabled = getServer().getPluginManager().isPluginEnabled("LightAPI");
@@ -135,7 +123,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       Utilities.registerCommandsAndCompletions();
       Utilities.registerEvents();
       if (Utilities.config.getBoolean("resourcePack.forcePack")) {
-        new ResourcePackEvents();
+        new ResourcepackService();
       }
       poweredToolManager = new PoweredToolManager(); //Must be before CustomItemManager
       customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");
