@@ -112,7 +112,8 @@
       <groupId>io.github.qveshn</groupId>
       <artifactId>LightAPI-fork</artifactId>
       <version>3.5.1-SNAPSHOT</version>
-      <optional>true</optional>
+      <scope>system</scope>
+      <systemPath>${pom.basedir}/libs/LightAPI-fork-3.5.2.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>com.gmail.nossr50.mcMMO</groupId>
