@@ -205,12 +205,13 @@ recipes:
     pattern:
       - SMS
       - COC
-      - SMS
+      - SRS
     ingredients:
       C: COPPER_INGOT
       M: magnetised_iron
       S: steel_ingot
       O: iron_core
+      R: FURNACE
     result:
       item: SolidFuelGenerator
       amount: 1
