@@ -107,7 +107,7 @@ fabric.properties
 
 # Package Files #
 *.jar
-!oraxen-1.57.0.jar
+!libs/*.jar
 *.war
 *.nar
 *.ear
