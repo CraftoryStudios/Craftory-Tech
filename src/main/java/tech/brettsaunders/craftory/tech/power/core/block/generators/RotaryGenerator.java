@@ -7,8 +7,10 @@ package tech.brettsaunders.craftory.tech.power.core.block.generators;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.NonNull;
 import org.bukkit.Location;
@@ -34,9 +36,11 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
-public class RotaryGenerator extends BaseGenerator {
+public class RotaryGenerator extends BaseGenerator implements IHopperInteract {
 
+  protected static Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
   protected static final int MAX_OUTPUT = 75;
   protected static final int[] MULTIPLIERS = {1, 2, 3, 4};
   protected static final int BASE_CAPACITY = 100000;
@@ -462,6 +466,16 @@ public class RotaryGenerator extends BaseGenerator {
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43, true));
     addGUIComponent(new GIndicator(inventory, runningContainer, 31));
     this.inventoryInterface = inventory;
+  }
+
+  @Override
+  public Map<BlockFace, Integer> getInputFaces() {
+    return inputFaces;
+  }
+
+  @Override
+  public Integer getOutputSlot() {
+    return SLOT;
   }
 
   private enum WheelMode {
