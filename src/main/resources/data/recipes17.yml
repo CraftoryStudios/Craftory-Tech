@@ -211,7 +211,7 @@ recipes:
       M: magnetised_iron
       S: steel_ingot
       O: iron_core
-      R: furnace
+      R: FURNACE
     result:
       item: SolidFuelGenerator
       amount: 1
