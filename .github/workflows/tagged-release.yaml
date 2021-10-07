@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: 8
+          java-version: 16
       
       - name: Maven Settings
         uses: whelk-io/maven-settings-xml-action@v18
