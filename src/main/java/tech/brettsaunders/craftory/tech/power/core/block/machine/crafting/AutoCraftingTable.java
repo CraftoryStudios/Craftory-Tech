@@ -3,14 +3,15 @@ package tech.brettsaunders.craftory.tech.power.core.block.machine.crafting;
 import io.papermc.lib.PaperLib;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -25,6 +26,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Constants.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
@@ -35,7 +40,6 @@ import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.utils.recipes.RecipeUtils;
 
 public class AutoCraftingTable extends BaseMachine implements Listener, IHopperInteract {
 
@@ -45,7 +49,10 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
   protected static final Map<BlockFace, Set<Integer>> inputFaces = new EnumMap<>(BlockFace.class);
   protected static final Map<BlockFace, Integer> outputFaces = new EnumMap<>(BlockFace.class);
   private static final List<Integer> gridSlots = Arrays.asList(12, 13, 14, 21, 22, 23, 30, 31, 32);
-  private ItemStack result;
+
+  // Crafting
+  private Recipe recipe;
+  private final List<RecipeChoice> necessaryIngredients;
 
   static {
     Set<Integer> gridSet = new HashSet<>(gridSlots);
@@ -59,6 +66,7 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
 
   public AutoCraftingTable(Location location, Player player) {
     super(location, Blocks.AUTO_CRAFTER, (byte) 0,MAX_RECEIVE);
+    necessaryIngredients = new ArrayList<>();
     setup();
     Events.registerEvents(this);
     energyStorage = new EnergyStorage(40000);
@@ -66,6 +74,7 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
 
   public AutoCraftingTable() {
     super();
+    necessaryIngredients = new ArrayList<>();
     setup();
     checkRecipe(new ArrayList<>(), new ItemStack(Material.AIR), true);
   }
@@ -114,58 +123,116 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
   }
 
   public void checkRecipe(List<Integer> slots, ItemStack itemStack, boolean startUp) {
-    ArrayList<ItemStack> ingredients = new ArrayList<>();
-    for (int i = 0; i < gridSlots.size(); i++) {
-      ingredients.add(i, inventoryInterface.getItem(gridSlots.get(i)));
-    }
+    ItemStack[] items = getGridItems(false);
+
     if (!startUp) {
       for (Integer slot : slots) {
-        ingredients.set(gridSlots.indexOf(slot), itemStack);
+        // Set itemstacks changed in event
+        items[gridSlots.indexOf(slot)] = itemStack;
       }
     }
 
-    Optional<ItemStack> result = RecipeUtils.getRecipeTree().find(ingredients);
-    if (result.isPresent()) {
-      this.result = result.get();
-    } else {
-      this.result = null;
+    recipe = Bukkit.getCraftingRecipe(items, location.getWorld());
+    updateIngredients();
+  }
+
+  private ItemStack[] getGridItems(boolean clone) {
+    ItemStack[] items = new ItemStack[9];
+    for (int i = 0; i < gridSlots.size(); i++) {
+      if (inventoryInterface.getItem(gridSlots.get(i)) != null) {
+        if (clone) {
+          items[i] = inventoryInterface.getItem(gridSlots.get(i)).clone();
+        } else {
+          items[i] = inventoryInterface.getItem(gridSlots.get(i));
+        }
+      } else {
+        items[i] = null;
+      }
+    }
+    return items;
+  }
+
+  private  void updateIngredients(){
+    // Collect needed ingredients from recipe
+    necessaryIngredients.clear();
+    if (recipe instanceof ShapelessRecipe shapelessRecipe) {
+      necessaryIngredients.addAll(shapelessRecipe.getChoiceList());
+    } else if (recipe instanceof ShapedRecipe shapedRecipe) {
+      Map<Character, Integer> charCounts = new HashMap<>();
+      for (String row : shapedRecipe.getShape()) {
+        for (char c : row.toCharArray()) {
+          charCounts.put(c, charCounts.getOrDefault(c, 0) + 1);
+        }
+      }
+      for (Character c : charCounts.keySet()) {
+        RecipeChoice ingredientChoice = shapedRecipe.getChoiceMap().get(c);
+        if (ingredientChoice != null) {
+          necessaryIngredients.addAll(Collections.nCopies(charCounts.get(c), ingredientChoice));
+        }
+      }
     }
   }
 
   @Ticking(ticks = 20)
   public void autoCraft() {
-    if (result != null) {
-      boolean hasIngredients =
-          gridSlots.stream()
-                   .map(slot -> inventoryInterface.getItem(slot))
-                   .filter(item -> item != null)
-                   .allMatch(itemStack -> itemStack.getAmount() > 1);
+    if (recipe != null) {
       boolean hasEnergy = energyStorage.getEnergyStored() >= ENERGY_PER_ACTION;
       final ItemStack outputItem = inventoryInterface.getItem(OUTPUT_SLOT);
-      boolean hasResultSpace = (outputItem == null || outputItem.getAmount() + result.getAmount() <= outputItem.getMaxStackSize())
-          && outputItem.getType() == result.getType();
+      boolean hasResultSpace = (outputItem == null || outputItem.getAmount() + recipe.getResult().getAmount() <= outputItem.getMaxStackSize())
+          && outputItem.getType() == recipe.getResult().getType();
 
-      if (hasEnergy && hasIngredients && hasResultSpace) {
-        runningContainer.setT(true);
-        final ItemStack item = outputItem;
-        if (item == null || item.getType() == Material.AIR) {
-          inventoryInterface.setItem(OUTPUT_SLOT, result);
-        } else if (item.getType() == result.getType() && item.getAmount() < item.getMaxStackSize()) {
-          item.setAmount(Math.min(item.getAmount() + result.getAmount(), item.getMaxStackSize()));
-        }
-        for (Integer slot : gridSlots) {
-          ItemStack stack = inventoryInterface.getItem(slot);
-          if (stack != null) {
-            stack.setAmount(stack.getAmount() - 1);
-            inventoryInterface.setItem(slot, stack);
+      if (hasEnergy && hasResultSpace && hasIngredients()) {
+          runningContainer.setT(true);
+          final ItemStack item = outputItem;
+          if (item == null || item.getType() == Material.AIR) {
+            inventoryInterface.setItem(OUTPUT_SLOT, recipe.getResult());
+          } else if (item.getType() == recipe.getResult().getType() && item.getAmount() < item.getMaxStackSize()) {
+            item.setAmount(Math.min(item.getAmount() + recipe.getResult().getAmount(), item.getMaxStackSize()));
           }
-        }
-        energyStorage.modifyEnergyStored(-ENERGY_PER_ACTION);
+          for (Integer slot : gridSlots) {
+            ItemStack stack = inventoryInterface.getItem(slot);
+            if (stack != null) {
+              stack.setAmount(stack.getAmount() - 1);
+              inventoryInterface.setItem(slot, stack);
+            }
+          }
+          energyStorage.modifyEnergyStored(-ENERGY_PER_ACTION);
       } else {
         runningContainer.setT(false);
       }
     } else {
       runningContainer.setT(false);
+    }
+  }
+
+  private boolean hasIngredients() {
+    if (necessaryIngredients.size() == 0) return false;
+
+    if (recipe instanceof ShapedRecipe) {
+      ItemStack[] items = getGridItems(false);
+      for (int i = 0; i < necessaryIngredients.size(); i++) {
+        if (!necessaryIngredients.get(i).test(items[i])) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      List<ItemStack> items = Arrays.asList(getGridItems(true));
+      int neededIngredientsCount = necessaryIngredients.size();
+      for (RecipeChoice neededIngredient : necessaryIngredients) {
+        for (int i = 0; i < items.size(); i++) {
+          if (neededIngredient.test(items.get(i))) {
+            if (items.get(i).getAmount() > 1) {
+              items.get(i).setAmount(items.get(i).getAmount() - 1);
+            } else {
+              items.remove(i);
+            }
+            neededIngredientsCount--;
+            break;
+          }
+        }
+      }
+      return neededIngredientsCount == 0;
     }
   }
 

@@ -31,7 +31,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.Log;
-import tech.brettsaunders.craftory.utils.recipes.RecipeUtils;
+import tech.brettsaunders.craftory.utils.RecipeUtils;
 
 public class MagnetisingTable extends CustomBlock implements Listener {
 

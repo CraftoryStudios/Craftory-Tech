@@ -2,7 +2,7 @@
  * Copyright (c) 2021. Brett Saunders & Matthew Jones - All Rights Reserved
  ******************************************************************************/
 
-package tech.brettsaunders.craftory.utils.recipes;
+package tech.brettsaunders.craftory.utils;
 
 
 import java.util.HashMap;
@@ -17,17 +17,10 @@ import org.bukkit.inventory.CampfireRecipe;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.SmokingRecipe;
 import tech.brettsaunders.craftory.Craftory;
-import tech.brettsaunders.craftory.utils.Log;
 
 public class RecipeUtils {
-
-  @Getter
-  private static final RecipeTree recipeTree = new RecipeTree();
-
   @Getter
   private static final HashMap<String, String> furnaceRecipes = new HashMap<>();
   @Getter
@@ -51,9 +44,7 @@ public class RecipeUtils {
     recipeIterator = Craftory.plugin.getServer().recipeIterator();
     while (recipeIterator.hasNext()) {
       Recipe recipe = recipeIterator.next();
-      if (recipe instanceof ShapedRecipe || recipe instanceof ShapelessRecipe) { //Ordered most to least common should improve performance
-        recipeTree.insert(recipe);
-      } else if (recipe instanceof FurnaceRecipe) {
+      if (recipe instanceof FurnaceRecipe) {
         furnaceRecipes.put(((FurnaceRecipe) recipe).getInput().getType().toString(),
             recipe.getResult().getType().toString());
       } else if (recipe instanceof BlastingRecipe) {

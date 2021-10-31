@@ -10,14 +10,21 @@
   <url>brettsaunders.tech</url>
   <version>0.6.0</version>
 
+  <pluginRepositories>
+    <pluginRepository>
+      <id>maven-snapshots</id>
+      <url>https://repository.apache.org/content/repositories/snapshots/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
   <build>
     <defaultGoal>clean package</defaultGoal>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>8</source>
-          <target>8</target>
+          <source>16</source>
+          <target>16</target>
         </configuration>
         <groupId>org.apache.maven.plugins</groupId>
         <version>3.8.1</version>
@@ -54,7 +61,7 @@
           </execution>
         </executions>
         <groupId>org.apache.maven.plugins</groupId>
-        <version>3.2.4</version>
+        <version>3.3.0-SNAPSHOT</version>
       </plugin>
     </plugins>
     <resources>
@@ -90,10 +97,35 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <artifactId>spigot-api</artifactId>
       <groupId>org.spigotmc</groupId>
+      <artifactId>spigot-api</artifactId>
+      <version>1.17.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
-      <version>1.17-R0.1-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.googlecode.json-simple</groupId>
+          <artifactId>json-simple</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.google.code.gson</groupId>
+          <artifactId>gson</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.yaml</groupId>
+          <artifactId>snakeyaml</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>net.md-5</groupId>
+          <artifactId>bungeecord-chat</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot</artifactId>
+      <version>1.17.1-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <artifactId>bstats-bukkit</artifactId>
@@ -168,7 +200,7 @@
   <repositories>
     <repository>
       <id>spigotmc-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots</url>
     </repository>
     <repository>
       <id>codemc-repo</id>
@@ -187,8 +219,8 @@
       <url>https://jitpack.io</url>
     </repository>
     <repository>
-      <id>paper-repo</id>
-      <url>https://papermc.io/repo/repository/maven-public</url>
+      <id>papermc</id>
+      <url>https://papermc.io/repo/repository/maven-public/</url>
     </repository>
   </repositories>
 

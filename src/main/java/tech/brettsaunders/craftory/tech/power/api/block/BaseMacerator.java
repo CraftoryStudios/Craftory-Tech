@@ -8,7 +8,7 @@ import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.utils.recipes.RecipeUtils;
+import tech.brettsaunders.craftory.utils.RecipeUtils;
 
 public class BaseMacerator extends BaseOneToOneMachine {
 

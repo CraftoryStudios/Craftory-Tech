@@ -23,8 +23,8 @@ import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GTwoToOneMachine;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.utils.recipes.RecipeUtils;
-import tech.brettsaunders.craftory.utils.recipes.RecipeUtils.CustomMachineRecipe;
+import tech.brettsaunders.craftory.utils.RecipeUtils;
+import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 
 public class BaseFoundry extends BaseMachine implements IHopperInteract {
 

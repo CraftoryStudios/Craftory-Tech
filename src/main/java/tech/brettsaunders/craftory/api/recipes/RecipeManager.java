@@ -35,8 +35,8 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.utils.Log;
-import tech.brettsaunders.craftory.utils.recipes.RecipeUtils;
-import tech.brettsaunders.craftory.utils.recipes.RecipeUtils.CustomMachineRecipe;
+import tech.brettsaunders.craftory.utils.RecipeUtils;
+import tech.brettsaunders.craftory.utils.RecipeUtils.CustomMachineRecipe;
 
 public class RecipeManager implements Listener {
 
