@@ -32,7 +32,7 @@
             </relocation>
             <relocation>
               <pattern>de.tr7zw.changeme.nbtapi</pattern>
-              <shadedPattern>tech.brettsaunders.craftory.nbtapi</shadedPattern>
+              <shadedPattern>tech.brettsaunders.craftory.external</shadedPattern>
             </relocation>
             <relocation>
               <pattern>io.github.bakedlibs.dough</pattern>
