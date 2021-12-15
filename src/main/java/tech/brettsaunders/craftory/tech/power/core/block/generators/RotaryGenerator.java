@@ -20,6 +20,8 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -261,6 +263,7 @@ public class RotaryGenerator extends BaseGenerator implements IHopperInteract {
     wheel.setAI(false);
     wheel.setSilent(true);
     wheel.setMarker(true);
+    wheel.setPersistent(false);
     wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
     EntityEquipment entityEquipment = wheel.getEquipment();
     entityEquipment.setHelmet(inventoryInterface.getItem(SLOT));
@@ -420,6 +423,14 @@ public class RotaryGenerator extends BaseGenerator implements IHopperInteract {
       }
     }
     return locations;
+  }
+
+  //Fixes windmill when it is unloaded and loaded again
+  @EventHandler
+  public void chunkLoadEvent(ChunkLoadEvent chunk) {
+    if (chunk.getChunk() == location.getChunk()) {
+      placeWheels();
+    }
   }
 
   protected List<Location> getWheelFootprint(Location centerLoc) {
