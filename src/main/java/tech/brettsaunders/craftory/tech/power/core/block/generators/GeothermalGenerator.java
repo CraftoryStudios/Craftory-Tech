@@ -38,7 +38,7 @@ public class GeothermalGenerator extends BaseGenerator implements IHopperInterac
   /* Static Constants Private */
   private static final byte C_LEVEL = 0;
   private static final int C_OUTPUT_AMOUNT = 100;
-  private static final double LAVA_TO_ENERGY_RATIO = 25;
+  private static final double LAVA_TO_ENERGY_RATIO = 50;
 
   static {
     inputFaces.put(BlockFace.NORTH, FUEL_SLOT);
