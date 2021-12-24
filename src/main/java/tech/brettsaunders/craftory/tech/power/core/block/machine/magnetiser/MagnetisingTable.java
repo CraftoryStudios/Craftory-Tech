@@ -5,10 +5,12 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser;
 
 import java.util.HashMap;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
+import org.bukkit.Chunk;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -21,6 +23,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Constants.Items;
@@ -33,10 +37,13 @@ import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
+import javax.annotation.processing.SupportedSourceVersion;
+
 public class MagnetisingTable extends CustomBlock implements Listener {
 
   private static final HashMap<String, String> recipes = RecipeUtils.getMagnetiserRecipes();
   private static final int PROCESS_TIME = 10;
+  private Chunk blockChunk;
   @Persistent
   protected Boolean framePlaced;
   @Persistent
@@ -52,6 +59,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     Events.registerEvents(this);
     progress = 0;
     framePlaced = false;
+    blockChunk = location.getChunk();
   }
 
   /* Saving, Setup and Loading */
@@ -77,7 +85,26 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
-    if (framePlaced) {
+  }
+
+  @Override
+  public void beforeSaveUpdate() {
+    super.beforeSaveUpdate();
+  }
+
+  @EventHandler
+  public void onChunkUnload(ChunkUnloadEvent event) {
+    if (framePlaced && (event.getChunk() == blockChunk)) {
+      if(itemFrame == null && (!findFrame() || !framePlaced)) return;
+      frameItem = itemFrame.getItem();
+      itemFrame.setItem(new ItemStack(Material.AIR));
+      itemFrame.remove();
+    }
+  }
+
+  @EventHandler
+  public void onChunkLoad(ChunkLoadEvent event) {
+    if (framePlaced && (event.getChunk() == blockChunk)) {
       frameLocation = location.clone().add(0.5, 1.03125, 0.5);
       frameLocation.setPitch(-90);
       if (spawnFrame()) {
@@ -87,17 +114,6 @@ public class MagnetisingTable extends CustomBlock implements Listener {
       } else {
         framePlaced = false;
       }
-    }
-  }
-
-  @Override
-  public void beforeSaveUpdate() {
-    super.beforeSaveUpdate();
-    if (framePlaced) {
-      if(itemFrame == null && (!findFrame() || !framePlaced)) return;
-      frameItem = itemFrame.getItem();
-      itemFrame.setItem(new ItemStack(Material.AIR));
-      itemFrame.remove();
     }
   }
 
@@ -222,8 +238,8 @@ public class MagnetisingTable extends CustomBlock implements Listener {
       ItemStack item = event.getItem().clone();
       event.getItem().setAmount(item.getAmount() - 1);
       item.setAmount(1);
+      frameItem = item;
       itemFrame.setItem(item);
     }
   }
-
 }
