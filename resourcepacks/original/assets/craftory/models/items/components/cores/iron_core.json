@@ -1,13 +1,14 @@
 {
-	"credit": "By BrettSaunders for the Craftory Plugin",
+	"credit": "Made with Blockbench",
 	"textures": {
 		"texture": "craftory:block/powered/cores/iron_block"
 	},
 	"elements": [
 		{
-			"name": "Box1",
-			"from": [0, 0, 0],
-			"to": [16, 16, 16],
+			"name": "Box3",
+			"from": [2, 3, 3],
+			"to": [14, 15, 15],
+			"rotation": {"angle": -22.5, "axis": "z", "origin": [8, 4, 8]},
 			"faces": {
 				"north": {"uv": [3.5, 3.5, 12.5, 12.5], "texture": "#texture"},
 				"east": {"uv": [3.5, 3.5, 12.5, 12.5], "texture": "#texture"},
@@ -43,6 +44,7 @@
 		},
 		"gui": {
 			"rotation": [30, 225, 0],
+			"translation": [1.25, 0, 0],
 			"scale": [0.625, 0.625, 0.625]
 		},
 		"fixed": {
