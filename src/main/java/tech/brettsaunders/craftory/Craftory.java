@@ -105,9 +105,13 @@ public final class Craftory extends JavaPlugin implements Listener {
     setupSentry();
     try {
       isLightAPIEnabled = getServer().getPluginManager().isPluginEnabled("LightAPI");
-
       loadedPlugins = (HashSet<String>) Arrays.stream(plugin.getServer().getPluginManager().getPlugins()).map(Plugin::getName).collect(
           Collectors.toSet());
+      if (!isLightAPIEnabled && loadedPlugins.contains("LightAPI")) {
+        isLightAPIEnabled = loadedPlugins.contains("LightAPI");
+        Log.warn("Loaded plugins: " + loadedPlugins.toString());
+        Log.warn("LightAPI not detected despite being present");
+      }
       thisVersionCode = generateVersionCode();
       this.getServer().getPluginManager().registerEvents(this, this);
 

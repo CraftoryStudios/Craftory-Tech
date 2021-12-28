@@ -67,10 +67,10 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
     int level = Math.round((getEnergyStored() / (float) getMaxEnergyStored()) * 10);
     if(currentLightLevel!=level) {
       if(currentLightLevel!=-1) {
-        Light.deleteLight(location, false);
+        Light.deleteLight(location);
       }
       if(level>0) {
-        Light.createLight(location, level, false);
+        Light.createLight(location, level);
       }
       currentLightLevel = level;
     }
@@ -82,8 +82,8 @@ public abstract class BaseCell extends BaseProvider implements IEnergyReceiver {
       return;
     }
     if(currentLightLevel>0) {
-      Light.deleteLight(location, false);
-      Light.createLight(location, currentLightLevel, false);
+      Light.deleteLight(location);
+      Light.createLight(location, currentLightLevel);
     }
   }
 

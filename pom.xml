@@ -109,11 +109,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>io.github.qveshn</groupId>
-      <artifactId>LightAPI-fork</artifactId>
-      <version>3.5.1-SNAPSHOT</version>
-      <scope>system</scope>
-      <systemPath>${pom.basedir}/libs/LightAPI-fork-3.5.2.jar</systemPath>
+      <groupId>com.github.BeYkeRYkt</groupId>
+      <artifactId>LightAPI</artifactId>
+      <version>5.1.0-Bukkit</version>
+      <scope>provided</scope>
+      <!--      <scope>system</scope>-->
+      <!--      <systemPath>${pom.basedir}/libs/LightAPI-fork-3.5.2.jar</systemPath>-->
     </dependency>
     <dependency>
       <groupId>com.gmail.nossr50.mcMMO</groupId>

@@ -82,8 +82,8 @@ public abstract class BaseGenerator extends BaseProvider {
       return;
     }
     if(lightSpawned) {
-      Light.deleteLight(location, false);
-      Light.createLight(location, lightLevel, false);
+      Light.deleteLight(location);
+      Light.createLight(location, lightLevel);
     }
   }
 
@@ -95,7 +95,7 @@ public abstract class BaseGenerator extends BaseProvider {
     runningContainer.setT(true);
     if(!lightSpawned){
       lightSpawned = true;
-      Light.createLight(location, lightLevel, false);
+      Light.createLight(location, lightLevel);
     }
   }
 
@@ -107,7 +107,7 @@ public abstract class BaseGenerator extends BaseProvider {
     runningContainer.setT(false);
     if(lightSpawned) {
       lightSpawned = false;
-      Light.deleteLight(location, false);
+      Light.deleteLight(location);
     }
   }
 

@@ -69,14 +69,14 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
       }
       if(!lightSpawned){
         lightSpawned = true;
-        Light.createLight(location, lightLevel, false);
+        Light.createLight(location, lightLevel);
       }
     } else {
       runningContainer.setT(false);
       tickCount = 0;
       if(lightSpawned) {
         lightSpawned = false;
-        Light.deleteLight(location, false);
+        Light.deleteLight(location);
       }
     }
     progressContainer.setT(((double) tickCount) / processTime);
@@ -88,8 +88,8 @@ public abstract class BaseMachine extends PoweredBlock implements IEnergyReceive
       return;
     }
     if(lightSpawned) {
-      Light.deleteLight(location, false);
-      Light.createLight(location, lightLevel, false);
+      Light.deleteLight(location);
+      Light.createLight(location, lightLevel);
     }
   }
 
