@@ -37,13 +37,10 @@ import tech.brettsaunders.craftory.tech.power.core.tools.ToolManager;
 import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
-import javax.annotation.processing.SupportedSourceVersion;
-
 public class MagnetisingTable extends CustomBlock implements Listener {
 
   private static final HashMap<String, String> recipes = RecipeUtils.getMagnetiserRecipes();
   private static final int PROCESS_TIME = 10;
-  private Chunk blockChunk;
   @Persistent
   protected Boolean framePlaced;
   @Persistent
@@ -52,6 +49,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   protected Location frameLocation;
   @Persistent
   protected int progress;
+  private Chunk blockChunk;
 
   /* Construction */
   public MagnetisingTable(Location location, Player p) {
@@ -59,7 +57,6 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     Events.registerEvents(this);
     progress = 0;
     framePlaced = false;
-    blockChunk = location.getChunk();
   }
 
   /* Saving, Setup and Loading */
@@ -85,11 +82,18 @@ public class MagnetisingTable extends CustomBlock implements Listener {
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
+    blockChunk = location.getChunk();
   }
 
   @Override
   public void beforeSaveUpdate() {
     super.beforeSaveUpdate();
+    if (framePlaced) {
+      if(itemFrame == null && (!findFrame() || !framePlaced)) return;
+      frameItem = itemFrame.getItem();
+      itemFrame.setItem(new ItemStack(Material.AIR));
+      itemFrame.remove();
+    }
   }
 
   @EventHandler
