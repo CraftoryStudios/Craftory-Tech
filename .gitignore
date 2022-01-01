@@ -139,4 +139,5 @@ buildNumber.properties
 *.iml
 /spigotServer/*
 /libs/item-nbt-api-plugin-2.9.0-SNAPSHOT.jar
-/spigotServer/
+
+*.bak
