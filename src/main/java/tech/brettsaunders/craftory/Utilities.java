@@ -77,7 +77,6 @@ public class Utilities {
   public static FileConfiguration config;
   public static FileConfiguration data;
   public static Metrics metrics;
-  public static Properties langProperties;
   public static boolean updateItemGraphics = false;
   private static File configFile = new File(Craftory.plugin.getDataFolder(), "config.yml");
   private static File dataFile = new File(Craftory.plugin.getDataFolder(), "data.yml");
@@ -177,21 +176,6 @@ public class Utilities {
 
     Log.info("Last version: " + Craftory.lastVersionCode+ " Current version: " + Craftory.thisVersionCode);
 
-  }
-
-  static void getTranslations() {
-    String locale = config.getString("language.locale");
-    Log.info("Using " + locale + " locale");
-    Properties defaultLang = new Properties();
-    try (FileInputStream fileInputStream = new FileInputStream(new File(plugin.getDataFolder(),
-        "data/default_lang.properties"));InputStreamReader streamReader = new InputStreamReader(new FileInputStream(new File(LANG_FOLDER, locale + ".properties")),
-        StandardCharsets.UTF_8)) {
-      defaultLang.load(new InputStreamReader(fileInputStream, StandardCharsets.UTF_8));
-      langProperties = new Properties(defaultLang);
-      langProperties.load(streamReader);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 
   static void createDataPath() {

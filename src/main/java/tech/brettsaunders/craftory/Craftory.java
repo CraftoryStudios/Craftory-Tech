@@ -113,7 +113,6 @@ public final class Craftory extends JavaPlugin implements Listener {
 
       Utilities.createDataPath();
       Utilities.createConfigs();
-      Utilities.getTranslations();
       tickManager = new CustomBlockTickManager();
       customBlockFactory = new CustomBlockFactory();
       Utilities.pluginBanner();

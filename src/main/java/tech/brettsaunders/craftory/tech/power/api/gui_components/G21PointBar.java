@@ -4,6 +4,8 @@
 
 package tech.brettsaunders.craftory.tech.power.api.gui_components;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -31,7 +33,7 @@ public abstract class G21PointBar implements IGUIComponent {
     setLevelIndicator();
   }
 
-  abstract String getDisplayName();
+  abstract BaseComponent getDisplayName();
 
   abstract double getAmountFilled();
 
@@ -51,12 +53,12 @@ public abstract class G21PointBar implements IGUIComponent {
         bottom = (int) Math.round(amountFilled * 0.4);
       }
     }
-    String displayName = getDisplayName();
+    BaseComponent displayName = getDisplayName();
     //Get Top Battery Icon and set Display Name
     String topTexture = getItemName() + "_" + top + "_t";
     ItemStack topItem = CustomItemManager.getCustomItem(topTexture);
     ItemMeta topMeta = topItem.getItemMeta();
-    topMeta.setDisplayName(displayName);
+    topMeta.setDisplayName(Compn);
     topItem.setItemMeta(topMeta);
 
     //Get Bottom Battery Icon and set Display Name

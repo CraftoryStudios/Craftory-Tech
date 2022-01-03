@@ -4,6 +4,8 @@
 
 package tech.brettsaunders.craftory.tech.power.api.gui_components;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.Constants.FLUIDS;
@@ -25,9 +27,11 @@ public class GTank extends G21PointBar {
   }
 
   @Override
-  String getDisplayName() {
-    return ChatColor.RESET + Utilities.getTranslation(fluid.toString()) + Utilities
-        .getTranslation("Stored") + ": " + Utilities.rawFluidToPrefixed(storage.getFluidStored());
+  BaseComponent getDisplayName() {
+    TranslatableComponent name = new TranslatableComponent(fluid.toString());
+    name.addWith(new TranslatableComponent("Stored"));
+    name.addWith(": " + Utilities.rawFluidToPrefixed(storage.getFluidStored()));
+    return name;
   }
 
   @Override

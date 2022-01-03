@@ -4,6 +4,8 @@
 
 package tech.brettsaunders.craftory.tech.power.api.gui_components;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TranslatableComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.Utilities;
@@ -24,9 +26,10 @@ public class GBattery extends G21PointBar {
   }
 
   @Override
-  String getDisplayName() {
-    return ChatColor.RESET + Utilities.getTranslation("EnergyStored") + ": " + Utilities
-        .rawEnergyToPrefixed(storage.getEnergyStored());
+  BaseComponent getDisplayName() {
+    TranslatableComponent name = new TranslatableComponent("EnergyStored");
+    name.addWith(": " + Utilities.rawEnergyToPrefixed(storage.getEnergyStored()));
+    return name;
   }
 
   @Override
