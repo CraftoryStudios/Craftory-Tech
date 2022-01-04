@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import lombok.NonNull;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -50,6 +51,7 @@ public class RotaryGenerator extends BaseGenerator implements IHopperInteract {
   private static final int SLOT = 22;
   protected static List<BlockFace> validFaces = Arrays
       .asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
+  private Chunk blockChunk;
 
   static {
     inputFaces.put(BlockFace.NORTH, SLOT);
@@ -108,6 +110,7 @@ public class RotaryGenerator extends BaseGenerator implements IHopperInteract {
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
+    blockChunk = location.getChunk();
     placeWheels();
     if (modeSaved != null) {
       mode = WheelMode.valueOf(modeSaved);
@@ -428,7 +431,8 @@ public class RotaryGenerator extends BaseGenerator implements IHopperInteract {
   //Fixes windmill when it is unloaded and loaded again
   @EventHandler
   public void chunkLoadEvent(ChunkLoadEvent chunk) {
-    if (chunk.getChunk() == location.getChunk()) {
+    Chunk loadedChunk = chunk.getChunk();
+    if (loadedChunk.getX() == blockChunk.getX() && loadedChunk.getZ() == blockChunk.getZ()) {
       placeWheels();
     }
   }
