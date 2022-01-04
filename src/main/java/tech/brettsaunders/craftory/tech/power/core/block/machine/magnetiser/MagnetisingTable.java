@@ -91,7 +91,6 @@ public class MagnetisingTable extends CustomBlock implements Listener {
         super.beforeSaveUpdate();
         if (framePlaced) {
             if (itemFrame == null && (!findFrame() || !framePlaced)) return;
-            System.out.println(frameItem);
             frameItem = itemFrame.getItem();
             itemFrame.remove();
         }
