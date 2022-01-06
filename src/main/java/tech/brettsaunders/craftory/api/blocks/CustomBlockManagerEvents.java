@@ -84,41 +84,42 @@ public class CustomBlockManagerEvents implements Listener {
     }
   }
 
-  @EventHandler
+  @EventHandler(ignoreCancelled = true)
   public void onPlace(BlockPlaceEvent e) {
+    // Check the item placed is a custom block
+    if (!CustomItemManager.isCustomBlockItem(e.getItemInHand())) return;
+
+    // Ensure we have valid placement data for the block
+    NBTItem nbtItem = new NBTItem(e.getItemInHand());
+    final String customBlockItemName = CustomItemManager.getCustomItemName(nbtItem);
+    if (!customBlockDataHashMap.containsKey(customBlockItemName)) return;
+
+    // Check player protection permissions
     OfflinePlayer player = Bukkit.getOfflinePlayer(e.getPlayer().getUniqueId());
     if (!Craftory.protectionManager.hasPermission(player, e.getBlockPlaced(), Interaction.PLACE_BLOCK)) {
       e.setCancelled(true);
       return;
     }
-    if (!CustomItemManager.isCustomBlockItem(e.getItemInHand())) {
-      return;
-    }
-    NBTItem nbtItem = new NBTItem(e.getItemInHand());
-    final String customBlockItemName = CustomItemManager.getCustomItemName(nbtItem);
-    if (!customBlockDataHashMap.containsKey(customBlockItemName)) {
-      return;
-    }
-    if (!e.isCancelled()) {
-      //If Basic Block
-      if (Utilities.getBasicBlockRegistry().containsKey(customBlockItemName)) {
-        customBlockManager.placeBasicCustomBlock(customBlockItemName, e.getBlockPlaced());
-      } else {
-        CustomBlock customBlock = customBlockManager
-            .placeCustomBlock(customBlockItemName, e.getBlockPlaced(), e.getPlayer().getFacing(), e.getPlayer());
-        CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
-            e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
-        Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
 
-        //Give data
-        if (Boolean.TRUE.equals(nbtItem.hasKey("extraData"))) {
-          NBTCompound extraCompound = nbtItem.getCompound("extraData");
-          if (extraCompound.hasKey("energyStorage") && customBlock instanceof PoweredBlock) {
-            ((PoweredBlock) customBlock).getEnergyStorage().setEnergyStored(extraCompound.getInteger("energyStorage"));
-          }
+    // If Basic Block (e.g. Ores)
+    if (Utilities.getBasicBlockRegistry().containsKey(customBlockItemName)) {
+      customBlockManager.placeBasicCustomBlock(customBlockItemName, e.getBlockPlaced());
+    } else {
+      // If normal Custom Block place it
+      CustomBlock customBlock = customBlockManager
+          .placeCustomBlock(customBlockItemName, e.getBlockPlaced(), e.getPlayer().getFacing(), e.getPlayer());
+      CustomBlockPlaceEvent customBlockPlaceEvent = new CustomBlockPlaceEvent(
+          e.getBlockPlaced().getLocation(), customBlockItemName, e.getBlockPlaced(), customBlock);
+      Bukkit.getPluginManager().callEvent(customBlockPlaceEvent);
+
+      // Provide custom block extra data from item NBT
+      if (Boolean.TRUE.equals(nbtItem.hasKey("extraData"))) {
+        NBTCompound extraCompound = nbtItem.getCompound("extraData");
+        if (extraCompound.hasKey("energyStorage") && customBlock instanceof PoweredBlock) {
+          ((PoweredBlock) customBlock).getEnergyStorage().setEnergyStored(extraCompound.getInteger("energyStorage"));
         }
-
       }
+
     }
   }
 
