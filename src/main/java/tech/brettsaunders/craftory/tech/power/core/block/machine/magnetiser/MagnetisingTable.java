@@ -99,6 +99,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent chunk) {
         Chunk loadedChunk = chunk.getChunk();
+        if (blockChunk == null) return;
         if (loadedChunk.getX() == blockChunk.getX() && loadedChunk.getZ() == blockChunk.getZ())
             if (framePlaced && !hasChunkLoaded) {
                 frameLocation = location.clone().add(0.5, 1.03125, 0.5);
@@ -115,6 +116,7 @@ public class MagnetisingTable extends CustomBlock implements Listener {
     @EventHandler
     public void onChunkUnload(ChunkUnloadEvent chunk) {
         Chunk loadedChunk = chunk.getChunk();
+        if (blockChunk == null) return;
         if (loadedChunk.getX() == blockChunk.getX() && loadedChunk.getZ() == blockChunk.getZ())
             if (framePlaced && hasChunkLoaded) {
                 if (itemFrame == null && (!findFrame() || !framePlaced)) return;
