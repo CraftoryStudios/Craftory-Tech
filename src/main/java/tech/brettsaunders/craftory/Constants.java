@@ -4,6 +4,8 @@
 
 package tech.brettsaunders.craftory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.bukkit.block.BlockFace;
 
 public class Constants {
@@ -39,7 +41,8 @@ public class Constants {
   public enum PoweredToolType {
     DRILL("drill"),
     HAMMER("hammer"),
-    EXCAVATOR("excavator");
+    EXCAVATOR("excavator"),
+    CHAINSAW("chainsaw");
 
     private final String name;
 
@@ -143,4 +146,7 @@ public class Constants {
     public static final String HAMMER_HIT = "minecraft:craftory.action.hammer_hit";
     public static final String HAMMER_DOUBLE_HIT = "minecraft:craftory.action.hammer_double_hit";
   }
+
+  public static final ArrayList<BlockFace> ALL_FACES = new ArrayList(Arrays.asList(BlockFace.DOWN, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH
+      ,BlockFace.UP, BlockFace.WEST));
 }

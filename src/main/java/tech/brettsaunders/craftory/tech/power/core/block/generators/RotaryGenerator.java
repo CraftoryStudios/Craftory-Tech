@@ -7,10 +7,13 @@ package tech.brettsaunders.craftory.tech.power.core.block.generators;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.NonNull;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -18,6 +21,8 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -34,9 +39,11 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
-public class RotaryGenerator extends BaseGenerator {
+public class RotaryGenerator extends BaseGenerator implements IHopperInteract {
 
+  protected static Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
   protected static final int MAX_OUTPUT = 75;
   protected static final int[] MULTIPLIERS = {1, 2, 3, 4};
   protected static final int BASE_CAPACITY = 100000;
@@ -44,6 +51,7 @@ public class RotaryGenerator extends BaseGenerator {
   private static final int SLOT = 22;
   protected static List<BlockFace> validFaces = Arrays
       .asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
+  private Chunk blockChunk;
 
   static {
     inputFaces.put(BlockFace.NORTH, Collections.singleton(SLOT));
@@ -102,6 +110,7 @@ public class RotaryGenerator extends BaseGenerator {
   @Override
   public void afterLoadUpdate() {
     super.afterLoadUpdate();
+    blockChunk = location.getChunk();
     placeWheels();
     if (modeSaved != null) {
       mode = WheelMode.valueOf(modeSaved);
@@ -257,6 +266,7 @@ public class RotaryGenerator extends BaseGenerator {
     wheel.setAI(false);
     wheel.setSilent(true);
     wheel.setMarker(true);
+    wheel.setPersistent(false);
     wheel.setHeadPose(new EulerAngle(Math.toRadians(90), Math.toRadians(180), 0));
     EntityEquipment entityEquipment = wheel.getEquipment();
     entityEquipment.setHelmet(inventoryInterface.getItem(SLOT));
@@ -418,6 +428,15 @@ public class RotaryGenerator extends BaseGenerator {
     return locations;
   }
 
+  //Fixes windmill when it is unloaded and loaded again
+  @EventHandler
+  public void chunkLoadEvent(ChunkLoadEvent chunk) {
+    Chunk loadedChunk = chunk.getChunk();
+    if (loadedChunk.getX() == blockChunk.getX() && loadedChunk.getZ() == blockChunk.getZ()) {
+      placeWheels();
+    }
+  }
+
   protected List<Location> getWheelFootprint(Location centerLoc) {
     return getLocations(centerLoc, 1, 3);
   }
@@ -462,6 +481,16 @@ public class RotaryGenerator extends BaseGenerator {
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 43, true));
     addGUIComponent(new GIndicator(inventory, runningContainer, 31));
     this.inventoryInterface = inventory;
+  }
+
+  @Override
+  public Map<BlockFace, Integer> getInputFaces() {
+    return inputFaces;
+  }
+
+  @Override
+  public Integer getOutputSlot() {
+    return SLOT;
   }
 
   private enum WheelMode {

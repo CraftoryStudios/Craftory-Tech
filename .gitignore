@@ -107,7 +107,7 @@ fabric.properties
 
 # Package Files #
 *.jar
-!oraxen-1.57.0.jar
+!libs/*.jar
 *.war
 *.nar
 *.ear
@@ -137,3 +137,7 @@ buildNumber.properties
 .settings/org.eclipse.m2e.core.prefs
 
 *.iml
+/spigotServer/*
+/libs/item-nbt-api-plugin-2.9.0-SNAPSHOT.jar
+
+*.bak

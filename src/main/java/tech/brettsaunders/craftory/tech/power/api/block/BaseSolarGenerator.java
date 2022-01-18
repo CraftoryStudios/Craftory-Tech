@@ -70,5 +70,4 @@ public class BaseSolarGenerator extends BaseGenerator {
     addGUIComponent(new GOutputConfig(inventory, sidesConfig, 23, true));
     this.inventoryInterface = inventory;
   }
-
 }

@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
@@ -34,9 +35,6 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   protected static final int INPUT_LOCATION = 21;
   protected static final int OUTPUT_LOCATION = 25;
   protected static final Map<BlockFace, Set<Integer>> inputFaces =
-      new EnumMap<>(BlockFace.class);
-
-  protected static final Map<BlockFace, Integer> outputFaces =
       new EnumMap<>(BlockFace.class);
 
   protected  Pair<String, String> currentRecipe = null;
@@ -165,7 +163,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
   }
 
   @Override
-  public Map<BlockFace, Integer> getOutputFaces() {
-    return outputFaces;
+  public Integer getOutputSlot() {
+    return OUTPUT_LOCATION;
   }
 }

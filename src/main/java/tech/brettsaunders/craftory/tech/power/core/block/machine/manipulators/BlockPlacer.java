@@ -23,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.font.Font;
@@ -161,7 +162,8 @@ public class BlockPlacer extends BaseMachine implements IHopperInteract {
   }
 
   @Override
-  public Map<BlockFace, Integer> getOutputFaces() {
-    return outputFaces;
+  public Integer getOutputSlot() {
+    return SLOT;
   }
+
 }

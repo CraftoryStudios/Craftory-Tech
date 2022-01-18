@@ -1,0 +1,63 @@
+{
+  "__comment": "Designed by BrettSaunders with Cubik Studio - https://cubik.studio",
+  "textures": {
+    "texture": "extra:item/turretConfig/turret_N"
+  },
+  "elements": [
+    {
+      "__comment": "Element",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        0.001,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#texture"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#texture"
+        }
+      }
+    }
+  ],
+  "ambientocclusion": false,
+  "gui_light": "front",
+  "display": {
+    "gui": {
+      "rotation": [
+        90,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1.2,
+        1.2,
+        1.2
+      ]
+    }
+  }
+}

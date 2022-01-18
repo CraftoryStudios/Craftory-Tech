@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/iron_axe"
+  },
+  "overrides": [
+	{"predicate": {"custom_model_data": 1021},"model": "craftory:items/tools/chainsaw/iron_chainsaw"}
+	]
+}

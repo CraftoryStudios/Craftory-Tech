@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
+import org.bukkit.Material;
 import org.bukkit.inventory.BlastingRecipe;
 import org.bukkit.inventory.CampfireRecipe;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -45,8 +46,11 @@ public class RecipeUtils {
     while (recipeIterator.hasNext()) {
       Recipe recipe = recipeIterator.next();
       if (recipe instanceof FurnaceRecipe) {
-        furnaceRecipes.put(((FurnaceRecipe) recipe).getInput().getType().toString(),
-            recipe.getResult().getType().toString());
+        String choices = ((FurnaceRecipe) recipe).getInputChoice().toString();
+        String result = recipe.getResult().getType().toString();
+        for (String choice: choices.substring(24, choices.length()-2).split(", ")) {
+          furnaceRecipes.put(choice, result);
+        }
       } else if (recipe instanceof BlastingRecipe) {
         blastingRecipes.add(recipe);
       } else if (recipe instanceof SmokingRecipe) {

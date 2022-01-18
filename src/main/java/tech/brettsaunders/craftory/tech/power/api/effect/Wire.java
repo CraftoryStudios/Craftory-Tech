@@ -87,7 +87,7 @@ public class Wire {
     if (CustomItemManager
         .matchCustomItemName(player.getInventory().getItemInMainHand(), Constants.Items.WRENCH) ||
         CustomItemManager.matchCustomItemName(player.getInventory().getItemInMainHand(),
-            Constants.Blocks.POWER_CONNECTOR)) {
+            Constants.Blocks.POWER_CONNECTOR) && start.getWorld().equals(end.getWorld())) {
       return start.distanceSquared(location) <= distanceSquared ||
           end.distanceSquared(location) <= distanceSquared;
     } else {

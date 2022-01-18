@@ -42,7 +42,7 @@ import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerConnectorMana
 import tech.brettsaunders.craftory.tech.power.core.power_grid.PowerGridManager;
 import tech.brettsaunders.craftory.tech.power.core.tools.PoweredToolManager;
 import tech.brettsaunders.craftory.utils.Log;
-import tech.brettsaunders.craftory.utils.ResourcePackEvents;
+import tech.brettsaunders.craftory.utils.ResourcepackService;
 import tech.brettsaunders.craftory.utils.Version;
 import tech.brettsaunders.craftory.world.WorldGenHandler;
 
@@ -50,8 +50,6 @@ import tech.brettsaunders.craftory.world.WorldGenHandler;
 public final class Craftory extends JavaPlugin implements Listener {
 
   public static final int SPIGOT_ID = 81151;
-  public static final String RESOURCE_PACK = "https://download.mc-packs.net/pack/7299fd24a5c0a382504b37c9d551f7876f13b097.zip";
-  public static final String HASH = "7299fd24a5c0a382504b37c9d551f7876f13b097";
   public static PowerConnectorManager powerConnectorManager;
   public static CustomBlockFactory customBlockFactory;
   public static Craftory plugin = null;
@@ -77,7 +75,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   private SentryClient sentryClient;
   private static HashSet<String> loadedPlugins = new HashSet<>();
 
-  public static final Version MAX_SUPPORTED_MC = new Version("1.17.1");
+  public static final Version MAX_SUPPORTED_MC = new Version("1.18.1");
   public static final Version MIN_SUPPORTED_MC = new Version("1.15.1");
   public static boolean isCaveAndCliffsUpdate;
   public static Version mcVersion;
@@ -104,7 +102,6 @@ public final class Craftory extends JavaPlugin implements Listener {
       return;
     }
 
-
     setupSentry();
     try {
       isLightAPIEnabled = getServer().getPluginManager().isPluginEnabled("LightAPI");
@@ -126,7 +123,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       Utilities.registerCommandsAndCompletions();
       Utilities.registerEvents();
       if (Utilities.config.getBoolean("resourcePack.forcePack")) {
-        new ResourcePackEvents();
+        new ResourcepackService();
       }
       poweredToolManager = new PoweredToolManager(); //Must be before CustomItemManager
       customBlockConfigFile = new File(getDataFolder(), "data/customBlockConfig.yml");

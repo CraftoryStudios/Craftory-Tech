@@ -7,7 +7,9 @@ package tech.brettsaunders.craftory.tech.power.core.block.generators;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -23,9 +25,11 @@ import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GTank;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
-public class GeothermalGenerator extends BaseGenerator {
+public class GeothermalGenerator extends BaseGenerator implements IHopperInteract {
 
+  protected static Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
   public static final int FUEL_SLOT = 14;
   public static final int OUT_SLOT = 16;
   /* Static Constants Protected */
@@ -128,4 +132,12 @@ public class GeothermalGenerator extends BaseGenerator {
     addGUIComponent(new GIndicator(inventory, runningContainer, 15));
     this.inventoryInterface = inventory;
   }
+
+  @Override
+  public Map<BlockFace, Integer> getInputFaces() {
+    return inputFaces;
+  }
+
+  @Override
+  public Integer getOutputSlot() {return OUT_SLOT;}
 }

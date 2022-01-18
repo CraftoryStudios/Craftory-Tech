@@ -12,5 +12,5 @@ public interface IHopperInteract {
 
   Map<BlockFace, Set<Integer>> getInputFaces();
 
-  Map<BlockFace, Integer> getOutputFaces();
+  Integer getOutputSlot();
 }

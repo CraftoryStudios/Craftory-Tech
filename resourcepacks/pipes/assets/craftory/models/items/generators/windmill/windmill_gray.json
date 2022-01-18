@@ -1,0 +1,7 @@
+{
+	"parent": "craftory:items/generators/windmill/windmill",
+		"textures": {
+		"0": "block/gray_wool",
+		"particle": "block/gray_wool"
+	}
+}

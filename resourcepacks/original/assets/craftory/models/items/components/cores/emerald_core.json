@@ -1,0 +1,7 @@
+{
+	"credit": "By BrettSaunders for the Craftory Plugin",
+	"parent": "craftory:items/components/cores/iron_core",
+	"textures": {
+		"texture": "craftory:block/powered/cores/emerald_block"
+	}
+}

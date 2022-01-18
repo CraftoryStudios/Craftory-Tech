@@ -1,0 +1,89 @@
+{
+	"credit": "By BrettSaunders for the Craftory Plugin",
+	"parent": "block/base/block_real",
+	"textures": {
+		"0": "craftory:block/ores/crystal",
+		"1": "craftory:block/ores/test",
+		"particle": "craftory:block/ores/crystal"
+	},
+	"elements": [
+		{
+			"from": [0.625, 0, 11.5625],
+			"to": [4.625, 1, 15.5625],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.625, 8, 22.5625]},
+			"faces": {
+				"north": {"uv": [12, 6, 16, 7], "rotation": 180, "texture": "#0"},
+				"east": {"uv": [12, 5, 16, 6], "texture": "#0"},
+				"south": {"uv": [12, 5, 16, 6], "texture": "#0"},
+				"west": {"uv": [12, 6, 16, 7], "texture": "#0"},
+				"up": {"uv": [8, 5, 12, 9], "texture": "#0"}
+			}
+		},
+		{
+			"from": [2.625, 0, 4.5625],
+			"to": [10.625, 5, 12.5625],
+			"shade": false,
+			"rotation": {"angle": 0, "axis": "y", "origin": [10.625, 8, 19.5625]},
+			"faces": {
+				"north": {"uv": [16, 0, 8, 5], "texture": "#0"},
+				"east": {"uv": [8, 0, 16, 5], "texture": "#0"},
+				"south": {"uv": [0, 8, 8, 13], "texture": "#0"},
+				"west": {"uv": [8, 0, 16, 5], "texture": "#0"},
+				"up": {"uv": [0, 0, 8, 8], "texture": "#0"}
+			}
+		},
+		{
+			"from": [4.625, 0, 3.5625],
+			"to": [8.625, 3, 7.5625],
+			"shade": false,
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [12.625, 8, -0.4375]},
+			"faces": {
+				"north": {"uv": [8, 9, 12, 12], "texture": "#0"},
+				"east": {"uv": [12, 11, 16, 14], "texture": "#0"},
+				"south": {"uv": [8, 12, 12, 15], "texture": "#0"},
+				"west": {"uv": [12, 12, 8, 15], "texture": "#0"},
+				"up": {"uv": [12, 7, 16, 11], "rotation": 270, "texture": "#0"}
+			}
+		},
+		{
+			"from": [4.8125, 0, -1.125],
+			"to": [8.8125, 3, 2.875],
+			"shade": false,
+			"rotation": {"angle": 45, "axis": "y", "origin": [12.8125, 8, -5.125]},
+			"faces": {
+				"north": {"uv": [8, 9, 12, 12], "texture": "#0"},
+				"east": {"uv": [12, 11, 16, 14], "texture": "#0"},
+				"south": {"uv": [8, 12, 12, 15], "texture": "#0"},
+				"west": {"uv": [12, 12, 8, 15], "texture": "#0"},
+				"up": {"uv": [12, 7, 16, 11], "rotation": 270, "texture": "#0"}
+			}
+		},
+		{
+			"from": [9.625, 0, 0.4375],
+			"to": [16.625, 3, 8.4375],
+			"shade": false,
+			"rotation": {"angle": 45, "axis": "y", "origin": [17.625, 8, 13.4375]},
+			"faces": {
+				"east": {"uv": [8, 0, 16, 3], "texture": "#0"},
+				"south": {"uv": [0, 0, 8, 3], "texture": "#0"},
+				"west": {"uv": [16, 0, 8, 3], "texture": "#0"},
+				"up": {"uv": [8, 0, 0, 8], "texture": "#0"}
+			}
+		},
+		{
+			"name": "stone",
+			"from": [0, 0, 0],
+			"to": [16, 0, 16],
+			"shade": false,
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 0, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0], "texture": "#1"},
+				"west": {"uv": [0, 0, 0, 0], "texture": "#1"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 0], "texture": "#1"}
+			}
+		}
+	]
+}

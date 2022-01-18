@@ -1,9 +1,3 @@
-<h3>Dprecation Warning</h3>
-<b>This version of Craftory is end of life, the state of the code has made progress slow, we are currently working on an updated version which will be shared open source when we can get it to an MVP stage. At that point we will divide the plugin into seperate smaller plugins to allow server owners more control and also allow other developers to build their own addons using the tools we are creating! For any questions check out our discord server.</b>
-
-<h5>DEVELOPERS: Please feel free to still submit bug fixes and version updates to this repo, as we intend to support it with community help until the new version is stable</h5>
-
-
 <div style="text-align:center"><img src="https://www.dropbox.com/s/ndlh5ctbhxnx1g2/title.gif?raw=1" /></div>
 
 ![Description](https://www.dropbox.com/s/cs66rvebp67vhmb/bannerBarDescription.png?raw=1)

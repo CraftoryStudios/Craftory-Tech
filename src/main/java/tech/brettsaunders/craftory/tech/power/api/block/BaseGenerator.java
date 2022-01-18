@@ -8,7 +8,6 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import org.bukkit.Location;
-import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
@@ -17,11 +16,10 @@ import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
-import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 import tech.brettsaunders.craftory.utils.Light;
 import tech.brettsaunders.craftory.utils.VariableContainer;
 
-public abstract class BaseGenerator extends BaseProvider implements IHopperInteract {
+public abstract class BaseGenerator extends BaseProvider {
 
 
   /* Per Object Variables Saved */

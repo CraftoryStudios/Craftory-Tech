@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import io.papermc.lib.PaperLib;
 import java.util.Set;
+import lombok.SneakyThrows;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -39,7 +41,7 @@ import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.persistence.Persistent;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IEnergyInfo;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
-import tech.brettsaunders.craftory.utils.Log;
+import tech.brettsaunders.craftory.utils.PipesHook;
 
 /** A standard powered block Contains GUI, Tickable, EnergyInfo, Location and Energy Storage */
 public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, Listener {
@@ -97,7 +99,6 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
     }
     cachedSides = new HashMap<>();
     if (cachedSidesConfig == null) {
-      Log.error("WTF cache config was null");
       cachedSidesConfig = new HashMap<>();
     }
     for (Entry<BlockFace, INTERACTABLEBLOCK> entry : cachedSidesConfig.entrySet()) {
@@ -107,6 +108,15 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
             Craftory.customBlockManager.getCustomBlock(
                 this.location.getBlock().getRelative(entry.getKey()).getLocation()));
       }
+    }
+  }
+
+  @SneakyThrows
+  @Override
+  public void blockBreak() {
+    super.blockBreak();
+    if (Bukkit.getServer().getPluginManager().getPlugin("TransportPipes")!=null && this instanceof IHopperInteract) {
+      PipesHook.removePipeContainer(location);
     }
   }
 
@@ -129,6 +139,10 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         }
         inventoryInterface.setItem(outputLocations.get(i), outputSlots.get(i));
       }
+    }
+
+    if (Bukkit.getServer().getPluginManager().getPlugin("TransportPipes")!=null && this instanceof IHopperInteract) {
+      PipesHook.addPipeContainer(location, ((IHopperInteract) this).getInputFaces(), outputLocations, inventoryInterface);
     }
   }
 
@@ -210,24 +224,21 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
         });
 
     // Hopper Output
-    outputFaces.forEach(
-        (face, slot) -> {
-          if (cachedSidesConfig.containsKey(face)
-              && cachedSidesConfig.get(face).equals(INTERACTABLEBLOCK.HOPPER_OUT)) {
-            ItemStack stack = inventoryInterface.getItem(slot);
-            if (stack != null) {
-              ItemStack toMove = stack.clone();
-              toMove.setAmount(1);
-              Inventory hopperInventory =
-                  ((Hopper) location.getBlock().getRelative(face).getState()).getInventory();
-              HashMap<Integer, ItemStack> failedItems = hopperInventory.addItem(toMove);
-              if (failedItems.isEmpty()) {
-                stack.setAmount(stack.getAmount() - 1);
-                inventoryInterface.setItem(slot, stack);
-              }
-            }
+      if (cachedSidesConfig.containsKey(BlockFace.DOWN)
+          && cachedSidesConfig.get(BlockFace.DOWN).equals(INTERACTABLEBLOCK.HOPPER_OUT)) {
+        ItemStack stack = inventoryInterface.getItem(((IHopperInteract) this).getOutputSlot());
+        if (stack != null) {
+          ItemStack toMove = stack.clone();
+          toMove.setAmount(1);
+          Inventory hopperInventory =
+              ((Hopper) location.getBlock().getRelative(BlockFace.DOWN).getState()).getInventory();
+          HashMap<Integer, ItemStack> failedItems = hopperInventory.addItem(toMove);
+          if (failedItems.isEmpty()) {
+            stack.setAmount(stack.getAmount() - 1);
+            inventoryInterface.setItem(((IHopperInteract) this).getOutputSlot(), stack);
           }
-        });
+        }
+      }
     // Set inventory to equal slots
   }
 

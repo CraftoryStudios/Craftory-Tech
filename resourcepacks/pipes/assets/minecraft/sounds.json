@@ -1,0 +1,13 @@
+{
+  "craftory.buzz": {
+    "sounds": [
+      {
+        "name": "buzz"
+      }
+    ],
+    "subtitle": "buzz"
+  },
+  "craftory.power.machine.default": {"sounds": [{"name": "power/machine/machine1"}],"subtitle": "machine"},
+  "craftory.action.hammer_hit": {"sounds": [{"name":"action/hammer_hit"}],"subtitle": "hammer hit"},
+  "craftory.action.hammer_double_hit": {"sounds": [{"name":"action/hammer_double_hit"}],"subtitle": "hammer_double_hit"}
+}

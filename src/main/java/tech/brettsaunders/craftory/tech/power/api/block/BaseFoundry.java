@@ -38,9 +38,6 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   protected static final int OUTPUT_LOCATION = 25;
   private static final Map<BlockFace, Set<Integer>> inputFaces =
       new EnumMap<>(BlockFace.class);
-
-  private static final Map<BlockFace, Integer> outputFaces =
-      new EnumMap<>(BlockFace.class);
   /* Per Object Variables Saved */
 
   /* Per Object Variables Not-Saved */
@@ -212,7 +209,7 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   }
 
   @Override
-  public Map<BlockFace, Integer> getOutputFaces() {
-    return outputFaces;
+  public Integer getOutputSlot() {
+    return OUTPUT_LOCATION;
   }
 }

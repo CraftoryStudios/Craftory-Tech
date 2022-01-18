@@ -6,7 +6,9 @@ package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.Map;
 import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,9 +23,11 @@ import tech.brettsaunders.craftory.tech.power.api.block.BaseGenerator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GOutputConfig;
+import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
-public class SolidFuelGenerator extends BaseGenerator {
+public class SolidFuelGenerator extends BaseGenerator implements IHopperInteract {
 
+  protected static Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
   public static final int FUEL_SLOT = 22;
   /* Static Constants Protected */
   protected static final int CAPACITY_BASE = 40000;
@@ -131,5 +135,13 @@ public class SolidFuelGenerator extends BaseGenerator {
       inventoryInterface.setItem(FUEL_SLOT, fuelItem);
     }
   }
+
+  @Override
+  public Map<BlockFace, Integer> getInputFaces() {
+    return inputFaces;
+  }
+
+  @Override
+  public Integer getOutputSlot() {return FUEL_SLOT;}
 
 }
