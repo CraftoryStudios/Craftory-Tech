@@ -102,7 +102,9 @@ public final class Craftory extends JavaPlugin implements Listener {
       return;
     }
 
-    setupSentry();
+    if (Utilities.config.getBoolean("error_reporting.enabled")) {
+      setupSentry();
+    }
     try {
       isLightAPIEnabled = getServer().getPluginManager().isPluginEnabled("LightAPI");
 

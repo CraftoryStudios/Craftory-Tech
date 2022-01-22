@@ -9,6 +9,8 @@ import java.util.Deque;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Level;
+
+import io.sentry.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import tech.brettsaunders.craftory.Utilities;
@@ -20,12 +22,9 @@ public class SentryLogging {
   }
 
   public static void sentryLog(Throwable e) {
+    if (!Utilities.config.getBoolean("error_reporting.enabled")) return;
 
     boolean isCraftory = false;
-
-    if (Utilities.config.getString("error_reporting.username").equalsIgnoreCase("debug")) {
-      return;
-    }
 
     for (StackTraceElement line : e.getStackTrace()) {
       if (line.getClassName().contains("craftory"))
