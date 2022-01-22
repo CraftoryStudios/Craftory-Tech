@@ -22,7 +22,7 @@ public class SentryLogging {
   }
 
   public static void sentryLog(Throwable e) {
-    if (!Utilities.config.getBoolean("error_reporting.enabled")) return;
+    if (!Utilities.isSentryEnabled()) return;
 
     boolean isCraftory = false;
 

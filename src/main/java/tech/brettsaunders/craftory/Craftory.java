@@ -105,7 +105,7 @@ public final class Craftory extends JavaPlugin implements Listener {
     Utilities.createDataPath();
     Utilities.createConfigs();
 
-    if (Utilities.config.getBoolean("error_reporting.enabled")) {
+    if (Utilities.isSentryEnabled()) {
       setupSentry();
     }
     try {

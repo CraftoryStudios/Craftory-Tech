@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 
 
@@ -38,12 +39,13 @@ public class CustomBlockPlaceEvent extends Event implements Cancellable {
     this.blockPlaced = block;
     this.customBlock = customBlock;
 
-    Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
-    .setCategory("customPlaceEvent")
-    .setTimestamp(new Date(System.currentTimeMillis()))
-    .setMessage("Placed Custom Block "+name + " at location: "+location)
-    .setType(Type.DEFAULT)
-    .build());
+    if (Utilities.isSentryEnabled())
+      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+      .setCategory("customPlaceEvent")
+      .setTimestamp(new Date(System.currentTimeMillis()))
+      .setMessage("Placed Custom Block "+name + " at location: "+location)
+      .setType(Type.DEFAULT)
+      .build());
   }
 
   public static HandlerList getHandlerList() {

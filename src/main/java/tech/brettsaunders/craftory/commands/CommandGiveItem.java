@@ -43,12 +43,13 @@ public class CommandGiveItem implements CommandExecutor, TabCompleter {
       }
       giveCustomItem(amount, args[1], args[2], sender);
 
-      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
-          .setCategory("command")
-          .setTimestamp(new Date(System.currentTimeMillis()))
-          .setMessage("Player "+sender.getName() + " used give item command, spawn "+ args[2])
-          .setType(Type.DEFAULT)
-          .build());
+      if (Utilities.isSentryEnabled())
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+            .setCategory("command")
+            .setTimestamp(new Date(System.currentTimeMillis()))
+            .setMessage("Player "+sender.getName() + " used give item command, spawn "+ args[2])
+            .setType(Type.DEFAULT)
+            .build());
     } else {
       Utilities.msg(sender, Utilities.getTranslation("GiveCommandUsage"));
     }
