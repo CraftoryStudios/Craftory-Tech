@@ -102,6 +102,9 @@ public final class Craftory extends JavaPlugin implements Listener {
       return;
     }
 
+    Utilities.createDataPath();
+    Utilities.createConfigs();
+
     if (Utilities.config.getBoolean("error_reporting.enabled")) {
       setupSentry();
     }
@@ -113,8 +116,6 @@ public final class Craftory extends JavaPlugin implements Listener {
       thisVersionCode = generateVersionCode();
       this.getServer().getPluginManager().registerEvents(this, this);
 
-      Utilities.createDataPath();
-      Utilities.createConfigs();
       Utilities.getTranslations();
       tickManager = new CustomBlockTickManager();
       customBlockFactory = new CustomBlockFactory();
