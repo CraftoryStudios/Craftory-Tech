@@ -52,6 +52,10 @@ public abstract class BaseProvider extends PoweredBlock implements IEnergyProvid
     if (isBlockPowered()) {
       return;
     }
+    // If block errors, reset cache
+    if (cachedSides == null) {
+      cachedSides = new HashMap<>();
+    }
     for(Entry<BlockFace, CustomBlock> entry: cachedSides.entrySet()) {
       BlockFace blockFace = entry.getKey();
       CustomBlock customBlock = entry.getValue();

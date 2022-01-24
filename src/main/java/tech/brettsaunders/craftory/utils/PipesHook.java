@@ -4,6 +4,8 @@ import de.robotricker.transportpipes.api.TransportPipesAPI;
 import de.robotricker.transportpipes.location.BlockLocation;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
+
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
@@ -12,7 +14,7 @@ import tech.brettsaunders.craftory.tech.power.api.pipes.PipeContainer;
 
 public class PipesHook {
 
-  public static void addPipeContainer(Location location, Map<BlockFace, Integer> inputFace, ArrayList<Integer> outputLocations, Inventory inventory) {
+  public static void addPipeContainer(Location location, Map<BlockFace, Set<Integer>> inputFace, ArrayList<Integer> outputLocations, Inventory inventory) {
     // Register all pipe containers on first tick when Transport Pipes enabled
       Tasks.runTaskLater(() -> {
         try {

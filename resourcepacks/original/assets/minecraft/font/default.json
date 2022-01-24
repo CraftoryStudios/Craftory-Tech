@@ -91,6 +91,15 @@
       "type": "bitmap"
     },
 	{
+	  "file": "extra:font/gui/autocrafter.png",
+	  "chars": [
+		"\u1a11"
+	  ],
+	  "height": 170,
+	  "ascent": 47,
+	  "type": "bitmap"
+    },
+	{
 		"type": "bitmap",
 		"file": "space:font/space_split.png",
 		"ascent": -32768,

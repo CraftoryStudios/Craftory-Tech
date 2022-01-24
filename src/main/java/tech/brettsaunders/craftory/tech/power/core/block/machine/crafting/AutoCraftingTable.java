@@ -30,6 +30,8 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
+import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Constants.INTERACTABLEBLOCK;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
@@ -44,49 +46,57 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 public class AutoCraftingTable extends BaseMachine implements Listener, IHopperInteract {
 
   private static final int MAX_RECEIVE = 10000;
-  private static final int ENERGY_PER_ACTION = 250;
-  private static final int OUTPUT_SLOT = 34;
+  private static final int OUTPUT_SLOT = 25;
   protected static final Map<BlockFace, Set<Integer>> inputFaces = new EnumMap<>(BlockFace.class);
   protected static final Map<BlockFace, Integer> outputFaces = new EnumMap<>(BlockFace.class);
-  private static final List<Integer> gridSlots = Arrays.asList(12, 13, 14, 21, 22, 23, 30, 31, 32);
+  private static final List<Integer> gridSlots = Arrays.asList(3, 4, 5, 12, 13, 14, 21, 22, 23);
+  private static final Set<Integer> inputSlots = new HashSet<>(Arrays.asList(39, 40, 41, 42, 43, 48, 49, 50, 51, 52));
 
   // Crafting
   private Recipe recipe;
-  private final List<RecipeChoice> necessaryIngredients;
+  private Map<RecipeChoice, Integer> ingredients;
 
   static {
-    Set<Integer> gridSet = new HashSet<>(gridSlots);
-    inputFaces.put(BlockFace.UP, gridSet);
-    inputFaces.put(BlockFace.EAST, gridSet);
-    inputFaces.put(BlockFace.WEST, gridSet);
-    inputFaces.put(BlockFace.NORTH, gridSet);
-    inputFaces.put(BlockFace.SOUTH, gridSet);
+    inputFaces.put(BlockFace.UP, inputSlots);
+    inputFaces.put(BlockFace.EAST, inputSlots);
+    inputFaces.put(BlockFace.WEST, inputSlots);
+    inputFaces.put(BlockFace.NORTH, inputSlots);
+    inputFaces.put(BlockFace.SOUTH, inputSlots);
     outputFaces.put(BlockFace.DOWN, OUTPUT_SLOT);
   }
 
   public AutoCraftingTable(Location location, Player player) {
     super(location, Blocks.AUTO_CRAFTER, (byte) 0,MAX_RECEIVE);
-    necessaryIngredients = new ArrayList<>();
     setup();
-    Events.registerEvents(this);
     energyStorage = new EnergyStorage(40000);
   }
 
   public AutoCraftingTable() {
     super();
-    necessaryIngredients = new ArrayList<>();
     setup();
-    checkRecipe(new ArrayList<>(), new ItemStack(Material.AIR), true);
   }
 
   private void setup() {
+    ingredients = new HashMap<>();
     outputLocations = new ArrayList<>();
     outputLocations.add(0, OUTPUT_SLOT);
     inputLocations =  new ArrayList<>(gridSlots);
     List<Integer> intractable = new ArrayList<>(gridSlots);
     intractable.add(OUTPUT_SLOT);
+    intractable.addAll(inputSlots);
     interactableSlots = new HashSet<>(intractable);
+    Events.registerEvents(this);
   }
+
+  @Override
+  public void afterLoadUpdate() {
+    super.afterLoadUpdate();
+    checkRecipe(new ArrayList<>(), new ItemStack(Material.AIR), true);
+  }
+
+  /**
+   * Section deals with calculating the recipe
+   */
 
   @EventHandler
   public void inventoryItemMove(InventoryClickEvent e) {
@@ -94,7 +104,7 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
 
     // Check if recipe changed
     if (gridSlots.contains(e.getRawSlot()) && e.getResult() == Result.ALLOW) {
-      checkRecipe(Arrays.asList(e.getRawSlot()), e.getCursor(), false);
+      checkRecipe(List.of(e.getRawSlot()), e.getCursor(), false);
     }
   }
 
@@ -112,18 +122,8 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
     }
   }
 
-
-
-  @Override
-  public void setupGUI() {
-    Inventory inventory = createInterfaceInventory(displayName, Font.AUTOCRAFTER.label + "");
-    addGUIComponent(new GBattery(inventory, energyStorage));
-    addGUIComponent(new GIndicator(inventory, runningContainer, 7));
-    this.inventoryInterface = inventory;
-  }
-
-  public void checkRecipe(List<Integer> slots, ItemStack itemStack, boolean startUp) {
-    ItemStack[] items = getGridItems(false);
+  private void checkRecipe(List<Integer> slots, ItemStack itemStack, boolean startUp) {
+    ItemStack[] items = getCraftingGridItems(false);
 
     if (!startUp) {
       for (Integer slot : slots) {
@@ -133,17 +133,27 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
     }
 
     recipe = Bukkit.getCraftingRecipe(items, location.getWorld());
+    if (recipe == null) {
+      inventoryInterface.setItem(7, new ItemStack(Material.AIR));
+    } else {
+      ItemStack result = recipe.getResult();
+      ItemMeta meta = result.getItemMeta();
+      meta.setLore(List.of("Consumes " + Constants.Energy.ENERGY_PER_CRAFT + " RE per craft"));
+      result.setItemMeta(meta);
+      inventoryInterface.setItem(7, result);
+    }
     updateIngredients();
   }
 
-  private ItemStack[] getGridItems(boolean clone) {
+  private ItemStack[] getCraftingGridItems(boolean clone) {
     ItemStack[] items = new ItemStack[9];
     for (int i = 0; i < gridSlots.size(); i++) {
-      if (inventoryInterface.getItem(gridSlots.get(i)) != null) {
+      ItemStack item = inventoryInterface.getItem(gridSlots.get(i));
+      if (item != null) {
         if (clone) {
-          items[i] = inventoryInterface.getItem(gridSlots.get(i)).clone();
+          items[i] = item.clone();
         } else {
-          items[i] = inventoryInterface.getItem(gridSlots.get(i));
+          items[i] = item;
         }
       } else {
         items[i] = null;
@@ -152,51 +162,76 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
     return items;
   }
 
-  private  void updateIngredients(){
+  private void updateIngredients(){
     // Collect needed ingredients from recipe
-    necessaryIngredients.clear();
+    ingredients.clear();
     if (recipe instanceof ShapelessRecipe shapelessRecipe) {
-      necessaryIngredients.addAll(shapelessRecipe.getChoiceList());
+      for (RecipeChoice choice : shapelessRecipe.getChoiceList()) {
+        if (choice != null)
+          ingredients.put(choice, ingredients.getOrDefault(choice, 0) + 1);
+      }
     } else if (recipe instanceof ShapedRecipe shapedRecipe) {
-      Map<Character, Integer> charCounts = new HashMap<>();
       for (String row : shapedRecipe.getShape()) {
         for (char c : row.toCharArray()) {
-          charCounts.put(c, charCounts.getOrDefault(c, 0) + 1);
-        }
-      }
-      for (Character c : charCounts.keySet()) {
-        RecipeChoice ingredientChoice = shapedRecipe.getChoiceMap().get(c);
-        if (ingredientChoice != null) {
-          necessaryIngredients.addAll(Collections.nCopies(charCounts.get(c), ingredientChoice));
+          RecipeChoice choice = shapedRecipe.getChoiceMap().get(c);
+          if (choice != null)
+            ingredients.put(choice, ingredients.getOrDefault(choice, 0) + 1);
         }
       }
     }
   }
 
+  /**
+   * Section deals with the GUI
+   */
+
+  @Override
+  public void setupGUI() {
+    Inventory inventory = createInterfaceInventory(displayName, Font.AUTOCRAFTER.label + "");
+    addGUIComponent(new GBattery(inventory, energyStorage));
+    this.inventoryInterface = inventory;
+  }
+
+  /**
+   * Section deals with crafting the item from ingredients
+   */
+
   @Ticking(ticks = 20)
   public void autoCraft() {
     if (recipe != null) {
-      boolean hasEnergy = energyStorage.getEnergyStored() >= ENERGY_PER_ACTION;
+      boolean hasEnergy = energyStorage.getEnergyStored() >= Constants.Energy.ENERGY_PER_CRAFT;
       final ItemStack outputItem = inventoryInterface.getItem(OUTPUT_SLOT);
-      boolean hasResultSpace = (outputItem == null || outputItem.getAmount() + recipe.getResult().getAmount() <= outputItem.getMaxStackSize())
+      boolean hasResultSpace = true;
+      if (outputItem != null && outputItem.getType() != Material.AIR) {
+        hasResultSpace = (outputItem.getAmount() + recipe.getResult().getAmount() <= outputItem.getMaxStackSize())
           && outputItem.getType() == recipe.getResult().getType();
+      };
 
       if (hasEnergy && hasResultSpace && hasIngredients()) {
           runningContainer.setT(true);
-          final ItemStack item = outputItem;
-          if (item == null || item.getType() == Material.AIR) {
+        if (outputItem == null || outputItem.getType() == Material.AIR) {
             inventoryInterface.setItem(OUTPUT_SLOT, recipe.getResult());
-          } else if (item.getType() == recipe.getResult().getType() && item.getAmount() < item.getMaxStackSize()) {
-            item.setAmount(Math.min(item.getAmount() + recipe.getResult().getAmount(), item.getMaxStackSize()));
+          } else if (outputItem.getType() == recipe.getResult().getType() && outputItem.getAmount() < outputItem.getMaxStackSize()) {
+            outputItem.setAmount(Math.min(outputItem.getAmount() + recipe.getResult().getAmount(), outputItem.getMaxStackSize()));
           }
-          for (Integer slot : gridSlots) {
-            ItemStack stack = inventoryInterface.getItem(slot);
-            if (stack != null) {
-              stack.setAmount(stack.getAmount() - 1);
-              inventoryInterface.setItem(slot, stack);
+          // Consume ingredients
+          for (Map.Entry<RecipeChoice, Integer> entry : ingredients.entrySet()) {
+            int amount = entry.getValue();
+            for (Integer slot : inputSlots) {
+              ItemStack stack = inventoryInterface.getItem(slot);
+              if (stack != null && entry.getKey().test(stack)) {
+                int reduceAmount = Math.min(stack.getAmount(), amount);
+                amount -= reduceAmount;
+                stack.setAmount(stack.getAmount() - reduceAmount);
+                inventoryInterface.setItem(slot, stack);
+              }
+              if (amount <= 0) {
+                break;
+              }
             }
+
           }
-          energyStorage.modifyEnergyStored(-ENERGY_PER_ACTION);
+          energyStorage.modifyEnergyStored(-Constants.Energy.ENERGY_PER_CRAFT);
       } else {
         runningContainer.setT(false);
       }
@@ -206,46 +241,36 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
   }
 
   private boolean hasIngredients() {
-    if (necessaryIngredients.size() == 0) return false;
+    if (ingredients.size() == 0) return false;
 
-    if (recipe instanceof ShapedRecipe) {
-      ItemStack[] items = getGridItems(false);
-      for (int i = 0; i < necessaryIngredients.size(); i++) {
-        if (!necessaryIngredients.get(i).test(items[i])) {
-          return false;
+    for (Map.Entry<RecipeChoice, Integer> entry : ingredients.entrySet()) {
+      int amount = 0;
+      for (Integer slot : inputSlots) {
+        ItemStack slotItem = inventoryInterface.getItem(slot);
+        if (slotItem != null && entry.getKey().test(slotItem)) {
+          amount += slotItem.getAmount();
+        }
+        if (amount >= entry.getValue()) {
+          break;
         }
       }
-      return true;
-    } else {
-      List<ItemStack> items = Arrays.asList(getGridItems(true));
-      int neededIngredientsCount = necessaryIngredients.size();
-      for (RecipeChoice neededIngredient : necessaryIngredients) {
-        for (int i = 0; i < items.size(); i++) {
-          if (neededIngredient.test(items.get(i))) {
-            if (items.get(i).getAmount() > 1) {
-              items.get(i).setAmount(items.get(i).getAmount() - 1);
-            } else {
-              items.remove(i);
-            }
-            neededIngredientsCount--;
-            break;
-          }
-        }
+      if (amount < entry.getValue()) {
+        return false;
       }
-      return neededIngredientsCount == 0;
     }
+    return true;
   }
+
+  /**
+   * Section deals with item transport
+   */
 
   @Override
   public void processHoppers() {
-    if (!(this instanceof IHopperInteract)) {
-      return;
-    }
     if (inventoryInterface == null) {
       return;
     }
     Map<BlockFace, Set<Integer>> inputFaces = ((IHopperInteract) this).getInputFaces();
-    Map<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
 
     // Hopper Input
     inputFaces.forEach(
@@ -267,8 +292,14 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
                   currentSlot = slot;
                   slotStack = inventoryInterface.getItem(slot);
 
-                  // ADDED fro auto crafting
                   if (slotStack == null || slotStack.getType() == Material.AIR) {
+                    for (ItemStack hopperItem : hopperItems) {
+                      if (hopperItem == null) continue;
+                      inventoryInterface.setItem(slot, hopperItem);
+                      inventoryInterface.getItem(slot).setAmount(1);
+                      hopperItem.setAmount(hopperItem.getAmount() - 1);
+                      break outerloop;
+                    }
                     continue;
                   }
 
@@ -293,26 +324,22 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
             }
           }
         });
-
     // Hopper Output
-    outputFaces.forEach(
-        (face, slot) -> {
-          if (cachedSidesConfig.containsKey(face)
-              && cachedSidesConfig.get(face).equals(INTERACTABLEBLOCK.HOPPER_OUT)) {
-            ItemStack stack = inventoryInterface.getItem(slot);
-            if (stack != null) {
-              ItemStack toMove = stack.clone();
-              toMove.setAmount(1);
-              Inventory hopperInventory =
-                  ((Hopper) location.getBlock().getRelative(face).getState()).getInventory();
-              HashMap<Integer, ItemStack> failedItems = hopperInventory.addItem(toMove);
-              if (failedItems.isEmpty()) {
-                stack.setAmount(stack.getAmount() - 1);
-                inventoryInterface.setItem(slot, stack);
-              }
-            }
-          }
-        });
+    if (cachedSidesConfig.containsKey(BlockFace.DOWN)
+            && cachedSidesConfig.get(BlockFace.DOWN).equals(INTERACTABLEBLOCK.HOPPER_OUT)) {
+      ItemStack stack = inventoryInterface.getItem(((IHopperInteract) this).getOutputSlot());
+      if (stack != null) {
+        ItemStack toMove = stack.clone();
+        toMove.setAmount(1);
+        Inventory hopperInventory =
+                ((Hopper) location.getBlock().getRelative(BlockFace.DOWN).getState()).getInventory();
+        HashMap<Integer, ItemStack> failedItems = hopperInventory.addItem(toMove);
+        if (failedItems.isEmpty()) {
+          stack.setAmount(stack.getAmount() - 1);
+          inventoryInterface.setItem(((IHopperInteract) this).getOutputSlot(), stack);
+        }
+      }
+    }
   }
 
   @Override
@@ -349,7 +376,7 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
   }
 
   @Override
-  public Map<BlockFace, Integer> getOutputFaces() {
-    return outputFaces;
+  public Integer getOutputSlot() {
+    return OUTPUT_SLOT;
   }
 }

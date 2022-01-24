@@ -8,6 +8,8 @@ import de.robotricker.transportpipes.location.TPDirection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,11 +20,11 @@ import org.bukkit.inventory.ItemStack;
 public class PipeContainer implements TransportPipesContainer {
 
   protected final Location location;
-  protected final Map<BlockFace, Integer> inputFaces;
+  protected final Map<BlockFace, Set<Integer>> inputFaces;
   protected final List<Integer> outputSlots;
   protected final Inventory cachedInv;
 
-  public PipeContainer(Location location, Map<BlockFace, Integer> inputFaces, List<Integer> outputSlots, Inventory inventory) {
+  public PipeContainer(Location location, Map<BlockFace, Set<Integer>> inputFaces, List<Integer> outputSlots, Inventory inventory) {
     this.location = location;
     this.inputFaces = inputFaces;
     this.outputSlots = outputSlots;
@@ -67,21 +69,29 @@ public class PipeContainer implements TransportPipesContainer {
       return null;
     }
 
-    Integer i = inputFaces.get(insertDirection.getBlockFace());
-    if (spaceForItem(cachedInv.getItem(i), insertion) > 0) {
-      DuctInsertEvent insertEvent = new DuctInsertEvent(cachedInv, insertion);
-      Bukkit.getServer().getPluginManager().callEvent(insertEvent);
-      ItemStack item = cachedInv.getItem(i);
-      if (item == null) {
-        cachedInv.setItem(i, insertion);
-        return null;
+    Set<Integer> slots = inputFaces.get(insertDirection.getBlockFace());
+    for (Integer slot : slots) {
+      if (spaceForItem(cachedInv.getItem(slot), insertion) > 0) {
+        return addItem(insertion, slot);
       }
-      int overflow = (item.getAmount() + insertion.getAmount()) - item.getMaxStackSize();
-      item.setAmount(Math.min(item.getAmount() + insertion.getAmount(), item.getMaxStackSize()));
-      if (overflow > 0) {
-        insertion.setAmount(overflow);
-        return insertion;
-      }
+    }
+
+    return null;
+  }
+
+  private ItemStack addItem(ItemStack insertion, int slot) {
+    DuctInsertEvent insertEvent = new DuctInsertEvent(cachedInv, insertion);
+    Bukkit.getServer().getPluginManager().callEvent(insertEvent);
+    ItemStack item = cachedInv.getItem(slot);
+    if (item == null) {
+      cachedInv.setItem(slot, insertion);
+      return null;
+    }
+    int overflow = (item.getAmount() + insertion.getAmount()) - item.getMaxStackSize();
+    item.setAmount(Math.min(item.getAmount() + insertion.getAmount(), item.getMaxStackSize()));
+    if (overflow > 0) {
+      insertion.setAmount(overflow);
+      return insertion;
     }
     return null;
   }
@@ -93,12 +103,14 @@ public class PipeContainer implements TransportPipesContainer {
     if (!inputFaces.containsKey(insertDirection.getBlockFace())) {
       return 0;
     }
-    Integer i = inputFaces.get(insertDirection.getBlockFace());
-    ItemStack item = cachedInv.getItem(i);
-    if (item == null || item.getType() == Material.AIR) {
-      space += insertion.getMaxStackSize();
-    } else if (item.isSimilar(insertion) && item.getAmount() < item.getMaxStackSize()) {
-      space += item.getMaxStackSize() - item.getAmount();
+    Set<Integer> slots = inputFaces.get(insertDirection.getBlockFace());
+    for (Integer slot : slots) {
+      ItemStack item = cachedInv.getItem(slot);
+      if (item == null || item.getType() == Material.AIR) {
+        space += insertion.getMaxStackSize();
+      } else if (item.isSimilar(insertion) && item.getAmount() < item.getMaxStackSize()) {
+        space += item.getMaxStackSize() - item.getAmount();
+      }
     }
     return space;
   }

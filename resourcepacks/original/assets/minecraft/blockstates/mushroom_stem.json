@@ -51,9 +51,9 @@
 		{"when":{"west":false,"up":false,"south":true,"north":true,"east":false,"down":true},"apply":{"model":"craftory:block/powered/manipulator/block_placer_south"}},
 		{"when":{"west":true,"up":false,"south":true,"north":true,"east":false,"down":true},"apply":{"model":"craftory:block/powered/manipulator/block_placer_west"}},
 		{"when":{"west":false,"up":true,"south":true,"north":true,"east":false,"down":true},"apply":{"model":"craftory:block/powered/manipulator/block_placer_east"}},
+		{"when":{"west":true,"up":false,"south":false,"north":false,"east":true,"down":true},"apply":{"model":"craftory:block/powered/autocrafter"}},
 		
 		{"when":{"west":false,"up":false,"south":false,"north":false,"east":true,"down":true},"apply":{"model":"block/original/mushroom_stem_true"}},
-		{"when":{"west":true,"up":false,"south":false,"north":false,"east":true,"down":true},"apply":{"model":"block/original/mushroom_stem_true"}},
 		{"when":{"west":false,"up":true,"south":false,"north":false,"east":true,"down":true},"apply":{"model":"block/original/mushroom_stem_true"}},
 		{"when":{"west":true,"up":true,"south":false,"north":false,"east":true,"down":true},"apply":{"model":"block/original/mushroom_stem_true"}},
 		{"when":{"west":false,"up":false,"south":true,"north":false,"east":true,"down":true},"apply":{"model":"block/original/mushroom_stem_true"}},

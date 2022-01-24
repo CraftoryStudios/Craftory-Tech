@@ -4,12 +4,8 @@
 
 package tech.brettsaunders.craftory.tech.power.core.block.generators;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -29,7 +25,8 @@ import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
 public class GeothermalGenerator extends BaseGenerator implements IHopperInteract {
 
-  protected static Map<BlockFace, Integer> inputFaces = new EnumMap<>(BlockFace.class);
+  protected static Map<BlockFace, Set<Integer>> inputFaces = new EnumMap<>(BlockFace.class);
+  protected static Map<BlockFace, Integer> outputFaces = new EnumMap<>(BlockFace.class);
   public static final int FUEL_SLOT = 14;
   public static final int OUT_SLOT = 16;
   /* Static Constants Protected */
@@ -134,7 +131,7 @@ public class GeothermalGenerator extends BaseGenerator implements IHopperInterac
   }
 
   @Override
-  public Map<BlockFace, Integer> getInputFaces() {
+  public Map<BlockFace, Set<Integer>> getInputFaces() {
     return inputFaces;
   }
 

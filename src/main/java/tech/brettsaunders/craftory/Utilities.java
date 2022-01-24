@@ -153,6 +153,9 @@ public class Utilities {
     config.addDefault("ore.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
     config.addDefault("crafting.blackListedWorlds", Collections.singletonList("exampleBlacklistedWorld"));
     config.addDefault("error_reporting.username", "");
+
+    // Auto Crafting Table
+    config.addDefault("autocrafting.ENERGY_PER_CRAFT", 350);
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();

@@ -174,7 +174,6 @@ public abstract class PoweredBlock extends BlockGUI implements IEnergyInfo, List
       return;
     }
     Map<BlockFace, Set<Integer>> inputFaces = ((IHopperInteract) this).getInputFaces();
-    Map<BlockFace, Integer> outputFaces = ((IHopperInteract) this).getOutputFaces();
 
     // Hopper Input
     inputFaces.forEach(

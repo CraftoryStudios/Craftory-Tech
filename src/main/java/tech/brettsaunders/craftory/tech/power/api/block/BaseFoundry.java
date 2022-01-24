@@ -38,9 +38,6 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
   protected static final int OUTPUT_LOCATION = 25;
   private static final Map<BlockFace, Set<Integer>> inputFaces =
       new EnumMap<>(BlockFace.class);
-  /* Per Object Variables Saved */
-
-  /* Per Object Variables Not-Saved */
 
   private  CustomMachineRecipe currentRecipe = null;
 
@@ -50,8 +47,6 @@ public class BaseFoundry extends BaseMachine implements IHopperInteract {
     inputFaces.put(BlockFace.SOUTH, Collections.singleton(INPUT_LOCATION2));
     inputFaces.put(BlockFace.WEST, Collections.singleton(INPUT_LOCATION1));
     inputFaces.put(BlockFace.UP, Collections.singleton(INPUT_LOCATION1));
-
-    outputFaces.put(BlockFace.DOWN, OUTPUT_LOCATION);
   }
 
 

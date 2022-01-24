@@ -46,8 +46,6 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     inputFaces.put(BlockFace.SOUTH, Collections.singleton(INPUT_LOCATION));
     inputFaces.put(BlockFace.WEST, Collections.singleton(INPUT_LOCATION));
     inputFaces.put(BlockFace.UP, Collections.singleton(INPUT_LOCATION));
-
-    outputFaces.put(BlockFace.DOWN, OUTPUT_LOCATION);
   }
 
   public BaseOneToOneMachine(Location location, String blockName, byte level, int maxRecieve) {
