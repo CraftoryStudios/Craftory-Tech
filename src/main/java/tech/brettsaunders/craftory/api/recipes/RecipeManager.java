@@ -219,6 +219,7 @@ public class RecipeManager implements Listener {
             }
           }
           Bukkit.getServer().addRecipe(shapedRecipe);
+          RecipeUtils.addCraftingRecipe(shapedRecipe);
           customRecipes.put(recipe, customItemsInSlots);
         } catch (Exception e) {
           Log.error("RECIPE BROKEN: " + recipe + "  " + result.getType().toString());

@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
@@ -101,6 +102,12 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
   @EventHandler
   public void inventoryItemMove(InventoryClickEvent e) {
     if (!e.getInventory().equals(inventoryInterface)) return;
+
+    // Disable shift clicking items into crafting slots
+    if (e.getClick().isShiftClick() && gridSlots.contains(e.getSlot())) {
+      e.setCancelled(true);
+      return;
+    }
 
     // Check if recipe changed
     if (gridSlots.contains(e.getRawSlot()) && e.getResult() == Result.ALLOW) {

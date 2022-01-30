@@ -5,6 +5,8 @@
 package tech.brettsaunders.craftory.tech.power.api.block;
 
 import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
@@ -23,8 +25,8 @@ public class BaseElectricFurnace extends BaseOneToOneMachine {
   }
 
   @Override
-  protected HashMap<String, String> getRecipes() {
-    return new HashMap<>(RecipeUtils.getFurnaceRecipes());
+  protected Map<String, String> getRecipes() {
+    return new HashMap<>(RecipeUtils.getFurnaceRecipesExtracted());
   }
 
 }

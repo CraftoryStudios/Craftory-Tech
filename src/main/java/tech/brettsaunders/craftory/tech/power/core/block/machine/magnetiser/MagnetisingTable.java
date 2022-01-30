@@ -5,6 +5,7 @@
 package tech.brettsaunders.craftory.tech.power.core.block.machine.magnetiser;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,7 +40,7 @@ import tech.brettsaunders.craftory.utils.RecipeUtils;
 
 public class MagnetisingTable extends CustomBlock implements Listener {
 
-    private static final HashMap<String, String> recipes = RecipeUtils.getMagnetiserRecipes();
+    private static final Map<String, String> recipes = RecipeUtils.getMagnetiserRecipes();
     private static final int PROCESS_TIME = 10;
     @Persistent
     protected Boolean framePlaced;

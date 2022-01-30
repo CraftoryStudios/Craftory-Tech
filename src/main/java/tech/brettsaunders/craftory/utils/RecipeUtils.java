@@ -12,32 +12,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
-import org.bukkit.Material;
-import org.bukkit.inventory.BlastingRecipe;
-import org.bukkit.inventory.CampfireRecipe;
-import org.bukkit.inventory.FurnaceRecipe;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.SmokingRecipe;
+import org.bukkit.inventory.*;
 import tech.brettsaunders.craftory.Craftory;
 
 public class RecipeUtils {
   @Getter
-  private static final HashMap<String, String> furnaceRecipes = new HashMap<>();
+  private static final Map<String, String> furnaceRecipesExtracted = new HashMap<>();
   @Getter
-  private static final HashSet<Recipe> blastingRecipes = new HashSet<>();
+  private static final Set<FurnaceRecipe> furnaceRecipes = new HashSet<>();
   @Getter
-  private static final HashSet<Recipe> smokingRecipeRecipes = new HashSet<>();
+  private static final Set<Recipe> blastingRecipes = new HashSet<>();
   @Getter
-  private static final HashSet<Recipe> campfireRecipes = new HashSet<>();
+  private static final Set<Recipe> smokingRecipeRecipes = new HashSet<>();
   @Getter
-  private static final HashSet<ICustomRecipe> customRecipes = new HashSet<>();
+  private static final Set<Recipe> campfireRecipes = new HashSet<>();
   @Getter
-  private static final HashSet<CustomMachineRecipe> foundryRecipes = new HashSet<>();
+  private static final Set<ICustomRecipe> customRecipes = new HashSet<>();
   @Getter
-  private static final HashMap<String, String> maceratorRecipes = new HashMap<>();
+  private static final Set<CustomMachineRecipe> foundryRecipes = new HashSet<>();
   @Getter
-  private static final HashMap<String, String> magnetiserRecipes = new HashMap<>();
+  private static final Map<String, String> maceratorRecipes = new HashMap<>();
+  @Getter
+  private static final Map<String, String> magnetiserRecipes = new HashMap<>();
+  @Getter
+  private static final Set<Recipe> craftingRecipes = new HashSet<>();
 
   static {
     Log.debug("Extracting Recipes");
@@ -45,11 +43,14 @@ public class RecipeUtils {
     recipeIterator = Craftory.plugin.getServer().recipeIterator();
     while (recipeIterator.hasNext()) {
       Recipe recipe = recipeIterator.next();
-      if (recipe instanceof FurnaceRecipe) {
+      if (recipe instanceof ShapedRecipe || recipe instanceof ShapelessRecipe) {
+        craftingRecipes.add(recipe);
+      } else if (recipe instanceof FurnaceRecipe) {
+        furnaceRecipes.add((FurnaceRecipe) recipe);
         String choices = ((FurnaceRecipe) recipe).getInputChoice().toString();
         String result = recipe.getResult().getType().toString();
         for (String choice: choices.substring(24, choices.length()-2).split(", ")) {
-          furnaceRecipes.put(choice, result);
+          furnaceRecipesExtracted.put(choice, result);
         }
       } else if (recipe instanceof BlastingRecipe) {
         blastingRecipes.add(recipe);
@@ -59,7 +60,7 @@ public class RecipeUtils {
         campfireRecipes.add(recipe);
       }
     }
-    Log.debug("Furnace: " + furnaceRecipes.size());
+    Log.debug("Furnace: " + furnaceRecipesExtracted.size());
     Log.debug("Blasting: " + blastingRecipes.size());
     Log.debug("Smoking: " + smokingRecipeRecipes.size());
     Log.debug("Campfire: " + campfireRecipes.size());
@@ -67,11 +68,15 @@ public class RecipeUtils {
   }
 
   public static void addFurnaceRecipe(String source, String result) {
-    furnaceRecipes.put(source, result);
+    furnaceRecipesExtracted.put(source, result);
+  }
+
+  public static void addCraftingRecipe(Recipe recipe) {
+    craftingRecipes.add(recipe);
   }
 
   public static void addAllFurnaceRecipes(Map<String, String> recipes) {
-    furnaceRecipes.putAll(recipes);
+    furnaceRecipesExtracted.putAll(recipes);
   }
 
   public static void addAllMaceratorRecipes(Map<String, String> recipes) {

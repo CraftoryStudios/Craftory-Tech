@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +16,6 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
@@ -116,7 +114,7 @@ public class BaseOneToOneMachine extends BaseMachine implements IHopperInteract 
     outputSlots.set(0, inventoryInterface.getItem(OUTPUT_LOCATION));
   }
 
-  protected HashMap<String, String> getRecipes() {
+  protected Map<String, String> getRecipes() {
     Log.warn("THIS CODE SHOULD NEVER BE RUN");
     return null;
   }

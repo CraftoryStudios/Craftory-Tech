@@ -4,7 +4,8 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +24,7 @@ public class BaseMacerator extends BaseOneToOneMachine {
   }
 
   @Override
-  protected HashMap<String, String> getRecipes() {
+  protected Map<String, String> getRecipes() {
     return RecipeUtils.getMaceratorRecipes();
   }
 

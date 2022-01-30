@@ -156,6 +156,8 @@ public class Utilities {
 
     // Auto Crafting Table
     config.addDefault("autocrafting.ENERGY_PER_CRAFT", 350);
+    config.addDefault("autocrafting.output_complexity_values", false);
+
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();

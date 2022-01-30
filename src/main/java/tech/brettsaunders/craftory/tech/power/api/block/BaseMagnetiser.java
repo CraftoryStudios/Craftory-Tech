@@ -4,7 +4,8 @@
 
 package tech.brettsaunders.craftory.tech.power.api.block;
 
-import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Location;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
@@ -22,7 +23,7 @@ public class BaseMagnetiser extends BaseOneToOneMachine {
   }
 
   @Override
-  protected HashMap<String, String> getRecipes() {
+  protected Map<String, String> getRecipes() {
     return RecipeUtils.getMagnetiserRecipes();
   }
 
