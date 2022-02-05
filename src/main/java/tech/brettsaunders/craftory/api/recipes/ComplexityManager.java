@@ -13,7 +13,7 @@ import tech.brettsaunders.craftory.utils.RecipeUtils;
 import java.util.*;
 
 public class ComplexityManager {
-    private static Map<String, Integer> itemTiers;
+    private final Map<String, Integer> itemTiers;
 
     List<Recipe> unmappedRecipes = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class ComplexityManager {
         }
     }
 
-    int getItemTier(String itemMaterialName) {
+    public int getItemTier(String itemMaterialName) {
         if (itemTiers.containsKey(itemMaterialName)) {
             return itemTiers.get(itemMaterialName);
         }

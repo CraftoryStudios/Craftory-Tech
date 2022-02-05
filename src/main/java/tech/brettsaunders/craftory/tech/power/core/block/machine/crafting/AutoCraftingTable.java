@@ -3,7 +3,6 @@ package tech.brettsaunders.craftory.tech.power.core.block.machine.crafting;
 import io.papermc.lib.PaperLib;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
@@ -35,13 +33,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tech.brettsaunders.craftory.Constants;
 import tech.brettsaunders.craftory.Constants.Blocks;
 import tech.brettsaunders.craftory.Constants.INTERACTABLEBLOCK;
+import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.api.blocks.CustomBlockTickManager.Ticking;
 import tech.brettsaunders.craftory.api.events.Events;
 import tech.brettsaunders.craftory.api.font.Font;
 import tech.brettsaunders.craftory.tech.power.api.block.BaseMachine;
 import tech.brettsaunders.craftory.tech.power.api.block.EnergyStorage;
 import tech.brettsaunders.craftory.tech.power.api.gui_components.GBattery;
-import tech.brettsaunders.craftory.tech.power.api.gui_components.GIndicator;
 import tech.brettsaunders.craftory.tech.power.api.interfaces.IHopperInteract;
 
 public class AutoCraftingTable extends BaseMachine implements Listener, IHopperInteract {
@@ -56,6 +54,8 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
   // Crafting
   private Recipe recipe;
   private Map<RecipeChoice, Integer> ingredients;
+
+  private int energyPerCraft = Constants.Energy.BASE_ENERGY_PER_CRAFT;
 
   static {
     inputFaces.put(BlockFace.UP, inputSlots);
@@ -145,7 +145,8 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
     } else {
       ItemStack result = recipe.getResult();
       ItemMeta meta = result.getItemMeta();
-      meta.setLore(List.of("Consumes " + Constants.Energy.ENERGY_PER_CRAFT + " RE per craft"));
+      energyPerCraft = Constants.Energy.BASE_ENERGY_PER_CRAFT + Constants.Energy.BASE_ENERGY_PER_CRAFT * (int)Math.round(1 + 0.15 * Craftory.complexityManager.getItemTier(result.getType().toString()));
+      meta.setLore(List.of("Consumes " + energyPerCraft + " RE per craft"));
       result.setItemMeta(meta);
       inventoryInterface.setItem(7, result);
     }
@@ -206,7 +207,7 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
   @Ticking(ticks = 20)
   public void autoCraft() {
     if (recipe != null) {
-      boolean hasEnergy = energyStorage.getEnergyStored() >= Constants.Energy.ENERGY_PER_CRAFT;
+      boolean hasEnergy = energyStorage.getEnergyStored() >= energyPerCraft;
       final ItemStack outputItem = inventoryInterface.getItem(OUTPUT_SLOT);
       boolean hasResultSpace = true;
       if (outputItem != null && outputItem.getType() != Material.AIR) {
@@ -238,7 +239,7 @@ public class AutoCraftingTable extends BaseMachine implements Listener, IHopperI
             }
 
           }
-          energyStorage.modifyEnergyStored(-Constants.Energy.ENERGY_PER_CRAFT);
+          energyStorage.modifyEnergyStored(-energyPerCraft);
       } else {
         runningContainer.setT(false);
       }

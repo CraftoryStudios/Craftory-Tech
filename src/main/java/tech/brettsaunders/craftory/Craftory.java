@@ -58,6 +58,7 @@ public final class Craftory extends JavaPlugin implements Listener {
   public static CustomBlockManager customBlockManager;
   public static FileConfiguration customItemConfig;
   public static PoweredToolManager poweredToolManager;
+  public static ComplexityManager complexityManager;
 
   public static FileConfiguration customModelDataConfig;
   public static FileConfiguration customBlocksConfig;
@@ -117,7 +118,7 @@ public final class Craftory extends JavaPlugin implements Listener {
       Utilities.createConfigs();
       Utilities.getTranslations();
       new Tags();
-      new ComplexityManager();
+      complexityManager = new ComplexityManager();
       Constants.loadEnergyValues();
       tickManager = new CustomBlockTickManager();
       customBlockFactory = new CustomBlockFactory();

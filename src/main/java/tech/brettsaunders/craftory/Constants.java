@@ -138,11 +138,11 @@ public class Constants {
   }
 
   public static class Energy {
-    public static int ENERGY_PER_CRAFT = 350;
+    public static int BASE_ENERGY_PER_CRAFT = 350;
   }
 
   public static void loadEnergyValues() {
-    Energy.ENERGY_PER_CRAFT = Utilities.config.getInt("autocrafter.ENERGY_PER_CRAFT", 350);
+    Energy.BASE_ENERGY_PER_CRAFT = Utilities.config.getInt("autocrafter.ENERGY_PER_CRAFT", 350);
   }
 
   /* Sounds */
