@@ -1,6 +1,5 @@
 package tech.brettsaunders.craftory.api.recipes;
 
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
 import org.bukkit.Material;
@@ -12,114 +11,68 @@ import tech.brettsaunders.craftory.Craftory;
 import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.Tags;
 import tech.brettsaunders.craftory.api.items.CustomItemManager;
-import tech.brettsaunders.craftory.utils.Log;
 import tech.brettsaunders.craftory.utils.RecipeUtils;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class ComplexityManager {
-    private static Map<String, Integer> complexities;
+    private static Map<String, Integer> recipeTier;
+    private Set<String> recipeResults = new HashSet<>();
+    private Set<String> baseIngridents = new HashSet<>();
     private final JsonParser parser = new JsonParser();
     List<Recipe> unmappedRecipes = new ArrayList<>();
 
     @SneakyThrows
     public ComplexityManager() {
-        complexities = new HashMap<>();
-        getDefaultMappings();
-        loadOverrides();
-        generateComplexities();
-        if (Utilities.config.getBoolean("autocrafting.output_complexity_values")) {
-            FileConfiguration complexitiesOutput = new YamlConfiguration();
-            for (String key : complexities.keySet()) {
-                complexitiesOutput.set(key, complexities.get(key));
-            }
-            complexitiesOutput.save(Craftory.plugin.getDataFolder() + "/complexities.yml");
+        recipeTier = new HashMap<>();
+        for (Recipe recipe : RecipeUtils.getCraftingRecipes()) {
+            recipeResults.add(recipe.getResult().getType().toString());
         }
-        if (Utilities.config.getBoolean("general.debug")) {
-            for (Recipe recipe : unmappedRecipes) {
-                Log.debug("Missing mapping for " + recipe.getResult().getType());
+        for (Recipe recipe : RecipeUtils.getFurnaceRecipes()) {
+            baseIngridents.add(recipe.getResult().getType().toString());
+        }
+        for (Material crop : Tag.CROPS.getValues()) {
+            baseIngridents.add(crop.toString());
+        }
+
+        calculateTiers();
+
+        if (Utilities.config.getBoolean("autocrafting.output_complexity_values")) {
+            FileConfiguration recipeTierOutput = new YamlConfiguration();
+            for (String key : recipeTier.keySet()) {
+                recipeTierOutput.set(key, recipeTier.get(key));
             }
+            recipeTierOutput.save(Craftory.plugin.getDataFolder() + "/recipeTiers.yml");
         }
     }
 
-    public static int getComplexity(String itemId) {
-        if (complexities.containsKey(itemId)) {
-            return complexities.get(itemId);
+    int getItemTier(String itemMaterialName) {
+        if (recipeTier.containsKey(itemMaterialName)) {
+            return recipeTier.get(itemMaterialName);
         }
         return -1;
     }
 
-    private void getDefaultMappings() {
-        try {
-            InputStream inputStream = Craftory.plugin.getResource("complexities.json");
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            String json = new String(buffer, StandardCharsets.UTF_8);
-            JsonObject jsonObject = parser.parse(json).getAsJsonObject();
-
-            JsonObject mappings = jsonObject.get("values").getAsJsonObject();
-            for (String key : mappings.keySet()) {
-
-                // TAG
-                if (key.startsWith("#")){
-                    Tag<Material> tag = Tags.getTag("minecraft:" + key.substring(1).toLowerCase());
-                    if (tag != null) {
-                        for (Material material : tag.getValues()) {
-                            complexities.put(material.toString().toUpperCase(), mappings.get(key).getAsInt());
-                        }
-                    }
-
-                } else {
-                    complexities.put(key.toUpperCase(), mappings.get(key).getAsInt());
-                }
-            }
-        } catch (Exception ignored) {
-            Log.debug("Failed to load default mappings");
-        }
-    }
-
-    private void loadOverrides() {
-
-    }
-
-    private void generateComplexities() {
-        for (Recipe furnanceRecipe : RecipeUtils.getFurnaceRecipes()) {
-            generateRecipeComplexity(furnanceRecipe, true);
-        }
+    private void calculateTiers() {
         for (Recipe recipe : RecipeUtils.getCraftingRecipes()) {
-            generateRecipeComplexity(recipe, true);
+            getRecipeTier(recipe, true);
         }
         int startSize = unmappedRecipes.size();
         int endSize = 0;
         while (startSize != endSize) {
             startSize = unmappedRecipes.size();
-            unmappedRecipes.removeIf(recipe -> generateRecipeComplexity(recipe, false));
+            unmappedRecipes.removeIf(recipe -> getRecipeTier(recipe, false));
             endSize = unmappedRecipes.size();
         }
     }
 
-    private boolean generateRecipeComplexity(Recipe recipe, boolean addToUnmappedRecipes) {
-        // Complexity already generated so prune this run
-        if (complexities.containsKey(recipe.getResult().getType().toString().toUpperCase())) {
+    private boolean getRecipeTier(Recipe recipe, boolean addToUnmappedRecipes) {
+        if (recipeTier.containsKey(recipe.getResult().getType().toString().toUpperCase())) {
             return true;
         }
 
-        int recipeComplexity = 0;
-        if (recipe instanceof FurnaceRecipe furnaceRecipe) {
-            recipeComplexity = getComplexity(furnaceRecipe.getInput().getType().toString().toUpperCase());
-            if (recipeComplexity == -1) {
-                if (addToUnmappedRecipes) {
-                    unmappedRecipes.add(recipe);
-                }
-                return false;
-            }
-            // Add complexity of 1/8th of coal used for smelting onto the item
-            recipeComplexity += 16;
-        } else if (recipe instanceof ShapedRecipe shapedRecipe) {
+        int ingredientsCombinedTier = -1;
+        if (recipe instanceof ShapedRecipe shapedRecipe) {
             // Calculate amounts of each ingredient
             Map<Character, Integer> ingredientCounts = new HashMap<>();
             for (String row : shapedRecipe.getShape()) {
@@ -134,34 +87,37 @@ public class ComplexityManager {
                     choices.add(entry.getValue());
                 }
             }
-            recipeComplexity = calculateChoicesComplexity(choices);
+            ingredientsCombinedTier = calculateChoicesComplexity(choices, recipe, addToUnmappedRecipes);
         } else if (recipe instanceof ShapelessRecipe shapelessRecipe) {
-            recipeComplexity = calculateChoicesComplexity(shapelessRecipe.getChoiceList());
+            ingredientsCombinedTier = calculateChoicesComplexity(shapelessRecipe.getChoiceList(), recipe, addToUnmappedRecipes);
         }
-        if (recipeComplexity == -1) {
-            if (addToUnmappedRecipes) {
-                unmappedRecipes.add(recipe);
-            }
+        if (ingredientsCombinedTier == -1) {
             return false;
         }
         String resultKey = recipe.getResult().getType().toString().toUpperCase();
         // Don't override default values
-        if (!complexities.containsKey(resultKey)) {
-            complexities.put(resultKey, (int) Math.ceil(recipeComplexity / recipe.getResult().getAmount() * 1.2) );
+        if (!recipeTier.containsKey(resultKey)) {
+            recipeTier.put(resultKey, ingredientsCombinedTier + 1);
         }
         return true;
     }
 
-    private int calculateChoicesComplexity(List<RecipeChoice> choices) {
-        int complexityTotal = -1;
+    private int calculateChoicesComplexity(List<RecipeChoice> choices, Recipe recipe, boolean addToUnmapped) {
+        int complexityTotal = 0;
         for (RecipeChoice choice : choices) {
             if (choice == null) continue;
 
+            boolean hasZeroIngrident = false;
+            int ingridentComplexity = -1;
             if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                 for (Material material : materialChoice.getChoices()) {
-                    int itemComplexity = getComplexity(material.toString());
+                    if (!recipeResults.contains(material.toString()) || baseIngridents.contains(material.toString())) {
+                        hasZeroIngrident = true;
+                        continue;
+                    }
+                    int itemComplexity = getItemTier(material.toString());
                     if (itemComplexity > 0) {
-                        complexityTotal += itemComplexity;
+                        ingridentComplexity = itemComplexity;
                         break;
                     }
                 }
@@ -170,15 +126,32 @@ public class ComplexityManager {
                     String craftoryId = CustomItemManager.getCustomItemName(itemStack);
                     int itemComplexity = -1;
                     if (craftoryId != null) {
-                        itemComplexity = getComplexity(craftoryId.toUpperCase());
+                        itemComplexity = getItemTier(craftoryId.toUpperCase());
                     } else {
-                        itemComplexity = getComplexity(itemStack.getType().toString());
+                        if (!recipeResults.contains(itemStack.getType().toString()) || baseIngridents.contains(itemStack.getType().toString())) {
+                            hasZeroIngrident = true;
+                            continue;
+                        }
+                        itemComplexity = getItemTier(itemStack.getType().toString());
                     }
                     if (itemComplexity > 0) {
-                        complexityTotal += itemComplexity;
+                        ingridentComplexity = itemComplexity;
                         break;
                     }
                 }
+            }
+
+            if (ingridentComplexity == -1) {
+                if (!hasZeroIngrident) {
+                    if (addToUnmapped) {
+                        unmappedRecipes.add(recipe);
+                    }
+                    return -1;
+                } else {
+                    complexityTotal += Math.min(0, complexityTotal);
+                }
+            } else {
+                complexityTotal += ingridentComplexity;
             }
 
         }
