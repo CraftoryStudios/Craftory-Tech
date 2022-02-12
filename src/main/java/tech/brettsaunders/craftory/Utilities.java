@@ -158,6 +158,7 @@ public class Utilities {
     config.addDefault("autocrafting.ENERGY_PER_CRAFT", 350);
     config.addDefault("autocrafting.output_complexity_values", false);
 
+    config.addDefault("error_reporting.enabled", true);
     config.options().copyHeader(true);
     config.options().copyDefaults(true);
     saveConfigFile();
@@ -173,16 +174,22 @@ public class Utilities {
 
     Craftory.lastVersionCode = data.getInt("lastVersion");
 
-    UserBuilder userBuilder = new UserBuilder()
-        .setId(data.getString("reporting.serverUUID"));
-    if (!Utilities.config.getString("error_reporting.username").isEmpty()) {
-      userBuilder.setUsername(Utilities.config.getString("error_reporting.username"));
-      Log.info("Sentry - Reporting Username: " + Utilities.config.getString("error_reporting.username"));
+    if (isSentryEnabled()) {
+      UserBuilder userBuilder = new UserBuilder()
+              .setId(data.getString("reporting.serverUUID"));
+      if (!Utilities.config.getString("error_reporting.username").isEmpty()) {
+        userBuilder.setUsername(Utilities.config.getString("error_reporting.username"));
+        Log.info("Sentry - Reporting Username: " + Utilities.config.getString("error_reporting.username"));
+      }
+      Sentry.getContext().setUser(userBuilder.build());
     }
-    Sentry.getContext().setUser(userBuilder.build());
 
     Log.info("Last version: " + Craftory.lastVersionCode+ " Current version: " + Craftory.thisVersionCode);
 
+  }
+
+  public static boolean isSentryEnabled() {
+    return config.getBoolean("error_reporting.enabled");
   }
 
   static void getTranslations() {

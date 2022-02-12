@@ -27,12 +27,13 @@ public class CommandHelp implements CommandExecutor, TabCompleter {
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineFour"));
       Utilities.msg(sender, Utilities.getTranslation("HelpCommandLineFive"));
 
-      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
-          .setCategory("command")
-          .setTimestamp(new Date(System.currentTimeMillis()))
-          .setMessage("Player "+sender.getName() + " used help command")
-          .setType(Type.DEFAULT)
-          .build());
+      if (Utilities.isSentryEnabled())
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+            .setCategory("command")
+            .setTimestamp(new Date(System.currentTimeMillis()))
+            .setMessage("Player "+sender.getName() + " used help command")
+            .setType(Type.DEFAULT)
+            .build());
     }
     return true;
   }

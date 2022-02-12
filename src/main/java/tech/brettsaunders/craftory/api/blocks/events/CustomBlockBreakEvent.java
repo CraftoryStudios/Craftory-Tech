@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 
 public class CustomBlockBreakEvent extends Event implements Cancellable {
@@ -32,7 +33,8 @@ public class CustomBlockBreakEvent extends Event implements Cancellable {
     this.isCancelled = false;
     this.customBlock = customBlock;
 
-    Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+    if (Utilities.isSentryEnabled())
+      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
         .setCategory("customBreakEvent")
         .setTimestamp(new Date(System.currentTimeMillis()))
         .setMessage("Break Custom Block "+name + " at location: "+location)

@@ -18,6 +18,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import tech.brettsaunders.craftory.Utilities;
 import tech.brettsaunders.craftory.api.blocks.CustomBlock;
 
 public class CustomBlockInteractEvent extends Event implements Cancellable {
@@ -56,13 +57,13 @@ public class CustomBlockInteractEvent extends Event implements Cancellable {
     } else {
       this.itemName = itemStack.getItemMeta().getDisplayName();
     }
-
-    Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
-        .setCategory("customInteractEvent")
-        .setTimestamp(new Date(System.currentTimeMillis()))
-        .setMessage("Interact with Custom Block "+customBlock.getBlockName() + " with item "+ itemName + " with player "+ player.getDisplayName())
-        .setType(Type.DEFAULT)
-        .build());
+    if (Utilities.isSentryEnabled())
+      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+          .setCategory("customInteractEvent")
+          .setTimestamp(new Date(System.currentTimeMillis()))
+          .setMessage("Interact with Custom Block "+customBlock.getBlockName() + " with item "+ itemName + " with player "+ player.getDisplayName())
+          .setType(Type.DEFAULT)
+          .build());
   }
 
   public static HandlerList getHandlerList() {

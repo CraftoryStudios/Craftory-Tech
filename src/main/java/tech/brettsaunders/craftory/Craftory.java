@@ -105,7 +105,12 @@ public final class Craftory extends JavaPlugin implements Listener {
       return;
     }
 
-    setupSentry();
+    Utilities.createDataPath();
+    Utilities.createConfigs();
+
+    if (Utilities.isSentryEnabled()) {
+      setupSentry();
+    }
     try {
       isLightAPIEnabled = getServer().getPluginManager().isPluginEnabled("LightAPI");
 
@@ -114,8 +119,6 @@ public final class Craftory extends JavaPlugin implements Listener {
       thisVersionCode = generateVersionCode();
       this.getServer().getPluginManager().registerEvents(this, this);
 
-      Utilities.createDataPath();
-      Utilities.createConfigs();
       Utilities.getTranslations();
       new Tags();
       complexityManager = new ComplexityManager();

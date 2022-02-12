@@ -27,12 +27,13 @@ public class CommandDebug implements CommandExecutor, TabCompleter {
       Utilities.config.set("general.debug", !debugMode);
       Utilities.saveConfigFile();
       Utilities.msg(sender, Utilities.getTranslation("DebugCommandToggled") + !debugMode);
-      Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
-          .setCategory("command")
-          .setTimestamp(new Date(System.currentTimeMillis()))
-          .setMessage("Player "+sender.getName() + " used debug command")
-          .setType(Type.DEFAULT)
-          .build());
+      if (Utilities.isSentryEnabled())
+        Sentry.getContext().recordBreadcrumb(new BreadcrumbBuilder()
+            .setCategory("command")
+            .setTimestamp(new Date(System.currentTimeMillis()))
+            .setMessage("Player "+sender.getName() + " used debug command")
+            .setType(Type.DEFAULT)
+            .build());
     } else {
       Utilities.msg(sender, "Usage");
     }
