@@ -4,7 +4,7 @@
 
 package tech.brettsaunders.craftory.utils;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import tech.brettsaunders.craftory.Craftory;

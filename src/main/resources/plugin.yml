@@ -43,4 +43,5 @@ permissions:
 
 libraries:
   - io.sentry:sentry:1.7.30
+  - org.apache.commons:commons-lang3:3.12.0
 

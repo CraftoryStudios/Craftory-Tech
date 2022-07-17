@@ -4,7 +4,7 @@
 
 package tech.brettsaunders.craftory.tech.power.api.effect;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
